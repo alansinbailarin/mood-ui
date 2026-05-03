@@ -42,6 +42,36 @@ export const showroomNav: NavCategory[] = [
             },
         ],
     },
+    {
+        id: 'templates',
+        title: 'Templates',
+        entries: [
+            {
+                id: 'dashboard',
+                label: 'Dashboard',
+                page: () => import('./pages/templates/DashboardTemplatePage.vue'),
+                badge: 'New',
+            },
+            {
+                id: 'auth',
+                label: 'Auth',
+                page: () => import('./pages/templates/AuthTemplatePage.vue'),
+                badge: 'New',
+            },
+            {
+                id: 'pricing',
+                label: 'Pricing',
+                page: () => import('./pages/templates/PricingTemplatePage.vue'),
+                badge: 'New',
+            },
+            {
+                id: 'settings',
+                label: 'Settings',
+                page: () => import('./pages/templates/SettingsTemplatePage.vue'),
+                badge: 'New',
+            },
+        ],
+    },
     { 
         id: 'forms', 
         title: 'Forms', 
