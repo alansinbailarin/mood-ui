@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import {
-    AdjustmentsHorizontalIcon,
+    SwatchIcon,
     SunIcon,
     MoonIcon,
     ComputerDesktopIcon,
@@ -12,6 +12,7 @@ import Button from '../../components/forms/Button.vue';
 import Tooltip from '../../components/feedback/Tooltip.vue';
 import PopoverPanel from '../../components/layout/PopoverPanel.vue';
 import { usePopover } from '../../composables/usePopover';
+import { useShowroomI18n, type ShowroomLocale } from '../composables/useShowroomI18n';
 
 import type { ModoColor, ModoRadius, ModoSize, ModoTheme, ModoHalo } from '../../config/ModoConfig';
 
@@ -22,7 +23,10 @@ const props = defineProps<{
     size: ModoSize;
     halo: ModoHalo;
     primaryHex: string;
-    locale: 'es' | 'en';
+    accentHex: string;
+    /** 0–100 — how strongly the page surfaces are tinted with the accent. */
+    baseIntensity: number;
+    locale: ShowroomLocale;
 }>();
 
 const emit = defineEmits<{
@@ -32,18 +36,23 @@ const emit = defineEmits<{
     'update:size': [v: ModoSize];
     'update:halo': [v: ModoHalo];
     'update:primaryHex': [v: string];
-    'update:locale': [v: 'es' | 'en'];
+    'update:accentHex': [v: string];
+    'update:baseIntensity': [v: number];
+    'update:locale': [v: ShowroomLocale];
     reset: [];
 }>();
+
+const t = useShowroomI18n(() => props.locale);
 
 const { triggerRef, panelRef, isOpen, panelStyle, toggle } = usePopover({
     placement: 'bottom-end',
     offset: 10,
 });
 
-// ── Color presets (named, like the screenshot) ───────────────────────────────
 interface Swatch { name: string; hex: string; }
-const presetColors: Swatch[] = [
+
+// Same palette used for primary AND accent (different fields).
+const swatches: Swatch[] = [
     { name: 'Indigo',  hex: '#6366f1' },
     { name: 'Violet',  hex: '#8b5cf6' },
     { name: 'Purple',  hex: '#a855f7' },
@@ -92,34 +101,37 @@ const colorOptions: { value: ModoColor; label: string }[] = [
     { value: 'danger',  label: 'Danger' },
 ];
 
-const themeOptions = [
-    { value: 'light' as const,  label: 'Light',  icon: SunIcon },
-    { value: 'dark' as const,   label: 'Dark',   icon: MoonIcon },
-    { value: 'system' as const, label: 'System', icon: ComputerDesktopIcon },
+const themeOptions = computed(() => [
+    { value: 'light' as const,  label: t.value.light,  icon: SunIcon },
+    { value: 'dark' as const,   label: t.value.dark,   icon: MoonIcon },
+    { value: 'system' as const, label: t.value.system, icon: ComputerDesktopIcon },
+]);
+
+const localeOptions: { value: ShowroomLocale; label: string }[] = [
+    { value: 'es', label: 'ES' },
+    { value: 'en', label: 'EN' },
 ];
 
-const localeOptions = [
-    { value: 'es' as const, label: 'ES' },
-    { value: 'en' as const, label: 'EN' },
-];
-
-const activeSwatch = computed(() =>
-    presetColors.find((s) => s.hex.toLowerCase() === props.primaryHex.toLowerCase()),
+const activePrimary = computed(() =>
+    swatches.find((s) => s.hex.toLowerCase() === props.primaryHex.toLowerCase()),
+);
+const activeAccent = computed(() =>
+    swatches.find((s) => s.hex.toLowerCase() === props.accentHex.toLowerCase()),
 );
 </script>
 
 <template>
     <span ref="triggerRef" class="inline-flex">
-        <Tooltip content="Personalizar tema">
+        <Tooltip :content="t.customizeTheme">
             <Button
                 variant="ghost"
                 size="small"
                 icon-only
-                aria-label="Personalizar tema"
+                :aria-label="t.customizeTheme"
                 :aria-expanded="isOpen"
                 @click="toggle"
             >
-                <AdjustmentsHorizontalIcon class="w-5 h-5" />
+                <SwatchIcon class="w-5 h-5" />
             </Button>
         </Tooltip>
     </span>
@@ -129,15 +141,15 @@ const activeSwatch = computed(() =>
         :style="panelStyle"
         radius="large"
         role="dialog"
-        aria-label="Personalizar tema"
+        :aria-label="t.customizeTheme"
         @update:panelRef="panelRef = $event"
     >
-        <div class="w-[320px] max-h-[min(80vh,640px)] overflow-y-auto p-5 space-y-5">
+        <div class="w-[340px] max-h-[min(85vh,720px)] overflow-y-auto p-5 space-y-5">
             <!-- ── Color Mode ────────────────────────────────────────── -->
             <section class="space-y-2">
-                <header class="flex items-center justify-between">
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Color mode</h3>
-                </header>
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    {{ t.colorMode }}
+                </h3>
                 <div class="grid grid-cols-3 gap-1.5">
                     <button
                         v-for="opt in themeOptions"
@@ -155,23 +167,76 @@ const activeSwatch = computed(() =>
                 </div>
             </section>
 
-            <!-- ── Primary color ─────────────────────────────────────── -->
+            <!-- ── Accent (controls page tint) ───────────────────────── -->
             <section class="space-y-2">
                 <header class="flex items-center justify-between">
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Primary</h3>
-                    <span v-if="activeSwatch" class="text-[10px] font-mono text-muted-foreground">
-                        {{ activeSwatch.name }}
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        {{ t.accent }}
+                    </h3>
+                    <span v-if="activeAccent" class="text-[10px] font-mono text-muted-foreground">
+                        {{ activeAccent.name }}
                     </span>
                 </header>
-                <div class="grid grid-cols-6 gap-1.5">
+                <div class="grid grid-cols-9 gap-1">
                     <Tooltip
-                        v-for="s in presetColors"
-                        :key="s.hex"
+                        v-for="s in swatches"
+                        :key="`accent-${s.hex}`"
                         :content="s.name"
                     >
                         <button
                             type="button"
-                            :aria-label="`Color primario ${s.name}`"
+                            :aria-label="`Accent ${s.name}`"
+                            class="w-full aspect-square rounded-md border transition-transform hover:scale-110"
+                            :class="accentHex.toLowerCase() === s.hex.toLowerCase()
+                                ? 'border-foreground ring-2 ring-foreground/30 ring-offset-1 ring-offset-card scale-110'
+                                : 'border-border'"
+                            :style="{ backgroundColor: s.hex }"
+                            @click="emit('update:accentHex', s.hex)"
+                        />
+                    </Tooltip>
+                </div>
+            </section>
+
+            <!-- ── Base intensity (HeroUI-style "Base" slider) ───────── -->
+            <section class="space-y-2">
+                <header class="flex items-center justify-between">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        {{ t.base }}
+                    </h3>
+                    <span class="text-[10px] font-mono text-muted-foreground">{{ baseIntensity }}%</span>
+                </header>
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    step="5"
+                    :value="baseIntensity"
+                    :aria-label="t.base"
+                    class="w-full accent-primary h-1.5 cursor-pointer"
+                    @input="(e: Event) => emit('update:baseIntensity', Number((e.target as HTMLInputElement).value))"
+                />
+                <p class="text-[10px] text-muted-foreground leading-tight">{{ t.baseHelp }}</p>
+            </section>
+
+            <!-- ── Primary (component-level) ─────────────────────────── -->
+            <section class="space-y-2">
+                <header class="flex items-center justify-between">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        {{ t.primary }}
+                    </h3>
+                    <span v-if="activePrimary" class="text-[10px] font-mono text-muted-foreground">
+                        {{ activePrimary.name }}
+                    </span>
+                </header>
+                <div class="grid grid-cols-9 gap-1">
+                    <Tooltip
+                        v-for="s in swatches"
+                        :key="`prim-${s.hex}`"
+                        :content="s.name"
+                    >
+                        <button
+                            type="button"
+                            :aria-label="`Primary ${s.name}`"
                             class="w-full aspect-square rounded-md border transition-transform hover:scale-110"
                             :class="primaryHex.toLowerCase() === s.hex.toLowerCase()
                                 ? 'border-foreground ring-2 ring-foreground/30 ring-offset-1 ring-offset-card scale-110'
@@ -181,21 +246,21 @@ const activeSwatch = computed(() =>
                         />
                     </Tooltip>
                 </div>
-                <label class="flex items-center gap-2 mt-2">
+                <label class="flex items-center gap-2 mt-1">
                     <input
                         type="color"
                         :value="primaryHex"
-                        aria-label="Color primario personalizado"
-                        class="w-8 h-8 rounded cursor-pointer bg-transparent border border-border"
+                        :aria-label="t.primary"
+                        class="w-7 h-7 rounded cursor-pointer bg-transparent border border-border"
                         @input="(e: Event) => emit('update:primaryHex', (e.target as HTMLInputElement).value)"
                     />
-                    <code class="text-xs font-mono text-muted-foreground">{{ primaryHex.toUpperCase() }}</code>
+                    <code class="text-[11px] font-mono text-muted-foreground">{{ primaryHex.toUpperCase() }}</code>
                 </label>
             </section>
 
             <!-- ── Color (semantic) ──────────────────────────────────── -->
             <section class="space-y-2">
-                <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Accent</h3>
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Color</h3>
                 <div class="flex flex-wrap gap-1">
                     <button
                         v-for="opt in colorOptions"
@@ -214,7 +279,7 @@ const activeSwatch = computed(() =>
 
             <!-- ── Radius ────────────────────────────────────────────── -->
             <section class="space-y-2">
-                <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Radius</h3>
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{{ t.radius }}</h3>
                 <div class="grid grid-cols-5 gap-1">
                     <button
                         v-for="opt in radiusOptions"
@@ -233,7 +298,7 @@ const activeSwatch = computed(() =>
 
             <!-- ── Size ──────────────────────────────────────────────── -->
             <section class="space-y-2">
-                <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Density</h3>
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{{ t.density }}</h3>
                 <div class="grid grid-cols-3 gap-1">
                     <button
                         v-for="opt in sizeOptions"
@@ -252,7 +317,7 @@ const activeSwatch = computed(() =>
 
             <!-- ── Focus halo ────────────────────────────────────────── -->
             <section class="space-y-2">
-                <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Focus halo</h3>
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{{ t.focusHalo }}</h3>
                 <div class="grid grid-cols-3 gap-1">
                     <button
                         v-for="opt in haloOptions"
@@ -271,7 +336,7 @@ const activeSwatch = computed(() =>
 
             <!-- ── Locale ────────────────────────────────────────────── -->
             <section class="space-y-2">
-                <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Language</h3>
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{{ t.language }}</h3>
                 <div class="grid grid-cols-2 gap-1">
                     <button
                         v-for="opt in localeOptions"
@@ -296,7 +361,7 @@ const activeSwatch = computed(() =>
                     @click="emit('reset')"
                 >
                     <ArrowPathIcon class="w-3.5 h-3.5" />
-                    Restablecer valores por defecto
+                    {{ t.reset }}
                 </button>
             </div>
         </div>
