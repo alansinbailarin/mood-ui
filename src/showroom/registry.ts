@@ -158,6 +158,24 @@ export const showroomNav: NavCategory[] = [
                 page: () => import('./pages/forms/SegmentedPage.vue'), 
                 badge: 'New', 
             }, 
+            { 
+                id: 'rating', 
+                label: 'Rating', 
+                page: () => import('./pages/forms/RatingPage.vue'), 
+                badge: 'New', 
+            }, 
+            { 
+                id: 'color-picker', 
+                label: 'ColorPicker', 
+                page: () => import('./pages/forms/ColorPickerPage.vue'), 
+                badge: 'New', 
+            }, 
+            { 
+                id: 'tag-input', 
+                label: 'TagInput', 
+                page: () => import('./pages/forms/TagInputPage.vue'), 
+                badge: 'New', 
+            }, 
         ], 
     }, 
     { 
@@ -275,6 +293,18 @@ export const showroomNav: NavCategory[] = [
                 id: 'code', 
                 label: 'Code', 
                 page: () => import('./pages/data-display/CodePage.vue'), 
+                badge: 'New', 
+            }, 
+            { 
+                id: 'stat', 
+                label: 'Stat', 
+                page: () => import('./pages/data-display/StatPage.vue'), 
+                badge: 'New', 
+            }, 
+            { 
+                id: 'timeline', 
+                label: 'Timeline', 
+                page: () => import('./pages/data-display/TimelinePage.vue'), 
                 badge: 'New', 
             }, 
             { 

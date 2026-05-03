@@ -95,6 +95,9 @@ export { default as DateField } from './components/forms/DateField.vue';
 export { default as DateRangeField } from './components/forms/DateRangeField.vue'; 
 export { default as DateTimeField } from './components/forms/DateTimeField.vue'; 
 export { default as Segmented } from './components/forms/Segmented.vue'; 
+export { default as Rating } from './components/forms/Rating.vue'; 
+export { default as ColorPicker } from './components/forms/ColorPicker.vue'; 
+export { default as TagInput } from './components/forms/TagInput.vue'; 
  
 /* ------------------------------------------------------------------ */ 
 /*  Feedback                                                            */ 
@@ -149,6 +152,8 @@ export { default as AvatarGroup } from './components/data-display/avatar/AvatarG
 export { default as Kbd } from './components/data-display/Kbd.vue'; 
 export { default as Code } from './components/data-display/Code.vue'; 
 export { default as Accordion } from './components/data-display/Accordion.vue'; 
+export { default as Stat } from './components/data-display/Stat.vue'; 
+export { default as Timeline } from './components/data-display/Timeline.vue'; 
  
 /* ------------------------------------------------------------------ */ 
 /*  Calendar / Scheduler                                                */ 
@@ -198,6 +203,9 @@ export type * from './interfaces/forms/DateField.interface';
 export type * from './interfaces/forms/DateRangeField.interface'; 
 export type * from './interfaces/forms/DateTimeField.interface'; 
 export type * from './interfaces/forms/Segmented.interface'; 
+export type * from './interfaces/forms/Rating.interface'; 
+export type * from './interfaces/forms/ColorPicker.interface'; 
+export type * from './interfaces/forms/TagInput.interface'; 
  
 export type * from './interfaces/feedback/Badge.interface'; 
 export type * from './interfaces/feedback/Banner.interface'; 
@@ -232,3 +240,5 @@ export type * from './interfaces/data-display/Typography.interface';
 export type * from './interfaces/data-display/Kbd.interface';
 export type * from './interfaces/data-display/Code.interface';
 export type * from './interfaces/data-display/Accordion.interface';
+export type * from './interfaces/data-display/Stat.interface';
+export type * from './interfaces/data-display/Timeline.interface';

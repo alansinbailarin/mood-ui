@@ -1,0 +1,173 @@
+<template>
+    <div
+        :class="[
+            'relative flex flex-col gap-2',
+            cardClasses,
+            paddingClasses,
+        ]"
+    >
+        <div class="flex items-start justify-between gap-3">
+            <span :class="['font-medium text-muted-foreground', labelSizeClass]">{{ label }}</span>
+            <span
+                v-if="icon"
+                :class="[
+                    'shrink-0 inline-flex items-center justify-center rounded-lg',
+                    iconBoxClass,
+                    iconColorClasses,
+                ]"
+            >
+                <component :is="icon" :class="iconSizeClass" aria-hidden="true" />
+            </span>
+        </div>
+
+        <div v-if="loading" :class="['h-8 w-24 bg-muted animate-pulse rounded', { 'h-7 w-20': resolvedSize === 'small', 'h-10 w-32': resolvedSize === 'large' }]" />
+        <span v-else :class="['font-bold tracking-tight text-foreground tabular-nums', valueSizeClass]">
+            {{ value }}
+        </span>
+
+        <div v-if="trend || description" class="flex items-center gap-2 flex-wrap">
+            <span
+                v-if="trend"
+                :class="[
+                    'inline-flex items-center gap-0.5 font-semibold tabular-nums',
+                    trendSizeClass,
+                    trendColorClass,
+                ]"
+            >
+                <ArrowUpIcon v-if="trendDirection === 'up'" :class="trendIconClass" />
+                <ArrowDownIcon v-else-if="trendDirection === 'down'" :class="trendIconClass" />
+                <MinusIcon v-else :class="trendIconClass" />
+                {{ trendLabel }}
+            </span>
+            <span v-if="description" :class="['text-muted-foreground', descSizeClass]">{{ description }}</span>
+        </div>
+    </div>
+</template>
+
+<script setup lang="ts">
+import { computed } from 'vue';
+import { ArrowUpIcon, ArrowDownIcon, MinusIcon } from '@heroicons/vue/24/solid';
+import type { Stat } from '../../interfaces/data-display/Stat.interface';
+import { useResolvedColor, useResolvedSize } from '../../composables/useModoConfig';
+
+const props = withDefaults(defineProps<Stat>(), {
+    variant: 'plain',
+    color: 'default',
+    loading: false,
+});
+
+const resolvedSize = useResolvedSize(() => props.size);
+const resolvedColor = useResolvedColor(() => props.color);
+
+const trendDirection = computed<'up' | 'down' | 'neutral'>(() => {
+    if (!props.trend) return 'neutral';
+    if (props.trend.direction) return props.trend.direction;
+    if (props.trend.value > 0) return 'up';
+    if (props.trend.value < 0) return 'down';
+    return 'neutral';
+});
+
+const trendLabel = computed(() => {
+    if (!props.trend) return '';
+    if (props.trend.label) return props.trend.label;
+    const sign = props.trend.value > 0 ? '+' : '';
+    return `${sign}${props.trend.value}%`;
+});
+
+const cardClasses = computed(() => {
+    switch (props.variant) {
+        case 'outlined': return 'border border-border bg-card rounded-xl';
+        case 'filled':   return 'bg-muted/40 border border-border/50 rounded-xl';
+        case 'plain':
+        default:         return '';
+    }
+});
+
+const paddingClasses = computed(() => {
+    if (props.variant === 'plain') return '';
+    switch (resolvedSize.value) {
+        case 'small':  return 'p-3';
+        case 'large':  return 'p-6';
+        case 'medium':
+        default:       return 'p-4';
+    }
+});
+
+const labelSizeClass = computed(() => {
+    switch (resolvedSize.value) {
+        case 'small':  return 'text-xs';
+        case 'large':  return 'text-base';
+        case 'medium':
+        default:       return 'text-sm';
+    }
+});
+
+const valueSizeClass = computed(() => {
+    switch (resolvedSize.value) {
+        case 'small':  return 'text-2xl';
+        case 'large':  return 'text-4xl';
+        case 'medium':
+        default:       return 'text-3xl';
+    }
+});
+
+const descSizeClass = computed(() => {
+    switch (resolvedSize.value) {
+        case 'small':  return 'text-[11px]';
+        case 'large':  return 'text-sm';
+        case 'medium':
+        default:       return 'text-xs';
+    }
+});
+
+const trendSizeClass = computed(() => {
+    switch (resolvedSize.value) {
+        case 'small':  return 'text-[11px]';
+        case 'large':  return 'text-sm';
+        case 'medium':
+        default:       return 'text-xs';
+    }
+});
+
+const trendIconClass = computed(() => {
+    switch (resolvedSize.value) {
+        case 'large':  return 'w-3.5 h-3.5';
+        default:       return 'w-3 h-3';
+    }
+});
+
+const iconBoxClass = computed(() => {
+    switch (resolvedSize.value) {
+        case 'small':  return 'w-7 h-7';
+        case 'large':  return 'w-12 h-12';
+        case 'medium':
+        default:       return 'w-9 h-9';
+    }
+});
+
+const iconSizeClass = computed(() => {
+    switch (resolvedSize.value) {
+        case 'small':  return 'w-3.5 h-3.5';
+        case 'large':  return 'w-6 h-6';
+        case 'medium':
+        default:       return 'w-4 h-4';
+    }
+});
+
+const iconColorClasses = computed(() => {
+    switch (resolvedColor.value) {
+        case 'primary': return 'bg-primary-subtle text-primary';
+        case 'danger':  return 'bg-destructive-subtle text-destructive';
+        case 'success': return 'bg-success-subtle text-success';
+        case 'warning': return 'bg-warning-subtle text-warning';
+        case 'default':
+        default:        return 'bg-muted text-muted-foreground';
+    }
+});
+
+const trendColorClass = computed(() => {
+    if (trendDirection.value === 'up')   return 'text-success';
+    if (trendDirection.value === 'down') return 'text-destructive';
+    return 'text-muted-foreground';
+});
+</script>
