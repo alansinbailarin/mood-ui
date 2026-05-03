@@ -94,6 +94,7 @@ export { default as FileInput } from './components/forms/FileInput.vue';
 export { default as DateField } from './components/forms/DateField.vue'; 
 export { default as DateRangeField } from './components/forms/DateRangeField.vue'; 
 export { default as DateTimeField } from './components/forms/DateTimeField.vue'; 
+export { default as Segmented } from './components/forms/Segmented.vue'; 
  
 /* ------------------------------------------------------------------ */ 
 /*  Feedback                                                            */ 
@@ -136,6 +137,7 @@ export { default as Tabs } from './components/navigation/Tabs.vue';
 export { default as Breadcrumbs } from './components/navigation/Breadcrumbs.vue'; 
 export { default as DropdownMenu } from './components/navigation/DropdownMenu.vue'; 
 export { default as Pagination } from './components/navigation/Pagination.vue'; 
+export { default as Stepper } from './components/navigation/Stepper.vue'; 
  
 /* ------------------------------------------------------------------ */ 
 /*  Data display                                                        */ 
@@ -144,6 +146,9 @@ export { default as Card } from './components/data-display/Card.vue';
 export { default as Typography } from './components/data-display/Typography.vue'; 
 export { default as Avatar } from './components/data-display/avatar/Avatar.vue'; 
 export { default as AvatarGroup } from './components/data-display/avatar/AvatarGroup.vue'; 
+export { default as Kbd } from './components/data-display/Kbd.vue'; 
+export { default as Code } from './components/data-display/Code.vue'; 
+export { default as Accordion } from './components/data-display/Accordion.vue'; 
  
 /* ------------------------------------------------------------------ */ 
 /*  Calendar / Scheduler                                                */ 
@@ -192,6 +197,7 @@ export type * from './interfaces/forms/FileInput.interface';
 export type * from './interfaces/forms/DateField.interface'; 
 export type * from './interfaces/forms/DateRangeField.interface'; 
 export type * from './interfaces/forms/DateTimeField.interface'; 
+export type * from './interfaces/forms/Segmented.interface'; 
  
 export type * from './interfaces/feedback/Badge.interface'; 
 export type * from './interfaces/feedback/Banner.interface'; 
@@ -219,6 +225,10 @@ export type * from './interfaces/navigation/Tabs.interface';
 export type * from './interfaces/navigation/Breadcrumbs.interface'; 
 export type * from './interfaces/navigation/DropdownMenu.interface'; 
 export type * from './interfaces/navigation/Pagination.interface'; 
+export type * from './interfaces/navigation/Stepper.interface'; 
  
 export type * from './interfaces/data-display/Card.interface'; 
 export type * from './interfaces/data-display/Typography.interface';
+export type * from './interfaces/data-display/Kbd.interface';
+export type * from './interfaces/data-display/Code.interface';
+export type * from './interfaces/data-display/Accordion.interface';

@@ -152,6 +152,12 @@ export const showroomNav: NavCategory[] = [
                 label: 'RangeSlider', 
                 page: () => import('./pages/forms/RangeSliderPage.vue'), 
             }, 
+            { 
+                id: 'segmented', 
+                label: 'Segmented', 
+                page: () => import('./pages/forms/SegmentedPage.vue'), 
+                badge: 'New', 
+            }, 
         ], 
     }, 
     { 
@@ -252,6 +258,24 @@ export const showroomNav: NavCategory[] = [
                 id: 'avatar-group', 
                 label: 'AvatarGroup', 
                 page: () => import('./pages/data-display/AvatarGroupPage.vue'), 
+            }, 
+            { 
+                id: 'accordion', 
+                label: 'Accordion', 
+                page: () => import('./pages/data-display/AccordionPage.vue'), 
+                badge: 'New', 
+            }, 
+            { 
+                id: 'kbd', 
+                label: 'Kbd', 
+                page: () => import('./pages/data-display/KbdPage.vue'), 
+                badge: 'New', 
+            }, 
+            { 
+                id: 'code', 
+                label: 'Code', 
+                page: () => import('./pages/data-display/CodePage.vue'), 
+                badge: 'New', 
             }, 
             { 
                 id: 'table', 
@@ -400,6 +424,12 @@ export const showroomNav: NavCategory[] = [
                 id: 'pagination', 
                 label: 'Pagination', 
                 page: () => import('./pages/navigation/PaginationPage.vue'), 
+                badge: 'New', 
+            }, 
+            { 
+                id: 'stepper', 
+                label: 'Stepper', 
+                page: () => import('./pages/navigation/StepperPage.vue'), 
                 badge: 'New', 
             }, 
         ], 
