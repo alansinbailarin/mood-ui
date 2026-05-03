@@ -10,17 +10,38 @@ import type { NavCategory } from './types';
  *   2. Adding a `NavEntry` here. 
  */ 
 export const showroomNav: NavCategory[] = [ 
-    { 
-        id: 'getting-started', 
-        title: 'Getting started', 
-        entries: [ 
-            { 
-                id: 'welcome', 
-                label: 'Welcome', 
-                page: () => import('./pages/welcome/WelcomePage.vue'), 
-            }, 
-        ], 
-    }, 
+    {
+        id: 'getting-started',
+        title: 'Getting started',
+        entries: [
+            {
+                id: 'welcome',
+                label: 'Welcome',
+                page: () => import('./pages/welcome/WelcomePage.vue'),
+            },
+        ],
+    },
+    {
+        id: 'docs',
+        title: 'Docs',
+        entries: [
+            {
+                id: 'installation',
+                label: 'Installation',
+                page: () => import('./pages/docs/InstallationPage.vue'),
+            },
+            {
+                id: 'theming',
+                label: 'Theming',
+                page: () => import('./pages/docs/ThemingPage.vue'),
+            },
+            {
+                id: 'i18n',
+                label: 'i18n',
+                page: () => import('./pages/docs/I18nPage.vue'),
+            },
+        ],
+    },
     { 
         id: 'forms', 
         title: 'Forms', 

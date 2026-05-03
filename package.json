@@ -13,12 +13,22 @@
   "bugs": {
     "url": "https://github.com/alansinbailarin/mood-ui/issues"
   },
-  "keywords": ["vue", "vue3", "components", "ui", "tailwindcss", "design-system", "modo"],
+  "keywords": [
+    "vue",
+    "vue3",
+    "components",
+    "ui",
+    "tailwindcss",
+    "design-system",
+    "modo"
+  ],
   "main": "./dist/mood-ui.cjs",
   "module": "./dist/mood-ui.mjs",
   "types": "./dist/index.d.ts",
   "style": "./dist/mood-ui.css",
-  "sideEffects": ["**/*.css"],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -28,7 +38,11 @@
     "./style.css": "./dist/mood-ui.css",
     "./package.json": "./package.json"
   },
-  "files": ["dist", "README.md", "LICENSE"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "BUILD_TARGET=lib vue-tsc -p tsconfig.lib.json --noEmit && BUILD_TARGET=lib vite build",
@@ -46,10 +60,13 @@
     "vue": "^3.4.0"
   },
   "peerDependenciesMeta": {
-    "gsap": { "optional": true },
-    "@heroicons/vue": { "optional": true }
+    "gsap": {
+      "optional": true
+    },
+    "@heroicons/vue": {
+      "optional": true
+    }
   },
-  "dependencies": {},
   "devDependencies": {
     "@heroicons/vue": "^2.2.0",
     "@tailwindcss/vite": "^4.2.4",
@@ -61,6 +78,7 @@
     "gsap": "^3.15.0",
     "jsdom": "^29.1.1",
     "playwright": "^1.59.1",
+    "shiki": "^1.29.2",
     "tailwindcss": "^4.2.4",
     "typescript": "~6.0.2",
     "vite": "^8.0.10",

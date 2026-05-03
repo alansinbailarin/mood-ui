@@ -3,7 +3,7 @@ import { ref, computed, defineAsyncComponent, h } from 'vue';
 import {
     SunIcon, MoonIcon, ComputerDesktopIcon,
     AdjustmentsHorizontalIcon, BookOpenIcon, RectangleGroupIcon,
-    Bars3Icon,
+    Bars3Icon, MagnifyingGlassIcon,
 } from '@heroicons/vue/24/outline';
 
 import logoUrl from './assets/icon-mood-ui.png';
@@ -24,6 +24,7 @@ import Stack from './components/layout/Stack.vue';
 
 import { showroomNav } from './showroom/registry';
 import { useShowroomRouter } from './showroom/composables/useShowroomRouter';
+import CommandPalette from './showroom/components/CommandPalette.vue';
 
 import type { ModoColor, ModoRadius, ModoSize, ModoTheme, ModoHalo } from './config/ModoConfig';
 import type { ModoPalette } from './config/palettes';
@@ -39,6 +40,7 @@ const halo = ref<ModoHalo>('tinted');
 const primaryHex = ref<string>('#6366f1');
 const localeName = ref<'es' | 'en'>('es');
 const settingsOpen = ref(false);
+const paletteOpen = ref(false);
 
 // AppShell state
 const sidebarCollapsed = ref(false);
@@ -249,6 +251,32 @@ const presetColors = [
                                 </Tooltip>
                             </div>
 
+                            <!-- ⌘K Command palette trigger -->
+                            <Tooltip content="Buscar (⌘K)">
+                                <button
+                                    type="button"
+                                    aria-label="Buscar"
+                                    class="hidden sm:inline-flex items-center gap-2 h-8 px-2.5 rounded-lg border border-border bg-muted/40 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors text-xs"
+                                    @click="paletteOpen = true"
+                                >
+                                    <MagnifyingGlassIcon class="w-4 h-4" />
+                                    <span class="hidden md:inline">Buscar…</span>
+                                    <kbd class="hidden md:inline-flex items-center font-mono font-semibold px-1.5 py-0.5 rounded border border-border bg-card text-[10px]">⌘K</kbd>
+                                </button>
+                            </Tooltip>
+                            <Tooltip content="Buscar (⌘K)">
+                                <Button
+                                    variant="ghost"
+                                    size="small"
+                                    icon-only
+                                    aria-label="Buscar"
+                                    class="sm:hidden"
+                                    @click="paletteOpen = true"
+                                >
+                                    <MagnifyingGlassIcon class="w-5 h-5" />
+                                </Button>
+                            </Tooltip>
+
                             <!-- Theme cycle (always visible) -->
                             <Tooltip :content="`Tema: ${theme} (click para cambiar)`">
                                 <Button
@@ -397,5 +425,13 @@ const presetColors = [
                 </label>
             </Stack>
         </Drawer>
+
+        <!-- ⌘K Command palette -->
+        <CommandPalette
+            v-model="paletteOpen"
+            @theme="theme = $event"
+            @color="primaryHex = $event"
+            @locale="localeName = $event"
+        />
     </ModoProvider>
 </template>

@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import Typography from '../../components/data-display/Typography.vue';
 import Card from '../../components/data-display/Card.vue';
+import CodePreview from './CodePreview.vue';
 
 defineProps<{
     title?: string;
     description?: string;
     code?: string;
+    /** Shiki language id. Defaults to 'vue'. */
+    lang?: 'vue' | 'typescript' | 'javascript' | 'bash' | 'html' | 'css' | 'json' | 'tsx';
 }>();
 </script>
 
@@ -16,12 +19,17 @@ defineProps<{
             <Typography v-if="description" variant="body" color="muted">{{ description }}</Typography>
         </div>
 
-        <Card variant="outlined" padding="large">
+        <!-- With code → toggleable Preview/Code via CodePreview -->
+        <CodePreview v-if="code" :code="code" :lang="lang ?? 'vue'">
+            <slot />
+        </CodePreview>
+
+        <!-- Without code → simple preview card (back-compat) -->
+        <Card v-else variant="outlined" padding="large">
             <div class="flex flex-wrap items-center gap-3">
                 <slot />
             </div>
         </Card>
-
-        <pre v-if="code" class="text-xs bg-muted/60 border border-border rounded-md p-4 overflow-x-auto font-mono text-muted-foreground"><code>{{ code }}</code></pre>
     </section>
 </template>
+
