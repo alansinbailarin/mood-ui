@@ -1,5 +1,6 @@
 <template>
     <div
+        ref="trackEl"
         role="radiogroup"
         :aria-label="ariaLabel"
         :aria-disabled="disabled || undefined"
@@ -10,9 +11,19 @@
             disabled ? 'opacity-60 pointer-events-none' : '',
         ]"
     >
+        <!-- Sliding indicator — same technique as Tabs -->
+        <span
+            ref="indicatorEl"
+            class="segmented-indicator absolute pointer-events-none"
+            :class="[innerRadiusClasses, 'bg-card shadow-sm']"
+            :style="indicatorStyle"
+            aria-hidden="true"
+        />
+
         <button
-            v-for="item in items"
+            v-for="(item, idx) in items"
             :key="item.value"
+            :ref="(el: any) => setItemRef(el, idx)"
             type="button"
             role="radio"
             :aria-checked="isActive(item) ? 'true' : 'false'"
@@ -21,7 +32,7 @@
             :disabled="item.disabled || disabled"
             :tabindex="isActive(item) ? 0 : -1"
             :class="[
-                'relative inline-flex items-center justify-center gap-1.5 font-medium select-none whitespace-nowrap',
+                'relative z-10 inline-flex items-center justify-center gap-1.5 font-medium select-none whitespace-nowrap',
                 'transition-colors duration-150 ease-out',
                 'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-offset-muted',
                 focusRingClass,
@@ -29,9 +40,7 @@
                 innerRadiusClasses,
                 fullWidth ? 'flex-1' : '',
                 item.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
-                isActive(item)
-                    ? activeClasses
-                    : 'text-muted-foreground hover:text-foreground',
+                isActive(item) ? activeTextClass : 'text-muted-foreground hover:text-foreground',
             ]"
             @click="onSelect(item)"
             @keydown="onKeydown($event, item)"
@@ -43,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import type { Segmented, SegmentedItem } from '../../interfaces/forms/Segmented.interface';
 import { useResolvedColor, useResolvedRadius, useResolvedSize } from '../../composables/useModoConfig';
 
@@ -62,6 +71,79 @@ const resolvedSize = useResolvedSize(() => props.size);
 const resolvedRadius = useResolvedRadius(() => props.radius);
 const resolvedColor = useResolvedColor(() => props.color);
 
+// ── DOM refs ──────────────────────────────────────────────────────────────
+const trackEl = ref<HTMLElement | null>(null);
+const indicatorEl = ref<HTMLElement | null>(null);
+const itemRefs = ref<(HTMLElement | null)[]>([]);
+function setItemRef(el: HTMLElement | null, idx: number) {
+    itemRefs.value[idx] = el;
+}
+
+// ── Sliding indicator ─────────────────────────────────────────────────────
+const indicatorStyle = ref<Record<string, string>>({
+    transform: 'translate3d(0,0,0)',
+    width: '0px',
+    height: '0px',
+    opacity: '0',
+});
+let _firstMeasureDone = false;
+
+function measureIndicator(animated = true) {
+    const idx = props.items.findIndex((i) => i.value === props.modelValue);
+    const el = itemRefs.value[idx];
+    if (!el) return;
+    const w = el.offsetWidth;
+    const h = el.offsetHeight;
+    if (w === 0 && h === 0) return;
+
+    const node = indicatorEl.value;
+    if (!animated && node) {
+        node.classList.add('segmented-indicator--no-anim');
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => node.classList.remove('segmented-indicator--no-anim'));
+        });
+    }
+
+    indicatorStyle.value = {
+        transform: `translate3d(${el.offsetLeft}px, ${el.offsetTop}px, 0)`,
+        width: `${w}px`,
+        height: `${h}px`,
+        top: '0',
+        opacity: '1',
+    };
+    _firstMeasureDone = true;
+}
+
+let _ro: ResizeObserver | null = null;
+onMounted(() => {
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => measureIndicator(false));
+    });
+    if (typeof ResizeObserver !== 'undefined' && trackEl.value) {
+        _ro = new ResizeObserver(() => measureIndicator(_firstMeasureDone));
+        _ro.observe(trackEl.value);
+    }
+    if (typeof window !== 'undefined') {
+        window.addEventListener('resize', onWindowResize);
+    }
+});
+onBeforeUnmount(() => {
+    _ro?.disconnect();
+    _ro = null;
+    if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', onWindowResize);
+    }
+});
+function onWindowResize() {
+    measureIndicator(false);
+}
+
+watch(
+    () => [props.modelValue, resolvedSize.value, resolvedRadius.value, resolvedColor.value, props.fullWidth, props.items.length],
+    () => nextTick(() => measureIndicator(_firstMeasureDone)),
+);
+
+// ── Selection & keyboard ──────────────────────────────────────────────────
 function isActive(item: SegmentedItem): boolean {
     return props.modelValue === item.value;
 }
@@ -92,9 +174,16 @@ function moveFocus(current: SegmentedItem, dir: 1 | -1) {
     if (enabled.length === 0) return;
     const idx = enabled.findIndex((i) => i.value === current.value);
     const next = enabled[(idx + dir + enabled.length) % enabled.length];
-    if (next) onSelect(next);
+    if (next) {
+        onSelect(next);
+        nextTick(() => {
+            const i = props.items.findIndex((it) => it.value === next.value);
+            itemRefs.value[i]?.focus();
+        });
+    }
 }
 
+// ── Class maps ────────────────────────────────────────────────────────────
 const sizeClasses = computed(() => {
     switch (resolvedSize.value) {
         case 'small':  return 'h-7 px-2.5 text-xs';
@@ -135,14 +224,15 @@ const innerRadiusClasses = computed(() => {
     }
 });
 
-const activeClasses = computed(() => {
+// Text color for active item — background comes from the indicator
+const activeTextClass = computed(() => {
     switch (resolvedColor.value) {
-        case 'primary': return 'bg-card text-primary shadow-sm';
-        case 'danger':  return 'bg-card text-destructive shadow-sm';
-        case 'success': return 'bg-card text-success shadow-sm';
-        case 'warning': return 'bg-card text-warning shadow-sm';
+        case 'primary': return 'text-primary font-medium';
+        case 'danger':  return 'text-destructive font-medium';
+        case 'success': return 'text-success font-medium';
+        case 'warning': return 'text-warning font-medium';
         case 'default':
-        default:        return 'bg-card text-foreground shadow-sm';
+        default:        return 'text-foreground font-medium';
     }
 });
 
@@ -157,3 +247,24 @@ const focusRingClass = computed(() => {
     }
 });
 </script>
+
+<style scoped>
+.segmented-indicator {
+    top: 0;
+    left: 0;
+    will-change: transform, width;
+    transition-property: transform, width, height, opacity;
+    transition-duration: 280ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.segmented-indicator--no-anim {
+    transition: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .segmented-indicator {
+        transition: opacity 120ms linear !important;
+    }
+}
+</style>
