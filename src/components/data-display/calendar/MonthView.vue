@@ -73,7 +73,7 @@
                         v-for="(day, dIdx) in week.days" 
                         :key="day.date.toISOString()" 
                         :tabindex="keyboardNavigation && day.date.getTime() === focusedDate.getTime() ? 0 : -1" 
-                        :ref="(el) => setDayRef(day.date, el as HTMLElement | null)" 
+                        :ref="(el: unknown) => setDayRef(day.date, el as HTMLElement | null)" 
                         @click="handleDayClick(day, $event)" 
                         @dblclick="handleDayDblClick(day, $event)" 
                         @focus="keyboardNavigation && (focusedDate = day.date)" 

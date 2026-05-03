@@ -164,7 +164,7 @@
                     <div 
                         v-for="r in resources" 
                         :key="`col-${r.id}`" 
-                        :ref="(el) => setColRef(r.id, el as HTMLElement | null)" 
+                        :ref="(el: unknown) => setColRef(r.id, el as HTMLElement | null)" 
                         class="relative flex-1 min-w-0 border-l border-border" 
                         :style="{ minWidth: `${minResourceWidth}px` }" 
                         @pointerdown="onColPointerDown(r, $event)" 

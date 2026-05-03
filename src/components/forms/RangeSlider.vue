@@ -90,8 +90,8 @@
                     isDisabled ? 'cursor-not-allowed' : 'cursor-grab active:cursor-grabbing', 
                 ]" 
                 :style="{ left: `${fromPercent}%`, zIndex: activeThumb === 'from' ? 3 : 2 }" 
-                @pointerdown.stop="(e) => onThumbPointerDown(e, 'from')" 
-                @keydown="(e) => onThumbKeydown(e, 'from')" 
+                @pointerdown.stop="(e: PointerEvent) => onThumbPointerDown(e, 'from')"
+                @keydown="(e: KeyboardEvent) => onThumbKeydown(e, 'from')"
             /> 
             <!-- Thumb TO --> 
             <button 
@@ -114,8 +114,8 @@
                     isDisabled ? 'cursor-not-allowed' : 'cursor-grab active:cursor-grabbing', 
                 ]" 
                 :style="{ left: `${toPercent}%`, zIndex: activeThumb === 'to' ? 3 : 2 }" 
-                @pointerdown.stop="(e) => onThumbPointerDown(e, 'to')" 
-                @keydown="(e) => onThumbKeydown(e, 'to')" 
+                @pointerdown.stop="(e: PointerEvent) => onThumbPointerDown(e, 'to')"
+                @keydown="(e: KeyboardEvent) => onThumbKeydown(e, 'to')"
             /> 
         </div> 
  

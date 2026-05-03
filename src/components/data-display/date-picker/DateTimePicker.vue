@@ -28,7 +28,7 @@
                         {{ col.label }} 
                     </div> 
                     <div 
-                        :ref="(el) => setScrollRef(col.key, el as HTMLElement | null)" 
+                        :ref="(el: unknown) => setScrollRef(col.key, el as HTMLElement | null)" 
                         class="flex-1 overflow-y-auto scroll-smooth" 
                         style="scrollbar-width: thin;" 
                     > 

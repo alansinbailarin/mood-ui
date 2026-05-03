@@ -97,7 +97,7 @@
                 </div> 
  
                 <div class="overflow-hidden px-2 pb-3"> 
-                    <div :ref="(el) => setGridRef(el as HTMLElement | null, idx)" class="grid grid-cols-7"> 
+                    <div :ref="(el: unknown) => setGridRef(el as HTMLElement | null, idx)" class="grid grid-cols-7"> 
                         <div 
                             v-for="day in panel.days" 
                             :key="day.date.getTime()" 

@@ -168,7 +168,7 @@
                 <div 
                     v-for="(day, dIdx) in days" 
                     :key="day.date.toISOString()" 
-                    :ref="(el) => setDayColRef(day.date, el as HTMLElement | null)" 
+                    :ref="(el: unknown) => setDayColRef(day.date, el as HTMLElement | null)" 
                     :class="['relative border-l border-border']" 
                     @pointerdown="onColPointerDown(day, dIdx, $event)" 
                     @click="handleSlotClick(day, $event)" 

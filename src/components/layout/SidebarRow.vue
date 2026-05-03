@@ -96,7 +96,7 @@
                         :active-variant="activeVariant" 
                         :bar-side="barSide" 
                         :expand-aria-label="expandAriaLabel" 
-                        @select="(it) => emit('select', it)" 
+                        @select="(it: unknown) => emit('select', it as any)" 
                     /> 
                 </ul> 
             </div> 

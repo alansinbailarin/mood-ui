@@ -89,7 +89,7 @@
                             'w-9 h-9 cursor-pointer bg-transparent border border-border',
                             swatchRadiusClasses,
                         ]"
-                        @input="(e) => select((e.target as HTMLInputElement).value)"
+                        @input="(e: Event) => select((e.target as HTMLInputElement).value)"
                     />
                 </div>
             </div>

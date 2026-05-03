@@ -1903,12 +1903,12 @@ function isFirstStickyCell(c: { key: string }): boolean {
                             :tabindex="(c.sortable || isReorderable(c)) ? 0 : undefined" 
                             :role="c.sortable ? 'button' : undefined" 
                             :draggable="isReorderable(c) ? true : undefined" 
-                            @click="(e) => onHeaderClick(c, e)" 
-                            @keydown="(e) => onHeaderKeydown(c, e)" 
-                            @dragstart="(e) => onHeaderDragStart(e, c)" 
-                            @dragover="(e) => onHeaderDragOver(e, c)" 
-                            @dragleave="(e) => onHeaderDragLeave(e, c)" 
-                            @drop="(e) => onHeaderDrop(e, c)" 
+                            @click="(e: MouseEvent) => onHeaderClick(c, e)"
+                            @keydown="(e: KeyboardEvent) => onHeaderKeydown(c, e)"
+                            @dragstart="(e: DragEvent) => onHeaderDragStart(e, c)"
+                            @dragover="(e: DragEvent) => onHeaderDragOver(e, c)"
+                            @dragleave="(e: DragEvent) => onHeaderDragLeave(e, c)"
+                            @drop="(e: DragEvent) => onHeaderDrop(e, c)"
                             @dragend="onHeaderDragEnd" 
                         > 
                             <span 
@@ -2124,7 +2124,7 @@ function isFirstStickyCell(c: { key: string }): boolean {
                                         <span class="font-medium text-foreground">{{ item.value }}</span> 
                                         <span class="text-muted-foreground text-caption">· {{ item.count }}</span> 
                                         <template 
-                                            v-for="(c, idx) in cols.filter((col) => col.aggregate)" 
+                                            v-for="(c, idx) in cols.filter((col: unknown) => (col as any).aggregate)" 
                                             :key="`agg-${c.key}`" 
                                         > 
                                             <span class="text-caption text-muted-foreground"> 
@@ -2155,7 +2155,7 @@ function isFirstStickyCell(c: { key: string }): boolean {
                             :aria-setsize="tree && treeMeta(ri) ? treeMeta(ri)!.setSize : undefined" 
                             :aria-posinset="tree && treeMeta(ri) ? treeMeta(ri)!.posInSet : undefined" 
                             :aria-expanded="tree && treeMeta(ri)?.hasChildren ? (treeMeta(ri)!.expanded ? 'true' : 'false') : undefined" 
-                            @click="(e) => onRowClick(row, ri, e)" 
+                            @click="(e: MouseEvent) => onRowClick(row, ri, e)" 
                             @dblclick="emit('row-activate', row, ri)" 
                         > 
                             <!-- Expansion toggle cell. --> 
@@ -2207,7 +2207,7 @@ function isFirstStickyCell(c: { key: string }): boolean {
                             <td 
                                 v-for="(c, ci) in cols" 
                                 :key="c.key" 
-                                :ref="(el) => setCellRef(ri, ci, el)" 
+                                :ref="(el: unknown) => setCellRef(ri, ci, el as HTMLElement | null)" 
                                 :class="[ 
                                     bodyCellClass, 
                                     c.cellClass, 
@@ -2224,13 +2224,13 @@ function isFirstStickyCell(c: { key: string }): boolean {
                                     minWidth: toCssLength(c.minWidth), 
                                     ...(pinStyle(c) ?? {}), 
                                 }" 
-                                @focus="kb.onCellFocus(ri, ci)" 
-                                @keydown="(e) => handleCellKeydown(e, ri, ci)" 
-                                @dblclick="(e) => onCellDblClick(c, row, ri, e)" 
+                                @focus="kb.onCellFocus(ri, ci)"
+                                @keydown="(e: KeyboardEvent) => handleCellKeydown(e, ri, ci)"
+                                @dblclick="(e: MouseEvent) => onCellDblClick(c, row, ri, e)"
                             > 
                                 <input 
                                     v-if="isCellEditing(c, ri)" 
-                                    :ref="(el) => setEditorRef(ri, c.key, el)" 
+                                    :ref="(el: unknown) => setEditorRef(ri, c.key, el as HTMLInputElement | null)" 
                                     :value="editDraft" 
                                     :type="resolveEditType(c)" 
                                     :aria-label="loc.table.edit.editCell" 
@@ -2241,8 +2241,8 @@ function isFirstStickyCell(c: { key: string }): boolean {
                                         alignTextClass(c.align), 
                                         editError ? 'ring-2 ring-destructive ring-inset rounded-xs' : '', 
                                     ]" 
-                                    @input="(e) => (editDraft = (e.target as HTMLInputElement).value)" 
-                                    @keydown="(e) => onEditorKeydown(e, ri, ci)" 
+                                    @input="(e: Event) => (editDraft = (e.target as HTMLInputElement).value)"
+                                    @keydown="(e: KeyboardEvent) => onEditorKeydown(e, ri, ci)"
                                     @blur="commitCellEdit" 
                                 /> 
                                 <span v-else :class="['inline-flex items-center gap-1 w-full', overflow === 'truncate' ? 'min-w-0' : '']"> 
@@ -2332,7 +2332,7 @@ function isFirstStickyCell(c: { key: string }): boolean {
             :page-size-options="pageSizeOptions" 
             :size="size" 
             :disabled="loading" 
-            @update:pagination="(next) => emit('update:pagination', next)" 
+            @update:pagination="(next: unknown) => emit('update:pagination', next as any)" 
         /> 
  
         <!-- Loading overlay (Phase 9). Translucent backdrop with a 
