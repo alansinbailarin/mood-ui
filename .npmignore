@@ -1,0 +1,17 @@
+# `.npmignore` is intentionally minimal — packaging is controlled by the
+# `files` field in `package.json` (which only ships `dist/`, `README.md`
+# and `LICENSE`). This file is here mainly to document intent.
+src
+public
+showroom
+dist-showroom
+node_modules
+.vscode
+.git
+*.log
+*.tsbuildinfo
+tsconfig*.json
+vite.config.ts
+vitest.config.ts
+index.html
+library.md

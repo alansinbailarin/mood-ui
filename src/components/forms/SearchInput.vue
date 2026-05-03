@@ -1,0 +1,358 @@
+<template> 
+    <div :class="['flex flex-col gap-1.5', fullWidth ? 'w-full' : 'inline-flex']"> 
+        <label 
+            v-if="label" 
+            :for="fieldId" 
+            class="text-caption font-medium text-foreground" 
+        > 
+            {{ label }} 
+            <span v-if="required" aria-hidden="true" class="text-destructive ml-0.5">*</span> 
+        </label> 
+ 
+        <div 
+            :class="[ 
+                'modo-field-wrapper flex items-center gap-2', 
+                wrapperVariantClasses, 
+                wrapperSizeClasses, 
+                radiusClasses, 
+                fullWidth ? 'w-full' : '', 
+                isDisabled ? 'opacity-60 cursor-not-allowed' : '', 
+            ]" 
+        > 
+            <MagnifyingGlassIcon 
+                aria-hidden="true" 
+                :class="['shrink-0 text-muted-foreground', iconSizeClasses]" 
+            /> 
+ 
+            <input 
+                :id="fieldId" 
+                ref="inputRef" 
+                type="search" 
+                :value="modelValue ?? ''" 
+                :placeholder="placeholder" 
+                :disabled="isDisabled" 
+                :readonly="readonly" 
+                :required="required" 
+                :name="name" 
+                :maxlength="maxLength" 
+                :autofocus="autofocus" 
+                autocomplete="off" 
+                spellcheck="false" 
+                role="searchbox" 
+                :aria-label="!label ? ariaLabel : undefined" 
+                :aria-invalid="hasError || undefined" 
+                :aria-describedby="describedBy" 
+                :aria-required="required || undefined" 
+                :class="[ 
+                    'modo-field-native flex-1 min-w-0 bg-transparent p-0', 
+                    'text-foreground placeholder:text-muted-foreground', 
+                    'disabled:cursor-not-allowed', 
+                    inputTextClasses, 
+                ]" 
+                @input="onInput" 
+                @keydown="onKeydown" 
+                @focus="onFocus" 
+                @blur="onBlur" 
+            /> 
+ 
+            <Loader 
+                v-if="loading" 
+                :size="size === 'large' ? 'medium' : 'small'" 
+                class="shrink-0 text-muted-foreground" 
+            /> 
+ 
+            <Button 
+                v-else-if="hasValue && !isDisabled && !readonly" 
+                variant="text" 
+                size="xs" 
+                radius="full" 
+                :icon="XMarkIcon" 
+                :ariaLabel="loc.searchInput.clear" 
+                tabindex="-1" 
+                class="shrink-0 text-muted-foreground hover:text-foreground" 
+                @click="onClear" 
+            /> 
+ 
+            <kbd 
+                v-else-if="shortcut && !focused" 
+                aria-hidden="true" 
+                :class="[ 
+                    'shrink-0 select-none rounded-md px-1.5 py-0.5', 
+                    'text-[11px] leading-none font-sans font-medium tabular-nums', 
+                    'bg-muted text-muted-foreground border border-border', 
+                ]" 
+            > 
+                {{ shortcutLabel }} 
+            </kbd> 
+        </div> 
+ 
+        <div 
+            v-if="errorText || helperText || showCounterEffective" 
+            class="flex items-start justify-between gap-2" 
+        > 
+            <Typography 
+                v-if="errorText" 
+                :id="errorId" 
+                variant="caption" 
+                size="medium" 
+                color="danger" 
+                as="p" 
+            > 
+                {{ errorText }} 
+            </Typography> 
+            <Typography 
+                v-else-if="helperText" 
+                :id="helperId" 
+                variant="caption" 
+                size="medium" 
+                color="muted" 
+                as="p" 
+            > 
+                {{ helperText }} 
+            </Typography> 
+            <span v-else class="flex-1" /> 
+ 
+            <span 
+                v-if="showCounterEffective" 
+                :id="counterId" 
+                :class="[ 
+                    'text-caption shrink-0 tabular-nums', 
+                    counterOverflow ? 'text-destructive' : 'text-muted-foreground', 
+                ]" 
+            > 
+                {{ currentLength }}/{{ maxLength }} 
+            </span> 
+        </div> 
+    </div> 
+</template> 
+ 
+<script setup lang="ts"> 
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'; 
+import type { SearchInput } from '../../interfaces/forms/SearchInput.interface'; 
+import { useFieldState, useFieldClasses } from '../../composables/useField'; 
+import Loader from '../feedback/Loader.vue'; 
+import Button from './Button.vue'; 
+import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/vue/24/outline'; 
+import Typography from '../data-display/Typography.vue'; 
+import { useModoLocale, useResolvedSize } from '../../composables/useModoConfig'; 
+ 
+const loc = useModoLocale(); 
+ 
+const emit = defineEmits<{ 
+    'update:modelValue': [value: string]; 
+    change: [value: string]; 
+    focus: [event: FocusEvent]; 
+    blur: [event: FocusEvent]; 
+    clear: []; 
+    /** Se emite al presionar Enter o tras el debounce. */ 
+    search: [value: string]; 
+}>(); 
+ 
+const props = withDefaults(defineProps<SearchInput>(), { 
+    variant: 'outline', 
+    color: 'default', 
+    disabled: false, 
+    readonly: false, 
+    required: false, 
+    loading: false, 
+    fullWidth: false, 
+    showCounter: false, 
+    autofocus: false, 
+    debounce: 0, 
+    placeholder: 'Search…', 
+}); 
+ 
+const resolvedSize = useResolvedSize(() => props.size); 
+ 
+const inputRef = ref<HTMLInputElement | null>(null); 
+const focused = ref(false); 
+ 
+const { 
+    fieldId, 
+    radius, 
+    stateColor, 
+    hasError, 
+    hasValue, 
+    isDisabled, 
+    currentLength, 
+    showCounterEffective, 
+    counterOverflow, 
+    errorId, 
+    helperId, 
+    counterId, 
+    describedBy, 
+} = useFieldState(props, { componentName: 'SearchInput', idPrefix: 'modo-search' }); 
+ 
+const { wrapperVariantClasses, radiusClasses } = useFieldClasses({ 
+    variant: () => props.variant, 
+    stateColor, 
+    hasError, 
+    radius, 
+    halo: () => props.halo, 
+}); 
+ 
+/* ---------- Debounce ---------- */ 
+let debounceTimer: number | null = null; 
+function scheduleSearch(value: string) { 
+    if (!props.debounce || props.debounce <= 0) return; 
+    if (debounceTimer !== null) clearTimeout(debounceTimer); 
+    debounceTimer = window.setTimeout(() => { 
+        emit('search', value); 
+        debounceTimer = null; 
+    }, props.debounce); 
+} 
+function cancelDebounce() { 
+    if (debounceTimer !== null) { 
+        clearTimeout(debounceTimer); 
+        debounceTimer = null; 
+    } 
+} 
+ 
+/* ---------- Events ---------- */ 
+function onInput(e: Event) { 
+    const target = e.target as HTMLInputElement; 
+    emit('update:modelValue', target.value); 
+    scheduleSearch(target.value); 
+} 
+ 
+function onKeydown(e: KeyboardEvent) { 
+    if (e.key === 'Enter') { 
+        e.preventDefault(); 
+        cancelDebounce(); 
+        emit('search', String(props.modelValue ?? '')); 
+    } else if (e.key === 'Escape' && hasValue.value) { 
+        e.preventDefault(); 
+        onClear(); 
+    } 
+} 
+ 
+function onFocus(e: FocusEvent) { 
+    focused.value = true; 
+    emit('focus', e); 
+} 
+ 
+function onBlur(e: FocusEvent) { 
+    focused.value = false; 
+    emit('blur', e); 
+} 
+ 
+function onClear() { 
+    cancelDebounce(); 
+    emit('update:modelValue', ''); 
+    emit('clear'); 
+    emit('search', ''); 
+    inputRef.value?.focus(); 
+} 
+ 
+/* ---------- Shortcut ---------- */ 
+const isMac = typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform); 
+ 
+interface ParsedShortcut { 
+    key: string; 
+    ctrl: boolean; 
+    meta: boolean; 
+    shift: boolean; 
+    alt: boolean; 
+} 
+ 
+const parsedShortcut = computed<ParsedShortcut | null>(() => { 
+    if (!props.shortcut) return null; 
+    const parts = props.shortcut.toLowerCase().split('+').map((p) => p.trim()); 
+    const result: ParsedShortcut = { key: '', ctrl: false, meta: false, shift: false, alt: false }; 
+    for (const part of parts) { 
+        if (part === 'cmd' || part === 'meta' || part === 'command') { 
+            if (isMac) result.meta = true; 
+            else result.ctrl = true; 
+        } else if (part === 'ctrl' || part === 'control') { 
+            result.ctrl = true; 
+        } else if (part === 'shift') { 
+            result.shift = true; 
+        } else if (part === 'alt' || part === 'option') { 
+            result.alt = true; 
+        } else { 
+            result.key = part; 
+        } 
+    } 
+    return result.key ? result : null; 
+}); 
+ 
+const shortcutLabel = computed(() => { 
+    const s = parsedShortcut.value; 
+    if (!s) return ''; 
+    const segs: string[] = []; 
+    if (s.meta) segs.push(isMac ? '⌘' : 'Ctrl'); 
+    else if (s.ctrl) segs.push(isMac ? '⌃' : 'Ctrl'); 
+    if (s.alt) segs.push(isMac ? '⌥' : 'Alt'); 
+    if (s.shift) segs.push(isMac ? '⇧' : 'Shift'); 
+    segs.push(s.key.length === 1 ? s.key.toUpperCase() : s.key); 
+    return segs.join(isMac ? '' : '+'); 
+}); 
+ 
+function onGlobalKeydown(e: KeyboardEvent) { 
+    const s = parsedShortcut.value; 
+    if (!s) return; 
+ 
+    // No robar atajos mientras el usuario escribe en otro campo (a menos que sea una combinación con modificador). 
+    const target = e.target as HTMLElement | null; 
+    const typingElsewhere = !!target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable); 
+    const hasModifier = s.meta || s.ctrl || s.alt; 
+    if (typingElsewhere && !hasModifier && target !== inputRef.value) return; 
+ 
+    if ( 
+        e.key.toLowerCase() === s.key && 
+        e.metaKey === s.meta && 
+        e.ctrlKey === s.ctrl && 
+        e.shiftKey === s.shift && 
+        e.altKey === s.alt 
+    ) { 
+        e.preventDefault(); 
+        inputRef.value?.focus(); 
+        inputRef.value?.select(); 
+    } 
+} 
+ 
+onMounted(() => { 
+    if (parsedShortcut.value) { 
+        window.addEventListener('keydown', onGlobalKeydown); 
+    } 
+}); 
+ 
+onBeforeUnmount(() => { 
+    cancelDebounce(); 
+    window.removeEventListener('keydown', onGlobalKeydown); 
+}); 
+ 
+/* ---------- Classes ---------- */ 
+ 
+const wrapperSizeClasses = computed(() => { 
+    switch (resolvedSize.value) { 
+        case 'small': return 'h-8 px-2.5'; 
+        case 'large': return 'h-12 px-4'; 
+        default: return 'h-10 px-3'; 
+    } 
+}); 
+ 
+const inputTextClasses = computed(() => { 
+    switch (resolvedSize.value) { 
+        case 'small': return 'text-caption'; 
+        case 'large': return 'text-body-lg'; 
+        default: return 'text-body'; 
+    } 
+}); 
+ 
+const iconSizeClasses = computed(() => { 
+    switch (resolvedSize.value) { 
+        case 'small': return 'w-4 h-4'; 
+        case 'large': return 'w-5 h-5'; 
+        default: return 'w-4 h-4'; 
+    } 
+}); 
+ 
+defineExpose({ 
+    focus: () => inputRef.value?.focus(), 
+    blur: () => inputRef.value?.blur(), 
+    select: () => inputRef.value?.select(), 
+    clear: onClear, 
+    inputRef, 
+}); 
+</script>

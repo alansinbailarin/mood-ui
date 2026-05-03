@@ -1,0 +1,24 @@
+{
+    "extends": "@vue/tsconfig/tsconfig.dom.json",
+    "compilerOptions": {
+        "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.lib.tsbuildinfo",
+        "outDir": "dist/types",
+        "declaration": true,
+        "emitDeclarationOnly": true,
+        "noEmit": false,
+        "rootDir": "src",
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "erasableSyntaxOnly": true,
+        "noFallthroughCasesInSwitch": true,
+        "types": ["vite/client"]
+    },
+    "include": ["src/**/*.ts", "src/**/*.vue"],
+    "exclude": [
+        "src/showroom/**",
+        "src/main.ts",
+        "src/App.vue",
+        "**/*.spec.ts",
+        "**/*.test.ts"
+    ]
+}

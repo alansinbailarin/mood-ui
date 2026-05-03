@@ -1,0 +1,373 @@
+@import "tailwindcss"; 
+ 
+/* Dark mode variant triggered by `.dark` class on <html>, any ancestor, or 
+ * an element marked with `data-modo-theme="dark"` (scoped provider). */ 
+@custom-variant dark (&:where(.dark, .dark *, [data-modo-theme="dark"], [data-modo-theme="dark"] *)); 
+ 
+@theme { 
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif; 
+  --font-poppins: "Poppins", sans-serif; 
+ 
+  /* ========================================================== 
+   * Motion — durations & easings. 
+   * Utilities: `duration-fast`, `duration-base`, `ease-standard`… 
+   * ========================================================== */ 
+  --duration-instant: 80ms; 
+  --duration-fast: 140ms; 
+  --duration-base: 220ms; 
+  --duration-slow: 320ms; 
+  --duration-slower: 480ms; 
+ 
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1); 
+  --ease-emphasized: cubic-bezier(0.3, 0, 0, 1); 
+  --ease-decelerate: cubic-bezier(0, 0, 0, 1); 
+  --ease-accelerate: cubic-bezier(0.3, 0, 1, 1); 
+ 
+  /* ========================================================== 
+   * Elevation — layered shadows (overridden in dark, see below). 
+   * Utilities: `shadow-xs`, `shadow-sm`, `shadow-md`… 
+   * ========================================================== */ 
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05); 
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.04), 0 1px 3px 0 rgb(0 0 0 / 0.06); 
+  --shadow-md: 0 2px 4px -1px rgb(0 0 0 / 0.06), 0 4px 8px -2px rgb(0 0 0 / 0.08); 
+  --shadow-lg: 0 4px 8px -2px rgb(0 0 0 / 0.08), 0 12px 24px -6px rgb(0 0 0 / 0.12); 
+  --shadow-xl: 0 8px 16px -4px rgb(0 0 0 / 0.10), 0 24px 48px -12px rgb(0 0 0 / 0.18); 
+ 
+  /* ========================================================== 
+   * Typography scale — each step pairs size + leading + tracking. 
+   * Utilities: `text-caption`, `text-body`, `text-title`, `text-display`. 
+   * ========================================================== */ 
+  --text-caption: 0.75rem; 
+  --text-caption--line-height: 1rem; 
+  --text-caption--letter-spacing: 0.01em; 
+ 
+  --text-body: 0.875rem; 
+  --text-body--line-height: 1.375rem; 
+ 
+  --text-body-lg: 1rem; 
+  --text-body-lg--line-height: 1.5rem; 
+ 
+  --text-title: 1.25rem; 
+  --text-title--line-height: 1.75rem; 
+  --text-title--letter-spacing: -0.01em; 
+  --text-title--font-weight: 600; 
+ 
+  --text-display: 2rem; 
+  --text-display--line-height: 2.375rem; 
+  --text-display--letter-spacing: -0.02em; 
+  --text-display--font-weight: 700; 
+} 
+ 
+/* ============================================================ 
+ * modo-ui · Semantic tokens (OKLCH) 
+ * Enable CSS `light-dark()` by declaring `color-scheme` per mode. 
+ * 
+ * The selectors accept `[data-modo-theme="light|dark"]` alongside the 
+ * global root / `.dark` class, so a nested provider can scope its own 
+ * theme to a subtree without affecting the rest of the document. 
+ * `:where(:root)` keeps root specificity at 0 so scoped overrides win. 
+ * ============================================================ */ 
+:where(:root), 
+[data-modo-theme="light"] { 
+  color-scheme: light; 
+  --background: oklch(1 0 0); 
+  --foreground: oklch(0.145 0 0); 
+  --card: oklch(1 0 0); 
+  --card-foreground: oklch(0.145 0 0); 
+  --popover: oklch(1 0 0); 
+  --popover-foreground: oklch(0.145 0 0); 
+  --primary: oklch(0.546 0.215 262.9); 
+  --primary-foreground: oklch(0.985 0 0); 
+  --secondary: oklch(0.97 0 0); 
+  --secondary-foreground: oklch(0.205 0 0); 
+  --muted: oklch(0.97 0 0); 
+  --muted-foreground: oklch(0.556 0 0); 
+  --accent: oklch(0.97 0 0); 
+  --accent-foreground: oklch(0.205 0 0); 
+  --destructive: oklch(0.577 0.245 27.325); 
+  --destructive-foreground: oklch(0.985 0 0); 
+  --success: oklch(0.619 0.165 146.7); 
+  --success-foreground: oklch(0.985 0 0); 
+  --warning: oklch(0.769 0.188 70.08); 
+  --warning-foreground: oklch(0.205 0 0); 
+  --info: oklch(0.65 0.135 235); 
+  --info-foreground: oklch(0.985 0 0); 
+  --border: oklch(0.922 0 0); 
+  --input: oklch(0.922 0 0); 
+  --ring: oklch(0.708 0 0); 
+  --radius: 0.5rem; 
+ 
+  /* Subtle surface tokens — opaque fills resolved via light-dark() so they 
+   * don't inherit alpha and work safely behind overlapping siblings. */ 
+  --primary-subtle: light-dark(oklch(0.93 0.05 262.9), oklch(0.27 0.09 259.8)); 
+  --destructive-subtle: light-dark(oklch(0.94 0.04 27.3), oklch(0.28 0.08 22.2)); 
+  --success-subtle: light-dark(oklch(0.94 0.04 146.7), oklch(0.28 0.07 146.7)); 
+  --warning-subtle: light-dark(oklch(0.95 0.05 84.4), oklch(0.3 0.08 84.4)); 
+  --info-subtle: light-dark(oklch(0.94 0.04 235), oklch(0.28 0.07 235)); 
+ 
+  /* Interactive state tokens — darker on hover/active in light, lighter in dark. */ 
+  --primary-hover: light-dark(oklch(0.50 0.22 262.9), oklch(0.67 0.21 259.8)); 
+  --primary-active: light-dark(oklch(0.45 0.21 262.9), oklch(0.72 0.20 259.8)); 
+  --destructive-hover: light-dark(oklch(0.53 0.25 27.3), oklch(0.74 0.19 22.2)); 
+  --destructive-active: light-dark(oklch(0.48 0.24 27.3), oklch(0.78 0.18 22.2)); 
+  --success-hover: light-dark(oklch(0.57 0.17 146.7), oklch(0.74 0.17 146.7)); 
+  --success-active: light-dark(oklch(0.52 0.16 146.7), oklch(0.78 0.16 146.7)); 
+  --warning-hover: light-dark(oklch(0.72 0.19 70.08), oklch(0.86 0.18 84.4)); 
+  --warning-active: light-dark(oklch(0.67 0.18 70.08), oklch(0.89 0.17 84.4)); 
+  --info-hover: light-dark(oklch(0.60 0.14 235), oklch(0.76 0.13 235)); 
+  --info-active: light-dark(oklch(0.55 0.13 235), oklch(0.80 0.12 235)); 
+  --muted-hover: light-dark(oklch(0.94 0 0), oklch(0.30 0 0)); 
+  --accent-hover: light-dark(oklch(0.94 0 0), oklch(0.40 0 0)); 
+ 
+  /* Extra event accent colors (used by calendars). */ 
+  --purple: light-dark(oklch(0.55 0.22 295), oklch(0.74 0.18 295)); 
+  --purple-foreground: oklch(0.985 0 0); 
+  --purple-subtle: light-dark(oklch(0.94 0.05 295), oklch(0.27 0.10 295)); 
+  --pink: light-dark(oklch(0.62 0.22 350), oklch(0.76 0.18 350)); 
+  --pink-foreground: oklch(0.985 0 0); 
+  --pink-subtle: light-dark(oklch(0.94 0.05 350), oklch(0.28 0.10 350)); 
+} 
+ 
+.dark, 
+[data-modo-theme="dark"] { 
+  color-scheme: dark; 
+  --background: oklch(0.145 0 0); 
+  --foreground: oklch(0.985 0 0); 
+  --card: oklch(0.205 0 0); 
+  --card-foreground: oklch(0.985 0 0); 
+  --popover: oklch(0.269 0 0); 
+  --popover-foreground: oklch(0.985 0 0); 
+  --primary: oklch(0.623 0.214 259.8); 
+  --primary-foreground: oklch(0.985 0 0); 
+  --secondary: oklch(0.269 0 0); 
+  --secondary-foreground: oklch(0.985 0 0); 
+  --muted: oklch(0.269 0 0); 
+  --muted-foreground: oklch(0.708 0 0); 
+  --accent: oklch(0.371 0 0); 
+  --accent-foreground: oklch(0.985 0 0); 
+  --destructive: oklch(0.704 0.191 22.216); 
+  --destructive-foreground: oklch(0.985 0 0); 
+  --success: oklch(0.7 0.17 146.7); 
+  --success-foreground: oklch(0.145 0 0); 
+  --warning: oklch(0.828 0.189 84.4); 
+  --warning-foreground: oklch(0.145 0 0); 
+  --info: oklch(0.72 0.135 235); 
+  --info-foreground: oklch(0.145 0 0); 
+  --border: oklch(0.275 0 0); 
+  --input: oklch(0.325 0 0); 
+  --ring: oklch(0.556 0 0); 
+} 
+ 
+/* ============================================================ 
+ * Dark-mode elevation override — deeper opacities since plain drop 
+ * shadows on dark surfaces read as nothing. 
+ * ============================================================ */ 
+.dark, 
+[data-modo-theme="dark"] { 
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.40); 
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.35), 0 1px 3px 0 rgb(0 0 0 / 0.45); 
+  --shadow-md: 0 2px 4px -1px rgb(0 0 0 / 0.45), 0 4px 8px -2px rgb(0 0 0 / 0.55); 
+  --shadow-lg: 0 4px 8px -2px rgb(0 0 0 / 0.50), 0 12px 24px -6px rgb(0 0 0 / 0.60); 
+  --shadow-xl: 0 8px 16px -4px rgb(0 0 0 / 0.55), 0 24px 48px -12px rgb(0 0 0 / 0.70); 
+} 
+ 
+/* Respect reduced-motion system preference — kills durations globally. */ 
+@media (prefers-reduced-motion: reduce) { 
+  :where(:root) { 
+    --duration-instant: 0ms; 
+    --duration-fast: 0ms; 
+    --duration-base: 0ms; 
+    --duration-slow: 0ms; 
+    --duration-slower: 0ms; 
+  } 
+  *, *::before, *::after { 
+    animation-duration: 0.01ms !important; 
+    animation-iteration-count: 1 !important; 
+    transition-duration: 0.01ms !important; 
+    scroll-behavior: auto !important; 
+  } 
+} 
+ 
+/* ============================================================ 
+ * Staggered entry — opt-in helper for lists inside popovers, menus, 
+ * filter panels, etc. Apply `.modo-stagger` to the container that holds 
+ * the items to animate. Each direct child fades + rises slightly into 
+ * place with a small delay based on its position. 
+ * 
+ * Usage: 
+ *   <ul class="modo-stagger"> ...items... </ul> 
+ * 
+ * Honors prefers-reduced-motion via the global override above. 
+ * ============================================================ */ 
+@keyframes modo-stagger-in { 
+  from { opacity: 0; transform: translateY(4px); } 
+  to   { opacity: 1; transform: translateY(0); } 
+} 
+ 
+.modo-stagger > * { 
+  animation: modo-stagger-in 180ms var(--ease-decelerate) both; 
+} 
+.modo-stagger > *:nth-child(1)  { animation-delay: 20ms;  } 
+.modo-stagger > *:nth-child(2)  { animation-delay: 45ms;  } 
+.modo-stagger > *:nth-child(3)  { animation-delay: 70ms;  } 
+.modo-stagger > *:nth-child(4)  { animation-delay: 95ms;  } 
+.modo-stagger > *:nth-child(5)  { animation-delay: 120ms; } 
+.modo-stagger > *:nth-child(6)  { animation-delay: 140ms; } 
+.modo-stagger > *:nth-child(7)  { animation-delay: 160ms; } 
+.modo-stagger > *:nth-child(8)  { animation-delay: 175ms; } 
+.modo-stagger > *:nth-child(9)  { animation-delay: 190ms; } 
+.modo-stagger > *:nth-child(10) { animation-delay: 200ms; } 
+/* Items past the 10th reuse the final delay to keep long lists snappy. */ 
+.modo-stagger > *:nth-child(n+11) { animation-delay: 210ms; } 
+ 
+/* ===================================================== 
+ * Skeleton loader — shimmering placeholder used by the 
+ * `<Skeleton />` component and anywhere loading state 
+ * needs a low-attention surrogate. 
+ * ===================================================== */ 
+@keyframes modo-skeleton-shimmer { 
+  0%   { background-position: -150% 0; } 
+  100% { background-position: 150% 0; } 
+} 
+@keyframes modo-skeleton-pulse { 
+  0%, 100% { opacity: 1; } 
+  50%      { opacity: 0.6; } 
+} 
+ 
+/* ============================================================ 
+ * Calendar "today" feedback — subtle scale pulse on the day cell 
+ * that represents the current date when `goToToday()` fires. 
+ * ============================================================ */ 
+@keyframes modo-today-pop { 
+  0%   { transform: scale(1); } 
+  40%  { transform: scale(1.12); } 
+  100% { transform: scale(1); } 
+} 
+ 
+/* Expose tokens as Tailwind utilities (v4 `@theme inline`). */ 
+@theme inline { 
+  --color-background: var(--background); 
+  --color-foreground: var(--foreground); 
+  --color-card: var(--card); 
+  --color-card-foreground: var(--card-foreground); 
+  --color-popover: var(--popover); 
+  --color-popover-foreground: var(--popover-foreground); 
+  --color-primary: var(--primary); 
+  --color-primary-foreground: var(--primary-foreground); 
+  --color-secondary: var(--secondary); 
+  --color-secondary-foreground: var(--secondary-foreground); 
+  --color-muted: var(--muted); 
+  --color-muted-foreground: var(--muted-foreground); 
+  --color-accent: var(--accent); 
+  --color-accent-foreground: var(--accent-foreground); 
+  --color-destructive: var(--destructive); 
+  --color-destructive-foreground: var(--destructive-foreground); 
+  --color-success: var(--success); 
+  --color-success-foreground: var(--success-foreground); 
+  --color-warning: var(--warning); 
+  --color-warning-foreground: var(--warning-foreground); 
+  --color-info: var(--info); 
+  --color-info-foreground: var(--info-foreground); 
+  --color-border: var(--border); 
+  --color-input: var(--input); 
+  --color-ring: var(--ring); 
+ 
+  --color-primary-subtle: var(--primary-subtle); 
+  --color-destructive-subtle: var(--destructive-subtle); 
+  --color-success-subtle: var(--success-subtle); 
+  --color-warning-subtle: var(--warning-subtle); 
+  --color-info-subtle: var(--info-subtle); 
+ 
+  --color-primary-hover: var(--primary-hover); 
+  --color-primary-active: var(--primary-active); 
+  --color-destructive-hover: var(--destructive-hover); 
+  --color-destructive-active: var(--destructive-active); 
+  --color-success-hover: var(--success-hover); 
+  --color-success-active: var(--success-active); 
+  --color-warning-hover: var(--warning-hover); 
+  --color-warning-active: var(--warning-active); 
+  --color-info-hover: var(--info-hover); 
+  --color-info-active: var(--info-active); 
+  --color-muted-hover: var(--muted-hover); 
+  --color-accent-hover: var(--accent-hover); 
+ 
+  --color-purple: var(--purple); 
+  --color-purple-foreground: var(--purple-foreground); 
+  --color-purple-subtle: var(--purple-subtle); 
+  --color-pink: var(--pink); 
+  --color-pink-foreground: var(--pink-foreground); 
+  --color-pink-subtle: var(--pink-subtle); 
+ 
+  --radius-sm: calc(var(--radius) - 4px); 
+  --radius-md: calc(var(--radius) - 2px); 
+  --radius-lg: var(--radius); 
+  --radius-xl: calc(var(--radius) + 4px); 
+} 
+ 
+body { 
+  font-family: "Poppins", sans-serif; 
+} 
+ 
+/* ============================================================ 
+ * A11y baseline 
+ * ============================================================ */ 
+ 
+/* Global default focus ring for any interactive element without one. 
+ * Components that set their own `focus-visible:ring-*` win by specificity. */ 
+:where(a, button, [role="button"], input, select, textarea, [tabindex]):focus-visible { 
+  outline: 2px solid var(--ring); 
+  outline-offset: 2px; 
+  border-radius: 2px; 
+} 
+ 
+/* Never let focus be swallowed silently. Bring focused anchors into view 
+ * when navigating with the keyboard through a scrollable container. */ 
+:where(a, button, [tabindex]):focus-visible { 
+  scroll-margin: 1rem; 
+} 
+ 
+/* Keyboard-only focus on sticky headers shouldn't hide behind them. */ 
+:where([role="main"], main) { 
+  scroll-margin-top: 5rem; 
+} 
+ 
+/* ========================================================== 
+ * Form field wrapper — transition smoothly between halo colors 
+ * when focus moves. Applied to the wrapper of Input, Textarea… 
+ * ========================================================== */ 
+.modo-field-wrapper { 
+  transition-property: background-color, border-color, box-shadow, --tw-ring-color, --tw-ring-shadow; 
+  transition-duration: var(--duration-base, 220ms); 
+  transition-timing-function: var(--ease-standard, cubic-bezier(0.2, 0, 0, 1)); 
+} 
+@media (prefers-reduced-motion: reduce) { 
+  .modo-field-wrapper { transition: none; } 
+} 
+ 
+/* Native <input>/<textarea> reset — focus feedback lives on the wrapper, 
+ * not on the native element. Prevents double rings and platform drift. */ 
+.modo-field-native, 
+.modo-field-native:focus, 
+.modo-field-native:focus-visible { 
+  outline: none !important; 
+  box-shadow: none !important; 
+} 
+.modo-field-native { 
+  border: 0 !important; 
+} 
+/* Webkit autofill: strip yellow background, inherit text color. */ 
+.modo-field-native:-webkit-autofill, 
+.modo-field-native:-webkit-autofill:hover, 
+.modo-field-native:-webkit-autofill:focus { 
+  -webkit-text-fill-color: inherit; 
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset; 
+  transition: background-color 9999s ease-in-out 0s; 
+} 
+/* Hide native "clear"/"reveal" icons on Edge/IE and search cancel on webkit. */ 
+.modo-field-native::-ms-clear, 
+.modo-field-native::-ms-reveal { display: none; } 
+.modo-field-native::-webkit-search-cancel-button, 
+.modo-field-native::-webkit-search-decoration { 
+  -webkit-appearance: none; 
+  appearance: none; 
+}

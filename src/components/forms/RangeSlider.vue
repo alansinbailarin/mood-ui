@@ -1,0 +1,396 @@
+<template> 
+    <div :class="['flex flex-col gap-1.5', fullWidth ? 'w-full' : 'inline-flex']"> 
+        <div v-if="label || showValue" class="flex items-center justify-between gap-2"> 
+            <label 
+                v-if="label" 
+                :for="fieldId" 
+                class="text-caption font-medium text-foreground" 
+            > 
+                {{ label }} 
+                <span v-if="required" aria-hidden="true" class="text-destructive ml-0.5">*</span> 
+            </label> 
+            <span v-if="showValue" class="text-caption tabular-nums text-muted-foreground"> 
+                {{ displayFrom }} – {{ displayTo }} 
+            </span> 
+        </div> 
+ 
+        <div 
+            ref="trackEl" 
+            :class="[ 
+                'relative w-full select-none touch-none', 
+                trackHeightClass, 
+                isDisabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer', 
+            ]" 
+            @pointerdown="onTrackPointerDown" 
+        > 
+            <!-- Track bg --> 
+            <div 
+                :class="[ 
+                    'absolute inset-x-0 top-1/2 -translate-y-1/2 bg-muted', 
+                    trackRadiusClass, 
+                    trackThicknessClass, 
+                ]" 
+            /> 
+            <!-- Filled segment --> 
+            <div 
+                :class="[ 
+                    'absolute top-1/2 -translate-y-1/2 transition-colors duration-base ease-standard', 
+                    trackRadiusClass, 
+                    trackThicknessClass, 
+                    fillColorClass, 
+                ]" 
+                :style="{ left: `${fromPercent}%`, width: `${toPercent - fromPercent}%` }" 
+            /> 
+ 
+            <!-- Marks --> 
+            <template v-if="resolvedMarks.length"> 
+                <div 
+                    v-for="mark in resolvedMarks" 
+                    :key="mark.value" 
+                    class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2" 
+                    :style="{ left: `${valueToPercent(mark.value)}%` }" 
+                > 
+                    <span 
+                        :class="[ 
+                            'block rounded-full', 
+                            markSizeClass, 
+                            mark.value >= fromValue && mark.value <= toValue ? fillColorClass : 'bg-border', 
+                        ]" 
+                    /> 
+                    <span 
+                        v-if="mark.label" 
+                        class="absolute left-1/2 -translate-x-1/2 top-full mt-1 text-[11px] text-muted-foreground whitespace-nowrap" 
+                    > 
+                        {{ mark.label }} 
+                    </span> 
+                </div> 
+            </template> 
+ 
+            <!-- Thumb FROM --> 
+            <button 
+                :id="fieldId" 
+                type="button" 
+                role="slider" 
+                :aria-label="(ariaLabel ?? label ?? 'Range') + ' from'" 
+                :aria-valuemin="min" 
+                :aria-valuemax="max" 
+                :aria-valuenow="fromValue" 
+                :aria-valuetext="displayFrom" 
+                :aria-disabled="isDisabled || undefined" 
+                :aria-invalid="hasError || undefined" 
+                :aria-describedby="describedBy" 
+                :disabled="isDisabled" 
+                :class="[ 
+                    'absolute top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-background border-2', 
+                    'transition-[transform,box-shadow,--tw-ring-color] duration-fast ease-standard', 
+                    thumbSizeClass, 
+                    thumbBorderColorClass, 
+                    thumbHaloClass, 
+                    'shadow-sm hover:scale-110 focus:outline-none', 
+                    isDisabled ? 'cursor-not-allowed' : 'cursor-grab active:cursor-grabbing', 
+                ]" 
+                :style="{ left: `${fromPercent}%`, zIndex: activeThumb === 'from' ? 3 : 2 }" 
+                @pointerdown.stop="(e) => onThumbPointerDown(e, 'from')" 
+                @keydown="(e) => onThumbKeydown(e, 'from')" 
+            /> 
+            <!-- Thumb TO --> 
+            <button 
+                type="button" 
+                role="slider" 
+                :aria-label="(ariaLabel ?? label ?? 'Range') + ' to'" 
+                :aria-valuemin="min" 
+                :aria-valuemax="max" 
+                :aria-valuenow="toValue" 
+                :aria-valuetext="displayTo" 
+                :aria-disabled="isDisabled || undefined" 
+                :disabled="isDisabled" 
+                :class="[ 
+                    'absolute top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-background border-2', 
+                    'transition-[transform,box-shadow,--tw-ring-color] duration-fast ease-standard', 
+                    thumbSizeClass, 
+                    thumbBorderColorClass, 
+                    thumbHaloClass, 
+                    'shadow-sm hover:scale-110 focus:outline-none', 
+                    isDisabled ? 'cursor-not-allowed' : 'cursor-grab active:cursor-grabbing', 
+                ]" 
+                :style="{ left: `${toPercent}%`, zIndex: activeThumb === 'to' ? 3 : 2 }" 
+                @pointerdown.stop="(e) => onThumbPointerDown(e, 'to')" 
+                @keydown="(e) => onThumbKeydown(e, 'to')" 
+            /> 
+        </div> 
+ 
+        <div v-if="errorText || helperText" class="flex items-start gap-2"> 
+            <Typography v-if="errorText" :id="errorId" variant="caption" size="medium" color="danger" as="p">{{ errorText }}</Typography> 
+            <Typography v-else-if="helperText" :id="helperId" variant="caption" size="medium" color="muted" as="p">{{ helperText }}</Typography> 
+        </div> 
+    </div> 
+</template> 
+ 
+<script setup lang="ts"> 
+import { computed, ref } from 'vue'; 
+import type { RangeSlider } from '../../interfaces/forms/RangeSlider.interface'; 
+import { useFieldState } from '../../composables/useField'; 
+import { useResolvedRadius, useResolvedSize } from '../../composables/useModoConfig'; 
+import Typography from '../data-display/Typography.vue'; 
+ 
+const props = withDefaults(defineProps<RangeSlider>(), { 
+    modelValue: () => [0, 100] as [number, number], 
+    min: 0, 
+    max: 100, 
+    step: 1, 
+    minDistance: 0, 
+    showValue: false, 
+    marks: false, 
+    orientation: 'horizontal', 
+    color: 'default', 
+    disabled: false, 
+    readonly: false, 
+    required: false, 
+    fullWidth: true, 
+}); 
+ 
+const resolvedSize = useResolvedSize(() => props.size); 
+// Track radius (default pill). Thumbs are always round. 
+const resolvedRadius = useResolvedRadius(() => props.radius ?? 'full'); 
+const trackRadiusClass = computed(() => { 
+    switch (resolvedRadius.value) { 
+        case 'none':   return 'rounded-none'; 
+        case 'small':  return 'rounded-sm'; 
+        case 'medium': return 'rounded-md'; 
+        case 'large':  return 'rounded-lg'; 
+        case 'full': 
+        default:       return 'rounded-full'; 
+    } 
+}); 
+ 
+const emit = defineEmits<{ 
+    'update:modelValue': [value: [number, number]]; 
+    change: [value: [number, number]]; 
+}>(); 
+ 
+const { 
+    fieldId, hasError, isDisabled, 
+    errorId, helperId, describedBy, 
+    stateColor, 
+} = useFieldState(props, { componentName: 'RangeSlider', idPrefix: 'modo-range' }); 
+ 
+const trackEl = ref<HTMLElement | null>(null); 
+type Thumb = 'from' | 'to'; 
+const activeThumb = ref<Thumb | null>(null); 
+ 
+const fromValue = computed(() => { 
+    const v = props.modelValue?.[0] ?? props.min; 
+    return Math.min(Math.max(v, props.min), props.max); 
+}); 
+const toValue = computed(() => { 
+    const v = props.modelValue?.[1] ?? props.max; 
+    return Math.min(Math.max(v, props.min), props.max); 
+}); 
+ 
+const fromPercent = computed(() => valueToPercent(fromValue.value)); 
+const toPercent = computed(() => valueToPercent(toValue.value)); 
+ 
+function valueToPercent(v: number) { 
+    if (props.max === props.min) return 0; 
+    return ((v - props.min) / (props.max - props.min)) * 100; 
+} 
+function percentToValue(pct: number) { 
+    const raw = props.min + (pct / 100) * (props.max - props.min); 
+    return clampToStep(raw); 
+} 
+function clampToStep(v: number) { 
+    const steps = Math.round((v - props.min) / props.step); 
+    const snapped = props.min + steps * props.step; 
+    const clamped = Math.min(Math.max(snapped, props.min), props.max); 
+    const precision = String(props.step).includes('.') 
+        ? String(props.step).split('.')[1].length 
+        : 0; 
+    return Number(clamped.toFixed(precision)); 
+} 
+ 
+function emitValue(next: [number, number]) { 
+    if (props.readonly || isDisabled.value) return; 
+    const cur = props.modelValue ?? [props.min, props.max]; 
+    if (cur[0] === next[0] && cur[1] === next[1]) return; 
+    emit('update:modelValue', next); 
+    emit('change', next); 
+} 
+ 
+function setThumb(thumb: Thumb, raw: number) { 
+    const v = clampToStep(raw); 
+    if (thumb === 'from') { 
+        const maxAllowed = toValue.value - props.minDistance; 
+        emitValue([Math.min(v, maxAllowed), toValue.value]); 
+    } else { 
+        const minAllowed = fromValue.value + props.minDistance; 
+        emitValue([fromValue.value, Math.max(v, minAllowed)]); 
+    } 
+} 
+ 
+/* ---------- Pointer drag ---------- */ 
+let activePointer: number | null = null; 
+let draggingThumb: Thumb | null = null; 
+ 
+function onTrackPointerDown(e: PointerEvent) { 
+    if (isDisabled.value || props.readonly) return; 
+    if (!trackEl.value) return; 
+    // Pick nearest thumb 
+    const rect = trackEl.value.getBoundingClientRect(); 
+    const pct = Math.min(Math.max(((e.clientX - rect.left) / rect.width) * 100, 0), 100); 
+    const v = percentToValue(pct); 
+    const thumb: Thumb = 
+        Math.abs(v - fromValue.value) <= Math.abs(v - toValue.value) ? 'from' : 'to'; 
+    activeThumb.value = thumb; 
+    startDrag(e, thumb); 
+    setThumb(thumb, v); 
+} 
+function onThumbPointerDown(e: PointerEvent, thumb: Thumb) { 
+    if (isDisabled.value || props.readonly) return; 
+    activeThumb.value = thumb; 
+    startDrag(e, thumb); 
+} 
+function startDrag(e: PointerEvent, thumb: Thumb) { 
+    activePointer = e.pointerId; 
+    draggingThumb = thumb; 
+    window.addEventListener('pointermove', onPointerMove); 
+    window.addEventListener('pointerup', onPointerUp); 
+    window.addEventListener('pointercancel', onPointerUp); 
+} 
+function onPointerMove(e: PointerEvent) { 
+    if (activePointer === null || e.pointerId !== activePointer) return; 
+    if (!trackEl.value || !draggingThumb) return; 
+    const rect = trackEl.value.getBoundingClientRect(); 
+    const pct = Math.min(Math.max(((e.clientX - rect.left) / rect.width) * 100, 0), 100); 
+    setThumb(draggingThumb, percentToValue(pct)); 
+} 
+function onPointerUp(e: PointerEvent) { 
+    if (activePointer === null || e.pointerId !== activePointer) return; 
+    activePointer = null; 
+    draggingThumb = null; 
+    window.removeEventListener('pointermove', onPointerMove); 
+    window.removeEventListener('pointerup', onPointerUp); 
+    window.removeEventListener('pointercancel', onPointerUp); 
+} 
+ 
+/* ---------- Keyboard ---------- */ 
+function onThumbKeydown(e: KeyboardEvent, thumb: Thumb) { 
+    if (isDisabled.value || props.readonly) return; 
+    const cur = thumb === 'from' ? fromValue.value : toValue.value; 
+    const bigStep = props.step * 10; 
+    switch (e.key) { 
+        case 'ArrowRight': 
+        case 'ArrowUp': 
+            e.preventDefault(); 
+            setThumb(thumb, cur + (e.shiftKey ? bigStep : props.step)); 
+            break; 
+        case 'ArrowLeft': 
+        case 'ArrowDown': 
+            e.preventDefault(); 
+            setThumb(thumb, cur - (e.shiftKey ? bigStep : props.step)); 
+            break; 
+        case 'PageUp': 
+            e.preventDefault(); 
+            setThumb(thumb, cur + bigStep); 
+            break; 
+        case 'PageDown': 
+            e.preventDefault(); 
+            setThumb(thumb, cur - bigStep); 
+            break; 
+        case 'Home': 
+            e.preventDefault(); 
+            setThumb(thumb, props.min); 
+            break; 
+        case 'End': 
+            e.preventDefault(); 
+            setThumb(thumb, props.max); 
+            break; 
+    } 
+    activeThumb.value = thumb; 
+} 
+ 
+/* ---------- Marks ---------- */ 
+const resolvedMarks = computed<{ value: number; label?: string }[]>(() => { 
+    if (!props.marks) return []; 
+    if (props.marks === true) { 
+        const out: { value: number }[] = []; 
+        for (let v = props.min; v <= props.max; v += props.step) out.push({ value: v }); 
+        return out; 
+    } 
+    if (Array.isArray(props.marks)) { 
+        return props.marks.map((m) => 
+            typeof m === 'number' ? { value: m } : m, 
+        ); 
+    } 
+    return []; 
+}); 
+ 
+/* ---------- Display ---------- */ 
+const displayFrom = computed(() => 
+    props.formatValue ? props.formatValue(fromValue.value) : String(fromValue.value), 
+); 
+const displayTo = computed(() => 
+    props.formatValue ? props.formatValue(toValue.value) : String(toValue.value), 
+); 
+ 
+/* ---------- Style maps ---------- */ 
+const trackHeightClass = computed(() => { 
+    switch (resolvedSize.value) { 
+        case 'small': return 'h-5'; 
+        case 'large': return 'h-8'; 
+        default: return 'h-6'; 
+    } 
+}); 
+const trackThicknessClass = computed(() => { 
+    switch (resolvedSize.value) { 
+        case 'small': return 'h-1'; 
+        case 'large': return 'h-2'; 
+        default: return 'h-1.5'; 
+    } 
+}); 
+const thumbSizeClass = computed(() => { 
+    switch (resolvedSize.value) { 
+        case 'small': return 'w-3.5 h-3.5'; 
+        case 'large': return 'w-6 h-6'; 
+        default: return 'w-5 h-5'; 
+    } 
+}); 
+const markSizeClass = computed(() => { 
+    switch (resolvedSize.value) { 
+        case 'small': return 'w-1 h-1'; 
+        case 'large': return 'w-2 h-2'; 
+        default: return 'w-1.5 h-1.5'; 
+    } 
+}); 
+ 
+const FILL_BY_COLOR: Record<string, string> = { 
+    default: 'bg-foreground', 
+    primary: 'bg-primary', 
+    danger: 'bg-destructive', 
+    success: 'bg-success', 
+    warning: 'bg-warning', 
+}; 
+const BORDER_BY_COLOR: Record<string, string> = { 
+    default: 'border-foreground', 
+    primary: 'border-primary', 
+    danger: 'border-destructive', 
+    success: 'border-success', 
+    warning: 'border-warning', 
+}; 
+const fillColorClass = computed(() => 
+    FILL_BY_COLOR[hasError.value ? 'danger' : stateColor.value] ?? 'bg-foreground', 
+); 
+const thumbBorderColorClass = computed(() => 
+    BORDER_BY_COLOR[hasError.value ? 'danger' : stateColor.value] ?? 'border-foreground', 
+); 
+ 
+const THUMB_HALO_BY_COLOR: Record<string, string> = { 
+    default: 'ring-[3px] ring-foreground/10 hover:ring-foreground/20 focus-visible:ring-foreground/30', 
+    primary: 'ring-[3px] ring-primary/15 hover:ring-primary/25 focus-visible:ring-primary/35', 
+    danger: 'ring-[3px] ring-destructive/15 hover:ring-destructive/25 focus-visible:ring-destructive/35', 
+    success: 'ring-[3px] ring-success/15 hover:ring-success/25 focus-visible:ring-success/35', 
+    warning: 'ring-[3px] ring-warning/15 hover:ring-warning/25 focus-visible:ring-warning/35', 
+}; 
+const thumbHaloClass = computed(() => 
+    THUMB_HALO_BY_COLOR[hasError.value ? 'danger' : stateColor.value] ?? THUMB_HALO_BY_COLOR.default, 
+); 
+</script>
