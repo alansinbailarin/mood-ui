@@ -61,6 +61,7 @@ import { useResolvedColor, useResolvedRadius, useResolvedTheme, useModoConfig, u
 import { resolveColorMode } from '../../composables/useColorMode'; 
 import { palettesToCssVars, semanticTokensFromPalettes } from '../../config/palettes'; 
 import { hexToOklchString, pickForegroundOklch } from '../../config/colorPrimitives'; 
+import { surfacesToCssVars } from '../../config/surfaces';
 import type { ModoColor, ModoRadius } from '../../config/ModoConfig'; 
  
 const props = withDefaults(defineProps<Tooltip>(), { 
@@ -266,9 +267,15 @@ const panelStyle = computed(() => {
             ...palettesToCssVars(cfg.value.palettes), 
             ...semanticTokensFromPalettes(cfg.value.palettes, hexToOklchString, pickForegroundOklch), 
         } 
-        : {}; 
+        : {};
+    const surfaceVars = cfg?.value.surfaces
+        ? surfacesToCssVars(cfg.value.surfaces)
+        : {};
+    const darkSurfaceVars = (scopedTheme.value === 'dark' && cfg?.value.darkSurfaces)
+        ? surfacesToCssVars(cfg.value.darkSurfaces)
+        : {};
     return { 
-        ...providerVars, 
+        ...providerVars, ...surfaceVars, ...darkSurfaceVars,
         top: `${position.value.top}px`, 
         left: `${position.value.left}px`, 
         maxWidth: `${props.maxWidth}px`, 

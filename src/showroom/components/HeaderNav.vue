@@ -92,13 +92,11 @@ function measure(animated: boolean) {
         indicatorStyle.value = { opacity: '0' };
         return;
     }
-    const trackRect = track.getBoundingClientRect();
-    const itemRect = item.getBoundingClientRect();
     indicatorStyle.value = {
-        transform: `translateX(${(itemRect.left - trackRect.left).toFixed(2)}px)`,
-        top: `${(itemRect.top - trackRect.top).toFixed(2)}px`,
-        width: `${itemRect.width.toFixed(2)}px`,
-        height: `${itemRect.height.toFixed(2)}px`,
+        transform: `translate3d(${item.offsetLeft}px, ${item.offsetTop}px, 0)`,
+        width: `${item.offsetWidth}px`,
+        height: `${item.offsetHeight}px`,
+        top: '0',
         opacity: '1',
         transition: animated
             ? 'transform 280ms cubic-bezier(0.4,0,0.2,1), width 280ms cubic-bezier(0.4,0,0.2,1)'

@@ -32,6 +32,7 @@ import { useResolvedRadius, useResolvedTheme, useModoConfig } from '../../compos
 import { resolveColorMode } from '../../composables/useColorMode'; 
 import { palettesToCssVars, semanticTokensFromPalettes } from '../../config/palettes'; 
 import { hexToOklchString, pickForegroundOklch } from '../../config/colorPrimitives'; 
+import { surfacesToCssVars } from '../../config/surfaces'; 
  
 defineOptions({ inheritAttrs: false }); 
  
@@ -62,15 +63,22 @@ const scopedTheme = computed(() => resolveColorMode(theme.value));
  
 // Forward the provider's palette CSS vars (`--primary`, `--primary-foreground`, 
 // etc.) to the teleported panel so `bg-primary` / `text-primary` stay in sync 
-// with whatever palette the provider set. 
+// with whatever palette the provider set. Also forward surface vars so tinted 
+// surfaces (base intensity) are visible inside the popover. 
 const mergedStyle = computed(() => { 
     const providerVars = cfg?.value.palettes 
         ? { 
               ...palettesToCssVars(cfg.value.palettes), 
               ...semanticTokensFromPalettes(cfg.value.palettes, hexToOklchString, pickForegroundOklch), 
           } 
-        : {}; 
-    return { ...providerVars, ...(props.style ?? {}) }; 
+        : {};
+    const surfaceVars = cfg?.value.surfaces
+        ? surfacesToCssVars(cfg.value.surfaces)
+        : {};
+    const darkSurfaceVars = (scopedTheme.value === 'dark' && cfg?.value.darkSurfaces)
+        ? surfacesToCssVars(cfg.value.darkSurfaces)
+        : {};
+    return { ...providerVars, ...surfaceVars, ...darkSurfaceVars, ...(props.style ?? {}) }; 
 }); 
  
 const radiusClass = computed(() => { 

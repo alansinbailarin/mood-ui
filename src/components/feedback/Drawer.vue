@@ -144,6 +144,7 @@ import {
 import { resolveColorMode } from '../../composables/useColorMode'; 
 import { palettesToCssVars, semanticTokensFromPalettes } from '../../config/palettes'; 
 import { hexToOklchString, pickForegroundOklch } from '../../config/colorPrimitives'; 
+import { surfacesToCssVars } from '../../config/surfaces';
 import type { ModoColor, ModoRadius } from '../../config/ModoConfig'; 
  
 const props = withDefaults(defineProps<Drawer>(), { 
@@ -187,8 +188,14 @@ const overlayStyle = computed(() => {
             ...palettesToCssVars(cfg.value.palettes), 
             ...semanticTokensFromPalettes(cfg.value.palettes, hexToOklchString, pickForegroundOklch), 
         } 
-        : {}; 
-    return providerVars; 
+        : {};
+    const surfaceVars = cfg?.value.surfaces
+        ? surfacesToCssVars(cfg.value.surfaces)
+        : {};
+    const darkSurfaceVars = (scopedTheme.value === 'dark' && cfg?.value.darkSurfaces)
+        ? surfacesToCssVars(cfg.value.darkSurfaces)
+        : {};
+    return { ...providerVars, ...surfaceVars, ...darkSurfaceVars }; 
 }); 
  
 function close() { 
