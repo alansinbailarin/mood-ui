@@ -1,30 +1,29 @@
 <script setup lang="ts">
-import { ref, computed, defineAsyncComponent, h } from 'vue';
+import { ref, computed, defineAsyncComponent, h, watch } from 'vue';
 import {
-    SunIcon, MoonIcon, ComputerDesktopIcon,
-    AdjustmentsHorizontalIcon, BookOpenIcon, RectangleGroupIcon,
-    Bars3Icon, MagnifyingGlassIcon,
+    Bars3Icon, MagnifyingGlassIcon, XMarkIcon,
+    SparklesIcon, BookOpenIcon, RectangleGroupIcon, SwatchIcon,
+    CubeTransparentIcon, ChatBubbleLeftRightIcon, ChartBarIcon,
+    CalendarDaysIcon, CalendarIcon, Squares2X2Icon, ArrowRightOnRectangleIcon,
+    HomeIcon,
 } from '@heroicons/vue/24/outline';
 
 import logoUrl from './assets/icon-mood-ui.png';
 
 import ModoProvider from './components/ModoProvider.vue';
-import AppShell from './components/layout/AppShell.vue';
-import Topbar from './components/layout/Topbar.vue';
 import Sidebar from './components/layout/Sidebar.vue';
-import Container from './components/layout/Container.vue';
 import Button from './components/forms/Button.vue';
-import Select from './components/forms/Select.vue';
 import Tooltip from './components/feedback/Tooltip.vue';
 import ToastContainer from './components/feedback/ToastContainer.vue';
 import Typography from './components/data-display/Typography.vue';
 import Loader from './components/feedback/Loader.vue';
-import Drawer from './components/feedback/Drawer.vue';
-import Stack from './components/layout/Stack.vue';
 
 import { showroomNav } from './showroom/registry';
 import { useShowroomRouter } from './showroom/composables/useShowroomRouter';
 import CommandPalette from './showroom/components/CommandPalette.vue';
+import ShowroomLayout from './showroom/components/ShowroomLayout.vue';
+import ShowroomSettings from './showroom/components/ShowroomSettings.vue';
+import ColorModeMenu from './showroom/components/ColorModeMenu.vue';
 
 import type { ModoColor, ModoRadius, ModoSize, ModoTheme, ModoHalo } from './config/ModoConfig';
 import type { ModoPalette } from './config/palettes';
@@ -32,19 +31,27 @@ import { paletteFromHex } from './config/palettes';
 import type { PartialLocale } from './config/ModoLocale';
 
 // ── Provider state ────────────────────────────────────────────────────────────
-const theme = ref<ModoTheme>('system');
-const color = ref<ModoColor>('primary');
-const radius = ref<ModoRadius>('medium');
-const size = ref<ModoSize>('medium');
-const halo = ref<ModoHalo>('tinted');
-const primaryHex = ref<string>('#6366f1');
-const localeName = ref<'es' | 'en'>('es');
-const settingsOpen = ref(false);
-const paletteOpen = ref(false);
+const DEFAULTS = {
+    theme:      'system'  as ModoTheme,
+    color:      'primary' as ModoColor,
+    radius:     'medium'  as ModoRadius,
+    size:       'medium'  as ModoSize,
+    halo:       'tinted'  as ModoHalo,
+    primaryHex: '#6366f1',
+    locale:     'es' as 'es' | 'en',
+};
 
-// AppShell state
-const sidebarCollapsed = ref(false);
-const sidebarMobileOpen = ref(false);
+const theme      = ref<ModoTheme>(DEFAULTS.theme);
+const color      = ref<ModoColor>(DEFAULTS.color);
+const radius     = ref<ModoRadius>(DEFAULTS.radius);
+const size       = ref<ModoSize>(DEFAULTS.size);
+const halo       = ref<ModoHalo>(DEFAULTS.halo);
+const primaryHex = ref<string>(DEFAULTS.primaryHex);
+const localeName = ref<'es' | 'en'>(DEFAULTS.locale);
+
+const paletteOpen        = ref(false);
+const sidebarCollapsed   = ref(false);
+const sidebarMobileOpen  = ref(false);
 
 const palettes = computed<{ primary?: Partial<ModoPalette> }>(() => ({
     primary: paletteFromHex(primaryHex.value),
@@ -65,18 +72,49 @@ const localeMap: Record<'es' | 'en', PartialLocale> = {
 };
 const locale = computed<PartialLocale>(() => localeMap[localeName.value]);
 
+function resetTheme() {
+    theme.value      = DEFAULTS.theme;
+    color.value      = DEFAULTS.color;
+    radius.value     = DEFAULTS.radius;
+    size.value       = DEFAULTS.size;
+    halo.value       = DEFAULTS.halo;
+    primaryHex.value = DEFAULTS.primaryHex;
+    localeName.value = DEFAULTS.locale;
+}
+
 // ── Router ────────────────────────────────────────────────────────────────────
 const { entry, currentId, go } = useShowroomRouter();
+
+// Welcome is rendered standalone (no sidebar). Anything else uses the showroom shell.
+const isWelcome = computed(() => !entry.value || currentId.value === 'welcome');
+
+// ── Sidebar sections (with icons per category) ────────────────────────────────
+const categoryIcon: Record<string, unknown> = {
+    'getting-started': SparklesIcon,
+    'docs':            BookOpenIcon,
+    'templates':       RectangleGroupIcon,
+    'theme-studio':    SwatchIcon,
+    'forms':           Squares2X2Icon,
+    'feedback':        ChatBubbleLeftRightIcon,
+    'data-display':    ChartBarIcon,
+    'calendar':        CalendarIcon,
+    'date-picker':     CalendarDaysIcon,
+    'layout':          CubeTransparentIcon,
+    'navigation':      ArrowRightOnRectangleIcon,
+};
 
 const sidebarSections = computed(() =>
     showroomNav.map((cat) => ({
         id: cat.id,
         title: cat.title,
-        items: cat.entries.map((e) => ({
+        items: cat.entries.map((e, idx) => ({
             id: e.id,
             label: e.label,
             badge: e.badge,
             badgeColor: 'primary' as const,
+            // Only show category icon on the first item of each section so the
+            // collapsed sidebar still shows one glyph per group without clutter.
+            icon: idx === 0 ? (categoryIcon[cat.id] as never) : undefined,
         })),
     })),
 );
@@ -101,57 +139,8 @@ const ActivePage = computed(() => {
     });
 });
 
-// ── Options ───────────────────────────────────────────────────────────────────
-const themeOptions = [
-    { value: 'light', label: 'Claro' },
-    { value: 'dark', label: 'Oscuro' },
-    { value: 'system', label: 'Sistema' },
-];
-const colorOptions = [
-    { value: 'default', label: 'Default' },
-    { value: 'primary', label: 'Primary' },
-    { value: 'danger', label: 'Danger' },
-    { value: 'success', label: 'Success' },
-    { value: 'warning', label: 'Warning' },
-];
-const radiusOptions = [
-    { value: 'none', label: 'None' },
-    { value: 'small', label: 'Small' },
-    { value: 'medium', label: 'Medium' },
-    { value: 'large', label: 'Large' },
-    { value: 'full', label: 'Full' },
-];
-const sizeOptions = [
-    { value: 'small', label: 'Small' },
-    { value: 'medium', label: 'Medium' },
-    { value: 'large', label: 'Large' },
-];
-const haloOptions = [
-    { value: 'tinted', label: 'Tinted' },
-    { value: 'neutral', label: 'Neutral' },
-    { value: 'off', label: 'Off' },
-];
-const localeOptions = [
-    { value: 'es', label: 'ES' },
-    { value: 'en', label: 'EN' },
-];
-
-const themeIcon = computed(() => {
-    if (theme.value === 'light') return SunIcon;
-    if (theme.value === 'dark') return MoonIcon;
-    return ComputerDesktopIcon;
-});
-
-function cycleTheme() {
-    const order: ModoTheme[] = ['light', 'dark', 'system'];
-    const next = order[(order.indexOf(theme.value) + 1) % order.length];
-    theme.value = next;
-}
-
-const presetColors = [
-    '#6366f1', '#8b5cf6', '#ec4899', '#ef4444',
-    '#f59e0b', '#10b981', '#14b8a6', '#0ea5e9',
-];
+// Close mobile drawer when route changes (e.g. via ⌘K).
+watch(currentId, () => { sidebarMobileOpen.value = false; });
 </script>
 
 <template>
@@ -164,197 +153,49 @@ const presetColors = [
         :palettes="palettes"
         :locale="locale"
     >
-        <AppShell
-            v-model:collapsed="sidebarCollapsed"
-            v-model:mobile-open="sidebarMobileOpen"
-            variant="standard"
-            appearance="flush"
-            sidebar-width="medium"
-            collapsed-width="small"
-            sticky-topbar
-            sticky-sidebar
-            main-padding="none"
-            breakpoint="lg"
-        >
-            <!-- TOPBAR -->
-            <template #topbar>
-                <Topbar :divider="true" padding="medium">
-                    <template #logo>
-                        <div class="flex items-center gap-2">
-                            <!-- Mobile menu trigger -->
-                            <Button
-                                variant="ghost"
-                                size="small"
-                                icon-only
-                                class="lg:hidden"
-                                aria-label="Abrir menú"
-                                @click="sidebarMobileOpen = true"
-                            >
-                                <Bars3Icon class="w-5 h-5" />
+        <!-- ─────────────────────────────────────────────────────────────
+             WELCOME (standalone landing — no sidebar, minimal header)
+        ───────────────────────────────────────────────────────────── -->
+        <div v-if="isWelcome" class="min-h-dvh bg-background text-foreground">
+            <header class="sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-background/70 bg-background/85 border-b border-border">
+                <div class="max-w-7xl mx-auto flex items-center justify-between gap-3 px-4 sm:px-6 h-14">
+                    <a href="#/welcome" class="flex items-center gap-2.5 group" aria-label="Inicio">
+                        <img :src="logoUrl" alt="mood-ui" class="w-7 h-7 object-contain group-hover:scale-110 transition-transform" />
+                        <Typography variant="title" size="medium" weight="bold" class="tracking-tight">mood-ui</Typography>
+                        <span class="hidden sm:inline-flex text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded bg-muted text-muted-foreground border border-border">
+                            v0.5.1
+                        </span>
+                    </a>
+                    <nav class="flex items-center gap-1.5">
+                        <Tooltip content="Ir al showroom">
+                            <Button color="primary" size="small" @click="go('button')">
+                                <RectangleGroupIcon class="w-4 h-4 mr-1.5" />
+                                Showroom
                             </Button>
-                            <!-- Desktop collapse trigger -->
-                            <Button
-                                variant="ghost"
-                                size="small"
-                                icon-only
-                                class="hidden lg:inline-flex"
-                                :aria-label="sidebarCollapsed ? 'Expandir sidebar' : 'Colapsar sidebar'"
-                                @click="sidebarCollapsed = !sidebarCollapsed"
-                            >
-                                <Bars3Icon class="w-5 h-5" />
-                            </Button>
-                        </div>
-                    </template>
+                        </Tooltip>
+                        <ColorModeMenu v-model="theme" />
+                        <ShowroomSettings
+                            :theme="theme"
+                            :color="color"
+                            :radius="radius"
+                            :size="size"
+                            :halo="halo"
+                            :primary-hex="primaryHex"
+                            :locale="localeName"
+                            @update:theme="theme = $event"
+                            @update:color="color = $event"
+                            @update:radius="radius = $event"
+                            @update:size="size = $event"
+                            @update:halo="halo = $event"
+                            @update:primary-hex="primaryHex = $event"
+                            @update:locale="localeName = $event"
+                            @reset="resetTheme"
+                        />
+                    </nav>
+                </div>
+            </header>
 
-                    <template #title>
-                        <a
-                            href="#/welcome"
-                            class="flex items-center gap-2.5 group"
-                            aria-label="Ir al inicio"
-                        >
-                            <img
-                                :src="logoUrl"
-                                alt="mood-ui"
-                                class="w-7 h-7 object-contain group-hover:scale-110 transition-transform"
-                            />
-                            <Typography variant="title" size="medium" weight="bold" class="tracking-tight">mood-ui</Typography>
-                            <span class="hidden sm:inline-flex text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded bg-muted text-muted-foreground border border-border">
-                                v0.3.1
-                            </span>
-                        </a>
-                    </template>
-
-                    <template #actions>
-                        <div class="flex items-center gap-1.5">
-                            <!-- Inline provider controls (lg+) -->
-                            <div class="hidden 2xl:flex items-center gap-1.5">
-                                <Select v-model="color" :options="colorOptions" size="small" aria-label="Color" />
-                                <Select v-model="radius" :options="radiusOptions" size="small" aria-label="Radius" />
-                                <Select v-model="size" :options="sizeOptions" size="small" aria-label="Tamaño" />
-                            </div>
-
-                            <!-- Color preset swatches (md+) -->
-                            <div class="hidden md:flex items-center gap-1">
-                                <Tooltip
-                                    v-for="hex in presetColors.slice(0, 5)"
-                                    :key="hex"
-                                    :content="hex"
-                                >
-                                    <button
-                                        type="button"
-                                        :aria-label="`Set primary color ${hex}`"
-                                        class="w-5 h-5 rounded-full border border-border hover:scale-110 transition-transform"
-                                        :class="primaryHex === hex ? 'ring-2 ring-foreground ring-offset-2 ring-offset-background' : ''"
-                                        :style="{ backgroundColor: hex }"
-                                        @click="primaryHex = hex"
-                                    />
-                                </Tooltip>
-                            </div>
-
-                            <!-- ⌘K Command palette trigger -->
-                            <Tooltip content="Buscar (⌘K)">
-                                <button
-                                    type="button"
-                                    aria-label="Buscar"
-                                    class="hidden sm:inline-flex items-center gap-2 h-8 px-2.5 rounded-lg border border-border bg-muted/40 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors text-xs"
-                                    @click="paletteOpen = true"
-                                >
-                                    <MagnifyingGlassIcon class="w-4 h-4" />
-                                    <span class="hidden md:inline">Buscar…</span>
-                                    <kbd class="hidden md:inline-flex items-center font-mono font-semibold px-1.5 py-0.5 rounded border border-border bg-card text-[10px]">⌘K</kbd>
-                                </button>
-                            </Tooltip>
-                            <Tooltip content="Buscar (⌘K)">
-                                <Button
-                                    variant="ghost"
-                                    size="small"
-                                    icon-only
-                                    aria-label="Buscar"
-                                    class="sm:hidden"
-                                    @click="paletteOpen = true"
-                                >
-                                    <MagnifyingGlassIcon class="w-5 h-5" />
-                                </Button>
-                            </Tooltip>
-
-                            <!-- Theme cycle (always visible) -->
-                            <Tooltip :content="`Tema: ${theme} (click para cambiar)`">
-                                <Button
-                                    variant="ghost"
-                                    size="small"
-                                    icon-only
-                                    aria-label="Cambiar tema"
-                                    @click="cycleTheme"
-                                >
-                                    <component :is="themeIcon" class="w-5 h-5" />
-                                </Button>
-                            </Tooltip>
-
-                            <!-- Settings drawer (always visible) -->
-                            <Tooltip content="Configuración del provider">
-                                <Button
-                                    variant="ghost"
-                                    size="small"
-                                    icon-only
-                                    aria-label="Configuración"
-                                    @click="settingsOpen = true"
-                                >
-                                    <AdjustmentsHorizontalIcon class="w-5 h-5" />
-                                </Button>
-                            </Tooltip>
-
-                            <Tooltip content="Welcome">
-                                <Button
-                                    as="a"
-                                    href="#/welcome"
-                                    variant="ghost"
-                                    size="small"
-                                    icon-only
-                                    aria-label="Welcome"
-                                    class="hidden sm:inline-flex"
-                                >
-                                    <BookOpenIcon class="w-5 h-5" />
-                                </Button>
-                            </Tooltip>
-
-                            <!-- GitHub link -->
-                            <Tooltip content="GitHub">
-                                <Button
-                                    as="a"
-                                    href="https://github.com/alansinbailarin/mood-ui"
-                                    target="_blank"
-                                    rel="noopener"
-                                    variant="ghost"
-                                    size="small"
-                                    icon-only
-                                    aria-label="GitHub repository"
-                                >
-                                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-                                    </svg>
-                                </Button>
-                            </Tooltip>
-                        </div>
-                    </template>
-                </Topbar>
-            </template>
-
-            <!-- SIDEBAR -->
-            <template #sidebar="{ collapsed }">
-                <!-- No `color` prop: Sidebar inherits the global color from <ModoProvider>. -->
-                <Sidebar
-                    :sections="sidebarSections"
-                    :active-id="currentId"
-                    :collapsed="collapsed"
-                    active-variant="tonal"
-                    size="small"
-                    padding="small"
-                    @select="onSidebarSelect"
-                />
-            </template>
-
-            <!-- MAIN -->
-            <Container max-width="xl" class="px-4 sm:px-6 py-6 sm:py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
                 <Suspense>
                     <component :is="ActivePage" v-if="ActivePage" />
                     <template #fallback>
@@ -363,70 +204,156 @@ const presetColors = [
                         </div>
                     </template>
                 </Suspense>
-            </Container>
-        </AppShell>
+            </div>
+        </div>
+
+        <!-- ─────────────────────────────────────────────────────────────
+             SHOWROOM (sidebar full-height + minimal topbar in main column)
+        ───────────────────────────────────────────────────────────── -->
+        <ShowroomLayout
+            v-else
+            v-model:collapsed="sidebarCollapsed"
+            v-model:mobile-open="sidebarMobileOpen"
+            :sidebar-width="248"
+            :collapsed-width="64"
+        >
+            <!-- SIDEBAR (full height — reaches the very top) -->
+            <template #sidebar="{ collapsed, isMobile, closeMobile }">
+                <!-- Header: logo + collapse toggle -->
+                <div class="flex items-center gap-2 h-14 px-3 shrink-0 border-b border-border">
+                    <a
+                        href="#/welcome"
+                        class="flex items-center gap-2 min-w-0 flex-1"
+                        :title="collapsed && !isMobile ? 'Ir al inicio' : undefined"
+                    >
+                        <img :src="logoUrl" alt="mood-ui" class="w-7 h-7 object-contain shrink-0" />
+                        <span v-if="!collapsed || isMobile" class="font-bold tracking-tight truncate">mood-ui</span>
+                    </a>
+                    <button
+                        v-if="!isMobile"
+                        type="button"
+                        class="hidden lg:inline-flex items-center justify-center w-8 h-8 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
+                        :aria-label="collapsed ? 'Expandir sidebar' : 'Colapsar sidebar'"
+                        @click="sidebarCollapsed = !sidebarCollapsed"
+                    >
+                        <Bars3Icon class="w-4 h-4" />
+                    </button>
+                    <button
+                        v-else
+                        type="button"
+                        class="inline-flex items-center justify-center w-8 h-8 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
+                        aria-label="Cerrar menú"
+                        @click="closeMobile"
+                    >
+                        <XMarkIcon class="w-4 h-4" />
+                    </button>
+                </div>
+
+                <!-- Search shortcut row -->
+                <div class="px-2 pt-2 shrink-0">
+                    <button
+                        type="button"
+                        class="flex items-center gap-2 w-full h-8 px-2 rounded-md border border-border bg-muted/30 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors text-xs"
+                        aria-label="Buscar (⌘K)"
+                        @click="paletteOpen = true"
+                    >
+                        <MagnifyingGlassIcon class="w-3.5 h-3.5 shrink-0" />
+                        <span v-if="!collapsed || isMobile" class="flex-1 text-left">Buscar…</span>
+                        <kbd v-if="!collapsed || isMobile" class="font-mono font-semibold px-1.5 py-0.5 rounded border border-border bg-card text-[10px]">⌘K</kbd>
+                    </button>
+                </div>
+
+                <!-- Nav -->
+                <div class="flex-1 min-h-0 overflow-y-auto py-2">
+                    <Sidebar
+                        :sections="sidebarSections"
+                        :active-id="currentId"
+                        :collapsed="collapsed && !isMobile"
+                        active-variant="tonal"
+                        size="small"
+                        padding="small"
+                        @select="onSidebarSelect"
+                    />
+                </div>
+
+                <!-- Footer -->
+                <div class="shrink-0 border-t border-border p-2">
+                    <button
+                        type="button"
+                        class="flex items-center gap-2 w-full h-8 px-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors text-xs"
+                        @click="go('welcome')"
+                    >
+                        <HomeIcon class="w-4 h-4 shrink-0" />
+                        <span v-if="!collapsed || isMobile">Volver al inicio</span>
+                    </button>
+                </div>
+            </template>
+
+            <!-- TOPBAR (minimal: open-sidebar (mobile) · search · theme · settings) -->
+            <template #topbar>
+                <div class="flex items-center gap-2 h-14 px-3 sm:px-4">
+                    <button
+                        type="button"
+                        class="lg:hidden inline-flex items-center justify-center w-9 h-9 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
+                        aria-label="Abrir menú"
+                        @click="sidebarMobileOpen = true"
+                    >
+                        <Bars3Icon class="w-5 h-5" />
+                    </button>
+
+                    <!-- Search trigger (⌘K) -->
+                    <button
+                        type="button"
+                        class="flex items-center gap-2 h-9 px-3 rounded-lg border border-border bg-muted/30 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors text-sm flex-1 sm:flex-none sm:min-w-[280px]"
+                        aria-label="Buscar (⌘K)"
+                        @click="paletteOpen = true"
+                    >
+                        <MagnifyingGlassIcon class="w-4 h-4" />
+                        <span class="flex-1 text-left">Buscar componentes…</span>
+                        <kbd class="hidden sm:inline-flex font-mono font-semibold px-1.5 py-0.5 rounded border border-border bg-card text-[10px]">⌘K</kbd>
+                    </button>
+
+                    <div class="flex-1 hidden sm:block" />
+
+                    <div class="flex items-center gap-1">
+                        <ColorModeMenu v-model="theme" />
+                        <ShowroomSettings
+                            :theme="theme"
+                            :color="color"
+                            :radius="radius"
+                            :size="size"
+                            :halo="halo"
+                            :primary-hex="primaryHex"
+                            :locale="localeName"
+                            @update:theme="theme = $event"
+                            @update:color="color = $event"
+                            @update:radius="radius = $event"
+                            @update:size="size = $event"
+                            @update:halo="halo = $event"
+                            @update:primary-hex="primaryHex = $event"
+                            @update:locale="localeName = $event"
+                            @reset="resetTheme"
+                        />
+                    </div>
+                </div>
+            </template>
+
+            <!-- MAIN -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+                <Suspense>
+                    <component :is="ActivePage" v-if="ActivePage" />
+                    <template #fallback>
+                        <div class="flex items-center justify-center py-24">
+                            <Loader size="medium" />
+                        </div>
+                    </template>
+                </Suspense>
+            </div>
+        </ShowroomLayout>
 
         <ToastContainer position="bottom-right" />
 
-        <!-- Settings drawer with FULL provider controls -->
-        <Drawer
-            v-model="settingsOpen"
-            side="right"
-            size="small"
-            title="Configuración del provider"
-            description="Cambia los tokens del provider en vivo y mira cómo reacciona toda la librería."
-        >
-            <Stack direction="column" spacing="medium" class="p-1">
-                <label class="flex flex-col gap-1">
-                    <Typography variant="caption" weight="medium" color="muted">Modo de color</Typography>
-                    <Select v-model="theme" :options="themeOptions" size="medium" />
-                </label>
-                <label class="flex flex-col gap-1">
-                    <Typography variant="caption" weight="medium" color="muted">Color global</Typography>
-                    <Select v-model="color" :options="colorOptions" size="medium" />
-                </label>
-                <label class="flex flex-col gap-1">
-                    <Typography variant="caption" weight="medium" color="muted">Radius</Typography>
-                    <Select v-model="radius" :options="radiusOptions" size="medium" />
-                </label>
-                <label class="flex flex-col gap-1">
-                    <Typography variant="caption" weight="medium" color="muted">Tamaño</Typography>
-                    <Select v-model="size" :options="sizeOptions" size="medium" />
-                </label>
-                <label class="flex flex-col gap-1">
-                    <Typography variant="caption" weight="medium" color="muted">Halo de focus</Typography>
-                    <Select v-model="halo" :options="haloOptions" size="medium" />
-                </label>
-                <label class="flex flex-col gap-1">
-                    <Typography variant="caption" weight="medium" color="muted">Idioma</Typography>
-                    <Select v-model="localeName" :options="localeOptions" size="medium" />
-                </label>
-                <label class="flex flex-col gap-2">
-                    <Typography variant="caption" weight="medium" color="muted">Color primario</Typography>
-                    <div class="flex flex-wrap gap-2">
-                        <button
-                            v-for="hex in presetColors"
-                            :key="hex"
-                            type="button"
-                            :aria-label="`Set primary color ${hex}`"
-                            class="w-8 h-8 rounded-full border border-border hover:scale-110 transition-transform"
-                            :class="primaryHex === hex ? 'ring-2 ring-foreground ring-offset-2 ring-offset-background' : ''"
-                            :style="{ backgroundColor: hex }"
-                            @click="primaryHex = hex"
-                        />
-                        <input
-                            type="color"
-                            :value="primaryHex"
-                            aria-label="Custom primary color"
-                            class="w-8 h-8 rounded cursor-pointer bg-transparent border border-border"
-                            @input="(e) => (primaryHex = (e.target as HTMLInputElement).value)"
-                        />
-                    </div>
-                </label>
-            </Stack>
-        </Drawer>
-
-        <!-- ⌘K Command palette -->
+        <!-- ⌘K Command palette (always mounted) -->
         <CommandPalette
             v-model="paletteOpen"
             @theme="theme = $event"
