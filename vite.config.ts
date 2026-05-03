@@ -24,7 +24,7 @@ export default defineConfig({
             ? [
                   dts({
                       entryRoot: 'src',
-                      outDir: 'dist/types',
+                      outDirs: ['dist/types'],
                       include: ['src/**/*.ts', 'src/**/*.vue'],
                       exclude: ['src/showroom/**', 'src/main.ts', 'src/App.vue', '**/*.spec.ts', '**/*.test.ts'],
                       tsconfigPath: './tsconfig.lib.json',
