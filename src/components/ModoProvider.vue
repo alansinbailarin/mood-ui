@@ -10,9 +10,10 @@
  
 <script setup lang="ts"> 
 import { ref, computed, watch, provide, inject } from 'vue'; 
-import { MODO_CONFIG, defaultModoConfig, type ModoColor, type ModoConfig, type ModoHalo, type ModoRadius, type ModoSize, type ModoTheme } from '../config/ModoConfig'; 
+import { MODO_CONFIG, defaultModoConfig, type ModoColor, type ModoConfig, type ModoHalo, type ModoRadius, type ModoSize, type ModoTheme, type ModoSurfaces } from '../config/ModoConfig'; 
 import { MODO_LOCALE, defaultLocale, mergeLocale, type ModoLocale, type PartialLocale } from '../config/ModoLocale'; 
 import { mergePalettes, palettesToCssVars, semanticTokensFromPalettes, type ModoPalette } from '../config/palettes'; 
+import { surfacesToCssVars } from '../config/surfaces';
 import { hexToOklchString, pickForegroundOklch } from '../config/colorPrimitives'; 
 import { useColorMode, resolveColorMode } from '../composables/useColorMode'; 
  
@@ -39,7 +40,23 @@ const props = withDefaults(defineProps<{
      * - `'off'`: sin halo persistente; solo focus-visible ring para a11y. 
      */ 
     halo?: ModoHalo; 
-    palettes?: { default?: Partial<ModoPalette>; primary?: Partial<ModoPalette> }; 
+    palettes?: { default?: Partial<ModoPalette>; primary?: Partial<ModoPalette> };
+    /**
+     * Override surface tokens (backgrounds, card, popover, border, muted…)
+     * for **light mode**. Any valid CSS color string is accepted.
+     * Only the keys you provide are overridden; the rest keep their defaults.
+     */
+    surfaces?: ModoSurfaces;
+    /**
+     * Override surface tokens for **dark mode**.
+     * Applied automatically when the resolved theme is `'dark'`.
+     * Use the built-in `darkSurfaces` presets from `mood-ui` or build your own:
+     * ```ts
+     * import { darkSurfaces } from 'mood-ui';
+     * // <ModoProvider :darkSurfaces="darkSurfaces.navy" />
+     * ```
+     */
+    darkSurfaces?: ModoSurfaces;
     /** 
      * Deep-partial override of the design-system copy (aria labels, empty 
      * states, reject messages, etc.). Cascades like palettes: inherits from 
@@ -90,8 +107,10 @@ const config = ref<ModoConfig>({
     size: pick(props.size, parent?.value.size, defaultModoConfig.size), 
     theme: pick(props.theme, parent?.value.theme, defaultModoConfig.theme), 
     halo: pick(props.halo, parent?.value.halo, defaultModoConfig.halo), 
-    palettes: mergePalettes(props.palettes, parent?.value.palettes), 
-}); 
+    palettes: mergePalettes(props.palettes, parent?.value.palettes),
+    surfaces: props.surfaces,
+    darkSurfaces: props.darkSurfaces,
+});
  
 watch( 
     () => [props.color, props.radius, props.size, props.theme, props.halo] as const, 
@@ -122,23 +141,36 @@ watch(
     (p) => { config.value.palettes = mergePalettes(p, parent?.value.palettes); }, 
     { deep: true }, 
 ); 
-// Inherit parent palette changes when we don't override them. 
-watch( 
-    () => parent?.value.palettes, 
-    (pp) => { 
-        if (!props.palettes) config.value.palettes = mergePalettes(undefined, pp); 
-    }, 
-    { deep: true }, 
-); 
- 
-const cssVarStyle = computed(() => { 
-    const legacy = palettesToCssVars(config.value.palettes); 
-    const derived = semanticTokensFromPalettes( 
-        config.value.palettes, 
-        hexToOklchString, 
-        pickForegroundOklch, 
-    ); 
-    return { ...legacy, ...derived }; 
+// Inherit parent palette changes when we don't override them.
+watch(
+    () => parent?.value.palettes,
+    (pp) => {
+        if (!props.palettes) config.value.palettes = mergePalettes(undefined, pp);
+    },
+    { deep: true },
+);
+
+// Sync surfaces / darkSurfaces props into config.
+watch(() => props.surfaces,    (v) => { config.value.surfaces     = v; }, { deep: true });
+watch(() => props.darkSurfaces, (v) => { config.value.darkSurfaces = v; }, { deep: true });
+
+const { isDark } = useColorMode();
+
+const cssVarStyle = computed(() => {
+    const legacy = palettesToCssVars(config.value.palettes);
+    const derived = semanticTokensFromPalettes(
+        config.value.palettes,
+        hexToOklchString,
+        pickForegroundOklch,
+    );
+    // Apply surface overrides: light surfaces always, dark surfaces only when dark.
+    const surfaceVars = config.value.surfaces
+        ? surfacesToCssVars(config.value.surfaces)
+        : {};
+    const darkSurfaceVars = (isDark.value && config.value.darkSurfaces)
+        ? surfacesToCssVars(config.value.darkSurfaces)
+        : {};
+    return { ...legacy, ...derived, ...surfaceVars, ...darkSurfaceVars };
 }); 
  
 provide(MODO_CONFIG, config); 

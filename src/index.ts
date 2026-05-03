@@ -21,7 +21,13 @@ export {
     type ModoTheme, 
     type ModoHalo, 
     type ModoConfig, 
-} from './config/ModoConfig'; 
+    type ModoSurfaces,
+} from './config/ModoConfig';
+export {
+    surfacesToCssVars,
+    darkSurfaces,
+    type DarkSurfacePreset,
+} from './config/surfaces'; 
 export { 
     MODO_LOCALE, 
     defaultLocale, 

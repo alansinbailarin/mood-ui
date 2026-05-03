@@ -1,5 +1,28 @@
 import type { InjectionKey, Ref } from 'vue'; 
-import { defaultPalettes, type ModoPalette } from './palettes'; 
+import { defaultPalettes, type ModoPalette } from './palettes';
+
+/**
+ * Surface tokens — backgrounds, cards, popovers, borders and neutral fills.
+ * Each value is any valid CSS color string (hex, oklch(), hsl(), rgb()…).
+ * Partial: only override the tokens you want to change.
+ */
+export interface ModoSurfaces {
+    background?:          string;
+    foreground?:          string;
+    card?:                string;
+    cardForeground?:      string;
+    popover?:             string;
+    popoverForeground?:   string;
+    secondary?:           string;
+    secondaryForeground?: string;
+    muted?:               string;
+    mutedForeground?:     string;
+    accent?:              string;
+    accentForeground?:    string;
+    border?:              string;
+    input?:               string;
+    ring?:                string;
+}
  
 export type ModoColor = 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
 export type ModoRadius = 'none' | 'small' | 'medium' | 'large' | 'full'; 
@@ -28,7 +51,9 @@ export interface ModoConfig {
     palettes: { 
         default: ModoPalette; 
         primary: ModoPalette; 
-    }; 
+    };
+    surfaces?: ModoSurfaces;
+    darkSurfaces?: ModoSurfaces;
 } 
  
 export const MODO_CONFIG: InjectionKey<Ref<ModoConfig>> = Symbol('modo-config'); 
