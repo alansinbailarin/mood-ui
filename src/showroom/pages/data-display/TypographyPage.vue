@@ -14,7 +14,7 @@ const variant = ref<'display' | 'heading' | 'title' | 'body' | 'caption'>('headi
 const size = ref<'small' | 'medium' | 'large'>('large');
 const weight = ref<'normal' | 'medium' | 'semibold' | 'bold'>('semibold');
 const color = ref<'default' | 'muted' | 'primary' | 'success' | 'warning' | 'danger'>('default');
-const text = ref('Modo UI Typography');
+const text = ref('Mood UI Typography');
 const truncate = ref(false);
 
 const variantOpts = [
@@ -109,7 +109,7 @@ const propsList: PropDoc[] = [
                             :color="color"
                             :truncate="truncate"
                         >
-                            {{ text || 'Modo UI' }}
+                            {{ text || 'Mood UI' }}
                         </Typography>
                     </div>
                 </Card>

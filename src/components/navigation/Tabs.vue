@@ -517,7 +517,7 @@ const panelsContainerClass = computed(() => {
 if (import.meta.env.DEV) { 
     if (!props.items || props.items.length === 0) { 
         // eslint-disable-next-line no-console 
-        console.warn('[modo-ui][Tabs] `items` prop is empty — nothing to render.'); 
+        console.warn('[mood-ui][Tabs] `items` prop is empty — nothing to render.'); 
     } 
 } 
  

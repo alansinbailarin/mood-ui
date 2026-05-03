@@ -1,5 +1,5 @@
 /** 
- * Types for the modo-ui showroom (Phase 1+2). 
+ * Types for the mood-ui showroom (Phase 1+2). 
  * 
  * Pages declare a list of `ControlDef`s and the playground builds the 
  * controls panel automatically. Keep this file dependency-light so any 

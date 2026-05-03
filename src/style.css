@@ -120,7 +120,7 @@
 }
 
 /* ============================================================
- * modo-ui · Semantic tokens (OKLCH)
+ * mood-ui · Semantic tokens (OKLCH)
  * Enable CSS `light-dark()` by declaring `color-scheme` per mode.
  *
  * The selectors accept `[data-modo-theme="light|dark"]` alongside the

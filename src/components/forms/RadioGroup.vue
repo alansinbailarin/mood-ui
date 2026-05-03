@@ -135,6 +135,6 @@ const labelSizeClasses = computed(() => {
 }); 
  
 if (import.meta.env.DEV && !props.label && !props.ariaLabel) { 
-    console.warn('[modo-ui RadioGroup] Se requiere `label` o `ariaLabel` para accesibilidad.'); 
+    console.warn('[mood-ui RadioGroup] Se requiere `label` o `ariaLabel` para accesibilidad.'); 
 } 
 </script>

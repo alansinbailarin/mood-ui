@@ -90,7 +90,7 @@ export function useFieldState(
  
     if (import.meta.env.DEV && !props.label && !props.ariaLabel && !props.id) { 
         console.warn( 
-            `[modo-ui ${options.componentName}] Se requiere \`label\` o \`ariaLabel\` para accesibilidad.`, 
+            `[mood-ui ${options.componentName}] Se requiere \`label\` o \`ariaLabel\` para accesibilidad.`, 
         ); 
     } 
  

@@ -75,7 +75,7 @@ const resolvedAriaLabel = computed(() => {
     if (props.ariaLabel) return props.ariaLabel; 
     if (props.label) return undefined; // visible text is the name 
     if (import.meta.env.DEV && props.icon) { 
-        console.warn('[modo-ui] <Button> is icon-only but has no `ariaLabel` — add one for screen readers.'); 
+        console.warn('[mood-ui] <Button> is icon-only but has no `ariaLabel` — add one for screen readers.'); 
     } 
     return undefined; 
 }); 

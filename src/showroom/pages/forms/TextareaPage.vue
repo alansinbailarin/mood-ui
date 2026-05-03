@@ -5,7 +5,7 @@ import Example from '../../components/Example.vue';
 import Textarea from '../../../components/forms/Textarea.vue';
 
 const v = ref('');
-const v2 = ref('Hola modo-ui');
+const v2 = ref('Hola mood-ui');
 </script>
 
 <template>
