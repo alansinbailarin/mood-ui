@@ -36,7 +36,11 @@ export {
     mergeLocale, 
     type ModoLocale, 
     type PartialLocale, 
-} from './config/ModoLocale'; 
+} from './config/ModoLocale';
+export {
+    locales,
+    type LocaleKey,
+} from './config/locales'; 
 export { 
     defaultPalettes, 
     paletteFromHex, 

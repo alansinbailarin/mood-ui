@@ -1,0 +1,144 @@
+import type { ModoLocale } from '../ModoLocale';
+
+/** Locale español completo para mood-ui. */
+export const es: ModoLocale = {
+    common: {
+        clear:   'Limpiar',
+        loading: 'Cargando',
+        close:   'Cerrar',
+        dismiss: 'Descartar',
+        remove:  'Eliminar',
+    },
+    input: {
+        clear: 'Limpiar campo',
+    },
+    textarea: {
+        clear: 'Limpiar área de texto',
+    },
+    select: {
+        empty:       'Sin resultados.',
+        clear:       'Limpiar selección',
+        clearSearch: 'Limpiar búsqueda',
+    },
+    multiSelect: {
+        clear:       'Limpiar selección',
+        clearSearch: 'Limpiar búsqueda',
+    },
+    combobox: {
+        clear:         'Limpiar',
+        toggleOptions: 'Mostrar/ocultar opciones',
+    },
+    numberInput: {
+        increment: 'Incrementar',
+        decrement: 'Decrementar',
+    },
+    searchInput: {
+        clear: 'Limpiar búsqueda',
+    },
+    passwordInput: {
+        show: 'Mostrar contraseña',
+        hide: 'Ocultar contraseña',
+        strength: {
+            0: '',
+            1: 'Muy débil',
+            2: 'Débil',
+            3: 'Buena',
+            4: 'Fuerte',
+        },
+    },
+    dateField: {
+        clear: 'Limpiar fecha',
+    },
+    dateTimeField: {
+        clear: 'Limpiar fecha y hora',
+    },
+    dateRangeField: {
+        clear: 'Limpiar rango',
+    },
+    calendar: {
+        prevYear:  'Año anterior',
+        prevMonth: 'Mes anterior',
+        nextMonth: 'Mes siguiente',
+        nextYear:  'Año siguiente',
+        today:     'Ir a hoy',
+    },
+    agenda: {
+        empty: 'Sin eventos próximos',
+    },
+    fileInput: {
+        placeholder:            'Haz clic o arrastra archivos…',
+        uploadFiles:            'Subir archivos',
+        dropzoneLabel:          'Arrastra un archivo aquí o haz clic para seleccionar',
+        dropzoneLabelMultiple:  'Arrastra archivos aquí o haz clic para seleccionar',
+        hintUpTo:               'hasta {limit}',
+        hintMax:                'máx. {limit}',
+        browse:                 'Explorar',
+        addMore:                'Agregar más',
+        replace:                'Reemplazar',
+        filesSelected:          '{count} archivos seleccionados',
+        reject: {
+            size:           'Demasiado grande (máx. {limit})',
+            sizeNoLimit:    'Archivo demasiado grande',
+            type:           'Tipo de archivo no permitido',
+            count:          'Demasiados archivos (máx. {limit})',
+            countNoLimit:   'Demasiados archivos',
+        },
+    },
+    banner: {
+        dismiss: 'Descartar',
+    },
+    badge: {
+        remove: 'Eliminar',
+    },
+    avatarGroup: {
+        group: 'Grupo de {count} usuarios',
+    },
+    slider: {
+        aria: 'Control deslizante',
+    },
+    skeleton: {
+        loading: 'Cargando',
+    },
+    table: {
+        empty:            'Sin datos',
+        noResults:        'Ningún resultado coincide con los filtros',
+        defaultLabel:     'Tabla de datos',
+        loading:          'Cargando filas',
+        sortAscending:    'Orden ascendente',
+        sortDescending:   'Orden descendente',
+        sortNone:         'Quitar orden',
+        sortedBy:         'Ordenado por {column} {direction}',
+        selectAllRows:    'Seleccionar todas las filas',
+        selectRow:        'Seleccionar fila',
+        selectedCount:    '{count} seleccionadas',
+        expandRow:        'Expandir fila',
+        collapseRow:      'Contraer fila',
+        filterPlaceholder: 'Filtrar…',
+        clearFilter:      'Limpiar filtro',
+        searchPlaceholder: 'Buscar…',
+        columnVisibility: 'Columnas',
+        export:           'Exportar',
+        exportCsv:        'Descargar CSV',
+        exportJson:       'Descargar JSON',
+        exportClipboard:  'Copiar al portapapeles',
+        copiedRows:       '{count} filas copiadas',
+        resizeColumn:     'Redimensionar columna',
+        reorderColumn:    'Reordenar columna',
+        movedColumn:      'Se movió {column} a la posición {position}',
+        pagination: {
+            previous:    'Página anterior',
+            next:        'Página siguiente',
+            first:       'Primera página',
+            last:        'Última página',
+            page:        'Página {current} de {total}',
+            rowsPerPage: 'Filas por página',
+            range:       '{from}-{to} de {total}',
+            rangeUnknown: '{from}-{to}',
+        },
+        edit: {
+            editCell:    'Editar celda',
+            commitHint:  'Presiona Enter para guardar, Escape para cancelar.',
+            invalid:     'Valor no válido',
+        },
+    },
+};
