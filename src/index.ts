@@ -67,7 +67,8 @@ export {
 } from './composables/useModoConfig'; 
 export { useColorMode, resolveColorMode, type ColorMode } from './composables/useColorMode'; 
 export { useToast, useToastQueue } from './composables/useToast'; 
-export { useConfirm, useConfirmQueue } from './composables/useConfirm'; 
+export { useConfirm, useConfirmQueue } from './composables/useConfirm';
+export { useLocale } from './composables/useLocale'; 
  
 /* ------------------------------------------------------------------ */ 
 /*  Forms                                                               */ 
