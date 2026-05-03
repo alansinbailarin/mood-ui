@@ -1,13 +1,15 @@
 /** 
- * Public entry point of the `modo-ui` package. 
+ * Public entry point of the `mood-ui` package. 
  * 
  * This module re-exports every component, composable and type that is 
  * intended to be consumed by external apps. Internal helpers stay 
  * unexported on purpose — anything not listed here is private. 
- * 
- * Phase 8 (lib export) builds against this file via `vite build --lib`. 
  */ 
- 
+
+// Global stylesheet — CSS custom properties, Tailwind base + utilities.
+// Vite picks this up and outputs it to dist/mood-ui.css.
+import './style.css';
+
 /* ------------------------------------------------------------------ */ 
 /*  Provider + config                                                  */ 
 /* ------------------------------------------------------------------ */ 

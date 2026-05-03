@@ -58,17 +58,78 @@
   --text-display--font-weight: 700; 
 } 
  
-/* ============================================================ 
- * modo-ui · Semantic tokens (OKLCH) 
- * Enable CSS `light-dark()` by declaring `color-scheme` per mode. 
- * 
- * The selectors accept `[data-modo-theme="light|dark"]` alongside the 
- * global root / `.dark` class, so a nested provider can scope its own 
- * theme to a subtree without affecting the rest of the document. 
- * `:where(:root)` keeps root specificity at 0 so scoped overrides win. 
- * ============================================================ */ 
-:where(:root), 
-[data-modo-theme="light"] { 
+/* ============================================================
+ * Tailwind v4 @theme inline — bridges semantic CSS vars to
+ * Tailwind color utilities (bg-foreground, text-primary, etc.)
+ * `inline` means the tokens reference CSS vars instead of being
+ * static, so dark-mode overrides on :root / .dark propagate.
+ * ============================================================ */
+@theme inline {
+  --color-background:             var(--background);
+  --color-foreground:             var(--foreground);
+  --color-card:                   var(--card);
+  --color-card-foreground:        var(--card-foreground);
+  --color-popover:                var(--popover);
+  --color-popover-foreground:     var(--popover-foreground);
+  --color-primary:                var(--primary);
+  --color-primary-foreground:     var(--primary-foreground);
+  --color-secondary:              var(--secondary);
+  --color-secondary-foreground:   var(--secondary-foreground);
+  --color-muted:                  var(--muted);
+  --color-muted-foreground:       var(--muted-foreground);
+  --color-accent:                 var(--accent);
+  --color-accent-foreground:      var(--accent-foreground);
+  --color-destructive:            var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success:                var(--success);
+  --color-success-foreground:     var(--success-foreground);
+  --color-warning:                var(--warning);
+  --color-warning-foreground:     var(--warning-foreground);
+  --color-info:                   var(--info);
+  --color-info-foreground:        var(--info-foreground);
+  --color-border:                 var(--border);
+  --color-input:                  var(--input);
+  --color-ring:                   var(--ring);
+
+  /* Interactive state tokens */
+  --color-primary-subtle:         var(--primary-subtle);
+  --color-primary-hover:          var(--primary-hover);
+  --color-primary-active:         var(--primary-active);
+  --color-destructive-subtle:     var(--destructive-subtle);
+  --color-destructive-hover:      var(--destructive-hover);
+  --color-destructive-active:     var(--destructive-active);
+  --color-success-subtle:         var(--success-subtle);
+  --color-success-hover:          var(--success-hover);
+  --color-success-active:         var(--success-active);
+  --color-warning-subtle:         var(--warning-subtle);
+  --color-warning-hover:          var(--warning-hover);
+  --color-warning-active:         var(--warning-active);
+  --color-info-subtle:            var(--info-subtle);
+  --color-info-hover:             var(--info-hover);
+  --color-info-active:            var(--info-active);
+  --color-muted-hover:            var(--muted-hover);
+  --color-accent-hover:           var(--accent-hover);
+
+  /* Calendar event accent colors */
+  --color-purple:                 var(--purple);
+  --color-purple-foreground:      var(--purple-foreground);
+  --color-purple-subtle:          var(--purple-subtle);
+  --color-pink:                   var(--pink);
+  --color-pink-foreground:        var(--pink-foreground);
+  --color-pink-subtle:            var(--pink-subtle);
+}
+
+/* ============================================================
+ * modo-ui · Semantic tokens (OKLCH)
+ * Enable CSS `light-dark()` by declaring `color-scheme` per mode.
+ *
+ * The selectors accept `[data-modo-theme="light|dark"]` alongside the
+ * global root / `.dark` class, so a nested provider can scope its own
+ * theme to a subtree without affecting the rest of the document.
+ * `:where(:root)` keeps root specificity at 0 so scoped overrides win.
+ * ============================================================ */
+:where(:root),
+[data-modo-theme="light"] {
   color-scheme: light; 
   --background: oklch(1 0 0); 
   --foreground: oklch(0.145 0 0); 
