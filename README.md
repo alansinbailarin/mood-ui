@@ -1,4 +1,4 @@
-# modo-components
+# mood-ui
 
 A complete Vue 3 + TypeScript + Tailwind v4 component library: forms, feedback,
 data display (tables, calendars, scheduler), navigation and a full AppShell.
@@ -7,7 +7,7 @@ Theming, dark mode and runtime-tunable color palettes are first-class.
 ## Install
 
 ```bash
-npm install modo-components
+npm install mood-ui
 # Peer dependencies your app must have:
 npm install vue@^3.4 @heroicons/vue@^2 gsap@^3
 ```
@@ -18,7 +18,7 @@ npm install vue@^3.4 @heroicons/vue@^2 gsap@^3
 
 ## Setup
 
-`modo-components` is built with Tailwind v4. Import the compiled stylesheet
+`mood-ui` is built with Tailwind v4. Import the compiled stylesheet
 **once** at your app entry:
 
 ```ts
@@ -26,7 +26,7 @@ npm install vue@^3.4 @heroicons/vue@^2 gsap@^3
 import { createApp } from 'vue';
 import App from './App.vue';
 
-import 'modo-components/style.css';
+import 'mood-ui/style.css';
 
 createApp(App).mount('#app');
 ```
@@ -37,7 +37,7 @@ size, halo, dark mode and the primary palette) to every component:
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue';
-import { ModoProvider, Button, paletteFromHex } from 'modo-components';
+import { ModoProvider, Button, paletteFromHex } from 'mood-ui';
 
 const primary = ref('#6366f1');
 </script>

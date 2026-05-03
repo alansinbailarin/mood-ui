@@ -1,5 +1,5 @@
 {
-  "name": "modo-components",
+  "name": "mood-ui",
   "version": "0.1.0",
   "description": "Vue 3 component library with full theming, dark mode, palettes, calendar, scheduler, table and AppShell.",
   "type": "module",
@@ -14,18 +14,18 @@
     "url": "https://github.com/alansinbailarin/modo-components/issues"
   },
   "keywords": ["vue", "vue3", "components", "ui", "tailwindcss", "design-system", "modo"],
-  "main": "./dist/modo-components.cjs",
-  "module": "./dist/modo-components.mjs",
+  "main": "./dist/mood-ui.cjs",
+  "module": "./dist/mood-ui.mjs",
   "types": "./dist/index.d.ts",
-  "style": "./dist/modo-components.css",
+  "style": "./dist/mood-ui.css",
   "sideEffects": ["**/*.css"],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/modo-components.mjs",
-      "require": "./dist/modo-components.cjs"
+      "import": "./dist/mood-ui.mjs",
+      "require": "./dist/mood-ui.cjs"
     },
-    "./style.css": "./dist/modo-components.css",
+    "./style.css": "./dist/mood-ui.css",
     "./package.json": "./package.json"
   },
   "files": ["dist", "README.md", "LICENSE"],

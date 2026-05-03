@@ -38,9 +38,9 @@ export default defineConfig({
         ? {
               lib: {
                   entry: fileURLToPath(new URL('./src/index.ts', import.meta.url)),
-                  name: 'ModoComponents',
+                  name: 'MoodUI',
                   formats: ['es', 'cjs'],
-                  fileName: (format) => `modo-components.${format === 'es' ? 'mjs' : 'cjs'}`,
+                  fileName: (format) => `mood-ui.${format === 'es' ? 'mjs' : 'cjs'}`,
               },
               outDir: 'dist',
               cssCodeSplit: false,
@@ -55,7 +55,7 @@ export default defineConfig({
                   output: {
                       globals: { vue: 'Vue', gsap: 'gsap' },
                       assetFileNames: (asset) =>
-                          asset.name === 'style.css' ? 'modo-components.css' : asset.name ?? '[name][extname]',
+                          asset.name === 'style.css' ? 'mood-ui.css' : asset.name ?? '[name][extname]',
                       exports: 'named',
                   },
               },
