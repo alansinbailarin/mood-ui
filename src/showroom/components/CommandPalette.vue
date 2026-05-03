@@ -14,6 +14,7 @@ import {
     LanguageIcon,
     HashtagIcon,
 } from '@heroicons/vue/24/outline';
+import Modal from '../../components/feedback/Modal.vue';
 import { showroomNav } from '../registry';
 import { useShowroomRouter } from '../composables/useShowroomRouter';
 
@@ -145,10 +146,7 @@ function onKeydown(e: KeyboardEvent) {
     }
     if (!open.value) return;
 
-    if (e.key === 'Escape') {
-        e.preventDefault();
-        close();
-    } else if (e.key === 'ArrowDown') {
+    if (e.key === 'ArrowDown') {
         e.preventDefault();
         activeIndex.value = Math.min(activeIndex.value + 1, filtered.value.length - 1);
         scrollIntoView();
@@ -175,6 +173,9 @@ watch(open, async (v) => {
     if (v) {
         await nextTick();
         inputEl.value?.focus();
+    } else {
+        query.value = '';
+        activeIndex.value = 0;
     }
 });
 
@@ -193,108 +194,86 @@ function flatIndex(group: string, idxInGroup: number): number {
 </script>
 
 <template>
-    <Teleport to="body">
-        <Transition
-            enter-active-class="transition duration-150"
-            enter-from-class="opacity-0"
-            enter-to-class="opacity-100"
-            leave-active-class="transition duration-100"
-            leave-from-class="opacity-100"
-            leave-to-class="opacity-0"
-        >
-            <div
-                v-if="open"
-                class="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm"
-                @click="close"
-            />
-        </Transition>
+    <Modal
+        v-model="open"
+        size="large"
+        position="top"
+        :show-close="false"
+        :inner-border="false"
+        overlay="blur"
+        aria-label="Búsqueda rápida"
+    >
+        <!-- Full-bleed wrapper that cancels the Modal body padding -->
+        <div class="-mx-6 -my-6">
+            <!-- Search input -->
+            <div class="flex items-center gap-3 px-4 py-3 border-b border-border">
+                <MagnifyingGlassIcon class="size-5 text-muted-foreground shrink-0" />
+                <input
+                    ref="inputEl"
+                    v-model="query"
+                    type="text"
+                    placeholder="Buscar componentes, acciones, docs…"
+                    class="flex-1 bg-transparent border-0 outline-none text-base text-foreground placeholder:text-muted-foreground"
+                />
+                <kbd class="hidden sm:inline-flex items-center gap-0.5 text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded border border-border bg-muted text-muted-foreground">
+                    ESC
+                </kbd>
+            </div>
 
-        <Transition
-            enter-active-class="transition duration-200 ease-out"
-            enter-from-class="opacity-0 scale-95 translate-y-2"
-            enter-to-class="opacity-100 scale-100 translate-y-0"
-            leave-active-class="transition duration-150 ease-in"
-            leave-from-class="opacity-100 scale-100"
-            leave-to-class="opacity-0 scale-95"
-        >
-            <div
-                v-if="open"
-                role="dialog"
-                aria-modal="true"
-                aria-label="Búsqueda rápida"
-                class="fixed left-1/2 top-[15vh] -translate-x-1/2 z-[101] w-[min(640px,calc(100vw-2rem))] rounded-2xl border border-border bg-card shadow-2xl ring-1 ring-black/5 overflow-hidden"
-                @click.stop
-            >
-                <!-- Search input -->
-                <div class="flex items-center gap-3 px-4 py-3 border-b border-border">
-                    <MagnifyingGlassIcon class="size-5 text-muted-foreground shrink-0" />
-                    <input
-                        ref="inputEl"
-                        v-model="query"
-                        type="text"
-                        placeholder="Buscar componentes, acciones, docs…"
-                        class="flex-1 bg-transparent border-0 outline-none text-base text-foreground placeholder:text-muted-foreground"
-                    />
-                    <kbd class="hidden sm:inline-flex items-center gap-0.5 text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded border border-border bg-muted text-muted-foreground">
-                        ESC
-                    </kbd>
+            <!-- Results -->
+            <div ref="listEl" class="max-h-[50vh] overflow-y-auto py-2">
+                <div
+                    v-if="filtered.length === 0"
+                    class="px-4 py-12 text-center text-sm text-muted-foreground"
+                >
+                    Sin resultados para "{{ query }}"
                 </div>
 
-                <!-- Results -->
-                <div ref="listEl" class="max-h-[50vh] overflow-y-auto py-2">
-                    <div
-                        v-if="filtered.length === 0"
-                        class="px-4 py-12 text-center text-sm text-muted-foreground"
-                    >
-                        Sin resultados para "{{ query }}"
+                <div
+                    v-for="g in groupedItems"
+                    :key="g.group"
+                    class="mb-1"
+                >
+                    <div class="px-4 py-1.5 text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
+                        {{ g.group }}
                     </div>
-
-                    <div
-                        v-for="g in groupedItems"
-                        :key="g.group"
-                        class="mb-1"
+                    <button
+                        v-for="(item, idx) in g.items"
+                        :key="item.id"
+                        :data-cmd-index="flatIndex(g.group, idx)"
+                        type="button"
+                        class="w-full flex items-center gap-3 px-4 py-2 text-sm text-left transition-colors"
+                        :class="flatIndex(g.group, idx) === activeIndex ? 'bg-primary/10 text-foreground' : 'text-foreground/90 hover:bg-muted/40'"
+                        @mouseenter="activeIndex = flatIndex(g.group, idx)"
+                        @click="item.run()"
                     >
-                        <div class="px-4 py-1.5 text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
-                            {{ g.group }}
-                        </div>
-                        <button
-                            v-for="(item, idx) in g.items"
-                            :key="item.id"
-                            :data-cmd-index="flatIndex(g.group, idx)"
-                            type="button"
-                            class="w-full flex items-center gap-3 px-4 py-2 text-sm text-left transition-colors"
-                            :class="flatIndex(g.group, idx) === activeIndex ? 'bg-primary/10 text-foreground' : 'text-foreground/90 hover:bg-muted/40'"
-                            @mouseenter="activeIndex = flatIndex(g.group, idx)"
-                            @click="item.run()"
+                        <component :is="item.icon" class="size-4 text-muted-foreground shrink-0" />
+                        <span class="flex-1">{{ item.label }}</span>
+                        <span
+                            v-if="flatIndex(g.group, idx) === activeIndex"
+                            class="text-[10px] font-mono text-muted-foreground"
                         >
-                            <component :is="item.icon" class="size-4 text-muted-foreground shrink-0" />
-                            <span class="flex-1">{{ item.label }}</span>
-                            <span
-                                v-if="flatIndex(g.group, idx) === activeIndex"
-                                class="text-[10px] font-mono text-muted-foreground"
-                            >
-                                ↵
-                            </span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Footer -->
-                <div class="flex items-center justify-between gap-3 px-4 py-2 border-t border-border bg-muted/20 text-[11px] text-muted-foreground">
-                    <div class="flex items-center gap-3">
-                        <span class="inline-flex items-center gap-1">
-                            <kbd class="font-mono font-semibold px-1 rounded border border-border bg-card">↑</kbd>
-                            <kbd class="font-mono font-semibold px-1 rounded border border-border bg-card">↓</kbd>
-                            navegar
+                            ↵
                         </span>
-                        <span class="inline-flex items-center gap-1">
-                            <kbd class="font-mono font-semibold px-1 rounded border border-border bg-card">↵</kbd>
-                            seleccionar
-                        </span>
-                    </div>
-                    <span>mood-ui</span>
+                    </button>
                 </div>
             </div>
-        </Transition>
-    </Teleport>
+
+            <!-- Footer -->
+            <div class="flex items-center justify-between gap-3 px-4 py-2 border-t border-border bg-muted/20 text-[11px] text-muted-foreground">
+                <div class="flex items-center gap-3">
+                    <span class="inline-flex items-center gap-1">
+                        <kbd class="font-mono font-semibold px-1 rounded border border-border bg-card">↑</kbd>
+                        <kbd class="font-mono font-semibold px-1 rounded border border-border bg-card">↓</kbd>
+                        navegar
+                    </span>
+                    <span class="inline-flex items-center gap-1">
+                        <kbd class="font-mono font-semibold px-1 rounded border border-border bg-card">↵</kbd>
+                        seleccionar
+                    </span>
+                </div>
+                <span>mood-ui</span>
+            </div>
+        </div>
+    </Modal>
 </template>

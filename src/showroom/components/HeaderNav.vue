@@ -96,6 +96,7 @@ function measure(animated: boolean) {
     const itemRect = item.getBoundingClientRect();
     indicatorStyle.value = {
         transform: `translateX(${(itemRect.left - trackRect.left).toFixed(2)}px)`,
+        top: `${(itemRect.top - trackRect.top).toFixed(2)}px`,
         width: `${itemRect.width.toFixed(2)}px`,
         height: `${itemRect.height.toFixed(2)}px`,
         opacity: '1',

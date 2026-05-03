@@ -8,7 +8,6 @@ import {
     ArrowPathIcon,
 } from '@heroicons/vue/24/outline';
 
-import Button from '../../components/forms/Button.vue';
 import Tooltip from '../../components/feedback/Tooltip.vue';
 import PopoverPanel from '../../components/layout/PopoverPanel.vue';
 import { usePopover } from '../../composables/usePopover';
@@ -121,20 +120,16 @@ const activeAccent = computed(() =>
 </script>
 
 <template>
-    <span ref="triggerRef" class="inline-flex">
-        <Tooltip :content="t.customizeTheme">
-            <Button
-                variant="ghost"
-                size="small"
-                icon-only
-                :aria-label="t.customizeTheme"
-                :aria-expanded="isOpen"
-                @click="toggle"
-            >
-                <SwatchIcon class="w-5 h-5" />
-            </Button>
-        </Tooltip>
-    </span>
+    <button
+        ref="triggerRef"
+        type="button"
+        :aria-label="t.customizeTheme"
+        :aria-expanded="isOpen"
+        class="inline-flex items-center justify-center w-8 h-8 rounded-full text-muted-foreground hover:text-foreground transition-colors"
+        @click="toggle"
+    >
+        <SwatchIcon class="w-5 h-5" />
+    </button>
 
     <PopoverPanel
         :open="isOpen"

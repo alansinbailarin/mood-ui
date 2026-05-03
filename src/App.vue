@@ -328,18 +328,6 @@ function onHeaderNavigate(id: string) {
                         <Bars3Icon class="w-5 h-5" />
                     </button>
 
-                    <!-- Search -->
-                    <button
-                        type="button"
-                        class="flex items-center gap-2 h-9 px-3 rounded-lg border border-border bg-muted/30 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors text-sm sm:min-w-[260px]"
-                        :aria-label="`${t.search} (⌘K)`"
-                        @click="paletteOpen = true"
-                    >
-                        <MagnifyingGlassIcon class="w-4 h-4" />
-                        <span class="flex-1 text-left">{{ t.searchLong }}</span>
-                        <kbd class="hidden sm:inline-flex font-mono font-semibold px-1.5 py-0.5 rounded border border-border bg-card text-[10px]">⌘K</kbd>
-                    </button>
-
                     <!-- Center: header nav -->
                     <div class="hidden lg:flex flex-1 justify-center">
                         <HeaderNav :active-id="currentId" :locale="localeName" @navigate="onHeaderNavigate" />
