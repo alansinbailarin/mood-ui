@@ -25,7 +25,7 @@ const options = [
 
 const trackEl = ref<HTMLElement | null>(null);
 const itemRefs = ref<HTMLElement[]>([]);
-const indicatorStyle = ref<Record<string, string>>({ opacity: '0' });
+const indicatorStyle = ref<Record<string, string>>({ opacity: '0', left: '0', top: '0' });
 const firstMeasureDone = ref(false);
 
 function setItemRef(el: unknown, idx: number) {
@@ -48,6 +48,7 @@ function measure(animated: boolean) {
         width: `${item.offsetWidth}px`,
         height: `${item.offsetHeight}px`,
         top: '0',
+        left: '0',
         opacity: '1',
         transition: animated
             ? 'transform 280ms cubic-bezier(0.4,0,0.2,1), width 280ms cubic-bezier(0.4,0,0.2,1)'
