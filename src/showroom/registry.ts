@@ -72,6 +72,18 @@ export const showroomNav: NavCategory[] = [
             },
         ],
     },
+    {
+        id: 'theme-studio',
+        title: 'Theme Studio',
+        entries: [
+            {
+                id: 'theme-studio',
+                label: 'Theme Studio',
+                page: () => import('./pages/theme-studio/ThemeStudioPage.vue'),
+                badge: 'Beta',
+            },
+        ],
+    },
     { 
         id: 'forms', 
         title: 'Forms', 
