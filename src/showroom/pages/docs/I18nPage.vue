@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { LanguageIcon } from '@heroicons/vue/24/outline';
+import { PaintBrushIcon, BookOpenIcon } from '@heroicons/vue/24/outline';
 import Typography from '../../../components/data-display/Typography.vue';
 import Card from '../../../components/data-display/Card.vue';
 import Stack from '../../../components/layout/Stack.vue';
 import Badge from '../../../components/feedback/Badge.vue';
 import Banner from '../../../components/feedback/Banner.vue';
 import CodePreview from '../../components/CodePreview.vue';
+import { useShowroomRouter } from '../../composables/useShowroomRouter';
+import { vReveal } from '../../composables/useScrollReveal';
 
 const usePreset = `<script setup lang="ts">
 import { ModoProvider, locales } from 'mood-ui';
@@ -97,19 +99,20 @@ const namespaces = [
     'skeleton',
     'table',
 ];
+
+const { go } = useShowroomRouter();
 </script>
 
 <template>
-    <div class="flex flex-col gap-10 max-w-3xl">
-        <header class="flex flex-col gap-3">
-            <Badge color="primary" variant="subtle" class="self-start">
-                <LanguageIcon class="size-3.5 mr-1" />
-                Docs
-            </Badge>
-            <Typography variant="display" size="medium" weight="bold">
+    <div class="flex flex-col gap-10 pb-12">
+        <header v-reveal class="flex flex-col gap-3">
+            <Typography variant="overline" size="medium" color="muted">
+                Documentación
+            </Typography>
+            <Typography variant="display" size="medium" as="h1" weight="medium" class="tracking-tight leading-[1.05]">
                 i18n
             </Typography>
-            <Typography variant="body" size="large" color="muted">
+            <Typography variant="body" size="medium" color="muted" weight="light">
                 mood-ui incluye soporte completo para internacionalización con
                 <strong>Español</strong> e <strong>Inglés</strong> built-in. Cambia idioma
                 globalmente, override por componente o crea locales completos para
@@ -118,9 +121,9 @@ const namespaces = [
         </header>
 
         <!-- Preset -->
-        <section class="flex flex-col gap-4">
-            <Typography variant="title" size="large" weight="bold">Usar un locale preset</Typography>
-            <Typography variant="body" color="muted">
+        <section v-reveal class="flex flex-col gap-4">
+            <Typography variant="title" size="large" weight="medium" as="h2">Usar un locale preset</Typography>
+            <Typography variant="body" size="small" color="muted" weight="light">
                 La forma más simple: importa <code>locales</code> y pasa el preset que quieras
                 al provider.
             </Typography>
@@ -128,9 +131,9 @@ const namespaces = [
         </section>
 
         <!-- useLocale composable -->
-        <section class="flex flex-col gap-4">
-            <Typography variant="title" size="large" weight="bold">Cambio dinámico con useLocale()</Typography>
-            <Typography variant="body" color="muted">
+        <section v-reveal class="flex flex-col gap-4">
+            <Typography variant="title" size="large" weight="medium" as="h2">Cambio dinámico con useLocale()</Typography>
+            <Typography variant="body" size="small" color="muted" weight="light">
                 <code>useLocale()</code> es un singleton reactivo. Cualquier llamada a
                 <code>set('en')</code> actualiza globalmente el idioma en toda la app.
             </Typography>
@@ -143,9 +146,9 @@ const namespaces = [
         </section>
 
         <!-- Partial override -->
-        <section class="flex flex-col gap-4">
-            <Typography variant="title" size="large" weight="bold">Override parcial</Typography>
-            <Typography variant="body" color="muted">
+        <section v-reveal class="flex flex-col gap-4">
+            <Typography variant="title" size="large" weight="medium" as="h2">Override parcial</Typography>
+            <Typography variant="body" size="small" color="muted" weight="light">
                 <code>PartialLocale</code> permite sobrescribir solo las cadenas que necesitas.
                 Las demás se heredan del default (inglés).
             </Typography>
@@ -153,9 +156,9 @@ const namespaces = [
         </section>
 
         <!-- Custom locale -->
-        <section class="flex flex-col gap-4">
-            <Typography variant="title" size="large" weight="bold">Crear un locale completo (otro idioma)</Typography>
-            <Typography variant="body" color="muted">
+        <section v-reveal class="flex flex-col gap-4">
+            <Typography variant="title" size="large" weight="medium" as="h2">Crear un locale completo (otro idioma)</Typography>
+            <Typography variant="body" size="small" color="muted" weight="light">
                 Usa <code>mergeLocale()</code> para combinar tu locale con el default. Garantiza
                 que todas las strings tengan un fallback en inglés.
             </Typography>
@@ -163,9 +166,9 @@ const namespaces = [
         </section>
 
         <!-- Namespaces -->
-        <section class="flex flex-col gap-4">
-            <Typography variant="title" size="large" weight="bold">Namespaces disponibles</Typography>
-            <Typography variant="body" color="muted">
+        <section v-reveal class="flex flex-col gap-4">
+            <Typography variant="title" size="large" weight="medium" as="h2">Namespaces disponibles</Typography>
+            <Typography variant="body" size="small" color="muted" weight="light">
                 El tipo <code>ModoLocale</code> está organizado en namespaces, uno por componente
                 o categoría:
             </Typography>
@@ -184,6 +187,49 @@ const namespaces = [
                     </div>
                 </Stack>
             </Card>
+        </section>
+
+        <!-- Next steps -->
+        <section v-reveal class="flex flex-col gap-4">
+            <Typography variant="heading" size="large" weight="medium">
+                Próximos pasos
+            </Typography>
+            <div class="grid sm:grid-cols-2 gap-4">
+                <Card
+                    variant="outlined"
+                    padding="large"
+                    class="relative overflow-hidden cursor-pointer hover:border-primary/50 hover:-translate-y-0.5 transition-all duration-300 group"
+                    @click="go('theming')"
+                >
+                    <div class="pointer-events-none absolute inset-0 opacity-[0.065] text-primary [background-image:linear-gradient(to_right,currentColor_1px,transparent_1px),linear-gradient(to_bottom,currentColor_1px,transparent_1px)] [background-size:20px_20px]" />
+                    <Stack direction="column" spacing="small" class="relative">
+                        <div class="size-10 rounded-xl bg-primary/10 text-primary grid place-items-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                            <PaintBrushIcon class="size-5" />
+                        </div>
+                        <Typography variant="title" size="medium" weight="medium" as="h3">Personaliza el tema</Typography>
+                        <Typography variant="body" size="small" color="muted" weight="light">
+                            Tokens, palettes, surfaces y dark mode presets.
+                        </Typography>
+                    </Stack>
+                </Card>
+                <Card
+                    variant="outlined"
+                    padding="large"
+                    class="relative overflow-hidden cursor-pointer hover:border-success/40 hover:-translate-y-0.5 transition-all duration-300 group"
+                    @click="go('introduction')"
+                >
+                    <div class="pointer-events-none absolute inset-0 opacity-[0.065] text-success [background-image:radial-gradient(circle,currentColor_1.5px,transparent_1.5px)] [background-size:18px_18px]" />
+                    <Stack direction="column" spacing="small" class="relative">
+                        <div class="size-10 rounded-xl bg-success/10 text-success grid place-items-center group-hover:bg-success group-hover:text-white transition-colors">
+                            <BookOpenIcon class="size-5" />
+                        </div>
+                        <Typography variant="title" size="medium" weight="medium" as="h3">Volver a Introducción</Typography>
+                        <Typography variant="body" size="small" color="muted" weight="light">
+                            Fundamentos y arquitectura de mood-ui.
+                        </Typography>
+                    </Stack>
+                </Card>
+            </div>
         </section>
     </div>
 </template>
