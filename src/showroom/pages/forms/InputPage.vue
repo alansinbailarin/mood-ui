@@ -1,172 +1,278 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import DocPage from '../../components/DocPage.vue';
-import Example from '../../components/Example.vue';
-import Card from '../../../components/data-display/Card.vue';
-import Stack from '../../../components/layout/Stack.vue';
-import Typography from '../../../components/data-display/Typography.vue';
+import { ref, computed } from 'vue';
+import ComponentDoc from '../../components/ComponentDoc.vue';
+import ComponentPreview from '../../components/ComponentPreview.vue';
 import Input from '../../../components/forms/Input.vue';
-import Select from '../../../components/forms/Select.vue';
-import Switch from '../../../components/forms/Switch.vue';
 import { EnvelopeIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
-import type { PropDoc } from '../../types';
+import type { PropDoc, EmitDoc } from '../../types';
 
-const v = ref('');
-const errored = ref('not-an-email');
-
-const pgVariant = ref<'outline' | 'filled' | 'ghost'>('outline');
-const pgColor = ref<'default' | 'primary' | 'danger' | 'success' | 'warning'>('primary');
-const pgSize = ref<'small' | 'medium' | 'large'>('medium');
-const pgPlaceholder = ref('Escribe algo…');
-const pgLabel = ref('Mi campo');
-const pgHint = ref('Texto de ayuda opcional');
-const pgError = ref('');
-const pgDisabled = ref(false);
-const pgReadonly = ref(false);
+// ── Overview playground state ─────────────────────────────────────────────────
+const pgValue     = ref('mood@example.com');
+const pgVariant   = ref<'outline' | 'filled' | 'ghost'>('outline');
+const pgColor     = ref<'default' | 'primary' | 'success' | 'warning' | 'danger'>('primary');
+const pgSize      = ref<'small' | 'medium' | 'large'>('medium');
 const pgClearable = ref(true);
-const pgValue = ref('');
+const pgDisabled  = ref(false);
+const pgReadonly  = ref(false);
 
-const variantOpts = [
-    { value: 'outline', label: 'outline' },
-    { value: 'filled', label: 'filled' },
-    { value: 'ghost', label: 'ghost' },
-];
-const colorOpts = [
-    { value: 'default', label: 'default' },
-    { value: 'primary', label: 'primary' },
-    { value: 'danger', label: 'danger' },
-    { value: 'success', label: 'success' },
-    { value: 'warning', label: 'warning' },
-];
-const sizeOpts = [
-    { value: 'small', label: 'small' },
-    { value: 'medium', label: 'medium' },
-    { value: 'large', label: 'large' },
+function resetPlayground() {
+    pgValue.value     = 'mood@example.com';
+    pgVariant.value   = 'outline';
+    pgColor.value     = 'primary';
+    pgSize.value      = 'medium';
+    pgClearable.value = true;
+    pgDisabled.value  = false;
+    pgReadonly.value  = false;
+}
+
+const colorDots = [
+    { value: 'default' as const, bg: '#64748b',        label: 'Default' },
+    { value: 'primary' as const, bg: 'var(--primary)', label: 'Primary' },
+    { value: 'success' as const, bg: '#22c55e',        label: 'Success' },
+    { value: 'warning' as const, bg: '#f59e0b',        label: 'Warning' },
+    { value: 'danger'  as const, bg: '#ef4444',        label: 'Danger'  },
 ];
 
-const props: PropDoc[] = [
-    { name: 'modelValue', type: 'string | number', description: 'Valor del input (v-model).' },
-    { name: 'label', type: 'string', description: 'Etiqueta visible.' },
-    { name: 'placeholder', type: 'string', description: 'Placeholder cuando está vacío.' },
-    { name: 'hint', type: 'string', description: 'Texto auxiliar bajo el input.' },
-    { name: 'errorText', type: 'string', description: 'Mensaje de error que marca el input como inválido.' },
-    { name: 'variant', type: "'outline' | 'filled' | 'ghost'", default: "'outline'", description: 'Estilo visual del campo.' },
-    { name: 'color', type: "'default' | 'primary' | ...", default: "'default'", description: 'Color semántico del foco.' },
-    { name: 'size', type: "'small' | 'medium' | 'large'", default: "'medium'", description: 'Tamaño visual.' },
-    { name: 'disabled', type: 'boolean', default: 'false', description: 'Deshabilita el input.' },
-    { name: 'readonly', type: 'boolean', default: 'false', description: 'Solo lectura.' },
-    { name: 'clearable', type: 'boolean', default: 'false', description: 'Muestra botón ✕ para limpiar.' },
-    { name: 'iconLeft / iconRight', type: 'Component', description: 'Iconos en cada lado.' },
-    { name: 'prefix / suffix', type: 'string', description: 'Texto adyacente al input.' },
+const overviewCode = computed(() => {
+    const parts: string[] = [];
+    if (pgVariant.value !== 'outline') parts.push(`variant="${pgVariant.value}"`);
+    if (pgColor.value   !== 'default') parts.push(`color="${pgColor.value}"`);
+    if (pgSize.value    !== 'medium')  parts.push(`size="${pgSize.value}"`);
+    if (pgClearable.value)             parts.push('clearable');
+    if (pgDisabled.value)              parts.push(':disabled="true"');
+    if (pgReadonly.value)              parts.push(':readonly="true"');
+    const attrs = parts.length ? ' ' + parts.join(' ') : '';
+    return `<Input v-model="value" label="Email" placeholder="tu@email.com"${attrs} />`;
+});
+
+// ── Example code strings ──────────────────────────────────────────────────────
+const basicCode = `<Input v-model="email" label="Email" placeholder="tu@email.com" />`;
+
+const variantsCode = `<Input variant="outline" placeholder="outline" />
+<Input variant="filled"  placeholder="filled"  />
+<Input variant="ghost"   placeholder="ghost"   />`;
+
+const sizesCode = `<Input size="small"  placeholder="small"  />
+<Input size="medium" placeholder="medium" />
+<Input size="large"  placeholder="large"  />`;
+
+const iconsCode = `<Input :icon-left="EnvelopeIcon"        placeholder="Email" />
+<Input :icon-right="MagnifyingGlassIcon" placeholder="Buscar" />
+<Input prefix="$" suffix="USD"           placeholder="0.00" />`;
+
+const statesCode = `<Input disabled placeholder="Disabled" />
+<Input readonly model-value="Solo lectura" />
+<Input v-model="email" error-text="Email inválido" label="Email" />`;
+
+// Example state
+const exBasic = ref('');
+const exErr   = ref('not-an-email');
+
+// ── API docs ──────────────────────────────────────────────────────────────────
+const propsList: PropDoc[] = [
+    { name: 'modelValue',  type: 'string | number | null',                                   description: 'Valor del input (v-model).' },
+    { name: 'label',       type: 'string',                                                   description: 'Etiqueta visible encima del input.' },
+    { name: 'placeholder', type: 'string',                                                   description: 'Placeholder cuando está vacío.' },
+    { name: 'helperText',  type: 'string',                                                   description: 'Texto de ayuda bajo el input. Se oculta si hay errorText.' },
+    { name: 'errorText',   type: 'string',                                                   description: 'Mensaje de error que marca el input como inválido.' },
+    { name: 'type',        type: "'text' | 'email' | 'url' | 'tel' | 'search'",              default: "'text'",    description: 'Tipo HTML del input.' },
+    { name: 'variant',     type: "'outline' | 'filled' | 'ghost'",                           default: "'outline'", description: 'Estilo visual del campo.' },
+    { name: 'color',       type: "'default' | 'primary' | 'success' | 'warning' | 'danger'", default: "'default'", description: 'Color semántico aplicado al estado de foco.' },
+    { name: 'size',        type: "'small' | 'medium' | 'large'",                             default: "'medium'",  description: 'Controla padding y tipografía.' },
+    { name: 'radius',      type: "'none' | 'small' | 'medium' | 'large' | 'full'",                                  description: 'Radio de las esquinas. Hereda del ModoProvider si se omite.' },
+    { name: 'halo',        type: "'tinted' | 'neutral' | 'off'",                                                    description: 'Estilo del halo persistente (ring). Hereda del ModoProvider.' },
+    { name: 'fullWidth',   type: 'boolean',                                                  default: 'false',     description: 'Aplica w-full al root del campo.' },
+    { name: 'disabled',    type: 'boolean',                                                  default: 'false',     description: 'Deshabilita el input.' },
+    { name: 'readonly',    type: 'boolean',                                                  default: 'false',     description: 'Solo lectura: mantiene estilo normal pero impide edición.' },
+    { name: 'required',    type: 'boolean',                                                  default: 'false',     description: 'Marca el campo como requerido y muestra el indicador.' },
+    { name: 'loading',     type: 'boolean',                                                  default: 'false',     description: 'Muestra un loader y bloquea el input durante operaciones asíncronas.' },
+    { name: 'clearable',   type: 'boolean',                                                  default: 'false',     description: 'Muestra botón ✕ para limpiar el valor cuando hay contenido.' },
+    { name: 'maxLength',   type: 'number',                                                                         description: 'Longitud máxima del valor. Activa el contador si showCounter.' },
+    { name: 'showCounter', type: 'boolean',                                                  default: 'false',     description: 'Muestra el contador de caracteres (requiere maxLength).' },
+    { name: 'iconLeft',    type: 'Component',                                                                      description: 'Icono renderizado dentro del input a la izquierda.' },
+    { name: 'iconRight',   type: 'Component',                                                                      description: 'Icono renderizado dentro del input a la derecha.' },
+    { name: 'prefix',      type: 'string',                                                                         description: 'Texto fijo a la izquierda (ej. "$", "https://").' },
+    { name: 'suffix',      type: 'string',                                                                         description: 'Texto fijo a la derecha (ej. ".com", "kg").' },
+    { name: 'name',        type: 'string',                                                                         description: 'Atributo name HTML para envío en formularios.' },
+    { name: 'id',          type: 'string',                                                                         description: 'id del input. Se autogenera si se omite.' },
+    { name: 'autocomplete',type: 'string',                                                                         description: 'Atributo autocomplete HTML.' },
+    { name: 'autofocus',   type: 'boolean',                                                  default: 'false',     description: 'Foco automático al montar.' },
+    { name: 'ariaLabel',   type: 'string',                                                                         description: 'Nombre accesible cuando no hay label visible.' },
+];
+
+const emitsList: EmitDoc[] = [
+    { name: 'update:modelValue', payload: 'string',     description: 'Emitido en cada cambio del valor (sincroniza v-model).' },
+    { name: 'change',            payload: 'string',     description: 'Emitido tras un cambio confirmado por el usuario.' },
+    { name: 'focus',             payload: 'FocusEvent', description: 'Emitido cuando el input recibe foco.' },
+    { name: 'blur',              payload: 'FocusEvent', description: 'Emitido cuando el input pierde foco.' },
+    { name: 'clear',             payload: 'void',       description: 'Emitido al pulsar el botón de limpiar (clearable).' },
 ];
 </script>
 
 <template>
-    <DocPage
+    <ComponentDoc
         title="Input"
         category="Forms"
-        import-path="import Input from '@/components/forms/Input.vue'"
-        description="Input de texto polimórfico con label, hint, mensajes de error, iconos, prefijos/sufijos y tres variantes visuales."
-        :props-list="props"
+        import-path="import { Input } from 'mood-ui'"
+        description="Input de texto con label, helper, mensajes de error, iconos, prefijos/sufijos y tres variantes visuales."
+        :props-list="propsList"
+        :emits-list="emitsList"
     >
+        <!-- ── Overview ────────────────────────────────────────────────────── -->
+        <template #overview>
+            <ComponentPreview :code="overviewCode" min-height="200px" @reset="resetPlayground">
+                <template #controls>
+                    <!-- Variant -->
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">VARIANT</span>
+                        <div class="flex rounded-md border border-border overflow-hidden">
+                            <button
+                                v-for="v in ['outline', 'filled', 'ghost']"
+                                :key="v"
+                                type="button"
+                                class="px-2 py-1 text-xs transition-colors capitalize"
+                                :class="pgVariant === v
+                                    ? 'bg-primary/10 text-primary font-medium'
+                                    : 'text-muted-foreground hover:bg-muted/60'"
+                                @click="pgVariant = (v as typeof pgVariant)"
+                            >{{ v }}</button>
+                        </div>
+                    </div>
+
+                    <span class="w-px h-4 bg-border shrink-0" />
+
+                    <!-- Color dots -->
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">COLOR</span>
+                        <div class="flex items-center gap-1">
+                            <button
+                                v-for="c in colorDots"
+                                :key="c.value"
+                                type="button"
+                                class="size-4 rounded-full transition-all duration-150"
+                                :class="pgColor === c.value
+                                    ? 'ring-2 ring-offset-1 ring-foreground/30 scale-125'
+                                    : 'hover:scale-110 opacity-70 hover:opacity-100'"
+                                :style="`background: ${c.bg}`"
+                                :title="c.label"
+                                @click="pgColor = c.value"
+                            />
+                        </div>
+                    </div>
+
+                    <span class="w-px h-4 bg-border shrink-0" />
+
+                    <!-- Size -->
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">SIZE</span>
+                        <div class="flex rounded-md border border-border overflow-hidden">
+                            <button
+                                v-for="s in ['small', 'medium', 'large']"
+                                :key="s"
+                                type="button"
+                                class="px-2 py-1 text-xs transition-colors capitalize"
+                                :class="pgSize === s
+                                    ? 'bg-primary/10 text-primary font-medium'
+                                    : 'text-muted-foreground hover:bg-muted/60'"
+                                @click="pgSize = (s as typeof pgSize)"
+                            >{{ s }}</button>
+                        </div>
+                    </div>
+
+                    <span class="w-px h-4 bg-border shrink-0" />
+
+                    <button
+                        type="button"
+                        class="px-2 py-1 rounded-md text-xs border transition-colors"
+                        :class="pgClearable
+                            ? 'border-primary bg-primary/10 text-primary font-medium'
+                            : 'border-border text-muted-foreground hover:bg-muted/60'"
+                        @click="pgClearable = !pgClearable"
+                    >Clearable</button>
+
+                    <button
+                        type="button"
+                        class="px-2 py-1 rounded-md text-xs border transition-colors"
+                        :class="pgDisabled
+                            ? 'border-primary bg-primary/10 text-primary font-medium'
+                            : 'border-border text-muted-foreground hover:bg-muted/60'"
+                        @click="pgDisabled = !pgDisabled"
+                    >Disabled</button>
+
+                    <button
+                        type="button"
+                        class="px-2 py-1 rounded-md text-xs border transition-colors"
+                        :class="pgReadonly
+                            ? 'border-primary bg-primary/10 text-primary font-medium'
+                            : 'border-border text-muted-foreground hover:bg-muted/60'"
+                        @click="pgReadonly = !pgReadonly"
+                    >Readonly</button>
+                </template>
+
+                <Input
+                    v-model="pgValue"
+                    label="Email"
+                    placeholder="tu@email.com"
+                    :variant="pgVariant"
+                    :color="pgColor"
+                    :size="pgSize"
+                    :clearable="pgClearable"
+                    :disabled="pgDisabled"
+                    :readonly="pgReadonly"
+                    style="width: 280px"
+                />
+            </ComponentPreview>
+        </template>
+
+        <!-- ── Examples ────────────────────────────────────────────────────── -->
         <template #examples>
-            <Example title="Default" description="Input simple con label y placeholder.">
-                <Input v-model="v" label="Email" placeholder="tu@email.com" class="w-72" />
-            </Example>
+            <ComponentPreview
+                title="Uso básico"
+                description="Input con label, placeholder y v-model."
+                :code="basicCode"
+            >
+                <Input v-model="exBasic" label="Email" placeholder="tu@email.com" style="width: 280px" />
+            </ComponentPreview>
 
-            <Example title="Variantes" description="outline (default), filled y ghost.">
-                <Input variant="outline" placeholder="outline" class="w-48" />
-                <Input variant="filled" placeholder="filled" class="w-48" />
-                <Input variant="ghost" placeholder="ghost" class="w-48" />
-            </Example>
+            <ComponentPreview
+                title="Variantes"
+                description="outline (default), filled y ghost."
+                :code="variantsCode"
+            >
+                <Input variant="outline" placeholder="outline" style="width: 200px" />
+                <Input variant="filled"  placeholder="filled"  style="width: 200px" />
+                <Input variant="ghost"   placeholder="ghost"   style="width: 200px" />
+            </ComponentPreview>
 
-            <Example title="Tamaños">
-                <Input size="small" placeholder="small" class="w-48" />
-                <Input size="medium" placeholder="medium" class="w-48" />
-                <Input size="large" placeholder="large" class="w-48" />
-            </Example>
+            <ComponentPreview
+                title="Tamaños"
+                description="Tres tamaños para distintas densidades de UI."
+                :code="sizesCode"
+            >
+                <Input size="small"  placeholder="small"  style="width: 200px" />
+                <Input size="medium" placeholder="medium" style="width: 200px" />
+                <Input size="large"  placeholder="large"  style="width: 200px" />
+            </ComponentPreview>
 
-            <Example title="Iconos y affixes" description="iconLeft, iconRight, prefix, suffix.">
-                <Input :icon-left="EnvelopeIcon" placeholder="Email" class="w-64" />
-                <Input :icon-right="MagnifyingGlassIcon" placeholder="Buscar" class="w-64" />
-                <Input prefix="$" suffix="USD" placeholder="0.00" class="w-48" />
-            </Example>
+            <ComponentPreview
+                title="Iconos y affixes"
+                description="iconLeft, iconRight y prefix/suffix de texto."
+                :code="iconsCode"
+            >
+                <Input :icon-left="EnvelopeIcon"         placeholder="Email"  style="width: 240px" />
+                <Input :icon-right="MagnifyingGlassIcon" placeholder="Buscar" style="width: 240px" />
+                <Input prefix="$" suffix="USD"           placeholder="0.00"   style="width: 200px" />
+            </ComponentPreview>
 
-            <Example title="Estados" description="disabled, readonly y error.">
-                <Input disabled placeholder="Disabled" class="w-48" />
-                <Input readonly model-value="Solo lectura" class="w-48" />
-                <Input v-model="errored" error-text="Email inválido" label="Email" class="w-64" />
-            </Example>
-
-            <Example title="Clearable">
-                <Input v-model="v" clearable placeholder="Escribe y limpia" class="w-64" />
-            </Example>
+            <ComponentPreview
+                title="Estados"
+                description="Disabled, readonly y error."
+                :code="statesCode"
+            >
+                <Input disabled placeholder="Disabled" style="width: 200px" />
+                <Input readonly model-value="Solo lectura" style="width: 200px" />
+                <Input v-model="exErr" error-text="Email inválido" label="Email" style="width: 240px" />
+            </ComponentPreview>
         </template>
-
-        <template #playground>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                <Card variant="outlined" padding="large" class="lg:col-span-2">
-                    <Input
-                        v-model="pgValue"
-                        :variant="pgVariant"
-                        :color="pgColor"
-                        :size="pgSize"
-                        :label="pgLabel"
-                        :placeholder="pgPlaceholder"
-                        :hint="pgHint || undefined"
-                        :error-text="pgError || undefined"
-                        :disabled="pgDisabled"
-                        :readonly="pgReadonly"
-                        :clearable="pgClearable"
-                    />
-                </Card>
-
-                <Card variant="outlined" padding="large">
-                    <Stack direction="column" spacing="medium">
-                        <Typography variant="title" size="small">Controles</Typography>
-                        <label class="flex flex-col gap-1">
-                            <Typography variant="caption" color="muted">Label</Typography>
-                            <Input v-model="pgLabel" size="small" />
-                        </label>
-                        <label class="flex flex-col gap-1">
-                            <Typography variant="caption" color="muted">Placeholder</Typography>
-                            <Input v-model="pgPlaceholder" size="small" />
-                        </label>
-                        <label class="flex flex-col gap-1">
-                            <Typography variant="caption" color="muted">Hint</Typography>
-                            <Input v-model="pgHint" size="small" />
-                        </label>
-                        <label class="flex flex-col gap-1">
-                            <Typography variant="caption" color="muted">Error</Typography>
-                            <Input v-model="pgError" size="small" placeholder="Vacío = sin error" />
-                        </label>
-                        <label class="flex flex-col gap-1">
-                            <Typography variant="caption" color="muted">Variant</Typography>
-                            <Select v-model="pgVariant" :options="variantOpts" size="small" />
-                        </label>
-                        <label class="flex flex-col gap-1">
-                            <Typography variant="caption" color="muted">Color</Typography>
-                            <Select v-model="pgColor" :options="colorOpts" size="small" />
-                        </label>
-                        <label class="flex flex-col gap-1">
-                            <Typography variant="caption" color="muted">Size</Typography>
-                            <Select v-model="pgSize" :options="sizeOpts" size="small" />
-                        </label>
-                        <label class="flex items-center justify-between">
-                            <Typography variant="caption" color="muted">Disabled</Typography>
-                            <Switch v-model="pgDisabled" />
-                        </label>
-                        <label class="flex items-center justify-between">
-                            <Typography variant="caption" color="muted">Readonly</Typography>
-                            <Switch v-model="pgReadonly" />
-                        </label>
-                        <label class="flex items-center justify-between">
-                            <Typography variant="caption" color="muted">Clearable</Typography>
-                            <Switch v-model="pgClearable" />
-                        </label>
-                    </Stack>
-                </Card>
-            </div>
-        </template>
-    </DocPage>
+    </ComponentDoc>
 </template>

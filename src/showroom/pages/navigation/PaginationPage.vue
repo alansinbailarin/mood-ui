@@ -1,165 +1,233 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import DocPage from '../../components/DocPage.vue';
-import Example from '../../components/Example.vue';
-import Card from '../../../components/data-display/Card.vue';
-import Typography from '../../../components/data-display/Typography.vue';
-import Stack from '../../../components/layout/Stack.vue';
-import Select from '../../../components/forms/Select.vue';
-import Switch from '../../../components/forms/Switch.vue';
+import { ref, computed } from 'vue';
+import ComponentDoc from '../../components/ComponentDoc.vue';
+import ComponentPreview from '../../components/ComponentPreview.vue';
 import Pagination from '../../../components/navigation/Pagination.vue';
-import type { PropDoc } from '../../types';
+import type { PropDoc, EmitDoc } from '../../types';
 
-const page = ref(3);
-const page2 = ref(1);
+// ── Overview playground state ─────────────────────────────────────────────────
+const pgSize     = ref<'small' | 'medium' | 'large'>('medium');
+const pgTotal    = ref<number>(50);
+const pgSiblings = ref<number>(1);
+const pgPage     = ref(1);
 
-// playground
-const pageCount = ref(20);
-const siblingCount = ref(1);
-const boundaryCount = ref(1);
-const color = ref<'default' | 'primary' | 'danger' | 'success' | 'warning'>('primary');
-const size = ref<'small' | 'medium' | 'large'>('medium');
-const radius = ref<'none' | 'small' | 'medium' | 'large' | 'full'>('medium');
-const showFirstLast = ref(true);
-const showPrevNext = ref(true);
-const disabled = ref(false);
+function resetPlayground() {
+    pgSize.value     = 'medium';
+    pgTotal.value    = 50;
+    pgSiblings.value = 1;
+    pgPage.value     = 1;
+}
 
-const numOpts = (n: number) => Array.from({ length: n }, (_, i) => ({ value: i, label: String(i) }));
-const sizeOpts = [
-    { value: 'small', label: 'small' },
-    { value: 'medium', label: 'medium' },
-    { value: 'large', label: 'large' },
-];
-const colorOpts = [
-    { value: 'default', label: 'default' },
-    { value: 'primary', label: 'primary' },
-    { value: 'success', label: 'success' },
-    { value: 'warning', label: 'warning' },
-    { value: 'danger', label: 'danger' },
-];
-const radiusOpts = [
-    { value: 'none', label: 'none' },
-    { value: 'small', label: 'small' },
-    { value: 'medium', label: 'medium' },
-    { value: 'large', label: 'large' },
-    { value: 'full', label: 'full' },
-];
-const pageCountOpts = [
-    { value: 5, label: '5' },
-    { value: 10, label: '10' },
-    { value: 20, label: '20' },
-    { value: 50, label: '50' },
-    { value: 100, label: '100' },
-];
+const overviewCode = computed(() => {
+    const parts: string[] = [`v-model="page"`, `:page-count="${pgTotal.value}"`];
+    if (pgSiblings.value !== 1)        parts.push(`:sibling-count="${pgSiblings.value}"`);
+    if (pgSize.value     !== 'medium') parts.push(`size="${pgSize.value}"`);
+    return `<Pagination ${parts.join(' ')} class="w-full" />`;
+});
 
+// ── Example state ─────────────────────────────────────────────────────────────
+const basicPage    = ref(3);
+const siblingsPage = ref(7);
+const jumpPage     = ref(1);
+const sizesPage    = ref(2);
+const compactPage  = ref(4);
+
+const jumpInput = ref<number | null>(null);
+function jumpTo() {
+    if (jumpInput.value && jumpInput.value >= 1 && jumpInput.value <= 20) {
+        jumpPage.value = jumpInput.value;
+    }
+}
+
+// ── Example code strings ──────────────────────────────────────────────────────
+const basicCode = `const page = ref(3);
+
+<Pagination v-model="page" :page-count="10" class="w-full" />`;
+
+const siblingsCode = `<Pagination v-model="page" :page-count="20" :sibling-count="2" class="w-full" />`;
+
+const jumpCode = `const page = ref(1);
+const jumpInput = ref<number | null>(null);
+
+function jumpTo() {
+    if (jumpInput.value) page.value = jumpInput.value;
+}
+
+<div class="flex items-center gap-3">
+    <Pagination v-model="page" :page-count="20" />
+    <input v-model.number="jumpInput" type="number" min="1" max="20" />
+    <button @click="jumpTo">Ir</button>
+</div>`;
+
+const sizesCode = `<Pagination v-model="page" :page-count="10" size="small" />
+<Pagination v-model="page" :page-count="10" size="medium" />
+<Pagination v-model="page" :page-count="10" size="large" />`;
+
+const compactCode = `<!-- Sin botones de primera/última página -->
+<Pagination v-model="page" :page-count="10" :show-first-last="false" />`;
+
+// ── API docs ──────────────────────────────────────────────────────────────────
 const propsList: PropDoc[] = [
-    { name: 'modelValue', type: 'number', required: true, description: 'Página actual (1-indexed).' },
-    { name: 'pageCount', type: 'number', required: true },
-    { name: 'siblingCount', type: 'number', default: '1' },
-    { name: 'boundaryCount', type: 'number', default: '1' },
-    { name: 'showFirstLast', type: 'boolean', default: 'true' },
-    { name: 'showPrevNext', type: 'boolean', default: 'true' },
-    { name: 'color', type: "'default' | 'primary' | 'danger' | 'success' | 'warning'" },
-    { name: 'size', type: "'small' | 'medium' | 'large'", default: "'medium'" },
-    { name: 'disabled', type: 'boolean', default: 'false' },
+    { name: 'modelValue',    type: 'number',                                                    required: true,          description: 'Página actual (1-indexed). Usa v-model.' },
+    { name: 'pageCount',     type: 'number',                                                    required: true,          description: 'Número total de páginas (≥ 1).' },
+    { name: 'siblingCount',  type: 'number',                                                    default: '1',            description: 'Páginas hermanas mostradas a cada lado de la actual.' },
+    { name: 'boundaryCount', type: 'number',                                                    default: '1',            description: 'Páginas pinned al inicio y final del rango.' },
+    { name: 'showFirstLast', type: 'boolean',                                                   default: 'true',         description: 'Muestra los botones de primera y última página.' },
+    { name: 'showPrevNext',  type: 'boolean',                                                   default: 'true',         description: 'Muestra los botones de página anterior y siguiente.' },
+    { name: 'color',         type: "'default' | 'primary' | 'danger' | 'success' | 'warning'",  default: "'primary'",    description: 'Color de la página activa.' },
+    { name: 'size',          type: "'small' | 'medium' | 'large'",                              default: "'medium'",     description: 'Tamaño de los botones del paginador.' },
+    { name: 'radius',        type: "'none' | 'small' | 'medium' | 'large' | 'full'",                                     description: 'Radio aplicado a los botones.' },
+    { name: 'disabled',      type: 'boolean',                                                   default: 'false',        description: 'Deshabilita todos los botones.' },
+    { name: 'ariaLabel',     type: 'string',                                                    default: "'Pagination'", description: 'Etiqueta accesible del nav.' },
+];
+
+const emitsList: EmitDoc[] = [
+    { name: 'update:modelValue', payload: 'number', description: 'Emitido al cambiar de página. Usado por v-model.' },
+    { name: 'change',            payload: 'number', description: 'Mismo payload que update:modelValue, útil para listeners externos.' },
 ];
 </script>
 
 <template>
-    <DocPage
+    <ComponentDoc
         title="Pagination"
         category="Navigation"
-        import-path="import Pagination from '@/components/navigation/Pagination.vue'"
+        import-path="import { Pagination } from 'mood-ui'"
         description="Paginador accesible con saltos a primera/última página, hermanos configurables y todos los tokens visuales del sistema."
         :props-list="propsList"
+        :emits-list="emitsList"
     >
-        <template #examples>
-            <Example title="Default">
-                <Pagination v-model="page" :page-count="20" />
-            </Example>
-
-            <Example title="Sin first/last">
-                <Pagination v-model="page2" :page-count="10" :show-first-last="false" />
-            </Example>
-
-            <Example title="Tamaños">
-                <Stack direction="column" spacing="small">
-                    <Pagination :model-value="3" :page-count="10" size="small" />
-                    <Pagination :model-value="3" :page-count="10" size="medium" />
-                    <Pagination :model-value="3" :page-count="10" size="large" />
-                </Stack>
-            </Example>
-
-            <Example title="Colores">
-                <Stack direction="column" spacing="small">
-                    <Pagination :model-value="3" :page-count="10" color="primary" />
-                    <Pagination :model-value="3" :page-count="10" color="success" />
-                    <Pagination :model-value="3" :page-count="10" color="warning" />
-                    <Pagination :model-value="3" :page-count="10" color="danger" />
-                </Stack>
-            </Example>
-        </template>
-
-        <template #playground>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                <Card variant="outlined" padding="large" class="lg:col-span-2">
-                    <div class="min-h-[120px] flex items-center justify-center">
-                        <Pagination
-                            v-model="page"
-                            :page-count="pageCount"
-                            :sibling-count="siblingCount"
-                            :boundary-count="boundaryCount"
-                            :color="color"
-                            :size="size"
-                            :radius="radius"
-                            :show-first-last="showFirstLast"
-                            :show-prev-next="showPrevNext"
-                            :disabled="disabled"
-                        />
+        <!-- ── Overview ────────────────────────────────────────────────────── -->
+        <template #overview>
+            <ComponentPreview :code="overviewCode" min-height="180px" @reset="resetPlayground">
+                <template #controls>
+                    <!-- Size -->
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Size</span>
+                        <div class="flex rounded-md border border-border overflow-hidden">
+                            <button
+                                v-for="s in ['small', 'medium', 'large']"
+                                :key="s"
+                                type="button"
+                                class="px-2 py-1 text-xs transition-colors"
+                                :class="pgSize === s
+                                    ? 'bg-primary/10 text-primary font-medium'
+                                    : 'text-muted-foreground hover:bg-muted/60'"
+                                @click="pgSize = (s as typeof pgSize)"
+                            >{{ s }}</button>
+                        </div>
                     </div>
-                </Card>
-                <Card variant="outlined" padding="large">
-                    <Stack direction="column" spacing="medium">
-                        <Typography variant="title" size="small">Controles</Typography>
-                        <label class="flex flex-col gap-1">
-                            <Typography variant="caption" color="muted">Page count</Typography>
-                            <Select v-model="pageCount" :options="pageCountOpts" size="small" />
-                        </label>
-                        <label class="flex flex-col gap-1">
-                            <Typography variant="caption" color="muted">Sibling count</Typography>
-                            <Select v-model="siblingCount" :options="numOpts(4)" size="small" />
-                        </label>
-                        <label class="flex flex-col gap-1">
-                            <Typography variant="caption" color="muted">Boundary count</Typography>
-                            <Select v-model="boundaryCount" :options="numOpts(4)" size="small" />
-                        </label>
-                        <label class="flex flex-col gap-1">
-                            <Typography variant="caption" color="muted">Color</Typography>
-                            <Select v-model="color" :options="colorOpts" size="small" />
-                        </label>
-                        <label class="flex flex-col gap-1">
-                            <Typography variant="caption" color="muted">Size</Typography>
-                            <Select v-model="size" :options="sizeOpts" size="small" />
-                        </label>
-                        <label class="flex flex-col gap-1">
-                            <Typography variant="caption" color="muted">Radius</Typography>
-                            <Select v-model="radius" :options="radiusOpts" size="small" />
-                        </label>
-                        <label class="flex items-center justify-between">
-                            <Typography variant="caption" color="muted">First / last</Typography>
-                            <Switch v-model="showFirstLast" />
-                        </label>
-                        <label class="flex items-center justify-between">
-                            <Typography variant="caption" color="muted">Prev / next</Typography>
-                            <Switch v-model="showPrevNext" />
-                        </label>
-                        <label class="flex items-center justify-between">
-                            <Typography variant="caption" color="muted">Disabled</Typography>
-                            <Switch v-model="disabled" />
-                        </label>
-                    </Stack>
-                </Card>
-            </div>
+
+                    <span class="w-px h-4 bg-border shrink-0" />
+
+                    <!-- Total -->
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Total</span>
+                        <div class="flex rounded-md border border-border overflow-hidden">
+                            <button
+                                v-for="t in [50, 100, 500]"
+                                :key="t"
+                                type="button"
+                                class="px-2 py-1 text-xs transition-colors"
+                                :class="pgTotal === t
+                                    ? 'bg-primary/10 text-primary font-medium'
+                                    : 'text-muted-foreground hover:bg-muted/60'"
+                                @click="pgTotal = t"
+                            >{{ t }}</button>
+                        </div>
+                    </div>
+
+                    <span class="w-px h-4 bg-border shrink-0" />
+
+                    <!-- Siblings -->
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Siblings</span>
+                        <div class="flex rounded-md border border-border overflow-hidden">
+                            <button
+                                v-for="n in [0, 1, 2]"
+                                :key="n"
+                                type="button"
+                                class="px-2 py-1 text-xs transition-colors"
+                                :class="pgSiblings === n
+                                    ? 'bg-primary/10 text-primary font-medium'
+                                    : 'text-muted-foreground hover:bg-muted/60'"
+                                @click="pgSiblings = n"
+                            >{{ n }}</button>
+                        </div>
+                    </div>
+                </template>
+
+                <Pagination
+                    v-model="pgPage"
+                    :page-count="pgTotal"
+                    :sibling-count="pgSiblings"
+                    :size="pgSize"
+                    class="w-full"
+                />
+            </ComponentPreview>
         </template>
-    </DocPage>
+
+        <!-- ── Examples ────────────────────────────────────────────────────── -->
+        <template #examples>
+            <ComponentPreview
+                title="Básico"
+                description="Paginador con primera/última, prev/next y un hermano por defecto a cada lado."
+                :code="basicCode"
+            >
+                <Pagination v-model="basicPage" :page-count="10" class="w-full" />
+            </ComponentPreview>
+
+            <ComponentPreview
+                title="Con más hermanos"
+                description="Aumenta `sibling-count` para mostrar más páginas alrededor de la actual."
+                :code="siblingsCode"
+            >
+                <Pagination v-model="siblingsPage" :page-count="20" :sibling-count="2" class="w-full" />
+            </ComponentPreview>
+
+            <ComponentPreview
+                title="Salto rápido"
+                description="Combina el paginador con un input para saltar directamente a una página concreta."
+                :code="jumpCode"
+            >
+                <div class="flex flex-col items-center gap-3 w-full">
+                    <Pagination v-model="jumpPage" :page-count="20" class="w-full" />
+                    <div class="flex items-center gap-2">
+                        <input
+                            v-model.number="jumpInput"
+                            type="number"
+                            min="1"
+                            max="20"
+                            placeholder="Página"
+                            class="w-24 rounded-md border border-border bg-background px-2 py-1 text-sm"
+                        />
+                        <button
+                            type="button"
+                            class="px-3 py-1 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors cursor-pointer"
+                            @click="jumpTo"
+                        >Ir</button>
+                    </div>
+                </div>
+            </ComponentPreview>
+
+            <ComponentPreview
+                title="Tamaños"
+                description="Tres tamaños responden a la jerarquía visual del entorno donde se inserte el paginador."
+                :code="sizesCode"
+            >
+                <div class="flex flex-col gap-3 w-full">
+                    <Pagination v-model="sizesPage" :page-count="10" size="small"  class="w-full" />
+                    <Pagination v-model="sizesPage" :page-count="10" size="medium" class="w-full" />
+                    <Pagination v-model="sizesPage" :page-count="10" size="large"  class="w-full" />
+                </div>
+            </ComponentPreview>
+
+            <ComponentPreview
+                title="Compacto"
+                description="Oculta los botones de primera/última cuando el espacio escasea o el contexto no los necesita."
+                :code="compactCode"
+            >
+                <Pagination v-model="compactPage" :page-count="10" :show-first-last="false" class="w-full" />
+            </ComponentPreview>
+        </template>
+    </ComponentDoc>
 </template>
