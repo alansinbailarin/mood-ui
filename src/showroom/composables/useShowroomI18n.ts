@@ -103,6 +103,7 @@ export interface ShowroomDict {
     docReset: string;
     docPreview: string;
     docCode: string;
+    onThisPage: string;
 
     // Button page
     btn_category: string;
@@ -232,6 +233,7 @@ const ES: ShowroomDict = {
     docReset: 'Resetear',
     docPreview: 'Preview',
     docCode: 'Código',
+    onThisPage: 'En esta página',
 
     btn_category: 'Forms',
     btn_description: 'La acción primaria de cualquier interfaz. Cuatro variantes, cinco colores semánticos, cuatro tamaños, iconos configurables, estado de carga y soporte para renderizar como link o cualquier elemento.',
@@ -360,6 +362,7 @@ const EN: ShowroomDict = {
     docReset: 'Reset',
     docPreview: 'Preview',
     docCode: 'Code',
+    onThisPage: 'On this page',
 
     btn_category: 'Forms',
     btn_description: 'The primary action of any interface. Four variants, five semantic colors, four sizes, configurable icons, loading state and support for rendering as a link or any element.',

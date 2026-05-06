@@ -92,7 +92,7 @@ const principles = computed(() => t.value.lang === 'es' ? [
     <article class="prose prose-neutral dark:prose-invert max-w-none flex flex-col gap-12 pb-12">
         <header v-reveal class="flex flex-col gap-3">
             <Typography variant="overline" size="medium" color="muted">
-                {{ t.home }}
+                Documentación
             </Typography>
             <Typography variant="display" size="medium" as="h1" weight="medium" class="tracking-tight leading-[1.05]">       
             Mood-UI</Typography>

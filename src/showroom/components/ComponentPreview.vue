@@ -1,35 +1,56 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, inject, onMounted, onBeforeUnmount, computed } from 'vue';
 import CodePreview from './CodePreview.vue';
 import Typography from '../../components/data-display/Typography.vue';
+import ModoProvider from '../../components/ModoProvider.vue';
 import { ArrowPathIcon } from '@heroicons/vue/24/outline';
 import { useShowroomT } from '../composables/useShowroomLocale';
+import { DOC_TOC_KEY, slugify, type DocTocApi } from '../composables/useDocToc';
 import type { BundledLanguage } from '../composables/useHighlighter';
 
-const emit = defineEmits<{ reset: [] }>();
+const props = withDefaults(
+    defineProps<{
+        /** Reactive code string to show in the Code tab. */
+        code: string;
+        /** Optional section title above the card. Used for the TOC anchor too. */
+        title?: string;
+        /** Optional description below the title. */
+        description?: string;
+        /** Shiki language for syntax highlight. */
+        lang?: BundledLanguage;
+        /** Minimum height of the preview canvas. */
+        minHeight?: string;
+        /** Skip the isolated ModoProvider wrapper. */
+        noScope?: boolean;
+    }>(),
+    {
+        lang: 'vue',
+        minHeight: '200px',
+        noScope: false,
+    },
+);
+
+defineEmits<{ reset: [] }>();
+
 const t = useShowroomT();
-
-withDefaults(defineProps<{
-    /** Reactive code string to show in the Code tab. */
-    code: string;
-    /** Optional section title above the card. */
-    title?: string;
-    /** Optional description below the title. */
-    description?: string;
-    /** Shiki language for syntax highlight. */
-    lang?: BundledLanguage;
-    /** Minimum height of the preview canvas. */
-    minHeight?: string;
-}>(), {
-    lang: 'vue',
-    minHeight: '200px',
-});
-
 const activeTab = ref<'preview' | 'code'>('preview');
+
+// ── TOC auto-registration ────────────────────────────────────────────────────
+const toc = inject<DocTocApi | null>(DOC_TOC_KEY, null);
+const sectionId = computed(() => (props.title ? `ex-${slugify(props.title)}` : ''));
+
+onMounted(() => {
+    if (toc && props.title && sectionId.value) {
+        toc.register({ id: sectionId.value, label: props.title, level: 2 });
+    }
+});
+onBeforeUnmount(() => {
+    if (toc && sectionId.value) toc.unregister(sectionId.value);
+});
 </script>
 
 <template>
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2" :id="sectionId || undefined">
         <!-- Optional title + description -->
         <div v-if="title || description" class="flex flex-col gap-0.5">
             <Typography v-if="title" variant="title" size="medium" weight="medium" as="h3">
@@ -44,61 +65,59 @@ const activeTab = ref<'preview' | 'code'>('preview');
         <div class="rounded-xl border border-border overflow-hidden">
             <!-- Toolbar -->
             <div class="flex items-center gap-2 px-3 py-2 border-b border-border bg-card/60 flex-wrap min-h-[44px]">
-                <!-- Controls (left) -->
                 <slot name="controls" />
 
-                <!-- Reset + Preview/Code tabs (right) -->
                 <div class="ml-auto flex items-center gap-2 shrink-0">
                     <button
                         v-if="$slots.controls"
                         type="button"
                         :title="t.docReset"
-                        class="size-7 flex items-center justify-center rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
-                        @click="emit('reset')"
+                        class="size-7 flex items-center justify-center rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors cursor-pointer"
+                        @click="$emit('reset')"
                     >
                         <ArrowPathIcon class="size-3.5" />
                     </button>
                     <div class="flex items-center rounded-lg border border-border bg-muted/30 p-0.5 gap-0.5">
-                    <button
-                        type="button"
-                        class="px-2.5 py-1 rounded-md text-xs font-medium transition-all"
-                        :class="activeTab === 'preview'
-                            ? 'bg-card text-foreground shadow-sm'
-                            : 'text-muted-foreground hover:text-foreground'"
-                        @click="activeTab = 'preview'"
-                    >
-                        {{ t.docPreview }}
-                    </button>
-                    <button
-                        type="button"
-                        class="px-2.5 py-1 rounded-md text-xs font-medium transition-all"
-                        :class="activeTab === 'code'
-                            ? 'bg-card text-foreground shadow-sm'
-                            : 'text-muted-foreground hover:text-foreground'"
-                        @click="activeTab = 'code'"
-                    >
-                        {{ t.docCode }}
-                    </button>
+                        <button
+                            type="button"
+                            class="px-2.5 py-1 rounded-md text-xs font-medium transition-all cursor-pointer"
+                            :class="activeTab === 'preview'
+                                ? 'bg-card text-foreground shadow-sm'
+                                : 'text-muted-foreground hover:text-foreground'"
+                            @click="activeTab = 'preview'"
+                        >
+                            {{ t.docPreview }}
+                        </button>
+                        <button
+                            type="button"
+                            class="px-2.5 py-1 rounded-md text-xs font-medium transition-all cursor-pointer"
+                            :class="activeTab === 'code'
+                                ? 'bg-card text-foreground shadow-sm'
+                                : 'text-muted-foreground hover:text-foreground'"
+                            @click="activeTab = 'code'"
+                        >
+                            {{ t.docCode }}
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Animated content -->
             <Transition name="tab-fade" mode="out-in">
-                <!-- Preview canvas -->
+                <!-- Preview canvas (isolated Modo scope) -->
                 <div
                     v-if="activeTab === 'preview'"
                     key="preview"
                     class="relative flex items-center justify-center overflow-hidden bg-background"
                     :style="`min-height: ${minHeight}; padding: 2.5rem;`"
                 >
-                    <!-- Subtle dot grid that adapts to light/dark via --border -->
                     <div
                         class="pointer-events-none absolute inset-0 opacity-[0.55]"
                         style="background-image: radial-gradient(circle, var(--border) 1px, transparent 1px); background-size: 24px 24px;"
                     />
-                    <!-- Content: flex-wrap so multiple items sit side by side -->
-                    <div class="relative z-10 flex flex-wrap items-center justify-center gap-3">
+                    <ModoProvider v-if="!noScope" scoped class="relative z-10 flex flex-wrap items-center justify-center gap-3">
+                        <slot />
+                    </ModoProvider>
+                    <div v-else class="relative z-10 flex flex-wrap items-center justify-center gap-3">
                         <slot />
                     </div>
                 </div>

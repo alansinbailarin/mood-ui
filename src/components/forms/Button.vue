@@ -18,15 +18,15 @@
         :aria-label="resolvedAriaLabel" 
         :class="[baseClasses, variantClasses, colorClasses, haloClasses, sizeClasses, radiusClasses, fullWidth ? 'w-full' : '']"  
         > 
-        <Loader v-if="loading && iconPosition === 'left'" :variant="variant" :size="forwardSize" :class="label ? 'mr-2' : ''" /> 
-        <component :is="icon" v-if="icon && !loading && iconPosition === 'left'" :class="[iconSizeClasses, label ? 'mr-2' : '']" /> 
+        <Loader v-if="loading && iconPosition === 'left'" :variant="variant" :size="forwardSize" /> 
+        <component :is="icon" v-if="icon && !loading && iconPosition === 'left'" :class="iconSizeClasses" /> 
  
         <template v-if="loading">{{ loadingText || label || 'Loading...' }}</template> 
         <template v-else> 
             <slot>{{ label }}</slot> 
         </template> 
-        <Loader v-if="loading && iconPosition === 'right'" :variant="variant" :size="forwardSize" :class="label ? 'ml-2' : ''" /> 
-        <component :is="icon" v-if="icon && !loading && iconPosition === 'right'" :class="[iconSizeClasses, label ? 'ml-2' : '']" /> 
+        <Loader v-if="loading && iconPosition === 'right'" :variant="variant" :size="forwardSize" /> 
+        <component :is="icon" v-if="icon && !loading && iconPosition === 'right'" :class="iconSizeClasses" /> 
     </button> 
 </template> 
  
@@ -80,7 +80,7 @@ const resolvedAriaLabel = computed(() => {
     return undefined; 
 }); 
  
-const baseClasses = 'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-colors duration-300 ease-in-out inline-flex items-center justify-center cursor-pointer disabled:cursor-not-allowed'; 
+const baseClasses = 'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-colors duration-300 ease-in-out inline-flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed'; 
  
 const variantClasses = computed(() => { 
     switch (variant.value) { 

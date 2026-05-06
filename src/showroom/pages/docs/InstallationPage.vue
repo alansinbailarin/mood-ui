@@ -199,7 +199,7 @@ const email = ref('');
                     href="https://www.npmjs.com/package/mood-ui"
                     target="_blank"
                     rel="noopener"
-                    variant="outline"
+                    variant="text"
                     size="small"
                 >
                     <span class="inline-flex items-center gap-1.5">
@@ -212,7 +212,7 @@ const email = ref('');
                     href="https://github.com/alansinbailarin/mood-ui"
                     target="_blank"
                     rel="noopener"
-                    variant="outline"
+                    variant="text"
                     size="small"
                 >
                     <span class="inline-flex items-center gap-1.5">
