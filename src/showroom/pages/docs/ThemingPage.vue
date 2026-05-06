@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { PaintBrushIcon } from '@heroicons/vue/24/outline';
+import { CubeIcon, GlobeAltIcon } from '@heroicons/vue/24/outline';
 import Typography from '../../../components/data-display/Typography.vue';
 import Card from '../../../components/data-display/Card.vue';
 import Stack from '../../../components/layout/Stack.vue';
-import Badge from '../../../components/feedback/Badge.vue';
 import Banner from '../../../components/feedback/Banner.vue';
 import CodePreview from '../../components/CodePreview.vue';
+import { useShowroomRouter } from '../../composables/useShowroomRouter';
+import { vReveal } from '../../composables/useScrollReveal';
 
 const providerProps = `<ModoProvider
   color="primary"          // brand color
@@ -95,19 +96,20 @@ const tokens = [
     { name: 'input',             usage: 'Input borders' },
     { name: 'ring',              usage: 'Focus ring color' },
 ];
+
+const { go } = useShowroomRouter();
 </script>
 
 <template>
-    <div class="flex flex-col gap-10 max-w-3xl">
-        <header class="flex flex-col gap-3">
-            <Badge color="primary" variant="subtle" class="self-start">
-                <PaintBrushIcon class="size-3.5 mr-1" />
-                Docs
-            </Badge>
-            <Typography variant="display" size="medium" weight="bold">
+    <div class="flex flex-col gap-10 max-w-3xl pb-12">
+        <header v-reveal class="flex flex-col gap-3">
+            <Typography variant="overline" size="medium" color="muted">
+                Documentación
+            </Typography>
+            <Typography variant="display" size="medium" as="h1" weight="medium" class="tracking-tight leading-[1.05]">
                 Theming
             </Typography>
-            <Typography variant="body" size="large" color="muted">
+            <Typography variant="body" size="medium" color="muted" weight="light">
                 mood-ui usa una cascada de configuración basada en CSS custom properties
                 + Tailwind v4 tokens. Personaliza desde el provider, surfaces, paletas
                 generadas o sobrescribiendo CSS vars directamente.
@@ -115,9 +117,9 @@ const tokens = [
         </header>
 
         <!-- Provider props -->
-        <section class="flex flex-col gap-4">
-            <Typography variant="title" size="large" weight="bold">Props del Provider</Typography>
-            <Typography variant="body" color="muted">
+        <section v-reveal class="flex flex-col gap-4">
+            <Typography variant="title" size="large" weight="medium" as="h2">Props del Provider</Typography>
+            <Typography variant="body" size="small" color="muted" weight="light">
                 <code>ModoProvider</code> acepta props que se propagan a todos los descendientes.
                 Cualquier componente puede sobrescribir localmente con su propia prop.
             </Typography>
@@ -125,9 +127,9 @@ const tokens = [
         </section>
 
         <!-- Custom palette -->
-        <section class="flex flex-col gap-4">
-            <Typography variant="title" size="large" weight="bold">Paleta personalizada desde un HEX</Typography>
-            <Typography variant="body" color="muted">
+        <section v-reveal class="flex flex-col gap-4">
+            <Typography variant="title" size="large" weight="medium" as="h2">Paleta personalizada desde un HEX</Typography>
+            <Typography variant="body" size="small" color="muted" weight="light">
                 <code>paletteFromHex()</code> genera una escala completa 50→900 a partir de un solo color.
                 Útil para marcas con un único color principal.
             </Typography>
@@ -135,9 +137,9 @@ const tokens = [
         </section>
 
         <!-- Surfaces -->
-        <section class="flex flex-col gap-4">
-            <Typography variant="title" size="large" weight="bold">Surfaces (tokens semánticos)</Typography>
-            <Typography variant="body" color="muted">
+        <section v-reveal class="flex flex-col gap-4">
+            <Typography variant="title" size="large" weight="medium" as="h2">Surfaces (tokens semánticos)</Typography>
+            <Typography variant="body" size="small" color="muted" weight="light">
                 Sobrescribe los 14 tokens semánticos directamente. Ideal para temas custom.
             </Typography>
             <CodePreview :code="surfaces" lang="vue" code-only />
@@ -156,9 +158,9 @@ const tokens = [
         </section>
 
         <!-- Dark surfaces presets -->
-        <section class="flex flex-col gap-4">
-            <Typography variant="title" size="large" weight="bold">Dark surfaces presets</Typography>
-            <Typography variant="body" color="muted">
+        <section v-reveal class="flex flex-col gap-4">
+            <Typography variant="title" size="large" weight="medium" as="h2">Dark surfaces presets</Typography>
+            <Typography variant="body" size="small" color="muted" weight="light">
                 6 presets listos para usar: <strong>default</strong>, <strong>navy</strong>,
                 <strong>zinc</strong>, <strong>charcoal</strong>, <strong>midnight</strong>,
                 <strong>forest</strong>.
@@ -167,9 +169,9 @@ const tokens = [
         </section>
 
         <!-- CSS override -->
-        <section class="flex flex-col gap-4">
-            <Typography variant="title" size="large" weight="bold">Override desde CSS</Typography>
-            <Typography variant="body" color="muted">
+        <section v-reveal class="flex flex-col gap-4">
+            <Typography variant="title" size="large" weight="medium" as="h2">Override desde CSS</Typography>
+            <Typography variant="body" size="small" color="muted" weight="light">
                 Si prefieres trabajar 100% en CSS, sobrescribe las custom properties en tu hoja de estilos global.
                 Funciona con <code>:root</code>, <code>.dark</code> o cualquier selector.
             </Typography>
@@ -180,6 +182,49 @@ const tokens = [
                 usa <code>:palettes</code> o <code>:surfaces</code> en el Provider. Para temas estáticos,
                 el override por CSS es lo más simple.
             </Banner>
+        </section>
+
+        <!-- Next steps -->
+        <section v-reveal class="flex flex-col gap-4">
+            <Typography variant="heading" size="large" weight="medium">
+                Próximos pasos
+            </Typography>
+            <div class="grid sm:grid-cols-2 gap-4">
+                <Card
+                    variant="outlined"
+                    padding="large"
+                    class="relative overflow-hidden cursor-pointer hover:border-primary/50 hover:-translate-y-0.5 transition-all duration-300 group"
+                    @click="go('button')"
+                >
+                    <div class="pointer-events-none absolute inset-0 opacity-[0.065] text-primary [background-image:linear-gradient(to_right,currentColor_1px,transparent_1px),linear-gradient(to_bottom,currentColor_1px,transparent_1px)] [background-size:20px_20px]" />
+                    <Stack direction="column" spacing="small" class="relative">
+                        <div class="size-10 rounded-xl bg-primary/10 text-primary grid place-items-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                            <CubeIcon class="size-5" />
+                        </div>
+                        <Typography variant="title" size="medium" weight="medium" as="h3">Explora componentes</Typography>
+                        <Typography variant="body" size="small" color="muted" weight="light">
+                            70+ componentes listos para usar con theming reactivo.
+                        </Typography>
+                    </Stack>
+                </Card>
+                <Card
+                    variant="outlined"
+                    padding="large"
+                    class="relative overflow-hidden cursor-pointer hover:border-success/40 hover:-translate-y-0.5 transition-all duration-300 group"
+                    @click="go('i18n')"
+                >
+                    <div class="pointer-events-none absolute inset-0 opacity-[0.065] text-success [background-image:radial-gradient(circle,currentColor_1.5px,transparent_1.5px)] [background-size:18px_18px]" />
+                    <Stack direction="column" spacing="small" class="relative">
+                        <div class="size-10 rounded-xl bg-success/10 text-success grid place-items-center group-hover:bg-success group-hover:text-white transition-colors">
+                            <GlobeAltIcon class="size-5" />
+                        </div>
+                        <Typography variant="title" size="medium" weight="medium" as="h3">Internacionalización</Typography>
+                        <Typography variant="body" size="small" color="muted" weight="light">
+                            ES y EN incluidos. Extiende para cualquier idioma.
+                        </Typography>
+                    </Stack>
+                </Card>
+            </div>
         </section>
     </div>
 </template>
