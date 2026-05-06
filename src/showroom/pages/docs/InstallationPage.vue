@@ -69,115 +69,124 @@ const email = ref('');
     <div class="flex flex-col gap-10 max-w-3xl">
         <!-- Header -->
         <header class="flex flex-col gap-3">
-            <Badge color="primary" variant="subtle" class="self-start">
-                <BookOpenIcon class="size-3.5 mr-1" />
-                Docs
-            </Badge>
-            <Typography variant="display" size="medium" weight="bold">
+            <Typography variant="overline" size="medium" color="muted">
+                Documentación
+            </Typography>
+            <Typography variant="display" size="medium" as="h1" weight="medium" class="tracking-tight leading-[1.05]">
                 Instalación
             </Typography>
-            <Typography variant="body" size="large" color="muted">
-                mood-ui se instala como un paquete npm estándar. Compatible con
+            <Typography variant="body"
+                size="medium"
+                color="muted"
+                weight="light">
+                Mood-UI se instala como un paquete npm estándar. Compatible con
                 Vue 3.5+ y Tailwind CSS v4.
             </Typography>
         </header>
 
-        <!-- Step 1: install -->
-        <section class="flex flex-col gap-4">
-            <div class="flex items-baseline gap-3">
-                <span class="size-8 rounded-full bg-primary text-primary-foreground grid place-items-center text-sm font-bold">1</span>
-                <Typography variant="title" size="large" weight="bold">Instala el paquete</Typography>
-            </div>
+        <!-- Steps: timeline -->
+        <ol class="relative flex flex-col gap-10 pl-8 border-l border-border ml-3">
+            <!-- Step 1 -->
+            <li class="relative flex flex-col gap-4">
+                <span class="absolute -left-[2.75rem] top-0.5 size-6 rounded-full bg-card ring-1 ring-primary/40 text-primary text-xs font-medium grid place-items-center select-none">1</span>
+                <Typography variant="title" size="large" weight="medium">Instala el paquete</Typography>
+                <CodePreview :code="installCmd" lang="bash" code-only />
+                <details class="group">
+                    <summary class="cursor-pointer text-sm text-muted-foreground hover:text-foreground transition-colors select-none">
+                        ¿Usas yarn o pnpm?
+                    </summary>
+                    <div class="mt-3 flex flex-col gap-3">
+                        <CodePreview :code="yarnCmd" lang="bash" code-only />
+                        <CodePreview :code="pnpmCmd" lang="bash" code-only />
+                    </div>
+                </details>
+            </li>
 
-            <CodePreview :code="installCmd" lang="bash" code-only />
-            <details class="group">
-                <summary class="cursor-pointer text-sm text-muted-foreground hover:text-foreground transition-colors select-none">
-                    ¿Usas yarn o pnpm?
-                </summary>
-                <div class="mt-3 flex flex-col gap-3">
-                    <CodePreview :code="yarnCmd" lang="bash" code-only />
-                    <CodePreview :code="pnpmCmd" lang="bash" code-only />
-                </div>
-            </details>
-        </section>
+            <!-- Step 2 -->
+            <li class="relative flex flex-col gap-4">
+                <span class="absolute -left-[2.75rem] top-0.5 size-6 rounded-full bg-card ring-1 ring-primary/40 text-primary text-xs font-medium grid place-items-center select-none">2</span>
+                <Typography variant="title" size="large" weight="medium">Peer dependencies</Typography>
+                <Typography variant="body" size="small" color="muted" weight="light">
+                    Asegúrate de tener Vue 3.5+ y Tailwind CSS v4 instalados:
+                </Typography>
+                <CodePreview :code="peerDeps" lang="bash" code-only />
+            </li>
 
-        <!-- Peer deps -->
-        <section class="flex flex-col gap-4">
-            <div class="flex items-baseline gap-3">
-                <span class="size-8 rounded-full bg-primary text-primary-foreground grid place-items-center text-sm font-bold">2</span>
-                <Typography variant="title" size="large" weight="bold">Peer dependencies</Typography>
-            </div>
-            <Typography variant="body" color="muted">
-                Asegúrate de tener Vue 3.5+ y Tailwind CSS v4 instalados:
-            </Typography>
-            <CodePreview :code="peerDeps" lang="bash" code-only />
-        </section>
+            <!-- Step 3 -->
+            <li class="relative flex flex-col gap-4">
+                <span class="absolute -left-[2.75rem] top-0.5 size-6 rounded-full bg-card ring-1 ring-primary/40 text-primary text-xs font-medium grid place-items-center select-none">3</span>
+                <Typography variant="title" size="large" weight="medium">Importa los estilos</Typography>
+                <Typography variant="body" size="small" color="muted" weight="light">
+                    Importa <code class="px-1.5 py-0.5 rounded bg-muted font-mono text-xs">mood-ui/style.css</code>
+                    después de Tailwind. Esto registra los design tokens y todos los utilities que usan los componentes.
+                </Typography>
+                <CodePreview :code="setupCss" lang="css" code-only />
+                <Banner color="info" variant="subtle">
+                    <strong>Tip:</strong> mood-ui usa <code>@theme inline</code> para mapear sus
+                    CSS vars a tokens de Tailwind. No necesitas configurar nada en
+                    <code>tailwind.config</code>.
+                </Banner>
+            </li>
 
-        <!-- CSS import -->
-        <section class="flex flex-col gap-4">
-            <div class="flex items-baseline gap-3">
-                <span class="size-8 rounded-full bg-primary text-primary-foreground grid place-items-center text-sm font-bold">3</span>
-                <Typography variant="title" size="large" weight="bold">Importa los estilos</Typography>
-            </div>
-            <Typography variant="body" color="muted">
-                Importa <code class="px-1.5 py-0.5 rounded bg-muted font-mono text-xs">mood-ui/style.css</code>
-                después de Tailwind. Esto registra los design tokens y todos los utilities que usan los componentes.
-            </Typography>
-            <CodePreview :code="setupCss" lang="css" code-only />
+            <!-- Step 4 -->
+            <li class="relative flex flex-col gap-4">
+                <span class="absolute -left-[2.75rem] top-0.5 size-6 rounded-full bg-card ring-1 ring-primary/40 text-primary text-xs font-medium grid place-items-center select-none">4</span>
+                <Typography variant="title" size="large" weight="medium">Envuelve tu app con ModoProvider</Typography>
+                <Typography variant="body" size="small" color="muted" weight="light">
+                    <code>ModoProvider</code> propaga el theming, idioma y tokens a todos los descendientes.
+                    Solo se necesita uno por aplicación (aunque puedes anidar varios para temas locales).
+                </Typography>
+                <CodePreview :code="wrapApp" lang="vue" code-only />
+            </li>
 
-            <Banner color="info" variant="subtle">
-                <strong>Tip:</strong> mood-ui usa <code>@theme inline</code> para mapear sus
-                CSS vars a tokens de Tailwind. No necesitas configurar nada en
-                <code>tailwind.config</code>.
-            </Banner>
-        </section>
-
-        <!-- Wrap app -->
-        <section class="flex flex-col gap-4">
-            <div class="flex items-baseline gap-3">
-                <span class="size-8 rounded-full bg-primary text-primary-foreground grid place-items-center text-sm font-bold">4</span>
-                <Typography variant="title" size="large" weight="bold">Envuelve tu app con ModoProvider</Typography>
-            </div>
-            <Typography variant="body" color="muted">
-                <code>ModoProvider</code> propaga el theming, idioma y tokens a todos los descendientes.
-                Solo se necesita uno por aplicación (aunque puedes anidar varios para temas locales).
-            </Typography>
-            <CodePreview :code="wrapApp" lang="vue" code-only />
-        </section>
-
-        <!-- Use components -->
-        <section class="flex flex-col gap-4">
-            <div class="flex items-baseline gap-3">
-                <span class="size-8 rounded-full bg-primary text-primary-foreground grid place-items-center text-sm font-bold">5</span>
-                <Typography variant="title" size="large" weight="bold">Usa los componentes</Typography>
-            </div>
-            <Typography variant="body" color="muted">
-                Importa cualquier componente desde el package root. Todo es tree-shakeable, así que
-                solo se incluye en tu bundle lo que realmente uses.
-            </Typography>
-            <CodePreview :code="useComponent" lang="vue" code-only />
-        </section>
+            <!-- Step 5 -->
+            <li class="relative flex flex-col gap-4">
+                <span class="absolute -left-[2.75rem] top-0.5 size-6 rounded-full bg-card ring-1 ring-primary/40 text-primary text-xs font-medium grid place-items-center select-none">5</span>
+                <Typography variant="title" size="large" weight="medium">Usa los componentes</Typography>
+                <Typography variant="body" size="small" color="muted" weight="light">
+                    Importa cualquier componente desde el package root. Todo es tree-shakeable, así que
+                    solo se incluye en tu bundle lo que realmente uses.
+                </Typography>
+                <CodePreview :code="useComponent" lang="vue" code-only />
+            </li>
+        </ol>
 
         <!-- Next steps -->
         <section class="flex flex-col gap-4">
-            <Typography variant="heading" size="medium" weight="bold">
+            <Typography variant="heading" size="large" weight="medium">
                 Próximos pasos
             </Typography>
-            <div class="grid sm:grid-cols-2 gap-3">
-                <Card variant="outlined" padding="large" class="cursor-pointer hover:border-primary/50 transition-colors" @click="go('theming')">
-                    <Stack direction="column" spacing="small">
-                        <BoltIcon class="size-6 text-primary" />
-                        <Typography variant="title" size="medium" weight="bold">Personaliza el tema</Typography>
-                        <Typography variant="body" color="muted">
+            <div class="grid sm:grid-cols-2 gap-4">
+                <Card
+                    variant="outlined"
+                    padding="large"
+                    class="relative overflow-hidden cursor-pointer hover:border-primary/50 hover:-translate-y-0.5 transition-all duration-300 group"
+                    @click="go('theming')"
+                >
+                    <div class="pointer-events-none absolute inset-0 opacity-[0.065] text-primary [background-image:linear-gradient(to_right,currentColor_1px,transparent_1px),linear-gradient(to_bottom,currentColor_1px,transparent_1px)] [background-size:20px_20px]" />
+                    <Stack direction="column" spacing="small" class="relative">
+                        <div class="size-10 rounded-xl bg-primary/10 text-primary grid place-items-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                            <BoltIcon class="size-5" />
+                        </div>
+                        <Typography variant="title" size="medium" weight="medium" as="h3">Personaliza el tema</Typography>
+                        <Typography variant="body" size="small" color="muted" weight="light">
                             Color, radius, surfaces, dark mode presets…
                         </Typography>
                     </Stack>
                 </Card>
-                <Card variant="outlined" padding="large" class="cursor-pointer hover:border-primary/50 transition-colors" @click="go('button')">
-                    <Stack direction="column" spacing="small">
-                        <CubeIcon class="size-6 text-primary" />
-                        <Typography variant="title" size="medium" weight="bold">Explora componentes</Typography>
-                        <Typography variant="body" color="muted">
+                <Card
+                    variant="outlined"
+                    padding="large"
+                    class="relative overflow-hidden cursor-pointer hover:border-success/40 hover:-translate-y-0.5 transition-all duration-300 group"
+                    @click="go('button')"
+                >
+                    <div class="pointer-events-none absolute inset-0 opacity-[0.065] text-success [background-image:radial-gradient(circle,currentColor_1.5px,transparent_1.5px)] [background-size:18px_18px]" />
+                    <Stack direction="column" spacing="small" class="relative">
+                        <div class="size-10 rounded-xl bg-success/10 text-success grid place-items-center group-hover:bg-success group-hover:text-white transition-colors">
+                            <CubeIcon class="size-5" />
+                        </div>
+                        <Typography variant="title" size="medium" weight="medium" as="h3">Explora componentes</Typography>
+                        <Typography variant="body" size="small" color="muted" weight="light">
                             70+ componentes listos para usar.
                         </Typography>
                     </Stack>

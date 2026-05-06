@@ -14,9 +14,8 @@ import dts from 'vite-plugin-dts';
 const isLib = process.env.BUILD_TARGET === 'lib';
 
 export default defineConfig({
-    // GitHub Pages serves from /mood-ui/ when the repo name is "mood-ui".
-    // In lib mode or local dev this is ignored.
-    base: isLib ? '/' : (process.env.GITHUB_PAGES ? '/mood-ui/' : '/'),
+    // Always serve from root – Vercel with custom domain modo-ui.com
+    base: isLib ? '/' : '/',
     plugins: [
         vue(),
         tailwindcss(),

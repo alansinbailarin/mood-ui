@@ -1,0 +1,7 @@
+{
+    "buildCommand": "npm run build:showroom",
+    "outputDirectory": "dist-showroom",
+    "rewrites": [
+        { "source": "/((?!assets/).*)", "destination": "/index.html" }
+    ]
+}

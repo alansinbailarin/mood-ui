@@ -12,7 +12,7 @@
 
 **81+ accessible components** · reactive theming · dark mode · i18n (ES + EN) · built with Vue 3, TypeScript & Tailwind v4.
 
-[**→ Live docs & playground**](https://alansinbailarin.github.io/mood-ui) · [npm](https://www.npmjs.com/package/mood-ui) · [Changelog](https://github.com/alansinbailarin/mood-ui/releases)
+[**→ Live docs & playground**](https://modo-ui.com) · [npm](https://www.npmjs.com/package/mood-ui) · [Changelog](https://github.com/alansinbailarin/mood-ui/releases)
 
 </div>
 
