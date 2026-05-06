@@ -161,10 +161,10 @@ const items = computed(() => releases.map((r) => ({
             </Typography>
         </header>
 
-        <ol class="relative flex flex-col gap-6 border-l border-border pl-6 ml-2">
+        <ol class="relative flex flex-col gap-6 border-l border-border pl-8 ml-3">
             <li v-for="r in items" :key="r.version" v-reveal="'left'" class="relative">
                 <span
-                    class="absolute -left-[34px] top-2 grid place-items-center size-7 rounded-full bg-card ring-1 ring-primary/40 text-primary"
+                    class="absolute -left-[2.75rem] top-2 grid place-items-center size-6 rounded-full bg-card ring-1 ring-primary/40 text-primary"
                 >
                     <TagIcon class="size-3.5" />
                 </span>
