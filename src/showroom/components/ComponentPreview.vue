@@ -3,9 +3,11 @@ import { ref } from 'vue';
 import CodePreview from './CodePreview.vue';
 import Typography from '../../components/data-display/Typography.vue';
 import { ArrowPathIcon } from '@heroicons/vue/24/outline';
+import { useShowroomT } from '../composables/useShowroomLocale';
 import type { BundledLanguage } from '../composables/useHighlighter';
 
 const emit = defineEmits<{ reset: [] }>();
+const t = useShowroomT();
 
 withDefaults(defineProps<{
     /** Reactive code string to show in the Code tab. */
@@ -50,7 +52,7 @@ const activeTab = ref<'preview' | 'code'>('preview');
                     <button
                         v-if="$slots.controls"
                         type="button"
-                        title="Resetear"
+                        :title="t.docReset"
                         class="size-7 flex items-center justify-center rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
                         @click="emit('reset')"
                     >
@@ -65,7 +67,7 @@ const activeTab = ref<'preview' | 'code'>('preview');
                             : 'text-muted-foreground hover:text-foreground'"
                         @click="activeTab = 'preview'"
                     >
-                        Preview
+                        {{ t.docPreview }}
                     </button>
                     <button
                         type="button"
@@ -75,7 +77,7 @@ const activeTab = ref<'preview' | 'code'>('preview');
                             : 'text-muted-foreground hover:text-foreground'"
                         @click="activeTab = 'code'"
                     >
-                        Code
+                        {{ t.docCode }}
                     </button>
                     </div>
                 </div>

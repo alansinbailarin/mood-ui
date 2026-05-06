@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import Typography from '../../components/data-display/Typography.vue';
 import { ClipboardIcon, CheckIcon } from '@heroicons/vue/24/outline';
 import { vReveal } from '../composables/useScrollReveal';
+import { useShowroomT } from '../composables/useShowroomLocale';
 import type { PropDoc, EmitDoc, SlotDoc } from '../types';
 
 const props = defineProps<{
@@ -16,6 +17,7 @@ const props = defineProps<{
 }>();
 
 const copied = ref(false);
+const t = useShowroomT();
 
 function copyImport() {
     navigator.clipboard.writeText(props.importPath).then(() => {
@@ -55,13 +57,13 @@ function copyImport() {
 
         <!-- Overview / interactive playground -->
         <section v-reveal class="flex flex-col gap-4">
-            <Typography variant="heading" size="large" weight="medium" as="h2">Overview</Typography>
+            <Typography variant="heading" size="large" weight="medium" as="h2">{{ t.docSection_overview }}</Typography>
             <slot name="overview" />
         </section>
 
         <!-- Examples -->
         <section v-if="$slots.examples" v-reveal class="flex flex-col gap-6">
-            <Typography variant="heading" size="large" weight="medium" as="h2">Ejemplos</Typography>
+            <Typography variant="heading" size="large" weight="medium" as="h2">{{ t.docSection_examples }}</Typography>
             <div class="flex flex-col gap-8">
                 <slot name="examples" />
             </div>
@@ -73,19 +75,19 @@ function copyImport() {
             v-reveal
             class="flex flex-col gap-8"
         >
-            <Typography variant="heading" size="large" weight="medium" as="h2">API Reference</Typography>
+            <Typography variant="heading" size="large" weight="medium" as="h2">{{ t.docSection_api }}</Typography>
 
             <!-- Props table -->
             <div v-if="propsList?.length" class="flex flex-col gap-3">
-                <Typography variant="title" size="medium" weight="medium" as="h3">Props</Typography>
+                <Typography variant="title" size="medium" weight="medium" as="h3">{{ t.docSection_props }}</Typography>
                 <div class="rounded-xl border border-border overflow-auto">
                     <table class="w-full text-sm min-w-[580px]">
                         <thead class="bg-muted/30 border-b border-border">
                             <tr>
-                                <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-32">Prop</th>
-                                <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Tipo</th>
-                                <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-28">Default</th>
-                                <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Descripción</th>
+                                <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-32">{{ t.docCol_prop }}</th>
+                                <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{{ t.docCol_type }}</th>
+                                <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-28">{{ t.docCol_default }}</th>
+                                <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{{ t.docCol_description }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -114,14 +116,14 @@ function copyImport() {
 
             <!-- Emits table -->
             <div v-if="emitsList?.length" class="flex flex-col gap-3">
-                <Typography variant="title" size="medium" weight="medium" as="h3">Emits</Typography>
+                <Typography variant="title" size="medium" weight="medium" as="h3">{{ t.docSection_emits }}</Typography>
                 <div class="rounded-xl border border-border overflow-auto">
                     <table class="w-full text-sm min-w-[400px]">
                         <thead class="bg-muted/30 border-b border-border">
                             <tr>
-                                <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-32">Evento</th>
-                                <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-36">Payload</th>
-                                <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Descripción</th>
+                                <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-32">{{ t.docCol_event }}</th>
+                                <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-36">{{ t.docCol_payload }}</th>
+                                <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{{ t.docCol_description }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -141,14 +143,14 @@ function copyImport() {
 
             <!-- Slots table -->
             <div v-if="slotsList?.length" class="flex flex-col gap-3">
-                <Typography variant="title" size="medium" weight="medium" as="h3">Slots</Typography>
+                <Typography variant="title" size="medium" weight="medium" as="h3">{{ t.docSection_slots }}</Typography>
                 <div class="rounded-xl border border-border overflow-auto">
                     <table class="w-full text-sm min-w-[400px]">
                         <thead class="bg-muted/30 border-b border-border">
                             <tr>
-                                <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-32">Slot</th>
-                                <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-40">Props</th>
-                                <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Descripción</th>
+                                <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-32">{{ t.docCol_slot }}</th>
+                                <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-40">{{ t.docCol_bindings }}</th>
+                                <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{{ t.docCol_description }}</th>
                             </tr>
                         </thead>
                         <tbody>

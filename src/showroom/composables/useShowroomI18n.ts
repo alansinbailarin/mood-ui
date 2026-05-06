@@ -84,6 +84,58 @@ export interface ShowroomDict {
     theming: string;
     i18n: string;
     changelog: string;
+
+    // ComponentDoc / ComponentPreview — generic UI strings
+    docSection_overview: string;
+    docSection_examples: string;
+    docSection_api: string;
+    docSection_props: string;
+    docSection_emits: string;
+    docSection_slots: string;
+    docCol_prop: string;
+    docCol_type: string;
+    docCol_default: string;
+    docCol_description: string;
+    docCol_event: string;
+    docCol_payload: string;
+    docCol_slot: string;
+    docCol_bindings: string;
+    docReset: string;
+    docPreview: string;
+    docCode: string;
+
+    // Button page
+    btn_category: string;
+    btn_description: string;
+    btn_ctrl_variant: string;
+    btn_ctrl_color: string;
+    btn_ctrl_size: string;
+    btn_ctrl_loading: string;
+    btn_ctrl_disabled: string;
+    btn_ex_variants_title: string;
+    btn_ex_variants_desc: string;
+    btn_ex_colors_title: string;
+    btn_ex_colors_desc: string;
+    btn_ex_sizes_title: string;
+    btn_ex_sizes_desc: string;
+    btn_ex_icons_title: string;
+    btn_ex_icons_desc: string;
+    btn_ex_states_title: string;
+    btn_ex_states_desc: string;
+    btn_prop_variant: string;
+    btn_prop_color: string;
+    btn_prop_size: string;
+    btn_prop_label: string;
+    btn_prop_loading: string;
+    btn_prop_loadingText: string;
+    btn_prop_disabled: string;
+    btn_prop_icon: string;
+    btn_prop_iconPosition: string;
+    btn_prop_fullWidth: string;
+    btn_prop_as: string;
+    btn_prop_ariaLabel: string;
+    btn_emit_click: string;
+    btn_slot_default: string;
 }
 
 const ES: ShowroomDict = {
@@ -162,6 +214,56 @@ const ES: ShowroomDict = {
     theming: 'Theming',
     i18n: 'i18n',
     changelog: 'Changelog',
+
+    docSection_overview: 'Overview',
+    docSection_examples: 'Ejemplos',
+    docSection_api: 'API Reference',
+    docSection_props: 'Props',
+    docSection_emits: 'Emits',
+    docSection_slots: 'Slots',
+    docCol_prop: 'Prop',
+    docCol_type: 'Tipo',
+    docCol_default: 'Default',
+    docCol_description: 'Descripción',
+    docCol_event: 'Evento',
+    docCol_payload: 'Payload',
+    docCol_slot: 'Slot',
+    docCol_bindings: 'Props',
+    docReset: 'Resetear',
+    docPreview: 'Preview',
+    docCode: 'Código',
+
+    btn_category: 'Forms',
+    btn_description: 'La acción primaria de cualquier interfaz. Cuatro variantes, cinco colores semánticos, cuatro tamaños, iconos configurables, estado de carga y soporte para renderizar como link o cualquier elemento.',
+    btn_ctrl_variant: 'Variante',
+    btn_ctrl_color: 'Color',
+    btn_ctrl_size: 'Tamaño',
+    btn_ctrl_loading: 'Loading',
+    btn_ctrl_disabled: 'Disabled',
+    btn_ex_variants_title: 'Variantes',
+    btn_ex_variants_desc: 'Cuatro estilos visuales para distintos niveles de jerarquía de acción.',
+    btn_ex_colors_title: 'Colores',
+    btn_ex_colors_desc: 'Cinco colores semánticos que mapean al sistema de design tokens del ModoProvider.',
+    btn_ex_sizes_title: 'Tamaños',
+    btn_ex_sizes_desc: 'El padding, la fuente y el alto se ajustan proporcionalmente en cada escala.',
+    btn_ex_icons_title: 'Con iconos',
+    btn_ex_icons_desc: 'Posición izquierda, derecha o solo icono. Usa aria-label en botones icon-only.',
+    btn_ex_states_title: 'Estados',
+    btn_ex_states_desc: 'Loading bloquea clicks y muestra spinner. Disabled deshabilita visualmente e impide eventos.',
+    btn_prop_variant: 'Variante visual. Normal es el botón sólido por defecto.',
+    btn_prop_color: 'Color semántico aplicado al botón.',
+    btn_prop_size: 'Controla el padding, fuente y alto del botón.',
+    btn_prop_label: 'Texto del botón. Equivalente al slot default para contenido plano.',
+    btn_prop_loading: 'Muestra un spinner y bloquea clicks mientras está activo.',
+    btn_prop_loadingText: 'Texto mostrado junto al spinner durante el estado loading.',
+    btn_prop_disabled: 'Deshabilita el botón visualmente e impide cualquier interacción.',
+    btn_prop_icon: 'Componente de icono renderizado junto al label (heroicons u otro).',
+    btn_prop_iconPosition: 'Lado donde aparece el icono respecto al label.',
+    btn_prop_fullWidth: 'El botón se expande para ocupar el 100% del ancho disponible.',
+    btn_prop_as: 'Elemento raíz a renderizar. Usa "a" para links o un router-link.',
+    btn_prop_ariaLabel: 'Label accesible. Imprescindible en botones icon-only sin texto visible.',
+    btn_emit_click: 'Emitido al hacer click cuando el botón no está deshabilitado ni en estado loading.',
+    btn_slot_default: 'Contenido personalizado del botón. Reemplaza la prop label cuando se necesita HTML o componentes internos.',
 };
 
 const EN: ShowroomDict = {
@@ -240,6 +342,56 @@ const EN: ShowroomDict = {
     theming: 'Theming',
     i18n: 'i18n',
     changelog: 'Changelog',
+
+    docSection_overview: 'Overview',
+    docSection_examples: 'Examples',
+    docSection_api: 'API Reference',
+    docSection_props: 'Props',
+    docSection_emits: 'Emits',
+    docSection_slots: 'Slots',
+    docCol_prop: 'Prop',
+    docCol_type: 'Type',
+    docCol_default: 'Default',
+    docCol_description: 'Description',
+    docCol_event: 'Event',
+    docCol_payload: 'Payload',
+    docCol_slot: 'Slot',
+    docCol_bindings: 'Props',
+    docReset: 'Reset',
+    docPreview: 'Preview',
+    docCode: 'Code',
+
+    btn_category: 'Forms',
+    btn_description: 'The primary action of any interface. Four variants, five semantic colors, four sizes, configurable icons, loading state and support for rendering as a link or any element.',
+    btn_ctrl_variant: 'Variant',
+    btn_ctrl_color: 'Color',
+    btn_ctrl_size: 'Size',
+    btn_ctrl_loading: 'Loading',
+    btn_ctrl_disabled: 'Disabled',
+    btn_ex_variants_title: 'Variants',
+    btn_ex_variants_desc: 'Four visual styles for different levels of action hierarchy in the interface.',
+    btn_ex_colors_title: 'Colors',
+    btn_ex_colors_desc: 'Five semantic colors that map directly to the ModoProvider design token system.',
+    btn_ex_sizes_title: 'Sizes',
+    btn_ex_sizes_desc: 'Padding, font and height scale proportionally at each level.',
+    btn_ex_icons_title: 'With icons',
+    btn_ex_icons_desc: 'Left, right or icon-only position. Use aria-label on icon-only buttons.',
+    btn_ex_states_title: 'States',
+    btn_ex_states_desc: 'Loading blocks clicks and shows spinner. Disabled prevents all interaction.',
+    btn_prop_variant: 'Visual variant. Normal is the solid button (default).',
+    btn_prop_color: 'Semantic color applied to the button.',
+    btn_prop_size: 'Controls padding, font size and height.',
+    btn_prop_label: 'Button text. Equivalent to the default slot for plain content.',
+    btn_prop_loading: 'Shows a spinner and blocks clicks while active.',
+    btn_prop_loadingText: 'Text shown alongside the spinner during loading state.',
+    btn_prop_disabled: 'Visually disables the button and prevents all interaction.',
+    btn_prop_icon: 'Icon component rendered next to the label (heroicons or any component).',
+    btn_prop_iconPosition: 'Side where the icon appears relative to the label.',
+    btn_prop_fullWidth: 'Button expands to fill 100% of available width.',
+    btn_prop_as: 'Root element to render. Use "a" for links or a router-link component.',
+    btn_prop_ariaLabel: 'Accessible label. Required for icon-only buttons without visible text.',
+    btn_emit_click: 'Emitted on click when the button is not disabled or in loading state.',
+    btn_slot_default: 'Custom button content. Replaces the label prop when HTML or inner components are needed.',
 };
 
 const DICTS: Record<ShowroomLocale, ShowroomDict> = { es: ES, en: EN };

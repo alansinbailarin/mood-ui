@@ -4,7 +4,10 @@ import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Button from '../../../components/forms/Button.vue';
 import { HeartIcon, ArrowRightIcon } from '@heroicons/vue/24/outline';
+import { useShowroomT } from '../../composables/useShowroomLocale';
 import type { PropDoc, EmitDoc, SlotDoc } from '../../types';
+
+const t = useShowroomT();
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgVariant  = ref<'normal' | 'outline' | 'ghost' | 'text'>('normal');
@@ -95,9 +98,9 @@ const slotsList: SlotDoc[] = [
 <template>
     <ComponentDoc
         title="Button"
-        category="Forms"
+        :category="t.btn_category"
         import-path="import { Button } from 'mood-ui'"
-        description="La acción primaria de cualquier interfaz. Cuatro variantes, cinco colores semánticos, cuatro tamaños, iconos configurables, estado de carga y soporte para renderizar como link o cualquier elemento."
+        :description="t.btn_description"
         :props-list="propsList"
         :emits-list="emitsList"
         :slots-list="slotsList"
@@ -108,7 +111,7 @@ const slotsList: SlotDoc[] = [
                 <template #controls>
                     <!-- Variant -->
                     <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Variant</span>
+                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">{{ t.btn_ctrl_variant }}</span>
                         <div class="flex rounded-md border border-border overflow-hidden">
                             <button
                                 v-for="v in ['normal', 'outline', 'ghost', 'text']"
@@ -127,7 +130,7 @@ const slotsList: SlotDoc[] = [
 
                     <!-- Color dots -->
                     <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Color</span>
+                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">{{ t.btn_ctrl_color }}</span>
                         <div class="flex items-center gap-1">
                             <button
                                 v-for="c in colorDots"
@@ -148,7 +151,7 @@ const slotsList: SlotDoc[] = [
 
                     <!-- Size -->
                     <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Size</span>
+                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">{{ t.btn_ctrl_size }}</span>
                         <div class="flex rounded-md border border-border overflow-hidden">
                             <button
                                 v-for="s in ['xs', 'small', 'medium', 'large']"
@@ -172,7 +175,7 @@ const slotsList: SlotDoc[] = [
                             ? 'border-primary bg-primary/10 text-primary font-medium'
                             : 'border-border text-muted-foreground hover:bg-muted/60'"
                         @click="pgLoading = !pgLoading"
-                    >Loading</button>
+                    >{{ t.btn_ctrl_loading }}</button>
 
                     <button
                         type="button"
@@ -181,7 +184,7 @@ const slotsList: SlotDoc[] = [
                             ? 'border-primary bg-primary/10 text-primary font-medium'
                             : 'border-border text-muted-foreground hover:bg-muted/60'"
                         @click="pgDisabled = !pgDisabled"
-                    >Disabled</button>
+                    >{{ t.btn_ctrl_disabled }}</button>
                 </template>
 
                 <Button
@@ -199,8 +202,8 @@ const slotsList: SlotDoc[] = [
         <!-- ── Examples ────────────────────────────────────────────────────── -->
         <template #examples>
             <ComponentPreview
-                title="Variantes"
-                description="Cuatro estilos visuales para distintos niveles de jerarquía de acción."
+                :title="t.btn_ex_variants_title"
+                :description="t.btn_ex_variants_desc"
                 :code="variantsCode"
             >
                 <Button variant="normal"  color="primary">Normal</Button>
@@ -210,8 +213,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Colores"
-                description="Cinco colores semánticos que mapean al sistema de design tokens del ModoProvider."
+                :title="t.btn_ex_colors_title"
+                :description="t.btn_ex_colors_desc"
                 :code="colorsCode"
             >
                 <Button color="default">Default</Button>
@@ -222,8 +225,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Tamaños"
-                description="El padding, la fuente y el alto se ajustan proporcionalmente en cada escala."
+                :title="t.btn_ex_sizes_title"
+                :description="t.btn_ex_sizes_desc"
                 :code="sizesCode"
             >
                 <Button size="xs"     color="primary">XS</Button>
@@ -233,8 +236,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con iconos"
-                description="Posición izquierda, derecha o solo icono. Usa aria-label en botones icon-only."
+                :title="t.btn_ex_icons_title"
+                :description="t.btn_ex_icons_desc"
                 :code="iconsCode"
             >
                 <Button :icon="HeartIcon"      color="danger"   variant="outline">Me gusta</Button>
@@ -243,8 +246,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Estados"
-                description="Loading bloquea clicks y muestra spinner. Disabled deshabilita visualmente e impide eventos."
+                :title="t.btn_ex_states_title"
+                :description="t.btn_ex_states_desc"
                 :code="statesCode"
             >
                 <Button loading                           color="primary">Guardando…</Button>
