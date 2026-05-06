@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount, nextTick, watch } from 'vue';
 import {
-    MagnifyingGlassIcon,
-    SunIcon,
-    MoonIcon,
-    ComputerDesktopIcon,
     SwatchIcon,
     GlobeAltIcon,
     ArrowTopRightOnSquareIcon,
@@ -13,10 +9,13 @@ import {
     PaintBrushIcon,
     LanguageIcon,
     HashtagIcon,
+    MagnifyingGlassIcon,
 } from '@heroicons/vue/24/outline';
 import Modal from '../../components/feedback/Modal.vue';
+import Tooltip from '../../components/feedback/Tooltip.vue';
 import { showroomNav } from '../registry';
 import { useShowroomRouter } from '../composables/useShowroomRouter';
+import { useShowroomT } from '../composables/useShowroomLocale';
 
 const props = defineProps<{
     modelValue: boolean;
@@ -28,6 +27,8 @@ const emit = defineEmits<{
     'color': [hex: string];
     'locale': [l: 'es' | 'en'];
 }>();
+
+const t = useShowroomT();
 
 const open = computed({
     get: () => props.modelValue,
@@ -45,12 +46,26 @@ const listEl = ref<HTMLElement | null>(null);
 type CmdItem = {
     id: string;
     label: string;
+    description?: string;
     group: string;
     icon: any;
     keywords?: string;
     shortcut?: string[];
     run: () => void;
 };
+
+// Brand color swatches — available via command palette actions only (no inline grid)
+type ColorSwatch = { id: string; label: string; hex: string };
+const brandColors: ColorSwatch[] = [
+    { id: 'c:indigo',  label: 'Indigo',  hex: '#6366f1' },
+    { id: 'c:violet',  label: 'Violet',  hex: '#8b5cf6' },
+    { id: 'c:pink',    label: 'Pink',    hex: '#ec4899' },
+    { id: 'c:rose',    label: 'Rose',    hex: '#ef4444' },
+    { id: 'c:amber',   label: 'Amber',   hex: '#f59e0b' },
+    { id: 'c:emerald', label: 'Emerald', hex: '#10b981' },
+    { id: 'c:sky',     label: 'Sky',     hex: '#0ea5e9' },
+];
+void brandColors; // kept for future use
 
 const componentItems = computed<CmdItem[]>(() =>
     showroomNav.flatMap((cat) =>
@@ -68,44 +83,60 @@ const componentItems = computed<CmdItem[]>(() =>
     ),
 );
 
-const docItems: CmdItem[] = [
-    { id: 'doc:welcome',      label: 'Welcome',       group: 'Docs', icon: HomeIcon,     run: () => { go('welcome'); close(); } },
-    { id: 'doc:installation', label: 'Installation',  group: 'Docs', icon: BookOpenIcon, run: () => { go('installation'); close(); } },
-    { id: 'doc:theming',      label: 'Theming',       group: 'Docs', icon: PaintBrushIcon, run: () => { go('theming'); close(); } },
-    { id: 'doc:i18n',         label: 'i18n',          group: 'Docs', icon: LanguageIcon, run: () => { go('i18n'); close(); } },
-];
+const docItems = computed<CmdItem[]>(() => {
+    const isEs = t.value.lang === 'es';
+    return [
+        { id: 'doc:welcome',      label: t.value.home,         description: isEs ? 'Página de inicio del showroom' : 'Showroom home page',             group: t.value.docs, icon: HomeIcon,      run: () => { go('welcome'); close(); } },
+        { id: 'doc:introduction', label: t.value.introduction, description: isEs ? '¿Qué es mood-ui y por qué usarlo?' : 'What is mood-ui and why use it?', group: t.value.docs, icon: BookOpenIcon,  run: () => { go('introduction'); close(); } },
+        { id: 'doc:installation', label: t.value.installation, description: isEs ? 'Instala mood-ui en tu proyecto' : 'Install mood-ui in your project',    group: t.value.docs, icon: BookOpenIcon,  run: () => { go('installation'); close(); } },
+        { id: 'doc:theming',      label: t.value.theming,      description: isEs ? 'Tokens de diseño y personalización' : 'Design tokens & customization',   group: t.value.docs, icon: PaintBrushIcon, run: () => { go('theming'); close(); } },
+        { id: 'doc:i18n',         label: t.value.i18n,         description: isEs ? 'Soporte multiidioma integrado' : 'Built-in multilanguage support',      group: t.value.docs, icon: LanguageIcon,  run: () => { go('i18n'); close(); } },
+        { id: 'doc:changelog',    label: t.value.changelog,    description: isEs ? 'Historial de versiones y cambios' : 'Version history and changes',      group: t.value.docs, icon: BookOpenIcon,  run: () => { go('changelog'); close(); } },
+    ];
+});
+
+const actionsLabel = computed(() => t.value.lang === 'es' ? 'Idioma' : 'Language');
+const linksLabel = computed(() => t.value.lang === 'es' ? 'Enlaces' : 'Links');
 
 const actionItems = computed<CmdItem[]>(() => [
-    { id: 'theme:light',  label: 'Tema: Claro',   group: 'Acciones', icon: SunIcon,             keywords: 'light claro mode',  run: () => { emit('theme', 'light');  close(); } },
-    { id: 'theme:dark',   label: 'Tema: Oscuro',  group: 'Acciones', icon: MoonIcon,            keywords: 'dark oscuro night', run: () => { emit('theme', 'dark');   close(); } },
-    { id: 'theme:system', label: 'Tema: Sistema', group: 'Acciones', icon: ComputerDesktopIcon, keywords: 'system auto',       run: () => { emit('theme', 'system'); close(); } },
-    { id: 'locale:es',    label: 'Idioma: Español', group: 'Acciones', icon: GlobeAltIcon,      keywords: 'spanish español',  run: () => { emit('locale', 'es');    close(); } },
-    { id: 'locale:en',    label: 'Idioma: English', group: 'Acciones', icon: GlobeAltIcon,      keywords: 'english ingles',   run: () => { emit('locale', 'en');    close(); } },
-    { id: 'color:indigo', label: 'Color: Indigo', group: 'Acciones', icon: SwatchIcon, keywords: 'primary brand', run: () => { emit('color', '#6366f1'); close(); } },
-    { id: 'color:violet', label: 'Color: Violet', group: 'Acciones', icon: SwatchIcon, keywords: 'primary brand', run: () => { emit('color', '#8b5cf6'); close(); } },
-    { id: 'color:pink',   label: 'Color: Pink',   group: 'Acciones', icon: SwatchIcon, keywords: 'primary brand', run: () => { emit('color', '#ec4899'); close(); } },
-    { id: 'color:rose',   label: 'Color: Rose',   group: 'Acciones', icon: SwatchIcon, keywords: 'primary brand', run: () => { emit('color', '#ef4444'); close(); } },
-    { id: 'color:amber',  label: 'Color: Amber',  group: 'Acciones', icon: SwatchIcon, keywords: 'primary brand', run: () => { emit('color', '#f59e0b'); close(); } },
-    { id: 'color:emerald',label: 'Color: Emerald',group: 'Acciones', icon: SwatchIcon, keywords: 'primary brand', run: () => { emit('color', '#10b981'); close(); } },
-    { id: 'color:sky',    label: 'Color: Sky',    group: 'Acciones', icon: SwatchIcon, keywords: 'primary brand', run: () => { emit('color', '#0ea5e9'); close(); } },
+    {
+        id: 'locale:es',
+        label: 'Español',
+        description: t.value.lang === 'es' ? 'Idioma actual del showroom' : 'Cambiar idioma a Español',
+        group: actionsLabel.value,
+        icon: GlobeAltIcon,
+        keywords: 'spanish español idioma',
+        run: () => { emit('locale', 'es'); close(); }
+    },
+    {
+        id: 'locale:en',
+        label: 'English',
+        description: t.value.lang === 'en' ? 'Current showroom language' : 'Switch showroom language to English',
+        group: actionsLabel.value,
+        icon: GlobeAltIcon,
+        keywords: 'english ingles language',
+        run: () => { emit('locale', 'en'); close(); }
+    },
     {
         id: 'link:github',
-        label: 'Abrir GitHub',
-        group: 'Enlaces',
+        label: 'GitHub',
+        description: 'alansinbailarin/mood-ui',
+        group: linksLabel.value,
         icon: ArrowTopRightOnSquareIcon,
         run: () => { window.open('https://github.com/alansinbailarin/mood-ui', '_blank'); close(); },
     },
     {
         id: 'link:npm',
-        label: 'Abrir npm',
-        group: 'Enlaces',
+        label: 'npm',
+        description: 'npmjs.com/package/mood-ui',
+        group: linksLabel.value,
         icon: ArrowTopRightOnSquareIcon,
         run: () => { window.open('https://www.npmjs.com/package/mood-ui', '_blank'); close(); },
     },
 ]);
 
 const allItems = computed<CmdItem[]>(() => [
-    ...docItems,
+    ...docItems.value,
     ...componentItems.value,
     ...actionItems.value,
 ]);
@@ -200,41 +231,43 @@ function flatIndex(group: string, idxInGroup: number): number {
         position="top"
         :show-close="false"
         :inner-border="false"
-        overlay="blur"
-        aria-label="Búsqueda rápida"
+        overlay="glass"
+        :aria-label="t.search"
     >
         <!-- Full-bleed wrapper that cancels the Modal body padding -->
         <div class="-mx-6 -my-6">
-            <!-- Search input -->
-            <div class="flex items-center gap-3 px-4 py-3 border-b border-border">
-                <MagnifyingGlassIcon class="size-5 text-muted-foreground shrink-0" />
+            <!-- Search input: full-bleed native -->
+            <div class="flex items-center gap-3 px-4 border-b border-border">
+                <MagnifyingGlassIcon class="size-4 text-muted-foreground shrink-0" />
                 <input
                     ref="inputEl"
                     v-model="query"
                     type="text"
-                    placeholder="Buscar componentes, acciones, docs…"
-                    class="flex-1 bg-transparent border-0 outline-none text-base text-foreground placeholder:text-muted-foreground"
+                    :placeholder="t.searchPlaceholder"
+                    autocomplete="off"
+                    spellcheck="false"
+                    style="outline: none !important; box-shadow: none !important;"
+                    class="flex-1 bg-transparent py-4 text-sm text-foreground placeholder:text-muted-foreground [&:focus]:outline-none [&:focus-visible]:outline-none [&::-webkit-search-cancel-button]:hidden"
+                    @keydown.stop
                 />
-                <kbd class="hidden sm:inline-flex items-center gap-0.5 text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded border border-border bg-muted text-muted-foreground">
-                    ESC
-                </kbd>
             </div>
 
             <!-- Results -->
-            <div ref="listEl" class="max-h-[50vh] overflow-y-auto py-2">
+            <div ref="listEl" class="max-h-[50vh] overflow-y-auto py-1.5">
                 <div
                     v-if="filtered.length === 0"
                     class="px-4 py-12 text-center text-sm text-muted-foreground"
                 >
-                    Sin resultados para "{{ query }}"
+                    {{ t.searchEmpty(query) }}
                 </div>
 
+                <!-- Regular grouped items -->
                 <div
                     v-for="g in groupedItems"
                     :key="g.group"
-                    class="mb-1"
+                    class="mb-0.5"
                 >
-                    <div class="px-4 py-1.5 text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
+                    <div class="px-4 py-1 text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
                         {{ g.group }}
                     </div>
                     <button
@@ -242,16 +275,19 @@ function flatIndex(group: string, idxInGroup: number): number {
                         :key="item.id"
                         :data-cmd-index="flatIndex(g.group, idx)"
                         type="button"
-                        class="w-full flex items-center gap-3 px-4 py-2 text-sm text-left transition-colors"
+                        class="w-full flex items-center gap-2.5 px-4 py-1.5 text-sm text-left transition-colors"
                         :class="flatIndex(g.group, idx) === activeIndex ? 'bg-primary/10 text-foreground' : 'text-foreground/90 hover:bg-muted/40'"
                         @mouseenter="activeIndex = flatIndex(g.group, idx)"
                         @click="item.run()"
                     >
-                        <component :is="item.icon" class="size-4 text-muted-foreground shrink-0" />
-                        <span class="flex-1">{{ item.label }}</span>
+                        <component :is="item.icon" class="size-3.5 text-muted-foreground shrink-0" />
+                        <span class="flex-1 min-w-0">
+                            <span class="block text-sm truncate">{{ item.label }}</span>
+                            <span v-if="item.description" class="block text-xs text-muted-foreground truncate">{{ item.description }}</span>
+                        </span>
                         <span
                             v-if="flatIndex(g.group, idx) === activeIndex"
-                            class="text-[10px] font-mono text-muted-foreground"
+                            class="text-[10px] font-mono text-muted-foreground shrink-0"
                         >
                             ↵
                         </span>
@@ -265,11 +301,15 @@ function flatIndex(group: string, idxInGroup: number): number {
                     <span class="inline-flex items-center gap-1">
                         <kbd class="font-mono font-semibold px-1 rounded border border-border bg-card">↑</kbd>
                         <kbd class="font-mono font-semibold px-1 rounded border border-border bg-card">↓</kbd>
-                        navegar
+                        {{ t.searchNavigate }}
                     </span>
                     <span class="inline-flex items-center gap-1">
                         <kbd class="font-mono font-semibold px-1 rounded border border-border bg-card">↵</kbd>
-                        seleccionar
+                        {{ t.searchSelect }}
+                    </span>
+                    <span class="inline-flex items-center gap-1">
+                        <kbd class="font-mono font-semibold px-1 rounded border border-border bg-card">ESC</kbd>
+                        {{ t.searchEsc }}
                     </span>
                 </div>
                 <span>mood-ui</span>

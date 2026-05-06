@@ -1,9 +1,12 @@
 /**
  * Tiny hash-based router for the showroom.
  *
- * URL format: `#/<categoryId>/<entryId>` (e.g. `#/forms/button`).
- * Falls back to the first entry of the first category when the hash is empty
- * or doesn't match anything in the registry.
+ * URL format: `#<entryId>` (e.g. `#button`). We deliberately drop the
+ * `#/cat/` prefix so the URL bar reads cleaner. Routing still uses the
+ * hash so deep-links survive on GitHub Pages without SPA fallback.
+ *
+ * Page transitions are wrapped in `document.startViewTransition` when
+ * available so route changes get a free crossfade.
  */
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { showroomNav, findEntry } from '../registry';
@@ -14,7 +17,6 @@ function parseHash(): string {
     if (typeof window === 'undefined') return defaultEntryId();
     const raw = window.location.hash.replace(/^#\/?/, '');
     if (!raw) return defaultEntryId();
-    // Accept both `cat/id` and bare `id`.
     const parts = raw.split('/').filter(Boolean);
     const id = parts[parts.length - 1];
     if (!id) return defaultEntryId();
@@ -25,8 +27,25 @@ function defaultEntryId(): string {
     return showroomNav[0]?.entries[0]?.id ?? 'welcome';
 }
 
+type ViewTransitionDoc = Document & {
+    startViewTransition?: (cb: () => void) => { ready: Promise<void>; finished: Promise<void> };
+};
+
+function runWithTransition(cb: () => void) {
+    const d = (typeof document !== 'undefined' ? document : null) as ViewTransitionDoc | null;
+    const reduce = typeof window !== 'undefined'
+        && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if (!d || reduce || typeof d.startViewTransition !== 'function') {
+        cb();
+        return;
+    }
+    d.startViewTransition(cb);
+}
+
 function onHashChange() {
-    current.value = parseHash();
+    const next = parseHash();
+    if (next === current.value) return;
+    runWithTransition(() => { current.value = next; });
 }
 
 if (typeof window !== 'undefined') {
@@ -34,12 +53,8 @@ if (typeof window !== 'undefined') {
 }
 
 export function useShowroomRouter() {
-    onMounted(() => {
-        // No-op; listener is module-level so it survives across mounts.
-    });
-    onUnmounted(() => {
-        // Listener is intentionally global; do not remove.
-    });
+    onMounted(() => { /* listener is module-level */ });
+    onUnmounted(() => { /* listener is module-level */ });
 
     const entry = computed(() => findEntry(current.value));
     const category = computed(() => {
@@ -50,12 +65,13 @@ export function useShowroomRouter() {
     });
 
     function go(id: string) {
-        const cat = showroomNav.find((c) => c.entries.some((e) => e.id === id));
-        const path = cat ? `${cat.id}/${id}` : id;
         if (typeof window !== 'undefined') {
-            window.location.hash = `#/${path}`;
+            const target = `#${id}`;
+            if (window.location.hash !== target) {
+                history.pushState(null, '', target);
+            }
         }
-        current.value = id;
+        runWithTransition(() => { current.value = id; });
     }
 
     return { currentId: current, entry, category, go };

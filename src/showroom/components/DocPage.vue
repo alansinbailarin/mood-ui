@@ -32,16 +32,26 @@ const active = ref<string>('examples');
 
 <template>
     <div class="flex flex-col gap-6">
-        <header class="flex flex-col gap-2">
+        <header class="flex flex-col gap-3">
             <div v-if="props.category" class="flex items-center gap-2">
-                <Typography variant="overline" color="muted">{{ props.category }}</Typography>
+                <Typography variant="overline" size="medium" color="muted">
+                    {{ props.category }}
+                </Typography>
             </div>
-            <Typography variant="display" size="small">{{ props.title }}</Typography>
-            <Typography v-if="props.description" variant="body" size="large" color="muted">
+            <Typography variant="display" size="medium" as="h1" weight="medium" class="tracking-tight leading-[1.05]">
+                {{ props.title }}
+            </Typography>
+            <Typography
+                v-if="props.description"
+                variant="body"
+                size="medium"
+                color="muted"
+                weight="light"
+            >
                 {{ props.description }}
             </Typography>
             <div v-if="props.importPath" class="mt-2">
-                <code class="px-3 py-1.5 rounded bg-muted text-sm font-mono text-muted-foreground border border-border inline-block">
+                <code class="px-3 py-1.5 rounded bg-muted text-xs font-mono text-muted-foreground border border-border inline-block">
                     {{ props.importPath }}
                 </code>
             </div>

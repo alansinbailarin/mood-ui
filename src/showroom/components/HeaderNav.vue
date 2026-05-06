@@ -35,6 +35,12 @@ const tabs = computed<Tab[]>(() => {
 
     return [
         {
+            key: 'docs',
+            label: t.value.docs,
+            entryId: findFirst('docs'),
+            categoryIds: ['docs'],
+        },
+        {
             key: 'components',
             label: t.value.components,
             entryId: componentEntryId,
@@ -53,12 +59,6 @@ const tabs = computed<Tab[]>(() => {
             label: t.value.themeStudio,
             entryId: findFirst('theme-studio'),
             categoryIds: ['theme-studio'],
-        },
-        {
-            key: 'docs',
-            label: t.value.docs,
-            entryId: findFirst('docs'),
-            categoryIds: ['docs'],
         },
     ].filter((tab) => tab.entryId);
 });

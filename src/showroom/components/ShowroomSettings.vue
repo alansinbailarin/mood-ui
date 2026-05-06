@@ -14,6 +14,7 @@ import { usePopover } from '../../composables/usePopover';
 import { useShowroomI18n, type ShowroomLocale } from '../composables/useShowroomI18n';
 
 import type { ModoColor, ModoRadius, ModoSize, ModoTheme, ModoHalo } from '../../config/ModoConfig';
+import type { DarkSurfacePreset } from '../../config/surfaces';
 
 const props = defineProps<{
     theme: ModoTheme;
@@ -25,6 +26,8 @@ const props = defineProps<{
     accentHex: string;
     /** 0–100 — how strongly the page surfaces are tinted with the accent. */
     baseIntensity: number;
+    /** Active dark-mode surface preset. */
+    darkSurface: DarkSurfacePreset;
     locale: ShowroomLocale;
 }>();
 
@@ -37,6 +40,7 @@ const emit = defineEmits<{
     'update:primaryHex': [v: string];
     'update:accentHex': [v: string];
     'update:baseIntensity': [v: number];
+    'update:darkSurface': [v: DarkSurfacePreset];
     'update:locale': [v: ShowroomLocale];
     reset: [];
 }>();
@@ -111,12 +115,31 @@ const localeOptions: { value: ShowroomLocale; label: string }[] = [
     { value: 'en', label: 'EN' },
 ];
 
+const surfaceOptions: { value: DarkSurfacePreset; label: string; sample: string }[] = [
+    { value: 'default',  label: 'Default',  sample: '#0b1220' },
+    { value: 'navy',     label: 'Navy',     sample: '#0a1530' },
+    { value: 'zinc',     label: 'Zinc',     sample: '#18181b' },
+    { value: 'charcoal', label: 'Charcoal', sample: '#1c1917' },
+    { value: 'midnight', label: 'Midnight', sample: '#0a0a1a' },
+    { value: 'forest',   label: 'Forest',   sample: '#0f1c14' },
+];
+
 const activePrimary = computed(() =>
     swatches.find((s) => s.hex.toLowerCase() === props.primaryHex.toLowerCase()),
 );
 const activeAccent = computed(() =>
     swatches.find((s) => s.hex.toLowerCase() === props.accentHex.toLowerCase()),
 );
+
+// Semantic color dots for the COLOR section
+interface SemanticColor { value: ModoColor; label: string; hex: string; }
+const semanticColors = computed<SemanticColor[]>(() => [
+    { value: 'default', label: 'Default', hex: '#64748b' },
+    { value: 'primary', label: 'Primary', hex: props.primaryHex },
+    { value: 'success', label: 'Success', hex: '#22c55e' },
+    { value: 'warning', label: 'Warning', hex: '#f59e0b' },
+    { value: 'danger',  label: 'Danger',  hex: '#ef4444' },
+]);
 </script>
 
 <template>
@@ -139,40 +162,40 @@ const activeAccent = computed(() =>
         :aria-label="t.customizeTheme"
         @update:panelRef="panelRef = $event"
     >
-        <div class="w-[340px] max-h-[min(85vh,720px)] overflow-y-auto p-5 space-y-5">
+        <div class="w-[300px] max-h-[min(85vh,680px)] overflow-y-auto p-4 space-y-4">
             <!-- ── Color Mode ────────────────────────────────────────── -->
-            <section class="space-y-2">
-                <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <section class="space-y-1.5">
+                <h3 class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                     {{ t.colorMode }}
                 </h3>
-                <div class="grid grid-cols-3 gap-1.5">
+                <div class="grid grid-cols-3 gap-1">
                     <button
                         v-for="opt in themeOptions"
                         :key="opt.value"
                         type="button"
-                        class="flex flex-col items-center justify-center gap-1.5 h-16 rounded-lg border text-xs font-medium transition-colors"
+                        class="flex items-center justify-center gap-1.5 h-8 rounded-md border text-xs font-medium transition-colors"
                         :class="theme === opt.value
                             ? 'border-primary bg-primary/10 text-primary'
                             : 'border-border bg-card text-foreground hover:bg-muted/50'"
                         @click="emit('update:theme', opt.value)"
                     >
-                        <component :is="opt.icon" class="w-4 h-4" />
+                        <component :is="opt.icon" class="w-3.5 h-3.5" />
                         <span>{{ opt.label }}</span>
                     </button>
                 </div>
             </section>
 
             <!-- ── Accent (controls page tint) ───────────────────────── -->
-            <section class="space-y-2">
+            <section class="space-y-1.5">
                 <header class="flex items-center justify-between">
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    <h3 class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                         {{ t.accent }}
                     </h3>
                     <span v-if="activeAccent" class="text-[10px] font-mono text-muted-foreground">
                         {{ activeAccent.name }}
                     </span>
                 </header>
-                <div class="grid grid-cols-9 gap-1">
+                <div class="flex flex-wrap gap-1.5">
                     <Tooltip
                         v-for="s in swatches"
                         :key="`accent-${s.hex}`"
@@ -181,10 +204,10 @@ const activeAccent = computed(() =>
                         <button
                             type="button"
                             :aria-label="`Accent ${s.name}`"
-                            class="w-full aspect-square rounded-md border transition-transform hover:scale-110"
+                            class="w-5 h-5 rounded-full border-2 transition-transform hover:scale-125"
                             :class="accentHex.toLowerCase() === s.hex.toLowerCase()
-                                ? 'border-foreground ring-2 ring-foreground/30 ring-offset-1 ring-offset-card scale-110'
-                                : 'border-border'"
+                                ? 'border-foreground scale-125'
+                                : 'border-transparent'"
                             :style="{ backgroundColor: s.hex }"
                             @click="emit('update:accentHex', s.hex)"
                         />
@@ -192,10 +215,10 @@ const activeAccent = computed(() =>
                 </div>
             </section>
 
-            <!-- ── Base intensity (HeroUI-style "Base" slider) ───────── -->
-            <section class="space-y-2">
+            <!-- ── Base intensity ─────────────────────────────────────── -->
+            <section class="space-y-1.5">
                 <header class="flex items-center justify-between">
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    <h3 class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                         {{ t.base }}
                     </h3>
                     <span class="text-[10px] font-mono text-muted-foreground">{{ baseIntensity }}%</span>
@@ -214,16 +237,16 @@ const activeAccent = computed(() =>
             </section>
 
             <!-- ── Primary (component-level) ─────────────────────────── -->
-            <section class="space-y-2">
+            <section class="space-y-1.5">
                 <header class="flex items-center justify-between">
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    <h3 class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                         {{ t.primary }}
                     </h3>
                     <span v-if="activePrimary" class="text-[10px] font-mono text-muted-foreground">
                         {{ activePrimary.name }}
                     </span>
                 </header>
-                <div class="grid grid-cols-9 gap-1">
+                <div class="flex flex-wrap gap-1.5">
                     <Tooltip
                         v-for="s in swatches"
                         :key="`prim-${s.hex}`"
@@ -232,10 +255,10 @@ const activeAccent = computed(() =>
                         <button
                             type="button"
                             :aria-label="`Primary ${s.name}`"
-                            class="w-full aspect-square rounded-md border transition-transform hover:scale-110"
+                            class="w-5 h-5 rounded-full border-2 transition-transform hover:scale-125"
                             :class="primaryHex.toLowerCase() === s.hex.toLowerCase()
-                                ? 'border-foreground ring-2 ring-foreground/30 ring-offset-1 ring-offset-card scale-110'
-                                : 'border-border'"
+                                ? 'border-foreground scale-125'
+                                : 'border-transparent'"
                             :style="{ backgroundColor: s.hex }"
                             @click="emit('update:primaryHex', s.hex)"
                         />
@@ -246,41 +269,41 @@ const activeAccent = computed(() =>
                         type="color"
                         :value="primaryHex"
                         :aria-label="t.primary"
-                        class="w-7 h-7 rounded cursor-pointer bg-transparent border border-border"
+                        class="w-6 h-6 rounded cursor-pointer bg-transparent border border-border"
                         @input="(e: Event) => emit('update:primaryHex', (e.target as HTMLInputElement).value)"
                     />
                     <code class="text-[11px] font-mono text-muted-foreground">{{ primaryHex.toUpperCase() }}</code>
                 </label>
             </section>
 
-            <!-- ── Color (semantic) ──────────────────────────────────── -->
-            <section class="space-y-2">
-                <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Color</h3>
-                <div class="flex flex-wrap gap-1">
-                    <button
-                        v-for="opt in colorOptions"
-                        :key="opt.value"
-                        type="button"
-                        class="px-2.5 py-1 rounded-md border text-xs transition-colors"
-                        :class="color === opt.value
-                            ? 'border-primary bg-primary/10 text-primary'
-                            : 'border-border bg-card hover:bg-muted/50 text-foreground'"
-                        @click="emit('update:color', opt.value)"
-                    >
-                        {{ opt.label }}
-                    </button>
+            <!-- ── Color (semantic circles) ──────────────────────────── -->
+            <section class="space-y-1.5">
+                <h3 class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Color</h3>
+                <div class="flex flex-wrap gap-2">
+                    <Tooltip v-for="sc in semanticColors" :key="sc.value" :content="sc.label">
+                        <button
+                            type="button"
+                            :aria-label="sc.label"
+                            class="w-5 h-5 rounded-full border-2 transition-transform hover:scale-125"
+                            :class="color === sc.value
+                                ? 'border-foreground scale-125'
+                                : 'border-transparent'"
+                            :style="{ backgroundColor: sc.hex }"
+                            @click="emit('update:color', sc.value)"
+                        />
+                    </Tooltip>
                 </div>
             </section>
 
             <!-- ── Radius ────────────────────────────────────────────── -->
-            <section class="space-y-2">
-                <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{{ t.radius }}</h3>
+            <section class="space-y-1.5">
+                <h3 class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{{ t.radius }}</h3>
                 <div class="grid grid-cols-5 gap-1">
                     <button
                         v-for="opt in radiusOptions"
                         :key="opt.value"
                         type="button"
-                        class="h-9 rounded-md border text-xs font-medium transition-colors"
+                        class="h-7 rounded-md border text-xs font-medium transition-colors"
                         :class="radius === opt.value
                             ? 'border-primary bg-primary/10 text-primary'
                             : 'border-border bg-card hover:bg-muted/50 text-foreground'"
@@ -292,14 +315,14 @@ const activeAccent = computed(() =>
             </section>
 
             <!-- ── Size ──────────────────────────────────────────────── -->
-            <section class="space-y-2">
-                <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{{ t.density }}</h3>
+            <section class="space-y-1.5">
+                <h3 class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{{ t.density }}</h3>
                 <div class="grid grid-cols-3 gap-1">
                     <button
                         v-for="opt in sizeOptions"
                         :key="opt.value"
                         type="button"
-                        class="h-9 rounded-md border text-xs font-medium transition-colors"
+                        class="h-7 rounded-md border text-xs font-medium transition-colors"
                         :class="size === opt.value
                             ? 'border-primary bg-primary/10 text-primary'
                             : 'border-border bg-card hover:bg-muted/50 text-foreground'"
@@ -311,14 +334,14 @@ const activeAccent = computed(() =>
             </section>
 
             <!-- ── Focus halo ────────────────────────────────────────── -->
-            <section class="space-y-2">
-                <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{{ t.focusHalo }}</h3>
+            <section class="space-y-1.5">
+                <h3 class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{{ t.focusHalo }}</h3>
                 <div class="grid grid-cols-3 gap-1">
                     <button
                         v-for="opt in haloOptions"
                         :key="opt.value"
                         type="button"
-                        class="h-9 rounded-md border text-xs font-medium transition-colors"
+                        class="h-7 rounded-md border text-xs font-medium transition-colors"
                         :class="halo === opt.value
                             ? 'border-primary bg-primary/10 text-primary'
                             : 'border-border bg-card hover:bg-muted/50 text-foreground'"
@@ -329,15 +352,45 @@ const activeAccent = computed(() =>
                 </div>
             </section>
 
+            <!-- ── Dark surface preset ─────────────────────── -->
+            <section class="space-y-1.5">
+                <header class="flex items-center justify-between">
+                    <h3 class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                        {{ t.surface }}
+                    </h3>
+                    <span class="text-[10px] font-mono text-muted-foreground capitalize">
+                        {{ darkSurface }}
+                    </span>
+                </header>
+                <div class="grid grid-cols-3 gap-1">
+                    <button
+                        v-for="opt in surfaceOptions"
+                        :key="opt.value"
+                        type="button"
+                        class="flex items-center gap-1.5 h-8 px-2 rounded-md border text-xs font-medium transition-colors text-left"
+                        :class="darkSurface === opt.value
+                            ? 'border-primary bg-primary/10 text-primary'
+                            : 'border-border bg-card hover:bg-muted/50 text-foreground'"
+                        @click="emit('update:darkSurface', opt.value)"
+                    >
+                        <span
+                            class="size-3 rounded-full ring-1 ring-border shrink-0"
+                            :style="{ backgroundColor: opt.sample }"
+                        />
+                        {{ opt.label }}
+                    </button>
+                </div>
+            </section>
+
             <!-- ── Locale ────────────────────────────────────────────── -->
-            <section class="space-y-2">
-                <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{{ t.language }}</h3>
+            <section class="space-y-1.5">
+                <h3 class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{{ t.language }}</h3>
                 <div class="grid grid-cols-2 gap-1">
                     <button
                         v-for="opt in localeOptions"
                         :key="opt.value"
                         type="button"
-                        class="h-9 rounded-md border text-xs font-medium transition-colors"
+                        class="h-7 rounded-md border text-xs font-medium transition-colors"
                         :class="locale === opt.value
                             ? 'border-primary bg-primary/10 text-primary'
                             : 'border-border bg-card hover:bg-muted/50 text-foreground'"

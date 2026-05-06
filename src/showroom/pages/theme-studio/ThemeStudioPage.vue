@@ -121,110 +121,23 @@ const colorPickerVal = ref('#10b981');
 </script>
 
 <template>
-    <div class="flex flex-col gap-6">
-        <header class="flex flex-col gap-2">
+    <div class="flex flex-col gap-8">
+        <header class="flex flex-col gap-3">
             <div class="flex items-center gap-2">
                 <Badge color="primary" variant="subtle">Beta</Badge>
-                <Typography variant="title" size="medium">Theme Studio</Typography>
+                <span class="text-[11px] uppercase tracking-[0.16em] font-bold text-muted-foreground">Live editor</span>
             </div>
-            <Typography variant="body" color="muted">
+            <h1 class="text-5xl sm:text-6xl font-extrabold tracking-tight text-foreground leading-[1.05]">
+                Theme Studio
+            </h1>
+            <p class="text-base sm:text-lg text-muted-foreground max-w-3xl leading-relaxed">
                 Edita el tema en vivo. La preview reacciona al instante. Cuando te guste, copia el snippet
                 CSS o las props del <code class="text-xs bg-muted px-1 py-0.5 rounded">&lt;ModoProvider&gt;</code>.
-            </Typography>
+            </p>
         </header>
 
-        <div class="grid lg:grid-cols-[320px_1fr] gap-6">
-            <!-- Controls -->
-            <Card class="p-5 flex flex-col gap-5 h-fit lg:sticky lg:top-4">
-                <FormField label="Color primario">
-                    <ColorPicker v-model="state.primaryHex" />
-                </FormField>
-
-                <FormField label="Color semántico">
-                    <Segmented
-                        v-model="state.color"
-                        :items="[
-                            { value: 'default', label: 'Default' },
-                            { value: 'primary', label: 'Primary' },
-                            { value: 'success', label: 'Success' },
-                            { value: 'warning', label: 'Warning' },
-                            { value: 'danger',  label: 'Danger'  },
-                        ]"
-                        size="small"
-                        full-width
-                    />
-                </FormField>
-
-                <FormField label="Radius">
-                    <Segmented
-                        v-model="state.radius"
-                        :items="[
-                            { value: 'none',   label: 'None' },
-                            { value: 'small',  label: 'S'    },
-                            { value: 'medium', label: 'M'    },
-                            { value: 'large',  label: 'L'    },
-                            { value: 'full',   label: 'Full' },
-                        ]"
-                        size="small"
-                        full-width
-                    />
-                </FormField>
-
-                <FormField label="Tamaño base">
-                    <Segmented
-                        v-model="state.size"
-                        :items="[
-                            { value: 'small',  label: 'Small'  },
-                            { value: 'medium', label: 'Medium' },
-                            { value: 'large',  label: 'Large'  },
-                        ]"
-                        size="small"
-                        full-width
-                    />
-                </FormField>
-
-                <FormField label="Halo (focus ring)">
-                    <Segmented
-                        v-model="state.halo"
-                        :items="[
-                            { value: 'tinted',  label: 'Tinted'  },
-                            { value: 'neutral', label: 'Neutral' },
-                            { value: 'off',     label: 'Off'     },
-                        ]"
-                        size="small"
-                        full-width
-                    />
-                </FormField>
-
-                <FormField :label="`Radius CSS (${state.radiusRem}rem)`">
-                    <Slider v-model="state.radiusRem" :min="0" :max="2" :step="0.05" />
-                </FormField>
-
-                <div class="border-t border-border pt-4 flex flex-col gap-3">
-                    <Typography variant="caption" color="muted">Presets</Typography>
-                    <div class="grid grid-cols-2 gap-2">
-                        <button
-                            v-for="p in presets"
-                            :key="p.name"
-                            class="flex items-center gap-2 px-2 py-1.5 rounded-md border border-border hover:bg-muted/50 text-left transition-colors"
-                            @click="applyPreset(p)"
-                        >
-                            <span class="w-3 h-3 rounded-full border border-border shrink-0" :style="{ backgroundColor: p.primaryHex }" />
-                            <span class="text-xs truncate">{{ p.name }}</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="border-t border-border pt-4 flex items-center justify-between">
-                    <Button size="small" variant="ghost" @click="reset">Reset</Button>
-                    <span class="text-[11px] text-muted-foreground inline-flex items-center gap-1">
-                        <BookmarkIcon class="w-3 h-3" /> Auto-guardado
-                    </span>
-                </div>
-            </Card>
-
-            <!-- Preview -->
-            <div class="flex flex-col gap-4">
+        <!-- Preview — FIRST, takes the full width -->
+        <div class="flex flex-col gap-4">
                 <ModoProvider
                     scoped
                     :color="state.color"
@@ -333,7 +246,117 @@ const colorPickerVal = ref('#10b981');
                         <pre class="text-xs font-mono bg-muted/40 rounded-md p-3 overflow-x-auto">{{ providerSnippet }}</pre>
                     </Card>
                 </div>
-            </div>
         </div>
+
+        <!-- Controls — BELOW the preview, organized like the header settings popover -->
+        <section class="rounded-2xl border border-border bg-card p-6 flex flex-col gap-6">
+            <div class="flex items-center justify-between flex-wrap gap-3">
+                <div>
+                    <h2 class="text-lg font-bold tracking-tight text-foreground">Controls</h2>
+                    <p class="text-xs text-muted-foreground mt-0.5">
+                        Toca cualquier control y la preview reacciona al instante. Auto-guardado en este navegador.
+                    </p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-[11px] text-muted-foreground inline-flex items-center gap-1">
+                        <BookmarkIcon class="w-3 h-3" /> Auto-guardado
+                    </span>
+                    <Button size="small" variant="ghost" @click="reset">Reset</Button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6">
+                <FormField label="Color primario">
+                    <ColorPicker v-model="state.primaryHex" />
+                </FormField>
+
+                <FormField label="Color semántico">
+                    <Segmented
+                        v-model="state.color"
+                        :items="[
+                            { value: 'default', label: 'Default' },
+                            { value: 'primary', label: 'Primary' },
+                            { value: 'success', label: 'Success' },
+                            { value: 'warning', label: 'Warning' },
+                            { value: 'danger',  label: 'Danger'  },
+                        ]"
+                        size="small"
+                        full-width
+                    />
+                </FormField>
+
+                <FormField label="Tema">
+                    <Segmented
+                        v-model="state.theme"
+                        :items="[
+                            { value: 'light', label: 'Light' },
+                            { value: 'dark',  label: 'Dark'  },
+                        ]"
+                        size="small"
+                        full-width
+                    />
+                </FormField>
+
+                <FormField label="Radius">
+                    <Segmented
+                        v-model="state.radius"
+                        :items="[
+                            { value: 'none',   label: 'None' },
+                            { value: 'small',  label: 'S'    },
+                            { value: 'medium', label: 'M'    },
+                            { value: 'large',  label: 'L'    },
+                            { value: 'full',   label: 'Full' },
+                        ]"
+                        size="small"
+                        full-width
+                    />
+                </FormField>
+
+                <FormField label="Tamaño base">
+                    <Segmented
+                        v-model="state.size"
+                        :items="[
+                            { value: 'small',  label: 'Small'  },
+                            { value: 'medium', label: 'Medium' },
+                            { value: 'large',  label: 'Large'  },
+                        ]"
+                        size="small"
+                        full-width
+                    />
+                </FormField>
+
+                <FormField label="Halo (focus ring)">
+                    <Segmented
+                        v-model="state.halo"
+                        :items="[
+                            { value: 'tinted',  label: 'Tinted'  },
+                            { value: 'neutral', label: 'Neutral' },
+                            { value: 'off',     label: 'Off'     },
+                        ]"
+                        size="small"
+                        full-width
+                    />
+                </FormField>
+
+                <FormField :label="`Radius CSS (${state.radiusRem}rem)`" class="md:col-span-2 lg:col-span-3">
+                    <Slider v-model="state.radiusRem" :min="0" :max="2" :step="0.05" />
+                </FormField>
+            </div>
+
+            <div class="border-t border-border pt-5">
+                <div class="text-[11px] uppercase tracking-[0.14em] font-bold text-foreground/90 mb-3">Presets</div>
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+                    <button
+                        v-for="p in presets"
+                        :key="p.name"
+                        class="flex items-center gap-2 px-3 py-2 rounded-md border border-border hover:bg-muted/50 text-left transition-colors"
+                        @click="applyPreset(p)"
+                    >
+                        <span class="w-3 h-3 rounded-full border border-border shrink-0" :style="{ backgroundColor: p.primaryHex }" />
+                        <span class="text-xs truncate">{{ p.name }}</span>
+                    </button>
+                </div>
+            </div>
+        </section>
     </div>
 </template>

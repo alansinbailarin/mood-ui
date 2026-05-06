@@ -26,6 +26,11 @@ export const showroomNav: NavCategory[] = [
         title: 'Docs',
         entries: [
             {
+                id: 'introduction',
+                label: 'Introduction',
+                page: () => import('./pages/docs/IntroductionPage.vue'),
+            },
+            {
                 id: 'installation',
                 label: 'Installation',
                 page: () => import('./pages/docs/InstallationPage.vue'),
@@ -40,12 +45,22 @@ export const showroomNav: NavCategory[] = [
                 label: 'i18n',
                 page: () => import('./pages/docs/I18nPage.vue'),
             },
+            {
+                id: 'changelog',
+                label: 'Changelog',
+                page: () => import('./pages/docs/ChangelogPage.vue'),
+            },
         ],
     },
     {
         id: 'templates',
         title: 'Templates',
         entries: [
+            {
+                id: 'templates',
+                label: 'Templates',
+                page: () => import('./pages/templates/TemplatesIndexPage.vue'),
+            },
             {
                 id: 'dashboard',
                 label: 'Dashboard',
