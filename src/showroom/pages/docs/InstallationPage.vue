@@ -66,7 +66,7 @@ const email = ref('');
 </script>
 
 <template>
-    <div class="flex flex-col gap-10 max-w-3xl">
+    <div class="flex flex-col gap-10">
         <!-- Header -->
         <header class="flex flex-col gap-3">
             <Typography variant="overline" size="medium" color="muted">

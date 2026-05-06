@@ -101,7 +101,7 @@ const { go } = useShowroomRouter();
 </script>
 
 <template>
-    <div class="flex flex-col gap-10 max-w-3xl pb-12">
+    <div class="flex flex-col gap-10 pb-12">
         <header v-reveal class="flex flex-col gap-3">
             <Typography variant="overline" size="medium" color="muted">
                 Documentación
