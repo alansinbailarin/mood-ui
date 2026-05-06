@@ -147,7 +147,7 @@ const teamUsers = [
                         class="inline-flex items-center gap-2 self-start rounded-full border border-border bg-card/60 backdrop-blur px-3 py-1 text-xs text-muted-foreground hover:border-primary/60 hover:text-foreground transition-colors"
                     >
                         <span class="size-1.5 rounded-full bg-success animate-pulse"></span>
-                        v0.3.1 · Spanish locale + useLocale()
+                        v0.5.2 · Latest release
                         <ArrowTopRightOnSquareIcon class="size-3.5" />
                     </a>
 
