@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { TagIcon, SparklesIcon } from '@heroicons/vue/24/outline';
+import { TagIcon, BookOpenIcon, PaintBrushIcon } from '@heroicons/vue/24/outline';
 
 import Typography from '../../../components/data-display/Typography.vue';
 import Badge from '../../../components/feedback/Badge.vue';
@@ -9,8 +9,10 @@ import Stack from '../../../components/layout/Stack.vue';
 
 import { useShowroomT } from '../../composables/useShowroomLocale';
 import { vReveal } from '../../composables/useScrollReveal';
+import { useShowroomRouter } from '../../composables/useShowroomRouter';
 
 const t = useShowroomT();
+const { go } = useShowroomRouter();
 
 interface Release {
     version: string;
@@ -146,14 +148,13 @@ const items = computed(() => releases.map((r) => ({
 <template>
     <article class="flex flex-col gap-12 pb-12">
         <header v-reveal class="flex flex-col gap-3">
-            <Badge color="primary" variant="subtle" class="self-start">
-                <SparklesIcon class="size-3.5 mr-1" />
-                {{ t.changelog }}
-            </Badge>
-            <Typography variant="display" size="medium" as="h1" weight="extrabold">
+            <Typography variant="overline" size="medium" color="muted">
+                Documentación
+            </Typography>
+            <Typography variant="display" size="medium" as="h1" weight="medium" class="tracking-tight leading-[1.05]">
                 {{ t.changelog }}
             </Typography>
-            <Typography variant="body" size="large" color="muted" weight="light">
+            <Typography variant="body" size="medium" color="muted" weight="light">
                 {{ t.lang === 'es'
                     ? 'Cada release listado de más reciente a más antiguo. Seguimos SemVer.'
                     : 'Every release listed newest first. We follow SemVer.' }}
@@ -163,7 +164,7 @@ const items = computed(() => releases.map((r) => ({
         <ol class="relative flex flex-col gap-6 border-l border-border pl-6 ml-2">
             <li v-for="r in items" :key="r.version" v-reveal="'left'" class="relative">
                 <span
-                    class="absolute -left-[34px] top-2 grid place-items-center size-7 rounded-full bg-primary/10 text-primary ring-4 ring-background"
+                    class="absolute -left-[34px] top-2 grid place-items-center size-7 rounded-full bg-card ring-1 ring-primary/40 text-primary"
                 >
                     <TagIcon class="size-3.5" />
                 </span>
@@ -184,5 +185,48 @@ const items = computed(() => releases.map((r) => ({
                 </Card>
             </li>
         </ol>
+
+        <!-- Next steps -->
+        <section v-reveal class="flex flex-col gap-4">
+            <Typography variant="heading" size="large" weight="medium">
+                Próximos pasos
+            </Typography>
+            <div class="grid sm:grid-cols-2 gap-4">
+                <Card
+                    variant="outlined"
+                    padding="large"
+                    class="relative overflow-hidden cursor-pointer hover:border-primary/50 hover:-translate-y-0.5 transition-all duration-300 group"
+                    @click="go('introduction')"
+                >
+                    <div class="pointer-events-none absolute inset-0 opacity-[0.065] text-primary [background-image:linear-gradient(to_right,currentColor_1px,transparent_1px),linear-gradient(to_bottom,currentColor_1px,transparent_1px)] [background-size:20px_20px]" />
+                    <Stack direction="column" spacing="small" class="relative">
+                        <div class="size-10 rounded-xl bg-primary/10 text-primary grid place-items-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                            <BookOpenIcon class="size-5" />
+                        </div>
+                        <Typography variant="title" size="medium" weight="medium" as="h3">Introducción</Typography>
+                        <Typography variant="body" size="small" color="muted" weight="light">
+                            Fundamentos, arquitectura y por qué mood-ui.
+                        </Typography>
+                    </Stack>
+                </Card>
+                <Card
+                    variant="outlined"
+                    padding="large"
+                    class="relative overflow-hidden cursor-pointer hover:border-success/40 hover:-translate-y-0.5 transition-all duration-300 group"
+                    @click="go('theming')"
+                >
+                    <div class="pointer-events-none absolute inset-0 opacity-[0.065] text-success [background-image:radial-gradient(circle,currentColor_1.5px,transparent_1.5px)] [background-size:18px_18px]" />
+                    <Stack direction="column" spacing="small" class="relative">
+                        <div class="size-10 rounded-xl bg-success/10 text-success grid place-items-center group-hover:bg-success group-hover:text-white transition-colors">
+                            <PaintBrushIcon class="size-5" />
+                        </div>
+                        <Typography variant="title" size="medium" weight="medium" as="h3">Theming</Typography>
+                        <Typography variant="body" size="small" color="muted" weight="light">
+                            Tokens, palettes, surfaces y dark mode.
+                        </Typography>
+                    </Stack>
+                </Card>
+            </div>
+        </section>
     </article>
 </template>
