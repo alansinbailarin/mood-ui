@@ -13,6 +13,14 @@ const pgSize     = ref<'xs' | 'small' | 'medium' | 'large'>('medium');
 const pgLoading  = ref(false);
 const pgDisabled = ref(false);
 
+function resetPlayground() {
+    pgVariant.value  = 'normal';
+    pgColor.value    = 'primary';
+    pgSize.value     = 'medium';
+    pgLoading.value  = false;
+    pgDisabled.value = false;
+}
+
 const colorDots = [
     { value: 'default'  as const, bg: '#64748b',        label: 'Default'  },
     { value: 'primary'  as const, bg: 'var(--primary)', label: 'Primary'  },
@@ -96,7 +104,7 @@ const slotsList: SlotDoc[] = [
     >
         <!-- ── Overview ────────────────────────────────────────────────────── -->
         <template #overview>
-            <ComponentPreview :code="overviewCode" min-height="220px">
+            <ComponentPreview :code="overviewCode" min-height="220px" @reset="resetPlayground">
                 <template #controls>
                     <!-- Variant -->
                     <div class="flex items-center gap-1.5">

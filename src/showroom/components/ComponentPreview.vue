@@ -2,7 +2,10 @@
 import { ref } from 'vue';
 import CodePreview from './CodePreview.vue';
 import Typography from '../../components/data-display/Typography.vue';
+import { ArrowPathIcon } from '@heroicons/vue/24/outline';
 import type { BundledLanguage } from '../composables/useHighlighter';
+
+const emit = defineEmits<{ reset: [] }>();
 
 withDefaults(defineProps<{
     /** Reactive code string to show in the Code tab. */
@@ -42,8 +45,18 @@ const activeTab = ref<'preview' | 'code'>('preview');
                 <!-- Controls (left) -->
                 <slot name="controls" />
 
-                <!-- Preview / Code tabs (right) -->
-                <div class="ml-auto flex items-center rounded-lg border border-border bg-muted/30 p-0.5 gap-0.5 shrink-0">
+                <!-- Reset + Preview/Code tabs (right) -->
+                <div class="ml-auto flex items-center gap-2 shrink-0">
+                    <button
+                        v-if="$slots.controls"
+                        type="button"
+                        title="Resetear"
+                        class="size-7 flex items-center justify-center rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
+                        @click="emit('reset')"
+                    >
+                        <ArrowPathIcon class="size-3.5" />
+                    </button>
+                    <div class="flex items-center rounded-lg border border-border bg-muted/30 p-0.5 gap-0.5">
                     <button
                         type="button"
                         class="px-2.5 py-1 rounded-md text-xs font-medium transition-all"
@@ -64,6 +77,7 @@ const activeTab = ref<'preview' | 'code'>('preview');
                     >
                         Code
                     </button>
+                    </div>
                 </div>
             </div>
 
