@@ -12,7 +12,7 @@
         "label": "Email",
         "helperText": "Lo usaremos para confirmar tu cuenta.",
         "errorText": "Este campo es obligatorio",
-        "placeholder": "tu@email.com"
+        "placeholder": "tu\\@email.com"
     },
     "examples": {
         "input": {
@@ -50,7 +50,7 @@
         "as": "Tag HTML del wrapper raíz."
     },
     "slots": {
-        "default": "Control de formulario. Recibe { id, describedBy, invalid, disabled, required, color } como props del slot.",
+        "default": "Control de formulario. Recibe \\{ id, describedBy, invalid, disabled, required, color \\} como props del slot.",
         "label": "Reemplaza el contenido del label cuando se necesita HTML personalizado.",
         "helper": "Reemplaza el helperText con contenido enriquecido."
     }

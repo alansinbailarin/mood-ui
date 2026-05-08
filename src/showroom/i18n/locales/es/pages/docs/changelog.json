@@ -1,58 +1,69 @@
 {
-    "kicker": "Documentación",
-    "intro": "Cada release listado de más reciente a más antiguo. Seguimos SemVer.",
+  "kicker": "Documentación",
+  "intro": "Cada release listado de más reciente a más antiguo. Seguimos SemVer.",
 
-    "releases": {
-        "v0.5.2": {
-            "title": "Pulido de showroom + a11y",
-            "items": [
-                "Nuevo selector de surface preset en la barra de configuración.",
-                "Search palette ahora usa el componente SearchInput nativo.",
-                "View transitions entre páginas (Chromium / Safari TP).",
-                "Headline del welcome más liviano y con scroll-reveal.",
-                "Botón \"Star on GitHub\" en el header con traducción ES/EN."
-            ]
-        },
-        "v0.5.0": {
-            "title": "Plantillas + theme studio",
-            "items": [
-                "Plantillas: Dashboard, Auth, Pricing y Settings.",
-                "Theme Studio interactivo con preview en vivo.",
-                "Nuevo componente Scheduler con drag & drop.",
-                "Soporte para 6 dark surface presets."
-            ]
-        },
-        "v0.4.0": {
-            "title": "Calendar suite + Table",
-            "items": [
-                "Calendar, MonthView, WeekView, DayView, AgendaView.",
-                "Table: virtualización, multi-sort, server-side, tree rows.",
-                "DateRangePicker y DateTimePicker."
-            ]
-        },
-        "v0.3.0": {
-            "title": "Dark surfaces + i18n",
-            "items": [
-                "Dark surface presets (navy, zinc, charcoal, midnight, forest).",
-                "i18n built-in con dicts ES/EN.",
-                "useToast / useConfirm composables."
-            ]
-        },
-        "v0.1.0": {
-            "title": "Primer release público",
-            "items": [
-                "40+ componentes base.",
-                "ModoProvider con theming reactivo.",
-                "Tailwind v4 + design tokens."
-            ]
-        }
+  "releases": {
+    "v0.6.0": {
+      "title": "Overhaul de docs + i18n completo",
+      "items": [
+        "Sistema ComponentDoc + ComponentPreview con ModoProvider aislado.",
+        "Migradas ~50 páginas de componentes al sistema ComponentDoc.",
+        "Traducciones ES/EN completas para todas las páginas de componentes.",
+        "TOC scroll-spy para navegación.",
+        "Botón de reset en toolbar de ComponentPreview.",
+        "Sistema de diseño unificado en todas las páginas de docs."
+      ]
     },
-
-    "nextSteps": "Próximos pasos",
-    "next": {
-        "introductionTitle": "Introducción",
-        "introductionDesc":  "Fundamentos, arquitectura y por qué mood-ui.",
-        "themingTitle":      "Theming",
-        "themingDesc":       "Tokens, palettes, surfaces y dark mode."
+    "v0.5.2": {
+      "title": "Pulido de showroom + a11y",
+      "items": [
+        "Nuevo selector de surface preset en la barra de configuración.",
+        "Search palette ahora usa el componente SearchInput nativo.",
+        "View transitions entre páginas (Chromium / Safari TP).",
+        "Headline del welcome más liviano y con scroll-reveal.",
+        "Botón \"Star on GitHub\" en el header con traducción ES/EN."
+      ]
+    },
+    "v0.5.0": {
+      "title": "Plantillas + theme studio",
+      "items": [
+        "Plantillas: Dashboard, Auth, Pricing y Settings.",
+        "Theme Studio interactivo con preview en vivo.",
+        "Nuevo componente Scheduler con drag & drop.",
+        "Soporte para 6 dark surface presets."
+      ]
+    },
+    "v0.4.0": {
+      "title": "Calendar suite + Table",
+      "items": [
+        "Calendar, MonthView, WeekView, DayView, AgendaView.",
+        "Table: virtualización, multi-sort, server-side, tree rows.",
+        "DateRangePicker y DateTimePicker."
+      ]
+    },
+    "v0.3.0": {
+      "title": "Dark surfaces + i18n",
+      "items": [
+        "Dark surface presets (navy, zinc, charcoal, midnight, forest).",
+        "i18n built-in con dicts ES/EN.",
+        "useToast / useConfirm composables."
+      ]
+    },
+    "v0.1.0": {
+      "title": "Primer release público",
+      "items": [
+        "40+ componentes base.",
+        "ModoProvider con theming reactivo.",
+        "Tailwind v4 + design tokens."
+      ]
     }
+  },
+
+  "nextSteps": "Próximos pasos",
+  "next": {
+    "introductionTitle": "Introducción",
+    "introductionDesc": "Fundamentos, arquitectura y por qué mood-ui.",
+    "themingTitle": "Theming",
+    "themingDesc": "Tokens, palettes, surfaces y dark mode."
+  }
 }

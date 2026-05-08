@@ -1,50 +1,50 @@
 {
-    "title": "Segmented",
-    "description": "Selector de un único valor en formato pill group, con indicador deslizante. Ideal para alternar vistas o filtros breves.",
+  "title": "Segmented",
+  "description": "Selector de un único valor en formato pill group, con indicador deslizante. Ideal para alternar vistas o filtros breves.",
 
-    "controls": {
-        "color":      "Color",
-        "size":       "Size",
-        "fullWidth":  "Full width",
-        "disabled":   "Disabled"
+  "controls": {
+    "color": "Color",
+    "size": "Size",
+    "fullWidth": "Full width",
+    "disabled": "Disabled"
+  },
+
+  "examples": {
+    "basic": {
+      "title": "Uso básico",
+      "desc": "Tres segmentos sólo con label."
     },
-
-    "examples": {
-        "basic": {
-            "title": "Uso básico",
-            "desc":  "Tres segmentos sólo con label."
-        },
-        "icons": {
-            "title": "Con iconos",
-            "desc":  "Cada segmento puede tener un icono opcional a la izquierda del label."
-        },
-        "colors": {
-            "title": "Colores",
-            "desc":  "Variantes semánticas aplicadas al texto e indicador del segmento activo."
-        },
-        "sizes": {
-            "title": "Tamaños",
-            "desc":  "Tres alturas para distintas densidades."
-        },
-        "fullWidth": {
-            "title": "Full width",
-            "desc":  "Con full-width el track ocupa el contenedor y los segmentos se reparten el ancho."
-        }
+    "icons": {
+      "title": "Con iconos",
+      "desc": "Cada segmento puede tener un icono opcional a la izquierda del label."
     },
-
-    "props": {
-        "items":      "Lista de segmentos { value, label?, icon?, disabled?, ariaLabel? }.",
-        "modelValue": "Valor seleccionado (v-model).",
-        "color":      "Color semántico aplicado al segmento activo.",
-        "size":       "Altura y tipografía de los segmentos.",
-        "radius":     "Radio de las esquinas del track y los segmentos.",
-        "fullWidth":  "Estira el control para ocupar todo el contenedor; los segmentos se reparten el ancho.",
-        "disabled":   "Deshabilita el control completo.",
-        "ariaLabel":  "Nombre accesible para el radiogroup."
+    "colors": {
+      "title": "Colores",
+      "desc": "Variantes semánticas aplicadas al texto e indicador del segmento activo."
     },
-
-    "emits": {
-        "updateModelValue": "Emitido al cambiar el segmento activo (sincroniza v-model).",
-        "change":           "Emitido tras cada selección confirmada por el usuario."
+    "sizes": {
+      "title": "Tamaños",
+      "desc": "Tres alturas para distintas densidades."
+    },
+    "fullWidth": {
+      "title": "Full width",
+      "desc": "Con full-width el track ocupa el contenedor y los segmentos se reparten el ancho."
     }
+  },
+
+  "props": {
+    "items": "Lista de segmentos \\{ value, label?, icon?, disabled?, ariaLabel? \\}.",
+    "modelValue": "Valor seleccionado (v-model).",
+    "color": "Color semántico aplicado al segmento activo.",
+    "size": "Altura y tipografía de los segmentos.",
+    "radius": "Radio de las esquinas del track y los segmentos.",
+    "fullWidth": "Estira el control para ocupar todo el contenedor; los segmentos se reparten el ancho.",
+    "disabled": "Deshabilita el control completo.",
+    "ariaLabel": "Nombre accesible para el radiogroup."
+  },
+
+  "emits": {
+    "updateModelValue": "Emitido al cambiar el segmento activo (sincroniza v-model).",
+    "change": "Emitido tras cada selección confirmada por el usuario."
+  }
 }

@@ -1,27 +1,21 @@
 {
-    "pages": {
-        "docs": {
-            "i18n": {
-                "overline": "Documentation",
-                "title": "i18n",
-                "subtitle": "mood-ui includes full internationalization support with Spanish and English built-in. Change language globally, override per component or create full locales for other languages.",
-                "presetTitle": "Using a locale preset",
-                "presetDesc": "The simplest way: import {code} and pass the preset you want to the provider.",
-                "dynamicTitle": "Dynamic switching with useLocale()",
-                "dynamicDesc": "{code} is a reactive singleton. Any call to {set} updates the language globally across the entire app.",
-                "dynamicTip": "Tip: The singleton is module-level, so {code} in any component returns the same state. You don't need Pinia or stores.",
-                "partialTitle": "Partial override",
-                "partialDesc": "{code} lets you override only the strings you need. The rest are inherited from the default (English).",
-                "customTitle": "Creating a full locale (another language)",
-                "customDesc": "Use {code} to combine your locale with the default. Ensures all strings have an English fallback.",
-                "namespacesTitle": "Available namespaces",
-                "namespacesDesc": "The {code} type is organized into namespaces, one per component or category:",
-                "nextSteps": "Next steps",
-                "themingCard": "Customize the theme",
-                "themingCardDesc": "Tokens, palettes, surfaces and dark mode presets.",
-                "introCard": "Back to Introduction",
-                "introCardDesc": "Fundamentals and architecture of mood-ui."
-            }
-        }
-    }
+  "overline": "Documentation",
+  "title": "i18n",
+  "subtitle": "mood-ui includes full internationalization support with Spanish and English built-in. Change language globally, override per component or create full locales for other languages.",
+  "presetTitle": "Using a locale preset",
+  "presetDesc": "The simplest way: import {code} and pass the preset you want to the provider.",
+  "dynamicTitle": "Dynamic switching with useLocale()",
+  "dynamicDesc": "{code} is a reactive singleton. Any call to {set} updates the language globally across the entire app.",
+  "dynamicTip": "Tip: The singleton is module-level, so {code} in any component returns the same state. You don't need Pinia or stores.",
+  "partialTitle": "Partial override",
+  "partialDesc": "{code} lets you override only the strings you need. The rest are inherited from the default (English).",
+  "customTitle": "Creating a full locale (another language)",
+  "customDesc": "Use {code} to combine your locale with the default. Ensures all strings have an English fallback.",
+  "namespacesTitle": "Available namespaces",
+  "namespacesDesc": "The {code} type is organized into namespaces, one per component or category:",
+  "nextSteps": "Next steps",
+  "themingCard": "Customize the theme",
+  "themingCardDesc": "Tokens, palettes, surfaces and dark mode presets.",
+  "introCard": "Back to Introduction",
+  "introCardDesc": "Fundamentals and architecture of mood-ui."
 }

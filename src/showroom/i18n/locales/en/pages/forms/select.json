@@ -51,7 +51,7 @@
 
     "props": {
         "modelValue":  "Selected value (v-model). null when nothing is selected.",
-        "options":     "Option list { value, label, description?, icon?, disabled?, group? }.",
+        "options":     "Option list \\{ value, label, description?, icon?, disabled?, group? \\}.",
         "label":       "Visible label above the field.",
         "placeholder": "Text shown when there is no selected value.",
         "helperText":  "Helper text below the field.",

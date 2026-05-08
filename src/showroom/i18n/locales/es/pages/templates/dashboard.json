@@ -1,25 +1,19 @@
 {
-    "pages": {
-        "templates": {
-            "dashboard": {
-                "searchPlaceholder": "Buscar pedidos, usuarios…",
-                "notificationsLabel": "Notificaciones",
-                "greeting": "Buenas tardes, Alan",
-                "greetingSubtitle": "Aquí tienes un resumen de tu negocio.",
-                "statUsersDesc": "nuevos: 312",
-                "recentOrders": "Pedidos recientes",
-                "viewAll": "Ver todos",
-                "colId": "ID",
-                "colClient": "Cliente",
-                "colPlan": "Plan",
-                "colStatus": "Estado",
-                "colAmount": "Monto",
-                "activity": "Actividad",
-                "activityDeploy": "Nuevo deploy en producción",
-                "activityPayments": "12 pagos procesados",
-                "activityMigration": "Migración DB completada",
-                "activityNewUser": "Nuevo usuario: lucia@…"
-            }
-        }
-    }
+  "searchPlaceholder": "Buscar pedidos, usuarios…",
+  "notificationsLabel": "Notificaciones",
+  "greeting": "Buenas tardes, Alan",
+  "greetingSubtitle": "Aquí tienes un resumen de tu negocio.",
+  "statUsersDesc": "nuevos: 312",
+  "recentOrders": "Pedidos recientes",
+  "viewAll": "Ver todos",
+  "colId": "ID",
+  "colClient": "Cliente",
+  "colPlan": "Plan",
+  "colStatus": "Estado",
+  "colAmount": "Monto",
+  "activity": "Actividad",
+  "activityDeploy": "Nuevo deploy en producción",
+  "activityPayments": "12 pagos procesados",
+  "activityMigration": "Migración DB completada",
+  "activityNewUser": "Nuevo usuario: lucia\\@…"
 }

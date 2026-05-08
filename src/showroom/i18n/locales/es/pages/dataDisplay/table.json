@@ -1,0 +1,53 @@
+{
+  "title": "Table",
+  "description": "Tabla potente con sorting, paginación, selección, sticky header, filas expandibles y soporte de árbol. Las columnas se definen con key + accessor.",
+  "controls": {
+    "size": "Tamaño",
+    "density": "Densidad",
+    "bordered": "Bordered",
+    "select": "Select",
+    "striped": "Striped",
+    "hover": "Hover",
+    "stickyHeader": "Sticky header"
+  },
+  "props": {
+    "data": "Filas a renderizar.",
+    "columns": "Definición de columnas (key, header, accessor, sortable, align…).",
+    "rowKey": "Identificador único de fila usado por v-for y selección.",
+    "size": "Tamaño de fuente y altura base de las filas.",
+    "density": "Padding vertical aplicado a las celdas.",
+    "striped": "Aplica un fondo alterno a las filas pares.",
+    "hover": "Resalta la fila bajo el cursor.",
+    "bordered": "Configura los bordes internos de la tabla.",
+    "stickyHeader": "Mantiene la cabecera visible al hacer scroll vertical.",
+    "selectable": "Activa selección de filas con checkboxes.",
+    "pageSize": "Activa paginación cliente con el tamaño indicado."
+  },
+  "emits": {
+    "updateSort": "Emitido al cambiar el orden de las columnas.",
+    "updateSelected": "Emitido al cambiar la selección de filas.",
+    "updatePagination": "Emitido al cambiar de página o page size."
+  },
+  "examples": {
+    "basic": {
+      "title": "Básica",
+      "desc": "Configuración por defecto con cuatro columnas y tipografía estándar."
+    },
+    "striped": {
+      "title": "Striped + bordered",
+      "desc": "Filas alternas y bordes completos para mejor lectura en tablas densas."
+    },
+    "sort": {
+      "title": "Con orden",
+      "desc": "Marca cualquier columna como sortable para activar el orden ascendente / descendente."
+    },
+    "compact": {
+      "title": "Densidad compacta",
+      "desc": "Reduce el padding vertical para mostrar más filas en menos espacio."
+    },
+    "stickyHeader": {
+      "title": "Sticky header",
+      "desc": "La cabecera permanece fija mientras se hace scroll dentro del contenedor."
+    }
+  }
+}

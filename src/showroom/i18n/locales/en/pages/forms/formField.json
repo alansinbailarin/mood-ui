@@ -12,7 +12,7 @@
         "label": "Email",
         "helperText": "We will use this to confirm your account.",
         "errorText": "This field is required",
-        "placeholder": "you@email.com"
+        "placeholder": "you\\@email.com"
     },
     "examples": {
         "input": {
@@ -50,7 +50,7 @@
         "as": "HTML tag of the root wrapper."
     },
     "slots": {
-        "default": "Form control. Receives { id, describedBy, invalid, disabled, required, color } as slot props.",
+        "default": "Form control. Receives \\{ id, describedBy, invalid, disabled, required, color \\} as slot props.",
         "label": "Replaces the label content when custom HTML is needed.",
         "helper": "Replaces the helperText with rich content."
     }

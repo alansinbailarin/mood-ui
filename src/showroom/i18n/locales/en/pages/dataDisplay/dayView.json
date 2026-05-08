@@ -1,0 +1,58 @@
+{
+  "title": "DayView",
+  "description": "Single-day view with an hourly grid. Ideal for detailed agendas, time blocks and operational planning.",
+  "controls": {
+    "format": "Format",
+    "allDayRow": "All-day row",
+    "borders": "Borders",
+    "currentTime": "Current time"
+  },
+  "props": {
+    "modelValue": "Visible day (v-model).",
+    "events": "Events to render in the hourly grid.",
+    "locale": "BCP-47 locale for headers and formats.",
+    "color": "Semantic color applied to accents.",
+    "format": "Time format for the hour column.",
+    "hourStart": "First visible hour (0-23).",
+    "hourEnd": "Last visible hour (1-24).",
+    "slotMinutes": "Granularity of time slots.",
+    "slotHeight": "Height in px of each time slot.",
+    "showAllDayRow": "Shows the top row for all-day events.",
+    "showHeader": "Shows the header with navigation.",
+    "showCurrentTime": "Draws the current-time line.",
+    "showNowPill": "Shows a pill with the current time.",
+    "businessHours": "Highlights the business hours range.",
+    "disabledTimeRanges": "Non-selectable time ranges.",
+    "bordered": "Draws a border around the grid.",
+    "draggableEvents": "Allows dragging events.",
+    "resizableEvents": "Allows resizing events.",
+    "allowRangeSelection": "Allows selecting a range by dragging over empty slots."
+  },
+  "emits": {
+    "updateModelValue": "Emitted when the visible day changes.",
+    "eventClick": "Click on an event.",
+    "slotClick": "Click on an empty slot.",
+    "createEvent": "Request to create an event.",
+    "eventDrop": "Event dragged to a new position.",
+    "eventResize": "Event resized.",
+    "selectRange": "Range selected by dragging."
+  },
+  "examples": {
+    "basic": {
+      "title": "Basic",
+      "desc": "Default day with no events."
+    },
+    "events": {
+      "title": "With events",
+      "desc": "Timed events rendered in the hourly grid."
+    },
+    "format12h": {
+      "title": "12-hour format",
+      "desc": "Hour column in AM/PM format."
+    },
+    "businessHours": {
+      "title": "Business hours",
+      "desc": "Highlights business hours and restricts the visible time range."
+    }
+  }
+}

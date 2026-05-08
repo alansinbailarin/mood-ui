@@ -1,83 +1,83 @@
 {
-    "title": "Select",
-    "description": "Selector accesible de un único valor con panel desplegable. Soporta búsqueda, agrupación, iconos y los modos visuales habituales.",
+  "title": "Select",
+  "description": "Selector accesible de un único valor con panel desplegable. Soporta búsqueda, agrupación, iconos y los modos visuales habituales.",
 
-    "controls": {
-        "variant":    "Variant",
-        "color":      "Color",
-        "size":       "Size",
-        "clearable":  "Clearable",
-        "searchable": "Searchable",
-        "disabled":   "Disabled"
+  "controls": {
+    "variant": "Variant",
+    "color": "Color",
+    "size": "Size",
+    "clearable": "Clearable",
+    "searchable": "Searchable",
+    "disabled": "Disabled"
+  },
+
+  "playground": {
+    "label": "País"
+  },
+
+  "examples": {
+    "basic": {
+      "title": "Uso básico",
+      "desc": "Selector simple con opciones estáticas y un placeholder.",
+      "label": "País",
+      "placeholder": "Elige un país"
     },
-
-    "playground": {
-        "label": "País"
+    "searchable": {
+      "title": "Buscable",
+      "desc": "Activa searchable para mostrar un buscador dentro del panel.",
+      "label": "Idioma",
+      "placeholder": "Buscar idioma…"
     },
-
-    "examples": {
-        "basic": {
-            "title":       "Uso básico",
-            "desc":        "Selector simple con opciones estáticas y un placeholder.",
-            "label":       "País",
-            "placeholder": "Elige un país"
-        },
-        "searchable": {
-            "title":       "Buscable",
-            "desc":        "Activa searchable para mostrar un buscador dentro del panel.",
-            "label":       "Idioma",
-            "placeholder": "Buscar idioma…"
-        },
-        "grouped": {
-            "title": "Opciones agrupadas",
-            "desc":  "Las opciones con la misma propiedad group se renderizan bajo un encabezado.",
-            "label": "Idioma"
-        },
-        "sizes": {
-            "title": "Tamaños",
-            "desc":  "Tres tamaños para encajar con la densidad del formulario."
-        },
-        "states": {
-            "title":          "Estados",
-            "desc":           "Loading, disabled y error con feedback inline.",
-            "loadingLabel":   "Loading",
-            "loadingPh":      "Cargando…",
-            "disabledLabel":  "Disabled",
-            "disabledPh":     "No editable",
-            "errorLabel":     "Error",
-            "errorText":      "Selecciona un país"
-        }
+    "grouped": {
+      "title": "Opciones agrupadas",
+      "desc": "Las opciones con la misma propiedad group se renderizan bajo un encabezado.",
+      "label": "Idioma"
     },
-
-    "props": {
-        "modelValue":  "Valor seleccionado (v-model). null cuando no hay selección.",
-        "options":     "Lista de opciones { value, label, description?, icon?, disabled?, group? }.",
-        "label":       "Etiqueta visible sobre el campo.",
-        "placeholder": "Texto mostrado cuando no hay valor seleccionado.",
-        "helperText":  "Texto de ayuda bajo el campo.",
-        "errorText":   "Mensaje de error que reemplaza al helperText.",
-        "variant":     "Estilo visual del trigger.",
-        "color":       "Color semántico del foco y acento.",
-        "size":        "Altura y tipografía del trigger.",
-        "radius":      "Radio de esquinas del trigger y panel.",
-        "clearable":   "Muestra un botón X para limpiar la selección.",
-        "searchable":  "Muestra un input de búsqueda dentro del panel.",
-        "disabled":    "Deshabilita el control.",
-        "readonly":    "Modo solo lectura — bloquea cambios.",
-        "required":    "Marca el campo como requerido.",
-        "loading":     "Muestra un spinner en lugar del chevron.",
-        "fullWidth":   "Aplica w-full al control raíz.",
-        "iconLeft":    "Icono renderizado a la izquierda del trigger.",
-        "panelWidth":  "Calcula el ancho del panel según el trigger o su contenido.",
-        "name":        "Atributo name HTML para envío en formularios.",
-        "id":          "id del control. Se autogenera si se omite.",
-        "ariaLabel":   "Nombre accesible cuando no hay label visible."
+    "sizes": {
+      "title": "Tamaños",
+      "desc": "Tres tamaños para encajar con la densidad del formulario."
     },
-
-    "emits": {
-        "updateModelValue": "Emitido al cambiar el valor (sincroniza v-model).",
-        "change":           "Emitido tras cada selección confirmada por el usuario.",
-        "open":             "Emitido cuando el panel se abre.",
-        "close":            "Emitido cuando el panel se cierra."
+    "states": {
+      "title": "Estados",
+      "desc": "Loading, disabled y error con feedback inline.",
+      "loadingLabel": "Loading",
+      "loadingPh": "Cargando…",
+      "disabledLabel": "Disabled",
+      "disabledPh": "No editable",
+      "errorLabel": "Error",
+      "errorText": "Selecciona un país"
     }
+  },
+
+  "props": {
+    "modelValue": "Valor seleccionado (v-model). null cuando no hay selección.",
+    "options": "Lista de opciones \\{ value, label, description?, icon?, disabled?, group? \\}.",
+    "label": "Etiqueta visible sobre el campo.",
+    "placeholder": "Texto mostrado cuando no hay valor seleccionado.",
+    "helperText": "Texto de ayuda bajo el campo.",
+    "errorText": "Mensaje de error que reemplaza al helperText.",
+    "variant": "Estilo visual del trigger.",
+    "color": "Color semántico del foco y acento.",
+    "size": "Altura y tipografía del trigger.",
+    "radius": "Radio de esquinas del trigger y panel.",
+    "clearable": "Muestra un botón X para limpiar la selección.",
+    "searchable": "Muestra un input de búsqueda dentro del panel.",
+    "disabled": "Deshabilita el control.",
+    "readonly": "Modo solo lectura — bloquea cambios.",
+    "required": "Marca el campo como requerido.",
+    "loading": "Muestra un spinner en lugar del chevron.",
+    "fullWidth": "Aplica w-full al control raíz.",
+    "iconLeft": "Icono renderizado a la izquierda del trigger.",
+    "panelWidth": "Calcula el ancho del panel según el trigger o su contenido.",
+    "name": "Atributo name HTML para envío en formularios.",
+    "id": "id del control. Se autogenera si se omite.",
+    "ariaLabel": "Nombre accesible cuando no hay label visible."
+  },
+
+  "emits": {
+    "updateModelValue": "Emitido al cambiar el valor (sincroniza v-model).",
+    "change": "Emitido tras cada selección confirmada por el usuario.",
+    "open": "Emitido cuando el panel se abre.",
+    "close": "Emitido cuando el panel se cierra."
+  }
 }

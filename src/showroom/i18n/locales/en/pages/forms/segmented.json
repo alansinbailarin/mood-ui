@@ -1,50 +1,50 @@
 {
-    "title": "Segmented",
-    "description": "Single-value pill-group selector with a sliding indicator. Ideal for switching views or short filters.",
+  "title": "Segmented",
+  "description": "Single-value pill-group selector with a sliding indicator. Ideal for switching views or short filters.",
 
-    "controls": {
-        "color":     "Color",
-        "size":      "Size",
-        "fullWidth": "Full width",
-        "disabled":  "Disabled"
+  "controls": {
+    "color": "Color",
+    "size": "Size",
+    "fullWidth": "Full width",
+    "disabled": "Disabled"
+  },
+
+  "examples": {
+    "basic": {
+      "title": "Basic usage",
+      "desc": "Three segments with labels only."
     },
-
-    "examples": {
-        "basic": {
-            "title": "Basic usage",
-            "desc":  "Three segments with labels only."
-        },
-        "icons": {
-            "title": "With icons",
-            "desc":  "Each segment can have an optional icon to the left of the label."
-        },
-        "colors": {
-            "title": "Colors",
-            "desc":  "Semantic variants applied to the text and indicator of the active segment."
-        },
-        "sizes": {
-            "title": "Sizes",
-            "desc":  "Three heights for different UI densities."
-        },
-        "fullWidth": {
-            "title": "Full width",
-            "desc":  "With full-width the track fills the container and segments share the width equally."
-        }
+    "icons": {
+      "title": "With icons",
+      "desc": "Each segment can have an optional icon to the left of the label."
     },
-
-    "props": {
-        "items":      "Segment list { value, label?, icon?, disabled?, ariaLabel? }.",
-        "modelValue": "Selected value (v-model).",
-        "color":      "Semantic color applied to the active segment.",
-        "size":       "Segment height and typography.",
-        "radius":     "Corner radius of the track and segments.",
-        "fullWidth":  "Stretches the control to fill the container; segments share the width.",
-        "disabled":   "Disables the entire control.",
-        "ariaLabel":  "Accessible name for the radiogroup."
+    "colors": {
+      "title": "Colors",
+      "desc": "Semantic variants applied to the text and indicator of the active segment."
     },
-
-    "emits": {
-        "updateModelValue": "Emitted when the active segment changes (syncs v-model).",
-        "change":           "Emitted after each user-confirmed selection."
+    "sizes": {
+      "title": "Sizes",
+      "desc": "Three heights for different UI densities."
+    },
+    "fullWidth": {
+      "title": "Full width",
+      "desc": "With full-width the track fills the container and segments share the width equally."
     }
+  },
+
+  "props": {
+    "items": "Segment list \\{ value, label?, icon?, disabled?, ariaLabel? \\}.",
+    "modelValue": "Selected value (v-model).",
+    "color": "Semantic color applied to the active segment.",
+    "size": "Segment height and typography.",
+    "radius": "Corner radius of the track and segments.",
+    "fullWidth": "Stretches the control to fill the container; segments share the width.",
+    "disabled": "Disables the entire control.",
+    "ariaLabel": "Accessible name for the radiogroup."
+  },
+
+  "emits": {
+    "updateModelValue": "Emitted when the active segment changes (syncs v-model).",
+    "change": "Emitted after each user-confirmed selection."
+  }
 }

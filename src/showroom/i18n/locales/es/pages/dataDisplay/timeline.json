@@ -1,0 +1,46 @@
+{
+    "title": "Timeline",
+    "description": "Lista vertical de eventos cronológicos con marcadores dot, icon u outline. Cada item soporta título, descripción, timestamp y color propio.",
+
+    "controls": {
+        "variant": "Variante",
+        "size": "Tamaño",
+        "color": "Color",
+        "side": "Lado"
+    },
+
+    "props": {
+        "items": "Eventos a renderizar en orden cronológico.",
+        "variant": "Estilo del marcador por defecto. Cada item puede sobreescribirlo.",
+        "color": "Color semántico por defecto del marcador.",
+        "size": "Escala visual del marcador y la tipografía.",
+        "side": "Lado donde se renderiza la línea de marcadores."
+    },
+
+    "slots": {
+        "itemId": "Contenido extra renderizado debajo del título y descripción del item con el id correspondiente."
+    },
+
+    "examples": {
+        "basic": {
+            "title": "Básico",
+            "desc": "Marcadores dot con título y timestamp."
+        },
+        "icons": {
+            "title": "Con iconos",
+            "desc": "Marcadores con icono para contexto visual más rico."
+        },
+        "colors": {
+            "title": "Colores por item",
+            "desc": "Cada evento puede sobreescribir el color del marcador de forma independiente."
+        },
+        "descriptions": {
+            "title": "Con descripciones",
+            "desc": "Añade texto secundario bajo el título de cada evento."
+        },
+        "right": {
+            "title": "Lado derecho",
+            "desc": "Mueve la línea de marcadores a la derecha del contenido."
+        }
+    }
+}

@@ -1,88 +1,88 @@
 {
-    "title": "Input",
-    "description": "Input de texto con label, helper, mensajes de error, iconos, prefijos/sufijos y tres variantes visuales.",
+  "title": "Input",
+  "description": "Input de texto con label, helper, mensajes de error, iconos, prefijos/sufijos y tres variantes visuales.",
 
-    "controls": {
-        "variant":   "Variant",
-        "color":     "Color",
-        "size":      "Size",
-        "clearable": "Clearable",
-        "loading":   "Loading",
-        "disabled":  "Disabled",
-        "readonly":  "Readonly"
+  "controls": {
+    "variant": "Variant",
+    "color": "Color",
+    "size": "Size",
+    "clearable": "Clearable",
+    "loading": "Loading",
+    "disabled": "Disabled",
+    "readonly": "Readonly"
+  },
+
+  "playground": {
+    "label": "Email",
+    "placeholder": "tu\\@email.com"
+  },
+
+  "examples": {
+    "basic": {
+      "title": "Uso básico",
+      "desc": "Input con label, placeholder y v-model.",
+      "label": "Email",
+      "ph": "tu\\@email.com"
     },
-
-    "playground": {
-        "label":       "Email",
-        "placeholder": "tu@email.com"
+    "variants": {
+      "title": "Variantes",
+      "desc": "outline (default), filled y ghost."
     },
-
-    "examples": {
-        "basic": {
-            "title": "Uso básico",
-            "desc":  "Input con label, placeholder y v-model.",
-            "label": "Email",
-            "ph":    "tu@email.com"
-        },
-        "variants": {
-            "title": "Variantes",
-            "desc":  "outline (default), filled y ghost."
-        },
-        "sizes": {
-            "title": "Tamaños",
-            "desc":  "Tres tamaños para distintas densidades de UI."
-        },
-        "icons": {
-            "title":    "Iconos y affixes",
-            "desc":     "iconLeft, iconRight y prefix/suffix de texto.",
-            "emailPh":  "Email",
-            "searchPh": "Buscar"
-        },
-        "states": {
-            "title":      "Estados",
-            "desc":       "Disabled, readonly y error.",
-            "readonlyVal": "Solo lectura",
-            "errorText":   "Email inválido",
-            "errorLabel":  "Email"
-        }
+    "sizes": {
+      "title": "Tamaños",
+      "desc": "Tres tamaños para distintas densidades de UI."
     },
-
-    "props": {
-        "modelValue":  "Valor del input (v-model).",
-        "label":       "Etiqueta visible encima del input.",
-        "placeholder": "Placeholder cuando está vacío.",
-        "helperText":  "Texto de ayuda bajo el input. Se oculta si hay errorText.",
-        "errorText":   "Mensaje de error que marca el input como inválido.",
-        "type":        "Tipo HTML del input.",
-        "variant":     "Estilo visual del campo.",
-        "color":       "Color semántico aplicado al estado de foco.",
-        "size":        "Controla padding y tipografía.",
-        "radius":      "Radio de las esquinas. Hereda del ModoProvider si se omite.",
-        "halo":        "Estilo del halo persistente (ring). Hereda del ModoProvider.",
-        "fullWidth":   "Aplica w-full al root del campo.",
-        "disabled":    "Deshabilita el input.",
-        "readonly":    "Solo lectura: mantiene estilo normal pero impide edición.",
-        "required":    "Marca el campo como requerido y muestra el indicador.",
-        "loading":     "Muestra un loader y bloquea el input durante operaciones asíncronas.",
-        "clearable":   "Muestra botón ✕ para limpiar el valor cuando hay contenido.",
-        "maxLength":   "Longitud máxima del valor. Activa el contador si showCounter.",
-        "showCounter": "Muestra el contador de caracteres (requiere maxLength).",
-        "iconLeft":    "Icono renderizado dentro del input a la izquierda.",
-        "iconRight":   "Icono renderizado dentro del input a la derecha.",
-        "prefix":      "Texto fijo a la izquierda (ej. \"$\", \"https://\").",
-        "suffix":      "Texto fijo a la derecha (ej. \".com\", \"kg\").",
-        "name":        "Atributo name HTML para envío en formularios.",
-        "id":          "id del input. Se autogenera si se omite.",
-        "autocomplete":"Atributo autocomplete HTML.",
-        "autofocus":   "Foco automático al montar.",
-        "ariaLabel":   "Nombre accesible cuando no hay label visible."
+    "icons": {
+      "title": "Iconos y affixes",
+      "desc": "iconLeft, iconRight y prefix/suffix de texto.",
+      "emailPh": "Email",
+      "searchPh": "Buscar"
     },
-
-    "emits": {
-        "updateModelValue": "Emitido en cada cambio del valor (sincroniza v-model).",
-        "change":           "Emitido tras un cambio confirmado por el usuario.",
-        "focus":            "Emitido cuando el input recibe foco.",
-        "blur":             "Emitido cuando el input pierde foco.",
-        "clear":            "Emitido al pulsar el botón de limpiar (clearable)."
+    "states": {
+      "title": "Estados",
+      "desc": "Disabled, readonly y error.",
+      "readonlyVal": "Solo lectura",
+      "errorText": "Email inválido",
+      "errorLabel": "Email"
     }
+  },
+
+  "props": {
+    "modelValue": "Valor del input (v-model).",
+    "label": "Etiqueta visible encima del input.",
+    "placeholder": "Placeholder cuando está vacío.",
+    "helperText": "Texto de ayuda bajo el input. Se oculta si hay errorText.",
+    "errorText": "Mensaje de error que marca el input como inválido.",
+    "type": "Tipo HTML del input.",
+    "variant": "Estilo visual del campo.",
+    "color": "Color semántico aplicado al estado de foco.",
+    "size": "Controla padding y tipografía.",
+    "radius": "Radio de las esquinas. Hereda del ModoProvider si se omite.",
+    "halo": "Estilo del halo persistente (ring). Hereda del ModoProvider.",
+    "fullWidth": "Aplica w-full al root del campo.",
+    "disabled": "Deshabilita el input.",
+    "readonly": "Solo lectura: mantiene estilo normal pero impide edición.",
+    "required": "Marca el campo como requerido y muestra el indicador.",
+    "loading": "Muestra un loader y bloquea el input durante operaciones asíncronas.",
+    "clearable": "Muestra botón ✕ para limpiar el valor cuando hay contenido.",
+    "maxLength": "Longitud máxima del valor. Activa el contador si showCounter.",
+    "showCounter": "Muestra el contador de caracteres (requiere maxLength).",
+    "iconLeft": "Icono renderizado dentro del input a la izquierda.",
+    "iconRight": "Icono renderizado dentro del input a la derecha.",
+    "prefix": "Texto fijo a la izquierda (ej. \"$\", \"https://\").",
+    "suffix": "Texto fijo a la derecha (ej. \".com\", \"kg\").",
+    "name": "Atributo name HTML para envío en formularios.",
+    "id": "id del input. Se autogenera si se omite.",
+    "autocomplete": "Atributo autocomplete HTML.",
+    "autofocus": "Foco automático al montar.",
+    "ariaLabel": "Nombre accesible cuando no hay label visible."
+  },
+
+  "emits": {
+    "updateModelValue": "Emitido en cada cambio del valor (sincroniza v-model).",
+    "change": "Emitido tras un cambio confirmado por el usuario.",
+    "focus": "Emitido cuando el input recibe foco.",
+    "blur": "Emitido cuando el input pierde foco.",
+    "clear": "Emitido al pulsar el botón de limpiar (clearable)."
+  }
 }

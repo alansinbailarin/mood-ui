@@ -1,49 +1,64 @@
 {
-    "title": "DropdownMenu",
-    "category": "Navigation",
-    "description": "Floating action menu with headers, dividers, keyboard shortcuts, descriptions, destructive items and external links.",
-    "trigger": { "actions": "Actions", "more": "More" },
-    "items": {
-        "edit": "Edit",
-        "duplicate": "Duplicate",
-        "export": "Export",
-        "exportDesc": "Download as JSON",
-        "openTab": "Open in new tab",
-        "profile": "My profile",
-        "preferences": "Preferences",
-        "logout": "Sign out",
-        "delete": "Delete",
-        "userEmail": "modo@example.com",
-        "actionsHeader": "Actions"
+  "title": "DropdownMenu",
+  "category": "Navigation",
+  "description": "Floating action menu with headers, dividers, keyboard shortcuts, descriptions, destructive items and external links.",
+  "trigger": { "actions": "Actions", "more": "More" },
+  "items": {
+    "edit": "Edit",
+    "duplicate": "Duplicate",
+    "export": "Export",
+    "exportDesc": "Download as JSON",
+    "openTab": "Open in new tab",
+    "profile": "My profile",
+    "preferences": "Preferences",
+    "logout": "Sign out",
+    "delete": "Delete",
+    "userEmail": "modo\\@example.com",
+    "actionsHeader": "Actions"
+  },
+  "examples": {
+    "basic": {
+      "title": "Basic",
+      "desc": "Minimal menu: a list of items with labels. Default trigger uses the Button component."
     },
-    "examples": {
-        "basic":    { "title": "Basic",                  "desc": "Minimal menu: a list of items with labels. Default trigger uses the Button component." },
-        "icons":    { "title": "With icons & shortcuts", "desc": "Each item supports optional `icon`, `shortcut` and `description` to enrich the reading." },
-        "dividers": { "title": "With headers & dividers", "desc": "Group items with `header` entries and separate sections with `divider`." },
-        "user":     { "title": "User menu",              "desc": "Common pattern: header with email, options and a divider before sign out." },
-        "danger":   { "title": "Destructive item",       "desc": "Mark an item as `danger` to tint it with the destructive color and emphasize irreversible actions." }
+    "icons": {
+      "title": "With icons & shortcuts",
+      "desc": "Each item supports optional `icon`, `shortcut` and `description` to enrich the reading."
     },
-    "props": {
-        "items":             "Heterogeneous list of items, headers and dividers.",
-        "triggerLabel":      "Default trigger text. Ignored when using the `#trigger` slot.",
-        "triggerIcon":       "Optional icon for the default trigger.",
-        "triggerVariant":    "Button variant used as the trigger.",
-        "color":             "Default trigger color.",
-        "size":              "Size of the trigger and menu items.",
-        "radius":            "Radius applied to trigger and panel.",
-        "showChevron":       "Shows a chevron on the default trigger.",
-        "placement":         "Panel position relative to the trigger.",
-        "matchTriggerWidth": "Forces the panel to match trigger width.",
-        "minWidth":          "Panel minimum width (CSS length).",
-        "disabled":          "Disables the entire menu.",
-        "closeOnSelect":     "Closes the menu after selecting a non-disabled item.",
-        "ariaLabel":         "Accessible label applied to the panel."
+    "dividers": {
+      "title": "With headers & dividers",
+      "desc": "Group items with `header` entries and separate sections with `divider`."
     },
-    "emits": {
-        "updateOpen": "Emitted when the menu opens or closes.",
-        "select":     "Emitted when an item is activated (click or keyboard); not fired for headers/dividers."
+    "user": {
+      "title": "User menu",
+      "desc": "Common pattern: header with email, options and a divider before sign out."
     },
-    "slots": {
-        "trigger": "Replaces the default trigger. Useful for wrapping an Avatar or other component."
+    "danger": {
+      "title": "Destructive item",
+      "desc": "Mark an item as `danger` to tint it with the destructive color and emphasize irreversible actions."
     }
+  },
+  "props": {
+    "items": "Heterogeneous list of items, headers and dividers.",
+    "triggerLabel": "Default trigger text. Ignored when using the `#trigger` slot.",
+    "triggerIcon": "Optional icon for the default trigger.",
+    "triggerVariant": "Button variant used as the trigger.",
+    "color": "Default trigger color.",
+    "size": "Size of the trigger and menu items.",
+    "radius": "Radius applied to trigger and panel.",
+    "showChevron": "Shows a chevron on the default trigger.",
+    "placement": "Panel position relative to the trigger.",
+    "matchTriggerWidth": "Forces the panel to match trigger width.",
+    "minWidth": "Panel minimum width (CSS length).",
+    "disabled": "Disables the entire menu.",
+    "closeOnSelect": "Closes the menu after selecting a non-disabled item.",
+    "ariaLabel": "Accessible label applied to the panel."
+  },
+  "emits": {
+    "updateOpen": "Emitted when the menu opens or closes.",
+    "select": "Emitted when an item is activated (click or keyboard); not fired for headers/dividers."
+  },
+  "slots": {
+    "trigger": "Replaces the default trigger. Useful for wrapping an Avatar or other component."
+  }
 }

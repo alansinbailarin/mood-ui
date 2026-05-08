@@ -1,0 +1,57 @@
+{
+  "title": "MonthView",
+  "description": "Grid-style monthly view for displaying events per day. Supports week numbers, any first day of week and event drag-and-drop.",
+  "controls": {
+    "weekStart": "Start",
+    "sun": "Sun",
+    "mon": "Mon",
+    "weekNumbers": "Week No.",
+    "fixedWeeks": "6 fixed weeks",
+    "outsideDays": "Outside days"
+  },
+  "props": {
+    "modelValue": "Visible date (v-model). Determines the displayed month.",
+    "events": "List of events to render in each cell.",
+    "locale": "BCP-47 locale for month and day names.",
+    "firstDayOfWeek": "First day of the week (0 = Sunday, 1 = Monday).",
+    "color": "Semantic color for selection and accents.",
+    "radius": "Border radius of the container.",
+    "maxEventsPerDay": "Maximum visible events per cell; the rest are grouped as \"+N\".",
+    "showWeekNumbers": "Shows a leading column with the ISO week number.",
+    "fixedWeeks": "Always renders 6 weeks to maintain a constant height.",
+    "showOutsideDays": "Shows days from the previous and next months.",
+    "showHeader": "Shows the header with navigation.",
+    "bordered": "Draws dividing lines between cells.",
+    "highlightWeekends": "Visually highlights Saturday and Sunday.",
+    "minDateMaxDate": "Limits the range of selectable dates.",
+    "disabledDates": "Individual disabled dates.",
+    "disabledDaysOfWeek": "Disabled days of the week (0-6).",
+    "draggableEvents": "Allows dragging events between days."
+  },
+  "emits": {
+    "updateModelValue": "Emitted when a day is selected.",
+    "eventClick": "Emitted when clicking on an event.",
+    "dayClick": "Emitted when clicking on a day cell.",
+    "moreClick": "Emitted when clicking the \"+N\" indicator.",
+    "createEvent": "Emitted when requesting event creation.",
+    "eventDrop": "Emitted when an event is dropped on another date."
+  },
+  "examples": {
+    "basic": {
+      "title": "Basic",
+      "desc": "Monthly view without events bound to a date."
+    },
+    "events": {
+      "title": "With events",
+      "desc": "Renders a collection of CalendarEvents distributed per day."
+    },
+    "weekNumbers": {
+      "title": "With week numbers",
+      "desc": "Enable show-week-numbers to display ISO numbering."
+    },
+    "sundayStart": {
+      "title": "Week starting on Sunday",
+      "desc": "Set first-day-of-week=0 to start on Sunday."
+    }
+  }
+}

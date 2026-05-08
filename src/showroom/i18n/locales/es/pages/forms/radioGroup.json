@@ -1,68 +1,68 @@
 {
-    "title": "RadioGroup",
-    "description": "Grupo de radios con selección única, fieldset/legend semántico y soporte completo de label, helper y error.",
+  "title": "RadioGroup",
+  "description": "Grupo de radios con selección única, fieldset/legend semántico y soporte completo de label, helper y error.",
 
-    "controls": {
-        "color":       "Color",
-        "size":        "Size",
-        "layout":      "Layout",
-        "loading":     "Loading",
-        "disabled":    "Disabled"
+  "controls": {
+    "color": "Color",
+    "size": "Size",
+    "layout": "Layout",
+    "loading": "Loading",
+    "disabled": "Disabled"
+  },
+
+  "playground": {
+    "label": "Plan"
+  },
+
+  "examples": {
+    "basic": {
+      "title": "Uso básico",
+      "desc": "Lista de opciones con selección única vinculada con v-model.",
+      "label": "Plan"
     },
-
-    "playground": {
-        "label": "Plan"
+    "described": {
+      "title": "Con descripción",
+      "desc": "Cada opción puede incluir un texto secundario para añadir contexto.",
+      "label": "Elige tu plan"
     },
-
-    "examples": {
-        "basic": {
-            "title": "Uso básico",
-            "desc":  "Lista de opciones con selección única vinculada con v-model.",
-            "label": "Plan"
-        },
-        "described": {
-            "title": "Con descripción",
-            "desc":  "Cada opción puede incluir un texto secundario para añadir contexto.",
-            "label": "Elige tu plan"
-        },
-        "horizontal": {
-            "title": "Horizontal",
-            "desc":  "Ideal para opciones cortas alineadas en una sola fila.",
-            "label": "Color favorito"
-        },
-        "sizes": {
-            "title": "Tamaños",
-            "desc":  "Tres tamaños disponibles para distintas densidades de UI."
-        },
-        "disabled": {
-            "title": "Disabled",
-            "desc":  "Bloquea todo el grupo manteniendo la selección visible.",
-            "label": "Disabled"
-        }
+    "horizontal": {
+      "title": "Horizontal",
+      "desc": "Ideal para opciones cortas alineadas en una sola fila.",
+      "label": "Color favorito"
     },
-
-    "props": {
-        "modelValue":  "Valor seleccionado del grupo (v-model).",
-        "options":     "Opciones { value, label, description?, disabled? } a renderizar.",
-        "name":        "Atributo name compartido por todos los radios. Se autogenera si se omite.",
-        "label":       "Etiqueta del grupo (renderizada como <legend>).",
-        "helperText":  "Texto de ayuda bajo el grupo.",
-        "errorText":   "Mensaje de error que reemplaza al helperText.",
-        "orientation": "Disposición de los radios dentro del grupo.",
-        "color":       "Color semántico aplicado a todos los radios.",
-        "size":        "Tamaño aplicado a todos los radios.",
-        "disabled":    "Deshabilita todo el grupo.",
-        "required":    "Marca el grupo como requerido.",
-        "loading":     "Estado de carga.",
-        "ariaLabel":   "Nombre accesible cuando no hay label visible."
+    "sizes": {
+      "title": "Tamaños",
+      "desc": "Tres tamaños disponibles para distintas densidades de UI."
     },
-
-    "emits": {
-        "updateModelValue": "Emitido al cambiar la opción seleccionada (sincroniza v-model).",
-        "change":           "Emitido tras cada selección confirmada por el usuario."
-    },
-
-    "slots": {
-        "default": "Permite renderizar Radios manualmente cuando se necesita personalización por opción."
+    "disabled": {
+      "title": "Disabled",
+      "desc": "Bloquea todo el grupo manteniendo la selección visible.",
+      "label": "Disabled"
     }
+  },
+
+  "props": {
+    "modelValue": "Valor seleccionado del grupo (v-model).",
+    "options": "Opciones \\{ value, label, description?, disabled? \\} a renderizar.",
+    "name": "Atributo name compartido por todos los radios. Se autogenera si se omite.",
+    "label": "Etiqueta del grupo (renderizada como <legend>).",
+    "helperText": "Texto de ayuda bajo el grupo.",
+    "errorText": "Mensaje de error que reemplaza al helperText.",
+    "orientation": "Disposición de los radios dentro del grupo.",
+    "color": "Color semántico aplicado a todos los radios.",
+    "size": "Tamaño aplicado a todos los radios.",
+    "disabled": "Deshabilita todo el grupo.",
+    "required": "Marca el grupo como requerido.",
+    "loading": "Estado de carga.",
+    "ariaLabel": "Nombre accesible cuando no hay label visible."
+  },
+
+  "emits": {
+    "updateModelValue": "Emitido al cambiar la opción seleccionada (sincroniza v-model).",
+    "change": "Emitido tras cada selección confirmada por el usuario."
+  },
+
+  "slots": {
+    "default": "Permite renderizar Radios manualmente cuando se necesita personalización por opción."
+  }
 }

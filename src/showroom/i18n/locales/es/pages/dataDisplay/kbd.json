@@ -1,0 +1,40 @@
+{
+  "title": "Kbd",
+  "description": "Representación visual de teclas o atajos de teclado. Útil en docs, tooltips y command palettes.",
+  "controls": {
+    "variant": "Variante",
+    "size": "Tamaño",
+    "radius": "Radio"
+  },
+  "props": {
+    "size": "Tamaño de la tecla.",
+    "variant": "Estilo visual de la tecla.",
+    "radius": "Radio de borde. Hereda del ModoProvider si se omite."
+  },
+  "slots": {
+    "default": "Texto o glifo de la tecla (Enter, ⌘, ↑, etc.)."
+  },
+  "examples": {
+    "basic": {
+      "title": "Básico",
+      "desc": "Una sola tecla."
+    },
+    "combo": {
+      "title": "Combinación",
+      "desc": "Une varias Kbd con un separador."
+    },
+    "variants": {
+      "title": "Variantes",
+      "desc": "Tres estilos visuales: subtle (por defecto), outline y solid."
+    },
+    "sizes": {
+      "title": "Tamaños",
+      "desc": "Tres escalas para alinear con texto en distintos contextos."
+    },
+    "inline": {
+      "title": "Inline en texto",
+      "desc": "Se alinea verticalmente con el texto que lo rodea.",
+      "text": "Pulsa {key} para abrir la búsqueda rápida."
+    }
+  }
+}
