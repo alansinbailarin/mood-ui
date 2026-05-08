@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, defineAsyncComponent, h, watch } from 'vue';
+import { Analytics } from '@vercel/analytics/vue';
 
 import ModoProvider from './components/ModoProvider.vue';
 import ToastContainer from './components/feedback/ToastContainer.vue';
@@ -237,5 +238,7 @@ function onHeaderNavigate(id: string) {
             @color="primaryHex = $event"
             @locale="localeName = $event"
         />
+
+        <Analytics />
     </ModoProvider>
 </template>
