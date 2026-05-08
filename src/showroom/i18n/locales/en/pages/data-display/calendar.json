@@ -36,6 +36,10 @@
                         "title": "Basic",
                         "desc": "Default calendar bound to a date via v-model."
                     },
+                    "minMax": {
+                        "title": "Min / Max date",
+                        "desc": "Limits the selectable range using min-date and max-date."
+                    },
                     "dateRange": {
                         "title": "With date range",
                         "desc": "Limits the selectable range using min-date and max-date."

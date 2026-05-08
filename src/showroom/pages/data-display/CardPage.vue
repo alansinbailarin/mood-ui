@@ -149,7 +149,7 @@ const slotsList = computed<SlotDoc[]>(() => [
       >
         <template #controls>
           <TbPills
-            label="Variant"
+            :label="t('controls.variant')"
             :options="[
               { value: 'elevated' },
               { value: 'outlined' },
@@ -159,7 +159,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           />
           <TbSep />
           <TbPills
-            label="Padding"
+            :label="t('controls.padding')"
             :options="[
               { value: 'none' },
               { value: 'small' },
@@ -170,7 +170,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           />
           <TbSep />
           <TbPills
-            label="Radius"
+            :label="t('controls.radius')"
             :options="[
               { value: 'none' },
               { value: 'small' },
@@ -181,9 +181,9 @@ const slotsList = computed<SlotDoc[]>(() => [
             v-model="pgRadius"
           />
           <TbSep />
-          <TbToggle label="Hoverable" v-model="pgHover" />
-          <TbToggle label="Clickable" v-model="pgClickable" />
-          <TbToggle label="Divided" v-model="pgDivided" />
+          <TbToggle :label="t('controls.hoverable')" v-model="pgHover" />
+          <TbToggle :label="t('controls.clickable')" v-model="pgClickable" />
+          <TbToggle :label="t('controls.divided')" v-model="pgDivided" />
         </template>
 
         <Card

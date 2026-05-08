@@ -126,7 +126,7 @@ const slotsList = computed<SlotDoc[]>(() => [
       >
         <template #controls>
           <TbPills
-            label="Size"
+            :label="t('controls.size')"
             :options="[
               { value: 'xs' },
               { value: 'small' },
@@ -138,7 +138,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           />
           <TbSep />
           <TbPills
-            label="Max"
+            :label="t('controls.max')"
             :options="[
               { value: '3' },
               { value: '4' },
@@ -150,7 +150,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           />
           <TbSep />
           <TbPills
-            label="Radius"
+            :label="t('controls.radius')"
             :options="[
               { value: 'none' },
               { value: 'small' },
@@ -161,7 +161,7 @@ const slotsList = computed<SlotDoc[]>(() => [
             v-model="pgRadius"
           />
           <TbSep />
-          <TbToggle label="Bordered" v-model="pgBordered" />
+          <TbToggle :label="t('controls.bordered')" v-model="pgBordered" />
         </template>
 
         <AvatarGroup

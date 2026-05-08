@@ -23,12 +23,13 @@ export interface UsePopoverOptions {
     onClose?: () => void; 
 } 
  
-export interface PopoverPosition { 
-    top: number; 
-    left: number; 
-    width?: number; 
-    /** Placement final (puede diferir del solicitado si hubo flip). */ 
-    placement: PopoverPlacement; 
+export interface PopoverPosition {
+    top: number;
+    left: number;
+    width?: number;
+    maxHeight?: number;
+    /** Placement final (puede diferir del solicitado si hubo flip). */
+    placement: PopoverPlacement;
 } 
  
 /** 
@@ -64,17 +65,20 @@ export function usePopover(options: UsePopoverOptions = {}) {
         placement: toValue(placementOption), 
     }); 
  
-    const panelStyle = computed(() => { 
-        const style: Record<string, string> = { 
-            position: 'fixed', 
-            top: `${position.value.top}px`, 
-            left: `${position.value.left}px`, 
-            zIndex: '1300', 
-        }; 
-        if (position.value.width !== undefined) { 
-            style.width = `${position.value.width}px`; 
-        } 
-        return style; 
+    const panelStyle = computed(() => {
+        const style: Record<string, string> = {
+            position: 'fixed',
+            top: `${position.value.top}px`,
+            left: `${position.value.left}px`,
+            zIndex: '1300',
+        };
+        if (position.value.width !== undefined) {
+            style.width = `${position.value.width}px`;
+        }
+        if (position.value.maxHeight !== undefined) {
+            style.maxHeight = `${position.value.maxHeight}px`;
+        }
+        return style;
     }); 
  
     function measure(): void { 
@@ -121,15 +125,21 @@ export function usePopover(options: UsePopoverOptions = {}) {
         if (left + panelW > vw - margin) left = vw - panelW - margin; 
         if (left < margin) left = margin; 
  
-        // Vertical clamp (por si el panel es más alto que el viewport). 
-        if (top + panelH > vh - margin) top = Math.max(margin, vh - panelH - margin); 
-        if (top < margin) top = margin; 
- 
-        position.value = { 
-            top, 
-            left, 
-            width: matchTriggerWidth ? tRect.width : undefined, 
-            placement: resolved, 
+        // Vertical clamp: if panel taller than available space, cap it so it stays in viewport.
+        const availableH = isBottom
+            ? vh - margin - (tRect.bottom + offset)
+            : tRect.top - offset - margin;
+        const clampedMaxH = panelH > availableH ? Math.max(availableH, 120) : undefined;
+
+        if (top + panelH > vh - margin) top = Math.max(margin, vh - panelH - margin);
+        if (top < margin) top = margin;
+
+        position.value = {
+            top,
+            left,
+            width: matchTriggerWidth ? tRect.width : undefined,
+            maxHeight: clampedMaxH,
+            placement: resolved,
         }; 
     } 
  

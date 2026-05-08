@@ -174,21 +174,25 @@ const propsList = computed<PropDoc[]>(() => [
       >
         <template #controls>
           <TbPills
-            label="Formato"
+            :label="t('controls.format')"
             :options="[{ value: '24h' }, { value: '12h' }]"
             v-model="pgFormat"
           />
           <TbSep />
           <TbPills
-            label="Variante"
+            :label="t('controls.variant')"
             :options="[{ value: 'filled' }, { value: 'outline' }]"
             v-model="pgVariant"
           />
           <TbSep />
-          <TbDots label="Color" :options="colorDots" v-model="pgColor" />
+          <TbDots
+            :label="t('controls.color')"
+            :options="colorDots"
+            v-model="pgColor"
+          />
           <TbSep />
           <TbPills
-            label="Step"
+            :label="t('controls.step')"
             :options="[
               { value: '1', label: '1m' },
               { value: '5', label: '5m' },
@@ -201,7 +205,7 @@ const propsList = computed<PropDoc[]>(() => [
           />
           <TbSep />
           <TbPills
-            label="Radius"
+            :label="t('controls.radius')"
             :options="[
               { value: 'none' },
               { value: 'small' },
@@ -212,7 +216,7 @@ const propsList = computed<PropDoc[]>(() => [
             v-model="pgRadius"
           />
           <TbSep />
-          <TbToggle label="Segundos" v-model="pgSeconds" />
+          <TbToggle :label="t('controls.seconds')" v-model="pgSeconds" />
         </template>
 
         <DateTimePicker

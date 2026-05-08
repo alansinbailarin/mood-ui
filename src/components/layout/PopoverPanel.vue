@@ -17,8 +17,8 @@
                 ]" 
                 :data-modo-theme="scopedTheme || undefined" 
             > 
-                <div :class="['modo-popover-inner overflow-hidden', radiusClass]"> 
-                    <slot /> 
+                <div :class="['modo-popover-inner overflow-x-hidden overflow-y-auto', radiusClass]">
+                    <slot />
                 </div> 
             </div> 
         </Transition> 

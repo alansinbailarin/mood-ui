@@ -109,10 +109,11 @@ export { default as DateTimeField } from './components/forms/DateTimeField.vue';
 export { default as Segmented } from './components/forms/Segmented.vue'; 
 export { default as Rating } from './components/forms/Rating.vue'; 
 export { default as ColorPicker } from './components/forms/ColorPicker.vue'; 
-export { default as TagInput } from './components/forms/TagInput.vue'; 
- 
-/* ------------------------------------------------------------------ */ 
-/*  Feedback                                                            */ 
+export { default as TagInput } from './components/forms/TagInput.vue';
+export { default as ColorModeSwitch } from './components/forms/ColorModeSwitch.vue';
+
+/* ------------------------------------------------------------------ */
+/*  Feedback                                                            */
 /* ------------------------------------------------------------------ */ 
 export { default as Badge } from './components/feedback/Badge.vue'; 
 export { default as Banner } from './components/feedback/Banner.vue'; 
@@ -217,8 +218,9 @@ export type * from './interfaces/forms/DateTimeField.interface';
 export type * from './interfaces/forms/Segmented.interface'; 
 export type * from './interfaces/forms/Rating.interface'; 
 export type * from './interfaces/forms/ColorPicker.interface'; 
-export type * from './interfaces/forms/TagInput.interface'; 
- 
+export type * from './interfaces/forms/TagInput.interface';
+export type * from './interfaces/forms/ColorModeSwitch.interface';
+
 export type * from './interfaces/feedback/Badge.interface'; 
 export type * from './interfaces/feedback/Banner.interface'; 
 export type * from './interfaces/feedback/Chip.interface'; 

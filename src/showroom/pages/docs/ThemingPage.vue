@@ -253,10 +253,13 @@ watch(locale, registerToc);
       <CodePreview :code="cssOverride" lang="css" code-only />
 
       <Banner color="warning" variant="subtle">
-        <strong>Recomendación:</strong> Si tienes lógica reactiva (cambio de
-        color desde un picker, por ejemplo), usa <code>:palettes</code> o
-        <code>:surfaces</code> en el Provider. Para temas estáticos, el override
-        por CSS es lo más simple.
+        <strong>Recommendation:</strong>
+        {{
+          t("pages.docs.theming.cssOverrideTip", {
+            palettes: ":palettes",
+            surfaces: ":surfaces",
+          })
+        }}
       </Banner>
     </section>
 

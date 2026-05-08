@@ -3,6 +3,24 @@
   "intro": "Every release listed newest first. We follow SemVer.",
 
   "releases": {
+    "v0.7.0": {
+      "title": "ColorModeSwitch + mobile UX + component fixes",
+      "items": [
+        "New public component: ColorModeSwitch with full docs page.",
+        "Tooltip fully refactored — better positioning, scoped theme, arrow & delay support.",
+        "Avatar icon fallback now respects the color prop.",
+        "DateRangeField auto-collapses to 1-month view on mobile.",
+        "Combobox: added touchstart support for mobile devices.",
+        "PopoverPanel: switched to overflow-y-auto so tall content scrolls correctly.",
+        "ToastContainer: CSS variable style now propagates to all zones.",
+        "CalendarMonthView: improved draggable event rendering.",
+        "Theme Studio customizer redesigned to match ShowroomSettings style.",
+        "Mobile header: section pill moved to right cluster next to color mode switch.",
+        "Mobile drawer now includes search and language switcher.",
+        "Fixed: mobile section sheet no longer shows Documentation as active when on Home.",
+        "i18n: extracted all remaining hardcoded strings from showroom pages (ES/EN)."
+      ]
+    },
     "v0.6.0": {
       "title": "Docs overhaul + full i18n",
       "items": [

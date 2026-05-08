@@ -29,17 +29,33 @@
                     "firstDayOfWeek": "Week start day (0=Sun, 1=Mon)."
                 },
                 "examples": {
+                    "basic24": {
+                        "title": "24h (default)",
+                        "desc": "24-hour mode with hour and minute columns."
+                    },
                     "basic24h": {
                         "title": "24h (default)",
                         "desc": "24-hour mode with hour and minute columns."
+                    },
+                    "format12": {
+                        "title": "12h format",
+                        "desc": "Adds the AM/PM column for regions that prefer the 12-hour clock."
                     },
                     "format12h": {
                         "title": "12h format",
                         "desc": "Adds the AM/PM column for regions that prefer the 12-hour clock."
                     },
+                    "seconds": {
+                        "title": "12h with seconds",
+                        "desc": "Enable show-seconds to show the seconds column."
+                    },
                     "seconds12h": {
                         "title": "12h with seconds",
                         "desc": "Enable show-seconds to show the seconds column."
+                    },
+                    "step": {
+                        "title": "15-minute step",
+                        "desc": "step=\"15\" groups minutes in 15-unit increments, ideal for schedules."
                     },
                     "step15": {
                         "title": "15-minute step",

@@ -2,14 +2,14 @@
     <Teleport to="body"> 
         <!-- One zone per placement. Empty zones still render an empty wrapper 
              but the `pointer-events-none` keeps them inert. --> 
-        <div 
-            v-for="zone in zones" 
-            :key="zone.placement" 
-            :class="['modo-toast-container fixed z-[9999] flex flex-col gap-2 pointer-events-none', zone.classes]" 
-            :style="zone.style" 
-            role="region" 
-            aria-label="Notifications" 
-            aria-live="polite" 
+        <div
+            v-for="zone in zones"
+            :key="zone.placement"
+            :class="['modo-toast-container fixed z-[9999] flex flex-col gap-2 pointer-events-none', zone.classes]"
+            :style="{ ...zone.style, ...cssVarStyle }"
+            role="region"
+            aria-label="Notifications"
+            aria-live="polite"
         > 
             <TransitionGroup 
                 :name="zone.transition" 
@@ -33,14 +33,19 @@
 </template> 
  
 <script setup lang="ts"> 
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'; 
-import Toast from './Toast.vue'; 
-import { useToast, useToastQueue } from '../../composables/useToast'; 
-import type { 
-    ToastContainer, 
-    ToastEntry, 
-    ToastPlacement, 
-} from '../../interfaces/feedback/Toast.interface'; 
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import Toast from './Toast.vue';
+import { useToast, useToastQueue } from '../../composables/useToast';
+import type {
+    ToastContainer,
+    ToastEntry,
+    ToastPlacement,
+} from '../../interfaces/feedback/Toast.interface';
+import { useModoConfig, useResolvedTheme } from '../../composables/useModoConfig';
+import { resolveColorMode } from '../../composables/useColorMode';
+import { palettesToCssVars, semanticTokensFromPalettes } from '../../config/palettes';
+import { surfacesToCssVars } from '../../config/surfaces';
+import { hexToOklchString, pickForegroundOklch } from '../../config/colorPrimitives'; 
  
 const props = withDefaults(defineProps<ToastContainer>(), { 
     placement: 'top-right', 
@@ -51,8 +56,27 @@ const props = withDefaults(defineProps<ToastContainer>(), {
     reducedMotion: 'auto', 
 }); 
  
-const queue = useToastQueue(); 
-const { dismiss } = useToast(); 
+const queue = useToastQueue();
+const { dismiss } = useToast();
+
+const cfg = useModoConfig();
+const theme = useResolvedTheme();
+const scopedTheme = computed(() => resolveColorMode(theme.value));
+
+const cssVarStyle = computed(() => {
+    const paletteVars = cfg?.value.palettes
+        ? {
+              ...palettesToCssVars(cfg.value.palettes),
+              ...semanticTokensFromPalettes(cfg.value.palettes, hexToOklchString, pickForegroundOklch),
+          }
+        : {};
+    const surfaceVars = cfg?.value.surfaces ? surfacesToCssVars(cfg.value.surfaces) : {};
+    const darkSurfaceVars =
+        scopedTheme.value === 'dark' && cfg?.value.darkSurfaces
+            ? surfacesToCssVars(cfg.value.darkSurfaces)
+            : {};
+    return { ...paletteVars, ...surfaceVars, ...darkSurfaceVars };
+}); 
  
 /* ------------------------------------------------------------------ */ 
 /*  Per-toast timer state                                               */ 

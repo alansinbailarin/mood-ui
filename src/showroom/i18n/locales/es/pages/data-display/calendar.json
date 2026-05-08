@@ -36,6 +36,10 @@
                         "title": "Básico",
                         "desc": "Calendario por defecto vinculado a una fecha mediante v-model."
                     },
+                    "minMax": {
+                        "title": "Fecha mín / máx",
+                        "desc": "Limita el rango seleccionable usando min-date y max-date."
+                    },
                     "dateRange": {
                         "title": "Con rango de fechas",
                         "desc": "Limita el rango seleccionable usando min-date y max-date."

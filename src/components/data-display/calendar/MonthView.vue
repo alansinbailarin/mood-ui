@@ -72,12 +72,13 @@
                     <div 
                         v-for="(day, dIdx) in week.days" 
                         :key="day.date.toISOString()" 
-                        :tabindex="keyboardNavigation && day.date.getTime() === focusedDate.getTime() ? 0 : -1" 
-                        :ref="(el: unknown) => setDayRef(day.date, el as HTMLElement | null)" 
-                        @click="handleDayClick(day, $event)" 
-                        @dblclick="handleDayDblClick(day, $event)" 
-                        @focus="keyboardNavigation && (focusedDate = day.date)" 
-                        @dragover.prevent="onDragOver(day, $event)" 
+                        :tabindex="keyboardNavigation && day.date.getTime() === focusedDate.getTime() ? 0 : -1"
+                        :ref="(el: unknown) => setDayRef(day.date, el as HTMLElement | null)"
+                        :data-day-key="day.date.toDateString()"
+                        @click="handleDayClick(day, $event)"
+                        @dblclick="handleDayDblClick(day, $event)"
+                        @focus="keyboardNavigation && (focusedDate = day.date)"
+                        @dragover.prevent="onDragOver(day, $event)"
                         @drop.prevent="onDrop(day, $event)" 
                         :class="[ 
                             'relative flex flex-col border-l border-border first:border-l-0 transition-colors focus:outline-none', 
@@ -121,16 +122,20 @@
                         </slot> 
                     </div> 
  
-                    <div 
-                        v-for="seg in week.visibleSegments" 
-                        :key="seg.key" 
-                        :draggable="draggableEvents && !seg.event.allDay ? true : draggableEvents" 
-                        @dragstart="onDragStart(seg.event, $event)" 
-                        @dragend="onDragEnd" 
-                        @click.stop="handleEventClick(seg.event, $event)" 
-                        @mouseenter="onEventEnter(seg.event, !!seg.event.allDay, $event)" 
-                        @mousemove="onEventMove" 
-                        @mouseleave="onEventLeave" 
+                    <div
+                        v-for="seg in week.visibleSegments"
+                        :key="seg.key"
+                        :draggable="draggableEvents && !seg.event.allDay ? true : draggableEvents"
+                        @dragstart="onDragStart(seg.event, $event)"
+                        @dragend="onDragEnd"
+                        @click.stop="handleEventClick(seg.event, $event)"
+                        @mouseenter="onEventEnter(seg.event, !!seg.event.allDay, $event)"
+                        @mousemove="onEventMove"
+                        @mouseleave="onEventLeave"
+                        @touchstart.passive="draggableEvents && onEventTouchStart(seg.event, $event)"
+                        @touchmove="draggableEvents && onEventTouchMove($event)"
+                        @touchend.passive="draggableEvents && onEventTouchEnd($event)"
+                        @touchcancel.passive="onTouchDragCancel" 
                         :style="{ 
                             left: `calc(${(seg.startCol / 7) * 100}% + 4px)`, 
                             width: `calc(${(seg.span / 7) * 100}% - 8px)`, 
@@ -498,38 +503,101 @@ const handleDayDblClick = (day: CalendarDay, e: MouseEvent) => {
 const handleEventClick = (ev: CalendarEvent, e: MouseEvent) => emit('event-click', ev, e); 
 const handleMoreClick = (date: Date, e: MouseEvent) => emit('more-click', date, eventsForDay(date), e); 
  
-const draggingId = ref<string | number | null>(null); 
-const dragOverKey = ref<string | null>(null); 
- 
-const onDragStart = (ev: CalendarEvent, e: DragEvent) => { 
-    if (!props.draggableEvents) return; 
-    draggingId.value = ev.id; 
-    if (e.dataTransfer) { 
-        e.dataTransfer.effectAllowed = 'move'; 
-        e.dataTransfer.setData('text/plain', String(ev.id)); 
-    } 
-}; 
-const onDragEnd = () => { 
-    draggingId.value = null; 
-    dragOverKey.value = null; 
-}; 
-const onDragOver = (day: CalendarDay, e: DragEvent) => { 
-    if (!props.draggableEvents || draggingId.value === null) return; 
-    if (day.disabled) { if (e.dataTransfer) e.dataTransfer.dropEffect = 'none'; return; } 
-    if (e.dataTransfer) e.dataTransfer.dropEffect = 'move'; 
-    dragOverKey.value = day.date.toDateString(); 
-}; 
-const onDrop = (day: CalendarDay, _e: DragEvent) => { 
-    if (!props.draggableEvents || draggingId.value === null) return; 
-    if (day.disabled) { onDragEnd(); return; } 
-    const ev = props.events.find(e => e.id === draggingId.value); 
-    if (!ev) { onDragEnd(); return; } 
-    const oldStart = startOfDay(ev.start); 
-    const diff = startOfDay(day.date).getTime() - oldStart.getTime(); 
-    const newStart = new Date(ev.start.getTime() + diff); 
-    const newEnd = ev.end ? new Date(ev.end.getTime() + diff) : undefined; 
-    emit('event-drop', ev, newStart, newEnd); 
-    onDragEnd(); 
+const draggingId = ref<string | number | null>(null);
+const dragOverKey = ref<string | null>(null);
+
+const onDragStart = (ev: CalendarEvent, e: DragEvent) => {
+    if (!props.draggableEvents) return;
+    draggingId.value = ev.id;
+    if (e.dataTransfer) {
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', String(ev.id));
+    }
+};
+const onDragEnd = () => {
+    draggingId.value = null;
+    dragOverKey.value = null;
+};
+const onDragOver = (day: CalendarDay, e: DragEvent) => {
+    if (!props.draggableEvents || draggingId.value === null) return;
+    if (day.disabled) { if (e.dataTransfer) e.dataTransfer.dropEffect = 'none'; return; }
+    if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+    dragOverKey.value = day.date.toDateString();
+};
+const onDrop = (day: CalendarDay, _e: DragEvent) => {
+    if (!props.draggableEvents || draggingId.value === null) return;
+    if (day.disabled) { onDragEnd(); return; }
+    const ev = props.events.find(e => e.id === draggingId.value);
+    if (!ev) { onDragEnd(); return; }
+    const oldStart = startOfDay(ev.start);
+    const diff = startOfDay(day.date).getTime() - oldStart.getTime();
+    const newStart = new Date(ev.start.getTime() + diff);
+    const newEnd = ev.end ? new Date(ev.end.getTime() + diff) : undefined;
+    emit('event-drop', ev, newStart, newEnd);
+    onDragEnd();
+};
+
+/* ---------- Touch drag (mobile — HTML5 drag API doesn't work on touch) ---------- */
+
+let touchHoldTimer: ReturnType<typeof setTimeout> | null = null;
+let touchDragEventId: string | number | null = null;
+const touchDragActive = ref(false);
+let touchDragEl: HTMLElement | null = null;
+
+const onEventTouchStart = (ev: CalendarEvent, e: TouchEvent) => {
+    touchDragEventId = ev.id;
+    touchDragEl = e.currentTarget as HTMLElement;
+    touchHoldTimer = setTimeout(() => {
+        touchDragActive.value = true;
+        draggingId.value = ev.id;
+    }, 350);
+};
+
+const onEventTouchMove = (e: TouchEvent) => {
+    if (!touchDragActive.value) {
+        // Touch moved before hold — cancel pending drag.
+        if (touchHoldTimer) { clearTimeout(touchHoldTimer); touchHoldTimer = null; }
+        touchDragEventId = null;
+        return;
+    }
+    e.preventDefault();
+    const touch = e.touches[0];
+    // Temporarily hide the dragged element so elementFromPoint returns the day underneath.
+    if (touchDragEl) touchDragEl.style.pointerEvents = 'none';
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (touchDragEl) touchDragEl.style.pointerEvents = '';
+    const dayEl = (target as Element | null)?.closest('[data-day-key]') as HTMLElement | null;
+    dragOverKey.value = dayEl?.dataset.dayKey ?? null;
+};
+
+const onEventTouchEnd = (e: TouchEvent) => {
+    if (touchHoldTimer) { clearTimeout(touchHoldTimer); touchHoldTimer = null; }
+    if (!touchDragActive.value) { touchDragEventId = null; return; }
+
+    const touch = e.changedTouches[0];
+    if (touchDragEl) touchDragEl.style.pointerEvents = 'none';
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (touchDragEl) touchDragEl.style.pointerEvents = '';
+
+    const dayKey = (target as Element | null)?.closest('[data-day-key]')
+        ?.getAttribute('data-day-key');
+
+    if (dayKey && touchDragEventId !== null) {
+        for (const week of weeksData.value) {
+            const day = week.days.find(d => d.date.toDateString() === dayKey);
+            if (day) { onDrop(day, {} as DragEvent); break; }
+        }
+    }
+    onTouchDragCancel();
+};
+
+const onTouchDragCancel = () => {
+    if (touchHoldTimer) { clearTimeout(touchHoldTimer); touchHoldTimer = null; }
+    touchDragActive.value = false;
+    touchDragEventId = null;
+    touchDragEl = null;
+    draggingId.value = null;
+    dragOverKey.value = null;
 }; 
  
 const focusDay = (date: Date) => { 

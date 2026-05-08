@@ -188,9 +188,8 @@ watch(locale, registerToc);
       <CodePreview :code="useLocaleComposable" lang="vue" code-only />
 
       <Banner color="info" variant="subtle">
-        <strong>Tip:</strong> El singleton es módulo-level, así que
-        <code>useLocale()</code> en cualquier componente devuelve el mismo
-        estado. No necesitas pinia ni stores.
+        <strong>Tip:</strong>
+        {{ t("pages.docs.i18n.dynamicTip", { code: "useLocale()" }) }}
       </Banner>
     </section>
 

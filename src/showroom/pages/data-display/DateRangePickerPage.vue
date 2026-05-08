@@ -183,22 +183,26 @@ const propsList = computed<PropDoc[]>(() => [
       >
         <template #controls>
           <TbPills
-            label="Meses"
+            :label="t('controls.months')"
             :options="[{ value: '1' }, { value: '2' }]"
             :model-value="String(pgMonths)"
             @update:model-value="pgMonths = Number($event) as 1 | 2"
           />
           <TbSep />
           <TbPills
-            label="Variante"
+            :label="t('controls.variant')"
             :options="[{ value: 'filled' }, { value: 'outline' }]"
             v-model="pgVariant"
           />
           <TbSep />
-          <TbDots label="Color" :options="colorDots" v-model="pgColor" />
+          <TbDots
+            :label="t('controls.color')"
+            :options="colorDots"
+            v-model="pgColor"
+          />
           <TbSep />
           <TbPills
-            label="Radius"
+            :label="t('controls.radius')"
             :options="[
               { value: 'none' },
               { value: 'small' },
@@ -209,7 +213,7 @@ const propsList = computed<PropDoc[]>(() => [
             v-model="pgRadius"
           />
           <TbSep />
-          <TbToggle label="Presets" v-model="pgPresets" />
+          <TbToggle :label="t('controls.presets')" v-model="pgPresets" />
         </template>
 
         <DateRangePicker
@@ -259,9 +263,11 @@ const propsList = computed<PropDoc[]>(() => [
       </ComponentPreview>
 
       <ComponentPreview
-        :title="t('pages.dataDisplay.dateRangePicker.examples.color.title')"
+        :title="
+          t('pages.dataDisplay.dateRangePicker.examples.colorPrimary.title')
+        "
         :description="
-          t('pages.dataDisplay.dateRangePicker.examples.color.desc')
+          t('pages.dataDisplay.dateRangePicker.examples.colorPrimary.desc')
         "
         :code="colorCode"
         min-height="340px"

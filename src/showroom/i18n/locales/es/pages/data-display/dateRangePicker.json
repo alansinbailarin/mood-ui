@@ -40,6 +40,10 @@
                         "title": "Con presets",
                         "desc": "show-presets añade un panel lateral con atajos (hoy, esta semana, este mes, últimos 30 días…)."
                     },
+                    "color": {
+                        "title": "Color primary",
+                        "desc": "El color afecta el fondo del rango seleccionado y los días de inicio/fin."
+                    },
                     "colorPrimary": {
                         "title": "Color primary",
                         "desc": "El color afecta el fondo del rango seleccionado y los días de inicio/fin."

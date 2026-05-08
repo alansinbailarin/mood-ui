@@ -12,7 +12,7 @@
 
 **81+ accessible components** · reactive theming · dark mode · i18n (ES + EN) · built with Vue 3, TypeScript & Tailwind v4.
 
-[**→ Live docs & playground**](https://modo-ui.com) · [npm](https://www.npmjs.com/package/mood-ui) · [Changelog](https://github.com/alansinbailarin/mood-ui/releases)
+[**→ Live docs & playground**](https://mood-ui.com) · [npm](https://www.npmjs.com/package/mood-ui) · [Changelog](https://github.com/alansinbailarin/mood-ui/releases)
 
 </div>
 
@@ -48,21 +48,21 @@ Import the stylesheet once at your app entry:
 
 ```ts
 // main.ts
-import { createApp } from 'vue'
-import App from './App.vue'
-import 'mood-ui/style.css'
+import { createApp } from "vue";
+import App from "./App.vue";
+import "mood-ui/style.css";
 
-createApp(App).mount('#app')
+createApp(App).mount("#app");
 ```
 
 Wrap your app in `<ModoProvider>` to expose all design tokens to every component:
 
 ```vue
 <script setup lang="ts">
-import { ref } from 'vue'
-import { ModoProvider, Button, paletteFromHex } from 'mood-ui'
+import { ref } from "vue";
+import { ModoProvider, Button, paletteFromHex } from "mood-ui";
 
-const primary = ref('#6366f1')
+const primary = ref("#6366f1");
 </script>
 
 <template>
@@ -130,13 +130,13 @@ Full feature list: resource rows · drag & drop events · resize events · cross
 
 ## All components
 
-| Category | Components |
-|---|---|
-| **Forms** | `Button` `ButtonGroup` `FormField` `Input` `Textarea` `PasswordInput` `NumberInput` `SearchInput` `Select` `MultiSelect` `Combobox` `Checkbox` `Radio` `RadioGroup` `Switch` `Slider` `RangeSlider` `FileInput` `DateField` `DateRangeField` `DateTimeField` |
-| **Feedback** | `Badge` `Banner` `Chip` `Drawer` `Loader` `Modal` `Skeleton` `Tooltip` `Toast` `ToastContainer` `ConfirmDialog` `EmptyState` `ProgressBar` |
-| **Layout** | `AppShell` `Canvas` `Container` `Divider` `Stack` `HStack` `VStack` `PageHeader` `PopoverPanel` `Sidebar` `SidebarRow` `Topbar` |
-| **Navigation** | `Tabs` `Breadcrumbs` `DropdownMenu` `Pagination` |
-| **Data display** | `Card` `Typography` `Avatar` `AvatarGroup` `Table` `TableColumn` `TablePagination` `Calendar` `MonthView` `WeekView` `DayView` `AgendaView` `Scheduler` `DateRangePicker` `DateTimePicker` |
+| Category         | Components                                                                                                                                                                                                                                                   |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Forms**        | `Button` `ButtonGroup` `FormField` `Input` `Textarea` `PasswordInput` `NumberInput` `SearchInput` `Select` `MultiSelect` `Combobox` `Checkbox` `Radio` `RadioGroup` `Switch` `Slider` `RangeSlider` `FileInput` `DateField` `DateRangeField` `DateTimeField` |
+| **Feedback**     | `Badge` `Banner` `Chip` `Drawer` `Loader` `Modal` `Skeleton` `Tooltip` `Toast` `ToastContainer` `ConfirmDialog` `EmptyState` `ProgressBar`                                                                                                                   |
+| **Layout**       | `AppShell` `Canvas` `Container` `Divider` `Stack` `HStack` `VStack` `PageHeader` `PopoverPanel` `Sidebar` `SidebarRow` `Topbar`                                                                                                                              |
+| **Navigation**   | `Tabs` `Breadcrumbs` `DropdownMenu` `Pagination`                                                                                                                                                                                                             |
+| **Data display** | `Card` `Typography` `Avatar` `AvatarGroup` `Table` `TableColumn` `TablePagination` `Calendar` `MonthView` `WeekView` `DayView` `AgendaView` `Scheduler` `DateRangePicker` `DateTimePicker`                                                                   |
 
 ## Composables
 

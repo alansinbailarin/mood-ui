@@ -95,7 +95,7 @@
                     :min-date="minDate" 
                     :max-date="maxDate" 
                     :disabled-dates="disabledDates" 
-                    :months="months" 
+                    :months="effectiveMonths"
                     :show-presets="showPresets" 
                     :presets="presets" 
                     :min-range="minRange" 
@@ -116,7 +116,7 @@
 </template> 
  
 <script setup lang="ts"> 
-import { computed, ref, watch } from 'vue'; 
+import { computed, ref, watch, onMounted, onBeforeUnmount } from 'vue';
 import type { DateRangeField } from '../../interfaces/forms/DateRangeField.interface'; 
 import {
     useFieldState,
@@ -178,7 +178,13 @@ const { wrapperVariantClasses, radiusClasses } = useFieldClasses({
 const affordanceIconClass = computed(() => FIELD_AFFORDANCE_ICON_BY_COLOR[stateColor.value] ?? 'text-muted-foreground');
 const affordanceActionClass = computed(() => FIELD_AFFORDANCE_ACTION_BY_COLOR[stateColor.value] ?? 'text-muted-foreground hover:text-foreground');
  
-const triggerEl = ref<HTMLButtonElement | null>(null); 
+const triggerEl = ref<HTMLButtonElement | null>(null);
+
+const isMobileViewport = ref(typeof window !== 'undefined' ? window.innerWidth < 640 : false);
+function onViewportResize() { isMobileViewport.value = window.innerWidth < 640; }
+onMounted(() => window.addEventListener('resize', onViewportResize));
+onBeforeUnmount(() => window.removeEventListener('resize', onViewportResize));
+const effectiveMonths = computed(() => isMobileViewport.value ? 1 : props.months);
  
 const { 
     triggerRef, panelRef, isOpen, panelStyle, 

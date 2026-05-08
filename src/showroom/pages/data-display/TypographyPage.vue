@@ -187,7 +187,7 @@ const slotsList = computed<SlotDoc[]>(() => [
       >
         <template #controls>
           <TbPills
-            label="Variant"
+            :label="t('controls.variant')"
             :options="[
               { value: 'display' },
               { value: 'heading' },
@@ -201,7 +201,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           />
           <TbSep />
           <TbPills
-            label="Size"
+            :label="t('controls.size')"
             :options="[
               { value: 'small' },
               { value: 'medium' },
@@ -211,7 +211,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           />
           <TbSep />
           <TbPills
-            label="Weight"
+            :label="t('controls.weight')"
             :options="[
               { value: 'light' },
               { value: 'normal' },
@@ -224,7 +224,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           />
           <TbSep />
           <TbPills
-            label="Align"
+            :label="t('controls.align')"
             :options="[
               { value: 'left' },
               { value: 'center' },
@@ -233,12 +233,16 @@ const slotsList = computed<SlotDoc[]>(() => [
             v-model="pgAlign"
           />
           <TbSep />
-          <TbDots label="Color" :options="colorDots" v-model="pgColor" />
+          <TbDots
+            :label="t('controls.color')"
+            :options="colorDots"
+            v-model="pgColor"
+          />
           <TbSep />
-          <TbToggle label="Truncate" v-model="pgTruncate" />
-          <TbToggle label="Italic" v-model="pgItalic" />
-          <TbToggle label="Underline" v-model="pgUnderline" />
-          <TbToggle label="Strikethrough" v-model="pgStrike" />
+          <TbToggle :label="t('controls.truncated')" v-model="pgTruncate" />
+          <TbToggle :label="t('controls.italic')" v-model="pgItalic" />
+          <TbToggle :label="t('controls.underline')" v-model="pgUnderline" />
+          <TbToggle :label="t('controls.strikethrough')" v-model="pgStrike" />
         </template>
 
         <Typography

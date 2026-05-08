@@ -155,8 +155,9 @@
                                 activeValue === opt.value && !opt.disabled ? optionSurface : '',
                                 matchedOption?.value === opt.value ? 'font-medium' : '', 
                             ]" 
-                            @pointerenter="setActive(opt.value)" 
-                            @mousedown.prevent 
+                            @pointerenter="setActive(opt.value)"
+                            @mousedown.prevent
+                            @touchstart.prevent
                             @click="selectOption(opt)" 
                         > 
                             <component 

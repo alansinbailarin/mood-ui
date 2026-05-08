@@ -133,7 +133,7 @@ function go(tab: Tab) {
         ref="trackEl"
         role="tablist"
         :aria-label="t('components')"
-        class="relative inline-flex items-center gap-1 rounded-full border border-border bg-muted/30 p-1"
+        class="relative inline-flex items-center gap-0.5 rounded-full border border-border bg-muted/30 p-0.5"
     >
         <span
             class="absolute pointer-events-none rounded-full bg-card shadow-sm border border-border/60"
@@ -146,7 +146,7 @@ function go(tab: Tab) {
             type="button"
             role="tab"
             :aria-selected="activeTabKey === tab.key"
-            class="relative z-10 inline-flex items-center justify-center h-8 px-3.5 rounded-full text-sm font-medium transition-colors duration-150"
+            class="relative z-10 inline-flex items-center justify-center h-7 px-3 rounded-full text-xs font-medium transition-colors duration-150"
             :class="activeTabKey === tab.key
                 ? 'text-foreground'
                 : 'text-muted-foreground hover:text-foreground'"

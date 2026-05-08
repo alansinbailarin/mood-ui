@@ -112,7 +112,7 @@ const slotsList = computed<SlotDoc[]>(() => [
       >
         <template #controls>
           <TbPills
-            label="Variant"
+            :label="t('controls.variant')"
             :options="[
               { value: 'subtle' },
               { value: 'outline' },
@@ -121,10 +121,14 @@ const slotsList = computed<SlotDoc[]>(() => [
             v-model="pgVariant"
           />
           <TbSep />
-          <TbDots label="Color" :options="colorDots" v-model="pgColor" />
+          <TbDots
+            :label="t('controls.color')"
+            :options="colorDots"
+            v-model="pgColor"
+          />
           <TbSep />
           <TbPills
-            label="Size"
+            :label="t('controls.size')"
             :options="[
               { value: 'small' },
               { value: 'medium' },
@@ -134,7 +138,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           />
           <TbSep />
           <TbPills
-            label="Radius"
+            :label="t('controls.radius')"
             :options="[
               { value: 'none' },
               { value: 'small' },

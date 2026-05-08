@@ -227,7 +227,7 @@ const slotsList = computed<SlotDoc[]>(() => [
       >
         <template #controls>
           <TbPills
-            label="Variante"
+            :label="t('controls.variant')"
             :options="[
               { value: 'dot' },
               { value: 'icon' },
@@ -236,10 +236,14 @@ const slotsList = computed<SlotDoc[]>(() => [
             v-model="pgVariant"
           />
           <TbSep />
-          <TbDots label="Color" :options="colorDots" v-model="pgColor" />
+          <TbDots
+            :label="t('controls.color')"
+            :options="colorDots"
+            v-model="pgColor"
+          />
           <TbSep />
           <TbPills
-            label="Tamaño"
+            :label="t('controls.size')"
             :options="[
               { value: 'small' },
               { value: 'medium' },
@@ -249,7 +253,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           />
           <TbSep />
           <TbPills
-            label="Lado"
+            :label="t('controls.side')"
             :options="[{ value: 'left' }, { value: 'right' }]"
             v-model="pgSide"
           />

@@ -41,7 +41,7 @@ const overviewCode = computed(() => {
     const parts: string[] = [];
     if (pgSize.value   !== 'medium') parts.push(`size="${pgSize.value}"`);
     if (pgRadius.value !== 'full')   parts.push(`radius="${pgRadius.value}"`);
-    if (pgMode.value === 'initials' && pgColor.value !== 'default') parts.push(`color="${pgColor.value}"`);
+    if ((pgMode.value === 'initials' || pgMode.value === 'icon') && pgColor.value !== 'default') parts.push(`color="${pgColor.value}"`);
     if (pgBordered.value)            parts.push(':bordered="true"');
     if (pgStatus.value)              parts.push(`status="${pgStatus.value}"`);
     if (pgMode.value === 'image')    parts.push('src="https://i.pravatar.cc/80?img=12"');
@@ -60,8 +60,9 @@ const initialsCode = `<Avatar initials="AP" color="primary" />
 <Avatar initials="NK" color="danger"  />`;
 
 const iconCode = `<Avatar />
-<Avatar size="large" />
-<Avatar size="xl"    />`;
+<Avatar color="primary" />
+<Avatar color="success" />
+<Avatar color="danger"  />`;
 
 const sizesCode = `<Avatar src="https://i.pravatar.cc/80?img=4" size="xs"     />
 <Avatar src="https://i.pravatar.cc/80?img=4" size="small"  />
@@ -134,6 +135,7 @@ const propsList = computed<PropDoc[]>(() => [
                     v-else
                     :size="pgSize"
                     :radius="pgRadius"
+                    :color="pgColor"
                     :bordered="pgBordered"
                     :status="pgStatus || undefined"
                 />
@@ -168,8 +170,9 @@ const propsList = computed<PropDoc[]>(() => [
                 :code="iconCode"
             >
                 <Avatar />
-                <Avatar size="large" />
-                <Avatar size="xl" />
+                <Avatar color="primary" />
+                <Avatar color="success" />
+                <Avatar color="danger" />
             </ComponentPreview>
 
             <ComponentPreview

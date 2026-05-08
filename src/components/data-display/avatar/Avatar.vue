@@ -36,10 +36,10 @@
             {{ initials }} 
         </span> 
  
-        <span 
-            v-else 
-            aria-hidden="true" 
-            :class="['inline-flex items-center justify-center bg-muted text-muted-foreground', sizeClasses, shapeClasses, bordered ? borderClasses : '']" 
+        <span
+            v-else
+            aria-hidden="true"
+            :class="['inline-flex items-center justify-center', iconFallbackColorClasses, sizeClasses, shapeClasses, bordered ? borderClasses : '']"
         > 
             <svg :class="iconFallbackClasses" fill="currentColor" viewBox="0 0 24 24"> 
                 <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v1.2c0 .66.54 1.2 1.2 1.2h16.8c.66 0 1.2-.54 1.2-1.2v-1.2c0-3.2-6.4-4.8-9.6-4.8z" /> 
@@ -153,6 +153,16 @@ const initialsFontClasses = computed(() => {
     } 
 }); 
  
+const iconFallbackColorClasses = computed(() => {
+    switch (color.value) {
+        case 'primary': return 'bg-primary-subtle text-primary';
+        case 'danger': return 'bg-destructive-subtle text-destructive';
+        case 'success': return 'bg-success-subtle text-success';
+        case 'warning': return 'bg-warning-subtle text-warning';
+        default: return 'bg-muted text-muted-foreground';
+    }
+});
+
 const iconFallbackClasses = computed(() => { 
     switch (size.value) { 
         case 'xs': return 'w-3.5 h-3.5'; 

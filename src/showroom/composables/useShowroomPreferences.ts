@@ -29,7 +29,7 @@ export const PREFS_DEFAULTS: ShowroomPrefs = {
     accentHex:     '#6366f1',
     baseIntensity: 0,
     darkSurface:   'default',
-    locale:        'es',
+    locale:        'en',
 };
 
 const STORAGE_KEY = 'mood-ui:showroom-prefs';

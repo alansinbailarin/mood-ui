@@ -8,7 +8,7 @@ import { setShowroomI18nLocale, type ShowroomLocale } from '../i18n';
 
 export type { ShowroomLocale };
 
-const locale = ref<ShowroomLocale>('es');
+const locale = ref<ShowroomLocale>('en');
 
 export function setShowroomLocale(v: ShowroomLocale): void {
     locale.value = v;

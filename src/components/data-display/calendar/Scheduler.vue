@@ -121,12 +121,12 @@
                                     }, 
                                     eventInlineStyle(seg.event, r), 
                                 ]" 
-                                :class="[ 
-                                    'absolute z-10 truncate text-xs px-1.5 flex items-center cursor-pointer transition-all hover:opacity-80 select-none', 
-                                    eventRadiusClass, 
-                                    draggableEvents ? 'cursor-grab active:cursor-grabbing' : '', 
-                                    seg.event.colorHex || (useResourceColor && r.colorHex) ? '' : eventColorClass(resolveEventColor(seg.event, r)), 
-                                    draggingId === seg.event.id ? 'opacity-70 scale-95' : '', 
+                                :class="[
+                                    'absolute z-10 truncate text-xs px-1.5 flex items-center cursor-pointer transition-all hover:opacity-80 select-none',
+                                    eventRadiusClass,
+                                    draggableEvents ? 'cursor-grab active:cursor-grabbing touch-none' : '',
+                                    seg.event.colorHex || (useResourceColor && r.colorHex) ? '' : eventColorClass(resolveEventColor(seg.event, r)),
+                                    draggingId === seg.event.id ? 'opacity-70 scale-95' : '',
                                 ]" 
                             > 
                                 <slot name="event" :event="seg.event" :resource="r" :allDay="true"> 
@@ -211,13 +211,13 @@
                             @mousemove="onEventMove" 
                             @mouseleave="onEventLeave" 
                             :style="[seg.style, eventInlineStyle(seg.event, r)]" 
-                            :class="[ 
-                                'absolute z-10 overflow-hidden transition-all hover:opacity-90 select-none flex flex-col', 
-                                eventRadiusClass, 
-                                isEventInteractive(seg.event) ? 'cursor-pointer' : 'cursor-default', 
-                                draggableEvents && isEventInteractive(seg.event) ? 'cursor-grab active:cursor-grabbing' : '', 
-                                seg.event.colorHex || (useResourceColor && r.colorHex) ? 'border-l-2' : eventColorClass(resolveEventColor(seg.event, r)), 
-                                draggingId === seg.event.id ? 'opacity-70 scale-95' : '', 
+                            :class="[
+                                'absolute z-10 overflow-hidden transition-all hover:opacity-90 select-none flex flex-col',
+                                eventRadiusClass,
+                                isEventInteractive(seg.event) ? 'cursor-pointer' : 'cursor-default',
+                                draggableEvents && isEventInteractive(seg.event) ? 'cursor-grab active:cursor-grabbing touch-none' : '',
+                                seg.event.colorHex || (useResourceColor && r.colorHex) ? 'border-l-2' : eventColorClass(resolveEventColor(seg.event, r)),
+                                draggingId === seg.event.id ? 'opacity-70 scale-95' : '',
                             ]" 
                         > 
                             <slot name="event" :event="seg.event" :resource="r" :allDay="false"> 
@@ -233,7 +233,7 @@
                                 @mousedown.stop.prevent 
                                 @dragstart.stop.prevent 
                                 @pointerdown.stop="onResizeStart(seg.event, r, $event)" 
-                                class="absolute bottom-0 left-0 right-0 h-1.5 cursor-ns-resize hover:bg-black/10" 
+                                class="absolute bottom-0 left-0 right-0 h-1.5 cursor-ns-resize hover:bg-black/10 touch-none" 
                             ></div> 
                         </div> 
  

@@ -40,6 +40,10 @@
                         "title": "With presets",
                         "desc": "show-presets adds a side panel with shortcuts (today, this week, this month, last 30 days…)."
                     },
+                    "color": {
+                        "title": "Primary color",
+                        "desc": "The color affects the background of the selected range and the start/end days."
+                    },
                     "colorPrimary": {
                         "title": "Primary color",
                         "desc": "The color affects the background of the selected range and the start/end days."

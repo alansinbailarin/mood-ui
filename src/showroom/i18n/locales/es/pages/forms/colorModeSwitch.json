@@ -1,0 +1,47 @@
+{
+    "title": "ColorModeSwitch",
+    "description": "Selector segmentado de tres estados para el modo de color (claro · sistema · oscuro) con un indicador animado deslizante. Soporta variante colapsada que se expande al pasar el cursor.",
+
+    "controls": {
+        "variant":    "Variante",
+        "size":       "Tamaño",
+        "showLabels": "Mostrar etiquetas",
+        "disabled":   "Disabled"
+    },
+
+    "examples": {
+        "basic": {
+            "title": "Uso básico",
+            "desc":  "Enlaza el switch con el composable useColorMode para controlar el tema de forma global."
+        },
+        "collapsed": {
+            "title": "Variante collapsed",
+            "desc":  "Solo muestra el modo activo. Al pasar el cursor se expande mostrando las tres opciones con una animación suave."
+        },
+        "sizes": {
+            "title": "Tamaños",
+            "desc":  "Tres tamaños disponibles para distintas densidades de UI."
+        },
+        "withLabels": {
+            "title": "Con etiquetas de texto",
+            "desc":  "Activa showLabels para mostrar el nombre del modo junto al ícono."
+        },
+        "disabled": {
+            "title": "Disabled",
+            "desc":  "Estado deshabilitado que impide la selección."
+        }
+    },
+
+    "props": {
+        "modelValue":  "Modo activo (v-model). Uno de 'light' | 'system' | 'dark'.",
+        "variant":     "Apariencia del control. 'default' muestra siempre las tres opciones; 'collapsed' solo muestra la activa y se expande al hacer hover.",
+        "ariaLabel":   "Nombre accesible del grupo de radio. Por defecto 'Color mode'.",
+        "showLabels":  "Muestra etiquetas de texto junto a cada ícono.",
+        "size":        "Tamaño del control.",
+        "disabled":    "Deshabilita el control e impide la selección."
+    },
+
+    "emits": {
+        "updateModelValue": "Emitido al seleccionar un modo (sincroniza v-model)."
+    }
+}

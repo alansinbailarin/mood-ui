@@ -209,6 +209,12 @@ export const showroomNav: NavCategory[] = [
         page: () => import("./pages/forms/TagInputPage.vue"),
         badge: "New",
       },
+      {
+        id: "color-mode-switch",
+        label: "ColorModeSwitch",
+        page: () => import("./pages/forms/ColorModeSwitchPage.vue"),
+        badge: "New",
+      },
     ],
   },
   {

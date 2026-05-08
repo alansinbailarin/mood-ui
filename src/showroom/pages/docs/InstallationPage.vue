@@ -191,9 +191,13 @@ const email = ref('');
         </Typography>
         <CodePreview :code="setupCss" lang="css" code-only />
         <Banner color="info" variant="subtle">
-          <strong>Tip:</strong> mood-ui usa <code>@theme inline</code> para
-          mapear sus CSS vars a tokens de Tailwind. No necesitas configurar nada
-          en <code>tailwind.config</code>.
+          <strong>Tip:</strong>
+          {{
+            t("pages.docs.installation.step3Tip", {
+              themeInline: "@theme inline",
+              tailwindConfig: "tailwind.config",
+            })
+          }}
         </Banner>
       </li>
 
