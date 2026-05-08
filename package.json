@@ -18,9 +18,22 @@
     "vue3",
     "components",
     "ui",
+    "ui-library",
+    "component-library",
     "tailwindcss",
+    "tailwind",
     "design-system",
-    "modo"
+    "mood-ui",
+    "modo",
+    "dark-mode",
+    "theming",
+    "calendar",
+    "scheduler",
+    "datepicker",
+    "table",
+    "accessible",
+    "typescript",
+    "composables"
   ],
   "main": "./dist/mood-ui.cjs",
   "module": "./dist/mood-ui.mjs",
@@ -85,6 +98,7 @@
     "vite-plugin-dts": "^5.0.0",
     "vitest": "^4.1.5",
     "vue": "^3.5.32",
+    "vue-i18n": "^11.4.2",
     "vue-tsc": "^3.2.7"
   }
 }

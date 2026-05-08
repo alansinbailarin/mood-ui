@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import DateTimeField from '../../../components/forms/DateTimeField.vue';
 import type { PropDoc, EmitDoc } from '../../types';
+
+const { t } = useI18n();
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgSize      = ref<'small' | 'medium' | 'large'>('medium');
@@ -55,38 +58,38 @@ const clearableCode = `<DateTimeField v-model="value" label="Inicio" clearable c
 const disabledCode = `<DateTimeField :model-value="value" label="Inicio" disabled class="w-80" />`;
 
 // ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'modelValue',  type: 'Date | null',                          default: 'null',         description: 'Fecha + hora seleccionada. Soporta v-model.' },
-    { name: 'label',       type: 'string',                                                        description: 'Etiqueta visible encima del campo.' },
-    { name: 'placeholder', type: 'string',                                default: "'Select date and time…'", description: 'Texto cuando no hay valor.' },
-    { name: 'size',        type: "'small' | 'medium' | 'large'",         default: "'medium'",     description: 'Tamaño del input.' },
-    { name: 'format',      type: "'24h' | '12h'",                        default: "'24h'",        description: 'Formato del selector de hora.' },
-    { name: 'step',        type: 'number',                                default: '5',            description: 'Granularidad de los minutos en el picker.' },
-    { name: 'showSeconds', type: 'boolean',                               default: 'false',        description: 'Muestra columna de segundos en el picker.' },
-    { name: 'minDate',     type: 'Date',                                                          description: 'Fecha y hora mínima seleccionable.' },
-    { name: 'maxDate',     type: 'Date',                                                          description: 'Fecha y hora máxima seleccionable.' },
-    { name: 'clearable',   type: 'boolean',                               default: 'false',        description: 'Muestra un botón para limpiar el valor.' },
-    { name: 'disabled',    type: 'boolean',                               default: 'false',        description: 'Deshabilita el campo.' },
-    { name: 'readonly',    type: 'boolean',                               default: 'false',        description: 'Hace el campo no interactivo.' },
-    { name: 'required',    type: 'boolean',                               default: 'false',        description: 'Marca el campo como obligatorio.' },
-    { name: 'fullWidth',   type: 'boolean',                               default: 'false',        description: 'Ocupa el 100% del ancho disponible.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'modelValue',  type: 'Date | null',                          default: 'null',         description: t('pages.forms.dateTimeField.props.modelValue') },
+    { name: 'label',       type: 'string',                                                        description: t('pages.forms.dateTimeField.props.label') },
+    { name: 'placeholder', type: 'string',                                default: "'Select date and time…'", description: t('pages.forms.dateTimeField.props.placeholder') },
+    { name: 'size',        type: "'small' | 'medium' | 'large'",         default: "'medium'",     description: t('pages.forms.dateTimeField.props.size') },
+    { name: 'format',      type: "'24h' | '12h'",                        default: "'24h'",        description: t('pages.forms.dateTimeField.props.format') },
+    { name: 'step',        type: 'number',                                default: '5',            description: t('pages.forms.dateTimeField.props.step') },
+    { name: 'showSeconds', type: 'boolean',                               default: 'false',        description: t('pages.forms.dateTimeField.props.showSeconds') },
+    { name: 'minDate',     type: 'Date',                                                          description: t('pages.forms.dateTimeField.props.minDate') },
+    { name: 'maxDate',     type: 'Date',                                                          description: t('pages.forms.dateTimeField.props.maxDate') },
+    { name: 'clearable',   type: 'boolean',                               default: 'false',        description: t('pages.forms.dateTimeField.props.clearable') },
+    { name: 'disabled',    type: 'boolean',                               default: 'false',        description: t('pages.forms.dateTimeField.props.disabled') },
+    { name: 'readonly',    type: 'boolean',                               default: 'false',        description: t('pages.forms.dateTimeField.props.readonly') },
+    { name: 'required',    type: 'boolean',                               default: 'false',        description: t('pages.forms.dateTimeField.props.required') },
+    { name: 'fullWidth',   type: 'boolean',                               default: 'false',        description: t('pages.forms.dateTimeField.props.fullWidth') },
+]);
 
-const emitsList: EmitDoc[] = [
-    { name: 'update:modelValue', payload: 'Date | null', description: 'Emitido al seleccionar o limpiar el valor.' },
-    { name: 'change',            payload: 'Date | null', description: 'Alias semántico de update:modelValue.' },
-    { name: 'open',              payload: 'void',        description: 'Emitido al abrir el popover.' },
-    { name: 'close',             payload: 'void',        description: 'Emitido al cerrar el popover.' },
-    { name: 'clear',             payload: 'void',        description: 'Emitido al limpiar el valor.' },
-];
+const emitsList = computed<EmitDoc[]>(() => [
+    { name: 'update:modelValue', payload: 'Date | null', description: t('pages.forms.dateTimeField.emits.updateModelValue') },
+    { name: 'change',            payload: 'Date | null', description: t('pages.forms.dateTimeField.emits.change') },
+    { name: 'open',              payload: 'void',        description: t('pages.forms.dateTimeField.emits.open') },
+    { name: 'close',             payload: 'void',        description: t('pages.forms.dateTimeField.emits.close') },
+    { name: 'clear',             payload: 'void',        description: t('pages.forms.dateTimeField.emits.clear') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="DateTimeField"
-        category="Forms"
+        :title="t('pages.forms.dateTimeField.title')"
+        :category="t('pages.forms.dateTimeField.category')"
         import-path="import { DateTimeField } from 'mood-ui'"
-        description="Input combinado de fecha y hora con popover de calendario + selector de hora interno."
+        :description="t('pages.forms.dateTimeField.description')"
         :props-list="propsList"
         :emits-list="emitsList"
     >
@@ -96,7 +99,7 @@ const emitsList: EmitDoc[] = [
                 <template #controls>
                     <!-- Size -->
                     <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Tamaño</span>
+                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">{{ t('pages.forms.dateTimeField.controls.size').toUpperCase() }}</span>
                         <div class="flex rounded-md border border-border overflow-hidden">
                             <button
                                 v-for="s in ['small', 'medium', 'large']"
@@ -115,7 +118,7 @@ const emitsList: EmitDoc[] = [
 
                     <!-- Format -->
                     <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Formato</span>
+                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">{{ t('pages.forms.dateTimeField.controls.format').toUpperCase() }}</span>
                         <div class="flex rounded-md border border-border overflow-hidden">
                             <button
                                 v-for="f in ['24h', '12h']"
@@ -139,7 +142,7 @@ const emitsList: EmitDoc[] = [
                             ? 'border-primary bg-primary/10 text-primary font-medium'
                             : 'border-border text-muted-foreground hover:bg-muted/60'"
                         @click="pgClearable = !pgClearable"
-                    >Clearable</button>
+                    >{{ t('pages.forms.dateTimeField.controls.clearable') }}</button>
 
                     <button
                         type="button"
@@ -148,12 +151,12 @@ const emitsList: EmitDoc[] = [
                             ? 'border-primary bg-primary/10 text-primary font-medium'
                             : 'border-border text-muted-foreground hover:bg-muted/60'"
                         @click="pgDisabled = !pgDisabled"
-                    >Disabled</button>
+                    >{{ t('pages.forms.dateTimeField.controls.disabled') }}</button>
                 </template>
 
                 <DateTimeField
                     v-model="pgValue"
-                    label="Inicio"
+                    :label="t('pages.forms.dateTimeField.playground.label')"
                     :size="pgSize"
                     :format="pgFormat"
                     :clearable="pgClearable"
@@ -166,24 +169,24 @@ const emitsList: EmitDoc[] = [
         <!-- ── Examples ────────────────────────────────────────────────────── -->
         <template #examples>
             <ComponentPreview
-                title="Básico"
-                description="Selector combinado de fecha y hora con formato 24h por defecto."
+                :title="t('pages.forms.dateTimeField.examples.basic.title')"
+                :description="t('pages.forms.dateTimeField.examples.basic.desc')"
                 :code="basicCode"
             >
                 <DateTimeField v-model="dValue" label="Inicio" class="w-80" />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Formato 12h"
-                description="Cambia el selector de hora a formato AM/PM con format='12h'."
+                :title="t('pages.forms.dateTimeField.examples.format12h.title')"
+                :description="t('pages.forms.dateTimeField.examples.format12h.desc')"
                 :code="format12hCode"
             >
                 <DateTimeField v-model="d12h" label="Inicio" format="12h" class="w-80" />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Min y max"
-                description="Limita el rango con minDate y maxDate aplicados a fecha y hora."
+                :title="t('pages.forms.dateTimeField.examples.minMax.title')"
+                :description="t('pages.forms.dateTimeField.examples.minMax.desc')"
                 :code="constraintsCode"
             >
                 <DateTimeField
@@ -196,16 +199,16 @@ const emitsList: EmitDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Clearable"
-                description="Botón ✕ visible cuando hay valor para limpiar la selección."
+                :title="t('pages.forms.dateTimeField.examples.clearable.title')"
+                :description="t('pages.forms.dateTimeField.examples.clearable.desc')"
                 :code="clearableCode"
             >
                 <DateTimeField v-model="dClearable" label="Inicio" clearable class="w-80" />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Disabled"
-                description="El campo se atenúa y bloquea la apertura del popover."
+                :title="t('pages.forms.dateTimeField.examples.disabled.title')"
+                :description="t('pages.forms.dateTimeField.examples.disabled.desc')"
                 :code="disabledCode"
             >
                 <DateTimeField :model-value="dValue" label="Inicio" disabled class="w-80" />

@@ -1,35 +1,41 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Button from '../../../components/forms/Button.vue';
 import { HeartIcon, ArrowRightIcon } from '@heroicons/vue/24/outline';
-import { useShowroomT } from '../../composables/useShowroomLocale';
 import type { PropDoc, EmitDoc, SlotDoc } from '../../types';
+import TbPills  from '../../components/toolbar/TbPills.vue';
+import TbDots   from '../../components/toolbar/TbDots.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep    from '../../components/toolbar/TbSep.vue';
 
-const t = useShowroomT();
+const { t } = useI18n();
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgVariant  = ref<'normal' | 'outline' | 'ghost' | 'text'>('normal');
 const pgColor    = ref<'default' | 'primary' | 'danger' | 'success' | 'warning'>('primary');
 const pgSize     = ref<'xs' | 'small' | 'medium' | 'large'>('medium');
 const pgLoading  = ref(false);
-const pgDisabled = ref(false);
+const pgDisabled  = ref(false);
+const pgFullWidth = ref(false);
 
 function resetPlayground() {
-    pgVariant.value  = 'normal';
-    pgColor.value    = 'primary';
-    pgSize.value     = 'medium';
-    pgLoading.value  = false;
-    pgDisabled.value = false;
+    pgVariant.value   = 'normal';
+    pgColor.value     = 'primary';
+    pgSize.value      = 'medium';
+    pgLoading.value   = false;
+    pgDisabled.value  = false;
+    pgFullWidth.value = false;
 }
 
 const colorDots = [
-    { value: 'default'  as const, bg: '#64748b',        label: 'Default'  },
-    { value: 'primary'  as const, bg: 'var(--primary)', label: 'Primary'  },
-    { value: 'success'  as const, bg: '#22c55e',        label: 'Success'  },
-    { value: 'warning'  as const, bg: '#f59e0b',        label: 'Warning'  },
-    { value: 'danger'   as const, bg: '#ef4444',        label: 'Danger'   },
+    { value: 'default'  as const, bg: 'var(--color-slate-400)',   label: 'Default'  },
+    { value: 'primary'  as const, bg: 'var(--primary)',            label: 'Primary'  },
+    { value: 'success'  as const, bg: 'var(--color-emerald-500)', label: 'Success'  },
+    { value: 'warning'  as const, bg: 'var(--color-amber-500)',   label: 'Warning'  },
+    { value: 'danger'   as const, bg: 'var(--color-red-500)',     label: 'Danger'   },
 ];
 
 // Reactive code — only non-default attrs appear
@@ -40,6 +46,7 @@ const overviewCode = computed(() => {
     if (pgSize.value     !== 'medium')  parts.push(`size="${pgSize.value}"`);
     if (pgLoading.value)                parts.push(':loading="true"');
     if (pgDisabled.value)               parts.push(':disabled="true"');
+    if (pgFullWidth.value)              parts.push(':full-width="true"');
 
     const attrs = parts.length ? ' ' + parts.join(' ') : '';
     return `<Button${attrs}>Click me</Button>`;
@@ -71,36 +78,36 @@ const statesCode = `<Button loading                          color="primary">Gua
 <Button disabled                          color="primary">Disabled</Button>`;
 
 // ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'variant',      type: "'normal' | 'outline' | 'ghost' | 'text'",                   default: "'normal'",  description: 'Variante visual. Normal es el botón sólido por defecto.' },
-    { name: 'color',        type: "'default' | 'primary' | 'success' | 'warning' | 'danger'",  default: "'default'", description: 'Color semántico aplicado al botón.' },
-    { name: 'size',         type: "'xs' | 'small' | 'medium' | 'large'",                       default: "'medium'",  description: 'Controla el padding, fuente y alto del botón.' },
-    { name: 'label',        type: 'string',                                                                           description: 'Texto del botón. Equivalente al slot default para contenido plano.' },
-    { name: 'loading',      type: 'boolean',                                                    default: 'false',     description: 'Muestra un spinner y bloquea clicks mientras está activo.' },
-    { name: 'loadingText',  type: 'string',                                                                           description: 'Texto mostrado junto al spinner durante el estado loading.' },
-    { name: 'disabled',     type: 'boolean',                                                    default: 'false',     description: 'Deshabilita el botón visualmente e impide cualquier interacción.' },
-    { name: 'icon',         type: 'Component',                                                                        description: 'Componente de icono renderizado junto al label (heroicons u otro).' },
-    { name: 'iconPosition', type: "'left' | 'right'",                                          default: "'left'",    description: 'Lado donde aparece el icono respecto al label.' },
-    { name: 'fullWidth',    type: 'boolean',                                                    default: 'false',     description: 'El botón se expande para ocupar el 100% del ancho disponible.' },
-    { name: 'as',           type: 'string | Component',                                         default: "'button'",  description: "Elemento raíz a renderizar. Usa \"a\" para links o un router-link." },
-    { name: 'ariaLabel',    type: 'string',                                                                           description: 'Label accesible. Imprescindible en botones icon-only sin texto visible.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'variant',      type: "'normal' | 'outline' | 'ghost' | 'text'",                   default: "'normal'",  description: t('pages.forms.button.props.variant') },
+    { name: 'color',        type: "'default' | 'primary' | 'success' | 'warning' | 'danger'",  default: "'default'", description: t('pages.forms.button.props.color') },
+    { name: 'size',         type: "'xs' | 'small' | 'medium' | 'large'",                       default: "'medium'",  description: t('pages.forms.button.props.size') },
+    { name: 'label',        type: 'string',                                                                           description: t('pages.forms.button.props.label') },
+    { name: 'loading',      type: 'boolean',                                                    default: 'false',     description: t('pages.forms.button.props.loading') },
+    { name: 'loadingText',  type: 'string',                                                                           description: t('pages.forms.button.props.loadingText') },
+    { name: 'disabled',     type: 'boolean',                                                    default: 'false',     description: t('pages.forms.button.props.disabled') },
+    { name: 'icon',         type: 'Component',                                                                        description: t('pages.forms.button.props.icon') },
+    { name: 'iconPosition', type: "'left' | 'right'",                                          default: "'left'",    description: t('pages.forms.button.props.iconPosition') },
+    { name: 'fullWidth',    type: 'boolean',                                                    default: 'false',     description: t('pages.forms.button.props.fullWidth') },
+    { name: 'as',           type: 'string | Component',                                         default: "'button'",  description: t('pages.forms.button.props.as') },
+    { name: 'ariaLabel',    type: 'string',                                                                           description: t('pages.forms.button.props.ariaLabel') },
+]);
 
-const emitsList: EmitDoc[] = [
-    { name: 'click', payload: 'MouseEvent', description: 'Emitido al hacer click cuando el botón no está deshabilitado ni en estado loading.' },
-];
+const emitsList = computed<EmitDoc[]>(() => [
+    { name: 'click', payload: 'MouseEvent', description: t('pages.forms.button.emits.click') },
+]);
 
-const slotsList: SlotDoc[] = [
-    { name: 'default', description: 'Contenido personalizado del botón. Reemplaza la prop label cuando se necesita HTML o componentes internos.' },
-];
+const slotsList = computed<SlotDoc[]>(() => [
+    { name: 'default', description: t('pages.forms.button.slots.default') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="Button"
-        :category="t.btn_category"
+        :title="t('pages.forms.button.title')"
+        :category="t('pages.forms.button.category')"
         import-path="import { Button } from 'mood-ui'"
-        :description="t.btn_description"
+        :description="t('pages.forms.button.description')"
         :props-list="propsList"
         :emits-list="emitsList"
         :slots-list="slotsList"
@@ -109,82 +116,15 @@ const slotsList: SlotDoc[] = [
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="220px" @reset="resetPlayground">
                 <template #controls>
-                    <!-- Variant -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">{{ t.btn_ctrl_variant }}</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="v in ['normal', 'outline', 'ghost', 'text']"
-                                :key="v"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgVariant === v
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgVariant = (v as typeof pgVariant)"
-                            >{{ v }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Color dots -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">{{ t.btn_ctrl_color }}</span>
-                        <div class="flex items-center gap-1">
-                            <button
-                                v-for="c in colorDots"
-                                :key="c.value"
-                                type="button"
-                                class="size-4 rounded-full transition-all duration-150"
-                                :class="pgColor === c.value
-                                    ? 'ring-2 ring-offset-1 ring-foreground/30 scale-125'
-                                    : 'hover:scale-110 opacity-70 hover:opacity-100'"
-                                :style="`background: ${c.bg}`"
-                                :title="c.label"
-                                @click="pgColor = c.value"
-                            />
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Size -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">{{ t.btn_ctrl_size }}</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in ['xs', 'small', 'medium', 'large']"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = (s as typeof pgSize)"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgLoading
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgLoading = !pgLoading"
-                    >{{ t.btn_ctrl_loading }}</button>
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgDisabled
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgDisabled = !pgDisabled"
-                    >{{ t.btn_ctrl_disabled }}</button>
+                    <TbPills label="Variant" :options="[{value:'normal'},{value:'outline'},{value:'ghost'},{value:'text'}]" v-model="pgVariant" />
+                    <TbSep />
+                    <TbDots label="Color" :options="colorDots" v-model="pgColor" />
+                    <TbSep />
+                    <TbPills label="Size" :options="[{value:'xs'},{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbToggle label="Loading" v-model="pgLoading" />
+                    <TbToggle label="Disabled" v-model="pgDisabled" />
+                    <TbToggle label="Full width" v-model="pgFullWidth" />
                 </template>
 
                 <Button
@@ -193,6 +133,7 @@ const slotsList: SlotDoc[] = [
                     :size="pgSize"
                     :loading="pgLoading"
                     :disabled="pgDisabled"
+                    :full-width="pgFullWidth"
                 >
                     Click me
                 </Button>
@@ -202,8 +143,8 @@ const slotsList: SlotDoc[] = [
         <!-- ── Examples ────────────────────────────────────────────────────── -->
         <template #examples>
             <ComponentPreview
-                :title="t.btn_ex_variants_title"
-                :description="t.btn_ex_variants_desc"
+                :title="t('pages.forms.button.examples.variants.title')"
+                :description="t('pages.forms.button.examples.variants.desc')"
                 :code="variantsCode"
             >
                 <Button variant="normal"  color="primary">Normal</Button>
@@ -213,8 +154,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                :title="t.btn_ex_colors_title"
-                :description="t.btn_ex_colors_desc"
+                :title="t('pages.forms.button.examples.colors.title')"
+                :description="t('pages.forms.button.examples.colors.desc')"
                 :code="colorsCode"
             >
                 <Button color="default">Default</Button>
@@ -225,8 +166,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                :title="t.btn_ex_sizes_title"
-                :description="t.btn_ex_sizes_desc"
+                :title="t('pages.forms.button.examples.sizes.title')"
+                :description="t('pages.forms.button.examples.sizes.desc')"
                 :code="sizesCode"
             >
                 <Button size="xs"     color="primary">XS</Button>
@@ -236,8 +177,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                :title="t.btn_ex_icons_title"
-                :description="t.btn_ex_icons_desc"
+                :title="t('pages.forms.button.examples.icons.title')"
+                :description="t('pages.forms.button.examples.icons.desc')"
                 :code="iconsCode"
             >
                 <Button :icon="HeartIcon"      color="danger"   variant="outline">Me gusta</Button>
@@ -246,8 +187,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                :title="t.btn_ex_states_title"
-                :description="t.btn_ex_states_desc"
+                :title="t('pages.forms.button.examples.states.title')"
+                :description="t('pages.forms.button.examples.states.desc')"
                 :code="statesCode"
             >
                 <Button loading                           color="primary">Guardando…</Button>

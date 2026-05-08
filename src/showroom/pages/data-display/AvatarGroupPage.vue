@@ -5,16 +5,21 @@ import ComponentPreview from '../../components/ComponentPreview.vue';
 import AvatarGroup from '../../../components/data-display/avatar/AvatarGroup.vue';
 import Avatar from '../../../components/data-display/avatar/Avatar.vue';
 import type { PropDoc, SlotDoc } from '../../types';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgSize     = ref<'xs' | 'small' | 'medium' | 'large' | 'xl'>('medium');
 const pgMax      = ref<3 | 4 | 5 | 6>(4);
 const pgBordered = ref(true);
+const pgRadius   = ref<'none' | 'small' | 'medium' | 'large' | 'full'>('full');
 
 function resetPlayground() {
     pgSize.value = 'medium';
     pgMax.value = 4;
     pgBordered.value = true;
+    pgRadius.value = 'full';
 }
 
 const overviewCode = computed(() => {
@@ -22,6 +27,7 @@ const overviewCode = computed(() => {
     if (pgSize.value !== 'medium') parts.push(`size="${pgSize.value}"`);
     parts.push(`:max="${pgMax.value}"`);
     if (!pgBordered.value)         parts.push(':bordered="false"');
+    if (pgRadius.value !== 'full')  parts.push(`radius="${pgRadius.value}"`);
     const attrs = ' ' + parts.join(' ');
     return `<AvatarGroup${attrs}>
   <Avatar src="https://i.pravatar.cc/80?img=1" />
@@ -87,55 +93,16 @@ const slotsList: SlotDoc[] = [
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="180px" @reset="resetPlayground">
                 <template #controls>
-                    <!-- Size -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Size</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in ['xs', 'small', 'medium', 'large', 'xl']"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = (s as typeof pgSize)"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Max shown -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Max</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="m in [3, 4, 5, 6]"
-                                :key="m"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors"
-                                :class="pgMax === m
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgMax = (m as typeof pgMax)"
-                            >{{ m }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgBordered
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgBordered = !pgBordered"
-                    >Bordered</button>
+                    <TbPills label="Size" :options="[{value:'xs'},{value:'small'},{value:'medium'},{value:'large'},{value:'xl'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbPills label="Max" :options="[{value:'3'},{value:'4'},{value:'5'},{value:'6'}]" :model-value="String(pgMax)" @update:model-value="pgMax = Number($event) as 3|4|5|6" />
+                    <TbSep />
+                    <TbPills label="Radius" :options="[{value:'none'},{value:'small'},{value:'medium'},{value:'large'},{value:'full'}]" v-model="pgRadius" />
+                    <TbSep />
+                    <TbToggle label="Bordered" v-model="pgBordered" />
                 </template>
 
-                <AvatarGroup :size="pgSize" :max="pgMax" :bordered="pgBordered">
+                <AvatarGroup :size="pgSize" :max="pgMax" :bordered="pgBordered" :radius="pgRadius">
                     <Avatar src="https://i.pravatar.cc/80?img=1" />
                     <Avatar src="https://i.pravatar.cc/80?img=2" />
                     <Avatar src="https://i.pravatar.cc/80?img=3" />

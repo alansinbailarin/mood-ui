@@ -1,0 +1,52 @@
+{
+    "title": "DateRangePicker",
+    "description": "Selector inline de rango de fechas. Soporta uno o dos meses visibles, presets rápidos, restricciones de longitud mínima/máxima y fechas deshabilitadas.",
+
+    "controls": {
+        "months": "Meses",
+        "variant": "Variante",
+        "color": "Color",
+        "radius": "Radio",
+        "presets": "Presets"
+    },
+
+    "props": {
+        "modelValue": "Tupla con la fecha de inicio y fin del rango (v-model).",
+        "months": "Número de meses visibles simultáneamente.",
+        "showPresets": "Muestra el panel lateral con rangos predefinidos (hoy, esta semana, etc.).",
+        "presets": "Presets personalizados. Cada uno tiene label y una función range() que retorna la tupla.",
+        "color": "Color de acento para el rango seleccionado.",
+        "variant": "Estilo visual del panel.",
+        "radius": "Radio de borde del panel.",
+        "minDate": "Fecha mínima seleccionable.",
+        "maxDate": "Fecha máxima seleccionable.",
+        "minRange": "Mínimo de días que debe abarcar el rango.",
+        "maxRange": "Máximo de días que puede abarcar el rango.",
+        "disabledDates": "Fechas no seleccionables.",
+        "locale": "Locale para nombres de mes y día.",
+        "firstDayOfWeek": "Día de inicio de semana (0=Dom, 1=Lun)."
+    },
+
+    "examples": {
+        "twoMonths": {
+            "title": "Dos meses (por defecto)",
+            "desc": "Muestra dos calendarios lado a lado para seleccionar rangos largos cómodamente."
+        },
+        "oneMonth": {
+            "title": "Un mes",
+            "desc": "Modo compacto con un solo calendario, ideal para rangos cortos."
+        },
+        "presets": {
+            "title": "Con presets",
+            "desc": "show-presets añade un panel lateral con atajos (hoy, esta semana, este mes, últimos 30 días…)."
+        },
+        "colorPrimary": {
+            "title": "Color primary",
+            "desc": "El color afecta el fondo del rango seleccionado y los días de inicio/fin."
+        },
+        "outline": {
+            "title": "Variante outline",
+            "desc": "Borde perimetral visible, útil en fondos neutrales."
+        }
+    }
+}

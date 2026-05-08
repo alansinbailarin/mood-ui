@@ -13,6 +13,7 @@ import Button from '../../../components/forms/Button.vue';
 import Banner from '../../../components/feedback/Banner.vue';
 import CodePreview from '../../components/CodePreview.vue';
 import { useShowroomRouter } from '../../composables/useShowroomRouter';
+import { vReveal } from '../../composables/useScrollReveal';
 
 const { go } = useShowroomRouter();
 
@@ -28,7 +29,7 @@ const setupCss = `/* main.ts or main.css */
 
 const setupApp = `// main.ts
 import { createApp } from 'vue';
-import App from './App.vue';
+import App from '../../../App.vue';
 import './style.css';
 
 createApp(App).mount('#app');`;
@@ -68,7 +69,7 @@ const email = ref('');
 <template>
     <div class="flex flex-col gap-10">
         <!-- Header -->
-        <header class="flex flex-col gap-3">
+        <header v-reveal class="flex flex-col gap-3">
             <Typography variant="overline" size="medium" color="muted">
                 Documentación
             </Typography>
@@ -85,7 +86,7 @@ const email = ref('');
         </header>
 
         <!-- Steps: timeline -->
-        <ol class="relative flex flex-col gap-10 pl-8 border-l border-border ml-3">
+        <ol v-reveal class="relative flex flex-col gap-10 pl-8 border-l border-border ml-3">
             <!-- Step 1 -->
             <li class="relative flex flex-col gap-4">
                 <span class="absolute -left-[2.75rem] top-0.5 size-6 rounded-full bg-card ring-1 ring-primary/40 text-primary text-xs font-medium grid place-items-center select-none">1</span>
@@ -152,7 +153,7 @@ const email = ref('');
         </ol>
 
         <!-- Next steps -->
-        <section class="flex flex-col gap-4">
+        <section v-reveal class="flex flex-col gap-4">
             <Typography variant="heading" size="large" weight="medium">
                 Próximos pasos
             </Typography>

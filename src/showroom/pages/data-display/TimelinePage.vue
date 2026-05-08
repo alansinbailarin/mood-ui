@@ -7,24 +7,29 @@ import {
     CheckCircleIcon, RocketLaunchIcon, BeakerIcon, BugAntIcon,
 } from '@heroicons/vue/24/solid';
 import type { PropDoc, SlotDoc } from '../../types';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbDots from '../../components/toolbar/TbDots.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgVariant = ref<'dot' | 'icon' | 'outline'>('dot');
 const pgSize    = ref<'small' | 'medium' | 'large'>('medium');
 const pgColor   = ref<'default' | 'primary' | 'success' | 'warning' | 'danger'>('primary');
+const pgSide    = ref<'left' | 'right'>('left');
 
 function resetPlayground() {
     pgVariant.value = 'dot';
     pgSize.value    = 'medium';
     pgColor.value   = 'primary';
+    pgSide.value    = 'left';
 }
 
 const colorDots = [
-    { value: 'default' as const, bg: '#64748b',        label: 'Default' },
-    { value: 'primary' as const, bg: 'var(--primary)', label: 'Primary' },
-    { value: 'success' as const, bg: '#22c55e',        label: 'Success' },
-    { value: 'warning' as const, bg: '#f59e0b',        label: 'Warning' },
-    { value: 'danger'  as const, bg: '#ef4444',        label: 'Danger'  },
+    { value: 'default' as const, bg: 'var(--color-slate-400)',  label: 'Default' },
+    { value: 'primary' as const, bg: 'var(--primary)',           label: 'Primary' },
+    { value: 'success' as const, bg: 'var(--color-emerald-500)', label: 'Success' },
+    { value: 'warning' as const, bg: 'var(--color-amber-500)',   label: 'Warning' },
+    { value: 'danger'  as const, bg: 'var(--color-red-500)',     label: 'Danger'  },
 ];
 
 const playgroundItems = [
@@ -39,6 +44,7 @@ const overviewCode = computed(() => {
     if (pgVariant.value !== 'dot')     parts.push(`variant="${pgVariant.value}"`);
     if (pgSize.value    !== 'medium')  parts.push(`size="${pgSize.value}"`);
     if (pgColor.value   !== 'primary') parts.push(`color="${pgColor.value}"`);
+    if (pgSide.value    !== 'left')    parts.push(`side="${pgSide.value}"`);
     return `<Timeline ${parts.join(' ')} />`;
 });
 
@@ -116,62 +122,13 @@ const slotsList: SlotDoc[] = [
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="320px" @reset="resetPlayground">
                 <template #controls>
-                    <!-- Variant -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Variante</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="v in ['dot', 'icon', 'outline']"
-                                :key="v"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgVariant === v
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgVariant = (v as typeof pgVariant)"
-                            >{{ v }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Color dots -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Color</span>
-                        <div class="flex items-center gap-1">
-                            <button
-                                v-for="c in colorDots"
-                                :key="c.value"
-                                type="button"
-                                class="size-4 rounded-full transition-all duration-150"
-                                :class="pgColor === c.value
-                                    ? 'ring-2 ring-offset-1 ring-foreground/30 scale-125'
-                                    : 'hover:scale-110 opacity-70 hover:opacity-100'"
-                                :style="`background: ${c.bg}`"
-                                :title="c.label"
-                                @click="pgColor = c.value"
-                            />
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Size -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Tamaño</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in ['small', 'medium', 'large']"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = (s as typeof pgSize)"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
+                    <TbPills label="Variante" :options="[{value:'dot'},{value:'icon'},{value:'outline'}]" v-model="pgVariant" />
+                    <TbSep />
+                    <TbDots label="Color" :options="colorDots" v-model="pgColor" />
+                    <TbSep />
+                    <TbPills label="Tamaño" :options="[{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbPills label="Lado" :options="[{value:'left'},{value:'right'}]" v-model="pgSide" />
                 </template>
 
                 <div class="w-full max-w-md">
@@ -180,6 +137,7 @@ const slotsList: SlotDoc[] = [
                         :variant="pgVariant"
                         :size="pgSize"
                         :color="pgColor"
+                        :side="pgSide"
                     />
                 </div>
             </ComponentPreview>

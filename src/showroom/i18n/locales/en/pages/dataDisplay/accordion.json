@@ -1,0 +1,54 @@
+{
+    "title": "Accordion",
+    "description": "Expandable panels for displaying hierarchical content compactly. Ideal for FAQs, settings and filters.",
+
+    "controls": {
+        "variant": "Variant",
+        "size": "Size",
+        "radius": "Radius",
+        "icon": "Icon",
+        "multiple": "Multiple"
+    },
+
+    "props": {
+        "items": "List of items to render (each with value, title and content).",
+        "modelValue": "v-model binding. Type depends on multiple.",
+        "multiple": "Allows multiple panels to be open at the same time.",
+        "variant": "Visual variant of the container.",
+        "size": "Padding and typography scale. Inherited from ModoProvider.",
+        "radius": "Border radius (for separated and bordered).",
+        "iconPosition": "Side where the chevron icon is shown."
+    },
+
+    "emits": {
+        "updateModelValue": "Emitted when the set of open panels changes.",
+        "change": "Alias of update:modelValue for use without v-model."
+    },
+
+    "slots": {
+        "itemValue": "Per-item slot for rendering rich content (HTML, forms, lists)."
+    },
+
+    "examples": {
+        "basic": {
+            "title": "Basic",
+            "desc": "Three single-open panels with v-model."
+        },
+        "multiple": {
+            "title": "Multiple open",
+            "desc": "Allows keeping multiple panels expanded simultaneously."
+        },
+        "variants": {
+            "title": "Variants",
+            "desc": "separated (independent cards), bordered (single box) and flush (no container)."
+        },
+        "icons": {
+            "title": "With icons",
+            "desc": "Each item can declare an optional icon next to its title."
+        },
+        "sizes": {
+            "title": "Sizes",
+            "desc": "Three padding and typography scales."
+        }
+    }
+}

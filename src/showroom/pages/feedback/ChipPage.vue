@@ -1,11 +1,18 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Chip from '../../../components/feedback/Chip.vue';
 import Avatar from '../../../components/data-display/avatar/Avatar.vue';
 import { BellIcon, EnvelopeIcon, ChatBubbleLeftIcon } from '@heroicons/vue/24/outline';
 import type { PropDoc, EmitDoc, SlotDoc } from '../../types';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbDots from '../../components/toolbar/TbDots.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
+
+const { t } = useI18n();
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgVariant = ref<'solid' | 'subtle' | 'outline'>('solid');
@@ -21,11 +28,11 @@ function resetPlayground() {
 }
 
 const colorDots = [
-    { value: 'default' as const, bg: '#64748b',        label: 'Default' },
-    { value: 'primary' as const, bg: 'var(--primary)', label: 'Primary' },
-    { value: 'success' as const, bg: '#22c55e',        label: 'Success' },
-    { value: 'warning' as const, bg: '#f59e0b',        label: 'Warning' },
-    { value: 'danger'  as const, bg: '#ef4444',        label: 'Danger'  },
+    { value: 'default' as const, bg: 'var(--color-slate-400)',   label: 'Default' },
+    { value: 'primary' as const, bg: 'var(--primary)',           label: 'Primary' },
+    { value: 'success' as const, bg: 'var(--color-emerald-500)', label: 'Success' },
+    { value: 'warning' as const, bg: 'var(--color-amber-500)',   label: 'Warning' },
+    { value: 'danger'  as const, bg: 'var(--color-red-500)',     label: 'Danger'  },
 ];
 
 const overviewCode = computed(() => {
@@ -71,34 +78,34 @@ const inlineCode = `<Chip :content="'Nuevo'" color="primary" variant="subtle" />
 <Chip :content="42"      color="success" variant="solid" />`;
 
 // ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'content',    type: 'string | number',                                                              description: 'Contenido visible (número o string corto). Se ignora si dot está activo.' },
-    { name: 'dot',        type: 'boolean',                                          default: 'false',           description: 'Renderiza un indicador pequeño sin contenido.' },
-    { name: 'max',        type: 'number',                                           default: '99',              description: 'Cap superior para contenido numérico (ej. 99 → "99+").' },
-    { name: 'invisible',  type: 'boolean',                                          default: 'false',           description: 'Oculta el chip manteniéndolo en el árbol.' },
-    { name: 'showZero',   type: 'boolean',                                          default: 'false',           description: 'Muestra el chip aun cuando content sea 0 (por defecto se oculta).' },
-    { name: 'variant',    type: "'solid' | 'subtle' | 'outline'",                   default: "'solid'",         description: 'Estilo visual aplicado al chip.' },
-    { name: 'color',      type: "'default' | 'primary' | 'success' | 'warning' | 'danger'", default: "'danger'", description: 'Color semántico aplicado al chip.' },
-    { name: 'size',       type: "'small' | 'medium' | 'large'",                                                  description: 'Tamaño del chip. Cascada desde ModoProvider si se omite.' },
-    { name: 'radius',     type: "'none' | 'small' | 'medium' | 'large' | 'full'",                               description: 'Radio de las esquinas. Cascada desde ModoProvider.' },
-    { name: 'placement',  type: "'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'", default: "'top-right'", description: 'Esquina del anchor donde se posiciona el chip overlay.' },
-    { name: 'icon',       type: 'Component',                                                                    description: 'Icono decorativo opcional (ignorado en modo dot).' },
-    { name: 'ariaLabel',  type: 'string',                                                                       description: 'Nombre accesible. Recomendado para chips numéricos o dot.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'content',    type: 'string | number',                                                              description: t('pages.feedback.chip.props.content') },
+    { name: 'dot',        type: 'boolean',                                          default: 'false',           description: t('pages.feedback.chip.props.dot') },
+    { name: 'max',        type: 'number',                                           default: '99',              description: t('pages.feedback.chip.props.max') },
+    { name: 'invisible',  type: 'boolean',                                          default: 'false',           description: t('pages.feedback.chip.props.invisible') },
+    { name: 'showZero',   type: 'boolean',                                          default: 'false',           description: t('pages.feedback.chip.props.showZero') },
+    { name: 'variant',    type: "'solid' | 'subtle' | 'outline'",                   default: "'solid'",         description: t('pages.feedback.chip.props.variant') },
+    { name: 'color',      type: "'default' | 'primary' | 'success' | 'warning' | 'danger'", default: "'danger'", description: t('pages.feedback.chip.props.color') },
+    { name: 'size',       type: "'small' | 'medium' | 'large'",                                                  description: t('pages.feedback.chip.props.size') },
+    { name: 'radius',     type: "'none' | 'small' | 'medium' | 'large' | 'full'",                               description: t('pages.feedback.chip.props.radius') },
+    { name: 'placement',  type: "'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'", default: "'top-right'", description: t('pages.feedback.chip.props.placement') },
+    { name: 'icon',       type: 'Component',                                                                    description: t('pages.feedback.chip.props.icon') },
+    { name: 'ariaLabel',  type: 'string',                                                                       description: t('pages.feedback.chip.props.ariaLabel') },
+]);
 
 const emitsList: EmitDoc[] = [];
 
-const slotsList: SlotDoc[] = [
-    { name: 'default', description: 'Anchor del chip overlay. Si se omite, el chip se renderiza inline como pill.' },
-];
+const slotsList = computed<SlotDoc[]>(() => [
+    { name: 'default', description: t('pages.feedback.chip.slots.default') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="Chip"
+        :title="t('pages.feedback.chip.title')"
         category="Feedback"
         import-path="import { Chip } from 'mood-ui'"
-        description="Indicador overlay (counter o dot) que se posiciona sobre otro elemento como un avatar o icono. También funciona como pill inline cuando no hay anchor."
+        :description="t('pages.feedback.chip.description')"
         :props-list="propsList"
         :slots-list="slotsList"
     >
@@ -106,73 +113,13 @@ const slotsList: SlotDoc[] = [
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="200px" @reset="resetPlayground">
                 <template #controls>
-                    <!-- Variant -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Variante</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="v in ['solid', 'subtle', 'outline']"
-                                :key="v"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgVariant === v
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgVariant = (v as typeof pgVariant)"
-                            >{{ v }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Color dots -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Color</span>
-                        <div class="flex items-center gap-1">
-                            <button
-                                v-for="c in colorDots"
-                                :key="c.value"
-                                type="button"
-                                class="size-4 rounded-full transition-all duration-150"
-                                :class="pgColor === c.value
-                                    ? 'ring-2 ring-offset-1 ring-foreground/30 scale-125'
-                                    : 'hover:scale-110 opacity-70 hover:opacity-100'"
-                                :style="`background: ${c.bg}`"
-                                :title="c.label"
-                                @click="pgColor = c.value"
-                            />
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Size -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Tamaño</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in ['small', 'medium', 'large']"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = (s as typeof pgSize)"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgDot
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgDot = !pgDot"
-                    >Dot</button>
+                    <TbPills :label="t('pages.feedback.chip.controls.variant')" :options="[{value:'solid'},{value:'subtle'},{value:'outline'}]" v-model="pgVariant" />
+                    <TbSep />
+                    <TbDots :label="t('pages.feedback.chip.controls.color')" :options="colorDots" v-model="pgColor" />
+                    <TbSep />
+                    <TbPills :label="t('pages.feedback.chip.controls.size')" :options="[{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbToggle :label="t('pages.feedback.chip.controls.dot')" v-model="pgDot" />
                 </template>
 
                 <Chip
@@ -191,8 +138,8 @@ const slotsList: SlotDoc[] = [
         <!-- ── Examples ────────────────────────────────────────────────────── -->
         <template #examples>
             <ComponentPreview
-                title="Counter sobre icono"
-                description="Contador overlay sobre un icono. Con max se trunca el valor a 99+."
+                :title="t('pages.feedback.chip.examples.counter.title')"
+                :description="t('pages.feedback.chip.examples.counter.desc')"
                 :code="counterCode"
             >
                 <Chip :content="3"  color="danger"  placement="top-right">
@@ -207,8 +154,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Dot sobre avatar"
-                description="Indicador de presencia sin contenido sobre un avatar."
+                :title="t('pages.feedback.chip.examples.dot.title')"
+                :description="t('pages.feedback.chip.examples.dot.desc')"
                 :code="dotCode"
             >
                 <Chip dot color="success" placement="bottom-right">
@@ -223,8 +170,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Variantes"
-                description="Tres tratamientos visuales para el chip overlay."
+                :title="t('pages.feedback.chip.examples.variants.title')"
+                :description="t('pages.feedback.chip.examples.variants.desc')"
                 :code="variantsCode"
             >
                 <Chip :content="5" variant="solid"   color="primary"><BellIcon class="w-6 h-6" /></Chip>
@@ -233,8 +180,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Inline (sin anchor)"
-                description="Cuando no hay slot default, el chip se renderiza en flujo como pill."
+                :title="t('pages.feedback.chip.examples.inline.title')"
+                :description="t('pages.feedback.chip.examples.inline.desc')"
                 :code="inlineCode"
             >
                 <Chip :content="'Nuevo'" color="primary" variant="subtle" />

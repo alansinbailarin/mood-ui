@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Button from '../../../components/forms/Button.vue';
 import { useToast } from '../../../composables/useToast';
 import { SparklesIcon } from '@heroicons/vue/24/outline';
 import type { PropDoc, EmitDoc, SlotDoc } from '../../types';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbDots from '../../components/toolbar/TbDots.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
+
+const { t } = useI18n();
 
 type Color   = 'info' | 'success' | 'warning' | 'danger';
 type Variant = 'filled' | 'subtle' | 'outline';
@@ -21,10 +27,10 @@ function resetPlayground() {
 }
 
 const colorDots = [
-    { value: 'info'    as const, bg: '#3b82f6', label: 'Info'    },
-    { value: 'success' as const, bg: '#22c55e', label: 'Success' },
-    { value: 'warning' as const, bg: '#f59e0b', label: 'Warning' },
-    { value: 'danger'  as const, bg: '#ef4444', label: 'Danger'  },
+    { value: 'info'    as const, bg: 'var(--color-blue-500)',    label: 'Info'    },
+    { value: 'success' as const, bg: 'var(--color-emerald-500)', label: 'Success' },
+    { value: 'warning' as const, bg: 'var(--color-amber-500)',   label: 'Warning' },
+    { value: 'danger'  as const, bg: 'var(--color-red-500)',     label: 'Danger'  },
 ];
 
 const overviewCode = computed(() => `toast.push({
@@ -36,9 +42,9 @@ const overviewCode = computed(() => `toast.push({
 
 function pushOverview() {
     toast.push({
-        title: 'Notificación',
-        description: 'Vista previa con la configuración del playground.',
-        color: pgColor.value,
+        title:       t('pages.feedback.toastItem.playground.title'),
+        description: t('pages.feedback.toastItem.playground.description'),
+        color:   pgColor.value,
         variant: pgVariant.value,
     });
 }
@@ -49,27 +55,27 @@ function pushColor(color: Color, label: string) {
 
 function pushAction() {
     toast.info({
-        title: 'Archivo movido',
-        description: 'Lo enviamos a la papelera.',
+        title:       t('pages.feedback.toastItem.examples.action.toastTitle'),
+        description: t('pages.feedback.toastItem.examples.action.toastDesc'),
         action: {
-            label: 'Deshacer',
-            onClick: (close) => { toast.success({ title: 'Restaurado' }); close(); },
+            label: t('pages.feedback.toastItem.examples.action.undo'),
+            onClick: (close) => { toast.success({ title: t('pages.feedback.toastItem.examples.action.restored') }); close(); },
         },
     });
 }
 
 function pushIcon() {
     toast.success({
-        title: 'Logro desbloqueado',
-        description: 'Has completado el tour del producto.',
+        title:       t('pages.feedback.toastItem.examples.icon.toastTitle'),
+        description: t('pages.feedback.toastItem.examples.icon.toastDesc'),
         icon: SparklesIcon,
     });
 }
 
 function pushPinned() {
     toast.warning({
-        title: 'Conexión inestable',
-        description: 'Reintentando…',
+        title:       t('pages.feedback.toastItem.examples.pinned.toastTitle'),
+        description: t('pages.feedback.toastItem.examples.pinned.toastDesc'),
         duration: 0,
     });
 }
@@ -103,33 +109,32 @@ toast.warning({
   duration: 0,
 });`;
 
-const propsList: PropDoc[] = [
-    { name: 'title',        type: 'string',                                                          description: 'Título principal del toast.' },
-    { name: 'description',  type: 'string',                                                          description: 'Texto de soporte bajo el título.' },
-    { name: 'color',        type: "'info' | 'success' | 'warning' | 'danger'",  default: "'info'",   description: 'Color semántico del toast.' },
-    { name: 'variant',      type: "'filled' | 'subtle' | 'outline'",            default: "'subtle'", description: 'Variante visual.' },
-    { name: 'icon',         type: 'Component',                                                       description: 'Icono leading personalizado. Por defecto se elige uno por color.' },
-    { name: 'hideIcon',     type: 'boolean',                                                         description: 'Oculta el icono leading.' },
-    { name: 'duration',     type: 'number',                                     default: '4500',     description: 'Auto-close en ms. Usa 0 para mantener el toast pinned.' },
-    { name: 'action',       type: '{ label, onClick(close), keepOpen? }',                            description: 'Botón de acción inline (ej. "Deshacer").' },
-    { name: 'dismissable',  type: 'boolean',                                    default: 'true',     description: 'Muestra el botón de cerrar.' },
-    { name: 'pauseOnHover', type: 'boolean',                                    default: 'true',     description: 'Pausa el timer mientras el cursor está encima.' },
-    { name: 'id',           type: 'string | number',                                                 description: 'ID estable. Si se reusa, el toast se actualiza in-place.' },
-    { name: 'radius',       type: "'none' | 'small' | 'medium' | 'large' | 'full'",                  description: 'Radio override; por defecto cascadea del provider.' },
-    { name: 'placement',    type: "'top-right' | 'top-left' | 'top-center' | 'bottom-right' | 'bottom-left' | 'bottom-center'", description: 'Override de posición para este toast.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'title',        type: 'string',                                                          description: t('pages.feedback.toastItem.props.title') },
+    { name: 'description',  type: 'string',                                                          description: t('pages.feedback.toastItem.props.description') },
+    { name: 'color',        type: "'info' | 'success' | 'warning' | 'danger'",  default: "'info'",   description: t('pages.feedback.toastItem.props.color') },
+    { name: 'variant',      type: "'filled' | 'subtle' | 'outline'",            default: "'subtle'", description: t('pages.feedback.toastItem.props.variant') },
+    { name: 'icon',         type: 'Component',                                                       description: t('pages.feedback.toastItem.props.icon') },
+    { name: 'hideIcon',     type: 'boolean',                                                         description: t('pages.feedback.toastItem.props.hideIcon') },
+    { name: 'duration',     type: 'number',                                     default: '4500',     description: t('pages.feedback.toastItem.props.duration') },
+    { name: 'action',       type: '{ label, onClick(close), keepOpen? }',                            description: t('pages.feedback.toastItem.props.action') },
+    { name: 'dismissable',  type: 'boolean',                                    default: 'true',     description: t('pages.feedback.toastItem.props.dismissable') },
+    { name: 'pauseOnHover', type: 'boolean',                                    default: 'true',     description: t('pages.feedback.toastItem.props.pauseOnHover') },
+    { name: 'id',           type: 'string | number',                                                 description: t('pages.feedback.toastItem.props.id') },
+    { name: 'radius',       type: "'none' | 'small' | 'medium' | 'large' | 'full'",                  description: t('pages.feedback.toastItem.props.radius') },
+    { name: 'placement',    type: "'top-right' | 'top-left' | 'top-center' | 'bottom-right' | 'bottom-left' | 'bottom-center'", description: t('pages.feedback.toastItem.props.placement') },
+]);
 
 const emitsList: EmitDoc[] = [];
-
 const slotsList: SlotDoc[] = [];
 </script>
 
 <template>
     <ComponentDoc
-        title="Toast"
+        :title="t('pages.feedback.toastItem.title')"
         category="Feedback"
         import-path="import { useToast } from 'mood-ui'"
-        description="Notificación efímera renderizada por el ToastContainer. No se instancia directamente: se dispara con los helpers info / success / warning / danger del composable useToast()."
+        :description="t('pages.feedback.toastItem.description')"
         :props-list="propsList"
         :emits-list="emitsList"
         :slots-list="slotsList"
@@ -137,86 +142,54 @@ const slotsList: SlotDoc[] = [];
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="200px" lang="ts" @reset="resetPlayground">
                 <template #controls>
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Color</span>
-                        <div class="flex items-center gap-1">
-                            <button
-                                v-for="c in colorDots"
-                                :key="c.value"
-                                type="button"
-                                class="size-4 rounded-full transition-all duration-150"
-                                :class="pgColor === c.value
-                                    ? 'ring-2 ring-offset-1 ring-foreground/30 scale-125'
-                                    : 'hover:scale-110 opacity-70 hover:opacity-100'"
-                                :style="`background: ${c.bg}`"
-                                :title="c.label"
-                                @click="pgColor = c.value"
-                            />
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Variante</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="v in (['filled', 'subtle', 'outline'] as Variant[])"
-                                :key="v"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgVariant === v
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgVariant = v"
-                            >{{ v }}</button>
-                        </div>
-                    </div>
+                    <TbDots :label="t('pages.feedback.toastItem.controls.color')" :options="colorDots" v-model="pgColor" />
+                    <TbSep />
+                    <TbPills :label="t('pages.feedback.toastItem.controls.variant')" :options="[{value:'filled'},{value:'subtle'},{value:'outline'}]" v-model="pgVariant" />
                 </template>
 
-                <Button color="primary" @click="pushOverview">Lanzar toast</Button>
+                <Button color="primary" @click="pushOverview">{{ t('pages.feedback.toastItem.playground.launch') }}</Button>
             </ComponentPreview>
         </template>
 
         <template #examples>
             <ComponentPreview
-                title="Colores semánticos"
-                description="Cuatro helpers cubren los estados habituales: informativo, éxito, advertencia y error."
+                :title="t('pages.feedback.toastItem.examples.colors.title')"
+                :description="t('pages.feedback.toastItem.examples.colors.desc')"
                 :code="colorsCode"
                 min-height="160px"
             >
-                <Button @click="pushColor('info', 'Información')">info</Button>
-                <Button color="success" @click="pushColor('success', 'Operación completada')">success</Button>
-                <Button color="warning" @click="pushColor('warning', 'Atención')">warning</Button>
-                <Button color="danger"  @click="pushColor('danger', 'Algo salió mal')">danger</Button>
+                <Button @click="pushColor('info', t('pages.feedback.toastItem.examples.colors.info'))">info</Button>
+                <Button color="success" @click="pushColor('success', t('pages.feedback.toastItem.examples.colors.success'))">success</Button>
+                <Button color="warning" @click="pushColor('warning', t('pages.feedback.toastItem.examples.colors.warning'))">warning</Button>
+                <Button color="danger"  @click="pushColor('danger', t('pages.feedback.toastItem.examples.colors.danger'))">danger</Button>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con acción"
-                description="action añade un botón inline — patrón clásico para 'Deshacer' tras un borrado."
+                :title="t('pages.feedback.toastItem.examples.action.title')"
+                :description="t('pages.feedback.toastItem.examples.action.desc')"
                 :code="actionCode"
                 min-height="160px"
             >
-                <Button @click="pushAction">Mover a papelera</Button>
+                <Button @click="pushAction">{{ t('pages.feedback.toastItem.examples.action.cta') }}</Button>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Icono personalizado"
-                description="Pasa cualquier componente de icono (heroicons u otro) para sustituir el icono por defecto."
+                :title="t('pages.feedback.toastItem.examples.icon.title')"
+                :description="t('pages.feedback.toastItem.examples.icon.desc')"
                 :code="iconCode"
                 min-height="160px"
             >
-                <Button color="success" @click="pushIcon">Mostrar logro</Button>
+                <Button color="success" @click="pushIcon">{{ t('pages.feedback.toastItem.examples.icon.cta') }}</Button>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Pinned (sin auto-close)"
-                description="duration: 0 mantiene el toast hasta que el usuario lo cierre o llames dismiss()."
+                :title="t('pages.feedback.toastItem.examples.pinned.title')"
+                :description="t('pages.feedback.toastItem.examples.pinned.desc')"
                 :code="pinnedCode"
                 min-height="160px"
             >
-                <Button color="warning" @click="pushPinned">Toast pinned</Button>
-                <Button variant="outline" @click="toast.dismissAll()">Limpiar todos</Button>
+                <Button color="warning" @click="pushPinned">{{ t('pages.feedback.toastItem.examples.pinned.cta') }}</Button>
+                <Button variant="outline" @click="toast.dismissAll()">{{ t('pages.feedback.toastItem.examples.pinned.dismissAll') }}</Button>
             </ComponentPreview>
         </template>
     </ComponentDoc>

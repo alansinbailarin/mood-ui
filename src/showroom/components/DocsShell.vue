@@ -17,9 +17,11 @@
  * a hover underline that slides in from the bottom. Categories are
  * spaced generously and use a heavier kicker style to stand apart.
  */
-import { ref } from 'vue';
+import { ref, provide, watch } from 'vue';
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
 import Typography from '../../components/data-display/Typography.vue';
+import DocToc from './DocToc.vue';
+import { createDocToc, DOC_TOC_KEY } from '../composables/useDocToc';
 
 export interface NavItem {
     id: string;
@@ -40,6 +42,14 @@ const props = defineProps<{
 const emit = defineEmits<{ navigate: [id: string] }>();
 
 const mobileNavOpen = ref(false);
+
+// ── TOC (provided to all descendant pages) ───────────────────────────────────
+const toc = createDocToc();
+provide(DOC_TOC_KEY, toc);
+
+// Clear TOC items whenever navigation changes so stale items from the
+// previous page don't bleed into the next one.
+watch(() => props.activeId, () => toc.clear());
 
 function navigate(id: string) {
     emit('navigate', id);
@@ -197,6 +207,9 @@ function navigate(id: string) {
                 >
                     <slot />
                 </main>
+
+                <!-- Right TOC column — shown on xl+ when there are items -->
+                <DocToc :toc="toc" />
             </div>
         </div>
     </div>

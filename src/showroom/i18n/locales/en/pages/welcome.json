@@ -1,0 +1,49 @@
+{
+    "badge": "v0.5.2 · MIT · Open source",
+    "headline1": "The Vue 3 component library",
+    "headline2": "built to ship fast.",
+    "lead": "{n}+ accessible components, live reactive theming, dark mode with custom surfaces and native i18n. Tailwind CSS v4. TypeScript first. No lock‑in.",
+    "ctaExplore": "Explore components",
+    "ctaGithub": "View on GitHub",
+    "trustLine": "developers already building with mood-ui",
+    "featuresKicker": "Why mood-ui",
+    "featuresTitle": "Everything you need, nothing in the way.",
+    "featuresSubtitle": "Built for designers and developers who want to ship fast without sacrificing quality or a11y.",
+    "installKicker": "Start in 60 seconds",
+    "installTitle": "Installation",
+    "nextSteps": "Next steps",
+    "nextStepsBody": "Configure the provider, explore components or customize theming.",
+    "catalogKicker": "Catalog",
+    "catalogTitle": "{n} components ready to use",
+    "catalogSubtitle": "Forms, feedback, layout, navigation, calendar, table… all share the same API and design tokens.",
+    "clickToExplore": "Click to explore",
+    "viewComponents": "View components",
+    "finalCtaTitle": "Start building today.",
+    "finalCtaBody": "Open source, MIT, no lock-in. Just Vue 3 + Tailwind v4 + your own creativity.",
+
+    "seo": {
+        "title": "Mood UI — {n}+ Vue 3 components with reactive theming",
+        "description": "Open source Vue 3 component library with {n}+ accessible components, Tailwind CSS v4, TypeScript, dark mode, WAI-ARIA accessibility and native i18n. MIT."
+    },
+
+    "stats": {
+        "composables": "Composables",
+        "bundle": "Bundle (gzip)"
+    },
+
+    "copy": {
+        "tooltip": "Copy",
+        "copied": "Copied!",
+        "ariaInstall": "Copy install command",
+        "ariaUsage": "Copy usage code"
+    },
+
+    "features": {
+        "theming":  { "title": "Reactive theming", "text": "Change color, radius, size, halo and light/dark mode live. Every component reacts instantly." },
+        "i18n":     { "title": "Built-in i18n", "text": "Spanish and English included. Switch language globally with useLocale().set(\"en\")." },
+        "darkMode": { "title": "Dark mode + surfaces", "text": "6 dark surface presets (navy, zinc, charcoal…) or tune all 14 semantic tokens yourself." },
+        "a11y":     { "title": "WAI-ARIA accessible", "text": "Roles, focus rings, keyboard navigation and screen readers covered out of the box." },
+        "ts":       { "title": "Tree-shakeable · TS first", "text": "Import only what you use. Full types, IntelliSense autocomplete, ESM + CJS." },
+        "tailwind": { "title": "Tailwind v4 native", "text": "CSS vars, design tokens and \\@theme inline. Override from your tailwind.config - no hacks." }
+    }
+}

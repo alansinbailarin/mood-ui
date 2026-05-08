@@ -1,0 +1,58 @@
+{
+    "pages": {
+        "dataDisplay": {
+            "typography": {
+                "title": "Typography",
+                "description": "Sistema tipográfico con variantes semánticas (display, heading, title, body, caption…), tamaños y pesos. La prop as permite mapear a la etiqueta HTML adecuada para mantener la jerarquía accesible.",
+                "controls": {
+                    "variant": "Variante",
+                    "size": "Tamaño",
+                    "weight": "Peso",
+                    "align": "Alineación",
+                    "color": "Color",
+                    "truncate": "Truncar",
+                    "italic": "Cursiva",
+                    "underline": "Subrayado",
+                    "strikethrough": "Tachado"
+                },
+                "props": {
+                    "variant": "Estilo tipográfico semántico. Define el tag por defecto.",
+                    "size": "Escala dentro del variant. Hereda del ModoProvider si se omite.",
+                    "as": "Sobrescribe el tag HTML inferido por el variant.",
+                    "weight": "Peso de la fuente.",
+                    "align": "Alineación horizontal del texto.",
+                    "color": "Color semántico aplicado al texto.",
+                    "truncate": "Trunca con ellipsis a una sola línea.",
+                    "italic": "Aplica estilo cursiva.",
+                    "underline": "Subraya el texto.",
+                    "strikethrough": "Tachado del texto."
+                },
+                "slots": {
+                    "default": "Contenido textual a renderizar."
+                },
+                "examples": {
+                    "variants": {
+                        "title": "Variantes",
+                        "desc": "Cada variant define una jerarquía visual y un tag HTML por defecto."
+                    },
+                    "sizes": {
+                        "title": "Tamaños",
+                        "desc": "Cada variant tiene tres escalas (small, medium, large)."
+                    },
+                    "weights": {
+                        "title": "Pesos",
+                        "desc": "Seis pesos disponibles desde light hasta extrabold."
+                    },
+                    "colors": {
+                        "title": "Colores semánticos",
+                        "desc": "Usa los colores del provider para mantener consistencia y accesibilidad."
+                    },
+                    "truncate": {
+                        "title": "Truncate",
+                        "desc": "Trunca el texto a una sola línea con ellipsis cuando excede el ancho."
+                    }
+                }
+            }
+        }
+    }
+}

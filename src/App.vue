@@ -11,8 +11,7 @@ import CommandPalette from './showroom/components/CommandPalette.vue';
 import DocsShell from './showroom/components/DocsShell.vue';
 import HeaderBar from './showroom/components/HeaderBar.vue';
 import { useShowroomPreferences } from './showroom/composables/useShowroomPreferences';
-import { useShowroomI18n, type ShowroomLocale } from './showroom/composables/useShowroomI18n';
-import { setShowroomLocale } from './showroom/composables/useShowroomLocale';
+import { setShowroomLocale, type ShowroomLocale } from './showroom/composables/useShowroomLocale';
 import { tintedLightSurfaces, tintedDarkSurfaces } from './showroom/utils/tintedSurfaces';
 
 import type { ModoColor, ModoRadius, ModoSize, ModoTheme, ModoHalo } from './config/ModoConfig';
@@ -55,8 +54,6 @@ const darkSurfaceComputed = computed(() => {
 });
 
 // ── i18n ──────────────────────────────────────────────────────────────────────
-const t = useShowroomI18n(() => localeName.value);
-
 const localeMap: Record<ShowroomLocale, PartialLocale> = {
     es: {},
     en: {
@@ -75,6 +72,9 @@ const locale = computed<PartialLocale>(() => localeMap[localeName.value]);
 // ── Router & route classification ─────────────────────────────────────────────
 const { entry, currentId, go } = useShowroomRouter();
 
+// Scroll to top whenever the active page changes
+watch(currentId, () => { window.scrollTo({ top: 0, behavior: 'instant' }); });
+
 const activeCategoryId = computed<string | null>(() => {
     const cat = showroomNav.find((c) => c.entries.some((e) => e.id === currentId.value));
     return cat?.id ?? null;
@@ -83,35 +83,13 @@ const activeCategoryId = computed<string | null>(() => {
 const isWelcome     = computed(() => !entry.value || currentId.value === 'welcome');
 const isThemeStudio = computed(() => activeCategoryId.value === 'theme-studio');
 
-// ── Left-nav sections per category ───────────────────────────────────────────
-// Categories that should NOT appear in the component nav column.
-const COMPONENT_HIDDEN = new Set(['getting-started', 'docs', 'templates', 'theme-studio']);
+// ── Left-nav sections — always unified (Docs + Templates + all components) ───
+// Categories that should NOT appear in the sidebar.
+const COMPONENT_HIDDEN = new Set(['getting-started', 'theme-studio']);
 
 const contentNavSections = computed<NavSection[]>(() => {
-    const catId = activeCategoryId.value;
+    if (isWelcome.value || isThemeStudio.value) return [];
 
-    // Docs: flat list of articles
-    if (catId === 'docs') {
-        const cat = showroomNav.find((c) => c.id === 'docs');
-        return [{
-            title: t.value.docs,
-            items: cat?.entries.map((e) => ({ id: e.id, label: e.label, badge: e.badge })) ?? [],
-        }];
-    }
-
-    // Templates: flat list of templates
-    if (catId === 'templates') {
-        const cat = showroomNav.find((c) => c.id === 'templates');
-        return [{
-            title: t.value.templates,
-            items: cat?.entries.map((e) => ({ id: e.id, label: e.label, badge: e.badge })) ?? [],
-        }];
-    }
-
-    // Theme Studio & Welcome are handled as standalone shells — no nav needed.
-    if (catId === 'theme-studio' || isWelcome.value) return [];
-
-    // Components: grouped by category
     return showroomNav
         .filter((cat) => !COMPONENT_HIDDEN.has(cat.id))
         .map((cat) => ({

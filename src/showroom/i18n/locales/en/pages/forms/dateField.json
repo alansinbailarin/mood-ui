@@ -1,0 +1,58 @@
+{
+    "category": "Forms",
+    "title": "DateField",
+    "description": "Date input with a calendar popover. Localizable, with minDate / maxDate and configurable display format.",
+    "controls": {
+        "size": "Size",
+        "variant": "Variant",
+        "clearable": "Clearable",
+        "disabled": "Disabled"
+    },
+    "playground": {
+        "label": "Date"
+    },
+    "examples": {
+        "basic": {
+            "title": "Basic",
+            "desc": "Field with label, calendar popover and medium display format by default."
+        },
+        "sizes": {
+            "title": "Sizes",
+            "desc": "Available in small, medium and large sharing the input proportions."
+        },
+        "minMax": {
+            "title": "Min and max",
+            "desc": "Restrict the selectable range using minDate and maxDate."
+        },
+        "clearable": {
+            "title": "Clearable",
+            "desc": "An ✕ button appears when a date is set to quickly clear the value."
+        },
+        "disabled": {
+            "title": "Disabled",
+            "desc": "The field dims, blocks the popover and preserves the visible value."
+        }
+    },
+    "props": {
+        "modelValue": "Selected date. Supports v-model.",
+        "label": "Visible label above the field.",
+        "placeholder": "Text shown when no date is selected.",
+        "size": "Input size.",
+        "variant": "Visual style of the wrapper.",
+        "displayFormat": "Intl format used to display the selected date.",
+        "minDate": "Minimum selectable date in the calendar.",
+        "maxDate": "Maximum selectable date in the calendar.",
+        "clearable": "Shows a clear button when a date is set.",
+        "disabled": "Disables the field and prevents opening the popover.",
+        "readonly": "Makes the field non-interactive while preserving the visible value.",
+        "required": "Marks the field as required for validation.",
+        "fullWidth": "The field occupies 100% of the available width."
+    },
+    "emits": {
+        "updateModelValue": "Emitted when the user selects or clears the date.",
+        "change": "Semantic alias of update:modelValue.",
+        "open": "Emitted when the calendar popover opens.",
+        "close": "Emitted when the popover closes.",
+        "clear": "Emitted when the clear button is pressed."
+    }
+}

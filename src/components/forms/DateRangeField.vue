@@ -35,7 +35,7 @@
             <component 
                 :is="iconLeft ?? CalendarDaysIcon" 
                 aria-hidden="true" 
-                :class="['shrink-0 text-muted-foreground', iconSizeClasses]" 
+                :class="['shrink-0', affordanceIconClass, iconSizeClasses]" 
             /> 
  
             <span 
@@ -54,7 +54,7 @@
             <Loader 
                 v-if="loading" 
                 :size="size === 'large' ? 'medium' : 'small'" 
-                class="shrink-0 text-muted-foreground" 
+                :class="['shrink-0', affordanceIconClass]" 
             /> 
             <Button 
                 v-else-if="clearable && hasAnyValue && !isDisabled && !readonly" 
@@ -64,14 +64,15 @@
                 :icon="XMarkIcon" 
                 :ariaLabel="loc.dateRangeField.clear" 
                 tabindex="-1" 
-                class="shrink-0 text-muted-foreground hover:text-foreground" 
+                :class="['shrink-0', affordanceActionClass]" 
                 @click.stop="clear" 
             /> 
             <ChevronDownIcon 
                 v-if="!loading" 
                 aria-hidden="true" 
                 :class="[ 
-                    'shrink-0 text-muted-foreground transition-transform duration-base ease-standard', 
+                    'shrink-0 transition-transform duration-base ease-standard', 
+                    affordanceIconClass,
                     iconSizeClasses, 
                     isOpen ? 'rotate-180' : '', 
                 ]" 
@@ -117,7 +118,12 @@
 <script setup lang="ts"> 
 import { computed, ref, watch } from 'vue'; 
 import type { DateRangeField } from '../../interfaces/forms/DateRangeField.interface'; 
-import { useFieldState, useFieldClasses } from '../../composables/useField'; 
+import {
+    useFieldState,
+    useFieldClasses,
+    FIELD_AFFORDANCE_ACTION_BY_COLOR,
+    FIELD_AFFORDANCE_ICON_BY_COLOR,
+} from '../../composables/useField'; 
 import { usePopover } from '../../composables/usePopover'; 
 import PopoverPanel from '../layout/PopoverPanel.vue'; 
 import DateRangePicker from '../data-display/date-picker/DateRangePicker.vue'; 
@@ -168,6 +174,9 @@ const { wrapperVariantClasses, radiusClasses } = useFieldClasses({
     forceFocus: () => isOpen.value, 
     halo: () => props.halo, 
 }); 
+
+const affordanceIconClass = computed(() => FIELD_AFFORDANCE_ICON_BY_COLOR[stateColor.value] ?? 'text-muted-foreground');
+const affordanceActionClass = computed(() => FIELD_AFFORDANCE_ACTION_BY_COLOR[stateColor.value] ?? 'text-muted-foreground hover:text-foreground');
  
 const triggerEl = ref<HTMLButtonElement | null>(null); 
  

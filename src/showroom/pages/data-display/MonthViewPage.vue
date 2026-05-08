@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import MonthView from '../../../components/data-display/calendar/MonthView.vue';
 import type { CalendarEvent } from '../../../interfaces/data-display/calendar/MonthView.interface';
 import type { PropDoc, EmitDoc } from '../../types';
+
+const { t } = useI18n();
 
 // ── Sample events ─────────────────────────────────────────────────────────────
 const today = new Date();
@@ -52,42 +55,42 @@ const weekNumCode  = `<MonthView v-model="date" :events="events" show-week-numbe
 const sundayCode   = `<MonthView v-model="date" :events="events" :first-day-of-week="0" />`;
 
 // ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'modelValue',          type: 'Date',                                                                description: 'Fecha visible (v-model). Determina el mes mostrado.' },
-    { name: 'events',              type: 'CalendarEvent[]',                                                     description: 'Lista de eventos a renderizar en cada celda.' },
-    { name: 'locale',              type: 'string',                                                              description: 'Locale BCP-47 para nombres de mes y días.' },
-    { name: 'firstDayOfWeek',      type: '0 | 1 | 2 | 3 | 4 | 5 | 6',                                            description: 'Primer día de la semana (0 = domingo, 1 = lunes).' },
-    { name: 'color',               type: "'default' | 'primary' | 'danger' | 'success' | 'warning'",            description: 'Color semántico de la selección y los acentos.' },
-    { name: 'radius',              type: "'none' | 'small' | 'medium' | 'large' | 'full'",                      description: 'Radio de borde del contenedor.' },
-    { name: 'maxEventsPerDay',     type: 'number',                                                              description: 'Máximo de eventos visibles por celda; el resto se agrupa en “+N”.' },
-    { name: 'showWeekNumbers',     type: 'boolean',                                       default: 'false',     description: 'Muestra una columna inicial con el número de semana ISO.' },
-    { name: 'fixedWeeks',          type: 'boolean',                                       default: 'true',      description: 'Renderiza siempre 6 semanas para mantener altura constante.' },
-    { name: 'showOutsideDays',     type: 'boolean',                                       default: 'true',      description: 'Muestra días del mes anterior y siguiente.' },
-    { name: 'showHeader',          type: 'boolean',                                       default: 'true',      description: 'Muestra cabecera con navegación.' },
-    { name: 'bordered',            type: 'boolean',                                       default: 'true',      description: 'Dibuja líneas divisorias entre celdas.' },
-    { name: 'highlightWeekends',   type: 'boolean',                                       default: 'false',     description: 'Resalta visualmente sábado y domingo.' },
-    { name: 'minDate / maxDate',   type: 'Date',                                                                description: 'Limita el rango de fechas seleccionables.' },
-    { name: 'disabledDates',       type: 'Date[]',                                                              description: 'Fechas individuales deshabilitadas.' },
-    { name: 'disabledDaysOfWeek',  type: 'number[]',                                                            description: 'Días de la semana deshabilitados (0-6).' },
-    { name: 'draggableEvents',     type: 'boolean',                                       default: 'false',     description: 'Permite arrastrar eventos entre días.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'modelValue',          type: 'Date',                                                                description: t('pages.dataDisplay.monthView.props.modelValue') },
+    { name: 'events',              type: 'CalendarEvent[]',                                                     description: t('pages.dataDisplay.monthView.props.events') },
+    { name: 'locale',              type: 'string',                                                              description: t('pages.dataDisplay.monthView.props.locale') },
+    { name: 'firstDayOfWeek',      type: '0 | 1 | 2 | 3 | 4 | 5 | 6',                                          description: t('pages.dataDisplay.monthView.props.firstDayOfWeek') },
+    { name: 'color',               type: "'default' | 'primary' | 'danger' | 'success' | 'warning'",            description: t('pages.dataDisplay.monthView.props.color') },
+    { name: 'radius',              type: "'none' | 'small' | 'medium' | 'large' | 'full'",                      description: t('pages.dataDisplay.monthView.props.radius') },
+    { name: 'maxEventsPerDay',     type: 'number',                                                              description: t('pages.dataDisplay.monthView.props.maxEventsPerDay') },
+    { name: 'showWeekNumbers',     type: 'boolean',                                       default: 'false',     description: t('pages.dataDisplay.monthView.props.showWeekNumbers') },
+    { name: 'fixedWeeks',          type: 'boolean',                                       default: 'true',      description: t('pages.dataDisplay.monthView.props.fixedWeeks') },
+    { name: 'showOutsideDays',     type: 'boolean',                                       default: 'true',      description: t('pages.dataDisplay.monthView.props.showOutsideDays') },
+    { name: 'showHeader',          type: 'boolean',                                       default: 'true',      description: t('pages.dataDisplay.monthView.props.showHeader') },
+    { name: 'bordered',            type: 'boolean',                                       default: 'true',      description: t('pages.dataDisplay.monthView.props.bordered') },
+    { name: 'highlightWeekends',   type: 'boolean',                                       default: 'false',     description: t('pages.dataDisplay.monthView.props.highlightWeekends') },
+    { name: 'minDate / maxDate',   type: 'Date',                                                                description: t('pages.dataDisplay.monthView.props.minDateMaxDate') },
+    { name: 'disabledDates',       type: 'Date[]',                                                              description: t('pages.dataDisplay.monthView.props.disabledDates') },
+    { name: 'disabledDaysOfWeek',  type: 'number[]',                                                            description: t('pages.dataDisplay.monthView.props.disabledDaysOfWeek') },
+    { name: 'draggableEvents',     type: 'boolean',                                       default: 'false',     description: t('pages.dataDisplay.monthView.props.draggableEvents') },
+]);
 
-const emitsList: EmitDoc[] = [
-    { name: 'update:modelValue', payload: 'Date',                                                                          description: 'Emitido al seleccionar un día.' },
-    { name: 'event-click',       payload: '(event: CalendarEvent, nativeEvent: MouseEvent)',                                description: 'Emitido al hacer click sobre un evento.' },
-    { name: 'day-click',         payload: '(date: Date, events: CalendarEvent[], nativeEvent: MouseEvent)',                 description: 'Emitido al hacer click sobre una celda de día.' },
-    { name: 'more-click',        payload: '(date: Date, events: CalendarEvent[], nativeEvent: MouseEvent)',                 description: 'Emitido al hacer click sobre el indicador “+N”.' },
-    { name: 'create-event',      payload: '(date: Date, nativeEvent: MouseEvent | KeyboardEvent)',                          description: 'Emitido al solicitar la creación de un evento.' },
-    { name: 'event-drop',        payload: '(event: CalendarEvent, newStart: Date, newEnd: Date | undefined)',               description: 'Emitido al soltar un evento arrastrado en otra fecha.' },
-];
+const emitsList = computed<EmitDoc[]>(() => [
+    { name: 'update:modelValue', payload: 'Date',                                                                          description: t('pages.dataDisplay.monthView.emits.updateModelValue') },
+    { name: 'event-click',       payload: '(event: CalendarEvent, nativeEvent: MouseEvent)',                                description: t('pages.dataDisplay.monthView.emits.eventClick') },
+    { name: 'day-click',         payload: '(date: Date, events: CalendarEvent[], nativeEvent: MouseEvent)',                 description: t('pages.dataDisplay.monthView.emits.dayClick') },
+    { name: 'more-click',        payload: '(date: Date, events: CalendarEvent[], nativeEvent: MouseEvent)',                 description: t('pages.dataDisplay.monthView.emits.moreClick') },
+    { name: 'create-event',      payload: '(date: Date, nativeEvent: MouseEvent | KeyboardEvent)',                          description: t('pages.dataDisplay.monthView.emits.createEvent') },
+    { name: 'event-drop',        payload: '(event: CalendarEvent, newStart: Date, newEnd: Date | undefined)',               description: t('pages.dataDisplay.monthView.emits.eventDrop') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="MonthView"
+        :title="t('pages.dataDisplay.monthView.title')"
         category="Calendar"
         import-path="import { MonthView } from 'mood-ui'"
-        description="Vista mensual tipo grilla para mostrar eventos por día. Soporta números de semana, semana iniciando en cualquier día y arrastre de eventos."
+        :description="t('pages.dataDisplay.monthView.description')"
         :props-list="propsList"
         :emits-list="emitsList"
     >
@@ -95,10 +98,10 @@ const emitsList: EmitDoc[] = [
             <ComponentPreview :code="overviewCode" min-height="400px" @reset="resetPlayground">
                 <template #controls>
                     <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Inicio</span>
+                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">{{ t('pages.dataDisplay.monthView.controls.weekStart') }}</span>
                         <div class="flex rounded-md border border-border overflow-hidden">
                             <button
-                                v-for="d in [{ v: 0, l: 'Dom' }, { v: 1, l: 'Lun' }]"
+                                v-for="d in [{ v: 0, l: t('pages.dataDisplay.monthView.controls.sun') }, { v: 1, l: t('pages.dataDisplay.monthView.controls.mon') }]"
                                 :key="d.v"
                                 type="button"
                                 class="px-2 py-1 text-xs transition-colors"
@@ -119,7 +122,7 @@ const emitsList: EmitDoc[] = [
                             ? 'border-primary bg-primary/10 text-primary font-medium'
                             : 'border-border text-muted-foreground hover:bg-muted/60'"
                         @click="pgShowWeekNumbers = !pgShowWeekNumbers"
-                    >Nº semana</button>
+                    >{{ t('pages.dataDisplay.monthView.controls.weekNumbers') }}</button>
 
                     <button
                         type="button"
@@ -128,7 +131,7 @@ const emitsList: EmitDoc[] = [
                             ? 'border-primary bg-primary/10 text-primary font-medium'
                             : 'border-border text-muted-foreground hover:bg-muted/60'"
                         @click="pgFixedWeeks = !pgFixedWeeks"
-                    >6 semanas fijas</button>
+                    >{{ t('pages.dataDisplay.monthView.controls.fixedWeeks') }}</button>
 
                     <button
                         type="button"
@@ -137,7 +140,7 @@ const emitsList: EmitDoc[] = [
                             ? 'border-primary bg-primary/10 text-primary font-medium'
                             : 'border-border text-muted-foreground hover:bg-muted/60'"
                         @click="pgShowOutsideDays = !pgShowOutsideDays"
-                    >Días externos</button>
+                    >{{ t('pages.dataDisplay.monthView.controls.outsideDays') }}</button>
                 </template>
 
                 <div class="w-full">
@@ -155,8 +158,8 @@ const emitsList: EmitDoc[] = [
 
         <template #examples>
             <ComponentPreview
-                title="Básico"
-                description="Vista mensual sin eventos vinculada a una fecha."
+                :title="t('pages.dataDisplay.monthView.examples.basic.title')"
+                :description="t('pages.dataDisplay.monthView.examples.basic.desc')"
                 :code="basicCode"
                 min-height="400px"
             >
@@ -164,8 +167,8 @@ const emitsList: EmitDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con eventos"
-                description="Renderiza una colección de CalendarEvent distribuidos por día."
+                :title="t('pages.dataDisplay.monthView.examples.events.title')"
+                :description="t('pages.dataDisplay.monthView.examples.events.desc')"
                 :code="eventsCode"
                 min-height="400px"
             >
@@ -173,8 +176,8 @@ const emitsList: EmitDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con números de semana"
-                description="Activa show-week-numbers para mostrar la numeración ISO."
+                :title="t('pages.dataDisplay.monthView.examples.weekNumbers.title')"
+                :description="t('pages.dataDisplay.monthView.examples.weekNumbers.desc')"
                 :code="weekNumCode"
                 min-height="400px"
             >
@@ -182,8 +185,8 @@ const emitsList: EmitDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Semana iniciando en domingo"
-                description="Configura first-day-of-week=0 para iniciar en domingo."
+                :title="t('pages.dataDisplay.monthView.examples.sundayStart.title')"
+                :description="t('pages.dataDisplay.monthView.examples.sundayStart.desc')"
                 :code="sundayCode"
                 min-height="400px"
             >

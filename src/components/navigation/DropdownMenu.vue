@@ -3,21 +3,27 @@
         <!-- Trigger: prefer the `#trigger` slot (full control, e.g. wrap an 
              Avatar). Default trigger uses <Button> per §14 (no raw <button>). --> 
         <span ref="triggerEl" class="inline-flex"> 
-            <slot name="trigger" :open="isOpen" :toggle="toggle"> 
-                <Button 
-                    :variant="triggerVariant" 
-                    :color="resolvedColor" 
-                    :size="resolvedSize" 
-                    :radius="resolvedRadius" 
-                    :icon="effectiveTriggerIcon" 
-                    :iconPosition="triggerLabel ? 'right' : 'left'" 
-                    :label="triggerLabel" 
-                    :ariaLabel="ariaLabel" 
-                    :disabled="disabled" 
-                    aria-haspopup="menu" 
-                    :aria-expanded="isOpen" 
-                    @click="toggle" 
-                /> 
+            <slot name="trigger" :open="isOpen" :toggle="toggle">
+                <Button
+                    :variant="triggerVariant"
+                    :color="resolvedColor"
+                    :size="resolvedSize"
+                    :radius="resolvedRadius"
+                    :icon="effectiveTriggerIcon"
+                    :iconPosition="triggerLabel ? 'right' : 'left'"
+                    :label="triggerLabel"
+                    :ariaLabel="ariaLabel"
+                    :disabled="disabled"
+                    :class="[
+                        triggerSurfaceClass,
+                        triggerVariant === 'outline' && props.color !== 'danger'
+                            ? '!border-border !text-foreground hover:!bg-accent active:!bg-accent focus-visible:!ring-ring'
+                            : '',
+                    ]"
+                    aria-haspopup="menu"
+                    :aria-expanded="isOpen"
+                    @click="toggle"
+                />
             </slot> 
         </span> 
  
@@ -46,7 +52,7 @@
                         {{ entry.label }} 
                     </li> 
  
-                    <li v-else role="none" class="px-1"> 
+                    <li v-else role="none"> 
                         <component 
                             :is="entry.href ? 'a' : 'button'" 
                             :type="entry.href ? undefined : 'button'" 
@@ -57,15 +63,17 @@
                             :tabindex="-1" 
                             :aria-disabled="entry.disabled || undefined" 
                             :data-active="idx === activeIndex || undefined" 
-                            :class="[ 
-                                'modo-dropdown-item w-full flex items-center gap-2 px-2.5 py-1.5 text-left', 
-                                'text-body transition-colors duration-fast ease-standard', 
-                                rowRadiusClass, 
-                                entry.disabled 
-                                    ? 'opacity-50 cursor-not-allowed' 
-                                    : entry.danger 
-                                        ? 'text-destructive hover:bg-destructive-subtle data-[active=true]:bg-destructive-subtle cursor-pointer' 
-                                        : 'text-foreground hover:bg-muted data-[active=true]:bg-muted cursor-pointer', 
+                            :class="[
+                                'modo-dropdown-item w-full flex items-center gap-2 px-3 py-2 text-left',
+                                'text-body transition-colors duration-fast ease-standard',
+                                entry.disabled
+                                    ? 'opacity-50 cursor-not-allowed'
+                                    : entry.danger
+                                        ? ['text-destructive', 'hover:bg-destructive/10', 'cursor-pointer']
+                                        : [itemTextColor, itemHover, 'cursor-pointer'],
+                                !entry.disabled && idx === activeIndex
+                                    ? (entry.danger ? 'bg-destructive/10' : itemSurface)
+                                    : '',
                             ]" 
                             @click="onItemClick(entry, $event)" 
                             @mouseenter="setActive(idx)" 
@@ -74,7 +82,7 @@
                             <component 
                                 :is="entry.icon" 
                                 v-if="entry.icon" 
-                                :class="[iconSizeClass, 'shrink-0', entry.danger ? 'text-destructive' : 'text-muted-foreground']" 
+                                :class="[iconSizeClass, 'shrink-0', entry.danger ? 'text-destructive' : itemIconColor]" 
                                 aria-hidden="true" 
                             /> 
                             <span class="flex flex-col min-w-0 flex-1"> 
@@ -265,24 +273,56 @@ function onItemClick(entry: DropdownMenuItem, evt?: MouseEvent) {
 } 
  
 /* ---------- Visual scaling tied to size ---------- */ 
-const iconSizeClass = computed(() => { 
-    switch (resolvedSize.value) { 
-        case 'small': return 'w-3.5 h-3.5'; 
-        case 'large': return 'w-5 h-5'; 
-        default: return 'w-4 h-4'; 
-    } 
-}); 
- 
-const rowRadiusClass = computed(() => { 
-    switch (resolvedRadius.value) { 
-        case 'none': return 'rounded-none'; 
-        case 'small': return 'rounded-sm'; 
-        case 'large': return 'rounded-lg'; 
-        case 'full': return 'rounded-full'; 
-        default: return 'rounded-md'; 
-    } 
-}); 
- 
+const iconSizeClass = computed(() => {
+    switch (resolvedSize.value) {
+        case 'small': return 'w-3.5 h-3.5';
+        case 'large': return 'w-5 h-5';
+        default: return 'w-4 h-4';
+    }
+});
+
+/* ---------- Item surface / hover (color-aware) ---------- */
+const effectiveItemColor = computed(() => props.color === 'default' ? 'default' : resolvedColor.value);
+const triggerSurfaceClass = computed(() => {
+    if (props.triggerVariant !== 'outline') return '';
+    if (effectiveItemColor.value === 'danger') {
+        return 'bg-destructive/10 hover:!bg-destructive/14 active:!bg-destructive/18';
+    }
+    return 'bg-card';
+});
+const ITEM_SURFACE: Record<string, string> = {
+    default: 'bg-accent',
+    primary: 'bg-accent',
+    danger:  'bg-destructive/16',
+    success: 'bg-accent',
+    warning: 'bg-accent',
+};
+const ITEM_HOVER: Record<string, string> = {
+    default: 'hover:bg-accent',
+    primary: 'hover:bg-accent',
+    danger:  'hover:bg-destructive/14',
+    success: 'hover:bg-accent',
+    warning: 'hover:bg-accent',
+};
+const ITEM_TEXT: Record<string, string> = {
+    default: 'text-foreground',
+    primary: 'text-foreground',
+    danger: 'text-destructive',
+    success: 'text-foreground',
+    warning: 'text-foreground',
+};
+const ITEM_ICON: Record<string, string> = {
+    default: 'modo-affordance-icon',
+    primary: 'modo-affordance-icon',
+    danger: 'text-destructive',
+    success: 'modo-affordance-icon',
+    warning: 'modo-affordance-icon',
+};
+const itemSurface = computed(() => ITEM_SURFACE[effectiveItemColor.value] ?? 'bg-accent');
+const itemHover = computed(() => ITEM_HOVER[effectiveItemColor.value] ?? 'hover:bg-accent');
+const itemTextColor = computed(() => ITEM_TEXT[effectiveItemColor.value] ?? 'text-foreground');
+const itemIconColor = computed(() => ITEM_ICON[effectiveItemColor.value] ?? 'modo-affordance-icon');
+
 defineExpose({ open, close, toggle }); 
 </script> 
  

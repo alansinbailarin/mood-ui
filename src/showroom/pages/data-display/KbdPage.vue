@@ -1,23 +1,31 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Kbd from '../../../components/data-display/Kbd.vue';
 import type { PropDoc, SlotDoc } from '../../types';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
+
+const { t } = useI18n();
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgVariant = ref<'subtle' | 'outline' | 'solid'>('subtle');
 const pgSize    = ref<'small' | 'medium' | 'large'>('medium');
+const pgRadius  = ref<'none' | 'small' | 'medium' | 'large' | 'full'>('medium');
 
 function resetPlayground() {
     pgVariant.value = 'subtle';
     pgSize.value = 'medium';
+    pgRadius.value = 'medium';
 }
 
 const overviewCode = computed(() => {
     const parts: string[] = [];
     if (pgVariant.value !== 'subtle') parts.push(`variant="${pgVariant.value}"`);
     if (pgSize.value    !== 'medium') parts.push(`size="${pgSize.value}"`);
+    if (pgRadius.value  !== 'medium') parts.push(`radius="${pgRadius.value}"`);
     const attrs = parts.length ? ' ' + parts.join(' ') : '';
     return `<Kbd${attrs}>⌘K</Kbd>`;
 });
@@ -44,74 +52,44 @@ const sizesCode = `<Kbd size="small">Tab</Kbd>
 const inlineCode = `<p>Pulsa <Kbd>⌘K</Kbd> para abrir la búsqueda rápida.</p>`;
 
 // ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'size',    type: "'small' | 'medium' | 'large'",                     default: "'medium'", description: 'Tamaño de la tecla.' },
-    { name: 'variant', type: "'subtle' | 'outline' | 'solid'",                   default: "'subtle'", description: 'Estilo visual de la tecla.' },
-    { name: 'radius',  type: "'none' | 'small' | 'medium' | 'large' | 'full'",                        description: 'Radio de borde. Hereda del ModoProvider si se omite.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'size',    type: "'small' | 'medium' | 'large'",                     default: "'medium'", description: t('pages.dataDisplay.kbd.props.size') },
+    { name: 'variant', type: "'subtle' | 'outline' | 'solid'",                   default: "'subtle'", description: t('pages.dataDisplay.kbd.props.variant') },
+    { name: 'radius',  type: "'none' | 'small' | 'medium' | 'large' | 'full'",                        description: t('pages.dataDisplay.kbd.props.radius') },
+]);
 
-const slotsList: SlotDoc[] = [
-    { name: 'default', description: 'Texto o glifo de la tecla (Enter, ⌘, ↑, etc.).' },
-];
+const slotsList = computed<SlotDoc[]>(() => [
+    { name: 'default', description: t('pages.dataDisplay.kbd.slots.default') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="Kbd"
+        :title="t('pages.dataDisplay.kbd.title')"
         category="Data Display"
         import-path="import { Kbd } from 'mood-ui'"
-        description="Representación visual de teclas o atajos de teclado. Útil en docs, tooltips y command palettes."
+        :description="t('pages.dataDisplay.kbd.description')"
         :props-list="propsList"
         :slots-list="slotsList"
     >
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="160px" @reset="resetPlayground">
                 <template #controls>
-                    <!-- Variant -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Variant</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="v in ['subtle', 'outline', 'solid']"
-                                :key="v"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgVariant === v
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgVariant = (v as typeof pgVariant)"
-                            >{{ v }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Size -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Size</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in ['small', 'medium', 'large']"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = (s as typeof pgSize)"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
+                    <TbPills :label="t('pages.dataDisplay.kbd.controls.variant')" :options="[{value:'subtle'},{value:'outline'},{value:'solid'}]" v-model="pgVariant" />
+                    <TbSep />
+                    <TbPills :label="t('pages.dataDisplay.kbd.controls.size')" :options="[{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbPills :label="t('pages.dataDisplay.kbd.controls.radius')" :options="[{value:'none'},{value:'small'},{value:'medium'},{value:'large'},{value:'full'}]" v-model="pgRadius" />
                 </template>
 
-                <Kbd :variant="pgVariant" :size="pgSize">⌘K</Kbd>
+                <Kbd :variant="pgVariant" :size="pgSize" :radius="pgRadius">⌘K</Kbd>
             </ComponentPreview>
         </template>
 
         <template #examples>
             <ComponentPreview
-                title="Básico"
-                description="Una sola tecla."
+                :title="t('pages.dataDisplay.kbd.examples.basic.title')"
+                :description="t('pages.dataDisplay.kbd.examples.basic.desc')"
                 :code="basicCode"
             >
                 <Kbd>Enter</Kbd>
@@ -120,8 +98,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Combinación"
-                description="Une varias Kbd con un separador."
+                :title="t('pages.dataDisplay.kbd.examples.combo.title')"
+                :description="t('pages.dataDisplay.kbd.examples.combo.desc')"
                 :code="comboCode"
             >
                 <div class="inline-flex items-center gap-1">
@@ -134,8 +112,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Variantes"
-                description="Tres estilos visuales: subtle (por defecto), outline y solid."
+                :title="t('pages.dataDisplay.kbd.examples.variants.title')"
+                :description="t('pages.dataDisplay.kbd.examples.variants.desc')"
                 :code="variantsCode"
             >
                 <Kbd variant="subtle">Esc</Kbd>
@@ -144,8 +122,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Tamaños"
-                description="Tres escalas para alinear con texto en distintos contextos."
+                :title="t('pages.dataDisplay.kbd.examples.sizes.title')"
+                :description="t('pages.dataDisplay.kbd.examples.sizes.desc')"
                 :code="sizesCode"
             >
                 <Kbd size="small">Tab</Kbd>
@@ -154,8 +132,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Inline en texto"
-                description="Se alinea verticalmente con el texto que lo rodea."
+                :title="t('pages.dataDisplay.kbd.examples.inline.title')"
+                :description="t('pages.dataDisplay.kbd.examples.inline.desc')"
                 :code="inlineCode"
             >
                 <p class="text-sm">

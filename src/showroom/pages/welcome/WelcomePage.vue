@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import {
     ArrowRightIcon,
     SparklesIcon,
@@ -13,70 +13,139 @@ import {
     ClipboardDocumentIcon,
     ArrowTopRightOnSquareIcon,
     HeartIcon,
+    ArrowUpRightIcon,
 } from '@heroicons/vue/24/outline';
 import { CheckBadgeIcon } from '@heroicons/vue/24/solid';
 
 import Card from '../../../components/data-display/Card.vue';
 import Stack from '../../../components/layout/Stack.vue';
 import Button from '../../../components/forms/Button.vue';
-import Input from '../../../components/forms/Input.vue';
 import Switch from '../../../components/forms/Switch.vue';
 import Badge from '../../../components/feedback/Badge.vue';
 import Avatar from '../../../components/data-display/avatar/Avatar.vue';
 import AvatarGroup from '../../../components/data-display/avatar/AvatarGroup.vue';
 import Tooltip from '../../../components/feedback/Tooltip.vue';
 
+import { useI18n } from 'vue-i18n';
 import { useShowroomRouter } from '../../composables/useShowroomRouter';
-import { useShowroomT } from '../../composables/useShowroomLocale';
 import { vReveal, vRevealChildren } from '../../composables/useScrollReveal';
 import { showroomNav } from '../../registry';
+import Typography from '../../../components/data-display/Typography.vue';
 
 const { go } = useShowroomRouter();
-const t = useShowroomT();
+const { t, locale } = useI18n();
+
+const cardStyles = [
+    {
+        iconClasses:    'bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground',
+        patternClasses: 'text-primary [background-image:linear-gradient(to_right,currentColor_1px,transparent_1px),linear-gradient(to_bottom,currentColor_1px,transparent_1px)] [background-size:20px_20px]',
+        hoverBorder:    'hover:border-primary/50',
+    },
+    {
+        iconClasses:    'bg-success/10 text-success group-hover:bg-success group-hover:text-white',
+        patternClasses: 'text-success [background-image:radial-gradient(circle,currentColor_1.5px,transparent_1.5px)] [background-size:18px_18px]',
+        hoverBorder:    'hover:border-success/40',
+    },
+    {
+        iconClasses:    'bg-warning/10 text-warning group-hover:bg-warning group-hover:text-white',
+        patternClasses: 'text-warning [background-image:repeating-linear-gradient(-60deg,currentColor_0,currentColor_1px,transparent_0,transparent_12px)]',
+        hoverBorder:    'hover:border-warning/40',
+    },
+    {
+        iconClasses:    'bg-destructive/10 text-destructive group-hover:bg-destructive group-hover:text-white',
+        patternClasses: 'text-destructive [background-image:linear-gradient(45deg,currentColor_1px,transparent_1px),linear-gradient(-45deg,currentColor_1px,transparent_1px)] [background-size:14px_14px]',
+        hoverBorder:    'hover:border-destructive/40',
+    },
+    {
+        iconClasses:    'bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground',
+        patternClasses: 'text-primary [background-image:radial-gradient(circle,currentColor_2px,transparent_2px)] [background-size:28px_28px]',
+        hoverBorder:    'hover:border-primary/50',
+    },
+    {
+        iconClasses:    'bg-success/10 text-success group-hover:bg-success group-hover:text-white',
+        patternClasses: 'text-success [background-image:repeating-linear-gradient(0deg,currentColor_0,currentColor_1px,transparent_0,transparent_18px)]',
+        hoverBorder:    'hover:border-success/40',
+    },
+];
 
 const totalComponents = showroomNav
     .filter((c) => !['getting-started', 'docs', 'templates', 'theme-studio'].includes(c.id))
     .reduce((acc, c) => acc + c.entries.length, 0);
 
-// Live mini-demo state
-const demoEmail = ref('jane@mood-ui.dev');
+// Decorative switch state for the floating tile
 const demoNotif = ref(true);
-const demoStatus = ref<'live' | 'building' | 'failed'>('live');
 
-const statusMap = {
-    live:     { color: 'success' as const, label: 'Live' },
-    building: { color: 'warning' as const, label: 'Building' },
-    failed:   { color: 'danger'  as const, label: 'Failed' },
-};
-const statusBadge = computed(() => statusMap[demoStatus.value]);
+// ── SEO: dynamic <title>, meta description, OG, JSON-LD ──
+const seo = computed(() => ({
+    title: t('pages.welcome.seo.title', { n: totalComponents }),
+    description: t('pages.welcome.seo.description', { n: totalComponents }),
+}));
+
+function setMeta(name: string, content: string, attr: 'name' | 'property' = 'name') {
+    let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${name}"]`);
+    if (!el) {
+        el = document.createElement('meta');
+        el.setAttribute(attr, name);
+        document.head.appendChild(el);
+    }
+    el.setAttribute('content', content);
+}
+
+let jsonLdEl: HTMLScriptElement | null = null;
+function applySeo() {
+    const { title, description } = seo.value;
+    document.title = title;
+    document.documentElement.lang = locale.value;
+    setMeta('description', description);
+    setMeta('og:title', title, 'property');
+    setMeta('og:description', description, 'property');
+    setMeta('og:type', 'website', 'property');
+    setMeta('twitter:card', 'summary_large_image');
+    setMeta('twitter:title', title);
+    setMeta('twitter:description', description);
+
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: 'Mood UI',
+        applicationCategory: 'DeveloperApplication',
+        operatingSystem: 'Web',
+        description,
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+        license: 'https://opensource.org/licenses/MIT',
+        programmingLanguage: ['Vue 3', 'TypeScript'],
+        url: 'https://modo-ui.com/',
+    };
+    if (!jsonLdEl) {
+        jsonLdEl = document.createElement('script');
+        jsonLdEl.type = 'application/ld+json';
+        jsonLdEl.id = 'mood-ui-jsonld';
+        document.head.appendChild(jsonLdEl);
+    }
+    jsonLdEl.textContent = JSON.stringify(jsonLd);
+}
+
+onMounted(applySeo);
+watch(seo, applySeo);
+onUnmounted(() => {
+    if (jsonLdEl) { jsonLdEl.remove(); jsonLdEl = null; }
+});
 
 const stats = computed(() => [
-    { label: t.value.components, value: String(totalComponents) },
-    { label: 'Composables',      value: '24' },
-    { label: t.value.language,   value: 'ES · EN' },
-    { label: 'Bundle (gzip)',    value: '131 KB' },
+    { label: t('components'),                  value: String(totalComponents) },
+    { label: t('pages.welcome.stats.composables'), value: '24' },
+    { label: t('settings.language'),           value: 'ES · EN' },
+    { label: t('pages.welcome.stats.bundle'),  value: '131 KB' },
 ]);
 
-const featureList = computed(() => {
-    const isEs = t.value.lang === 'es';
-    return isEs
-        ? [
-            { icon: SwatchIcon,        title: 'Theming reactivo',    text: 'Cambia color, radius, tamaño, halo y modo claro/oscuro en vivo. Todos los componentes responden al instante.' },
-            { icon: GlobeAltIcon,      title: 'i18n integrado',      text: 'Español e inglés incluidos. Cambia idioma globalmente con useLocale().set("es").' },
-            { icon: MoonIcon,          title: 'Dark mode + surfaces', text: '6 presets de superficies oscuras (navy, zinc, charcoal…) o personaliza los 14 tokens semánticos.' },
-            { icon: ShieldCheckIcon,   title: 'Accesibilidad WAI-ARIA', text: 'Roles, focus rings, navegación por teclado y lectores de pantalla cubiertos por defecto.' },
-            { icon: BoltIcon,          title: 'Tree-shakeable · TS first', text: 'Importa solo lo que usas. Tipos completos, autocompletado IntelliSense, ESM + CJS.' },
-            { icon: PuzzlePieceIcon,   title: 'Tailwind v4 native',  text: 'CSS-vars, design tokens y @theme inline. Override desde tu tailwind.config sin hacks.' },
-        ]
-        : [
-            { icon: SwatchIcon,        title: 'Reactive theming',    text: 'Change color, radius, size, halo and light/dark mode live. Every component reacts instantly.' },
-            { icon: GlobeAltIcon,      title: 'Built-in i18n',       text: 'Spanish and English included. Switch language globally with useLocale().set("en").' },
-            { icon: MoonIcon,          title: 'Dark mode + surfaces', text: '6 dark surface presets (navy, zinc, charcoal…) or tune all 14 semantic tokens yourself.' },
-            { icon: ShieldCheckIcon,   title: 'WAI-ARIA accessible', text: 'Roles, focus rings, keyboard navigation and screen readers covered out of the box.' },
-            { icon: BoltIcon,          title: 'Tree-shakeable · TS first', text: 'Import only what you use. Full types, IntelliSense autocomplete, ESM + CJS.' },
-            { icon: PuzzlePieceIcon,   title: 'Tailwind v4 native',  text: 'CSS vars, design tokens and @theme inline. Override from your tailwind.config — no hacks.' },
-        ];
-});
+const featureList = computed(() => [
+    { icon: SwatchIcon,      title: t('pages.welcome.features.theming.title'),  text: t('pages.welcome.features.theming.text')  },
+    { icon: GlobeAltIcon,    title: t('pages.welcome.features.i18n.title'),     text: t('pages.welcome.features.i18n.text')     },
+    { icon: MoonIcon,        title: t('pages.welcome.features.darkMode.title'), text: t('pages.welcome.features.darkMode.text') },
+    { icon: ShieldCheckIcon, title: t('pages.welcome.features.a11y.title'),     text: t('pages.welcome.features.a11y.text')     },
+    { icon: BoltIcon,        title: t('pages.welcome.features.ts.title'),       text: t('pages.welcome.features.ts.text')       },
+    { icon: PuzzlePieceIcon, title: t('pages.welcome.features.tailwind.title'), text: t('pages.welcome.features.tailwind.text') },
+]);
 
 const categoryHighlights = computed(() =>
     showroomNav
@@ -113,158 +182,153 @@ const teamUsers = [
     { name: 'Demi',    src: 'https://i.pravatar.cc/64?img=5'  },
     { name: 'Candice', src: 'https://i.pravatar.cc/64?img=24' },
 ];
+
+function navigateToGithub() {
+    window.open('https://github.com/alansinbailarin/mood-ui', '_blank', 'noopener');
+}
 </script>
 
 <template>
     <!-- ─────────────────────────  HERO  ───────────────────────── -->
-    <section class="relative overflow-hidden pt-10 lg:pt-16">
-            <!-- Soft, breathing gradient backdrop -->
-            <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-                <div class="showroom-hero-glow absolute -top-40 left-1/2 w-[1200px] h-[640px] rounded-full bg-gradient-to-br from-primary/30 via-primary/10 to-transparent blur-3xl"></div>
-                <div class="absolute top-32 -right-32 w-[480px] h-[480px] rounded-full bg-gradient-to-br from-accent/25 to-transparent blur-3xl opacity-70"></div>
-                <!-- Faint grid -->
-                <div
-                    class="absolute inset-0 opacity-[0.06] [background-image:linear-gradient(to_right,currentColor_1px,transparent_1px),linear-gradient(to_bottom,currentColor_1px,transparent_1px)] [background-size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]"
-                ></div>
+    <section class="relative overflow-hidden pt-16 lg:pt-28 pb-12 lg:pb-20">
+        <!-- Soft, breathing gradient backdrop -->
+        <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+            <div class="showroom-hero-glow absolute -top-40 left-1/2 -translate-x-1/2 w-[1200px] h-[640px] rounded-full bg-gradient-to-br from-primary/30 via-primary/10 to-transparent blur-3xl"></div>
+            <div class="absolute top-32 -right-32 w-[480px] h-[480px] rounded-full bg-gradient-to-br from-accent/25 to-transparent blur-3xl opacity-70"></div>
+            <div class="absolute top-40 -left-32 w-[420px] h-[420px] rounded-full bg-gradient-to-tr from-success/15 to-transparent blur-3xl opacity-60"></div>
+            <!-- Faint grid -->
+            <div
+                class="absolute inset-0 opacity-[0.05] [background-image:linear-gradient(to_right,currentColor_1px,transparent_1px),linear-gradient(to_bottom,currentColor_1px,transparent_1px)] [background-size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]"
+            ></div>
+        </div>
+
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 relative">
+            <!-- ─── Floating components (decorative, hidden on small screens) ─── -->
+
+            <!-- TOP LEFT — Badge chip -->
+            <div
+                v-reveal="'scale'"
+                class="hidden md:flex absolute top-2 left-0 lg:left-4 items-center gap-1.5 rounded-full bg-card border border-border shadow-lg pl-1.5 pr-3 py-1 -rotate-6 hover:rotate-0 transition-transform duration-300"
+            >
+                <span class="size-5 rounded-full bg-success/15 grid place-items-center">
+                    <CheckBadgeIcon class="size-3.5 text-success" />
+                </span>
+                <span class="text-[11px] font-semibold text-foreground">WAI-ARIA</span>
             </div>
 
-            <div class="max-w-7xl mx-auto px-4 sm:px-6">
-            <div class="grid lg:grid-cols-[1.15fr_1fr] gap-12 lg:gap-16 items-center">
-                <!-- LEFT — Headline -->
-                <div v-reveal class="flex flex-col gap-7">
-                    <a
-                        href="https://github.com/alansinbailarin/mood-ui"
-                        target="_blank"
+            <!-- TOP RIGHT — Avatar group card -->
+            <div
+                v-reveal="'scale'"
+                class="hidden md:flex absolute top-0 right-0 lg:right-4 items-center gap-2 bg-card border border-border rounded-2xl shadow-xl p-2 pr-3 rotate-3 hover:rotate-0 transition-transform duration-300"
+            >
+                <AvatarGroup size="small" radius="large" :max="3">
+                    <Avatar v-for="u in teamUsers.slice(0,3)" :key="u.name" :src="u.src" :alt="u.name" size="small" />
+                </AvatarGroup>
+                <span class="text-[11px] font-semibold text-foreground">320+ devs</span>
+            </div>
+
+            <!-- MID LEFT — Switch tile -->
+            <div
+                v-reveal
+                class="hidden lg:flex absolute top-[42%] -left-4 xl:-left-12 flex-col gap-1.5 bg-card border border-border rounded-2xl shadow-xl p-3 -rotate-[8deg] hover:rotate-0 transition-transform duration-300 w-[150px]"
+            >
+                <div class="flex items-center justify-between gap-2">
+                    <span class="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Dark mode</span>
+                    <Switch v-model="demoNotif" size="small" />
+                </div>
+                <div class="flex items-center gap-1">
+                    <span class="size-3 rounded-sm bg-foreground"></span>
+                    <span class="size-3 rounded-sm bg-muted"></span>
+                    
+                </div>
+            </div>
+
+            <!-- MID RIGHT — Color palette tile -->
+            <div
+                v-reveal
+                class="hidden lg:flex absolute top-[40%] -right-4 xl:-right-12 flex-col gap-2 bg-card border border-border rounded-2xl shadow-xl p-3 rotate-[7deg] hover:rotate-0 transition-transform duration-300 w-[160px]"
+            >
+                <span class="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Theme</span>
+                <div class="flex gap-1">
+                    <span class="size-5 rounded-full bg-primary ring-2 ring-card"></span>
+                    <span class="size-5 rounded-full bg-success ring-2 ring-card"></span>
+                    <span class="size-5 rounded-full bg-warning ring-2 ring-card"></span>
+                    <span class="size-5 rounded-full bg-destructive ring-2 ring-card"></span>
+                    <span class="size-5 rounded-full bg-muted-foreground ring-2 ring-card"></span>
+                </div>
+            </div>
+
+            <!-- BOTTOM LEFT — npm command pill -->
+            <div
+                v-reveal="'scale'"
+                class="hidden md:flex absolute bottom-2 left-2 lg:left-12 items-center gap-2 bg-foreground text-background rounded-xl shadow-2xl px-3 py-2 -rotate-3 hover:rotate-0 transition-transform duration-300 font-mono text-[11px]"
+            >
+                <span class="text-success">$</span>
+                <span>npm i mood-ui</span>
+                <ClipboardDocumentIcon class="size-3.5 opacity-60" />
+            </div>
+
+            <!-- BOTTOM RIGHT — Mini stat -->
+            <div
+                v-reveal="'scale'"
+                class="hidden md:flex absolute bottom-0 right-2 lg:right-12 flex-col bg-card border border-border rounded-2xl shadow-xl px-3 py-2 rotate-[5deg] hover:rotate-0 transition-transform duration-300"
+            >
+                <span class="text-[9px] font-semibold uppercase tracking-wider text-muted-foreground">Bundle</span>
+                <span class="text-base font-semibold text-foreground tabular-nums">131 <span class="text-[10px] font-normal text-muted-foreground">KB gzip</span></span>
+            </div>
+
+            <!-- ─── Centered content ─── -->
+            <div v-reveal class="relative z-10 flex flex-col items-center text-center gap-6 max-w-3xl mx-auto pt-8 lg:pt-4">
+                <a
+                    href="https://github.com/alansinbailarin/mood-ui"
+                    target="_blank"
+                    rel="noopener"
+                    class="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 backdrop-blur px-3 py-1 text-xs text-muted-foreground hover:border-primary/60 hover:text-foreground transition-colors"
+                >
+                    <span class="size-1.5 rounded-full bg-success animate-pulse"></span>
+                    {{ t('pages.welcome.badge') }}
+                    <ArrowTopRightOnSquareIcon class="size-3.5" />
+                </a>
+
+                <h1 class="text-[2.5rem] sm:text-6xl lg:text-[5rem] font-light leading-[1.02] tracking-[-0.04em] text-foreground">
+                    {{ t('pages.welcome.headline1') }}
+                    <span class="block font-medium bg-gradient-to-br from-primary via-primary to-accent bg-clip-text text-transparent">
+                        {{ t('pages.welcome.headline2') }}
+                    </span>
+                </h1>
+
+                <p class="text-base lg:text-lg text-muted-foreground max-w-2xl leading-relaxed font-light">
+                    {{ t('pages.welcome.lead', { n: totalComponents }) }}
+                </p>
+
+                <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+                    <Button color="primary" size="large" @click="go('button')">
+                        {{ t('pages.welcome.ctaExplore') }}
+                        <template #suffix><ArrowRightIcon class="size-5" /></template>
+                    </Button>
+                    <Button
                         rel="noopener"
-                        class="inline-flex items-center gap-2 self-start rounded-full border border-border bg-card/60 backdrop-blur px-3 py-1 text-xs text-muted-foreground hover:border-primary/60 hover:text-foreground transition-colors"
-                    >
-                        <span class="size-1.5 rounded-full bg-success animate-pulse"></span>
-                        v0.5.2 · {{ t.welcomeBadge }}
-                        <ArrowTopRightOnSquareIcon class="size-3.5" />
-                    </a>
-
-                    <h1 class="text-[2.75rem] sm:text-6xl lg:text-[4.5rem] font-light leading-[1.02] tracking-[-0.04em] text-foreground">
-                        {{ t.welcomeHeadline1 }}
-                        <span class="block font-medium bg-gradient-to-br from-primary via-primary to-accent bg-clip-text text-transparent">
-                            {{ t.welcomeHeadline2 }}
-                        </span>
-                    </h1>
-
-                    <p class="text-lg lg:text-xl text-muted-foreground max-w-xl leading-relaxed font-light">
-                        {{ t.welcomeLead(totalComponents) }}
-                    </p>
-
-                    <div class="flex flex-wrap items-center gap-3 pt-2">
-                        <Button color="primary" size="large" @click="go('button')">
-                            {{ t.ctaExplore }}
-                            <template #suffix><ArrowRightIcon class="size-5" /></template>
-                        </Button>
-                        <Button
-                            as="a"
-                            href="https://github.com/alansinbailarin/mood-ui"
-                            target="_blank"
-                            rel="noopener"
-                            variant="outline"
-                            size="large"
+                        variant="outline"
+                        size="medium"
+                        :icon="ArrowUpRightIcon"
+                        @click="navigateToGithub()"
                         >
-                            {{ t.ctaGithub }}
-                        </Button>
-                    </div>
-
-                    <!-- Trust strip -->
-                    <div class="flex items-center gap-4 pt-5">
-                        <AvatarGroup size="small" :max="5">
-                            <Avatar
-                                v-for="u in teamUsers"
-                                :key="u.name"
-                                :src="u.src"
-                                :alt="u.name"
-                                size="small"
-                            />
-                        </AvatarGroup>
-                        <div class="text-sm text-muted-foreground">
-                            <span class="text-foreground font-semibold">320+</span>
-                            {{ t.trustLine }}
-                        </div>
-                    </div>
+                        {{ t('pages.welcome.ctaGithub') }}
+                    </Button>
                 </div>
 
-                <!-- RIGHT — Live mini app preview -->
-                <div v-reveal="'right'" class="relative">
-                    <div class="absolute -inset-6 -z-10 rounded-[2rem] bg-gradient-to-br from-primary/15 via-transparent to-accent/15 blur-2xl"></div>
-
-                    <Card variant="elevated" padding="none" class="overflow-hidden shadow-2xl ring-1 ring-border/60">
-                        <div class="flex items-center justify-between px-4 py-2.5 border-b border-border bg-muted/40">
-                            <div class="flex items-center gap-1.5">
-                                <span class="size-2.5 rounded-full bg-danger/70"></span>
-                                <span class="size-2.5 rounded-full bg-warning/70"></span>
-                                <span class="size-2.5 rounded-full bg-success/70"></span>
-                            </div>
-                            <span class="text-[11px] text-muted-foreground font-mono">app.mood-ui.dev</span>
-                            <span class="size-2.5"></span>
-                        </div>
-
-                        <div class="p-6 flex flex-col gap-5">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <Avatar :src="teamUsers[0].src" alt="Olivia" size="medium" />
-                                    <div>
-                                        <div class="text-sm font-semibold text-foreground">Olivia Rhye</div>
-                                        <div class="text-xs text-muted-foreground">Product Designer</div>
-                                    </div>
-                                </div>
-                                <Badge :color="statusBadge.color" variant="subtle">
-                                    {{ statusBadge.label }}
-                                </Badge>
-                            </div>
-
-                            <Input
-                                v-model="demoEmail"
-                                label="Email"
-                                placeholder="you@example.com"
-                                size="medium"
-                            />
-
-                            <div class="flex items-center justify-between rounded-lg border border-border bg-muted/30 px-4 py-3">
-                                <div>
-                                    <div class="text-sm font-medium text-foreground">
-                                        {{ t.lang === 'es' ? 'Notificaciones' : 'Notifications' }}
-                                    </div>
-                                    <div class="text-xs text-muted-foreground">
-                                        {{ t.lang === 'es' ? 'Recibe updates por email' : 'Receive email updates' }}
-                                    </div>
-                                </div>
-                                <Switch v-model="demoNotif" size="medium" />
-                            </div>
-
-                            <div class="flex items-center gap-2">
-                                <Tooltip content="Cambiar el estado de deploy">
-                                    <Button
-                                        size="small"
-                                        variant="outline"
-                                        @click="demoStatus = demoStatus === 'live' ? 'building' : demoStatus === 'building' ? 'failed' : 'live'"
-                                    >
-                                        Toggle status
-                                    </Button>
-                                </Tooltip>
-                                <Button size="small" color="primary" class="ml-auto">
-                                    Guardar
-                                </Button>
-                            </div>
-                        </div>
-                    </Card>
-
-                    <div class="absolute -bottom-4 -left-4 hidden sm:flex items-center gap-1.5 bg-card border border-border rounded-full pl-1 pr-3 py-1 shadow-lg">
-                        <span class="size-6 rounded-full bg-success/15 grid place-items-center">
-                            <CheckBadgeIcon class="size-4 text-success" />
-                        </span>
-                        <span class="text-xs font-medium">100% accesible</span>
-                    </div>
+                <!-- micro feature line -->
+                <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 pt-4 text-xs text-muted-foreground">
+                    <span class="inline-flex items-center gap-1.5"><CheckIcon class="size-3.5 text-success" /> Vue 3</span>
+                    <span class="inline-flex items-center gap-1.5"><CheckIcon class="size-3.5 text-success" /> Tailwind v4</span>
+                    <span class="inline-flex items-center gap-1.5"><CheckIcon class="size-3.5 text-success" /> TypeScript</span>
+                    <span class="inline-flex items-center gap-1.5"><CheckIcon class="size-3.5 text-success" /> MIT</span>
+                    <span class="inline-flex items-center gap-1.5"><CheckIcon class="size-3.5 text-success" /> a11y</span>
                 </div>
             </div>
-            </div>
+        </div>
     </section>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col gap-28 pt-28 pb-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col gap-15 pt-12 pb-20">
 
         <!-- ───────────────────────  STATS STRIP  ─────────────────── -->
         <section v-reveal>
@@ -287,56 +351,59 @@ const teamUsers = [
         <!-- ───────────────────────  FEATURES  ────────────────────── -->
         <section class="flex flex-col gap-12">
             <div v-reveal class="flex flex-col gap-3 max-w-2xl">
-                <Badge color="primary" variant="subtle" class="self-start">
-                    <SparklesIcon class="size-3.5 mr-1" />
-                    {{ t.featuresKicker }}
-                </Badge>
-                <h2 class="text-3xl lg:text-5xl font-light tracking-tight text-foreground leading-[1.1]">
-                    {{ t.featuresTitle }}
-                </h2>
-                <p class="text-base lg:text-lg text-muted-foreground font-light leading-relaxed">
-                    {{ t.featuresSubtitle }}
-                </p>
+                <Typography variant="overline" size="medium" color="muted">
+                    {{ t('pages.welcome.featuresKicker') }}                
+                </Typography>
+                <Typography variant="display" size="medium" as="h1" weight="medium" class="tracking-tight leading-[1.05]">
+                    {{ t('pages.welcome.featuresTitle') }}
+                </Typography>
+                <Typography variant="body" size="medium" color="muted" weight="light">
+                    {{ t('pages.welcome.featuresSubtitle') }}                
+                </Typography>
             </div>
 
             <div v-reveal-children class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <Card
-                    v-for="f in featureList"
+                    v-for="(f, i) in featureList"
                     :key="f.title"
                     variant="outlined"
                     padding="large"
-                    class="group hover:border-primary/50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+                    class="relative overflow-hidden group hover:-translate-y-0.5 transition-all duration-300"
+                    :class="cardStyles[i].hoverBorder"
                 >
-                    <Stack direction="column" spacing="medium">
-                        <div class="size-10 rounded-xl bg-primary/10 text-primary grid place-items-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                    <div
+                        class="pointer-events-none absolute inset-0 opacity-[0.065]"
+                        :class="cardStyles[i].patternClasses"
+                    />
+                    <Stack direction="column" spacing="small" class="relative">
+                        <div
+                            class="size-10 rounded-xl grid place-items-center transition-colors"
+                            :class="cardStyles[i].iconClasses"
+                        >
                             <component :is="f.icon" class="size-5" />
                         </div>
-                        <h3 class="text-lg font-semibold text-foreground">{{ f.title }}</h3>
-                        <p class="text-sm text-muted-foreground leading-relaxed">{{ f.text }}</p>
+                        <Typography variant="title" size="small" as="h3">{{ f.title }}</Typography>
+                        <Typography variant="body" size="small" color="muted">{{ f.text }}</Typography>
                     </Stack>
                 </Card>
             </div>
         </section>
 
         <!-- ───────────────────────  INSTALL  ─────────────────────── -->
-        <section class="flex flex-col gap-10">
-            <div v-reveal class="flex flex-col gap-3 max-w-2xl">
-                <Badge color="success" variant="subtle" class="self-start">
-                    {{ t.installKicker }}
-                </Badge>
-                <h2 class="text-3xl lg:text-5xl font-light tracking-tight text-foreground">
-                    {{ t.installTitle }}
-                </h2>
-            </div>
+        <section class="flex flex-col gap-5">
+            
+            <Typography v-reveal="" variant="overline" class="text-muted-foreground max-w-2xl">
+                {{ t('pages.welcome.installKicker') }}
+            </Typography>
 
             <div v-reveal class="grid lg:grid-cols-2 gap-4">
                 <Card variant="outlined" padding="none" class="overflow-hidden">
                     <div class="flex items-center justify-between px-4 py-2.5 border-b border-border bg-muted/40">
                         <span class="text-xs font-mono text-muted-foreground">terminal</span>
-                        <Tooltip :content="copied === 'install' ? 'Copiado!' : 'Copiar'">
+                        <Tooltip :content="copied === 'install' ? t('pages.welcome.copy.copied') : t('pages.welcome.copy.tooltip')">
                             <button
                                 type="button"
-                                aria-label="Copiar comando de instalación"
+                                :aria-label="t('pages.welcome.copy.ariaInstall')"
                                 class="text-muted-foreground hover:text-foreground transition-colors"
                                 @click="copy(installCmd, 'install')"
                             >
@@ -351,10 +418,10 @@ const teamUsers = [
                 <Card variant="outlined" padding="none" class="overflow-hidden lg:row-span-2">
                     <div class="flex items-center justify-between px-4 py-2.5 border-b border-border bg-muted/40">
                         <span class="text-xs font-mono text-muted-foreground">App.vue</span>
-                        <Tooltip :content="copied === 'usage' ? 'Copiado!' : 'Copiar'">
+                        <Tooltip :content="copied === 'usage' ? t('pages.welcome.copy.copied') : t('pages.welcome.copy.tooltip')">
                             <button
                                 type="button"
-                                aria-label="Copiar código de uso"
+                                :aria-label="t('pages.welcome.copy.ariaUsage')"
                                 class="text-muted-foreground hover:text-foreground transition-colors"
                                 @click="copy(usageCode, 'usage')"
                             >
@@ -368,14 +435,14 @@ const teamUsers = [
 
                 <Card variant="outlined" padding="large">
                     <Stack direction="column" spacing="small">
-                        <h3 class="text-lg font-semibold">{{ t.nextSteps }}</h3>
-                        <p class="text-sm text-muted-foreground">{{ t.nextStepsBody }}</p>
+                        <h3 class="text-lg font-semibold">{{ t('pages.welcome.nextSteps') }}</h3>
+                        <p class="text-sm text-muted-foreground">{{ t('pages.welcome.nextStepsBody') }}</p>
                         <div class="flex flex-wrap gap-2 pt-2">
                             <Button size="small" variant="outline" @click="go('button')">
-                                {{ t.components }}
+                                {{ t('components') }}
                             </Button>
                             <Button size="small" variant="outline" @click="go('theming')">
-                                {{ t.theming }}
+                                {{ t('docsNav.theming') }}
                             </Button>
                             <Button
                                 as="a"
@@ -397,15 +464,16 @@ const teamUsers = [
         <!-- ───────────────────────  CATALOG WALL  ─────────────────── -->
         <section class="flex flex-col gap-12">
             <div v-reveal class="flex flex-col gap-3 max-w-2xl">
-                <Badge color="warning" variant="subtle" class="self-start">
-                    {{ t.catalogKicker }}
-                </Badge>
-                <h2 class="text-3xl lg:text-5xl font-light tracking-tight text-foreground">
-                    {{ t.catalogTitle(totalComponents) }}
-                </h2>
-                <p class="text-base lg:text-lg text-muted-foreground font-light leading-relaxed">
-                    {{ t.catalogSubtitle }}
-                </p>
+                <Typography v-reveal="" variant="overline" class="text-muted-foreground max-w-2xl">
+                {{ t('pages.welcome.catalogKicker') }}
+                </Typography>
+                 <Typography variant="display" size="medium" as="h1" weight="medium" class="tracking-tight leading-[1.05]">
+                {{ t('pages.welcome.catalogTitle', { n: totalComponents }) }}
+            </Typography>
+
+            <Typography variant="body" size="medium" color="muted" weight="light">
+                {{ t('pages.welcome.catalogSubtitle') }}
+            </Typography>
             </div>
 
             <div v-reveal-children class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -422,9 +490,9 @@ const teamUsers = [
                             <h3 class="text-base font-semibold">{{ cat.title }}</h3>
                             <Badge color="primary" variant="subtle">{{ cat.count }}</Badge>
                         </div>
-                        <span class="text-xs text-muted-foreground">{{ t.clickToExplore }}</span>
+                        <span class="text-xs text-muted-foreground">{{ t('pages.welcome.clickToExplore') }}</span>
                         <div class="flex items-center text-primary text-sm font-medium pt-2 group-hover:gap-2 gap-1 transition-all">
-                            {{ t.viewComponents }}
+                            {{ t('pages.welcome.viewComponents') }}
                             <ArrowRightIcon class="size-4" />
                         </div>
                     </Stack>
@@ -444,14 +512,14 @@ const teamUsers = [
                 <div class="relative grid lg:grid-cols-[1.5fr_1fr] gap-8 items-center">
                     <div class="flex flex-col gap-4">
                         <h2 class="text-3xl lg:text-5xl font-light tracking-tight text-foreground">
-                            {{ t.finalCtaTitle }}
+                            {{ t('pages.welcome.finalCtaTitle') }}
                         </h2>
                         <p class="text-base lg:text-lg text-muted-foreground font-light leading-relaxed">
-                            {{ t.finalCtaBody }}
+                            {{ t('pages.welcome.finalCtaBody') }}
                         </p>
                         <div class="flex flex-wrap gap-3 pt-2">
                             <Button color="primary" size="large" @click="go('button')">
-                                {{ t.ctaExplore }}
+                                {{ t('pages.welcome.ctaExplore') }}
                                 <template #suffix><ArrowRightIcon class="size-5" /></template>
                             </Button>
                             <Button
@@ -463,7 +531,7 @@ const teamUsers = [
                                 size="large"
                             >
                                 <template #prefix><HeartIcon class="size-5" /></template>
-                                {{ t.starOnGithub }}
+                                {{ t('starOnGithub') }}
                             </Button>
                         </div>
                     </div>

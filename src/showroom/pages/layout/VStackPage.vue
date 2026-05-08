@@ -1,18 +1,26 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import VStack from '../../../components/layout/VStack.vue';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
 import type { PropDoc, SlotDoc } from '../../types';
+
+const { t } = useI18n();
 
 const pgSpacing = ref<'none' | 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge'>('medium');
 const pgAlign = ref<'start' | 'center' | 'end' | 'stretch' | 'baseline'>('stretch');
 const pgJustify = ref<'start' | 'center' | 'end' | 'between' | 'around' | 'evenly'>('start');
+const pgDivider = ref(false);
 
 function resetPlayground() {
     pgSpacing.value = 'medium';
     pgAlign.value = 'stretch';
     pgJustify.value = 'start';
+    pgDivider.value = false;
 }
 
 const overviewCode = computed(() => {
@@ -20,6 +28,7 @@ const overviewCode = computed(() => {
     if (pgSpacing.value !== 'medium') parts.push(`spacing="${pgSpacing.value}"`);
     if (pgAlign.value !== 'stretch') parts.push(`align="${pgAlign.value}"`);
     if (pgJustify.value !== 'start') parts.push(`justify="${pgJustify.value}"`);
+    if (pgDivider.value) parts.push('divider');
     const attrs = parts.length ? ' ' + parts.join(' ') : '';
     return `<VStack${attrs}>
     <div>1</div>
@@ -44,90 +53,53 @@ const alignmentsCode = `<VStack align="start">…</VStack>
 <VStack align="stretch">…</VStack>`;
 
 const dividerCode = `<VStack spacing="medium" divider>
-    <span>Sección 1</span>
-    <span>Sección 2</span>
-    <span>Sección 3</span>
+    <span>${t('pages.layout.vstack.sections.s1')}</span>
+    <span>${t('pages.layout.vstack.sections.s2')}</span>
+    <span>${t('pages.layout.vstack.sections.s3')}</span>
 </VStack>`;
 
-const propsList: PropDoc[] = [
-    { name: 'spacing',    type: "'none' | 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge'", default: "'medium'",  description: 'Gap vertical entre los hijos.' },
-    { name: 'align',      type: "'start' | 'center' | 'end' | 'stretch' | 'baseline'",          default: "'stretch'", description: 'Alineación horizontal (cross-axis).' },
-    { name: 'justify',    type: "'start' | 'center' | 'end' | 'between' | 'around' | 'evenly'", default: "'start'",   description: 'Distribución vertical (main-axis).' },
-    { name: 'wrap',       type: "'nowrap' | 'wrap' | 'wrap-reverse'",                          default: "'nowrap'",  description: 'Comportamiento de salto de línea.' },
-    { name: 'divider',    type: 'boolean',                                                      default: 'false',     description: 'Inserta un Divider horizontal entre cada hijo.' },
-    { name: 'fullWidth',  type: 'boolean',                                                      default: 'false',     description: 'Ocupa todo el ancho disponible.' },
-    { name: 'fullHeight', type: 'boolean',                                                      default: 'false',     description: 'Ocupa todo el alto disponible.' },
-    { name: 'as',         type: 'string',                                                       default: "'div'",     description: 'Etiqueta raíz a renderizar.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'spacing',    type: "'none' | 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge'", default: "'medium'",  description: t('pages.layout.vstack.props.spacing') },
+    { name: 'align',      type: "'start' | 'center' | 'end' | 'stretch' | 'baseline'",          default: "'stretch'", description: t('pages.layout.vstack.props.align') },
+    { name: 'justify',    type: "'start' | 'center' | 'end' | 'between' | 'around' | 'evenly'", default: "'start'",   description: t('pages.layout.vstack.props.justify') },
+    { name: 'wrap',       type: "'nowrap' | 'wrap' | 'wrap-reverse'",                          default: "'nowrap'",  description: t('pages.layout.vstack.props.wrap') },
+    { name: 'divider',    type: 'boolean',                                                      default: 'false',     description: t('pages.layout.vstack.props.divider') },
+    { name: 'fullWidth',  type: 'boolean',                                                      default: 'false',     description: t('pages.layout.vstack.props.fullWidth') },
+    { name: 'fullHeight', type: 'boolean',                                                      default: 'false',     description: t('pages.layout.vstack.props.fullHeight') },
+    { name: 'as',         type: 'string',                                                       default: "'div'",     description: t('pages.layout.vstack.props.as') },
+]);
 
-const slotsList: SlotDoc[] = [
-    { name: 'default', description: 'Hijos a apilar verticalmente.' },
-];
+const slotsList = computed<SlotDoc[]>(() => [
+    { name: 'default', description: t('pages.layout.vstack.slots.default') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="VStack"
-        category="Layout"
+        :title="t('pages.layout.vstack.title')"
+        :category="t('pages.layout.vstack.category')"
         import-path="import { VStack } from 'mood-ui'"
-        description="Atajo de Stack con dirección vertical. Apila hijos en columna con spacing y align consistentes."
+        :description="t('pages.layout.vstack.description')"
         :props-list="propsList"
         :slots-list="slotsList"
     >
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="240px" @reset="resetPlayground">
                 <template #controls>
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Gap</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="g in ['none','small','medium','large']"
-                                :key="g"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors"
-                                :class="pgSpacing === g ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSpacing = (g as typeof pgSpacing)"
-                            >{{ g }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Align</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="a in ['start','center','end','stretch']"
-                                :key="a"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors"
-                                :class="pgAlign === a ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgAlign = (a as typeof pgAlign)"
-                            >{{ a }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Justify</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="j in ['start','center','end','between']"
-                                :key="j"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors"
-                                :class="pgJustify === j ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgJustify = (j as typeof pgJustify)"
-                            >{{ j }}</button>
-                        </div>
-                    </div>
+                    <TbPills label="Gap" :options="[{value:'none'},{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSpacing" />
+                    <TbSep />
+                    <TbPills label="Align" :options="[{value:'start'},{value:'center'},{value:'end'},{value:'stretch'}]" v-model="pgAlign" />
+                    <TbSep />
+                    <TbPills label="Justify" :options="[{value:'start'},{value:'center'},{value:'end'},{value:'between'}]" v-model="pgJustify" />
+                    <TbSep />
+                    <TbToggle label="Divider" v-model="pgDivider" />
                 </template>
 
                 <VStack
                     :spacing="pgSpacing"
                     :align="pgAlign"
                     :justify="pgJustify"
+                    :divider="pgDivider"
                     class="w-full max-w-xs p-4 border border-dashed border-border rounded-md min-h-[200px]"
                 >
                     <div class="size-12 bg-primary/10 rounded-md grid place-items-center text-primary font-medium">1</div>
@@ -139,8 +111,8 @@ const slotsList: SlotDoc[] = [
 
         <template #examples>
             <ComponentPreview
-                title="Básico"
-                description="Apila hijos verticalmente con spacing del sistema."
+                :title="t('pages.layout.vstack.examples.basic.title')"
+                :description="t('pages.layout.vstack.examples.basic.desc')"
                 :code="basicCode"
             >
                 <VStack spacing="medium" class="w-full max-w-xs">
@@ -151,8 +123,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Spacings"
-                description="Selecciona el gap vertical según la densidad deseada."
+                :title="t('pages.layout.vstack.examples.spacings.title')"
+                :description="t('pages.layout.vstack.examples.spacings.desc')"
                 :code="gapCode"
             >
                 <div class="flex gap-6 items-start">
@@ -175,8 +147,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Alineaciones"
-                description="Controla la alineación horizontal del contenido."
+                :title="t('pages.layout.vstack.examples.alignments.title')"
+                :description="t('pages.layout.vstack.examples.alignments.desc')"
                 :code="alignmentsCode"
             >
                 <div class="flex gap-3 w-full">
@@ -187,14 +159,14 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con divider"
-                description="Inserta separadores horizontales entre cada elemento."
+                :title="t('pages.layout.vstack.examples.divider.title')"
+                :description="t('pages.layout.vstack.examples.divider.desc')"
                 :code="dividerCode"
             >
                 <VStack spacing="medium" divider class="w-full max-w-xs">
-                    <span class="text-sm">Sección 1</span>
-                    <span class="text-sm">Sección 2</span>
-                    <span class="text-sm">Sección 3</span>
+                    <span class="text-sm">{{ t('pages.layout.vstack.sections.s1') }}</span>
+                    <span class="text-sm">{{ t('pages.layout.vstack.sections.s2') }}</span>
+                    <span class="text-sm">{{ t('pages.layout.vstack.sections.s3') }}</span>
                 </VStack>
             </ComponentPreview>
         </template>

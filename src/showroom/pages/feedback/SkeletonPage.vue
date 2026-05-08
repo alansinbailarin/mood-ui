@@ -1,26 +1,34 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Skeleton from '../../../components/feedback/Skeleton.vue';
 import Card from '../../../components/data-display/Card.vue';
 import type { PropDoc, SlotDoc } from '../../types';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
+
+const { t } = useI18n();
 
 type Shape = 'text' | 'circle' | 'rect';
 type Size  = 'small' | 'medium' | 'large';
 
-const pgShape = ref<Shape>('rect');
-const pgSize  = ref<Size>('medium');
+const pgShape     = ref<Shape>('rect');
+const pgSize      = ref<Size>('medium');
+const pgAnimation = ref<'shimmer' | 'pulse' | 'none'>('shimmer');
 
 function resetPlayground() {
-    pgShape.value = 'rect';
-    pgSize.value  = 'medium';
+    pgShape.value     = 'rect';
+    pgSize.value      = 'medium';
+    pgAnimation.value = 'shimmer';
 }
 
 const overviewCode = computed(() => {
     const parts: string[] = [];
-    if (pgShape.value !== 'rect')   parts.push(`shape="${pgShape.value}"`);
-    if (pgSize.value  !== 'medium') parts.push(`size="${pgSize.value}"`);
+    if (pgShape.value     !== 'rect')    parts.push(`shape="${pgShape.value}"`);
+    if (pgSize.value      !== 'medium')  parts.push(`size="${pgSize.value}"`);
+    if (pgAnimation.value !== 'shimmer') parts.push(`animation="${pgAnimation.value}"`);
     parts.push(':width="160"');
     if (pgShape.value === 'circle') parts.push(':height="48"');
     return `<Skeleton ${parts.join(' ')} />`;
@@ -50,72 +58,45 @@ const buttonCode = `<Skeleton shape="button" size="small" :width="96" />
 <Skeleton shape="button" size="medium" :width="120" />
 <Skeleton shape="button" size="large" :width="144" />`;
 
-const propsList: PropDoc[] = [
-    { name: 'shape',     type: "'text' | 'title' | 'rect' | 'circle' | 'avatar' | 'button' | 'input' | 'card' | …", default: "'rect'", description: 'Preset visual que define alto, ancho y radius por defecto. Mira la interface para todos los presets disponibles.' },
-    { name: 'size',      type: "'small' | 'medium' | 'large'",                       default: "'medium'", description: 'Mapea al size del componente real para mantener pixel-parity.' },
-    { name: 'radius',    type: "'none' | 'small' | 'medium' | 'large' | 'full'",                          description: 'Radio de las esquinas. circle / avatar siempre fuerzan full.' },
-    { name: 'width',     type: 'string | number',                                                          description: 'Ancho explícito. Acepta cualquier longitud CSS.' },
-    { name: 'height',    type: 'string | number',                                                          description: 'Alto explícito.' },
-    { name: 'fullWidth', type: 'boolean',                                            default: 'false',     description: 'Hace que width colapse a 100% del contenedor.' },
-    { name: 'withLabel', type: 'boolean',                                            default: 'false',     description: 'Renderiza una mini-barra de label encima de la forma.' },
-    { name: 'lines',     type: 'number',                                             default: '1',         description: 'Para shape="text": número de líneas apiladas.' },
-    { name: 'animation', type: "'shimmer' | 'pulse' | 'none'",                       default: "'shimmer'", description: 'Animación de carga.' },
-    { name: 'ariaLabel', type: 'string',                                                                   description: 'Etiqueta accesible (anuncia qué se está cargando).' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'shape',     type: "'text' | 'title' | 'rect' | 'circle' | 'avatar' | 'button' | 'input' | 'card' | …", default: "'rect'", description: t('pages.feedback.skeleton.props.shape') },
+    { name: 'size',      type: "'small' | 'medium' | 'large'",                       default: "'medium'", description: t('pages.feedback.skeleton.props.size') },
+    { name: 'radius',    type: "'none' | 'small' | 'medium' | 'large' | 'full'",                          description: t('pages.feedback.skeleton.props.radius') },
+    { name: 'width',     type: 'string | number',                                                          description: t('pages.feedback.skeleton.props.width') },
+    { name: 'height',    type: 'string | number',                                                          description: t('pages.feedback.skeleton.props.height') },
+    { name: 'fullWidth', type: 'boolean',                                            default: 'false',     description: t('pages.feedback.skeleton.props.fullWidth') },
+    { name: 'withLabel', type: 'boolean',                                            default: 'false',     description: t('pages.feedback.skeleton.props.withLabel') },
+    { name: 'lines',     type: 'number',                                             default: '1',         description: t('pages.feedback.skeleton.props.lines') },
+    { name: 'animation', type: "'shimmer' | 'pulse' | 'none'",                       default: "'shimmer'", description: t('pages.feedback.skeleton.props.animation') },
+    { name: 'ariaLabel', type: 'string',                                                                   description: t('pages.feedback.skeleton.props.ariaLabel') },
+]);
 
 const slotsList: SlotDoc[] = [];
 </script>
 
 <template>
     <ComponentDoc
-        title="Skeleton"
+        :title="t('pages.feedback.skeleton.title')"
         category="Feedback"
         import-path="import { Skeleton } from 'mood-ui'"
-        description="Placeholder animado que reserva el espacio del contenido mientras carga. Soporta presets que replican el footprint exacto de los componentes reales para evitar layout shifts."
+        :description="t('pages.feedback.skeleton.description')"
         :props-list="propsList"
         :slots-list="slotsList"
     >
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="200px" @reset="resetPlayground">
                 <template #controls>
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Forma</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in (['text', 'circle', 'rect'] as Shape[])"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgShape === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgShape = s"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Tamaño</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in (['small', 'medium', 'large'] as Size[])"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = s"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
+                    <TbPills :label="t('pages.feedback.skeleton.controls.shape')" :options="[{value:'text'},{value:'circle'},{value:'rect'}]" v-model="pgShape" />
+                    <TbSep />
+                    <TbPills :label="t('pages.feedback.skeleton.controls.size')" :options="[{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbPills :label="t('pages.feedback.skeleton.controls.animation')" :options="[{value:'shimmer'},{value:'pulse'},{value:'none'}]" v-model="pgAnimation" />
                 </template>
 
                 <Skeleton
                     :shape="pgShape"
                     :size="pgSize"
+                    :animation="pgAnimation"
                     :width="160"
                     :height="pgShape === 'circle' ? 48 : undefined"
                 />
@@ -124,8 +105,8 @@ const slotsList: SlotDoc[] = [];
 
         <template #examples>
             <ComponentPreview
-                title="Texto multi-línea"
-                description="Usa shape='text' con lines para simular un párrafo. La última línea se acorta automáticamente."
+                :title="t('pages.feedback.skeleton.examples.text.title')"
+                :description="t('pages.feedback.skeleton.examples.text.desc')"
                 :code="textCode"
                 min-height="180px"
             >
@@ -135,8 +116,8 @@ const slotsList: SlotDoc[] = [];
             </ComponentPreview>
 
             <ComponentPreview
-                title="Avatar + texto"
-                description="Composición típica para listas de usuarios: círculo + dos líneas apiladas."
+                :title="t('pages.feedback.skeleton.examples.profile.title')"
+                :description="t('pages.feedback.skeleton.examples.profile.desc')"
                 :code="profileCode"
                 min-height="180px"
             >
@@ -150,8 +131,8 @@ const slotsList: SlotDoc[] = [];
             </ComponentPreview>
 
             <ComponentPreview
-                title="Card placeholder"
-                description="Reserva el footprint de una tarjeta con imagen, título y descripción."
+                :title="t('pages.feedback.skeleton.examples.card.title')"
+                :description="t('pages.feedback.skeleton.examples.card.desc')"
                 :code="cardCode"
                 min-height="280px"
             >
@@ -165,8 +146,8 @@ const slotsList: SlotDoc[] = [];
             </ComponentPreview>
 
             <ComponentPreview
-                title="Button skeleton"
-                description="El preset button respeta el alto por size para hacer match con el botón real."
+                :title="t('pages.feedback.skeleton.examples.button.title')"
+                :description="t('pages.feedback.skeleton.examples.button.desc')"
                 :code="buttonCode"
                 min-height="180px"
             >

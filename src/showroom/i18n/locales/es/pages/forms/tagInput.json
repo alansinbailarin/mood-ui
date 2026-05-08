@@ -1,0 +1,57 @@
+{
+    "title": "TagInput",
+    "description": "Editor de etiquetas: el usuario escribe texto, pulsa Enter (o un delimitador) y se añade un chip. Soporta validación, máximos y variantes visuales.",
+
+    "playground": {
+        "placeholder": "Añade un tag y pulsa Enter…"
+    },
+
+    "examples": {
+        "basic": {
+            "title": "Uso básico",
+            "desc":  "Pulsa Enter o coma para confirmar. Los duplicados se descartan por defecto.",
+            "ph":    "Añade un tag y pulsa Enter…"
+        },
+        "max": {
+            "title": "Máximo de tags",
+            "desc":  "Limita la cantidad de tags con la prop max.",
+            "ph":    "Hasta 3 tags"
+        },
+        "validator": {
+            "title": "Validador personalizado",
+            "desc":  "Sólo se confirman tags que pasan el validador (aquí, emails válidos).",
+            "ph":    "Sólo emails válidos"
+        },
+        "colors": {
+            "title": "Colores",
+            "desc":  "Variantes semánticas para los chips."
+        },
+        "sizes": {
+            "title": "Tamaños",
+            "desc":  "Tres alturas para encajar con la densidad del formulario."
+        }
+    },
+
+    "props": {
+        "modelValue":  "Array actual de tags (v-model).",
+        "placeholder": "Placeholder cuando no hay tags y el input está vacío.",
+        "max":         "Máximo de tags. Más allá del límite el input se deshabilita.",
+        "unique":      "Rechaza duplicados (comparación case-insensitive).",
+        "validator":   "Validador opcional. Devolver false rechaza el tag.",
+        "delimiters":  "Caracteres que también confirman el tag actual al teclearlos.",
+        "color":       "Color semántico de los chips.",
+        "variant":     "Variante visual de los chips.",
+        "size":        "Tamaño del input y los chips.",
+        "radius":      "Radio del wrapper y los chips.",
+        "disabled":    "Deshabilita la interacción.",
+        "readonly":    "Modo sólo lectura — los tags no se pueden eliminar.",
+        "ariaLabel":   "Nombre accesible para el input."
+    },
+
+    "emits": {
+        "updateModelValue": "Emitido al cambiar la lista de tags (v-model).",
+        "add":              "Emitido al añadir un tag nuevo.",
+        "remove":           "Emitido al eliminar un tag, con su valor e índice original.",
+        "change":           "Emitido tras cualquier cambio (add o remove)."
+    }
+}

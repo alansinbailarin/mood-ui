@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import DayView from '../../../components/data-display/calendar/DayView.vue';
 import type { CalendarEvent } from '../../../interfaces/data-display/calendar/MonthView.interface';
 import type { PropDoc, EmitDoc } from '../../types';
+
+const { t } = useI18n();
 
 // ── Sample events ─────────────────────────────────────────────────────────────
 const today = new Date();
@@ -63,45 +66,45 @@ const bizCode    = `<DayView
 />`;
 
 // ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'modelValue',         type: 'Date',                                                              description: 'Día visible (v-model).' },
-    { name: 'events',             type: 'CalendarEvent[]',                                                   description: 'Eventos a renderizar en la grilla horaria.' },
-    { name: 'locale',             type: 'string',                                                            description: 'Locale BCP-47 para encabezados y formatos.' },
-    { name: 'color',              type: "'default' | 'primary' | 'danger' | 'success' | 'warning'",          description: 'Color semántico aplicado a acentos.' },
-    { name: 'format',             type: "'12h' | '24h'",                              default: "'24h'",      description: 'Formato horario de la columna de horas.' },
-    { name: 'hourStart',          type: 'number',                                     default: '0',          description: 'Hora inicial visible (0-23).' },
-    { name: 'hourEnd',            type: 'number',                                     default: '24',         description: 'Hora final visible (1-24).' },
-    { name: 'slotMinutes',        type: '15 | 30 | 60',                               default: '30',         description: 'Granularidad de los slots de tiempo.' },
-    { name: 'slotHeight',         type: 'number',                                                            description: 'Altura en px de cada slot horario.' },
-    { name: 'showAllDayRow',      type: 'boolean',                                    default: 'true',       description: 'Muestra la fila superior para eventos all-day.' },
-    { name: 'showHeader',         type: 'boolean',                                    default: 'true',       description: 'Muestra la cabecera con navegación.' },
-    { name: 'showCurrentTime',    type: 'boolean',                                    default: 'true',       description: 'Dibuja la línea de hora actual.' },
-    { name: 'showNowPill',        type: 'boolean',                                    default: 'true',       description: 'Muestra una píldora con la hora actual.' },
-    { name: 'businessHours',      type: 'BusinessHours | BusinessHours[]',                                   description: 'Resalta el rango de horas laborales.' },
-    { name: 'disabledTimeRanges', type: 'DisabledTimeRange[]',                                               description: 'Rangos horarios no seleccionables.' },
-    { name: 'bordered',           type: 'boolean',                                    default: 'true',       description: 'Dibuja borde alrededor de la grilla.' },
-    { name: 'draggableEvents',    type: 'boolean',                                    default: 'false',      description: 'Permite arrastrar eventos.' },
-    { name: 'resizableEvents',    type: 'boolean',                                    default: 'false',      description: 'Permite redimensionar eventos.' },
-    { name: 'allowRangeSelection',type: 'boolean',                                    default: 'false',      description: 'Permite seleccionar un rango arrastrando sobre slots vacíos.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'modelValue',         type: 'Date',                                                              description: t('pages.dataDisplay.dayView.props.modelValue') },
+    { name: 'events',             type: 'CalendarEvent[]',                                                   description: t('pages.dataDisplay.dayView.props.events') },
+    { name: 'locale',             type: 'string',                                                            description: t('pages.dataDisplay.dayView.props.locale') },
+    { name: 'color',              type: "'default' | 'primary' | 'danger' | 'success' | 'warning'",          description: t('pages.dataDisplay.dayView.props.color') },
+    { name: 'format',             type: "'12h' | '24h'",                              default: "'24h'",      description: t('pages.dataDisplay.dayView.props.format') },
+    { name: 'hourStart',          type: 'number',                                     default: '0',          description: t('pages.dataDisplay.dayView.props.hourStart') },
+    { name: 'hourEnd',            type: 'number',                                     default: '24',         description: t('pages.dataDisplay.dayView.props.hourEnd') },
+    { name: 'slotMinutes',        type: '15 | 30 | 60',                               default: '30',         description: t('pages.dataDisplay.dayView.props.slotMinutes') },
+    { name: 'slotHeight',         type: 'number',                                                            description: t('pages.dataDisplay.dayView.props.slotHeight') },
+    { name: 'showAllDayRow',      type: 'boolean',                                    default: 'true',       description: t('pages.dataDisplay.dayView.props.showAllDayRow') },
+    { name: 'showHeader',         type: 'boolean',                                    default: 'true',       description: t('pages.dataDisplay.dayView.props.showHeader') },
+    { name: 'showCurrentTime',    type: 'boolean',                                    default: 'true',       description: t('pages.dataDisplay.dayView.props.showCurrentTime') },
+    { name: 'showNowPill',        type: 'boolean',                                    default: 'true',       description: t('pages.dataDisplay.dayView.props.showNowPill') },
+    { name: 'businessHours',      type: 'BusinessHours | BusinessHours[]',                                   description: t('pages.dataDisplay.dayView.props.businessHours') },
+    { name: 'disabledTimeRanges', type: 'DisabledTimeRange[]',                                               description: t('pages.dataDisplay.dayView.props.disabledTimeRanges') },
+    { name: 'bordered',           type: 'boolean',                                    default: 'true',       description: t('pages.dataDisplay.dayView.props.bordered') },
+    { name: 'draggableEvents',    type: 'boolean',                                    default: 'false',      description: t('pages.dataDisplay.dayView.props.draggableEvents') },
+    { name: 'resizableEvents',    type: 'boolean',                                    default: 'false',      description: t('pages.dataDisplay.dayView.props.resizableEvents') },
+    { name: 'allowRangeSelection',type: 'boolean',                                    default: 'false',      description: t('pages.dataDisplay.dayView.props.allowRangeSelection') },
+]);
 
-const emitsList: EmitDoc[] = [
-    { name: 'update:modelValue', payload: 'Date',                                                                                  description: 'Emitido al cambiar el día visible.' },
-    { name: 'event-click',       payload: '(event: CalendarEvent, nativeEvent: MouseEvent)',                                        description: 'Click sobre un evento.' },
-    { name: 'slot-click',        payload: '(date: Date, nativeEvent: MouseEvent)',                                                  description: 'Click sobre un slot vacío.' },
-    { name: 'create-event',      payload: '(date: Date, allDay: boolean, nativeEvent: MouseEvent | KeyboardEvent)',                 description: 'Solicitud de creación de evento.' },
-    { name: 'event-drop',        payload: '(event: CalendarEvent, newStart: Date, newEnd: Date | undefined)',                       description: 'Evento arrastrado a una nueva posición.' },
-    { name: 'event-resize',      payload: '(event: CalendarEvent, newStart: Date, newEnd: Date)',                                   description: 'Evento redimensionado.' },
-    { name: 'select-range',      payload: '(start: Date, end: Date)',                                                               description: 'Rango seleccionado arrastrando.' },
-];
+const emitsList = computed<EmitDoc[]>(() => [
+    { name: 'update:modelValue', payload: 'Date',                                                                                  description: t('pages.dataDisplay.dayView.emits.updateModelValue') },
+    { name: 'event-click',       payload: '(event: CalendarEvent, nativeEvent: MouseEvent)',                                        description: t('pages.dataDisplay.dayView.emits.eventClick') },
+    { name: 'slot-click',        payload: '(date: Date, nativeEvent: MouseEvent)',                                                  description: t('pages.dataDisplay.dayView.emits.slotClick') },
+    { name: 'create-event',      payload: '(date: Date, allDay: boolean, nativeEvent: MouseEvent | KeyboardEvent)',                 description: t('pages.dataDisplay.dayView.emits.createEvent') },
+    { name: 'event-drop',        payload: '(event: CalendarEvent, newStart: Date, newEnd: Date | undefined)',                       description: t('pages.dataDisplay.dayView.emits.eventDrop') },
+    { name: 'event-resize',      payload: '(event: CalendarEvent, newStart: Date, newEnd: Date)',                                   description: t('pages.dataDisplay.dayView.emits.eventResize') },
+    { name: 'select-range',      payload: '(start: Date, end: Date)',                                                               description: t('pages.dataDisplay.dayView.emits.selectRange') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="DayView"
+        :title="t('pages.dataDisplay.dayView.title')"
         category="Calendar"
         import-path="import { DayView } from 'mood-ui'"
-        description="Vista de un único día con grilla horaria. Ideal para agendas detalladas, bloques de tiempo y planificación operativa."
+        :description="t('pages.dataDisplay.dayView.description')"
         :props-list="propsList"
         :emits-list="emitsList"
     >
@@ -109,7 +112,7 @@ const emitsList: EmitDoc[] = [
             <ComponentPreview :code="overviewCode" min-height="400px" @reset="resetPlayground">
                 <template #controls>
                     <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Formato</span>
+                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">{{ t('pages.dataDisplay.dayView.controls.format') }}</span>
                         <div class="flex rounded-md border border-border overflow-hidden">
                             <button
                                 v-for="f in ['24h', '12h']"
@@ -133,7 +136,7 @@ const emitsList: EmitDoc[] = [
                             ? 'border-primary bg-primary/10 text-primary font-medium'
                             : 'border-border text-muted-foreground hover:bg-muted/60'"
                         @click="pgShowAllDay = !pgShowAllDay"
-                    >Fila all-day</button>
+                    >{{ t('pages.dataDisplay.dayView.controls.allDayRow') }}</button>
 
                     <button
                         type="button"
@@ -142,7 +145,7 @@ const emitsList: EmitDoc[] = [
                             ? 'border-primary bg-primary/10 text-primary font-medium'
                             : 'border-border text-muted-foreground hover:bg-muted/60'"
                         @click="pgBordered = !pgBordered"
-                    >Bordes</button>
+                    >{{ t('pages.dataDisplay.dayView.controls.borders') }}</button>
 
                     <button
                         type="button"
@@ -151,7 +154,7 @@ const emitsList: EmitDoc[] = [
                             ? 'border-primary bg-primary/10 text-primary font-medium'
                             : 'border-border text-muted-foreground hover:bg-muted/60'"
                         @click="pgShowNowPill = !pgShowNowPill"
-                    >Hora actual</button>
+                    >{{ t('pages.dataDisplay.dayView.controls.currentTime') }}</button>
                 </template>
 
                 <div class="w-full">
@@ -169,8 +172,8 @@ const emitsList: EmitDoc[] = [
 
         <template #examples>
             <ComponentPreview
-                title="Básico"
-                description="Día por defecto sin eventos."
+                :title="t('pages.dataDisplay.dayView.examples.basic.title')"
+                :description="t('pages.dataDisplay.dayView.examples.basic.desc')"
                 :code="basicCode"
                 min-height="400px"
             >
@@ -178,8 +181,8 @@ const emitsList: EmitDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con eventos"
-                description="Eventos timed renderizados en la grilla horaria."
+                :title="t('pages.dataDisplay.dayView.examples.events.title')"
+                :description="t('pages.dataDisplay.dayView.examples.events.desc')"
                 :code="eventsCode"
                 min-height="400px"
             >
@@ -187,8 +190,8 @@ const emitsList: EmitDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Formato 12 horas"
-                description="Columna horaria en formato AM/PM."
+                :title="t('pages.dataDisplay.dayView.examples.format12h.title')"
+                :description="t('pages.dataDisplay.dayView.examples.format12h.desc')"
                 :code="fmt12hCode"
                 min-height="400px"
             >
@@ -196,8 +199,8 @@ const emitsList: EmitDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Business hours"
-                description="Resalta horario laboral y restringe el rango horario visible."
+                :title="t('pages.dataDisplay.dayView.examples.businessHours.title')"
+                :description="t('pages.dataDisplay.dayView.examples.businessHours.desc')"
                 :code="bizCode"
                 min-height="400px"
             >

@@ -1,15 +1,22 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Modal from '../../../components/feedback/Modal.vue';
 import Button from '../../../components/forms/Button.vue';
 import Typography from '../../../components/data-display/Typography.vue';
 import type { PropDoc, EmitDoc, SlotDoc } from '../../types';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
+
+const { t } = useI18n();
 
 type Size = 'small' | 'medium' | 'large' | 'xlarge';
 
 const pgSize     = ref<Size>('medium');
+const pgOverlay  = ref<'blur' | 'dim' | 'solid' | 'transparent'>('blur');
 const pgCentered = ref(true);
 const pgClosable = ref(true);
 
@@ -22,15 +29,17 @@ const open5    = ref(false);
 
 function resetPlayground() {
     pgSize.value     = 'medium';
+    pgOverlay.value  = 'blur';
     pgCentered.value = true;
     pgClosable.value = true;
 }
 
 const overviewCode = computed(() => {
     const parts: string[] = ['v-model="open"', 'title="Confirmar acción"'];
-    if (pgSize.value !== 'medium') parts.push(`size="${pgSize.value}"`);
-    if (!pgCentered.value)         parts.push('position="top"');
-    if (!pgClosable.value)         parts.push(':show-close="false"', ':close-on-overlay="false"', ':close-on-escape="false"');
+    if (pgSize.value    !== 'medium') parts.push(`size="${pgSize.value}"`);
+    if (pgOverlay.value !== 'blur')   parts.push(`overlay="${pgOverlay.value}"`);
+    if (!pgCentered.value)            parts.push('position="top"');
+    if (!pgClosable.value)            parts.push(':show-close="false"', ':close-on-overlay="false"', ':close-on-escape="false"');
     return `<Modal ${parts.join(' ')}>
   <p>¿Quieres aplicar estos cambios?</p>
 </Modal>`;
@@ -79,41 +88,41 @@ const scrollCode = `<Modal v-model="open" title="Términos y condiciones">
   </div>
 </Modal>`;
 
-const propsList: PropDoc[] = [
-    { name: 'modelValue',     type: 'boolean',                                                                           description: 'Visibilidad. Usa v-model.' },
-    { name: 'size',           type: "'small' | 'medium' | 'large' | 'xlarge' | 'full'", default: "'medium'",            description: 'Tamaño del panel.' },
-    { name: 'position',       type: "'center' | 'top'",                                  default: "'center'",            description: 'Posición vertical del panel.' },
-    { name: 'radius',         type: "'none' | 'small' | 'medium' | 'large' | 'full'",                                    description: 'Radio de las esquinas. Cascada del provider.' },
-    { name: 'title',          type: 'string',                                                                            description: 'Título accesible — se renderiza en header si no hay slot.' },
-    { name: 'description',    type: 'string',                                                                            description: 'Descripción opcional bajo el título.' },
-    { name: 'closeOnOverlay', type: 'boolean',                                           default: 'true',                description: 'Cierra al hacer click en el backdrop.' },
-    { name: 'closeOnEscape',  type: 'boolean',                                           default: 'true',                description: 'Cierra al pulsar Escape.' },
-    { name: 'showClose',      type: 'boolean',                                           default: 'true',                description: 'Muestra el botón de cerrar (X) en la esquina.' },
-    { name: 'lockScroll',     type: 'boolean',                                           default: 'true',                description: 'Bloquea el scroll del body mientras está abierto.' },
-    { name: 'color',          type: "'default' | 'primary' | 'danger' | 'success' | 'warning'",                          description: 'Color de acento aplicado a borde y ring.' },
-    { name: 'overlay',        type: "'blur' | 'solid' | 'transparent' | 'dark' | 'dim' | 'glass'", default: "'blur'",   description: 'Estilo del backdrop.' },
-    { name: 'innerBorder',    type: 'boolean',                                           default: 'true',                description: 'Renderiza un borde interior sutil dentro del borde principal.' },
-    { name: 'origin',         type: 'HTMLElement | null',                                                                description: 'Elemento de origen para la animación FLIP-style.' },
-    { name: 'ariaLabel',      type: 'string',                                                                            description: 'Etiqueta accesible cuando no hay title.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'modelValue',     type: 'boolean',                                                                           description: t('pages.feedback.modal.props.modelValue') },
+    { name: 'size',           type: "'small' | 'medium' | 'large' | 'xlarge' | 'full'", default: "'medium'",            description: t('pages.feedback.modal.props.size') },
+    { name: 'position',       type: "'center' | 'top'",                                  default: "'center'",            description: t('pages.feedback.modal.props.position') },
+    { name: 'radius',         type: "'none' | 'small' | 'medium' | 'large' | 'full'",                                    description: t('pages.feedback.modal.props.radius') },
+    { name: 'title',          type: 'string',                                                                            description: t('pages.feedback.modal.props.title') },
+    { name: 'description',    type: 'string',                                                                            description: t('pages.feedback.modal.props.description') },
+    { name: 'closeOnOverlay', type: 'boolean',                                           default: 'true',                description: t('pages.feedback.modal.props.closeOnOverlay') },
+    { name: 'closeOnEscape',  type: 'boolean',                                           default: 'true',                description: t('pages.feedback.modal.props.closeOnEscape') },
+    { name: 'showClose',      type: 'boolean',                                           default: 'true',                description: t('pages.feedback.modal.props.showClose') },
+    { name: 'lockScroll',     type: 'boolean',                                           default: 'true',                description: t('pages.feedback.modal.props.lockScroll') },
+    { name: 'color',          type: "'default' | 'primary' | 'danger' | 'success' | 'warning'",                          description: t('pages.feedback.modal.props.color') },
+    { name: 'overlay',        type: "'blur' | 'solid' | 'transparent' | 'dark' | 'dim' | 'glass'", default: "'blur'",   description: t('pages.feedback.modal.props.overlay') },
+    { name: 'innerBorder',    type: 'boolean',                                           default: 'true',                description: t('pages.feedback.modal.props.innerBorder') },
+    { name: 'origin',         type: 'HTMLElement | null',                                                                description: t('pages.feedback.modal.props.origin') },
+    { name: 'ariaLabel',      type: 'string',                                                                            description: t('pages.feedback.modal.props.ariaLabel') },
+]);
 
-const emitsList: EmitDoc[] = [
-    { name: 'update:modelValue', payload: 'boolean', description: 'Cambio del estado abierto/cerrado.' },
-];
+const emitsList = computed<EmitDoc[]>(() => [
+    { name: 'update:modelValue', payload: 'boolean', description: t('pages.feedback.modal.emits.updateModelValue') },
+]);
 
-const slotsList: SlotDoc[] = [
-    { name: 'default', description: 'Cuerpo principal del modal.' },
-    { name: 'header',  description: 'Reemplaza el header generado a partir de title/description.' },
-    { name: 'footer',  description: 'Acciones al pie del modal (botones de cancelar/confirmar).' },
-];
+const slotsList = computed<SlotDoc[]>(() => [
+    { name: 'default', description: t('pages.feedback.modal.slots.default') },
+    { name: 'header',  description: t('pages.feedback.modal.slots.header') },
+    { name: 'footer',  description: t('pages.feedback.modal.slots.footer') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="Modal"
+        :title="t('pages.feedback.modal.title')"
         category="Feedback"
         import-path="import { Modal } from 'mood-ui'"
-        description="Diálogo modal centrado con foco atrapado, bloqueo de scroll y animación FLIP-style desde el botón que lo abrió. Soporta tamaños, header con título/descripción y slot footer."
+        :description="t('pages.feedback.modal.description')"
         :props-list="propsList"
         :emits-list="emitsList"
         :slots-list="slotsList"
@@ -121,58 +130,30 @@ const slotsList: SlotDoc[] = [
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="220px" @reset="resetPlayground">
                 <template #controls>
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Tamaño</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in (['small', 'medium', 'large', 'xlarge'] as Size[])"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = s"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgCentered
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgCentered = !pgCentered"
-                    >Centrado</button>
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgClosable
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgClosable = !pgClosable"
-                    >Cerrable</button>
+                    <TbPills :label="t('pages.feedback.modal.controls.size')" :options="[{value:'small'},{value:'medium'},{value:'large'},{value:'xlarge'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbPills :label="t('pages.feedback.modal.controls.overlay')" :options="[{value:'blur'},{value:'dim'},{value:'solid'},{value:'transparent'}]" v-model="pgOverlay" />
+                    <TbSep />
+                    <TbToggle :label="t('pages.feedback.modal.controls.centered')" v-model="pgCentered" />
+                    <TbToggle :label="t('pages.feedback.modal.controls.closable')" v-model="pgClosable" />
                 </template>
 
-                <Button color="primary" @click="pgOpen = true">Abrir modal</Button>
+                <Button color="primary" @click="pgOpen = true">{{ t('pages.feedback.modal.playground.open') }}</Button>
                 <Modal
                     v-model="pgOpen"
                     :size="pgSize"
                     :position="pgCentered ? 'center' : 'top'"
+                    :overlay="pgOverlay"
                     :show-close="pgClosable"
                     :close-on-overlay="pgClosable"
                     :close-on-escape="pgClosable"
-                    title="Confirmar acción"
-                    description="Vista previa interactiva del modal."
+                    :title="t('pages.feedback.modal.playground.title')"
+                    :description="t('pages.feedback.modal.playground.description')"
                 >
-                    <Typography>¿Quieres aplicar estos cambios?</Typography>
+                    <Typography>{{ t('pages.feedback.modal.playground.body') }}</Typography>
                     <template #footer>
-                        <Button variant="ghost" @click="pgOpen = false">Cancelar</Button>
-                        <Button color="primary" @click="pgOpen = false">Aplicar</Button>
+                        <Button variant="ghost" @click="pgOpen = false">{{ t('pages.feedback.modal.playground.cancel') }}</Button>
+                        <Button color="primary" @click="pgOpen = false">{{ t('pages.feedback.modal.playground.apply') }}</Button>
                     </template>
                 </Modal>
             </ComponentPreview>
@@ -180,83 +161,86 @@ const slotsList: SlotDoc[] = [
 
         <template #examples>
             <ComponentPreview
-                title="Básico"
-                description="Disparado por un botón con v-model. Footer con acciones cancelar/confirmar."
+                :title="t('pages.feedback.modal.examples.basic.title')"
+                :description="t('pages.feedback.modal.examples.basic.desc')"
                 :code="basicCode"
                 min-height="180px"
             >
-                <Button @click="open1 = true">Abrir modal</Button>
-                <Modal v-model="open1" title="Confirmar" description="¿Quieres aplicar estos cambios?">
-                    <Typography>El cambio es reversible desde el historial.</Typography>
+                <Button @click="open1 = true">{{ t('pages.feedback.modal.examples.basic.cta') }}</Button>
+                <Modal v-model="open1"
+                    :title="t('pages.feedback.modal.examples.basic.modalTitle')"
+                    :description="t('pages.feedback.modal.examples.basic.modalDesc')"
+                >
+                    <Typography>{{ t('pages.feedback.modal.examples.basic.body') }}</Typography>
                     <template #footer>
-                        <Button variant="ghost" @click="open1 = false">Cancelar</Button>
-                        <Button color="primary" @click="open1 = false">Aplicar</Button>
+                        <Button variant="ghost" @click="open1 = false">{{ t('pages.feedback.modal.examples.basic.cancel') }}</Button>
+                        <Button color="primary" @click="open1 = false">{{ t('pages.feedback.modal.examples.basic.apply') }}</Button>
                     </template>
                 </Modal>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con formulario"
-                description="Útil para crear o editar entidades sin sacar al usuario del contexto actual."
+                :title="t('pages.feedback.modal.examples.form.title')"
+                :description="t('pages.feedback.modal.examples.form.desc')"
                 :code="formCode"
                 min-height="180px"
             >
-                <Button color="primary" @click="open2 = true">Nuevo proyecto</Button>
-                <Modal v-model="open2" size="medium" title="Nuevo proyecto">
+                <Button color="primary" @click="open2 = true">{{ t('pages.feedback.modal.examples.form.cta') }}</Button>
+                <Modal v-model="open2" size="medium" :title="t('pages.feedback.modal.examples.form.modalTitle')">
                     <form class="flex flex-col gap-3">
-                        <input class="border border-border rounded-md px-3 py-2 bg-card" placeholder="Nombre" />
-                        <textarea class="border border-border rounded-md px-3 py-2 bg-card" placeholder="Descripción" />
+                        <input class="border border-border rounded-md px-3 py-2 bg-card" :placeholder="t('pages.feedback.modal.examples.form.namePh')" />
+                        <textarea class="border border-border rounded-md px-3 py-2 bg-card" :placeholder="t('pages.feedback.modal.examples.form.descPh')" />
                     </form>
                     <template #footer>
-                        <Button variant="ghost" @click="open2 = false">Cancelar</Button>
-                        <Button color="primary" @click="open2 = false">Crear</Button>
+                        <Button variant="ghost" @click="open2 = false">{{ t('pages.feedback.modal.examples.form.cancel') }}</Button>
+                        <Button color="primary" @click="open2 = false">{{ t('pages.feedback.modal.examples.form.create') }}</Button>
                     </template>
                 </Modal>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Sin overlay-close"
-                description="Para acciones críticas, fuerza la decisión explícita deshabilitando el cierre por overlay y Escape."
+                :title="t('pages.feedback.modal.examples.locked.title')"
+                :description="t('pages.feedback.modal.examples.locked.desc')"
                 :code="lockedCode"
                 min-height="180px"
             >
-                <Button color="danger" @click="open3 = true">Acción crítica</Button>
+                <Button color="danger" @click="open3 = true">{{ t('pages.feedback.modal.examples.locked.cta') }}</Button>
                 <Modal
                     v-model="open3"
-                    title="Acción crítica"
+                    :title="t('pages.feedback.modal.examples.locked.modalTitle')"
                     color="danger"
                     :close-on-overlay="false"
                     :close-on-escape="false"
                 >
-                    <Typography>Solo se cierra con el botón explícito.</Typography>
+                    <Typography>{{ t('pages.feedback.modal.examples.locked.body') }}</Typography>
                     <template #footer>
-                        <Button color="danger" @click="open3 = false">Entendido</Button>
+                        <Button color="danger" @click="open3 = false">{{ t('pages.feedback.modal.examples.locked.confirm') }}</Button>
                     </template>
                 </Modal>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Fullscreen"
-                description="size='full' ocupa todo el viewport — ideal para vistas de detalle inmersivas."
+                :title="t('pages.feedback.modal.examples.full.title')"
+                :description="t('pages.feedback.modal.examples.full.desc')"
                 :code="fullCode"
                 min-height="180px"
             >
-                <Button @click="open4 = true">Abrir fullscreen</Button>
-                <Modal v-model="open4" size="full" title="Vista completa">
-                    <Typography>Ocupa todo el viewport disponible.</Typography>
+                <Button @click="open4 = true">{{ t('pages.feedback.modal.examples.full.cta') }}</Button>
+                <Modal v-model="open4" size="full" :title="t('pages.feedback.modal.examples.full.modalTitle')">
+                    <Typography>{{ t('pages.feedback.modal.examples.full.body') }}</Typography>
                 </Modal>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Contenido scrollable"
-                description="El cuerpo del modal puede scrollear internamente sin bloquear el resto del layout."
+                :title="t('pages.feedback.modal.examples.scroll.title')"
+                :description="t('pages.feedback.modal.examples.scroll.desc')"
                 :code="scrollCode"
                 min-height="180px"
             >
-                <Button @click="open5 = true">Términos y condiciones</Button>
-                <Modal v-model="open5" title="Términos y condiciones">
+                <Button @click="open5 = true">{{ t('pages.feedback.modal.examples.scroll.cta') }}</Button>
+                <Modal v-model="open5" :title="t('pages.feedback.modal.examples.scroll.modalTitle')">
                     <div class="max-h-[50vh] overflow-y-auto pr-2 flex flex-col gap-2">
-                        <p v-for="i in 12" :key="i">Párrafo {{ i }} con texto largo para forzar scroll interno.</p>
+                        <p v-for="i in 12" :key="i">{{ t('pages.feedback.modal.examples.scroll.paragraph', { i }) }}</p>
                     </div>
                 </Modal>
             </ComponentPreview>

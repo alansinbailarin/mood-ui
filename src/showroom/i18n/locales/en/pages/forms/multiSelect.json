@@ -1,0 +1,58 @@
+{
+    "category": "Forms",
+    "title": "MultiSelect",
+    "description": "Multi-select with chips, search and bulk selection. Designed for medium-sized lists where users need to pick multiple options.",
+    "examples": {
+        "basic": {
+            "title": "Basic usage",
+            "desc": "Multi-selection with removable chips."
+        },
+        "searchable": {
+            "title": "Searchable and select all",
+            "desc": "Combines search with a toggle to select or deselect all at once."
+        },
+        "maxChips": {
+            "title": "Collapsed chips",
+            "desc": "When many items are selected, max-visible-chips collapses the rest into a +N badge."
+        },
+        "maxSelected": {
+            "title": "Selection limit",
+            "desc": "max-selected prevents exceeding the specified number of options."
+        },
+        "sizes": {
+            "title": "Sizes",
+            "desc": "Three sizes for different form contexts."
+        }
+    },
+    "props": {
+        "modelValue": "Array of selected values (v-model).",
+        "options": "List of available options.",
+        "label": "Visible label above the field.",
+        "placeholder": "Text shown when nothing is selected.",
+        "helperText": "Helper text below the field.",
+        "errorText": "Error message that replaces the helperText.",
+        "variant": "Visual style of the trigger.",
+        "color": "Semantic color for the control and the chips.",
+        "size": "Trigger height and chip size.",
+        "radius": "Border radius of the trigger and chips.",
+        "clearable": "Shows an X button to clear all selections.",
+        "searchable": "Activates the search input in the panel.",
+        "showSelectAll": "Shows a \"Select all\" button in the panel.",
+        "maxSelected": "Maximum number of selectable options.",
+        "maxVisibleChips": "Number of chips before collapsing to \"+N\".",
+        "disabled": "Disables the control.",
+        "readonly": "Read-only mode — blocks changes.",
+        "required": "Marks the field as required.",
+        "loading": "Shows a spinner instead of the chevron.",
+        "fullWidth": "Applies w-full to the root control.",
+        "iconLeft": "Icon rendered to the left of the trigger.",
+        "name": "Generates hidden inputs for form submission.",
+        "ariaLabel": "Accessible name when there is no visible label."
+    },
+    "emits": {
+        "updateModelValue": "Emitted when the selection array changes.",
+        "change": "Emitted after each confirmed change.",
+        "open": "Emitted when the panel opens.",
+        "close": "Emitted when the panel closes."
+    }
+}

@@ -1,29 +1,44 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import ProgressBar from '../../../components/feedback/ProgressBar.vue';
 import type { PropDoc, EmitDoc } from '../../types';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbDots from '../../components/toolbar/TbDots.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
+
+const { t } = useI18n();
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgValue         = ref<number>(50);
+const pgValueStr      = computed({
+    get: () => String(pgValue.value),
+    set: (v: string) => { pgValue.value = parseInt(v); pgIndeterminate.value = false; },
+});
 const pgColor         = ref<'default' | 'primary' | 'success' | 'warning' | 'danger'>('primary');
 const pgSize          = ref<'small' | 'medium' | 'large'>('medium');
 const pgIndeterminate = ref(false);
+const pgStriped       = ref(false);
+const pgShowValue     = ref(false);
 
 function resetPlayground() {
     pgValue.value         = 50;
     pgColor.value         = 'primary';
     pgSize.value          = 'medium';
     pgIndeterminate.value = false;
+    pgStriped.value       = false;
+    pgShowValue.value     = false;
 }
 
 const colorDots = [
-    { value: 'default' as const, bg: '#64748b',        label: 'Default' },
-    { value: 'primary' as const, bg: 'var(--primary)', label: 'Primary' },
-    { value: 'success' as const, bg: '#22c55e',        label: 'Success' },
-    { value: 'warning' as const, bg: '#f59e0b',        label: 'Warning' },
-    { value: 'danger'  as const, bg: '#ef4444',        label: 'Danger'  },
+    { value: 'default' as const, bg: 'var(--color-slate-400)',   label: 'Default' },
+    { value: 'primary' as const, bg: 'var(--primary)',           label: 'Primary' },
+    { value: 'success' as const, bg: 'var(--color-emerald-500)', label: 'Success' },
+    { value: 'warning' as const, bg: 'var(--color-amber-500)',   label: 'Warning' },
+    { value: 'danger'  as const, bg: 'var(--color-red-500)',     label: 'Danger'  },
 ];
 
 const overviewCode = computed(() => {
@@ -31,6 +46,8 @@ const overviewCode = computed(() => {
     if (!pgIndeterminate.value) parts.push(`:value="${pgValue.value}"`);
     if (pgColor.value !== 'primary') parts.push(`color="${pgColor.value}"`);
     if (pgSize.value  !== 'medium')  parts.push(`size="${pgSize.value}"`);
+    if (pgStriped.value)             parts.push('striped');
+    if (pgShowValue.value)           parts.push('show-value');
     const attrs = parts.length ? ' ' + parts.join(' ') : '';
     return `<ProgressBar${attrs} />`;
 });
@@ -65,101 +82,43 @@ const sizesCode = `<ProgressBar :value="50" size="small"  />
 const stripedCode = `<ProgressBar :value="65" striped color="primary" show-value />`;
 
 // ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'value',     type: 'number',                                                                            description: 'Valor actual entre min y max. Omitir para modo indeterminado.' },
-    { name: 'min',       type: 'number',                                          default: '0',                     description: 'Valor mínimo del rango.' },
-    { name: 'max',       type: 'number',                                          default: '100',                   description: 'Valor máximo del rango.' },
-    { name: 'color',     type: "'default' | 'primary' | 'success' | 'warning' | 'danger'", default: "'primary'",    description: 'Color de la barra.' },
-    { name: 'size',      type: "'small' | 'medium' | 'large'",                    default: "'medium'",              description: 'Grosor de la barra.' },
-    { name: 'radius',    type: "'none' | 'small' | 'medium' | 'large' | 'full'",  default: "'full'",                description: 'Radio del track. Cascada desde ModoProvider.' },
-    { name: 'showValue', type: 'boolean',                                          default: 'false',                description: 'Muestra el porcentaje numérico junto a la barra.' },
-    { name: 'label',     type: 'string',                                                                             description: 'Etiqueta opcional renderizada encima de la barra.' },
-    { name: 'ariaLabel', type: 'string',                                                                             description: 'Label accesible cuando se omite la prop label.' },
-    { name: 'striped',   type: 'boolean',                                          default: 'false',                description: 'Activa la animación de stripes (útil para "subiendo…").' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'value',     type: 'number',                                                                            description: t('pages.feedback.progressBar.props.value') },
+    { name: 'min',       type: 'number',                                          default: '0',                     description: t('pages.feedback.progressBar.props.min') },
+    { name: 'max',       type: 'number',                                          default: '100',                   description: t('pages.feedback.progressBar.props.max') },
+    { name: 'color',     type: "'default' | 'primary' | 'success' | 'warning' | 'danger'", default: "'primary'",    description: t('pages.feedback.progressBar.props.color') },
+    { name: 'size',      type: "'small' | 'medium' | 'large'",                    default: "'medium'",              description: t('pages.feedback.progressBar.props.size') },
+    { name: 'radius',    type: "'none' | 'small' | 'medium' | 'large' | 'full'",  default: "'full'",                description: t('pages.feedback.progressBar.props.radius') },
+    { name: 'showValue', type: 'boolean',                                          default: 'false',                description: t('pages.feedback.progressBar.props.showValue') },
+    { name: 'label',     type: 'string',                                                                             description: t('pages.feedback.progressBar.props.label') },
+    { name: 'ariaLabel', type: 'string',                                                                             description: t('pages.feedback.progressBar.props.ariaLabel') },
+    { name: 'striped',   type: 'boolean',                                          default: 'false',                description: t('pages.feedback.progressBar.props.striped') },
+]);
 
 const emitsList: EmitDoc[] = [];
 </script>
 
 <template>
     <ComponentDoc
-        title="ProgressBar"
+        :title="t('pages.feedback.progressBar.title')"
         category="Feedback"
         import-path="import { ProgressBar } from 'mood-ui'"
-        description="Barra de progreso lineal determinada o indeterminada. Soporta etiqueta, valor numérico, colores, tamaños y animación striped."
+        :description="t('pages.feedback.progressBar.description')"
         :props-list="propsList"
     >
         <!-- ── Overview ────────────────────────────────────────────────────── -->
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="180px" @reset="resetPlayground">
                 <template #controls>
-                    <!-- Value presets -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Valor</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="v in [0, 25, 50, 75, 100]"
-                                :key="v"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors"
-                                :class="pgValue === v && !pgIndeterminate
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgValue = v; pgIndeterminate = false"
-                            >{{ v }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Color dots -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Color</span>
-                        <div class="flex items-center gap-1">
-                            <button
-                                v-for="c in colorDots"
-                                :key="c.value"
-                                type="button"
-                                class="size-4 rounded-full transition-all duration-150"
-                                :class="pgColor === c.value
-                                    ? 'ring-2 ring-offset-1 ring-foreground/30 scale-125'
-                                    : 'hover:scale-110 opacity-70 hover:opacity-100'"
-                                :style="`background: ${c.bg}`"
-                                :title="c.label"
-                                @click="pgColor = c.value"
-                            />
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Size -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Tamaño</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in ['small', 'medium', 'large']"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = (s as typeof pgSize)"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgIndeterminate
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgIndeterminate = !pgIndeterminate"
-                    >Indeterminado</button>
+                    <TbPills :label="t('pages.feedback.progressBar.controls.value')" :options="[{value:'0'},{value:'25'},{value:'50'},{value:'75'},{value:'100'}]" v-model="pgValueStr" />
+                    <TbSep />
+                    <TbDots :label="t('pages.feedback.progressBar.controls.color')" :options="colorDots" v-model="pgColor" />
+                    <TbSep />
+                    <TbPills :label="t('pages.feedback.progressBar.controls.size')" :options="[{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbToggle :label="t('pages.feedback.progressBar.controls.indeterminate')" v-model="pgIndeterminate" />
+                    <TbToggle :label="t('pages.feedback.progressBar.controls.striped')" v-model="pgStriped" />
+                    <TbToggle :label="t('pages.feedback.progressBar.controls.showValue')" v-model="pgShowValue" />
                 </template>
 
                 <ProgressBar
@@ -167,6 +126,8 @@ const emitsList: EmitDoc[] = [];
                     :value="pgIndeterminate ? undefined : pgValue"
                     :color="pgColor"
                     :size="pgSize"
+                    :striped="pgStriped"
+                    :show-value="pgShowValue"
                 />
             </ComponentPreview>
         </template>
@@ -174,16 +135,16 @@ const emitsList: EmitDoc[] = [];
         <!-- ── Examples ────────────────────────────────────────────────────── -->
         <template #examples>
             <ComponentPreview
-                title="Con label y valor"
-                description="Combina label encima y showValue para mostrar el porcentaje numérico."
+                :title="t('pages.feedback.progressBar.examples.label.title')"
+                :description="t('pages.feedback.progressBar.examples.label.desc')"
                 :code="labelCode"
             >
-                <ProgressBar class="w-72" :value="animValue" label="Subiendo archivo" show-value />
+                <ProgressBar class="w-72" :value="animValue" :label="t('pages.feedback.progressBar.examples.label.uploadLabel')" show-value />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Indeterminado"
-                description="Omite la prop value para mostrar la animación deslizante."
+                :title="t('pages.feedback.progressBar.examples.indeterminate.title')"
+                :description="t('pages.feedback.progressBar.examples.indeterminate.desc')"
                 :code="indeterminateCode"
             >
                 <div class="flex flex-col gap-3 w-72">
@@ -193,8 +154,8 @@ const emitsList: EmitDoc[] = [];
             </ComponentPreview>
 
             <ComponentPreview
-                title="Colores"
-                description="Cinco colores semánticos para reflejar el estado del proceso."
+                :title="t('pages.feedback.progressBar.examples.colors.title')"
+                :description="t('pages.feedback.progressBar.examples.colors.desc')"
                 :code="colorsCode"
             >
                 <div class="flex flex-col gap-2 w-72">
@@ -206,8 +167,8 @@ const emitsList: EmitDoc[] = [];
             </ComponentPreview>
 
             <ComponentPreview
-                title="Tamaños"
-                description="Tres grosores: small, medium (default) y large."
+                :title="t('pages.feedback.progressBar.examples.sizes.title')"
+                :description="t('pages.feedback.progressBar.examples.sizes.desc')"
                 :code="sizesCode"
             >
                 <div class="flex flex-col gap-3 w-72">
@@ -218,8 +179,8 @@ const emitsList: EmitDoc[] = [];
             </ComponentPreview>
 
             <ComponentPreview
-                title="Striped"
-                description="Activa stripes animadas para procesos en curso."
+                :title="t('pages.feedback.progressBar.examples.striped.title')"
+                :description="t('pages.feedback.progressBar.examples.striped.desc')"
                 :code="stripedCode"
             >
                 <ProgressBar class="w-72" :value="65" striped color="primary" show-value />

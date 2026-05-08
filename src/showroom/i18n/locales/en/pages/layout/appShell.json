@@ -1,0 +1,53 @@
+{
+    "title": "AppShell",
+    "category": "Layout",
+    "description": "Application frame: topbar + sidebar + main content with automatic mobile drawer. Supports standard, rail (icon-only) and dual (rail + panel) variants.",
+    "menu": {
+        "home": "Home",
+        "inbox": "Inbox",
+        "team": "Team",
+        "reports": "Reports",
+        "settings": "Settings"
+    },
+    "examples": {
+        "basic":     { "title": "Basic",             "desc": "Topbar + sidebar + content — the most common layout." },
+        "rail":      { "title": "Rail variant",       "desc": "Persistent icon-only rail, ideal for dense apps." },
+        "collapsed": { "title": "Collapsed sidebar",  "desc": "v-model:collapsed lets you fold the sidebar while keeping icons." },
+        "noSidebar": { "title": "No sidebar",         "desc": "Topbar-only layout — useful for landings or linear flows." }
+    },
+    "content": {
+        "main":         "Main shell content — this region is the default slot.",
+        "basic":        "Main content",
+        "rail":         "Icon-only rail",
+        "collapsed":    "Folded sidebar",
+        "noSidebar":    "No-sidebar layout (e.g. authenticated landing)",
+        "subtitleDemo": "Demo"
+    },
+    "props": {
+        "variant":         "Shell structure.",
+        "appearance":      "Visual framing: full-bleed or card.",
+        "sidebarPosition": "Sidebar side.",
+        "sidebarWidth":    "Width of the expanded sidebar.",
+        "collapsedWidth":  "Width of the collapsed sidebar (standard variant).",
+        "railWidth":       "Rail width (rail / dual variants).",
+        "collapsed":       "v-model — sidebar folded on desktop.",
+        "mobileOpen":      "v-model — mobile drawer open.",
+        "breakpoint":      "Breakpoint at which the sidebar becomes permanent.",
+        "stickyTopbar":    "Makes the topbar sticky.",
+        "stickySidebar":   "Makes the sidebar sticky on desktop.",
+        "divider":         "Renders borders between regions.",
+        "mainPadding":     "Padding around the main content.",
+        "radius":          "Radius when appearance=\"contained\"."
+    },
+    "slots": {
+        "topbar":         "Application topbar.",
+        "sidebar":        "Sidebar in standard and dual variants (secondary panel).",
+        "sidebarHeader":  "Sticky sidebar header.",
+        "sidebarFooter":  "Sticky sidebar footer.",
+        "rail":           "Icon-only rail (rail and dual variants).",
+        "railHeader":     "Sticky rail header.",
+        "railFooter":     "Sticky rail footer.",
+        "default":        "Main application content.",
+        "footer":         "Global shell footer."
+    }
+}

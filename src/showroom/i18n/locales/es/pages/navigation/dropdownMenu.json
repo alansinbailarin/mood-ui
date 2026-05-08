@@ -1,0 +1,49 @@
+{
+    "title": "DropdownMenu",
+    "category": "Navigation",
+    "description": "Menú flotante de acciones con headers, dividers, atajos de teclado, descripciones, items destructivos y enlaces externos.",
+    "trigger": { "actions": "Acciones", "more": "Más" },
+    "items": {
+        "edit": "Editar",
+        "duplicate": "Duplicar",
+        "export": "Exportar",
+        "exportDesc": "Descargar como JSON",
+        "openTab": "Abrir en nueva pestaña",
+        "profile": "Mi perfil",
+        "preferences": "Preferencias",
+        "logout": "Cerrar sesión",
+        "delete": "Eliminar",
+        "userEmail": "modo@ejemplo.com",
+        "actionsHeader": "Acciones"
+    },
+    "examples": {
+        "basic":    { "title": "Básico",                "desc": "Menú mínimo: una lista de items con label. El trigger por defecto usa el componente Button." },
+        "icons":    { "title": "Con iconos y atajos",   "desc": "Cada item soporta `icon`, `shortcut` y `description` opcionales para enriquecer la lectura." },
+        "dividers": { "title": "Con headers y dividers", "desc": "Agrupa items con entradas tipo `header` y separa secciones con `divider`." },
+        "user":     { "title": "Menú de usuario",       "desc": "Patrón habitual: header con email, opciones y un divider antes de cerrar sesión." },
+        "danger":   { "title": "Item destructivo",      "desc": "Marca un item como `danger` para teñirlo del color destructivo y reforzar acciones irreversibles." }
+    },
+    "props": {
+        "items":             "Lista heterogénea de items, headers y dividers.",
+        "triggerLabel":      "Texto del trigger por defecto. Ignorado si usas el slot `#trigger`.",
+        "triggerIcon":       "Icono opcional del trigger por defecto.",
+        "triggerVariant":    "Variante del Button usado como trigger.",
+        "color":             "Color del trigger por defecto.",
+        "size":              "Tamaño del trigger y de los items del menú.",
+        "radius":            "Radio aplicado a trigger y panel.",
+        "showChevron":       "Muestra un chevron en el trigger por defecto.",
+        "placement":         "Posición del panel respecto al trigger.",
+        "matchTriggerWidth": "Fuerza al panel a tener el mismo ancho que el trigger.",
+        "minWidth":          "Ancho mínimo del panel (CSS length).",
+        "disabled":          "Deshabilita el menú completo.",
+        "closeOnSelect":     "Cierra el menú tras seleccionar un item no deshabilitado.",
+        "ariaLabel":         "Etiqueta accesible aplicada al panel."
+    },
+    "emits": {
+        "updateOpen": "Emitido cuando el menú se abre o se cierra.",
+        "select":     "Emitido al activar un item (click o teclado), no se dispara para headers/dividers."
+    },
+    "slots": {
+        "trigger": "Sustituye el trigger por defecto. Útil para envolver un Avatar u otro componente."
+    }
+}

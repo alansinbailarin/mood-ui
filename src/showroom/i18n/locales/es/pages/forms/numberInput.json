@@ -1,0 +1,77 @@
+{
+    "category": "Forms",
+    "title": "NumberInput",
+    "description": "Input numérico con steppers, min/max, precisión decimal, separador de miles y prefijo/sufijo.",
+    "controls": {
+        "variant": "Variante",
+        "color": "Color",
+        "size": "Tamaño",
+        "steppers": "Steppers",
+        "stepperPos": "Posición",
+        "disabled": "Disabled"
+    },
+    "playground": {
+        "label": "Cantidad"
+    },
+    "examples": {
+        "basic": {
+            "title": "Uso básico",
+            "desc": "Input numérico con steppers a la derecha (default)."
+        },
+        "minMax": {
+            "title": "Min / max + step",
+            "desc": "Limita el rango del valor y el incremento de los steppers."
+        },
+        "price": {
+            "title": "Precio con prefix y separador",
+            "desc": "Combina precision, step decimal, prefix/suffix y formato con separador de miles."
+        },
+        "split": {
+            "title": "Stepper split",
+            "desc": "− a la izquierda y + a la derecha del input."
+        },
+        "disabled": {
+            "title": "Disabled",
+            "desc": "Estado deshabilitado preservando el valor."
+        }
+    },
+    "props": {
+        "modelValue": "Valor numérico (v-model). null cuando el input está vacío.",
+        "label": "Etiqueta visible encima del input.",
+        "placeholder": "Placeholder cuando está vacío.",
+        "helperText": "Texto de ayuda. Oculto si hay errorText.",
+        "errorText": "Mensaje de error que marca el input como inválido.",
+        "variant": "Estilo visual.",
+        "color": "Color semántico aplicado al estado de foco.",
+        "size": "Tamaño visual.",
+        "radius": "Radio de las esquinas. Hereda del ModoProvider si se omite.",
+        "halo": "Estilo del halo persistente (ring).",
+        "fullWidth": "Aplica w-full al root.",
+        "disabled": "Deshabilita el input.",
+        "readonly": "Solo lectura: oculta steppers y bloquea edición.",
+        "required": "Marca el campo como requerido.",
+        "loading": "Estado de carga.",
+        "min": "Valor mínimo permitido.",
+        "max": "Valor máximo permitido.",
+        "step": "Incremento de los steppers y flechas de teclado.",
+        "precision": "Decimales forzados al formatear el display tras el blur.",
+        "steppers": "Muestra los botones +/− para incrementar/decrementar.",
+        "stepperPosition": "Posición de los steppers: apilados a la derecha o separados (− izquierda, + derecha).",
+        "allowInvalid": "Permite valores fuera de min/max mientras se escribe; clampea al blur.",
+        "thousandSeparator": "Formatea el display con separador de miles tras el blur.",
+        "prefix": "Texto fijo a la izquierda (ej. \"$\").",
+        "suffix": "Texto fijo a la derecha (ej. \"%\", \"kg\").",
+        "iconLeft": "Icono renderizado a la izquierda del input.",
+        "name": "Atributo name HTML.",
+        "id": "id del input. Se autogenera si se omite.",
+        "autocomplete": "Atributo autocomplete HTML.",
+        "autofocus": "Foco automático al montar.",
+        "ariaLabel": "Nombre accesible cuando no hay label visible."
+    },
+    "emits": {
+        "updateModelValue": "Emitido en cada cambio del valor (sincroniza v-model).",
+        "change": "Emitido tras un cambio confirmado por el usuario.",
+        "focus": "Emitido cuando el input recibe foco.",
+        "blur": "Emitido cuando el input pierde foco."
+    }
+}

@@ -6,20 +6,18 @@
  * Clicking a tab routes to the first entry of its category.
  */
 import { ref, computed, nextTick, onMounted, onBeforeUnmount, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import { showroomNav } from '../registry';
-import { useShowroomI18n, type ShowroomLocale } from '../composables/useShowroomI18n';
 
 const props = defineProps<{
     /** Active route id (so we can highlight the section it belongs to). */
     activeId: string;
-    /** Showroom locale for tab labels. */
-    locale: ShowroomLocale;
 }>();
 
 const emit = defineEmits<{ navigate: [id: string] }>();
 
-const t = useShowroomI18n(() => props.locale);
+const { t } = useI18n();
 
 interface Tab { key: string; label: string; entryId: string; categoryIds: string[]; }
 
@@ -36,13 +34,13 @@ const tabs = computed<Tab[]>(() => {
     return [
         {
             key: 'docs',
-            label: t.value.docs,
+            label: t('docs'),
             entryId: findFirst('docs'),
             categoryIds: ['docs'],
         },
         {
             key: 'components',
-            label: t.value.components,
+            label: t('components'),
             entryId: componentEntryId,
             categoryIds: showroomNav
                 .filter((c) => !['getting-started', 'docs', 'templates', 'theme-studio'].includes(c.id))
@@ -50,13 +48,13 @@ const tabs = computed<Tab[]>(() => {
         },
         {
             key: 'templates',
-            label: t.value.templates,
+            label: t('templates'),
             entryId: findFirst('templates'),
             categoryIds: ['templates'],
         },
         {
             key: 'theme-studio',
-            label: t.value.themeStudio,
+            label: t('themeStudio'),
             entryId: findFirst('theme-studio'),
             categoryIds: ['theme-studio'],
         },
@@ -134,7 +132,7 @@ function go(tab: Tab) {
     <div
         ref="trackEl"
         role="tablist"
-        :aria-label="t.components"
+        :aria-label="t('components')"
         class="relative inline-flex items-center gap-1 rounded-full border border-border bg-muted/30 p-1"
     >
         <span

@@ -4,6 +4,10 @@ import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Switch from '../../../components/forms/Switch.vue';
 import type { PropDoc, EmitDoc } from '../../types';
+import TbPills  from '../../components/toolbar/TbPills.vue';
+import TbDots   from '../../components/toolbar/TbDots.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep    from '../../components/toolbar/TbSep.vue';
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgChecked  = ref(true);
@@ -11,6 +15,7 @@ const pgColor    = ref<'default' | 'primary' | 'success' | 'warning' | 'danger'>
 const pgSize     = ref<'small' | 'medium' | 'large'>('medium');
 const pgLabelPos = ref<'left' | 'right'>('right');
 const pgDisabled = ref(false);
+const pgLoading  = ref(false);
 
 function resetPlayground() {
     pgChecked.value  = true;
@@ -18,14 +23,15 @@ function resetPlayground() {
     pgSize.value     = 'medium';
     pgLabelPos.value = 'right';
     pgDisabled.value = false;
+    pgLoading.value  = false;
 }
 
 const colorDots = [
-    { value: 'default' as const, bg: '#64748b',        label: 'Default' },
-    { value: 'primary' as const, bg: 'var(--primary)', label: 'Primary' },
-    { value: 'success' as const, bg: '#22c55e',        label: 'Success' },
-    { value: 'warning' as const, bg: '#f59e0b',        label: 'Warning' },
-    { value: 'danger'  as const, bg: '#ef4444',        label: 'Danger'  },
+    { value: 'default' as const, bg: 'var(--color-slate-400)',   label: 'Default' },
+    { value: 'primary' as const, bg: 'var(--primary)',            label: 'Primary' },
+    { value: 'success' as const, bg: 'var(--color-emerald-500)', label: 'Success' },
+    { value: 'warning' as const, bg: 'var(--color-amber-500)',   label: 'Warning' },
+    { value: 'danger'  as const, bg: 'var(--color-red-500)',     label: 'Danger'  },
 ];
 
 const overviewCode = computed(() => {
@@ -34,6 +40,7 @@ const overviewCode = computed(() => {
     if (pgSize.value     !== 'medium')  parts.push(`size="${pgSize.value}"`);
     if (pgLabelPos.value !== 'right')   parts.push(`label-position="${pgLabelPos.value}"`);
     if (pgDisabled.value)               parts.push(':disabled="true"');
+    if (pgLoading.value)                parts.push(':loading="true"');
     const attrs = parts.length ? ' ' + parts.join(' ') : '';
     return `<Switch v-model="checked" label="Notificaciones"${attrs} />`;
 });
@@ -105,73 +112,14 @@ const emitsList: EmitDoc[] = [
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="180px" @reset="resetPlayground">
                 <template #controls>
-                    <!-- Color dots -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">COLOR</span>
-                        <div class="flex items-center gap-1">
-                            <button
-                                v-for="c in colorDots"
-                                :key="c.value"
-                                type="button"
-                                class="size-4 rounded-full transition-all duration-150"
-                                :class="pgColor === c.value
-                                    ? 'ring-2 ring-offset-1 ring-foreground/30 scale-125'
-                                    : 'hover:scale-110 opacity-70 hover:opacity-100'"
-                                :style="`background: ${c.bg}`"
-                                :title="c.label"
-                                @click="pgColor = c.value"
-                            />
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Size -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">SIZE</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in ['small', 'medium', 'large']"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = (s as typeof pgSize)"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Label position -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">LABEL</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="p in ['left', 'right']"
-                                :key="p"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgLabelPos === p
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgLabelPos = (p as typeof pgLabelPos)"
-                            >{{ p }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgDisabled
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgDisabled = !pgDisabled"
-                    >Disabled</button>
+                    <TbDots label="Color" :options="colorDots" v-model="pgColor" />
+                    <TbSep />
+                    <TbPills label="Size" :options="[{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbPills label="Label" :options="[{value:'left'},{value:'right'}]" v-model="pgLabelPos" />
+                    <TbSep />
+                    <TbToggle label="Loading" v-model="pgLoading" />
+                    <TbToggle label="Disabled" v-model="pgDisabled" />
                 </template>
 
                 <Switch
@@ -180,6 +128,7 @@ const emitsList: EmitDoc[] = [
                     :color="pgColor"
                     :size="pgSize"
                     :label-position="pgLabelPos"
+                    :loading="pgLoading"
                     :disabled="pgDisabled"
                 />
             </ComponentPreview>

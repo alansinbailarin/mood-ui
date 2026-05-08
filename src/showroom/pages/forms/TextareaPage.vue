@@ -1,9 +1,16 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Textarea from '../../../components/forms/Textarea.vue';
 import type { PropDoc, EmitDoc } from '../../types';
+import TbPills  from '../../components/toolbar/TbPills.vue';
+import TbDots   from '../../components/toolbar/TbDots.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep    from '../../components/toolbar/TbSep.vue';
+
+const { t } = useI18n();
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgValue      = ref('Hola mood-ui 👋');
@@ -12,6 +19,8 @@ const pgColor      = ref<'default' | 'primary' | 'success' | 'warning' | 'danger
 const pgSize       = ref<'small' | 'medium' | 'large'>('medium');
 const pgAutoresize = ref(false);
 const pgDisabled   = ref(false);
+const pgClearable  = ref(false);
+const pgReadonly   = ref(false);
 
 function resetPlayground() {
     pgValue.value      = 'Hola mood-ui 👋';
@@ -20,14 +29,16 @@ function resetPlayground() {
     pgSize.value       = 'medium';
     pgAutoresize.value = false;
     pgDisabled.value   = false;
+    pgClearable.value  = false;
+    pgReadonly.value   = false;
 }
 
 const colorDots = [
-    { value: 'default' as const, bg: '#64748b',        label: 'Default' },
-    { value: 'primary' as const, bg: 'var(--primary)', label: 'Primary' },
-    { value: 'success' as const, bg: '#22c55e',        label: 'Success' },
-    { value: 'warning' as const, bg: '#f59e0b',        label: 'Warning' },
-    { value: 'danger'  as const, bg: '#ef4444',        label: 'Danger'  },
+    { value: 'default' as const, bg: 'var(--color-slate-400)',   label: 'Default' },
+    { value: 'primary' as const, bg: 'var(--primary)',            label: 'Primary' },
+    { value: 'success' as const, bg: 'var(--color-emerald-500)', label: 'Success' },
+    { value: 'warning' as const, bg: 'var(--color-amber-500)',   label: 'Warning' },
+    { value: 'danger'  as const, bg: 'var(--color-red-500)',     label: 'Danger'  },
 ];
 
 const overviewCode = computed(() => {
@@ -36,7 +47,9 @@ const overviewCode = computed(() => {
     if (pgColor.value   !== 'default') parts.push(`color="${pgColor.value}"`);
     if (pgSize.value    !== 'medium')  parts.push(`size="${pgSize.value}"`);
     if (pgAutoresize.value)            parts.push('autoresize');
+    if (pgClearable.value)             parts.push('clearable');
     if (pgDisabled.value)              parts.push(':disabled="true"');
+    if (pgReadonly.value)              parts.push(':readonly="true"');
     const attrs = parts.length ? ' ' + parts.join(' ') : '';
     return `<Textarea v-model="value" label="Comentario" placeholder="Escribe algo…"${attrs} />`;
 });
@@ -71,50 +84,50 @@ const exBasic = ref('');
 const exBio   = ref('Hola mood-ui');
 
 // ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'modelValue',  type: 'string | null',                                            description: 'Valor del textarea (v-model).' },
-    { name: 'label',       type: 'string',                                                   description: 'Etiqueta visible encima del textarea.' },
-    { name: 'placeholder', type: 'string',                                                   description: 'Placeholder cuando está vacío.' },
-    { name: 'helperText',  type: 'string',                                                   description: 'Texto de ayuda bajo el textarea. Se oculta si hay errorText.' },
-    { name: 'errorText',   type: 'string',                                                   description: 'Mensaje de error que marca el textarea como inválido.' },
-    { name: 'variant',     type: "'outline' | 'filled' | 'ghost'",                           default: "'outline'", description: 'Estilo visual.' },
-    { name: 'color',       type: "'default' | 'primary' | 'success' | 'warning' | 'danger'", default: "'default'", description: 'Color semántico aplicado al estado de foco.' },
-    { name: 'size',        type: "'small' | 'medium' | 'large'",                             default: "'medium'",  description: 'Controla padding y tipografía.' },
-    { name: 'radius',      type: "'none' | 'small' | 'medium' | 'large' | 'full'",                                  description: 'Radio de las esquinas. Hereda del ModoProvider si se omite.' },
-    { name: 'halo',        type: "'tinted' | 'neutral' | 'off'",                                                    description: 'Estilo del halo persistente (ring).' },
-    { name: 'fullWidth',   type: 'boolean',                                                  default: 'false',     description: 'Aplica w-full al root.' },
-    { name: 'disabled',    type: 'boolean',                                                  default: 'false',     description: 'Deshabilita el textarea.' },
-    { name: 'readonly',    type: 'boolean',                                                  default: 'false',     description: 'Solo lectura.' },
-    { name: 'required',    type: 'boolean',                                                  default: 'false',     description: 'Marca el campo como requerido.' },
-    { name: 'loading',     type: 'boolean',                                                  default: 'false',     description: 'Estado de carga (deshabilita y muestra loader).' },
-    { name: 'clearable',   type: 'boolean',                                                  default: 'false',     description: 'Muestra botón ✕ para limpiar el valor.' },
-    { name: 'maxLength',   type: 'number',                                                                         description: 'Longitud máxima. Activa el contador si showCounter.' },
-    { name: 'showCounter', type: 'boolean',                                                  default: 'false',     description: 'Muestra contador de caracteres (requiere maxLength).' },
-    { name: 'rows',        type: 'number',                                                   default: '3',         description: 'Número mínimo de filas visibles.' },
-    { name: 'autoresize',  type: 'boolean',                                                  default: 'false',     description: 'Crece automáticamente con el contenido hasta maxRows.' },
-    { name: 'maxRows',     type: 'number',                                                   default: '8',         description: 'Máximo de filas cuando autoresize=true.' },
-    { name: 'resize',      type: "'none' | 'vertical' | 'horizontal' | 'both'",              default: "'vertical'", description: 'Dirección de redimensionamiento manual del navegador.' },
-    { name: 'name',        type: 'string',                                                                         description: 'Atributo name HTML.' },
-    { name: 'id',          type: 'string',                                                                         description: 'id del textarea. Se autogenera si se omite.' },
-    { name: 'autofocus',   type: 'boolean',                                                  default: 'false',     description: 'Foco automático al montar.' },
-    { name: 'ariaLabel',   type: 'string',                                                                         description: 'Nombre accesible cuando no hay label visible.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'modelValue',  type: 'string | null',                                            description: t('pages.forms.textarea.props.modelValue') },
+    { name: 'label',       type: 'string',                                                   description: t('pages.forms.textarea.props.label') },
+    { name: 'placeholder', type: 'string',                                                   description: t('pages.forms.textarea.props.placeholder') },
+    { name: 'helperText',  type: 'string',                                                   description: t('pages.forms.textarea.props.helperText') },
+    { name: 'errorText',   type: 'string',                                                   description: t('pages.forms.textarea.props.errorText') },
+    { name: 'variant',     type: "'outline' | 'filled' | 'ghost'",                           default: "'outline'", description: t('pages.forms.textarea.props.variant') },
+    { name: 'color',       type: "'default' | 'primary' | 'success' | 'warning' | 'danger'", default: "'default'", description: t('pages.forms.textarea.props.color') },
+    { name: 'size',        type: "'small' | 'medium' | 'large'",                             default: "'medium'",  description: t('pages.forms.textarea.props.size') },
+    { name: 'radius',      type: "'none' | 'small' | 'medium' | 'large' | 'full'",                                  description: t('pages.forms.textarea.props.radius') },
+    { name: 'halo',        type: "'tinted' | 'neutral' | 'off'",                                                    description: t('pages.forms.textarea.props.halo') },
+    { name: 'fullWidth',   type: 'boolean',                                                  default: 'false',     description: t('pages.forms.textarea.props.fullWidth') },
+    { name: 'disabled',    type: 'boolean',                                                  default: 'false',     description: t('pages.forms.textarea.props.disabled') },
+    { name: 'readonly',    type: 'boolean',                                                  default: 'false',     description: t('pages.forms.textarea.props.readonly') },
+    { name: 'required',    type: 'boolean',                                                  default: 'false',     description: t('pages.forms.textarea.props.required') },
+    { name: 'loading',     type: 'boolean',                                                  default: 'false',     description: t('pages.forms.textarea.props.loading') },
+    { name: 'clearable',   type: 'boolean',                                                  default: 'false',     description: t('pages.forms.textarea.props.clearable') },
+    { name: 'maxLength',   type: 'number',                                                                         description: t('pages.forms.textarea.props.maxLength') },
+    { name: 'showCounter', type: 'boolean',                                                  default: 'false',     description: t('pages.forms.textarea.props.showCounter') },
+    { name: 'rows',        type: 'number',                                                   default: '3',         description: t('pages.forms.textarea.props.rows') },
+    { name: 'autoresize',  type: 'boolean',                                                  default: 'false',     description: t('pages.forms.textarea.props.autoresize') },
+    { name: 'maxRows',     type: 'number',                                                   default: '8',         description: t('pages.forms.textarea.props.maxRows') },
+    { name: 'resize',      type: "'none' | 'vertical' | 'horizontal' | 'both'",              default: "'vertical'", description: t('pages.forms.textarea.props.resize') },
+    { name: 'name',        type: 'string',                                                                         description: t('pages.forms.textarea.props.name') },
+    { name: 'id',          type: 'string',                                                                         description: t('pages.forms.textarea.props.id') },
+    { name: 'autofocus',   type: 'boolean',                                                  default: 'false',     description: t('pages.forms.textarea.props.autofocus') },
+    { name: 'ariaLabel',   type: 'string',                                                                         description: t('pages.forms.textarea.props.ariaLabel') },
+]);
 
-const emitsList: EmitDoc[] = [
-    { name: 'update:modelValue', payload: 'string',     description: 'Emitido en cada cambio del valor (sincroniza v-model).' },
-    { name: 'change',            payload: 'string',     description: 'Emitido tras un cambio confirmado por el usuario.' },
-    { name: 'focus',             payload: 'FocusEvent', description: 'Emitido cuando el textarea recibe foco.' },
-    { name: 'blur',              payload: 'FocusEvent', description: 'Emitido cuando el textarea pierde foco.' },
-    { name: 'clear',             payload: 'void',       description: 'Emitido al pulsar el botón de limpiar (clearable).' },
-];
+const emitsList = computed<EmitDoc[]>(() => [
+    { name: 'update:modelValue', payload: 'string',     description: t('pages.forms.textarea.emits.updateModelValue') },
+    { name: 'change',            payload: 'string',     description: t('pages.forms.textarea.emits.change') },
+    { name: 'focus',             payload: 'FocusEvent', description: t('pages.forms.textarea.emits.focus') },
+    { name: 'blur',              payload: 'FocusEvent', description: t('pages.forms.textarea.emits.blur') },
+    { name: 'clear',             payload: 'void',       description: t('pages.forms.textarea.emits.clear') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="Textarea"
+        :title="t('pages.forms.textarea.title')"
         category="Forms"
         import-path="import { Textarea } from 'mood-ui'"
-        description="Área de texto multilínea con autoresize, contador de caracteres, helper/error text y todas las variantes visuales del Input."
+        :description="t('pages.forms.textarea.description')"
         :props-list="propsList"
         :emits-list="emitsList"
     >
@@ -122,93 +135,29 @@ const emitsList: EmitDoc[] = [
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="220px" @reset="resetPlayground">
                 <template #controls>
-                    <!-- Variant -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">VARIANT</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="v in ['outline', 'filled', 'ghost']"
-                                :key="v"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgVariant === v
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgVariant = (v as typeof pgVariant)"
-                            >{{ v }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Color dots -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">COLOR</span>
-                        <div class="flex items-center gap-1">
-                            <button
-                                v-for="c in colorDots"
-                                :key="c.value"
-                                type="button"
-                                class="size-4 rounded-full transition-all duration-150"
-                                :class="pgColor === c.value
-                                    ? 'ring-2 ring-offset-1 ring-foreground/30 scale-125'
-                                    : 'hover:scale-110 opacity-70 hover:opacity-100'"
-                                :style="`background: ${c.bg}`"
-                                :title="c.label"
-                                @click="pgColor = c.value"
-                            />
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Size -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">SIZE</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in ['small', 'medium', 'large']"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = (s as typeof pgSize)"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgAutoresize
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgAutoresize = !pgAutoresize"
-                    >Autoresize</button>
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgDisabled
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgDisabled = !pgDisabled"
-                    >Disabled</button>
+                    <TbPills :label="t('pages.forms.textarea.controls.variant')" :options="[{value:'outline'},{value:'filled'},{value:'ghost'}]" v-model="pgVariant" />
+                    <TbSep />
+                    <TbDots :label="t('pages.forms.textarea.controls.color')" :options="colorDots" v-model="pgColor" />
+                    <TbSep />
+                    <TbPills :label="t('pages.forms.textarea.controls.size')" :options="[{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbToggle :label="t('pages.forms.textarea.controls.autoresize')" v-model="pgAutoresize" />
+                    <TbToggle :label="t('pages.forms.textarea.controls.clearable')" v-model="pgClearable" />
+                    <TbToggle :label="t('pages.forms.textarea.controls.disabled')" v-model="pgDisabled" />
+                    <TbToggle :label="t('pages.forms.textarea.controls.readonly')" v-model="pgReadonly" />
                 </template>
 
                 <Textarea
                     v-model="pgValue"
-                    label="Comentario"
-                    placeholder="Escribe algo…"
+                    :label="t('pages.forms.textarea.playground.label')"
+                    :placeholder="t('pages.forms.textarea.playground.placeholder')"
                     :variant="pgVariant"
                     :color="pgColor"
                     :size="pgSize"
                     :autoresize="pgAutoresize"
+                    :clearable="pgClearable"
                     :disabled="pgDisabled"
+                    :readonly="pgReadonly"
                     :rows="3"
                     style="width: 360px"
                 />
@@ -218,16 +167,21 @@ const emitsList: EmitDoc[] = [
         <!-- ── Examples ────────────────────────────────────────────────────── -->
         <template #examples>
             <ComponentPreview
-                title="Uso básico"
-                description="Textarea simple con label, placeholder y filas iniciales."
+                :title="t('pages.forms.textarea.examples.basic.title')"
+                :description="t('pages.forms.textarea.examples.basic.desc')"
                 :code="basicCode"
             >
-                <Textarea v-model="exBasic" label="Comentario" placeholder="Escribe algo…" :rows="4" style="width: 360px" />
+                <Textarea v-model="exBasic"
+                    :label="t('pages.forms.textarea.examples.basic.label')"
+                    :placeholder="t('pages.forms.textarea.examples.basic.placeholder')"
+                    :rows="4"
+                    style="width: 360px"
+                />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Variantes"
-                description="outline (default), filled y ghost."
+                :title="t('pages.forms.textarea.examples.variants.title')"
+                :description="t('pages.forms.textarea.examples.variants.desc')"
                 :code="variantsCode"
             >
                 <Textarea variant="outline" placeholder="outline" :rows="2" style="width: 240px" />
@@ -236,41 +190,41 @@ const emitsList: EmitDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Autoresize + contador"
-                description="Crece con el contenido hasta maxRows y muestra contador de caracteres."
+                :title="t('pages.forms.textarea.examples.autoresize.title')"
+                :description="t('pages.forms.textarea.examples.autoresize.desc')"
                 :code="autoresizeCode"
             >
                 <Textarea
                     v-model="exBio"
-                    label="Bio"
+                    :label="t('pages.forms.textarea.examples.autoresize.label')"
                     autoresize
                     :max-rows="6"
                     :max-length="200"
                     show-counter
-                    placeholder="Cuéntanos sobre ti"
+                    :placeholder="t('pages.forms.textarea.examples.autoresize.placeholder')"
                     style="width: 360px"
                 />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Error"
-                description="errorText marca el campo como inválido y reemplaza al helperText."
+                :title="t('pages.forms.textarea.examples.error.title')"
+                :description="t('pages.forms.textarea.examples.error.desc')"
                 :code="errorCode"
             >
                 <Textarea
-                    label="Descripción"
-                    error-text="La descripción es requerida"
+                    :label="t('pages.forms.textarea.examples.error.label')"
+                    :error-text="t('pages.forms.textarea.examples.error.errorText')"
                     :rows="3"
                     style="width: 360px"
                 />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Disabled"
-                description="Estado deshabilitado preservando el valor visual."
+                :title="t('pages.forms.textarea.examples.disabled.title')"
+                :description="t('pages.forms.textarea.examples.disabled.desc')"
                 :code="disabledCode"
             >
-                <Textarea disabled model-value="No editable" :rows="2" style="width: 280px" />
+                <Textarea disabled :model-value="t('pages.forms.textarea.examples.disabled.value')" :rows="2" style="width: 280px" />
             </ComponentPreview>
         </template>
     </ComponentDoc>

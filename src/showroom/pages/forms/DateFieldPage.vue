@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import DateField from '../../../components/forms/DateField.vue';
 import type { PropDoc, EmitDoc } from '../../types';
+
+const { t } = useI18n();
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgSize      = ref<'small' | 'medium' | 'large'>('medium');
@@ -56,37 +59,37 @@ const clearableCode = `<DateField v-model="value" label="Fecha" clearable class=
 const disabledCode = `<DateField :model-value="value" label="Fecha" disabled class="w-72" />`;
 
 // ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'modelValue',    type: 'Date | null',                          default: 'null',       description: 'Fecha seleccionada. Soporta v-model.' },
-    { name: 'label',         type: 'string',                                                      description: 'Etiqueta visible encima del campo.' },
-    { name: 'placeholder',   type: 'string',                                default: "'Select date…'", description: 'Texto mostrado cuando no hay fecha seleccionada.' },
-    { name: 'size',          type: "'small' | 'medium' | 'large'",         default: "'medium'",   description: 'Tamaño del input.' },
-    { name: 'variant',       type: "'outline' | 'filled' | 'ghost'",       default: "'outline'",  description: 'Estilo visual del wrapper.' },
-    { name: 'displayFormat', type: "'short' | 'medium' | 'long' | 'full'", default: "'medium'",   description: 'Formato Intl usado para mostrar la fecha seleccionada.' },
-    { name: 'minDate',       type: 'Date',                                                        description: 'Fecha mínima seleccionable en el calendario.' },
-    { name: 'maxDate',       type: 'Date',                                                        description: 'Fecha máxima seleccionable en el calendario.' },
-    { name: 'clearable',     type: 'boolean',                               default: 'false',     description: 'Muestra un botón para limpiar el valor cuando hay fecha.' },
-    { name: 'disabled',      type: 'boolean',                               default: 'false',     description: 'Deshabilita el campo y bloquea la apertura del popover.' },
-    { name: 'readonly',      type: 'boolean',                               default: 'false',     description: 'Hace el campo no interactivo conservando el valor visible.' },
-    { name: 'required',      type: 'boolean',                               default: 'false',     description: 'Marca el campo como obligatorio para validación.' },
-    { name: 'fullWidth',     type: 'boolean',                               default: 'false',     description: 'El campo ocupa el 100% del ancho disponible.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'modelValue',    type: 'Date | null',                          default: 'null',       description: t('pages.forms.dateField.props.modelValue') },
+    { name: 'label',         type: 'string',                                                      description: t('pages.forms.dateField.props.label') },
+    { name: 'placeholder',   type: 'string',                                default: "'Select date…'", description: t('pages.forms.dateField.props.placeholder') },
+    { name: 'size',          type: "'small' | 'medium' | 'large'",         default: "'medium'",   description: t('pages.forms.dateField.props.size') },
+    { name: 'variant',       type: "'outline' | 'filled' | 'ghost'",       default: "'outline'",  description: t('pages.forms.dateField.props.variant') },
+    { name: 'displayFormat', type: "'short' | 'medium' | 'long' | 'full'", default: "'medium'",   description: t('pages.forms.dateField.props.displayFormat') },
+    { name: 'minDate',       type: 'Date',                                                        description: t('pages.forms.dateField.props.minDate') },
+    { name: 'maxDate',       type: 'Date',                                                        description: t('pages.forms.dateField.props.maxDate') },
+    { name: 'clearable',     type: 'boolean',                               default: 'false',     description: t('pages.forms.dateField.props.clearable') },
+    { name: 'disabled',      type: 'boolean',                               default: 'false',     description: t('pages.forms.dateField.props.disabled') },
+    { name: 'readonly',      type: 'boolean',                               default: 'false',     description: t('pages.forms.dateField.props.readonly') },
+    { name: 'required',      type: 'boolean',                               default: 'false',     description: t('pages.forms.dateField.props.required') },
+    { name: 'fullWidth',     type: 'boolean',                               default: 'false',     description: t('pages.forms.dateField.props.fullWidth') },
+]);
 
-const emitsList: EmitDoc[] = [
-    { name: 'update:modelValue', payload: 'Date | null', description: 'Emitido cuando el usuario selecciona o limpia la fecha.' },
-    { name: 'change',            payload: 'Date | null', description: 'Alias semántico de update:modelValue.' },
-    { name: 'open',              payload: 'void',        description: 'Emitido al abrir el popover del calendario.' },
-    { name: 'close',             payload: 'void',        description: 'Emitido al cerrar el popover.' },
-    { name: 'clear',             payload: 'void',        description: 'Emitido al pulsar el botón de limpiar.' },
-];
+const emitsList = computed<EmitDoc[]>(() => [
+    { name: 'update:modelValue', payload: 'Date | null', description: t('pages.forms.dateField.emits.updateModelValue') },
+    { name: 'change',            payload: 'Date | null', description: t('pages.forms.dateField.emits.change') },
+    { name: 'open',              payload: 'void',        description: t('pages.forms.dateField.emits.open') },
+    { name: 'close',             payload: 'void',        description: t('pages.forms.dateField.emits.close') },
+    { name: 'clear',             payload: 'void',        description: t('pages.forms.dateField.emits.clear') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="DateField"
-        category="Forms"
+        :title="t('pages.forms.dateField.title')"
+        :category="t('pages.forms.dateField.category')"
         import-path="import { DateField } from 'mood-ui'"
-        description="Input de fecha con popover de calendario. Localizable, con minDate / maxDate y formato configurable."
+        :description="t('pages.forms.dateField.description')"
         :props-list="propsList"
         :emits-list="emitsList"
     >
@@ -96,7 +99,7 @@ const emitsList: EmitDoc[] = [
                 <template #controls>
                     <!-- Size -->
                     <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Tamaño</span>
+                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">{{ t('pages.forms.dateField.controls.size').toUpperCase() }}</span>
                         <div class="flex rounded-md border border-border overflow-hidden">
                             <button
                                 v-for="s in ['small', 'medium', 'large']"
@@ -115,7 +118,7 @@ const emitsList: EmitDoc[] = [
 
                     <!-- Variant -->
                     <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Variante</span>
+                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">{{ t('pages.forms.dateField.controls.variant').toUpperCase() }}</span>
                         <div class="flex rounded-md border border-border overflow-hidden">
                             <button
                                 v-for="v in ['outline', 'filled', 'ghost']"
@@ -139,7 +142,7 @@ const emitsList: EmitDoc[] = [
                             ? 'border-primary bg-primary/10 text-primary font-medium'
                             : 'border-border text-muted-foreground hover:bg-muted/60'"
                         @click="pgClearable = !pgClearable"
-                    >Clearable</button>
+                    >{{ t('pages.forms.dateField.controls.clearable') }}</button>
 
                     <button
                         type="button"
@@ -148,12 +151,12 @@ const emitsList: EmitDoc[] = [
                             ? 'border-primary bg-primary/10 text-primary font-medium'
                             : 'border-border text-muted-foreground hover:bg-muted/60'"
                         @click="pgDisabled = !pgDisabled"
-                    >Disabled</button>
+                    >{{ t('pages.forms.dateField.controls.disabled') }}</button>
                 </template>
 
                 <DateField
                     v-model="pgValue"
-                    label="Fecha"
+                    :label="t('pages.forms.dateField.playground.label')"
                     :size="pgSize"
                     :variant="pgVariant"
                     :clearable="pgClearable"
@@ -166,16 +169,16 @@ const emitsList: EmitDoc[] = [
         <!-- ── Examples ────────────────────────────────────────────────────── -->
         <template #examples>
             <ComponentPreview
-                title="Básico"
-                description="Campo con label, popover de calendario y formato medio por defecto."
+                :title="t('pages.forms.dateField.examples.basic.title')"
+                :description="t('pages.forms.dateField.examples.basic.desc')"
                 :code="basicCode"
             >
                 <DateField v-model="dValue" label="Fecha" class="w-72" />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Tamaños"
-                description="Disponible en small, medium y large compartiendo proporciones del input."
+                :title="t('pages.forms.dateField.examples.sizes.title')"
+                :description="t('pages.forms.dateField.examples.sizes.desc')"
                 :code="sizesCode"
             >
                 <div class="flex flex-col gap-3">
@@ -186,8 +189,8 @@ const emitsList: EmitDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Min y max"
-                description="Limita el rango seleccionable usando minDate y maxDate."
+                :title="t('pages.forms.dateField.examples.minMax.title')"
+                :description="t('pages.forms.dateField.examples.minMax.desc')"
                 :code="constraintsCode"
             >
                 <DateField
@@ -200,16 +203,16 @@ const emitsList: EmitDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Clearable"
-                description="Aparece un botón ✕ cuando hay valor para limpiar la fecha rápidamente."
+                :title="t('pages.forms.dateField.examples.clearable.title')"
+                :description="t('pages.forms.dateField.examples.clearable.desc')"
                 :code="clearableCode"
             >
                 <DateField v-model="dClearable" label="Fecha" clearable class="w-72" />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Disabled"
-                description="El campo se atenúa, bloquea el popover y conserva el valor visible."
+                :title="t('pages.forms.dateField.examples.disabled.title')"
+                :description="t('pages.forms.dateField.examples.disabled.desc')"
                 :code="disabledCode"
             >
                 <DateField :model-value="dValue" label="Fecha" disabled class="w-72" />

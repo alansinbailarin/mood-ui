@@ -2213,9 +2213,10 @@ function isFirstStickyCell(c: { key: string }): boolean {
                                     c.cellClass, 
                                     pinMap[c.key] ? 'bg-card' : '', 
                                     isFirstStickyCell(c) ? 'modo-sticky-first-cell' : '', 
-                                    isColumnEditable(c, row, ri) ? 'cursor-text' : '', 
-                                    kb.isFocused(ri, ci) ? 'ring-2 ring-ring ring-inset relative z-[1]' : '', 
-                                ]" 
+                                    isColumnEditable(c, row, ri) ? 'cursor-text' : '',
+                                    'outline-none',
+                                    kb.isFocused(ri, ci) ? 'ring-2 ring-ring ring-inset relative z-[1]' : '',
+                                ]"
                                 :aria-colindex="ci + 1 + leadingColCount" 
                                 :tabindex="kb.isFocused(ri, ci) ? 0 : -1" 
                                 :title="cellTitle(c, row, ri)" 

@@ -1,0 +1,43 @@
+{
+    "title": "Sidebar",
+    "category": "Layout",
+    "description": "Navegación lateral con secciones, items, iconos y badges. Soporta modo colapsado (solo iconos), items anidados y diferentes estilos de activo.",
+    "menu": {
+        "home": "Inicio",
+        "inbox": "Inbox",
+        "team": "Equipo",
+        "reports": "Reportes",
+        "settings": "Ajustes"
+    },
+    "sections": { "main": "Principal", "config": "Configuración" },
+    "examples": {
+        "basic":     { "title": "Básico",          "desc": "Lista plana de items con activo controlado." },
+        "collapsed": { "title": "Colapsado (rail)", "desc": "Modo icon-only con tooltips automáticos en hover." },
+        "sections":  { "title": "Con secciones",    "desc": "Agrupa items bajo títulos para mejor organización." },
+        "footer":    { "title": "Con footer",       "desc": "Slot footer para botones de logout o perfil." }
+    },
+    "logout": "Salir",
+    "props": {
+        "sections":      "Secciones a renderizar (cada una con título e items).",
+        "items":         "Atajo: lista plana de items renderizada como sección anónima.",
+        "activeId":      "v-model del item activo.",
+        "collapsed":     "Modo icon-only: oculta labels, badges y sub-items.",
+        "size":          "Tamaño visual de las filas.",
+        "radius":        "Radio del hit-area de las filas.",
+        "color":         "Color del estado activo.",
+        "activeVariant": "Cómo se renderiza el estado activo.",
+        "barSide":       "Lado del accent bar (solo activeVariant=\"bar\").",
+        "padding":       "Padding alrededor de la lista interior.",
+        "dividers":      "Renderiza bordes entre header / body / footer.",
+        "ariaLabel":     "Aria-label del nav raíz.",
+        "as":            "Etiqueta raíz a renderizar."
+    },
+    "emits": {
+        "select":         "Emitido al activar un item.",
+        "updateActiveId": "v-model del item activo."
+    },
+    "slots": {
+        "header": "Contenido renderizado encima de las secciones (logo, brand…).",
+        "footer": "Contenido renderizado debajo de las secciones (logout, perfil…)."
+    }
+}

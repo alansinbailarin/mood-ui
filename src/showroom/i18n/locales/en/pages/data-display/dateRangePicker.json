@@ -1,0 +1,55 @@
+{
+    "pages": {
+        "dataDisplay": {
+            "dateRangePicker": {
+                "title": "DateRangePicker",
+                "description": "Inline date range selector. Supports one or two visible months, quick presets, min/max length restrictions and disabled dates.",
+                "controls": {
+                    "months": "Months",
+                    "variant": "Variant",
+                    "color": "Color",
+                    "radius": "Radius",
+                    "presets": "Presets"
+                },
+                "props": {
+                    "modelValue": "Tuple with the start and end dates of the range (v-model).",
+                    "months": "Number of months visible simultaneously.",
+                    "showPresets": "Shows the side panel with predefined ranges (today, this week, etc.).",
+                    "presets": "Custom presets. Each has a label and a range() function that returns the tuple.",
+                    "color": "Accent color for the selected range.",
+                    "variant": "Visual style of the panel.",
+                    "radius": "Border radius of the panel.",
+                    "minDate": "Minimum selectable date.",
+                    "maxDate": "Maximum selectable date.",
+                    "minRange": "Minimum number of days the range must span.",
+                    "maxRange": "Maximum number of days the range can span.",
+                    "disabledDates": "Non-selectable dates.",
+                    "locale": "Locale for month and day names.",
+                    "firstDayOfWeek": "Week start day (0=Sun, 1=Mon)."
+                },
+                "examples": {
+                    "twoMonths": {
+                        "title": "Two months (default)",
+                        "desc": "Shows two calendars side by side for comfortably selecting long ranges."
+                    },
+                    "oneMonth": {
+                        "title": "One month",
+                        "desc": "Compact mode with a single calendar, ideal for short ranges."
+                    },
+                    "presets": {
+                        "title": "With presets",
+                        "desc": "show-presets adds a side panel with shortcuts (today, this week, this month, last 30 days…)."
+                    },
+                    "colorPrimary": {
+                        "title": "Primary color",
+                        "desc": "The color affects the background of the selected range and the start/end days."
+                    },
+                    "outline": {
+                        "title": "Outline variant",
+                        "desc": "Visible perimeter border, useful on neutral backgrounds."
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import ConfirmDialog from '../../../components/feedback/ConfirmDialog.vue';
@@ -7,6 +8,10 @@ import Button from '../../../components/forms/Button.vue';
 import { useConfirm } from '../../../composables/useConfirm';
 import { useToast } from '../../../composables/useToast';
 import type { PropDoc, EmitDoc, SlotDoc } from '../../types';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
+
+const { t } = useI18n();
 
 type Tone = 'default' | 'primary' | 'danger';
 type Size = 'small' | 'medium' | 'large';
@@ -26,14 +31,16 @@ function resetPlayground() {
 
 async function runPlayground() {
     const ok = await confirm({
-        title: '¿Continuar con la acción?',
-        description: 'Vista previa del componente con la configuración del playground.',
-        confirmLabel: 'Continuar',
-        cancelLabel: 'Cancelar',
+        title:        t('pages.feedback.confirmDialog.playground.title'),
+        description:  t('pages.feedback.confirmDialog.playground.description'),
+        confirmLabel: t('pages.feedback.confirmDialog.playground.confirmLabel'),
+        cancelLabel:  t('pages.feedback.confirmDialog.playground.cancelLabel'),
         color: pgTone.value,
-        size: pgSize.value,
+        size:  pgSize.value,
     });
-    lastResult.value = ok ? 'confirmado' : 'cancelado';
+    lastResult.value = ok
+        ? t('pages.feedback.confirmDialog.playground.confirmed')
+        : t('pages.feedback.confirmDialog.playground.cancelled');
 }
 
 const overviewCode = computed(() => {
@@ -96,10 +103,10 @@ async function runBasic() {
 
 async function runDanger() {
     const ok = await confirm({
-        title: '¿Eliminar elemento?',
-        description: 'Esta acción no se puede deshacer.',
+        title:        '¿Eliminar elemento?',
+        description:  'Esta acción no se puede deshacer.',
         confirmLabel: 'Eliminar',
-        cancelLabel: 'Cancelar',
+        cancelLabel:  'Cancelar',
         color: 'danger',
     });
     if (ok) toast.success('Eliminado');
@@ -108,8 +115,8 @@ async function runDanger() {
 
 async function runAsync() {
     const ok = await confirm({
-        title: '¿Publicar ahora?',
-        description: 'El contenido será visible para todos los usuarios.',
+        title:        '¿Publicar ahora?',
+        description:  'El contenido será visible para todos los usuarios.',
         confirmLabel: 'Publicar',
         color: 'primary',
     });
@@ -121,21 +128,20 @@ async function runAsync() {
 
 async function runCustom() {
     const ok = await confirm({
-        title: 'Cerrar sesión',
-        description: 'Tendrás que volver a iniciar sesión para acceder.',
+        title:        'Cerrar sesión',
+        description:  'Tendrás que volver a iniciar sesión para acceder.',
         confirmLabel: 'Cerrar sesión',
-        cancelLabel: 'Quedarme',
+        cancelLabel:  'Quedarme',
         color: 'warning',
     });
     toast.info(ok ? 'Sesión cerrada' : 'Te quedaste');
 }
 
-const propsList: PropDoc[] = [
-    { name: 'radius', type: "'none' | 'small' | 'medium' | 'large' | 'full'", description: 'Radio por defecto para confirmaciones que no especifican uno.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'radius', type: "'none' | 'small' | 'medium' | 'large' | 'full'", description: t('pages.feedback.confirmDialog.props.radius') },
+]);
 
 const emitsList: EmitDoc[] = [];
-
 const slotsList: SlotDoc[] = [];
 </script>
 
@@ -144,10 +150,10 @@ const slotsList: SlotDoc[] = [];
     <ConfirmDialog />
 
     <ComponentDoc
-        title="ConfirmDialog"
+        :title="t('pages.feedback.confirmDialog.title')"
         category="Feedback"
         import-path="import { ConfirmDialog, useConfirm } from 'mood-ui'"
-        description="Diálogo de confirmación imperativo. Monta una vez el host <ConfirmDialog /> cerca del root y usa useConfirm().confirm({...}) desde cualquier componente para obtener un Promise<boolean>."
+        :description="t('pages.feedback.confirmDialog.description')"
         :props-list="propsList"
         :emits-list="emitsList"
         :slots-list="slotsList"
@@ -155,83 +161,55 @@ const slotsList: SlotDoc[] = [];
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="220px" lang="vue" @reset="resetPlayground">
                 <template #controls>
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Tono</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="t in (['default', 'primary', 'danger'] as Tone[])"
-                                :key="t"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgTone === t
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgTone = t"
-                            >{{ t }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Tamaño</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in (['small', 'medium', 'large'] as Size[])"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = s"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
+                    <TbPills :label="t('pages.feedback.confirmDialog.controls.tone')" :options="[{value:'default'},{value:'primary'},{value:'danger'}]" v-model="pgTone" />
+                    <TbSep />
+                    <TbPills :label="t('pages.feedback.confirmDialog.controls.size')" :options="[{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSize" />
                 </template>
 
                 <Button :color="pgTone === 'default' ? 'default' : pgTone" @click="runPlayground">
-                    Lanzar confirm()
+                    {{ t('pages.feedback.confirmDialog.playground.launch') }}
                 </Button>
-                <span class="text-sm text-muted-foreground">Última respuesta: {{ lastResult }}</span>
+                <span class="text-sm text-muted-foreground">
+                    {{ t('pages.feedback.confirmDialog.playground.lastResult') }} {{ lastResult }}
+                </span>
             </ComponentPreview>
         </template>
 
         <template #examples>
             <ComponentPreview
-                title="Confirmación básica"
-                description="Pasando solo un string se obtiene un yes/no minimalista."
+                :title="t('pages.feedback.confirmDialog.examples.basic.title')"
+                :description="t('pages.feedback.confirmDialog.examples.basic.desc')"
                 :code="basicCode"
                 min-height="180px"
             >
-                <Button @click="runBasic">Lanzar confirm</Button>
+                <Button @click="runBasic">{{ t('pages.feedback.confirmDialog.examples.basic.cta') }}</Button>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Acción destructiva"
-                description="Para borrados y operaciones irreversibles, usa color='danger' y un confirmLabel explícito."
+                :title="t('pages.feedback.confirmDialog.examples.danger.title')"
+                :description="t('pages.feedback.confirmDialog.examples.danger.desc')"
                 :code="dangerCode"
                 min-height="180px"
             >
-                <Button color="danger" @click="runDanger">Eliminar elemento</Button>
+                <Button color="danger" @click="runDanger">{{ t('pages.feedback.confirmDialog.examples.danger.cta') }}</Button>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Async confirm"
-                description="confirm() devuelve Promise<boolean>: ideal para encadenar await + llamada a API."
+                :title="t('pages.feedback.confirmDialog.examples.async.title')"
+                :description="t('pages.feedback.confirmDialog.examples.async.desc')"
                 :code="asyncCode"
                 min-height="180px"
             >
-                <Button color="primary" @click="runAsync">Publicar</Button>
+                <Button color="primary" @click="runAsync">{{ t('pages.feedback.confirmDialog.examples.async.cta') }}</Button>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Labels personalizados"
-                description="Sobrescribe confirmLabel y cancelLabel para que el botón refleje exactamente la acción."
+                :title="t('pages.feedback.confirmDialog.examples.custom.title')"
+                :description="t('pages.feedback.confirmDialog.examples.custom.desc')"
                 :code="customCode"
                 min-height="180px"
             >
-                <Button color="warning" @click="runCustom">Cerrar sesión</Button>
+                <Button color="warning" @click="runCustom">{{ t('pages.feedback.confirmDialog.examples.custom.cta') }}</Button>
             </ComponentPreview>
         </template>
     </ComponentDoc>

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"console.log\\(require\\('./node_modules/vue-i18n/package.json'\\).version\\)\")",
+      "Bash(npx vue-tsc *)"
+    ]
+  }
+}

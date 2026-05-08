@@ -1,0 +1,37 @@
+{
+    "title": "PopoverPanel",
+    "category": "Layout",
+    "description": "Primitiva interna usada por componentes flotantes (Select, MultiSelect, DropdownMenu, Tooltip, DateField, Combobox…). Renderiza un panel teleportado al body con tema y palette del provider preservados.",
+    "examples": {
+        "tooltip":  { "title": "Tooltip",      "desc": "Tooltip usa su propio sistema de posicionamiento, similar a PopoverPanel." },
+        "select":   { "title": "Select",       "desc": "El menú desplegable de Select renderiza dentro de un PopoverPanel." },
+        "dropdown": { "title": "DropdownMenu", "desc": "DropdownMenu encapsula trigger + PopoverPanel + items." },
+        "direct":   { "title": "Uso directo",  "desc": "Combina usePopover (open, panelStyle, panelRef) con PopoverPanel para casos no cubiertos por los componentes de alto nivel." }
+    },
+    "demo": {
+        "openPanel":   "Abrir panel",
+        "customTitle": "Panel personalizado",
+        "customBody":  "Contenido libre dentro del popover.",
+        "close":       "Cerrar",
+        "tooltipText": "Soy un popover anclado al trigger",
+        "click":       "Click me",
+        "actions":     "Acciones",
+        "edit":        "Editar",
+        "duplicate":   "Duplicar",
+        "delete":      "Eliminar",
+        "directNote":  "Para casos comunes (menús, selects, tooltips) usa los componentes de alto nivel que ya integran"
+    },
+    "props": {
+        "open":       "Controla la visibilidad del panel.",
+        "style":      "Estilo (top/left/width/zIndex) calculado por usePopover.",
+        "radius":     "Radio de las esquinas. Si no se pasa, hereda del provider.",
+        "role":       "ARIA role aplicado al panel.",
+        "labelledBy": "Id del elemento que nombra al panel."
+    },
+    "emits": {
+        "updatePanelRef": "Emitido cuando el elemento raíz cambia. Necesario para que usePopover lo posicione."
+    },
+    "slots": {
+        "default": "Contenido del panel flotante."
+    }
+}

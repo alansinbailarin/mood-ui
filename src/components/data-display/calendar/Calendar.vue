@@ -1,7 +1,7 @@
 <template> 
     <div 
         ref="rootRef" 
-        :class="['inline-flex flex-col select-none w-fit self-start', variant === 'outline' ? 'border border-border' : '', containerRadiusClass]" 
+        :class="['inline-flex flex-col select-none w-fit self-start', variant === 'outline' ? 'bg-card border border-border' : variant === 'filled' ? 'bg-card shadow-md' : '', containerRadiusClass]" 
         tabindex="0" 
         role="application" 
         :aria-label="`Calendar, ${monthLabel} ${currentYear}`" 

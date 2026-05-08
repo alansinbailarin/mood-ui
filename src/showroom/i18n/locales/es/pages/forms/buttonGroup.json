@@ -1,0 +1,46 @@
+{
+    "category": "Forms",
+    "title": "ButtonGroup",
+    "description": "Agrupa varios botones en una unidad visual compartiendo variante, color y tamaño. Soporta orientación horizontal y vertical.",
+    "controls": {
+        "variant": "Variante",
+        "color": "Color",
+        "size": "Tamaño",
+        "gradient": "Degradado",
+        "disabled": "Disabled"
+    },
+    "examples": {
+        "basic": {
+            "title": "Uso básico",
+            "desc": "Tres botones agrupados que comparten color y variante."
+        },
+        "mixed": {
+            "title": "Colores mixtos",
+            "desc": "Cada botón puede sobreescribir el color del grupo para destacar acciones."
+        },
+        "fullWidth": {
+            "title": "Ancho completo",
+            "desc": "El grupo se expande al 100% y los botones reparten el ancho proporcionalmente."
+        },
+        "vertical": {
+            "title": "Vertical",
+            "desc": "Apila los botones en columna — útil para menús contextuales o listas de acciones."
+        },
+        "icons": {
+            "title": "Con iconos",
+            "desc": "Botones icon-only agrupados para barras de herramientas compactas."
+        }
+    },
+    "props": {
+        "orientation": "Eje en el que se apilan los botones.",
+        "variant": "Variante visual heredada por todos los botones del grupo.",
+        "color": "Color semántico aplicado a los botones del grupo.",
+        "size": "Tamaño compartido por todos los botones del grupo.",
+        "radius": "Radio aplicado al wrapper. Los botones colapsan sus esquinas internas.",
+        "disabled": "Deshabilita todos los botones del grupo.",
+        "gradient": "Aplica un degradado sutil compatible con la variante normal."
+    },
+    "slots": {
+        "default": "Lista de componentes <Button> que forman parte del grupo."
+    }
+}

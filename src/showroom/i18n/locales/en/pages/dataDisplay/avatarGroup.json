@@ -1,0 +1,42 @@
+{
+    "title": "AvatarGroup",
+    "description": "Stacks overlapping avatars showing up to N visible and a counter for the rest. Ideal for collaborator, assignee or member lists.",
+
+    "controls": {
+        "size": "Size",
+        "max": "Max",
+        "radius": "Radius",
+        "bordered": "Bordered"
+    },
+
+    "props": {
+        "max": "Maximum number of visible avatars. The rest are grouped in a +N counter.",
+        "size": "Size applied to all child avatars.",
+        "radius": "Shape shared by all avatars in the group.",
+        "bordered": "Border around each avatar to visually separate them.",
+        "ariaLabel": "Accessible name for the group."
+    },
+
+    "slots": {
+        "default": "List of <Avatar> components. The group controls their size and shape."
+    },
+
+    "examples": {
+        "basic": {
+            "title": "Basic",
+            "desc": "Three overlapping avatars without a limit."
+        },
+        "maxOverflow": {
+            "title": "With max and overflow",
+            "desc": "Limits visible avatars and shows a +N counter for the rest."
+        },
+        "sizes": {
+            "title": "Sizes",
+            "desc": "The size is applied to all child avatars."
+        },
+        "mixed": {
+            "title": "Mixed",
+            "desc": "Combines images, initials and icon fallback in the same group."
+        }
+    }
+}

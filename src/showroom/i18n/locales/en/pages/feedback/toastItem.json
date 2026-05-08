@@ -1,0 +1,66 @@
+{
+    "title": "Toast",
+    "description": "Ephemeral notification rendered by ToastContainer. Not instantiated directly: fired via the info / success / warning / danger helpers of the useToast() composable.",
+
+    "controls": {
+        "color":   "Color",
+        "variant": "Variant"
+    },
+
+    "playground": {
+        "launch":       "Launch toast",
+        "title":        "Notification",
+        "description":  "Preview with the current playground settings."
+    },
+
+    "examples": {
+        "colors": {
+            "title": "Semantic colors",
+            "desc":  "Four helpers cover the common states: informational, success, warning and error.",
+            "info":    "Information",
+            "success": "Operation complete",
+            "warning": "Attention",
+            "danger":  "Something went wrong"
+        },
+        "action": {
+            "title":   "With action",
+            "desc":    "action adds an inline button — the classic 'Undo' pattern after a deletion.",
+            "cta":     "Move to trash",
+            "toastTitle": "File moved",
+            "toastDesc":  "We sent it to the trash.",
+            "undo":       "Undo",
+            "restored":   "Restored"
+        },
+        "icon": {
+            "title":      "Custom icon",
+            "desc":       "Pass any icon component (heroicons or other) to replace the default icon.",
+            "cta":        "Show achievement",
+            "toastTitle": "Achievement unlocked",
+            "toastDesc":  "You completed the product tour."
+        },
+        "pinned": {
+            "title":      "Pinned (no auto-close)",
+            "desc":       "duration: 0 keeps the toast until the user dismisses it or you call dismiss().",
+            "cta":        "Pinned toast",
+            "dismissAll": "Dismiss all",
+            "toastTitle": "Unstable connection",
+            "toastDesc":  "Retrying…"
+        }
+    },
+
+    "props": {
+        "title":       "Main title of the toast.",
+        "description": "Supporting text below the title.",
+        "color":       "Semantic color of the toast.",
+        "variant":     "Visual variant.",
+        "icon":        "Custom leading icon. Defaults to one chosen by color.",
+        "hideIcon":    "Hides the leading icon.",
+        "duration":    "Auto-close in ms. Use 0 to keep the toast pinned.",
+        "action":      "Inline action button (e.g. \"Undo\").",
+        "dismissable": "Shows the close button.",
+        "pauseOnHover":"Pauses the timer while the cursor is over the toast.",
+        "id":          "Stable ID. If reused, the toast updates in-place.",
+        "radius":      "Radius override; cascades from provider by default.",
+        "placement":   "Position override for this specific toast."
+    }
+}

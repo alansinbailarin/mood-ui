@@ -1,0 +1,56 @@
+{
+    "title": "Banner",
+    "category": "Feedback",
+    "description": "Prominent notice to communicate state at page or section level. Supports semantic colors, variants, dismiss and sticky position.",
+    "examples": {
+        "colors":   { "title": "Colors",        "desc": "Four semantic colors with default icons." },
+        "variants": { "title": "Variants",      "desc": "Three visual treatments: filled, subtle (default) and outline." },
+        "action":   { "title": "With action",   "desc": "Right-side actions slot to anchor a CTA." },
+        "dismiss":  { "title": "Dismissable",   "desc": "Lets the user close the banner. Emits the dismiss event." },
+        "icon":     { "title": "With custom icon", "desc": "Replace the icon with your own via the icon prop." }
+    },
+    "demo": {
+        "infoTitle":     "Information",
+        "infoDesc":      "Your account will sync in a few minutes.",
+        "successTitle":  "Done",
+        "successDesc":   "Changes saved successfully.",
+        "warnTitle":     "Heads up",
+        "warnDesc":      "Your plan expires in 5 days.",
+        "errTitle":      "Error",
+        "errDesc":       "We couldn't process the payment.",
+        "filledTitle":   "Filled",
+        "filledDesc":    "Solid style.",
+        "subtleTitle":   "Subtle",
+        "subtleDesc":    "Soft style (default).",
+        "outlineTitle":  "Outline",
+        "outlineDesc":   "Outlined style.",
+        "renewTitle":    "Plan about to expire",
+        "renewDesc":     "Renew to keep access to premium features.",
+        "renewBtn":      "Renew",
+        "tipTitle":      "Tip",
+        "tipDesc":       "You can close this notice.",
+        "newTitle":      "New version",
+        "newDesc":       "v2 ships theming support and new components.",
+        "showAgain":     "Show again"
+    },
+    "props": {
+        "color":            "Banner semantic color.",
+        "variant":          "Visual style applied to the banner.",
+        "title":            "Banner highlighted title.",
+        "description":      "Descriptive text. Replaced by the default slot when provided.",
+        "dismissable":      "Shows a close button that emits the dismiss event.",
+        "dismissAnimation": "Animation used when closing the banner.",
+        "icon":             "Custom icon. Falls back to the default by color when omitted.",
+        "showIcon":         "Shows or hides the banner icon.",
+        "position":         "Banner positioning.",
+        "fullWidth":        "Removes the radius to anchor the banner edge-to-edge.",
+        "radius":           "Corner radius. Cascades from ModoProvider."
+    },
+    "emits": {
+        "dismiss": "Emitted when the banner is closed while dismissable is active."
+    },
+    "slots": {
+        "default": "Banner body content. Replaces the description prop when HTML is needed.",
+        "actions": "Right-side banner actions (typically buttons)."
+    }
+}

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount, nextTick, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import {
-    SwatchIcon,
     GlobeAltIcon,
     ArrowTopRightOnSquareIcon,
     HomeIcon,
@@ -12,10 +12,8 @@ import {
     MagnifyingGlassIcon,
 } from '@heroicons/vue/24/outline';
 import Modal from '../../components/feedback/Modal.vue';
-import Tooltip from '../../components/feedback/Tooltip.vue';
 import { showroomNav } from '../registry';
 import { useShowroomRouter } from '../composables/useShowroomRouter';
-import { useShowroomT } from '../composables/useShowroomLocale';
 
 const props = defineProps<{
     modelValue: boolean;
@@ -28,7 +26,7 @@ const emit = defineEmits<{
     'locale': [l: 'es' | 'en'];
 }>();
 
-const t = useShowroomT();
+const { t } = useI18n();
 
 const open = computed({
     get: () => props.modelValue,
@@ -83,27 +81,21 @@ const componentItems = computed<CmdItem[]>(() =>
     ),
 );
 
-const docItems = computed<CmdItem[]>(() => {
-    const isEs = t.value.lang === 'es';
-    return [
-        { id: 'doc:welcome',      label: t.value.home,         description: isEs ? 'Página de inicio del showroom' : 'Showroom home page',             group: t.value.docs, icon: HomeIcon,      run: () => { go('welcome'); close(); } },
-        { id: 'doc:introduction', label: t.value.introduction, description: isEs ? '¿Qué es mood-ui y por qué usarlo?' : 'What is mood-ui and why use it?', group: t.value.docs, icon: BookOpenIcon,  run: () => { go('introduction'); close(); } },
-        { id: 'doc:installation', label: t.value.installation, description: isEs ? 'Instala mood-ui en tu proyecto' : 'Install mood-ui in your project',    group: t.value.docs, icon: BookOpenIcon,  run: () => { go('installation'); close(); } },
-        { id: 'doc:theming',      label: t.value.theming,      description: isEs ? 'Tokens de diseño y personalización' : 'Design tokens & customization',   group: t.value.docs, icon: PaintBrushIcon, run: () => { go('theming'); close(); } },
-        { id: 'doc:i18n',         label: t.value.i18n,         description: isEs ? 'Soporte multiidioma integrado' : 'Built-in multilanguage support',      group: t.value.docs, icon: LanguageIcon,  run: () => { go('i18n'); close(); } },
-        { id: 'doc:changelog',    label: t.value.changelog,    description: isEs ? 'Historial de versiones y cambios' : 'Version history and changes',      group: t.value.docs, icon: BookOpenIcon,  run: () => { go('changelog'); close(); } },
-    ];
-});
-
-const actionsLabel = computed(() => t.value.lang === 'es' ? 'Idioma' : 'Language');
-const linksLabel = computed(() => t.value.lang === 'es' ? 'Enlaces' : 'Links');
+const docItems = computed<CmdItem[]>(() => [
+    { id: 'doc:welcome',      label: t('home'),                  description: t('search.descWelcome'),      group: t('search.groupDocs'), icon: HomeIcon,       run: () => { go('welcome'); close(); } },
+    { id: 'doc:introduction', label: t('docsNav.introduction'),  description: t('search.descIntroduction'), group: t('search.groupDocs'), icon: BookOpenIcon,   run: () => { go('introduction'); close(); } },
+    { id: 'doc:installation', label: t('docsNav.installation'),  description: t('search.descInstallation'), group: t('search.groupDocs'), icon: BookOpenIcon,   run: () => { go('installation'); close(); } },
+    { id: 'doc:theming',      label: t('docsNav.theming'),       description: t('search.descTheming'),      group: t('search.groupDocs'), icon: PaintBrushIcon, run: () => { go('theming'); close(); } },
+    { id: 'doc:i18n',         label: t('docsNav.i18n'),          description: t('search.descI18n'),         group: t('search.groupDocs'), icon: LanguageIcon,   run: () => { go('i18n'); close(); } },
+    { id: 'doc:changelog',    label: t('docsNav.changelog'),     description: t('search.descChangelog'),    group: t('search.groupDocs'), icon: BookOpenIcon,   run: () => { go('changelog'); close(); } },
+]);
 
 const actionItems = computed<CmdItem[]>(() => [
     {
         id: 'locale:es',
         label: 'Español',
-        description: t.value.lang === 'es' ? 'Idioma actual del showroom' : 'Cambiar idioma a Español',
-        group: actionsLabel.value,
+        description: t('search.actionLanguageEsDesc'),
+        group: t('search.groupActions'),
         icon: GlobeAltIcon,
         keywords: 'spanish español idioma',
         run: () => { emit('locale', 'es'); close(); }
@@ -111,8 +103,8 @@ const actionItems = computed<CmdItem[]>(() => [
     {
         id: 'locale:en',
         label: 'English',
-        description: t.value.lang === 'en' ? 'Current showroom language' : 'Switch showroom language to English',
-        group: actionsLabel.value,
+        description: t('search.actionLanguageEnDesc'),
+        group: t('search.groupActions'),
         icon: GlobeAltIcon,
         keywords: 'english ingles language',
         run: () => { emit('locale', 'en'); close(); }
@@ -121,7 +113,7 @@ const actionItems = computed<CmdItem[]>(() => [
         id: 'link:github',
         label: 'GitHub',
         description: 'alansinbailarin/mood-ui',
-        group: linksLabel.value,
+        group: t('search.groupLinks'),
         icon: ArrowTopRightOnSquareIcon,
         run: () => { window.open('https://github.com/alansinbailarin/mood-ui', '_blank'); close(); },
     },
@@ -129,7 +121,7 @@ const actionItems = computed<CmdItem[]>(() => [
         id: 'link:npm',
         label: 'npm',
         description: 'npmjs.com/package/mood-ui',
-        group: linksLabel.value,
+        group: t('search.groupLinks'),
         icon: ArrowTopRightOnSquareIcon,
         run: () => { window.open('https://www.npmjs.com/package/mood-ui', '_blank'); close(); },
     },
@@ -232,7 +224,7 @@ function flatIndex(group: string, idxInGroup: number): number {
         :show-close="false"
         :inner-border="false"
         overlay="glass"
-        :aria-label="t.search"
+        :aria-label="t('search.label')"
     >
         <!-- Full-bleed wrapper that cancels the Modal body padding -->
         <div class="-mx-6 -my-6">
@@ -243,7 +235,7 @@ function flatIndex(group: string, idxInGroup: number): number {
                     ref="inputEl"
                     v-model="query"
                     type="text"
-                    :placeholder="t.searchPlaceholder"
+                    :placeholder="t('search.placeholder')"
                     autocomplete="off"
                     spellcheck="false"
                     style="outline: none !important; box-shadow: none !important;"
@@ -258,7 +250,7 @@ function flatIndex(group: string, idxInGroup: number): number {
                     v-if="filtered.length === 0"
                     class="px-4 py-12 text-center text-sm text-muted-foreground"
                 >
-                    {{ t.searchEmpty(query) }}
+                    {{ t('search.empty', { q: query }) }}
                 </div>
 
                 <!-- Regular grouped items -->
@@ -301,15 +293,15 @@ function flatIndex(group: string, idxInGroup: number): number {
                     <span class="inline-flex items-center gap-1">
                         <kbd class="font-mono font-semibold px-1 rounded border border-border bg-card">↑</kbd>
                         <kbd class="font-mono font-semibold px-1 rounded border border-border bg-card">↓</kbd>
-                        {{ t.searchNavigate }}
+                        {{ t('search.navigate') }}
                     </span>
                     <span class="inline-flex items-center gap-1">
                         <kbd class="font-mono font-semibold px-1 rounded border border-border bg-card">↵</kbd>
-                        {{ t.searchSelect }}
+                        {{ t('search.select') }}
                     </span>
                     <span class="inline-flex items-center gap-1">
                         <kbd class="font-mono font-semibold px-1 rounded border border-border bg-card">ESC</kbd>
-                        {{ t.searchEsc }}
+                        {{ t('search.esc') }}
                     </span>
                 </div>
                 <span>mood-ui</span>

@@ -1,0 +1,55 @@
+{
+    "category": "Forms",
+    "title": "DateRangeField",
+    "description": "Selector de rango de fechas con popover de doble calendario y soporte de presets.",
+    "controls": {
+        "size": "Tamaño",
+        "presets": "Presets",
+        "clearable": "Clearable",
+        "disabled": "Disabled"
+    },
+    "playground": {
+        "label": "Periodo"
+    },
+    "examples": {
+        "basic": {
+            "title": "Básico",
+            "desc": "Selector con popover de doble calendario y formato medio por defecto."
+        },
+        "presets": {
+            "title": "Con presets",
+            "desc": "Activa show-presets para añadir atajos rápidos como hoy, semana o mes."
+        },
+        "minMax": {
+            "title": "Min y max",
+            "desc": "Limita el rango seleccionable con minDate y maxDate."
+        },
+        "disabled": {
+            "title": "Disabled",
+            "desc": "El campo se atenúa, bloquea el popover y conserva el rango visible."
+        }
+    },
+    "props": {
+        "modelValue": "Rango seleccionado [start, end]. Soporta v-model.",
+        "label": "Etiqueta visible encima del campo.",
+        "placeholder": "Texto cuando no hay rango seleccionado.",
+        "size": "Tamaño del input.",
+        "months": "Número de meses visibles en el popover.",
+        "showPresets": "Muestra una columna con presets (hoy, semana, mes…).",
+        "minDate": "Fecha mínima seleccionable en el calendario.",
+        "maxDate": "Fecha máxima seleccionable en el calendario.",
+        "minRange": "Número mínimo de días entre start y end.",
+        "maxRange": "Número máximo de días entre start y end.",
+        "clearable": "Muestra un botón para limpiar el rango.",
+        "disabled": "Deshabilita el campo.",
+        "readonly": "Hace el campo no interactivo.",
+        "fullWidth": "Ocupa el 100% del ancho disponible."
+    },
+    "emits": {
+        "updateModelValue": "Emitido al cambiar el rango.",
+        "change": "Alias semántico de update:modelValue.",
+        "open": "Emitido al abrir el popover.",
+        "close": "Emitido al cerrar el popover.",
+        "clear": "Emitido al limpiar el rango."
+    }
+}

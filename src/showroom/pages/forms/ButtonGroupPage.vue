@@ -1,11 +1,18 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import ButtonGroup from '../../../components/forms/ButtonGroup.vue';
 import Button from '../../../components/forms/Button.vue';
 import { HeartIcon, ArrowRightIcon, BoltIcon } from '@heroicons/vue/24/outline';
 import type { PropDoc, SlotDoc } from '../../types';
+import TbPills  from '../../components/toolbar/TbPills.vue';
+import TbDots   from '../../components/toolbar/TbDots.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep    from '../../components/toolbar/TbSep.vue';
+
+const { t } = useI18n();
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgVariant  = ref<'normal' | 'outline' | 'ghost' | 'text'>('normal');
@@ -23,11 +30,11 @@ function resetPlayground() {
 }
 
 const colorDots = [
-    { value: 'default' as const, bg: '#64748b',        label: 'Default' },
-    { value: 'primary' as const, bg: 'var(--primary)', label: 'Primary' },
-    { value: 'success' as const, bg: '#22c55e',        label: 'Success' },
-    { value: 'warning' as const, bg: '#f59e0b',        label: 'Warning' },
-    { value: 'danger'  as const, bg: '#ef4444',        label: 'Danger'  },
+    { value: 'default' as const, bg: 'var(--color-slate-400)',   label: 'Default' },
+    { value: 'primary' as const, bg: 'var(--primary)',            label: 'Primary' },
+    { value: 'success' as const, bg: 'var(--color-emerald-500)', label: 'Success' },
+    { value: 'warning' as const, bg: 'var(--color-amber-500)',   label: 'Warning' },
+    { value: 'danger'  as const, bg: 'var(--color-red-500)',     label: 'Danger'  },
 ];
 
 const overviewCode = computed(() => {
@@ -79,27 +86,27 @@ const iconsCode = `<ButtonGroup color="primary">
 </ButtonGroup>`;
 
 // ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'orientation', type: "'horizontal' | 'vertical'",                                       default: "'horizontal'", description: 'Eje en el que se apilan los botones.' },
-    { name: 'variant',     type: "'normal' | 'outline' | 'ghost' | 'text'",                         default: "'normal'",     description: 'Variante visual heredada por todos los botones del grupo.' },
-    { name: 'color',       type: "'default' | 'primary' | 'success' | 'warning' | 'danger'",        default: "'default'",    description: 'Color semántico aplicado a los botones del grupo.' },
-    { name: 'size',        type: "'small' | 'medium' | 'large'",                                    default: "'medium'",     description: 'Tamaño compartido por todos los botones del grupo.' },
-    { name: 'radius',      type: "'none' | 'small' | 'medium' | 'large' | 'full'",                  default: "'medium'",     description: 'Radio aplicado al wrapper. Los botones colapsan sus esquinas internas.' },
-    { name: 'disabled',    type: 'boolean',                                                          default: 'false',        description: 'Deshabilita todos los botones del grupo.' },
-    { name: 'gradient',    type: 'boolean',                                                          default: 'false',        description: 'Aplica un degradado sutil compatible con la variante normal.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'orientation', type: "'horizontal' | 'vertical'",                                       default: "'horizontal'", description: t('pages.forms.buttonGroup.props.orientation') },
+    { name: 'variant',     type: "'normal' | 'outline' | 'ghost' | 'text'",                         default: "'normal'",     description: t('pages.forms.buttonGroup.props.variant') },
+    { name: 'color',       type: "'default' | 'primary' | 'success' | 'warning' | 'danger'",        default: "'default'",    description: t('pages.forms.buttonGroup.props.color') },
+    { name: 'size',        type: "'small' | 'medium' | 'large'",                                    default: "'medium'",     description: t('pages.forms.buttonGroup.props.size') },
+    { name: 'radius',      type: "'none' | 'small' | 'medium' | 'large' | 'full'",                  default: "'medium'",     description: t('pages.forms.buttonGroup.props.radius') },
+    { name: 'disabled',    type: 'boolean',                                                          default: 'false',        description: t('pages.forms.buttonGroup.props.disabled') },
+    { name: 'gradient',    type: 'boolean',                                                          default: 'false',        description: t('pages.forms.buttonGroup.props.gradient') },
+]);
 
-const slotsList: SlotDoc[] = [
-    { name: 'default', description: 'Lista de componentes <Button> que forman parte del grupo.' },
-];
+const slotsList = computed<SlotDoc[]>(() => [
+    { name: 'default', description: t('pages.forms.buttonGroup.slots.default') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="ButtonGroup"
-        category="Forms"
+        :title="t('pages.forms.buttonGroup.title')"
+        :category="t('pages.forms.buttonGroup.category')"
         import-path="import { ButtonGroup, Button } from 'mood-ui'"
-        description="Agrupa varios botones en una unidad visual compartiendo variante, color y tamaño. Soporta orientación horizontal y vertical."
+        :description="t('pages.forms.buttonGroup.description')"
         :props-list="propsList"
         :slots-list="slotsList"
     >
@@ -107,82 +114,14 @@ const slotsList: SlotDoc[] = [
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="200px" @reset="resetPlayground">
                 <template #controls>
-                    <!-- Variant -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">VARIANT</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="v in ['normal', 'outline', 'ghost', 'text']"
-                                :key="v"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgVariant === v
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgVariant = (v as typeof pgVariant)"
-                            >{{ v }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Color dots -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">COLOR</span>
-                        <div class="flex items-center gap-1">
-                            <button
-                                v-for="c in colorDots"
-                                :key="c.value"
-                                type="button"
-                                class="size-4 rounded-full transition-all duration-150"
-                                :class="pgColor === c.value
-                                    ? 'ring-2 ring-offset-1 ring-foreground/30 scale-125'
-                                    : 'hover:scale-110 opacity-70 hover:opacity-100'"
-                                :style="`background: ${c.bg}`"
-                                :title="c.label"
-                                @click="pgColor = c.value"
-                            />
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Size -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">SIZE</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in ['small', 'medium', 'large']"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = (s as typeof pgSize)"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgGradient
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgGradient = !pgGradient"
-                    >Gradient</button>
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgDisabled
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgDisabled = !pgDisabled"
-                    >Disabled</button>
+                    <TbPills :label="t('pages.forms.buttonGroup.controls.variant')" :options="[{value:'normal'},{value:'outline'},{value:'ghost'},{value:'text'}]" v-model="pgVariant" />
+                    <TbSep />
+                    <TbDots :label="t('pages.forms.buttonGroup.controls.color')" :options="colorDots" v-model="pgColor" />
+                    <TbSep />
+                    <TbPills :label="t('pages.forms.buttonGroup.controls.size')" :options="[{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbToggle :label="t('pages.forms.buttonGroup.controls.gradient')" v-model="pgGradient" />
+                    <TbToggle :label="t('pages.forms.buttonGroup.controls.disabled')" v-model="pgDisabled" />
                 </template>
 
                 <ButtonGroup
@@ -202,8 +141,8 @@ const slotsList: SlotDoc[] = [
         <!-- ── Examples ────────────────────────────────────────────────────── -->
         <template #examples>
             <ComponentPreview
-                title="Uso básico"
-                description="Tres botones agrupados que comparten color y variante."
+                :title="t('pages.forms.buttonGroup.examples.basic.title')"
+                :description="t('pages.forms.buttonGroup.examples.basic.desc')"
                 :code="basicCode"
             >
                 <ButtonGroup color="primary">
@@ -214,8 +153,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Colores mixtos"
-                description="Cada botón puede sobreescribir el color del grupo para destacar acciones."
+                :title="t('pages.forms.buttonGroup.examples.mixed.title')"
+                :description="t('pages.forms.buttonGroup.examples.mixed.desc')"
                 :code="mixedCode"
             >
                 <ButtonGroup variant="outline">
@@ -226,8 +165,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Ancho completo"
-                description="El grupo se expande al 100% y los botones reparten el ancho proporcionalmente."
+                :title="t('pages.forms.buttonGroup.examples.fullWidth.title')"
+                :description="t('pages.forms.buttonGroup.examples.fullWidth.desc')"
                 :code="fullWidthCode"
             >
                 <ButtonGroup color="primary" class="w-full">
@@ -239,8 +178,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Vertical"
-                description="Apila los botones en columna — útil para menús contextuales o listas de acciones."
+                :title="t('pages.forms.buttonGroup.examples.vertical.title')"
+                :description="t('pages.forms.buttonGroup.examples.vertical.desc')"
                 :code="verticalCode"
             >
                 <ButtonGroup orientation="vertical" variant="outline" color="primary">
@@ -252,8 +191,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con iconos"
-                description="Botones icon-only agrupados para barras de herramientas compactas."
+                :title="t('pages.forms.buttonGroup.examples.icons.title')"
+                :description="t('pages.forms.buttonGroup.examples.icons.desc')"
                 :code="iconsCode"
             >
                 <ButtonGroup color="primary">

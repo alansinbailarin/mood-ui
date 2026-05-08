@@ -1,0 +1,28 @@
+{
+    "pages": {
+        "docs": {
+            "theming": {
+                "overline": "Documentation",
+                "title": "Theming",
+                "subtitle": "mood-ui uses a configuration cascade based on CSS custom properties + Tailwind v4 tokens. Customize via the provider, surfaces, generated palettes or by overriding CSS vars directly.",
+                "providerPropsTitle": "Provider props",
+                "providerPropsDesc": "{code} accepts props that propagate to all descendants. Any component can locally override with its own prop.",
+                "customPaletteTitle": "Custom palette from a HEX color",
+                "customPaletteDesc": "{code} generates a full 50→900 scale from a single color. Useful for brands with a single primary color.",
+                "surfacesTitle": "Surfaces (semantic tokens)",
+                "surfacesDesc": "Override all 14 semantic tokens directly. Ideal for custom themes.",
+                "availableTokens": "Available tokens",
+                "darkPresetsTitle": "Dark surfaces presets",
+                "darkPresetsDesc": "6 ready-to-use presets: {default}, {navy}, {zinc}, {charcoal}, {midnight}, {forest}.",
+                "cssOverrideTitle": "Override from CSS",
+                "cssOverrideDesc": "If you prefer to work 100% in CSS, override the custom properties in your global stylesheet. Works with {root}, {dark} or any selector.",
+                "cssOverrideTip": "Recommendation: If you have reactive logic (e.g. color change from a picker), use {palettes} or {surfaces} in the Provider. For static themes, CSS override is the simplest approach.",
+                "nextSteps": "Next steps",
+                "componentsCard": "Explore components",
+                "componentsCardDesc": "70+ components ready to use with reactive theming.",
+                "i18nCard": "Internationalization",
+                "i18nCardDesc": "ES and EN included. Extend for any language."
+            }
+        }
+    }
+}

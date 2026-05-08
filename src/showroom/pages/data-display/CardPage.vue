@@ -6,18 +6,25 @@ import Card from '../../../components/data-display/Card.vue';
 import Typography from '../../../components/data-display/Typography.vue';
 import Button from '../../../components/forms/Button.vue';
 import type { PropDoc, SlotDoc } from '../../types';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
 
 // ── Overview playground state ─────────────────────────────────────────────────
-const pgVariant = ref<'elevated' | 'outlined' | 'filled'>('outlined');
-const pgPadding = ref<'none' | 'small' | 'medium' | 'large'>('medium');
-const pgRadius  = ref<'none' | 'small' | 'medium' | 'large' | 'full'>('medium');
-const pgHover   = ref(false);
+const pgVariant   = ref<'elevated' | 'outlined' | 'filled'>('outlined');
+const pgPadding   = ref<'none' | 'small' | 'medium' | 'large'>('medium');
+const pgRadius    = ref<'none' | 'small' | 'medium' | 'large' | 'full'>('medium');
+const pgHover     = ref(false);
+const pgClickable = ref(false);
+const pgDivided   = ref(true);
 
 function resetPlayground() {
-    pgVariant.value = 'outlined';
-    pgPadding.value = 'medium';
-    pgRadius.value  = 'medium';
-    pgHover.value   = false;
+    pgVariant.value   = 'outlined';
+    pgPadding.value   = 'medium';
+    pgRadius.value    = 'medium';
+    pgHover.value     = false;
+    pgClickable.value = false;
+    pgDivided.value   = true;
 }
 
 const overviewCode = computed(() => {
@@ -26,6 +33,8 @@ const overviewCode = computed(() => {
     if (pgPadding.value !== 'medium')   parts.push(`padding="${pgPadding.value}"`);
     if (pgRadius.value  !== 'medium')   parts.push(`radius="${pgRadius.value}"`);
     if (pgHover.value)                  parts.push(':hoverable="true"');
+    if (pgClickable.value)              parts.push(':clickable="true"');
+    if (!pgDivided.value)               parts.push(':divided="false"');
     const attrs = parts.length ? ' ' + parts.join(' ') : '';
     return `<Card${attrs} class="w-80">\n  Contenido del card\n</Card>`;
 });
@@ -102,71 +111,15 @@ const slotsList: SlotDoc[] = [
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="260px" @reset="resetPlayground">
                 <template #controls>
-                    <!-- Variant -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Variant</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="v in ['elevated', 'outlined', 'filled']"
-                                :key="v"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgVariant === v
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgVariant = (v as typeof pgVariant)"
-                            >{{ v }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Padding -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Padding</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="p in ['none', 'small', 'medium', 'large']"
-                                :key="p"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgPadding === p
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgPadding = (p as typeof pgPadding)"
-                            >{{ p }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Radius -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Radius</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="r in ['none', 'small', 'medium', 'large', 'full']"
-                                :key="r"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgRadius === r
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgRadius = (r as typeof pgRadius)"
-                            >{{ r }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgHover
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgHover = !pgHover"
-                    >Hoverable</button>
+                    <TbPills label="Variant" :options="[{value:'elevated'},{value:'outlined'},{value:'filled'}]" v-model="pgVariant" />
+                    <TbSep />
+                    <TbPills label="Padding" :options="[{value:'none'},{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgPadding" />
+                    <TbSep />
+                    <TbPills label="Radius" :options="[{value:'none'},{value:'small'},{value:'medium'},{value:'large'},{value:'full'}]" v-model="pgRadius" />
+                    <TbSep />
+                    <TbToggle label="Hoverable" v-model="pgHover" />
+                    <TbToggle label="Clickable" v-model="pgClickable" />
+                    <TbToggle label="Divided" v-model="pgDivided" />
                 </template>
 
                 <Card
@@ -174,6 +127,8 @@ const slotsList: SlotDoc[] = [
                     :padding="pgPadding"
                     :radius="pgRadius"
                     :hoverable="pgHover"
+                    :clickable="pgClickable"
+                    :divided="pgDivided"
                     class="w-80"
                 >
                     <Typography variant="title" size="small">Card de ejemplo</Typography>

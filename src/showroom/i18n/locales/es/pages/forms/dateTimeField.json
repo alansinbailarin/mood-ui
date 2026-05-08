@@ -1,0 +1,59 @@
+{
+    "category": "Forms",
+    "title": "DateTimeField",
+    "description": "Input combinado de fecha y hora con popover de calendario + selector de hora interno.",
+    "controls": {
+        "size": "Tamaño",
+        "format": "Formato",
+        "clearable": "Clearable",
+        "disabled": "Disabled"
+    },
+    "playground": {
+        "label": "Inicio"
+    },
+    "examples": {
+        "basic": {
+            "title": "Básico",
+            "desc": "Selector combinado de fecha y hora con formato 24h por defecto."
+        },
+        "format12h": {
+            "title": "Formato 12h",
+            "desc": "Cambia el selector de hora a formato AM/PM con format='12h'."
+        },
+        "minMax": {
+            "title": "Min y max",
+            "desc": "Limita el rango con minDate y maxDate aplicados a fecha y hora."
+        },
+        "clearable": {
+            "title": "Clearable",
+            "desc": "Botón ✕ visible cuando hay valor para limpiar la selección."
+        },
+        "disabled": {
+            "title": "Disabled",
+            "desc": "El campo se atenúa y bloquea la apertura del popover."
+        }
+    },
+    "props": {
+        "modelValue": "Fecha + hora seleccionada. Soporta v-model.",
+        "label": "Etiqueta visible encima del campo.",
+        "placeholder": "Texto cuando no hay valor.",
+        "size": "Tamaño del input.",
+        "format": "Formato del selector de hora.",
+        "step": "Granularidad de los minutos en el picker.",
+        "showSeconds": "Muestra columna de segundos en el picker.",
+        "minDate": "Fecha y hora mínima seleccionable.",
+        "maxDate": "Fecha y hora máxima seleccionable.",
+        "clearable": "Muestra un botón para limpiar el valor.",
+        "disabled": "Deshabilita el campo.",
+        "readonly": "Hace el campo no interactivo.",
+        "required": "Marca el campo como obligatorio.",
+        "fullWidth": "Ocupa el 100% del ancho disponible."
+    },
+    "emits": {
+        "updateModelValue": "Emitido al seleccionar o limpiar el valor.",
+        "change": "Alias semántico de update:modelValue.",
+        "open": "Emitido al abrir el popover.",
+        "close": "Emitido al cerrar el popover.",
+        "clear": "Emitido al limpiar el valor."
+    }
+}

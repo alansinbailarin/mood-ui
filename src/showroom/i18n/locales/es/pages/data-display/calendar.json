@@ -1,0 +1,55 @@
+{
+    "pages": {
+        "dataDisplay": {
+            "calendar": {
+                "title": "Calendar",
+                "description": "Calendario mensual para seleccionar una fecha. Soporta minDate, maxDate, fechas deshabilitadas, locale y variantes visuales.",
+                "controls": {
+                    "variant": "Variante",
+                    "color": "Color",
+                    "radius": "Radio",
+                    "outsideDays": "Días externos",
+                    "header": "Cabecera"
+                },
+                "props": {
+                    "modelValue": "Fecha seleccionada (v-model).",
+                    "month": "Mes inicial mostrado (0-11). Por defecto el mes actual.",
+                    "year": "Año inicial mostrado.",
+                    "locale": "Locale BCP-47 para nombres de mes y días.",
+                    "firstDayOfWeek": "Primer día de la semana (0 = domingo, 1 = lunes).",
+                    "minDate": "Fecha mínima seleccionable.",
+                    "maxDate": "Fecha máxima seleccionable.",
+                    "disabledDates": "Fechas individuales a deshabilitar.",
+                    "color": "Color semántico aplicado a la selección y al hover.",
+                    "variant": "Variante visual del contenedor.",
+                    "radius": "Radio de borde del calendario y de las celdas.",
+                    "showOutsideDays": "Muestra días del mes anterior y siguiente que completan la grilla.",
+                    "showHeader": "Muestra la cabecera con navegación de mes y año.",
+                    "fixedWeeks": "Siempre muestra 6 semanas para mantener una altura constante."
+                },
+                "emits": {
+                    "updateModelValue": "Emitido al seleccionar una fecha.",
+                    "monthChange": "Emitido al cambiar el mes o año visible mediante navegación."
+                },
+                "examples": {
+                    "basic": {
+                        "title": "Básico",
+                        "desc": "Calendario por defecto vinculado a una fecha mediante v-model."
+                    },
+                    "dateRange": {
+                        "title": "Con rango de fechas",
+                        "desc": "Limita el rango seleccionable usando min-date y max-date."
+                    },
+                    "outline": {
+                        "title": "Variante outline",
+                        "desc": "Variante con borde visible y radio grande."
+                    },
+                    "locale": {
+                        "title": "Locale personalizado",
+                        "desc": "Cambia el locale y el primer día de la semana."
+                    }
+                }
+            }
+        }
+    }
+}

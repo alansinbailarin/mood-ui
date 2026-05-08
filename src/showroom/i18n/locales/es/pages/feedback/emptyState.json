@@ -1,0 +1,60 @@
+{
+    "title": "EmptyState",
+    "description": "Estado vacío para listas, búsquedas y secciones sin datos. Soporta icono, descripción, acciones y variantes visuales.",
+
+    "controls": {
+        "variant":  "Variante",
+        "size":     "Tamaño",
+        "centered": "Centrado"
+    },
+
+    "playground": {
+        "title":       "Sin notificaciones",
+        "description": "Cuando recibas algo aparecerá aquí."
+    },
+
+    "examples": {
+        "action": {
+            "title":       "Con acción",
+            "desc":        "Slot actions para añadir un CTA debajo de la descripción.",
+            "emptyTitle":  "Sin resultados",
+            "emptyDesc":   "Intenta con otra búsqueda o limpia los filtros.",
+            "cta":         "Limpiar filtros"
+        },
+        "variants": {
+            "title":        "Variantes",
+            "desc":         "Tres superficies: subtle (default), solid (con borde) y outline (borde discontinuo).",
+            "subtleDesc":   "Sin borde.",
+            "solidDesc":    "Con superficie.",
+            "outlineDesc":  "Borde discontinuo."
+        },
+        "noResults": {
+            "title":       "Sin resultados",
+            "desc":        "Patrón típico para una búsqueda sin coincidencias.",
+            "emptyTitle":  "Sin resultados",
+            "emptyDesc":   "No encontramos nada que coincida con \"facturas 2025\". Prueba otros términos."
+        },
+        "error": {
+            "title":       "Estado de error",
+            "desc":        "Combina variant outline con un CTA para reintentar la operación.",
+            "emptyTitle":  "Algo salió mal",
+            "emptyDesc":   "Reintenta en unos segundos.",
+            "cta":         "Reintentar"
+        }
+    },
+
+    "props": {
+        "title":       "Encabezado principal del empty state.",
+        "description": "Texto secundario debajo del título.",
+        "icon":        "Icono mostrado encima del título. Por defecto se usa InboxIcon.",
+        "size":        "Tamaño visual del empty state.",
+        "variant":     "Tratamiento visual del contenedor.",
+        "centered":    "Centra horizontalmente el contenido.",
+        "radius":      "Radio de las esquinas para variant solid u outline."
+    },
+
+    "slots": {
+        "actions": "Acciones debajo de la descripción (típicamente botones).",
+        "default": "Contenido extra renderizado al final del empty state."
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "title": "Divider",
+    "category": "Layout",
+    "description": "Horizontal or vertical separator line, optionally with a centered label or icon.",
+    "examples": {
+        "orientations": { "title": "Orientations",       "desc": "Horizontal by default; vertical when the host is flex/grid." },
+        "label":        { "title": "With label and icon", "desc": "Insert a centered label or icon (horizontal only)." },
+        "variants":     { "title": "Line variants",      "desc": "Solid, dashed and dotted for different hierarchy levels." },
+        "emphasis":     { "title": "Emphasis",            "desc": "Controls the line contrast against the background." }
+    },
+    "labels": { "or": "or", "featured": "Featured", "section": "Section" },
+    "props": {
+        "orientation": "Separator orientation.",
+        "variant":     "Line style.",
+        "emphasis":    "Visual intensity of the divider.",
+        "spacing":     "Margin perpendicular to the line.",
+        "label":       "Inline label (horizontal orientation only).",
+        "icon":        "Optional icon next to the label.",
+        "labelAlign":  "Position of the label inside the divider.",
+        "decorative":  "If decorative, it's ignored by assistive tech."
+    },
+    "slots": { "default": "Inline content alternative to the label prop." }
+}

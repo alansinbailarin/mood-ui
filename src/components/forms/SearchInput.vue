@@ -21,7 +21,7 @@
         > 
             <MagnifyingGlassIcon 
                 aria-hidden="true" 
-                :class="['shrink-0 text-muted-foreground', iconSizeClasses]" 
+                :class="['shrink-0', affordanceIconClass, iconSizeClasses]" 
             /> 
  
             <input 
@@ -58,7 +58,7 @@
             <Loader 
                 v-if="loading" 
                 :size="size === 'large' ? 'medium' : 'small'" 
-                class="shrink-0 text-muted-foreground" 
+                :class="['shrink-0', affordanceIconClass]" 
             /> 
  
             <Button 
@@ -69,7 +69,7 @@
                 :icon="XMarkIcon" 
                 :ariaLabel="loc.searchInput.clear" 
                 tabindex="-1" 
-                class="shrink-0 text-muted-foreground hover:text-foreground" 
+                :class="['shrink-0', affordanceActionClass]" 
                 @click="onClear" 
             /> 
  
@@ -129,7 +129,12 @@
 <script setup lang="ts"> 
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'; 
 import type { SearchInput } from '../../interfaces/forms/SearchInput.interface'; 
-import { useFieldState, useFieldClasses } from '../../composables/useField'; 
+import {
+    useFieldState,
+    useFieldClasses,
+    FIELD_AFFORDANCE_ACTION_BY_COLOR,
+    FIELD_AFFORDANCE_ICON_BY_COLOR,
+} from '../../composables/useField'; 
 import Loader from '../feedback/Loader.vue'; 
 import Button from './Button.vue'; 
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/vue/24/outline'; 
@@ -190,6 +195,9 @@ const { wrapperVariantClasses, radiusClasses } = useFieldClasses({
     radius, 
     halo: () => props.halo, 
 }); 
+
+const affordanceIconClass = computed(() => FIELD_AFFORDANCE_ICON_BY_COLOR[stateColor.value] ?? 'text-muted-foreground');
+const affordanceActionClass = computed(() => FIELD_AFFORDANCE_ACTION_BY_COLOR[stateColor.value] ?? 'text-muted-foreground hover:text-foreground');
  
 /* ---------- Debounce ---------- */ 
 let debounceTimer: number | null = null; 

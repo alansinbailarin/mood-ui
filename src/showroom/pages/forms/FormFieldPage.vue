@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import FormField from '../../../components/forms/FormField.vue';
@@ -7,6 +8,8 @@ import Input from '../../../components/forms/Input.vue';
 import Select from '../../../components/forms/Select.vue';
 import Textarea from '../../../components/forms/Textarea.vue';
 import type { PropDoc, SlotDoc } from '../../types';
+
+const { t } = useI18n();
 
 const countries = [
     { value: 'es', label: 'España' },
@@ -84,33 +87,33 @@ const exEmail   = ref('invalido');
 const exUrl     = ref('');
 
 // ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'label',       type: 'string',                                                                  description: 'Texto del label visible. Se enlaza al control mediante for/id.' },
-    { name: 'helperText',  type: 'string',                                                                  description: 'Texto de ayuda bajo el control. Oculto cuando hay errorText.' },
-    { name: 'errorText',   type: 'string',                                                                  description: 'Mensaje de error. Activa aria-invalid y color danger en el control.' },
-    { name: 'required',    type: 'boolean',                              default: 'false',                  description: 'Muestra el asterisco rojo y propaga required al slot.' },
-    { name: 'disabled',    type: 'boolean',                              default: 'false',                  description: 'Aplica estado deshabilitado y lo propaga al control hijo.' },
-    { name: 'id',          type: 'string',                                                                  description: 'id que se enlaza con el label. Se autogenera si se omite.' },
-    { name: 'orientation', type: "'vertical' | 'horizontal'",            default: "'vertical'",             description: 'Disposición del label respecto al control.' },
-    { name: 'labelWidth',  type: 'string',                               default: "'10rem'",                description: 'Ancho del label cuando orientation="horizontal".' },
-    { name: 'fullWidth',   type: 'boolean',                              default: 'false',                  description: 'Aplica w-full al wrapper externo.' },
-    { name: 'hint',        type: 'string',                                                                  description: 'Texto auxiliar a la derecha del label (e.g. "Opcional").' },
-    { name: 'as',          type: 'string',                               default: "'div'",                  description: 'Tag HTML del wrapper raíz.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'label',       type: 'string',                                                                  description: t('pages.forms.formField.props.label') },
+    { name: 'helperText',  type: 'string',                                                                  description: t('pages.forms.formField.props.helperText') },
+    { name: 'errorText',   type: 'string',                                                                  description: t('pages.forms.formField.props.errorText') },
+    { name: 'required',    type: 'boolean',                              default: 'false',                  description: t('pages.forms.formField.props.required') },
+    { name: 'disabled',    type: 'boolean',                              default: 'false',                  description: t('pages.forms.formField.props.disabled') },
+    { name: 'id',          type: 'string',                                                                  description: t('pages.forms.formField.props.id') },
+    { name: 'orientation', type: "'vertical' | 'horizontal'",            default: "'vertical'",             description: t('pages.forms.formField.props.orientation') },
+    { name: 'labelWidth',  type: 'string',                               default: "'10rem'",                description: t('pages.forms.formField.props.labelWidth') },
+    { name: 'fullWidth',   type: 'boolean',                              default: 'false',                  description: t('pages.forms.formField.props.fullWidth') },
+    { name: 'hint',        type: 'string',                                                                  description: t('pages.forms.formField.props.hint') },
+    { name: 'as',          type: 'string',                               default: "'div'",                  description: t('pages.forms.formField.props.as') },
+]);
 
-const slotsList: SlotDoc[] = [
-    { name: 'default', description: 'Control de formulario. Recibe { id, describedBy, invalid, disabled, required, color } como props del slot.' },
-    { name: 'label',   description: 'Reemplaza el contenido del label cuando se necesita HTML personalizado.' },
-    { name: 'helper',  description: 'Reemplaza el helperText con contenido enriquecido.' },
-];
+const slotsList = computed<SlotDoc[]>(() => [
+    { name: 'default', description: t('pages.forms.formField.slots.default') },
+    { name: 'label',   description: t('pages.forms.formField.slots.label') },
+    { name: 'helper',  description: t('pages.forms.formField.slots.helper') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="FormField"
-        category="Forms"
+        :title="t('pages.forms.formField.title')"
+        :category="t('pages.forms.formField.category')"
         import-path="import { FormField } from 'mood-ui'"
-        description="Wrapper accesible que provee label, helper, error y enlazado de id/aria a cualquier control de formulario."
+        :description="t('pages.forms.formField.description')"
         :props-list="propsList"
         :slots-list="slotsList"
     >
@@ -120,7 +123,7 @@ const slotsList: SlotDoc[] = [
                 <template #controls>
                     <!-- Orientation -->
                     <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">LAYOUT</span>
+                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">{{ t('pages.forms.formField.controls.layout').toUpperCase() }}</span>
                         <div class="flex rounded-md border border-border overflow-hidden">
                             <button
                                 v-for="o in ['vertical', 'horizontal']"
@@ -144,7 +147,7 @@ const slotsList: SlotDoc[] = [
                             ? 'border-primary bg-primary/10 text-primary font-medium'
                             : 'border-border text-muted-foreground hover:bg-muted/60'"
                         @click="pgRequired = !pgRequired"
-                    >Required</button>
+                    >{{ t('pages.forms.formField.controls.required') }}</button>
 
                     <button
                         type="button"
@@ -153,7 +156,7 @@ const slotsList: SlotDoc[] = [
                             ? 'border-primary bg-primary/10 text-primary font-medium'
                             : 'border-border text-muted-foreground hover:bg-muted/60'"
                         @click="pgDisabled = !pgDisabled"
-                    >Disabled</button>
+                    >{{ t('pages.forms.formField.controls.disabled') }}</button>
 
                     <button
                         type="button"
@@ -162,20 +165,30 @@ const slotsList: SlotDoc[] = [
                             ? 'border-primary bg-primary/10 text-primary font-medium'
                             : 'border-border text-muted-foreground hover:bg-muted/60'"
                         @click="pgError = !pgError"
-                    >Error</button>
+                    >{{ t('pages.forms.formField.controls.error') }}</button>
                 </template>
 
                 <FormField
-                    label="Email"
-                    helper-text="Lo usaremos para confirmar tu cuenta."
+                    v-slot="{ id, disabled, describedBy, invalid, color }"
+                    :label="t('pages.forms.formField.playground.label')"
+                    :helper-text="t('pages.forms.formField.playground.helperText')"
                     :orientation="pgOrientation"
                     :required="pgRequired"
                     :disabled="pgDisabled"
-                    :error-text="pgError ? 'Este campo es obligatorio' : undefined"
+                    :error-text="pgError ? t('pages.forms.formField.playground.errorText') : undefined"
                     full-width
                     class="w-80"
                 >
-                    <Input v-model="pgValue" placeholder="tu@email.com" full-width />
+                    <Input
+                        :id="id"
+                        v-model="pgValue"
+                        :disabled="disabled"
+                        :aria-describedby="describedBy"
+                        :invalid="invalid"
+                        :color="(color as 'danger' | undefined)"
+                        :placeholder="t('pages.forms.formField.playground.placeholder')"
+                        full-width
+                    />
                 </FormField>
             </ComponentPreview>
         </template>
@@ -183,51 +196,52 @@ const slotsList: SlotDoc[] = [
         <!-- ── Examples ────────────────────────────────────────────────────── -->
         <template #examples>
             <ComponentPreview
-                title="Con Input"
-                description="Wrapping de un campo de texto con label y texto de ayuda."
+                :title="t('pages.forms.formField.examples.input.title')"
+                :description="t('pages.forms.formField.examples.input.desc')"
                 :code="inputCode"
             >
-                <FormField label="Nombre completo" helper-text="Tal como aparece en tu DNI." class="w-72">
-                    <Input v-model="exName" placeholder="Ada Lovelace" full-width />
+                <FormField v-slot="{ id }" label="Nombre completo" helper-text="Tal como aparece en tu DNI." class="w-72">
+                    <Input :id="id" v-model="exName" placeholder="Ada Lovelace" full-width />
                 </FormField>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con Select"
-                description="FormField también funciona con cualquier control compuesto."
+                :title="t('pages.forms.formField.examples.select.title')"
+                :description="t('pages.forms.formField.examples.select.desc')"
                 :code="selectCode"
             >
-                <FormField label="País" required class="w-72">
-                    <Select v-model="exCountry" :options="countries" placeholder="Elige un país" full-width />
+                <FormField v-slot="{ id }" label="País" required class="w-72">
+                    <Select :id="id" v-model="exCountry" :options="countries" placeholder="Elige un país" full-width />
                 </FormField>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con Textarea"
-                description="Usa la prop hint para añadir un texto auxiliar a la derecha del label."
+                :title="t('pages.forms.formField.examples.textarea.title')"
+                :description="t('pages.forms.formField.examples.textarea.desc')"
                 :code="textareaCode"
             >
-                <FormField label="Comentarios" hint="Opcional" class="w-80">
-                    <Textarea v-model="exMessage" :rows="4" placeholder="Cuéntanos más…" full-width />
+                <FormField v-slot="{ id }" label="Comentarios" hint="Opcional" class="w-80">
+                    <Textarea :id="id" v-model="exMessage" :rows="4" placeholder="Cuéntanos más…" full-width />
                 </FormField>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con error"
-                description="errorText reemplaza al helperText y propaga el estado inválido al control."
+                :title="t('pages.forms.formField.examples.error.title')"
+                :description="t('pages.forms.formField.examples.error.desc')"
                 :code="errorCode"
             >
-                <FormField label="Email" error-text="El email no es válido" required class="w-72">
-                    <Input v-model="exEmail" placeholder="tu@email.com" full-width />
+                <FormField v-slot="{ id, invalid, color }" label="Email" error-text="El email no es válido" required class="w-72">
+                    <Input :id="id" v-model="exEmail" :invalid="invalid" :color="(color as 'danger' | undefined)" placeholder="tu@email.com" full-width />
                 </FormField>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Layout horizontal"
-                description="orientation='horizontal' coloca el label a la izquierda con un ancho fijo."
+                :title="t('pages.forms.formField.examples.horizontal.title')"
+                :description="t('pages.forms.formField.examples.horizontal.desc')"
                 :code="horizontalCode"
             >
                 <FormField
+                    v-slot="{ id }"
                     label="URL pública"
                     helper-text="Visible en tu perfil."
                     orientation="horizontal"
@@ -235,7 +249,7 @@ const slotsList: SlotDoc[] = [
                     full-width
                     class="max-w-xl"
                 >
-                    <Input v-model="exUrl" placeholder="https://…" full-width />
+                    <Input :id="id" v-model="exUrl" placeholder="https://…" full-width />
                 </FormField>
             </ComponentPreview>
         </template>

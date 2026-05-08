@@ -40,14 +40,14 @@
                 :is="iconLeft" 
                 v-if="iconLeft" 
                 aria-hidden="true" 
-                :class="['shrink-0 text-muted-foreground', iconSizeClasses]" 
+                :class="['shrink-0', affordanceIconClass, iconSizeClasses]" 
             /> 
  
             <component 
                 :is="selectedOption.icon" 
                 v-if="selectedOption && selectedOption.icon" 
                 aria-hidden="true" 
-                :class="['shrink-0 text-muted-foreground', iconSizeClasses]" 
+                :class="['shrink-0', affordanceIconClass, iconSizeClasses]" 
             /> 
  
             <span 
@@ -66,7 +66,7 @@
             <Loader 
                 v-if="loading" 
                 :size="size === 'large' ? 'medium' : 'small'" 
-                class="shrink-0 text-muted-foreground" 
+                :class="['shrink-0', affordanceIconClass]" 
             /> 
  
             <Button 
@@ -77,7 +77,7 @@
                 :icon="XMarkIcon" 
                 :ariaLabel="loc.select.clear" 
                 tabindex="-1" 
-                class="shrink-0 text-muted-foreground hover:text-foreground" 
+                :class="['shrink-0', affordanceActionClass]" 
                 @click.stop="clear" 
             /> 
  
@@ -85,7 +85,8 @@
                 v-if="!loading" 
                 aria-hidden="true" 
                 :class="[ 
-                    'shrink-0 text-muted-foreground transition-transform duration-base ease-standard', 
+                    'shrink-0 transition-transform duration-base ease-standard', 
+                    affordanceIconClass,
                     iconSizeClasses, 
                     isOpen ? 'rotate-180' : '', 
                 ]" 
@@ -114,7 +115,7 @@
                     <div class="flex items-center gap-2 h-7"> 
                         <MagnifyingGlassIcon 
                             v-if="!isSearching" 
-                            class="w-4 h-4 shrink-0 text-muted-foreground" 
+                            :class="['w-4 h-4 shrink-0', affordanceIconClass]" 
                             aria-hidden="true" 
                         /> 
                         <Loader 
@@ -140,7 +141,7 @@
                             :icon="XMarkIcon" 
                             :ariaLabel="loc.select.clearSearch" 
                             tabindex="-1" 
-                            class="shrink-0 text-muted-foreground hover:text-foreground" 
+                            :class="['shrink-0', affordanceActionClass]" 
                             @click="searchQuery = ''" 
                         /> 
                     </div> 
@@ -149,7 +150,7 @@
                 <ul 
                     :id="listboxId" 
                     role="listbox" 
-                    class="modo-stagger flex-1 overflow-y-auto py-1" 
+                    class="modo-stagger flex-1 overflow-y-auto" 
                     tabindex="-1" 
                 > 
                     <template v-if="groupedOptions.length === 0"> 
@@ -176,10 +177,10 @@
                             :class="[ 
                                 'flex items-center gap-2 px-3 py-2 text-body cursor-pointer select-none', 
                                 'transition-colors duration-fast ease-standard', 
-                                opt.disabled 
-                                    ? 'text-muted-foreground/60 cursor-not-allowed' 
-                                    : 'text-foreground hover:bg-muted', 
-                                activeValue === opt.value && !opt.disabled ? 'bg-muted' : '', 
+                                opt.disabled
+                                    ? 'text-muted-foreground/60 cursor-not-allowed'
+                                    : ['text-foreground', optionHover],
+                                activeValue === opt.value && !opt.disabled ? optionSurface : '', 
                                 opt.value === modelValue ? 'font-medium' : '', 
                             ]" 
                             @pointerenter="setActive(opt.value)" 
@@ -189,7 +190,7 @@
                                 :is="opt.icon" 
                                 v-if="opt.icon" 
                                 aria-hidden="true" 
-                                class="w-4 h-4 shrink-0 text-muted-foreground" 
+                                :class="['w-4 h-4 shrink-0', affordanceIconClass]" 
                             /> 
                             <div class="flex-1 min-w-0"> 
                                 <div class="truncate">{{ opt.label }}</div> 
@@ -238,7 +239,12 @@
 <script setup lang="ts"> 
 import { computed, nextTick, ref, useId, watch } from 'vue'; 
 import type { Select, SelectOption, SelectValue } from '../../interfaces/forms/Select.interface'; 
-import { useFieldState, useFieldClasses } from '../../composables/useField'; 
+import {
+    useFieldState,
+    useFieldClasses,
+    FIELD_AFFORDANCE_ACTION_BY_COLOR,
+    FIELD_AFFORDANCE_ICON_BY_COLOR,
+} from '../../composables/useField'; 
 import { usePopover } from '../../composables/usePopover'; 
 import PopoverPanel from '../layout/PopoverPanel.vue'; 
 import Typography from '../data-display/Typography.vue'; 
@@ -303,8 +309,27 @@ const CHECK_COLOR_BY_STATE: Record<string, string> = {
     success: 'text-success', 
     warning: 'text-warning', 
 }; 
-const checkColorClass = computed(() => CHECK_COLOR_BY_STATE[stateColor.value] ?? 'text-foreground'); 
- 
+const checkColorClass = computed(() => CHECK_COLOR_BY_STATE[stateColor.value] ?? 'text-foreground');
+const affordanceIconClass = computed(() => FIELD_AFFORDANCE_ICON_BY_COLOR[stateColor.value] ?? 'text-muted-foreground');
+const affordanceActionClass = computed(() => FIELD_AFFORDANCE_ACTION_BY_COLOR[stateColor.value] ?? 'text-muted-foreground hover:text-foreground');
+
+const OPTION_SURFACE: Record<string, string> = {
+    default: 'bg-muted',
+    primary: 'bg-primary/10',
+    danger:  'bg-destructive/10',
+    success: 'bg-success/10',
+    warning: 'bg-warning/10',
+};
+const OPTION_HOVER: Record<string, string> = {
+    default: 'hover:bg-muted',
+    primary: 'hover:bg-primary/10',
+    danger:  'hover:bg-destructive/10',
+    success: 'hover:bg-success/10',
+    warning: 'hover:bg-warning/10',
+};
+const optionSurface = computed(() => OPTION_SURFACE[stateColor.value] ?? 'bg-muted');
+const optionHover = computed(() => OPTION_HOVER[stateColor.value] ?? 'hover:bg-muted');
+
 const autoListboxId = useId(); 
 const listboxId = computed(() => `modo-select-listbox-${autoListboxId}`); 
 const optionDomId = (v: SelectValue) => `${listboxId.value}-opt-${String(v)}`; 

@@ -1,0 +1,68 @@
+{
+    "category": "Forms",
+    "title": "FileInput",
+    "description": "File selector with drag & drop support, validation, image previews and two visual variants (inline and prominent area).",
+    "controls": {
+        "variant": "Variant",
+        "color": "Color",
+        "size": "Size",
+        "multiple": "Multiple",
+        "dashed": "Dashed",
+        "disabled": "Disabled"
+    },
+    "playground": {
+        "label": "Attach your files"
+    },
+    "examples": {
+        "basic": {
+            "title": "Basic usage",
+            "desc": "Single-file selection with inline presentation."
+        },
+        "multiple": {
+            "title": "Multiple files",
+            "desc": "Enable multiple to allow selecting several files at once."
+        },
+        "accept": {
+            "title": "Images only",
+            "desc": "Restrict accepted types with the accept attribute."
+        },
+        "dropzone": {
+            "title": "Drag & drop",
+            "desc": "The 'area' variant shows a prominent dropzone with an optional dashed border."
+        },
+        "previews": {
+            "title": "With previews",
+            "desc": "Selected images automatically show a thumbnail."
+        }
+    },
+    "props": {
+        "modelValue": "List of selected files (v-model).",
+        "multiple": "Allows selecting multiple files.",
+        "accept": "Accepted file type filter (MIME types or extensions).",
+        "maxSize": "Maximum file size per file in bytes.",
+        "maxFiles": "Maximum number of files in multiple mode.",
+        "previews": "Shows thumbnails for selected images.",
+        "dropzone": "Enables drag & drop on the area.",
+        "dropzoneVariant": "Presentation style: compact row or prominent dropzone area.",
+        "dropzoneHeight": "Minimum height of the area when dropzoneVariant=\"area\".",
+        "dashed": "Applies a dashed border to the wrapper.",
+        "dropzoneLabel": "Main text of the dropzone area (dropzoneVariant=\"area\" only).",
+        "dropzoneHint": "Secondary text of the dropzone area (dropzoneVariant=\"area\" only).",
+        "clickToSelect": "Clicking anywhere on the area opens the native file picker.",
+        "label": "Visible label above the control.",
+        "placeholder": "Text shown when no files are selected.",
+        "helperText": "Helper text below the control.",
+        "errorText": "Error message that replaces the helperText.",
+        "variant": "Visual style of the wrapper.",
+        "color": "Semantic color for focus and accent.",
+        "size": "Overall control size.",
+        "disabled": "Disables the control.",
+        "readonly": "Read-only mode.",
+        "required": "Marks the field as required."
+    },
+    "emits": {
+        "updateModelValue": "Emitted when the file list changes (syncs v-model).",
+        "change": "Emitted after each confirmed change.",
+        "reject": "Emitted when a file is rejected due to type, size or count constraints."
+    }
+}

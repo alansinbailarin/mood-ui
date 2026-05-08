@@ -1,0 +1,60 @@
+{
+    "category": "Forms",
+    "title": "Combobox",
+    "description": "Input de texto autocompletado con sugerencias estáticas o async. Permite valores libres (combobox) o estrictos (autocomplete).",
+    "examples": {
+        "basic": {
+            "title": "Uso básico",
+            "desc": "Sugerencias estáticas mostradas mientras el usuario escribe."
+        },
+        "freeSolo": {
+            "title": "Free solo (creatable)",
+            "desc": "Permite confirmar cualquier texto aunque no esté en la lista de opciones."
+        },
+        "strict": {
+            "title": "Estricto (autocomplete)",
+            "desc": "Con free-solo en false sólo se aceptan valores presentes en options."
+        },
+        "async": {
+            "title": "Búsqueda async",
+            "desc": "Pasa loadOptions para resolver opciones desde un backend con debounce."
+        },
+        "sizes": {
+            "title": "Tamaños",
+            "desc": "Tres tamaños para distintas densidades de UI."
+        }
+    },
+    "props": {
+        "modelValue": "Texto actual del input (v-model).",
+        "options": "Lista de opciones estáticas. Ignorado si se define loadOptions.",
+        "loadOptions": "Fuente async de opciones invocada en cada cambio del query.",
+        "debounce": "Delay en ms para llamar a loadOptions.",
+        "minChars": "Mínimo de caracteres antes de disparar la búsqueda async.",
+        "freeSolo": "Permite cualquier texto como valor. Si false, sólo se aceptan options válidas.",
+        "label": "Etiqueta visible sobre el campo.",
+        "placeholder": "Placeholder del input.",
+        "helperText": "Texto de ayuda bajo el campo.",
+        "errorText": "Mensaje de error que reemplaza al helperText.",
+        "emptyText": "Texto cuando no hay opciones que mostrar.",
+        "loadingText": "Texto mientras la búsqueda async está en curso.",
+        "variant": "Estilo visual del input.",
+        "color": "Color semántico del foco y acento.",
+        "size": "Altura del input.",
+        "radius": "Radio de esquinas.",
+        "clearable": "Muestra un botón X para limpiar.",
+        "disabled": "Deshabilita el control.",
+        "readonly": "Modo solo lectura.",
+        "required": "Marca el campo como requerido.",
+        "loading": "Estado de carga forzado (independiente de loadOptions).",
+        "fullWidth": "Aplica w-full al control raíz.",
+        "iconLeft": "Icono a la izquierda del input.",
+        "maxLength": "Máximo de caracteres del input.",
+        "name": "name HTML para envío en formularios.",
+        "ariaLabel": "Nombre accesible cuando no hay label visible."
+    },
+    "emits": {
+        "updateModelValue": "Emitido al cambiar el valor del input.",
+        "change": "Emitido tras seleccionar una opción o confirmar texto.",
+        "select": "Emitido al elegir una opción del listado."
+    }
+}

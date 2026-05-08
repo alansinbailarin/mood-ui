@@ -23,7 +23,7 @@
                 :is="iconLeft" 
                 v-if="iconLeft" 
                 aria-hidden="true" 
-                :class="['shrink-0 text-muted-foreground', iconSizeClasses]" 
+                :class="['shrink-0', affordanceIconClass, iconSizeClasses]" 
             /> 
             <span 
                 v-if="prefix" 
@@ -78,21 +78,21 @@
                 :icon="XMarkIcon" 
                 :ariaLabel="loc.input.clear" 
                 tabindex="-1" 
-                class="shrink-0 text-muted-foreground hover:text-foreground" 
+                :class="['shrink-0', affordanceActionClass]" 
                 @click="onClear" 
             /> 
  
             <Loader 
                 v-if="loading" 
                 :size="size === 'large' ? 'medium' : 'small'" 
-                class="shrink-0 text-muted-foreground" 
+                :class="['shrink-0', affordanceIconClass]" 
             /> 
  
             <component 
                 :is="iconRight" 
                 v-if="iconRight && !loading && !(clearable && hasValue)" 
                 aria-hidden="true" 
-                :class="['shrink-0 text-muted-foreground', iconSizeClasses]" 
+                :class="['shrink-0', affordanceIconClass, iconSizeClasses]" 
             /> 
         </div> 
  
@@ -139,7 +139,12 @@
 <script setup lang="ts"> 
 import { computed, ref } from 'vue'; 
 import type { Input } from '../../interfaces/forms/Input.interface'; 
-import { useFieldState, useFieldClasses } from '../../composables/useField'; 
+import {
+    useFieldState,
+    useFieldClasses,
+    FIELD_AFFORDANCE_ACTION_BY_COLOR,
+    FIELD_AFFORDANCE_ICON_BY_COLOR,
+} from '../../composables/useField'; 
 import { useModoLocale, useResolvedSize } from '../../composables/useModoConfig'; 
 import Loader from '../feedback/Loader.vue'; 
 import Button from './Button.vue'; 
@@ -197,6 +202,9 @@ const { wrapperVariantClasses, radiusClasses } = useFieldClasses({
     radius, 
     halo: () => props.halo, 
 }); 
+
+const affordanceIconClass = computed(() => FIELD_AFFORDANCE_ICON_BY_COLOR[stateColor.value] ?? 'text-muted-foreground');
+const affordanceActionClass = computed(() => FIELD_AFFORDANCE_ACTION_BY_COLOR[stateColor.value] ?? 'text-muted-foreground hover:text-foreground');
  
 const wrapperSizeClasses = computed(() => { 
     switch (resolvedSize.value) { 

@@ -1,0 +1,51 @@
+{
+    "title": "PageHeader",
+    "category": "Layout",
+    "description": "Page header with title, subtitle, optional back button, breadcrumbs, tabs and an actions area.",
+    "examples": {
+        "basic":       { "title": "Basic",              "desc": "Title, subtitle and divider — the most common combination." },
+        "breadcrumbs": { "title": "With breadcrumbs",   "desc": "Use the breadcrumbs slot to show the navigation hierarchy." },
+        "tabs":        { "title": "With tabs",          "desc": "Tabs align with the divider for a smooth visual transition." },
+        "actions":     { "title": "With back & actions", "desc": "Typical combo for detail or edit views." }
+    },
+    "demo": {
+        "title": "Projects",
+        "subtitle": "Manage workspace projects",
+        "filters": "Filters",
+        "new": "New",
+        "edit": "Edit project",
+        "crumbs": "Workspace · Projects ·",
+        "crumbCurrent": "Edit",
+        "reports": "Reports",
+        "tabSummary": "Summary",
+        "tabDetail": "Detail",
+        "tabAudit": "Audit",
+        "detail": "Detail",
+        "back": "Back to list",
+        "cancel": "Cancel",
+        "save": "Save"
+    },
+    "props": {
+        "title":         "Main page title.",
+        "subtitle":      "Secondary text below the title.",
+        "backButton":    "Shows a back button to the left of the title.",
+        "backIcon":      "Back button icon. Defaults to chevron-left.",
+        "backAriaLabel": "Accessible name for the icon-only back button.",
+        "size":          "Visual size of the title.",
+        "divider":       "Renders a bottom border separating the header from content.",
+        "sticky":        "Enables position: sticky at the top of scroll.",
+        "padding":       "Padding around the header content.",
+        "as":            "Root tag to render."
+    },
+    "emits": {
+        "back": "Emitted on back button click."
+    },
+    "slots": {
+        "breadcrumbs": "Breadcrumbs rendered above the title.",
+        "title":       "Replaces the plain title with rich content.",
+        "subtitle":    "Replaces the plain subtitle with rich content.",
+        "actions":     "Actions on the right side of the header (buttons, menus).",
+        "hero":        "Highlighted area (banner, metrics) below the main header.",
+        "tabs":        "Tabs rendered below the header, aligned with the divider."
+    }
+}

@@ -1,207 +1,170 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Stepper from '../../../components/navigation/Stepper.vue';
 import { UserIcon, CreditCardIcon, CheckBadgeIcon } from '@heroicons/vue/24/outline';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbDots from '../../components/toolbar/TbDots.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
 import type { PropDoc, EmitDoc } from '../../types';
 
-// ── Overview playground state ─────────────────────────────────────────────────
+const { t } = useI18n();
+
 const pgOrientation = ref<'horizontal' | 'vertical'>('horizontal');
 const pgVariant     = ref<'numbered' | 'dots' | 'progress'>('numbered');
 const pgSize        = ref<'small' | 'medium' | 'large'>('medium');
+const pgCurrent     = ref(1);
+const pgColor       = ref<'default' | 'primary' | 'success' | 'warning' | 'danger'>('primary');
+
+const colorDots = [
+    { value: 'default'  as const, bg: 'var(--color-slate-400)', label: 'Default'  },
+    { value: 'primary'  as const, bg: 'var(--primary)',          label: 'Primary'  },
+    { value: 'success'  as const, bg: 'var(--color-emerald-500)',label: 'Success'  },
+    { value: 'warning'  as const, bg: 'var(--color-amber-500)',  label: 'Warning'  },
+    { value: 'danger'   as const, bg: 'var(--color-red-500)',    label: 'Danger'   },
+];
 
 function resetPlayground() {
     pgOrientation.value = 'horizontal';
     pgVariant.value     = 'numbered';
     pgSize.value        = 'medium';
+    pgCurrent.value     = 1;
+    pgColor.value       = 'primary';
 }
 
-const playgroundSteps = [
-    { id: 'account', label: 'Cuenta',  description: 'Datos básicos' },
-    { id: 'billing', label: 'Pago',    description: 'Tarjeta o PayPal' },
-    { id: 'review',  label: 'Revisar', description: 'Confirma tu pedido' },
-];
+const playgroundSteps = computed(() => [
+    { id: 'account', label: t('pages.navigation.stepper.playgroundSteps.account.label'), description: t('pages.navigation.stepper.playgroundSteps.account.description') },
+    { id: 'billing', label: t('pages.navigation.stepper.playgroundSteps.billing.label'), description: t('pages.navigation.stepper.playgroundSteps.billing.description') },
+    { id: 'review',  label: t('pages.navigation.stepper.playgroundSteps.review.label'),  description: t('pages.navigation.stepper.playgroundSteps.review.description') },
+]);
 
 const overviewCode = computed(() => {
     const parts: string[] = [];
     if (pgOrientation.value !== 'horizontal') parts.push(`orientation="${pgOrientation.value}"`);
     if (pgVariant.value     !== 'numbered')   parts.push(`variant="${pgVariant.value}"`);
     if (pgSize.value        !== 'medium')     parts.push(`size="${pgSize.value}"`);
+    if (pgColor.value       !== 'primary')    parts.push(`color="${pgColor.value}"`);
+    if (pgCurrent.value     !== 1)            parts.push(`:current="${pgCurrent.value}"`);
     const attrs = parts.length ? ' ' + parts.join(' ') : '';
-    return `<Stepper :steps="steps" :current="1"${attrs} />`;
+    return `<Stepper :steps="steps" :current="${pgCurrent.value}"${attrs} class="w-full" />`;
 });
 
-// ── Example data ──────────────────────────────────────────────────────────────
-const basicSteps = [
-    { id: 'a', label: 'Carrito' },
-    { id: 'b', label: 'Envío' },
-    { id: 'c', label: 'Pago' },
-];
+const basicSteps = computed(() => [
+    { id: 'a', label: t('pages.navigation.stepper.basicSteps.cart') },
+    { id: 'b', label: t('pages.navigation.stepper.basicSteps.shipping') },
+    { id: 'c', label: t('pages.navigation.stepper.basicSteps.payment') },
+]);
 
-const detailedSteps = [
-    { id: 'account', label: 'Cuenta',  description: 'Email y contraseña', icon: UserIcon },
-    { id: 'billing', label: 'Pago',    description: 'Método de pago',     icon: CreditCardIcon },
-    { id: 'review',  label: 'Revisar', description: 'Confirma tu pedido', icon: CheckBadgeIcon },
-];
+const detailedSteps = computed(() => [
+    { id: 'account', label: t('pages.navigation.stepper.detailedSteps.account.label'), description: t('pages.navigation.stepper.detailedSteps.account.description'), icon: UserIcon },
+    { id: 'billing', label: t('pages.navigation.stepper.detailedSteps.billing.label'), description: t('pages.navigation.stepper.detailedSteps.billing.description'), icon: CreditCardIcon },
+    { id: 'review',  label: t('pages.navigation.stepper.detailedSteps.review.label'),  description: t('pages.navigation.stepper.detailedSteps.review.description'),  icon: CheckBadgeIcon },
+]);
 
-const verticalSteps = [
-    { id: 'a', label: 'Datos personales', description: 'Nombre, email y teléfono' },
-    { id: 'b', label: 'Dirección',        description: 'Datos de envío' },
-    { id: 'c', label: 'Pago',             description: 'Tarjeta o transferencia' },
-    { id: 'd', label: 'Confirmación',     description: 'Revisa antes de enviar' },
-];
+const verticalSteps = computed(() => [
+    { id: 'a', label: t('pages.navigation.stepper.verticalSteps.personal.label'),     description: t('pages.navigation.stepper.verticalSteps.personal.description') },
+    { id: 'b', label: t('pages.navigation.stepper.verticalSteps.address.label'),      description: t('pages.navigation.stepper.verticalSteps.address.description') },
+    { id: 'c', label: t('pages.navigation.stepper.verticalSteps.payment.label'),      description: t('pages.navigation.stepper.verticalSteps.payment.description') },
+    { id: 'd', label: t('pages.navigation.stepper.verticalSteps.confirmation.label'), description: t('pages.navigation.stepper.verticalSteps.confirmation.description') },
+]);
 
-const errorSteps = [
-    { id: 'a', label: 'Datos' },
-    { id: 'b', label: 'Pago',       description: 'Tarjeta declinada', state: 'error' as const },
-    { id: 'c', label: 'Confirmar' },
-];
+const errorSteps = computed(() => [
+    { id: 'a', label: t('pages.navigation.stepper.errorSteps.data') },
+    { id: 'b', label: t('pages.navigation.stepper.errorSteps.payment'), description: t('pages.navigation.stepper.errorSteps.paymentDesc'), state: 'error' as const },
+    { id: 'c', label: t('pages.navigation.stepper.errorSteps.confirm') },
+]);
 
-// ── Example code strings ──────────────────────────────────────────────────────
-const basicCode = `const steps = [
-    { id: 'a', label: 'Carrito' },
-    { id: 'b', label: 'Envío' },
-    { id: 'c', label: 'Pago' },
-];
-
-<Stepper :steps="steps" :current="1" />`;
-
-const descriptionsCode = `const steps = [
-    { id: 'account', label: 'Cuenta',  description: 'Email y contraseña', icon: UserIcon },
-    { id: 'billing', label: 'Pago',    description: 'Método de pago',     icon: CreditCardIcon },
-    { id: 'review',  label: 'Revisar', description: 'Confirma tu pedido', icon: CheckBadgeIcon },
-];
-
-<Stepper :steps="steps" :current="1" />`;
-
+const basicCode = `<Stepper :steps="steps" :current="1" />`;
+const descriptionsCode = `<Stepper :steps="steps" :current="1" />`;
 const verticalCode = `<Stepper :steps="verticalSteps" :current="1" orientation="vertical" />`;
+const errorsCode = `<Stepper :steps="steps" :current="1" />`;
 
-const errorsCode = `const steps = [
-    { id: 'a', label: 'Datos' },
-    { id: 'b', label: 'Pago', description: 'Tarjeta declinada', state: 'error' },
-    { id: 'c', label: 'Confirmar' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'steps',       type: 'StepperStep[]',                                             required: true,          description: t('pages.navigation.stepper.props.steps') },
+    { name: 'current',     type: 'number',                                                    default: '0',            description: t('pages.navigation.stepper.props.current') },
+    { name: 'variant',     type: "'numbered' | 'dots' | 'progress'",                          default: "'numbered'",   description: t('pages.navigation.stepper.props.variant') },
+    { name: 'orientation', type: "'horizontal' | 'vertical'",                                 default: "'horizontal'", description: t('pages.navigation.stepper.props.orientation') },
+    { name: 'color',       type: "'default' | 'primary' | 'danger' | 'success' | 'warning'",  default: "'primary'",    description: t('pages.navigation.stepper.props.color') },
+    { name: 'size',        type: "'small' | 'medium' | 'large'",                              default: "'medium'",     description: t('pages.navigation.stepper.props.size') },
+    { name: 'clickable',   type: 'boolean',                                                   default: 'false',        description: t('pages.navigation.stepper.props.clickable') },
+]);
 
-<Stepper :steps="steps" :current="1" />`;
-
-// ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'steps',       type: 'StepperStep[]',                                             required: true,          description: 'Pasos a renderizar en orden. Cada paso acepta id, label, description, icon, disabled y state.' },
-    { name: 'current',     type: 'number',                                                    default: '0',            description: 'Índice 0-based del paso activo. Los anteriores se marcan como completados.' },
-    { name: 'variant',     type: "'numbered' | 'dots' | 'progress'",                          default: "'numbered'",   description: 'Estilo del indicador (número, punto o barra de progreso).' },
-    { name: 'orientation', type: "'horizontal' | 'vertical'",                                 default: "'horizontal'", description: 'Disposición del stepper.' },
-    { name: 'color',       type: "'default' | 'primary' | 'danger' | 'success' | 'warning'",  default: "'primary'",    description: 'Color semántico de los pasos activo y completados.' },
-    { name: 'size',        type: "'small' | 'medium' | 'large'",                              default: "'medium'",     description: 'Tamaño del indicador y de los labels.' },
-    { name: 'clickable',   type: 'boolean',                                                   default: 'false',        description: 'Permite click en pasos completados; emite `step-click`.' },
-];
-
-const emitsList: EmitDoc[] = [
-    { name: 'step-click', payload: '(step: StepperStep, index: number)', description: 'Emitido al hacer click en un paso cuando `clickable` es true.' },
-];
+const emitsList = computed<EmitDoc[]>(() => [
+    { name: 'step-click', payload: '(step: StepperStep, index: number)', description: t('pages.navigation.stepper.emits.stepClick') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="Stepper"
-        category="Navigation"
+        :title="t('pages.navigation.stepper.title')"
+        :category="t('pages.navigation.stepper.category')"
         import-path="import { Stepper } from 'mood-ui'"
-        description="Indicador de progreso por pasos. Útil para wizards, onboarding y checkouts. Soporta variantes numbered, dots y progress, en horizontal o vertical."
+        :description="t('pages.navigation.stepper.description')"
         :props-list="propsList"
         :emits-list="emitsList"
     >
-        <!-- ── Overview ────────────────────────────────────────────────────── -->
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="240px" @reset="resetPlayground">
                 <template #controls>
-                    <!-- Orientation -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Orientation</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="o in ['horizontal', 'vertical']"
-                                :key="o"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgOrientation === o
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgOrientation = (o as typeof pgOrientation)"
-                            >{{ o }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Variant -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Variant</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="v in ['numbered', 'dots', 'progress']"
-                                :key="v"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgVariant === v
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgVariant = (v as typeof pgVariant)"
-                            >{{ v }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Size -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Size</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in ['small', 'medium', 'large']"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = (s as typeof pgSize)"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
+                    <TbPills label="Orientation" :options="[{value:'horizontal'},{value:'vertical'}]" v-model="pgOrientation" />
+                    <TbSep />
+                    <TbPills label="Variant" :options="[{value:'numbered'},{value:'dots'},{value:'progress'}]" v-model="pgVariant" />
+                    <TbSep />
+                    <TbPills label="Size" :options="[{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbDots label="Color" :options="colorDots" v-model="pgColor" />
                 </template>
 
-                <Stepper
-                    :steps="playgroundSteps"
-                    :current="1"
-                    :orientation="pgOrientation"
-                    :variant="pgVariant"
-                    :size="pgSize"
-                    class="w-full max-w-xl"
-                />
+                <div class="w-full max-w-lg flex flex-col gap-4">
+                    <Stepper
+                        :steps="playgroundSteps"
+                        :current="pgCurrent"
+                        :orientation="pgOrientation"
+                        :variant="pgVariant"
+                        :size="pgSize"
+                        :color="pgColor"
+                        class="w-full"
+                    />
+                    <div class="flex justify-center gap-2">
+                        <button
+                            type="button"
+                            class="px-3 py-1.5 rounded-md text-xs border border-border text-muted-foreground hover:bg-muted/60 transition-colors disabled:opacity-40 disabled:pointer-events-none"
+                            :disabled="pgCurrent === 0"
+                            @click="pgCurrent--"
+                        >{{ t('pages.navigation.stepper.demo.prev') }}</button>
+                        <button
+                            type="button"
+                            class="px-3 py-1.5 rounded-md text-xs border border-primary bg-primary/10 text-primary font-medium hover:bg-primary/20 transition-colors disabled:opacity-40 disabled:pointer-events-none"
+                            :disabled="pgCurrent === playgroundSteps.length - 1"
+                            @click="pgCurrent++"
+                        >{{ t('pages.navigation.stepper.demo.next') }}</button>
+                    </div>
+                </div>
             </ComponentPreview>
         </template>
 
-        <!-- ── Examples ────────────────────────────────────────────────────── -->
         <template #examples>
             <ComponentPreview
-                title="Básico"
-                description="Tres pasos numerados; el `current` marca el activo y todos los anteriores quedan completados."
+                :title="t('pages.navigation.stepper.examples.basic.title')"
+                :description="t('pages.navigation.stepper.examples.basic.desc')"
                 :code="basicCode"
             >
                 <Stepper :steps="basicSteps" :current="1" class="w-full max-w-xl" />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con descripciones e iconos"
-                description="Cada paso acepta `description` y un `icon` propio para reforzar el contexto."
+                :title="t('pages.navigation.stepper.examples.descriptions.title')"
+                :description="t('pages.navigation.stepper.examples.descriptions.desc')"
                 :code="descriptionsCode"
             >
                 <Stepper :steps="detailedSteps" :current="1" class="w-full max-w-xl" />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Vertical"
-                description="Cambia `orientation` a vertical para flujos largos con descripciones extensas."
+                :title="t('pages.navigation.stepper.examples.vertical.title')"
+                :description="t('pages.navigation.stepper.examples.vertical.desc')"
                 :code="verticalCode"
                 min-height="320px"
             >
@@ -209,8 +172,8 @@ const emitsList: EmitDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con error"
-                description="Override el estado de un paso a `error` para señalar un problema sin bloquear el resto del flujo."
+                :title="t('pages.navigation.stepper.examples.error.title')"
+                :description="t('pages.navigation.stepper.examples.error.desc')"
                 :code="errorsCode"
             >
                 <Stepper :steps="errorSteps" :current="1" class="w-full max-w-xl" />

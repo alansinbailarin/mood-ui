@@ -1,16 +1,24 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Avatar from '../../../components/data-display/avatar/Avatar.vue';
 import type { PropDoc } from '../../types';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbDots from '../../components/toolbar/TbDots.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
+
+const { t } = useI18n();
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgSize    = ref<'xs' | 'small' | 'medium' | 'large' | 'xl'>('medium');
-const pgRadius  = ref<'full' | 'medium' | 'none'>('full');
+const pgRadius  = ref<'none' | 'small' | 'medium' | 'large' | 'full'>('full');
 const pgColor   = ref<'default' | 'primary' | 'success' | 'warning' | 'danger'>('primary');
 const pgMode    = ref<'image' | 'initials' | 'icon'>('image');
 const pgBordered = ref(false);
+const pgStatus  = ref<'' | 'online' | 'offline' | 'away' | 'busy'>('');
 
 function resetPlayground() {
     pgSize.value = 'medium';
@@ -18,14 +26,15 @@ function resetPlayground() {
     pgColor.value = 'primary';
     pgMode.value = 'image';
     pgBordered.value = false;
+    pgStatus.value = '';
 }
 
 const colorDots = [
-    { value: 'default'  as const, bg: '#64748b',        label: 'Default'  },
-    { value: 'primary'  as const, bg: 'var(--primary)', label: 'Primary'  },
-    { value: 'success'  as const, bg: '#22c55e',        label: 'Success'  },
-    { value: 'warning'  as const, bg: '#f59e0b',        label: 'Warning'  },
-    { value: 'danger'   as const, bg: '#ef4444',        label: 'Danger'   },
+    { value: 'default'  as const, bg: 'var(--color-slate-400)',  label: 'Default'  },
+    { value: 'primary'  as const, bg: 'var(--primary)',           label: 'Primary'  },
+    { value: 'success'  as const, bg: 'var(--color-emerald-500)', label: 'Success'  },
+    { value: 'warning'  as const, bg: 'var(--color-amber-500)',   label: 'Warning'  },
+    { value: 'danger'   as const, bg: 'var(--color-red-500)',     label: 'Danger'   },
 ];
 
 const overviewCode = computed(() => {
@@ -34,6 +43,7 @@ const overviewCode = computed(() => {
     if (pgRadius.value !== 'full')   parts.push(`radius="${pgRadius.value}"`);
     if (pgMode.value === 'initials' && pgColor.value !== 'default') parts.push(`color="${pgColor.value}"`);
     if (pgBordered.value)            parts.push(':bordered="true"');
+    if (pgStatus.value)              parts.push(`status="${pgStatus.value}"`);
     if (pgMode.value === 'image')    parts.push('src="https://i.pravatar.cc/80?img=12"');
     if (pgMode.value === 'initials') parts.push('initials="AP"');
     return `<Avatar ${parts.join(' ')} />`;
@@ -65,117 +75,42 @@ const statusCode = `<Avatar src="https://i.pravatar.cc/80?img=5" status="online"
 <Avatar src="https://i.pravatar.cc/80?img=8" status="offline" />`;
 
 // ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'src',       type: 'string',                                                              description: 'URL de la imagen del avatar. Si falla, hace fallback a initials o icono.' },
-    { name: 'alt',       type: 'string',                                                              description: 'Texto alternativo para la imagen.' },
-    { name: 'initials',  type: 'string',                                                              description: 'Iniciales mostradas cuando no hay imagen disponible.' },
-    { name: 'size',      type: "'xs' | 'small' | 'medium' | 'large' | 'xl'",     default: "'medium'", description: 'Tamaño del avatar.' },
-    { name: 'radius',    type: "'none' | 'small' | 'medium' | 'large' | 'full'",                     description: 'Forma del avatar. full=círculo, none=cuadrado.' },
-    { name: 'color',     type: "'default' | 'primary' | 'success' | 'warning' | 'danger'", default: "'default'", description: 'Color de fondo cuando se muestran iniciales.' },
-    { name: 'status',    type: "'online' | 'offline' | 'away' | 'busy'",                              description: 'Indicador de estado visible en la esquina inferior.' },
-    { name: 'bordered',  type: 'boolean',                                          default: 'false',  description: 'Añade un borde alrededor del avatar.' },
-    { name: 'ariaLabel', type: 'string',                                                              description: 'Nombre accesible cuando se muestran iniciales o el icono fallback.' },
-    { name: 'skeleton',  type: 'boolean',                                          default: 'false',  description: 'Muestra un placeholder de carga con la misma huella.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'src',       type: 'string',                                                              description: t('pages.dataDisplay.avatar.props.src') },
+    { name: 'alt',       type: 'string',                                                              description: t('pages.dataDisplay.avatar.props.alt') },
+    { name: 'initials',  type: 'string',                                                              description: t('pages.dataDisplay.avatar.props.initials') },
+    { name: 'size',      type: "'xs' | 'small' | 'medium' | 'large' | 'xl'",     default: "'medium'", description: t('pages.dataDisplay.avatar.props.size') },
+    { name: 'radius',    type: "'none' | 'small' | 'medium' | 'large' | 'full'",                     description: t('pages.dataDisplay.avatar.props.radius') },
+    { name: 'color',     type: "'default' | 'primary' | 'success' | 'warning' | 'danger'", default: "'default'", description: t('pages.dataDisplay.avatar.props.color') },
+    { name: 'status',    type: "'online' | 'offline' | 'away' | 'busy'",                              description: t('pages.dataDisplay.avatar.props.status') },
+    { name: 'bordered',  type: 'boolean',                                          default: 'false',  description: t('pages.dataDisplay.avatar.props.bordered') },
+    { name: 'ariaLabel', type: 'string',                                                              description: t('pages.dataDisplay.avatar.props.ariaLabel') },
+    { name: 'skeleton',  type: 'boolean',                                          default: 'false',  description: t('pages.dataDisplay.avatar.props.skeleton') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="Avatar"
+        :title="t('pages.dataDisplay.avatar.title')"
         category="Data Display"
         import-path="import { Avatar } from 'mood-ui'"
-        description="Avatar de usuario con imagen, iniciales fallback, indicador de estado y múltiples tamaños y formas."
+        :description="t('pages.dataDisplay.avatar.description')"
         :props-list="propsList"
     >
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="220px" @reset="resetPlayground">
                 <template #controls>
-                    <!-- Mode -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Modo</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="m in ['image', 'initials', 'icon']"
-                                :key="m"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgMode === m
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgMode = (m as typeof pgMode)"
-                            >{{ m }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Size -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Size</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in ['xs', 'small', 'medium', 'large', 'xl']"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = (s as typeof pgSize)"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Shape (radius) -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Shape</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="r in [{v:'full',l:'Circle'},{v:'medium',l:'Rounded'},{v:'none',l:'Square'}]"
-                                :key="r.v"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors"
-                                :class="pgRadius === r.v
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgRadius = (r.v as typeof pgRadius)"
-                            >{{ r.l }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Color dots (only meaningful for initials) -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Color</span>
-                        <div class="flex items-center gap-1">
-                            <button
-                                v-for="c in colorDots"
-                                :key="c.value"
-                                type="button"
-                                class="size-4 rounded-full transition-all duration-150"
-                                :class="pgColor === c.value
-                                    ? 'ring-2 ring-offset-1 ring-foreground/30 scale-125'
-                                    : 'hover:scale-110 opacity-70 hover:opacity-100'"
-                                :style="`background: ${c.bg}`"
-                                :title="c.label"
-                                @click="pgColor = c.value"
-                            />
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgBordered
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgBordered = !pgBordered"
-                    >Bordered</button>
+                    <TbPills :label="t('pages.dataDisplay.avatar.controls.mode')" :options="[{value:'image'},{value:'initials'},{value:'icon'}]" v-model="pgMode" />
+                    <TbSep />
+                    <TbPills :label="t('pages.dataDisplay.avatar.controls.size')" :options="[{value:'xs'},{value:'small'},{value:'medium'},{value:'large'},{value:'xl'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbPills :label="t('pages.dataDisplay.avatar.controls.radius')" :options="[{value:'none'},{value:'small'},{value:'medium'},{value:'large'},{value:'full'}]" v-model="pgRadius" />
+                    <TbSep />
+                    <TbDots :label="t('pages.dataDisplay.avatar.controls.color')" :options="colorDots" v-model="pgColor" />
+                    <TbSep />
+                    <TbPills :label="t('pages.dataDisplay.avatar.controls.status')" :options="[{value:'',label:'none'},{value:'online'},{value:'offline'},{value:'away'},{value:'busy'}]" v-model="pgStatus" />
+                    <TbSep />
+                    <TbToggle :label="t('pages.dataDisplay.avatar.controls.bordered')" v-model="pgBordered" />
                 </template>
 
                 <Avatar
@@ -184,6 +119,7 @@ const propsList: PropDoc[] = [
                     :size="pgSize"
                     :radius="pgRadius"
                     :bordered="pgBordered"
+                    :status="pgStatus || undefined"
                 />
                 <Avatar
                     v-else-if="pgMode === 'initials'"
@@ -192,20 +128,22 @@ const propsList: PropDoc[] = [
                     :radius="pgRadius"
                     :color="pgColor"
                     :bordered="pgBordered"
+                    :status="pgStatus || undefined"
                 />
                 <Avatar
                     v-else
                     :size="pgSize"
                     :radius="pgRadius"
                     :bordered="pgBordered"
+                    :status="pgStatus || undefined"
                 />
             </ComponentPreview>
         </template>
 
         <template #examples>
             <ComponentPreview
-                title="Imagen"
-                description="Carga la imagen desde una URL."
+                :title="t('pages.dataDisplay.avatar.examples.image.title')"
+                :description="t('pages.dataDisplay.avatar.examples.image.desc')"
                 :code="imageCode"
             >
                 <Avatar src="https://i.pravatar.cc/80?img=1" />
@@ -214,8 +152,8 @@ const propsList: PropDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Iniciales"
-                description="Fallback con iniciales y color semántico cuando no hay imagen."
+                :title="t('pages.dataDisplay.avatar.examples.initials.title')"
+                :description="t('pages.dataDisplay.avatar.examples.initials.desc')"
                 :code="initialsCode"
             >
                 <Avatar initials="AP" color="primary" />
@@ -225,8 +163,8 @@ const propsList: PropDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Icono fallback"
-                description="Si no hay src ni initials, se muestra un icono genérico."
+                :title="t('pages.dataDisplay.avatar.examples.iconFallback.title')"
+                :description="t('pages.dataDisplay.avatar.examples.iconFallback.desc')"
                 :code="iconCode"
             >
                 <Avatar />
@@ -235,8 +173,8 @@ const propsList: PropDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Tamaños"
-                description="Cinco escalas: xs, small, medium, large y xl."
+                :title="t('pages.dataDisplay.avatar.examples.sizes.title')"
+                :description="t('pages.dataDisplay.avatar.examples.sizes.desc')"
                 :code="sizesCode"
             >
                 <Avatar src="https://i.pravatar.cc/80?img=4" size="xs" />
@@ -247,8 +185,8 @@ const propsList: PropDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Indicador de estado"
-                description="Punto en la esquina inferior derecha para señalar presencia."
+                :title="t('pages.dataDisplay.avatar.examples.status.title')"
+                :description="t('pages.dataDisplay.avatar.examples.status.desc')"
                 :code="statusCode"
             >
                 <Avatar src="https://i.pravatar.cc/80?img=5" status="online" />

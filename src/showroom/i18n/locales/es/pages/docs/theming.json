@@ -1,0 +1,28 @@
+{
+    "pages": {
+        "docs": {
+            "theming": {
+                "overline": "Documentación",
+                "title": "Theming",
+                "subtitle": "mood-ui usa una cascada de configuración basada en CSS custom properties + Tailwind v4 tokens. Personaliza desde el provider, surfaces, paletas generadas o sobrescribiendo CSS vars directamente.",
+                "providerPropsTitle": "Props del Provider",
+                "providerPropsDesc": "{code} acepta props que se propagan a todos los descendientes. Cualquier componente puede sobrescribir localmente con su propia prop.",
+                "customPaletteTitle": "Paleta personalizada desde un HEX",
+                "customPaletteDesc": "{code} genera una escala completa 50→900 a partir de un solo color. Útil para marcas con un único color principal.",
+                "surfacesTitle": "Surfaces (tokens semánticos)",
+                "surfacesDesc": "Sobrescribe los 14 tokens semánticos directamente. Ideal para temas custom.",
+                "availableTokens": "Tokens disponibles",
+                "darkPresetsTitle": "Dark surfaces presets",
+                "darkPresetsDesc": "6 presets listos para usar: {default}, {navy}, {zinc}, {charcoal}, {midnight}, {forest}.",
+                "cssOverrideTitle": "Override desde CSS",
+                "cssOverrideDesc": "Si prefieres trabajar 100% en CSS, sobrescribe las custom properties en tu hoja de estilos global. Funciona con {root}, {dark} o cualquier selector.",
+                "cssOverrideTip": "Recomendación: Si tienes lógica reactiva (cambio de color desde un picker, por ejemplo), usa {palettes} o {surfaces} en el Provider. Para temas estáticos, el override por CSS es lo más simple.",
+                "nextSteps": "Próximos pasos",
+                "componentsCard": "Explora componentes",
+                "componentsCardDesc": "70+ componentes listos para usar con theming reactivo.",
+                "i18nCard": "Internacionalización",
+                "i18nCardDesc": "ES y EN incluidos. Extiende para cualquier idioma."
+            }
+        }
+    }
+}

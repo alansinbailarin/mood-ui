@@ -1,0 +1,53 @@
+{
+    "title": "DateTimePicker",
+    "description": "Inline date and time selector. Shows a monthly calendar alongside scrollable time columns. Supports 12/24h formats, seconds and minute step.",
+
+    "controls": {
+        "format": "Format",
+        "variant": "Variant",
+        "color": "Color",
+        "step": "Step",
+        "radius": "Radius",
+        "seconds": "Seconds"
+    },
+
+    "props": {
+        "modelValue": "Selected date and time (v-model).",
+        "format": "Time format of the time selector.",
+        "step": "Minute increment for the minutes column.",
+        "showSeconds": "Shows the seconds column.",
+        "color": "Accent color for the selected day.",
+        "variant": "Visual style of the calendar panel.",
+        "radius": "Border radius of the panel.",
+        "minDate": "Minimum selectable date.",
+        "maxDate": "Maximum selectable date.",
+        "disabledDates": "List of disabled dates.",
+        "minTime": "Minimum time in HH:MM format.",
+        "maxTime": "Maximum time in HH:MM format.",
+        "locale": "Locale for month and day names (e.g. en-US).",
+        "firstDayOfWeek": "Week start day (0=Sun, 1=Mon)."
+    },
+
+    "examples": {
+        "basic24h": {
+            "title": "24h (default)",
+            "desc": "24-hour mode with hour and minute columns."
+        },
+        "format12h": {
+            "title": "12h format",
+            "desc": "Adds the AM/PM column for regions that prefer the 12-hour clock."
+        },
+        "seconds12h": {
+            "title": "12h with seconds",
+            "desc": "Enable show-seconds to show the seconds column."
+        },
+        "step15": {
+            "title": "15-minute step",
+            "desc": "step=\"15\" groups minutes in 15-unit increments, ideal for schedules."
+        },
+        "outline": {
+            "title": "Outline variant",
+            "desc": "Perimeter border for neutral backgrounds or cards."
+        }
+    }
+}

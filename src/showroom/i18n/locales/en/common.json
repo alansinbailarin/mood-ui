@@ -1,0 +1,81 @@
+{
+    "home": "Home",
+    "components": "Components",
+    "templates": "Templates",
+    "themeStudio": "Theme Studio",
+    "docs": "Documentation",
+    "backHome": "Back to home",
+    "starOnGithub": "Star on GitHub",
+    "soon": "Soon",
+
+    "search": {
+        "label": "Search",
+        "labelLong": "Search components…",
+        "placeholder": "Search components, actions, docs…",
+        "empty": "No results for \"{q}\"",
+        "navigate": "navigate",
+        "select": "select",
+        "esc": "close",
+        "groupActions": "Actions",
+        "groupLinks": "Links",
+        "groupDocs": "Documentation",
+        "actionLanguageEs": "Cambiar a Español",
+        "actionLanguageEsDesc": "Switch language to Spanish",
+        "actionLanguageEn": "Switch to English",
+        "actionLanguageEnDesc": "Current showroom language",
+        "descWelcome": "Showroom home page",
+        "descIntroduction": "What is mood-ui and why use it?",
+        "descInstallation": "Install mood-ui in your project",
+        "descTheming": "Design tokens & customization",
+        "descI18n": "Built-in multilanguage support",
+        "descChangelog": "Version history and changes"
+    },
+
+    "settings": {
+        "customizeTheme": "Customize theme",
+        "colorMode": "Mode",
+        "accent": "Accent",
+        "primary": "Primary",
+        "radius": "Radius",
+        "density": "Density",
+        "focusHalo": "Focus halo",
+        "language": "Language",
+        "base": "Base",
+        "baseHelp": "Tints background with accent color",
+        "surface": "Surface (dark)",
+        "surfaceHelp": "Dark-mode surface preset",
+        "reset": "Reset",
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+    },
+
+    "sidebar": {
+        "openMenu": "Open menu",
+        "closeMenu": "Close menu",
+        "expand": "Expand sidebar",
+        "collapse": "Collapse sidebar"
+    },
+
+    "header": {
+        "sections": "Sections",
+        "docsDesc": "Getting started, installation and theming",
+        "componentsDesc": "All available UI components",
+        "templatesDesc": "Ready-to-use templates",
+        "themeStudioDesc": "Customize colors, radii and more"
+    },
+
+    "toc": {
+        "weeklySuffix": "/wk",
+        "issueTitle": "Found a problem?",
+        "issueBody": "Open an issue on GitHub"
+    },
+
+    "docsNav": {
+        "introduction": "Introduction",
+        "installation": "Installation",
+        "theming": "Theming",
+        "i18n": "i18n",
+        "changelog": "Changelog"
+    }
+}

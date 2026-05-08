@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import DateRangeField from '../../../components/forms/DateRangeField.vue';
 import type { PropDoc, EmitDoc } from '../../types';
+
+const { t } = useI18n();
 
 type Range = [Date | null, Date | null];
 
@@ -55,38 +58,38 @@ const constraintsCode = `<DateRangeField
 const disabledCode = `<DateRangeField :model-value="range" label="Periodo" disabled class="w-96" />`;
 
 // ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'modelValue',  type: '[Date | null, Date | null]',           default: '[null, null]', description: 'Rango seleccionado [start, end]. Soporta v-model.' },
-    { name: 'label',       type: 'string',                                                        description: 'Etiqueta visible encima del campo.' },
-    { name: 'placeholder', type: 'string',                                default: "'Select date range…'", description: 'Texto cuando no hay rango seleccionado.' },
-    { name: 'size',        type: "'small' | 'medium' | 'large'",         default: "'medium'",     description: 'Tamaño del input.' },
-    { name: 'months',      type: 'number',                                default: '2',           description: 'Número de meses visibles en el popover.' },
-    { name: 'showPresets', type: 'boolean',                               default: 'false',       description: 'Muestra una columna con presets (hoy, semana, mes…).' },
-    { name: 'minDate',     type: 'Date',                                                          description: 'Fecha mínima seleccionable en el calendario.' },
-    { name: 'maxDate',     type: 'Date',                                                          description: 'Fecha máxima seleccionable en el calendario.' },
-    { name: 'minRange',    type: 'number',                                                        description: 'Número mínimo de días entre start y end.' },
-    { name: 'maxRange',    type: 'number',                                                        description: 'Número máximo de días entre start y end.' },
-    { name: 'clearable',   type: 'boolean',                               default: 'false',       description: 'Muestra un botón para limpiar el rango.' },
-    { name: 'disabled',    type: 'boolean',                               default: 'false',       description: 'Deshabilita el campo.' },
-    { name: 'readonly',    type: 'boolean',                               default: 'false',       description: 'Hace el campo no interactivo.' },
-    { name: 'fullWidth',   type: 'boolean',                               default: 'false',       description: 'Ocupa el 100% del ancho disponible.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'modelValue',  type: '[Date | null, Date | null]',           default: '[null, null]', description: t('pages.forms.dateRangeField.props.modelValue') },
+    { name: 'label',       type: 'string',                                                        description: t('pages.forms.dateRangeField.props.label') },
+    { name: 'placeholder', type: 'string',                                default: "'Select date range…'", description: t('pages.forms.dateRangeField.props.placeholder') },
+    { name: 'size',        type: "'small' | 'medium' | 'large'",         default: "'medium'",     description: t('pages.forms.dateRangeField.props.size') },
+    { name: 'months',      type: 'number',                                default: '2',           description: t('pages.forms.dateRangeField.props.months') },
+    { name: 'showPresets', type: 'boolean',                               default: 'false',       description: t('pages.forms.dateRangeField.props.showPresets') },
+    { name: 'minDate',     type: 'Date',                                                          description: t('pages.forms.dateRangeField.props.minDate') },
+    { name: 'maxDate',     type: 'Date',                                                          description: t('pages.forms.dateRangeField.props.maxDate') },
+    { name: 'minRange',    type: 'number',                                                        description: t('pages.forms.dateRangeField.props.minRange') },
+    { name: 'maxRange',    type: 'number',                                                        description: t('pages.forms.dateRangeField.props.maxRange') },
+    { name: 'clearable',   type: 'boolean',                               default: 'false',       description: t('pages.forms.dateRangeField.props.clearable') },
+    { name: 'disabled',    type: 'boolean',                               default: 'false',       description: t('pages.forms.dateRangeField.props.disabled') },
+    { name: 'readonly',    type: 'boolean',                               default: 'false',       description: t('pages.forms.dateRangeField.props.readonly') },
+    { name: 'fullWidth',   type: 'boolean',                               default: 'false',       description: t('pages.forms.dateRangeField.props.fullWidth') },
+]);
 
-const emitsList: EmitDoc[] = [
-    { name: 'update:modelValue', payload: '[Date | null, Date | null]', description: 'Emitido al cambiar el rango.' },
-    { name: 'change',            payload: '[Date | null, Date | null]', description: 'Alias semántico de update:modelValue.' },
-    { name: 'open',              payload: 'void',                       description: 'Emitido al abrir el popover.' },
-    { name: 'close',             payload: 'void',                       description: 'Emitido al cerrar el popover.' },
-    { name: 'clear',             payload: 'void',                       description: 'Emitido al limpiar el rango.' },
-];
+const emitsList = computed<EmitDoc[]>(() => [
+    { name: 'update:modelValue', payload: '[Date | null, Date | null]', description: t('pages.forms.dateRangeField.emits.updateModelValue') },
+    { name: 'change',            payload: '[Date | null, Date | null]', description: t('pages.forms.dateRangeField.emits.change') },
+    { name: 'open',              payload: 'void',                       description: t('pages.forms.dateRangeField.emits.open') },
+    { name: 'close',             payload: 'void',                       description: t('pages.forms.dateRangeField.emits.close') },
+    { name: 'clear',             payload: 'void',                       description: t('pages.forms.dateRangeField.emits.clear') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="DateRangeField"
-        category="Forms"
+        :title="t('pages.forms.dateRangeField.title')"
+        :category="t('pages.forms.dateRangeField.category')"
         import-path="import { DateRangeField } from 'mood-ui'"
-        description="Selector de rango de fechas con popover de doble calendario y soporte de presets."
+        :description="t('pages.forms.dateRangeField.description')"
         :props-list="propsList"
         :emits-list="emitsList"
     >
@@ -96,7 +99,7 @@ const emitsList: EmitDoc[] = [
                 <template #controls>
                     <!-- Size -->
                     <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Tamaño</span>
+                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">{{ t('pages.forms.dateRangeField.controls.size').toUpperCase() }}</span>
                         <div class="flex rounded-md border border-border overflow-hidden">
                             <button
                                 v-for="s in ['small', 'medium', 'large']"
@@ -120,7 +123,7 @@ const emitsList: EmitDoc[] = [
                             ? 'border-primary bg-primary/10 text-primary font-medium'
                             : 'border-border text-muted-foreground hover:bg-muted/60'"
                         @click="pgPresets = !pgPresets"
-                    >Presets</button>
+                    >{{ t('pages.forms.dateRangeField.controls.presets') }}</button>
 
                     <button
                         type="button"
@@ -129,7 +132,7 @@ const emitsList: EmitDoc[] = [
                             ? 'border-primary bg-primary/10 text-primary font-medium'
                             : 'border-border text-muted-foreground hover:bg-muted/60'"
                         @click="pgClearable = !pgClearable"
-                    >Clearable</button>
+                    >{{ t('pages.forms.dateRangeField.controls.clearable') }}</button>
 
                     <button
                         type="button"
@@ -138,12 +141,12 @@ const emitsList: EmitDoc[] = [
                             ? 'border-primary bg-primary/10 text-primary font-medium'
                             : 'border-border text-muted-foreground hover:bg-muted/60'"
                         @click="pgDisabled = !pgDisabled"
-                    >Disabled</button>
+                    >{{ t('pages.forms.dateRangeField.controls.disabled') }}</button>
                 </template>
 
                 <DateRangeField
                     v-model="pgValue"
-                    label="Periodo"
+                    :label="t('pages.forms.dateRangeField.playground.label')"
                     :size="pgSize"
                     :show-presets="pgPresets"
                     :clearable="pgClearable"
@@ -156,24 +159,24 @@ const emitsList: EmitDoc[] = [
         <!-- ── Examples ────────────────────────────────────────────────────── -->
         <template #examples>
             <ComponentPreview
-                title="Básico"
-                description="Selector con popover de doble calendario y formato medio por defecto."
+                :title="t('pages.forms.dateRangeField.examples.basic.title')"
+                :description="t('pages.forms.dateRangeField.examples.basic.desc')"
                 :code="basicCode"
             >
                 <DateRangeField v-model="rBasic" label="Periodo" class="w-96" />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con presets"
-                description="Activa show-presets para añadir atajos rápidos como hoy, semana o mes."
+                :title="t('pages.forms.dateRangeField.examples.presets.title')"
+                :description="t('pages.forms.dateRangeField.examples.presets.desc')"
                 :code="presetsCode"
             >
                 <DateRangeField v-model="rPresets" label="Periodo" show-presets class="w-96" />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Min y max"
-                description="Limita el rango seleccionable con minDate y maxDate."
+                :title="t('pages.forms.dateRangeField.examples.minMax.title')"
+                :description="t('pages.forms.dateRangeField.examples.minMax.desc')"
                 :code="constraintsCode"
             >
                 <DateRangeField
@@ -186,8 +189,8 @@ const emitsList: EmitDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Disabled"
-                description="El campo se atenúa, bloquea el popover y conserva el rango visible."
+                :title="t('pages.forms.dateRangeField.examples.disabled.title')"
+                :description="t('pages.forms.dateRangeField.examples.disabled.desc')"
                 :code="disabledCode"
             >
                 <DateRangeField :model-value="rDisabled" label="Periodo" disabled class="w-96" />

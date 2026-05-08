@@ -1,0 +1,93 @@
+{
+    "title": "Modal",
+    "description": "Centered modal dialog with focus trap, scroll lock, and FLIP-style animation from the triggering button. Supports sizes, header with title/description, and a footer slot.",
+
+    "controls": {
+        "size":     "Size",
+        "overlay":  "Overlay",
+        "centered": "Centered",
+        "closable": "Closable"
+    },
+
+    "playground": {
+        "open":        "Open modal",
+        "title":       "Confirm action",
+        "description": "Interactive modal preview.",
+        "body":        "Do you want to apply these changes?",
+        "cancel":      "Cancel",
+        "apply":       "Apply"
+    },
+
+    "examples": {
+        "basic": {
+            "title":       "Basic",
+            "desc":        "Triggered by a button with v-model. Footer with cancel/confirm actions.",
+            "cta":         "Open modal",
+            "modalTitle":  "Confirm",
+            "modalDesc":   "Do you want to apply these changes?",
+            "body":        "The change is reversible from the history.",
+            "cancel":      "Cancel",
+            "apply":       "Apply"
+        },
+        "form": {
+            "title":       "With form",
+            "desc":        "Useful for creating or editing entities without leaving the current context.",
+            "cta":         "New project",
+            "modalTitle":  "New project",
+            "namePh":      "Name",
+            "descPh":      "Description",
+            "cancel":      "Cancel",
+            "create":      "Create"
+        },
+        "locked": {
+            "title":       "No overlay-close",
+            "desc":        "For critical actions, force an explicit decision by disabling overlay and Escape.",
+            "cta":         "Critical action",
+            "modalTitle":  "Critical action",
+            "body":        "Only closes with the explicit button.",
+            "confirm":     "Understood"
+        },
+        "full": {
+            "title":       "Fullscreen",
+            "desc":        "size='full' fills the entire viewport — ideal for immersive detail views.",
+            "cta":         "Open fullscreen",
+            "modalTitle":  "Full view",
+            "body":        "Fills the entire available viewport."
+        },
+        "scroll": {
+            "title":       "Scrollable content",
+            "desc":        "The modal body can scroll internally without blocking the rest of the layout.",
+            "cta":         "Terms and conditions",
+            "modalTitle":  "Terms and conditions",
+            "paragraph":   "Paragraph {i} with long text to force internal scroll."
+        }
+    },
+
+    "props": {
+        "modelValue":     "Visibility. Use v-model.",
+        "size":           "Panel size.",
+        "position":       "Vertical position of the panel.",
+        "radius":         "Corner radius. Cascades from provider.",
+        "title":          "Accessible title — rendered in header when no slot is provided.",
+        "description":    "Optional description below the title.",
+        "closeOnOverlay": "Close when clicking the backdrop.",
+        "closeOnEscape":  "Close when pressing Escape.",
+        "showClose":      "Show the close (X) button in the corner.",
+        "lockScroll":     "Lock body scroll while open.",
+        "color":          "Accent color applied to border and ring.",
+        "overlay":        "Backdrop style.",
+        "innerBorder":    "Renders a subtle inner border inside the main border.",
+        "origin":         "Origin element for the FLIP-style animation.",
+        "ariaLabel":      "Accessible label when there is no title."
+    },
+
+    "emits": {
+        "updateModelValue": "Change in open/closed state."
+    },
+
+    "slots": {
+        "default": "Main body of the modal.",
+        "header":  "Replaces the header generated from title/description.",
+        "footer":  "Actions at the bottom of the modal (cancel/confirm buttons)."
+    }
+}

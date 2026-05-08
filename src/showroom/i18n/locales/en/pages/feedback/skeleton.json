@@ -1,0 +1,42 @@
+{
+    "title": "Skeleton",
+    "description": "Animated placeholder that reserves content space while loading. Supports presets that replicate the exact footprint of real components to prevent layout shifts.",
+
+    "controls": {
+        "shape":     "Shape",
+        "size":      "Size",
+        "animation": "Animation"
+    },
+
+    "examples": {
+        "text": {
+            "title": "Multi-line text",
+            "desc":  "Use shape='text' with lines to simulate a paragraph. The last line is automatically shortened."
+        },
+        "profile": {
+            "title": "Avatar + text",
+            "desc":  "Typical composition for user lists: circle + two stacked lines."
+        },
+        "card": {
+            "title": "Card placeholder",
+            "desc":  "Reserves the footprint of a card with image, title and description."
+        },
+        "button": {
+            "title": "Button skeleton",
+            "desc":  "The button preset respects the height per size to match the real button."
+        }
+    },
+
+    "props": {
+        "shape":     "Visual preset that defines default height, width and radius. See the interface for all available presets.",
+        "size":      "Maps to the real component's size to maintain pixel-parity.",
+        "radius":    "Corner radius. circle / avatar always force full.",
+        "width":     "Explicit width. Accepts any CSS length.",
+        "height":    "Explicit height.",
+        "fullWidth": "Collapses width to 100% of the container.",
+        "withLabel": "Renders a mini label bar above the shape.",
+        "lines":     "For shape=\"text\": number of stacked lines.",
+        "animation": "Loading animation.",
+        "ariaLabel": "Accessible label (announces what is loading)."
+    }
+}

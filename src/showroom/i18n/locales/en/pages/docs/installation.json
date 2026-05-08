@@ -1,0 +1,29 @@
+{
+    "pages": {
+        "docs": {
+            "installation": {
+                "overline": "Documentation",
+                "title": "Installation",
+                "subtitle": "Mood-UI is installed as a standard npm package. Compatible with Vue 3.5+ and Tailwind CSS v4.",
+                "step1Title": "Install the package",
+                "step1Alt": "Using yarn or pnpm?",
+                "step2Title": "Peer dependencies",
+                "step2Desc": "Make sure you have Vue 3.5+ and Tailwind CSS v4 installed:",
+                "step3Title": "Import the styles",
+                "step3Desc": "Import {code} after Tailwind. This registers the design tokens and all utilities used by the components.",
+                "step3Tip": "Tip: mood-ui uses {themeInline} to map its CSS vars to Tailwind tokens. You don't need to configure anything in {tailwindConfig}.",
+                "step4Title": "Wrap your app with ModoProvider",
+                "step4Desc": "{code} propagates theming, language and tokens to all descendants. Only one is needed per application (though you can nest them for local themes).",
+                "step5Title": "Use the components",
+                "step5Desc": "Import any component from the package root. Everything is tree-shakeable, so only what you actually use is included in your bundle.",
+                "nextSteps": "Next steps",
+                "themeCard": "Customize the theme",
+                "themeCardDesc": "Color, radius, surfaces, dark mode presets…",
+                "componentsCard": "Explore components",
+                "componentsCardDesc": "70+ ready-to-use components.",
+                "viewOnNpm": "View on npm",
+                "viewOnGithub": "GitHub"
+            }
+        }
+    }
+}

@@ -1,0 +1,59 @@
+{
+    "pages": {
+        "dataDisplay": {
+            "table": {
+                "title": "Table",
+                "description": "Powerful table with sorting, pagination, selection, sticky header, expandable rows and tree support. Columns are defined with key + accessor.",
+                "controls": {
+                    "size": "Size",
+                    "density": "Density",
+                    "bordered": "Bordered",
+                    "select": "Select",
+                    "striped": "Striped",
+                    "hover": "Hover",
+                    "stickyHeader": "Sticky header"
+                },
+                "props": {
+                    "data": "Rows to render.",
+                    "columns": "Column definitions (key, header, accessor, sortable, align…).",
+                    "rowKey": "Unique row identifier used by v-for and selection.",
+                    "size": "Font size and base row height.",
+                    "density": "Vertical padding applied to cells.",
+                    "striped": "Applies an alternating background to even rows.",
+                    "hover": "Highlights the row under the cursor.",
+                    "bordered": "Configures internal table borders.",
+                    "stickyHeader": "Keeps the header visible while scrolling vertically.",
+                    "selectable": "Enables row selection with checkboxes.",
+                    "pageSize": "Enables client-side pagination with the given page size."
+                },
+                "emits": {
+                    "updateSort": "Emitted when column sort order changes.",
+                    "updateSelected": "Emitted when row selection changes.",
+                    "updatePagination": "Emitted when the page or page size changes."
+                },
+                "examples": {
+                    "basic": {
+                        "title": "Basic",
+                        "desc": "Default configuration with four columns and standard typography."
+                    },
+                    "striped": {
+                        "title": "Striped + bordered",
+                        "desc": "Alternating rows and full borders for easier reading in dense tables."
+                    },
+                    "sort": {
+                        "title": "With sorting",
+                        "desc": "Mark any column as sortable to enable ascending / descending order."
+                    },
+                    "compact": {
+                        "title": "Compact density",
+                        "desc": "Reduces vertical padding to show more rows in less space."
+                    },
+                    "stickyHeader": {
+                        "title": "Sticky header",
+                        "desc": "The header stays fixed while scrolling inside the container."
+                    }
+                }
+            }
+        }
+    }
+}

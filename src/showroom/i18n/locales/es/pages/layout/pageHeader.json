@@ -1,0 +1,51 @@
+{
+    "title": "PageHeader",
+    "category": "Layout",
+    "description": "Cabecera de página con título, subtítulo, botón back opcional, breadcrumbs, tabs y zona de acciones.",
+    "examples": {
+        "basic":       { "title": "Básico",            "desc": "Título, subtítulo y divider — la combinación más común." },
+        "breadcrumbs": { "title": "Con breadcrumbs",    "desc": "Usa el slot breadcrumbs para mostrar la jerarquía de navegación." },
+        "tabs":        { "title": "Con tabs",           "desc": "Las tabs se alinean con el divider para una transición visual fluida." },
+        "actions":     { "title": "Con back y acciones", "desc": "Combinación típica para vistas de detalle o edición." }
+    },
+    "demo": {
+        "title": "Proyectos",
+        "subtitle": "Gestiona los proyectos del workspace",
+        "filters": "Filtros",
+        "new": "Nuevo",
+        "edit": "Editar proyecto",
+        "crumbs": "Workspace · Proyectos ·",
+        "crumbCurrent": "Editar",
+        "reports": "Reportes",
+        "tabSummary": "Resumen",
+        "tabDetail": "Detalle",
+        "tabAudit": "Auditoría",
+        "detail": "Detalle",
+        "back": "Volver a la lista",
+        "cancel": "Cancelar",
+        "save": "Guardar"
+    },
+    "props": {
+        "title":         "Título principal de la página.",
+        "subtitle":      "Texto secundario debajo del título.",
+        "backButton":    "Muestra un botón back a la izquierda del título.",
+        "backIcon":      "Icono del botón back. Por defecto chevron-left.",
+        "backAriaLabel": "Nombre accesible para el botón back icon-only.",
+        "size":          "Tamaño visual del título.",
+        "divider":       "Renderiza un borde inferior separando el header del contenido.",
+        "sticky":        "Activa position: sticky al inicio del scroll.",
+        "padding":       "Padding alrededor del contenido del header.",
+        "as":            "Etiqueta raíz a renderizar."
+    },
+    "emits": {
+        "back": "Emitido al hacer click en el botón back."
+    },
+    "slots": {
+        "breadcrumbs": "Breadcrumbs renderizados encima del título.",
+        "title":       "Reemplaza el título plano por contenido rico.",
+        "subtitle":    "Reemplaza el subtítulo plano por contenido rico.",
+        "actions":     "Acciones a la derecha del header (botones, menús).",
+        "hero":        "Zona destacada (banner, métricas) debajo del header principal.",
+        "tabs":        "Tabs renderizadas debajo del header, alineadas con el divider."
+    }
+}

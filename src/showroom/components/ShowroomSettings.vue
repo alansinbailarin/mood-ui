@@ -8,10 +8,12 @@ import {
     ArrowPathIcon,
 } from '@heroicons/vue/24/outline';
 
+import { useI18n } from 'vue-i18n';
+
 import Tooltip from '../../components/feedback/Tooltip.vue';
 import PopoverPanel from '../../components/layout/PopoverPanel.vue';
 import { usePopover } from '../../composables/usePopover';
-import { useShowroomI18n, type ShowroomLocale } from '../composables/useShowroomI18n';
+import type { ShowroomLocale } from '../i18n';
 
 import type { ModoColor, ModoRadius, ModoSize, ModoTheme, ModoHalo } from '../../config/ModoConfig';
 import type { DarkSurfacePreset } from '../../config/surfaces';
@@ -45,7 +47,7 @@ const emit = defineEmits<{
     reset: [];
 }>();
 
-const t = useShowroomI18n(() => props.locale);
+const { t } = useI18n();
 
 const { triggerRef, panelRef, isOpen, panelStyle, toggle } = usePopover({
     placement: 'bottom-end',
@@ -105,9 +107,9 @@ const colorOptions: { value: ModoColor; label: string }[] = [
 ];
 
 const themeOptions = computed(() => [
-    { value: 'light' as const,  label: t.value.light,  icon: SunIcon },
-    { value: 'dark' as const,   label: t.value.dark,   icon: MoonIcon },
-    { value: 'system' as const, label: t.value.system, icon: ComputerDesktopIcon },
+    { value: 'light' as const,  label: t('settings.light'),  icon: SunIcon },
+    { value: 'dark' as const,   label: t('settings.dark'),   icon: MoonIcon },
+    { value: 'system' as const, label: t('settings.system'), icon: ComputerDesktopIcon },
 ]);
 
 const localeOptions: { value: ShowroomLocale; label: string }[] = [
@@ -143,274 +145,235 @@ const semanticColors = computed<SemanticColor[]>(() => [
 </script>
 
 <template>
-    <button
-        ref="triggerRef"
-        type="button"
-        :aria-label="t.customizeTheme"
-        :aria-expanded="isOpen"
-        class="inline-flex items-center justify-center w-8 h-8 rounded-full text-muted-foreground hover:text-foreground transition-colors"
-        @click="toggle"
-    >
-        <SwatchIcon class="w-5 h-5" />
-    </button>
+    <!-- Trigger: colored gradient dot + swatch icon -->
+    <Tooltip :content="t('settings.customizeTheme')">
+        <button
+            ref="triggerRef"
+            type="button"
+            :aria-label="t('settings.customizeTheme')"
+            :aria-expanded="isOpen"
+            class="relative inline-flex items-center justify-center w-8 h-8 rounded-full transition-colors hover:bg-muted/60"
+            @click="toggle"
+        >
+            <SwatchIcon class="w-5 h-5 transition-colors" :style="{ color: primaryHex }" />
+        </button>
+    </Tooltip>
 
     <PopoverPanel
         :open="isOpen"
         :style="panelStyle"
         radius="large"
         role="dialog"
-        :aria-label="t.customizeTheme"
+        :aria-label="t('settings.customizeTheme')"
         @update:panelRef="panelRef = $event"
     >
-        <div class="w-[300px] max-h-[min(85vh,680px)] overflow-y-auto p-4 space-y-4">
-            <!-- ── Color Mode ────────────────────────────────────────── -->
-            <section class="space-y-1.5">
-                <h3 class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                    {{ t.colorMode }}
-                </h3>
-                <div class="grid grid-cols-3 gap-1">
-                    <button
-                        v-for="opt in themeOptions"
-                        :key="opt.value"
-                        type="button"
-                        class="flex items-center justify-center gap-1.5 h-8 rounded-md border text-xs font-medium transition-colors"
-                        :class="theme === opt.value
-                            ? 'border-primary bg-primary/10 text-primary'
-                            : 'border-border bg-card text-foreground hover:bg-muted/50'"
-                        @click="emit('update:theme', opt.value)"
-                    >
-                        <component :is="opt.icon" class="w-3.5 h-3.5" />
-                        <span>{{ opt.label }}</span>
-                    </button>
+        <div class="w-[252px] flex flex-col rounded-2xl overflow-hidden">
+            <!-- Header -->
+            <div class="px-3 py-2 border-b border-border/50 shrink-0 flex items-center justify-between gap-2">
+                <div class="flex items-center gap-1.5 min-w-0">
+                    <div class="size-3 rounded-full shrink-0" :style="{ background: `linear-gradient(135deg, ${primaryHex}, ${accentHex})` }" />
+                    <span class="text-[11px] font-semibold text-foreground tracking-tight truncate">{{ t('settings.customizeTheme') }}</span>
                 </div>
-            </section>
+                <Tooltip :content="t('settings.reset')">
+                    <button type="button" class="size-6 shrink-0 grid place-items-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors" @click="emit('reset')">
+                        <ArrowPathIcon class="w-3 h-3" />
+                    </button>
+                </Tooltip>
+            </div>
 
-            <!-- ── Accent (controls page tint) ───────────────────────── -->
-            <section class="space-y-1.5">
-                <header class="flex items-center justify-between">
-                    <h3 class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                        {{ t.accent }}
-                    </h3>
-                    <span v-if="activeAccent" class="text-[10px] font-mono text-muted-foreground">
-                        {{ activeAccent.name }}
-                    </span>
-                </header>
-                <div class="flex flex-wrap gap-1.5">
-                    <Tooltip
-                        v-for="s in swatches"
-                        :key="`accent-${s.hex}`"
-                        :content="s.name"
-                    >
-                        <button
-                            type="button"
-                            :aria-label="`Accent ${s.name}`"
-                            class="w-5 h-5 rounded-full border-2 transition-transform hover:scale-125"
-                            :class="accentHex.toLowerCase() === s.hex.toLowerCase()
-                                ? 'border-foreground scale-125'
-                                : 'border-transparent'"
-                            :style="{ backgroundColor: s.hex }"
-                            @click="emit('update:accentHex', s.hex)"
+            <!-- Body -->
+            <div class="max-h-[min(80vh,560px)] overflow-y-auto overscroll-contain">
+                <div class="p-3 flex flex-col gap-3">
+
+                    <!-- ── Mode ── -->
+                    <section>
+                        <p class="text-[10px] font-semibold text-muted-foreground uppercase tracking-[0.08em] mb-1.5">{{ t('settings.colorMode') }}</p>
+                        <div class="grid grid-cols-3 gap-1">
+                            <button
+                                v-for="opt in themeOptions"
+                                :key="opt.value"
+                                type="button"
+                                class="flex items-center justify-center gap-1 py-2 rounded-lg border text-[10px] font-medium transition-all duration-150"
+                                :class="theme === opt.value ? 'border-transparent' : 'border-border text-muted-foreground hover:border-foreground/20 hover:text-foreground'"
+                                :style="theme === opt.value ? { background: primaryHex + '12', boxShadow: `0 0 0 1.5px ${primaryHex}`, color: primaryHex } : {}"
+                                @click="emit('update:theme', opt.value)"
+                            >
+                                <component :is="opt.icon" class="w-3 h-3 shrink-0" />
+                                {{ opt.label }}
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- ── Accent ── -->
+                    <section>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <p class="text-[10px] font-semibold text-muted-foreground uppercase tracking-[0.08em]">{{ t('settings.accent') }}</p>
+                            <span v-if="activeAccent" class="text-[9px] text-muted-foreground">{{ activeAccent.name }}</span>
+                        </div>
+                        <div class="flex flex-wrap gap-1">
+                            <Tooltip v-for="s in swatches" :key="`accent-${s.hex}`" :content="s.name">
+                                <button
+                                    type="button"
+                                    :aria-label="`Accent ${s.name}`"
+                                    class="size-4 rounded-full border-[1.5px] transition-transform hover:scale-125"
+                                    :class="accentHex.toLowerCase() === s.hex.toLowerCase() ? 'border-foreground scale-125' : 'border-transparent'"
+                                    :style="{ backgroundColor: s.hex }"
+                                    @click="emit('update:accentHex', s.hex)"
+                                />
+                            </Tooltip>
+                        </div>
+                    </section>
+
+                    <!-- ── Base intensity ── -->
+                    <section>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <p class="text-[10px] font-semibold text-muted-foreground uppercase tracking-[0.08em]">{{ t('settings.base') }}</p>
+                            <span class="text-[9px] font-semibold tabular-nums" :style="{ color: baseIntensity > 0 ? accentHex : undefined }">{{ baseIntensity }}%</span>
+                        </div>
+                        <input
+                            type="range" min="0" max="100" step="5"
+                            :value="baseIntensity"
+                            :aria-label="t('settings.base')"
+                            class="w-full accent-primary h-1 cursor-pointer"
+                            @input="(e: Event) => emit('update:baseIntensity', Number((e.target as HTMLInputElement).value))"
                         />
-                    </Tooltip>
+                    </section>
+
+                    <!-- ── Primary ── -->
+                    <section>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <p class="text-[10px] font-semibold text-muted-foreground uppercase tracking-[0.08em]">{{ t('settings.primary') }}</p>
+                            <span v-if="activePrimary" class="text-[9px] text-muted-foreground">{{ activePrimary.name }}</span>
+                        </div>
+                        <div class="flex flex-wrap gap-1 mb-1.5">
+                            <Tooltip v-for="s in swatches" :key="`prim-${s.hex}`" :content="s.name">
+                                <button
+                                    type="button"
+                                    :aria-label="`Primary ${s.name}`"
+                                    class="size-4 rounded-full border-[1.5px] transition-transform hover:scale-125"
+                                    :class="primaryHex.toLowerCase() === s.hex.toLowerCase() ? 'border-foreground scale-125' : 'border-transparent'"
+                                    :style="{ backgroundColor: s.hex }"
+                                    @click="emit('update:primaryHex', s.hex)"
+                                />
+                            </Tooltip>
+                        </div>
+                        <label class="flex items-center gap-1.5">
+                            <input
+                                type="color" :value="primaryHex" :aria-label="t('settings.primary')"
+                                class="w-5 h-5 rounded cursor-pointer bg-transparent border border-border"
+                                @input="(e: Event) => emit('update:primaryHex', (e.target as HTMLInputElement).value)"
+                            />
+                            <code class="text-[10px] font-mono text-muted-foreground">{{ primaryHex.toUpperCase() }}</code>
+                        </label>
+                    </section>
+
+                    <!-- ── Semantic color ── -->
+                    <section>
+                        <p class="text-[10px] font-semibold text-muted-foreground uppercase tracking-[0.08em] mb-1.5">Color</p>
+                        <div class="grid grid-cols-5 gap-1">
+                            <button
+                                v-for="sc in semanticColors"
+                                :key="sc.value"
+                                type="button"
+                                :aria-label="sc.label"
+                                class="flex flex-col items-center gap-1.5 py-2 rounded-md border text-[9px] font-medium transition-all duration-150"
+                                :class="color === sc.value ? 'border-transparent' : 'border-border text-muted-foreground hover:border-foreground/20 hover:text-foreground'"
+                                :style="color === sc.value ? { background: sc.hex + '15', boxShadow: `0 0 0 1.5px ${sc.hex}`, color: sc.hex } : {}"
+                                @click="emit('update:color', sc.value)"
+                            >
+                                <span class="size-3 rounded-full shrink-0" :style="{ background: sc.hex }" />
+                                <span>{{ sc.label.slice(0,3) }}</span>
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- ── Radius ── -->
+                    <section>
+                        <p class="text-[10px] font-semibold text-muted-foreground uppercase tracking-[0.08em] mb-1.5">{{ t('settings.radius') }}</p>
+                        <div class="grid grid-cols-5 gap-1">
+                            <button
+                                v-for="opt in radiusOptions"
+                                :key="opt.value"
+                                type="button"
+                                class="py-1.5 rounded-md border text-[10px] font-medium transition-all duration-150"
+                                :class="radius === opt.value ? 'border-transparent' : 'border-border text-muted-foreground hover:border-foreground/20 hover:text-foreground'"
+                                :style="radius === opt.value ? { background: primaryHex + '12', boxShadow: `0 0 0 1.5px ${primaryHex}`, color: primaryHex } : {}"
+                                @click="emit('update:radius', opt.value)"
+                            >{{ opt.label }}</button>
+                        </div>
+                    </section>
+
+                    <!-- ── Size ── -->
+                    <section>
+                        <p class="text-[10px] font-semibold text-muted-foreground uppercase tracking-[0.08em] mb-1.5">{{ t('settings.density') }}</p>
+                        <div class="grid grid-cols-3 gap-1">
+                            <button
+                                v-for="opt in sizeOptions"
+                                :key="opt.value"
+                                type="button"
+                                class="py-1.5 rounded-md border text-[10px] font-medium transition-all duration-150"
+                                :class="size === opt.value ? 'border-transparent' : 'border-border text-muted-foreground hover:border-foreground/20 hover:text-foreground'"
+                                :style="size === opt.value ? { background: primaryHex + '12', boxShadow: `0 0 0 1.5px ${primaryHex}`, color: primaryHex } : {}"
+                                @click="emit('update:size', opt.value)"
+                            >{{ opt.label }}</button>
+                        </div>
+                    </section>
+
+                    <!-- ── Halo ── -->
+                    <section>
+                        <p class="text-[10px] font-semibold text-muted-foreground uppercase tracking-[0.08em] mb-1.5">{{ t('settings.focusHalo') }}</p>
+                        <div class="grid grid-cols-3 gap-1">
+                            <button
+                                v-for="opt in haloOptions"
+                                :key="opt.value"
+                                type="button"
+                                class="py-1.5 rounded-md border text-[10px] font-medium transition-all duration-150"
+                                :class="halo === opt.value ? 'border-transparent' : 'border-border text-muted-foreground hover:border-foreground/20 hover:text-foreground'"
+                                :style="halo === opt.value ? { background: primaryHex + '12', boxShadow: `0 0 0 1.5px ${primaryHex}`, color: primaryHex } : {}"
+                                @click="emit('update:halo', opt.value)"
+                            >{{ opt.label }}</button>
+                        </div>
+                    </section>
+
+                    <!-- ── Dark surface ── -->
+                    <section>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <p class="text-[10px] font-semibold text-muted-foreground uppercase tracking-[0.08em]">{{ t('settings.surface') }}</p>
+                            <span class="text-[9px] text-muted-foreground capitalize">{{ darkSurface }}</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-1">
+                            <button
+                                v-for="opt in surfaceOptions"
+                                :key="opt.value"
+                                type="button"
+                                class="flex items-center gap-1.5 px-2 py-1.5 rounded-md border transition-all duration-150"
+                                :class="darkSurface === opt.value ? 'border-transparent' : 'border-border hover:border-foreground/20'"
+                                :style="darkSurface === opt.value ? { boxShadow: `0 0 0 1.5px ${primaryHex}` } : {}"
+                                @click="emit('update:darkSurface', opt.value)"
+                            >
+                                <div class="size-3.5 rounded-sm shrink-0 ring-1 ring-inset ring-white/10" :style="{ background: opt.sample }" />
+                                <span class="text-[9px] font-medium text-muted-foreground truncate">{{ opt.label }}</span>
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- ── Language ── -->
+                    <section>
+                        <p class="text-[10px] font-semibold text-muted-foreground uppercase tracking-[0.08em] mb-1.5">{{ t('settings.language') }}</p>
+                        <div class="grid grid-cols-2 gap-1">
+                            <button
+                                v-for="opt in localeOptions"
+                                :key="opt.value"
+                                type="button"
+                                class="py-1.5 rounded-md border text-[10px] font-medium transition-all duration-150"
+                                :class="locale === opt.value ? 'border-transparent' : 'border-border text-muted-foreground hover:border-foreground/20'"
+                                :style="locale === opt.value ? { background: primaryHex + '12', boxShadow: `0 0 0 1.5px ${primaryHex}`, color: primaryHex } : {}"
+                                @click="emit('update:locale', opt.value)"
+                            >{{ opt.label }}</button>
+                        </div>
+                    </section>
+
                 </div>
-            </section>
-
-            <!-- ── Base intensity ─────────────────────────────────────── -->
-            <section class="space-y-1.5">
-                <header class="flex items-center justify-between">
-                    <h3 class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                        {{ t.base }}
-                    </h3>
-                    <span class="text-[10px] font-mono text-muted-foreground">{{ baseIntensity }}%</span>
-                </header>
-                <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    step="5"
-                    :value="baseIntensity"
-                    :aria-label="t.base"
-                    class="w-full accent-primary h-1.5 cursor-pointer"
-                    @input="(e: Event) => emit('update:baseIntensity', Number((e.target as HTMLInputElement).value))"
-                />
-                <p class="text-[10px] text-muted-foreground leading-tight">{{ t.baseHelp }}</p>
-            </section>
-
-            <!-- ── Primary (component-level) ─────────────────────────── -->
-            <section class="space-y-1.5">
-                <header class="flex items-center justify-between">
-                    <h3 class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                        {{ t.primary }}
-                    </h3>
-                    <span v-if="activePrimary" class="text-[10px] font-mono text-muted-foreground">
-                        {{ activePrimary.name }}
-                    </span>
-                </header>
-                <div class="flex flex-wrap gap-1.5">
-                    <Tooltip
-                        v-for="s in swatches"
-                        :key="`prim-${s.hex}`"
-                        :content="s.name"
-                    >
-                        <button
-                            type="button"
-                            :aria-label="`Primary ${s.name}`"
-                            class="w-5 h-5 rounded-full border-2 transition-transform hover:scale-125"
-                            :class="primaryHex.toLowerCase() === s.hex.toLowerCase()
-                                ? 'border-foreground scale-125'
-                                : 'border-transparent'"
-                            :style="{ backgroundColor: s.hex }"
-                            @click="emit('update:primaryHex', s.hex)"
-                        />
-                    </Tooltip>
-                </div>
-                <label class="flex items-center gap-2 mt-1">
-                    <input
-                        type="color"
-                        :value="primaryHex"
-                        :aria-label="t.primary"
-                        class="w-6 h-6 rounded cursor-pointer bg-transparent border border-border"
-                        @input="(e: Event) => emit('update:primaryHex', (e.target as HTMLInputElement).value)"
-                    />
-                    <code class="text-[11px] font-mono text-muted-foreground">{{ primaryHex.toUpperCase() }}</code>
-                </label>
-            </section>
-
-            <!-- ── Color (semantic circles) ──────────────────────────── -->
-            <section class="space-y-1.5">
-                <h3 class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Color</h3>
-                <div class="flex flex-wrap gap-2">
-                    <Tooltip v-for="sc in semanticColors" :key="sc.value" :content="sc.label">
-                        <button
-                            type="button"
-                            :aria-label="sc.label"
-                            class="w-5 h-5 rounded-full border-2 transition-transform hover:scale-125"
-                            :class="color === sc.value
-                                ? 'border-foreground scale-125'
-                                : 'border-transparent'"
-                            :style="{ backgroundColor: sc.hex }"
-                            @click="emit('update:color', sc.value)"
-                        />
-                    </Tooltip>
-                </div>
-            </section>
-
-            <!-- ── Radius ────────────────────────────────────────────── -->
-            <section class="space-y-1.5">
-                <h3 class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{{ t.radius }}</h3>
-                <div class="grid grid-cols-5 gap-1">
-                    <button
-                        v-for="opt in radiusOptions"
-                        :key="opt.value"
-                        type="button"
-                        class="h-7 rounded-md border text-xs font-medium transition-colors"
-                        :class="radius === opt.value
-                            ? 'border-primary bg-primary/10 text-primary'
-                            : 'border-border bg-card hover:bg-muted/50 text-foreground'"
-                        @click="emit('update:radius', opt.value)"
-                    >
-                        {{ opt.label }}
-                    </button>
-                </div>
-            </section>
-
-            <!-- ── Size ──────────────────────────────────────────────── -->
-            <section class="space-y-1.5">
-                <h3 class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{{ t.density }}</h3>
-                <div class="grid grid-cols-3 gap-1">
-                    <button
-                        v-for="opt in sizeOptions"
-                        :key="opt.value"
-                        type="button"
-                        class="h-7 rounded-md border text-xs font-medium transition-colors"
-                        :class="size === opt.value
-                            ? 'border-primary bg-primary/10 text-primary'
-                            : 'border-border bg-card hover:bg-muted/50 text-foreground'"
-                        @click="emit('update:size', opt.value)"
-                    >
-                        {{ opt.label }}
-                    </button>
-                </div>
-            </section>
-
-            <!-- ── Focus halo ────────────────────────────────────────── -->
-            <section class="space-y-1.5">
-                <h3 class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{{ t.focusHalo }}</h3>
-                <div class="grid grid-cols-3 gap-1">
-                    <button
-                        v-for="opt in haloOptions"
-                        :key="opt.value"
-                        type="button"
-                        class="h-7 rounded-md border text-xs font-medium transition-colors"
-                        :class="halo === opt.value
-                            ? 'border-primary bg-primary/10 text-primary'
-                            : 'border-border bg-card hover:bg-muted/50 text-foreground'"
-                        @click="emit('update:halo', opt.value)"
-                    >
-                        {{ opt.label }}
-                    </button>
-                </div>
-            </section>
-
-            <!-- ── Dark surface preset ─────────────────────── -->
-            <section class="space-y-1.5">
-                <header class="flex items-center justify-between">
-                    <h3 class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                        {{ t.surface }}
-                    </h3>
-                    <span class="text-[10px] font-mono text-muted-foreground capitalize">
-                        {{ darkSurface }}
-                    </span>
-                </header>
-                <div class="grid grid-cols-3 gap-1">
-                    <button
-                        v-for="opt in surfaceOptions"
-                        :key="opt.value"
-                        type="button"
-                        class="flex items-center gap-1.5 h-8 px-2 rounded-md border text-xs font-medium transition-colors text-left"
-                        :class="darkSurface === opt.value
-                            ? 'border-primary bg-primary/10 text-primary'
-                            : 'border-border bg-card hover:bg-muted/50 text-foreground'"
-                        @click="emit('update:darkSurface', opt.value)"
-                    >
-                        <span
-                            class="size-3 rounded-full ring-1 ring-border shrink-0"
-                            :style="{ backgroundColor: opt.sample }"
-                        />
-                        {{ opt.label }}
-                    </button>
-                </div>
-            </section>
-
-            <!-- ── Locale ────────────────────────────────────────────── -->
-            <section class="space-y-1.5">
-                <h3 class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{{ t.language }}</h3>
-                <div class="grid grid-cols-2 gap-1">
-                    <button
-                        v-for="opt in localeOptions"
-                        :key="opt.value"
-                        type="button"
-                        class="h-7 rounded-md border text-xs font-medium transition-colors"
-                        :class="locale === opt.value
-                            ? 'border-primary bg-primary/10 text-primary'
-                            : 'border-border bg-card hover:bg-muted/50 text-foreground'"
-                        @click="emit('update:locale', opt.value)"
-                    >
-                        {{ opt.label }}
-                    </button>
-                </div>
-            </section>
-
-            <!-- ── Reset ─────────────────────────────────────────────── -->
-            <div class="pt-2 border-t border-border">
-                <button
-                    type="button"
-                    class="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors"
-                    @click="emit('reset')"
-                >
-                    <ArrowPathIcon class="w-3.5 h-3.5" />
-                    {{ t.reset }}
-                </button>
             </div>
         </div>
     </PopoverPanel>

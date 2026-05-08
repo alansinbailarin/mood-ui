@@ -71,7 +71,6 @@ const canvasStyle = computed<CSSProperties>(() => ({
         var(--border) calc(var(--canvas-stroke-alpha) * 100%), 
         transparent 
     ); 
-    background-color: inherit; 
 } 
  
 .modo-canvas[data-pattern='dots'] { 

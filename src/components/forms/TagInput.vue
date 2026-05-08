@@ -1,62 +1,93 @@
 <template>
-    <div
-        :class="[
-            'flex flex-wrap items-center gap-1.5 w-full bg-card border border-border',
-            'transition-colors',
-            'focus-within:border-foreground/40 focus-within:ring-2 focus-within:ring-foreground/15',
-            radiusClasses,
-            paddingClasses,
-            disabled ? 'opacity-50 pointer-events-none' : '',
-            readonly ? 'bg-muted/30' : '',
-        ]"
-        @click="focusInput"
-    >
-        <span
-            v-for="(tag, idx) in modelValue"
-            :key="`${tag}-${idx}`"
-            :class="[
-                'inline-flex items-center gap-1 font-medium whitespace-nowrap',
-                chipSizeClasses,
-                chipRadiusClasses,
-                chipColorClasses,
-            ]"
+    <div :class="['flex flex-col gap-1.5', fullWidth ? 'w-full' : 'inline-flex']">
+        <label
+            v-if="label"
+            :for="fieldId"
+            class="text-caption font-medium text-foreground"
         >
-            {{ tag }}
-            <button
-                v-if="!readonly && !disabled"
-                type="button"
-                :aria-label="`Eliminar ${tag}`"
-                class="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full hover:bg-foreground/10 transition-colors"
-                @click.stop="removeTag(idx)"
-            >
-                <svg viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3">
-                    <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
-                </svg>
-            </button>
-        </span>
+            {{ label }}
+        </label>
 
-        <input
-            ref="inputEl"
-            v-model="draft"
-            type="text"
-            :placeholder="modelValue?.length ? '' : placeholder"
-            :aria-label="ariaLabel ?? 'Tags'"
-            :disabled="disabled || readonly || (max !== undefined && (modelValue?.length ?? 0) >= max)"
+        <div
             :class="[
-                'flex-1 min-w-[6rem] bg-transparent border-0 outline-none text-foreground placeholder:text-muted-foreground',
-                inputSizeClasses,
+                'flex flex-wrap items-center gap-1.5 transition-shadow',
+                wrapperVariantClasses,
+                radiusClasses,
+                paddingClasses,
+                fullWidth ? 'w-full' : '',
+                isDisabled ? 'opacity-60 cursor-not-allowed pointer-events-none' : 'cursor-text',
+                readonly ? 'pointer-events-none' : '',
             ]"
-            @keydown="onKeydown"
-            @blur="commitDraft"
-            @paste="onPaste"
-        />
+            @click="focusInput"
+        >
+            <span
+                v-for="(tag, idx) in modelValue"
+                :key="`${tag}-${idx}`"
+                :class="[
+                    'inline-flex items-center gap-1 font-medium whitespace-nowrap',
+                    chipSizeClasses,
+                    chipRadiusClasses,
+                    chipColorClasses,
+                ]"
+            >
+                {{ tag }}
+                <button
+                    v-if="!readonly && !disabled"
+                    type="button"
+                    :aria-label="`Eliminar ${tag}`"
+                    class="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full hover:bg-foreground/10 transition-colors"
+                    @click.stop="removeTag(idx)"
+                >
+                    <svg viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3">
+                        <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                    </svg>
+                </button>
+            </span>
+
+            <input
+                :id="fieldId"
+                ref="inputEl"
+                v-model="draft"
+                type="text"
+                :placeholder="modelValue?.length ? '' : placeholder"
+                :aria-label="label ? undefined : (ariaLabel ?? 'Tags')"
+                :aria-invalid="hasError || undefined"
+                :aria-describedby="describedBy"
+                :disabled="isDisabled || readonly || (max !== undefined && (modelValue?.length ?? 0) >= max)"
+                :class="[
+                    'modo-field-native flex-1 min-w-[6rem] bg-transparent p-0 text-foreground placeholder:text-muted-foreground',
+                    inputSizeClasses,
+                ]"
+                @keydown="onKeydown"
+                @blur="commitDraft"
+                @paste="onPaste"
+            />
+        </div>
+
+        <div v-if="errorText || helperText" class="flex items-start">
+            <p
+                v-if="errorText"
+                :id="errorId"
+                class="text-caption text-destructive"
+            >
+                {{ errorText }}
+            </p>
+            <p
+                v-else-if="helperText"
+                :id="helperId"
+                class="text-caption text-muted-foreground"
+            >
+                {{ helperText }}
+            </p>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import type { TagInput } from '../../interfaces/forms/TagInput.interface';
-import { useResolvedColor, useResolvedRadius, useResolvedSize } from '../../composables/useModoConfig';
+import { useResolvedColor, useResolvedSize } from '../../composables/useModoConfig';
+import { useFieldState, useFieldClasses } from '../../composables/useField';
 
 const props = withDefaults(defineProps<TagInput>(), {
     modelValue: () => [],
@@ -65,6 +96,8 @@ const props = withDefaults(defineProps<TagInput>(), {
     delimiters: () => [','],
     color: 'default',
     variant: 'subtle',
+    fieldVariant: 'outline',
+    fullWidth: false,
 });
 
 const emit = defineEmits<{
@@ -74,10 +107,23 @@ const emit = defineEmits<{
     'change': [v: string[]];
 }>();
 
+/* ── Field system (same as Input / Select / Combobox) ── */
+const { fieldId, radius, stateColor, hasError, isDisabled, errorId, helperId, describedBy } =
+    useFieldState(props, { componentName: 'TagInput', idPrefix: 'modo-tag-input' });
+
+const { wrapperVariantClasses, radiusClasses } = useFieldClasses({
+    variant: () => props.fieldVariant ?? 'outline',
+    stateColor,
+    hasError,
+    radius,
+    halo: () => props.halo,
+});
+
+/* ── Chip color (separate from field state color) ── */
 const resolvedSize = useResolvedSize(() => props.size);
-const resolvedRadius = useResolvedRadius(() => props.radius);
 const resolvedColor = useResolvedColor(() => props.color);
 
+/* ── Input state ── */
 const draft = ref('');
 const inputEl = ref<HTMLInputElement | null>(null);
 
@@ -137,17 +183,7 @@ function onPaste(e: ClipboardEvent) {
     }
 }
 
-const radiusClasses = computed(() => {
-    switch (resolvedRadius.value) {
-        case 'none':   return 'rounded-none';
-        case 'small':  return 'rounded';
-        case 'large':  return 'rounded-xl';
-        case 'full':   return 'rounded-2xl';
-        case 'medium':
-        default:       return 'rounded-lg';
-    }
-});
-
+/* ── Size classes ── */
 const paddingClasses = computed(() => {
     switch (resolvedSize.value) {
         case 'small':  return 'p-1.5 min-h-[2rem]';
@@ -176,7 +212,7 @@ const chipSizeClasses = computed(() => {
 });
 
 const chipRadiusClasses = computed(() => {
-    switch (resolvedRadius.value) {
+    switch (radius.value) {
         case 'none':   return 'rounded-none';
         case 'small':  return 'rounded';
         case 'large':  return 'rounded-lg';
@@ -195,26 +231,27 @@ const chipColorClasses = computed(() => {
             solid:   'bg-foreground text-background',
         },
         primary: {
-            subtle:  'bg-primary-subtle text-primary',
+            subtle:  'bg-primary/12 text-primary',
             outline: 'border border-primary/40 text-primary',
             solid:   'bg-primary text-primary-foreground',
         },
         danger: {
-            subtle:  'bg-destructive-subtle text-destructive',
+            subtle:  'bg-destructive/10 text-destructive',
             outline: 'border border-destructive/40 text-destructive',
             solid:   'bg-destructive text-destructive-foreground',
         },
         success: {
-            subtle:  'bg-success-subtle text-success',
+            subtle:  'bg-success/10 text-success',
             outline: 'border border-success/40 text-success',
             solid:   'bg-success text-success-foreground',
         },
         warning: {
-            subtle:  'bg-warning-subtle text-warning',
+            subtle:  'bg-warning/10 text-warning',
             outline: 'border border-warning/40 text-warning',
             solid:   'bg-warning text-warning-foreground',
         },
     };
-    return map[c]?.[props.variant] ?? map.default[props.variant];
+    return map[c]?.[props.variant] ?? map.default.subtle;
 });
 </script>
+

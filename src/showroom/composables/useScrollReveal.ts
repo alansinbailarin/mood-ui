@@ -29,10 +29,14 @@ const observer: IntersectionObserver | null = (typeof window !== 'undefined')
     )
     : null;
 
+// Delay must be >= view-transition fade-in duration (340ms) so that
+// reveal animations don't conflict with the crossfade between routes.
+const REVEAL_DELAY = 380;
+
 export const vReveal: Directive<HTMLElement, string | undefined> = {
     mounted(el, binding) {
         el.setAttribute('data-reveal', binding.value ?? '');
-        observer?.observe(el);
+        setTimeout(() => observer?.observe(el), REVEAL_DELAY);
     },
     unmounted(el) {
         observer?.unobserve(el);
@@ -44,7 +48,7 @@ export const vRevealChildren: Directive<HTMLElement> = {
         el.setAttribute('data-reveal-children', '');
         for (const child of Array.from(el.children) as HTMLElement[]) {
             child.setAttribute('data-reveal', '');
-            observer?.observe(child);
+            setTimeout(() => observer?.observe(child), REVEAL_DELAY);
         }
     },
     unmounted(el) {

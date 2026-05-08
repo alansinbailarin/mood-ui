@@ -1,0 +1,50 @@
+{
+    "title": "ProgressBar",
+    "description": "Determinate or indeterminate linear progress bar. Supports label, numeric value, colors, sizes and striped animation.",
+
+    "controls": {
+        "value":         "Value",
+        "color":         "Color",
+        "size":          "Size",
+        "indeterminate": "Indeterminate",
+        "striped":       "Striped",
+        "showValue":     "Value"
+    },
+
+    "examples": {
+        "label": {
+            "title":       "With label and value",
+            "desc":        "Combine a label above and showValue to display the numeric percentage.",
+            "uploadLabel": "Uploading file"
+        },
+        "indeterminate": {
+            "title": "Indeterminate",
+            "desc":  "Omit the value prop to show the sliding animation."
+        },
+        "colors": {
+            "title": "Colors",
+            "desc":  "Five semantic colors to reflect the process state."
+        },
+        "sizes": {
+            "title": "Sizes",
+            "desc":  "Three thicknesses: small, medium (default) and large."
+        },
+        "striped": {
+            "title": "Striped",
+            "desc":  "Enable animated stripes for in-progress operations."
+        }
+    },
+
+    "props": {
+        "value":     "Current value between min and max. Omit for indeterminate mode.",
+        "min":       "Minimum value of the range.",
+        "max":       "Maximum value of the range.",
+        "color":     "Bar color.",
+        "size":      "Bar thickness.",
+        "radius":    "Track radius. Cascades from ModoProvider.",
+        "showValue": "Shows the numeric percentage next to the bar.",
+        "label":     "Optional label rendered above the bar.",
+        "ariaLabel": "Accessible label when the label prop is omitted.",
+        "striped":   "Enables stripe animation (useful for \"uploading…\")."
+    }
+}

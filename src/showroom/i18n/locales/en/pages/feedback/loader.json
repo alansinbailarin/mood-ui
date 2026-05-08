@@ -1,0 +1,37 @@
+{
+    "title": "Loader",
+    "description": "Circular spinner for indicating indeterminate progress. Small, accessible, and inherits color by default so it integrates into buttons, banners or any container.",
+
+    "controls": {
+        "variant": "Variant",
+        "size":    "Size",
+        "color":   "Color"
+    },
+
+    "examples": {
+        "variants": {
+            "title": "Variants",
+            "desc":  "normal shows only the arc; outline adds a subtle background track."
+        },
+        "sizes": {
+            "title": "Sizes",
+            "desc":  "Three sizes aligned with the rest of the system (14, 18 and 22 px)."
+        },
+        "colors": {
+            "title": "Custom colors",
+            "desc":  "The color prop accepts any CSS value — useful for applying project semantic tokens."
+        },
+        "inline": {
+            "title":   "Inline with text",
+            "desc":    "Combined with text, the spinner inherits the container's color by default.",
+            "loading": "Loading projects…"
+        }
+    },
+
+    "props": {
+        "variant": "Visual variant. outline paints a subtle background track on the ring.",
+        "size":    "Spinner size. Cascades from ModoProvider.",
+        "color":   "Stroke color. Accepts any valid CSS value.",
+        "label":   "Visually hidden accessible text for screen readers."
+    }
+}

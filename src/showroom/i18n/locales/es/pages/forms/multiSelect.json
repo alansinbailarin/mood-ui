@@ -1,0 +1,58 @@
+{
+    "category": "Forms",
+    "title": "MultiSelect",
+    "description": "Selector múltiple con chips, búsqueda y selección masiva. Pensado para listas medianas donde el usuario marca varias opciones.",
+    "examples": {
+        "basic": {
+            "title": "Uso básico",
+            "desc": "Selección múltiple con chips removibles."
+        },
+        "searchable": {
+            "title": "Buscable y seleccionar todo",
+            "desc": "Combina búsqueda con un toggle para marcar / desmarcar todo de una vez."
+        },
+        "maxChips": {
+            "title": "Chips compactados",
+            "desc": "Cuando hay muchas selecciones, max-visible-chips colapsa el resto en un +N."
+        },
+        "maxSelected": {
+            "title": "Límite de selección",
+            "desc": "max-selected impide superar el número indicado de opciones."
+        },
+        "sizes": {
+            "title": "Tamaños",
+            "desc": "Tres tamaños para distintos contextos de formulario."
+        }
+    },
+    "props": {
+        "modelValue": "Array de valores seleccionados (v-model).",
+        "options": "Lista de opciones disponibles.",
+        "label": "Etiqueta visible sobre el campo.",
+        "placeholder": "Texto cuando no hay nada seleccionado.",
+        "helperText": "Texto de ayuda bajo el campo.",
+        "errorText": "Mensaje de error que reemplaza al helperText.",
+        "variant": "Estilo visual del trigger.",
+        "color": "Color semántico del control y los chips.",
+        "size": "Altura del trigger y tamaño de los chips.",
+        "radius": "Radio de esquinas del trigger y los chips.",
+        "clearable": "Muestra botón X para limpiar todas las selecciones.",
+        "searchable": "Activa el input de búsqueda en el panel.",
+        "showSelectAll": "Muestra un botón \"Seleccionar todo\" en el panel.",
+        "maxSelected": "Máximo de opciones seleccionables.",
+        "maxVisibleChips": "Cantidad de chips antes de colapsar a \"+N\".",
+        "disabled": "Deshabilita el control.",
+        "readonly": "Modo solo lectura — bloquea cambios.",
+        "required": "Marca el campo como requerido.",
+        "loading": "Muestra spinner en lugar del chevron.",
+        "fullWidth": "Aplica w-full al control raíz.",
+        "iconLeft": "Icono renderizado a la izquierda del trigger.",
+        "name": "Genera inputs ocultos para envío en formularios.",
+        "ariaLabel": "Nombre accesible cuando no hay label visible."
+    },
+    "emits": {
+        "updateModelValue": "Emitido al cambiar el array de selecciones.",
+        "change": "Emitido tras cada cambio confirmado.",
+        "open": "Emitido cuando el panel se abre.",
+        "close": "Emitido cuando el panel se cierra."
+    }
+}

@@ -18,6 +18,7 @@ export interface DocTocApi {
     items: Ref<TocItem[]>;
     register: (item: TocItem) => void;
     unregister: (id: string) => void;
+    clear: () => void;
     activeId: Ref<string>;
     setActive: (id: string) => void;
 }
@@ -37,10 +38,14 @@ export function createDocToc(): DocTocApi {
         const idx = items.value.findIndex((i) => i.id === id);
         if (idx !== -1) items.value.splice(idx, 1);
     }
+    function clear() {
+        items.value = [];
+        activeId.value = '';
+    }
     function setActive(id: string) {
         activeId.value = id;
     }
-    return { items, register, unregister, activeId, setActive };
+    return { items, register, unregister, clear, activeId, setActive };
 }
 
 export function slugify(s: string): string {

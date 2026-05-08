@@ -1,0 +1,67 @@
+{
+    "pages": {
+        "dataDisplay": {
+            "weekView": {
+                "title": "WeekView",
+                "description": "Weekly view with an hourly grid. Supports business hours, disabled ranges, drag & drop and event resizing.",
+                "controls": {
+                    "format": "Format",
+                    "allDayRow": "All-day row",
+                    "borders": "Borders",
+                    "currentTime": "Current time"
+                },
+                "props": {
+                    "modelValue": "Visible date. The week is calculated from it.",
+                    "events": "Events to render in the hourly grid.",
+                    "locale": "BCP-47 locale for headers and formats.",
+                    "firstDayOfWeek": "First day of the week.",
+                    "color": "Semantic color applied to accents.",
+                    "format": "Time format for the hour column.",
+                    "hourStart": "First visible hour (0-23).",
+                    "hourEnd": "Last visible hour (1-24).",
+                    "slotMinutes": "Granularity of time slots.",
+                    "slotHeight": "Height in px of each time slot.",
+                    "minDayWidth": "Minimum width per day column before horizontal scroll.",
+                    "showAllDayRow": "Shows the row for all-day events.",
+                    "showHeader": "Shows the header with navigation.",
+                    "showCurrentTime": "Draws the current-time line.",
+                    "showNowPill": "Shows a pill with the current time over the day column.",
+                    "businessHours": "Highlights the business hours range.",
+                    "disabledTimeRanges": "Non-selectable time ranges.",
+                    "bordered": "Draws a border around the grid.",
+                    "draggableEvents": "Allows dragging events.",
+                    "resizableEvents": "Allows resizing events.",
+                    "allowRangeSelection": "Allows selecting a range by dragging over empty slots."
+                },
+                "emits": {
+                    "updateModelValue": "Emitted when the visible week changes.",
+                    "eventClick": "Click on an event.",
+                    "dayClick": "Click on a day header.",
+                    "slotClick": "Click on an empty slot.",
+                    "createEvent": "Request to create an event.",
+                    "eventDrop": "Event dragged to a new position.",
+                    "eventResize": "Event resized.",
+                    "selectRange": "Range selected by dragging."
+                },
+                "examples": {
+                    "basic": {
+                        "title": "Basic",
+                        "desc": "Week in 24-hour format with timed events."
+                    },
+                    "allDay": {
+                        "title": "With all-day row",
+                        "desc": "The top row groups all-day and multi-day events."
+                    },
+                    "format12h": {
+                        "title": "12-hour format",
+                        "desc": "Switches the time format to AM/PM."
+                    },
+                    "businessHours": {
+                        "title": "Business hours",
+                        "desc": "Highlights business hours and limits the visible time range."
+                    }
+                }
+            }
+        }
+    }
+}

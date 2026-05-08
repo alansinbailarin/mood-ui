@@ -1,17 +1,18 @@
 <template>
     <div
         :class="[
-            'relative flex flex-col gap-2',
+            'relative flex flex-col',
             cardClasses,
             paddingClasses,
         ]"
     >
+        <!-- Header: label + icon -->
         <div class="flex items-start justify-between gap-3">
-            <span :class="['font-medium text-muted-foreground', labelSizeClass]">{{ label }}</span>
+            <span :class="['font-medium text-muted-foreground leading-none', labelSizeClass]">{{ label }}</span>
             <span
                 v-if="icon"
                 :class="[
-                    'shrink-0 inline-flex items-center justify-center rounded-lg',
+                    'shrink-0 inline-flex items-center justify-center rounded-xl',
                     iconBoxClass,
                     iconColorClasses,
                 ]"
@@ -20,18 +21,22 @@
             </span>
         </div>
 
-        <div v-if="loading" :class="['h-8 w-24 bg-muted animate-pulse rounded', { 'h-7 w-20': resolvedSize === 'small', 'h-10 w-32': resolvedSize === 'large' }]" />
-        <span v-else :class="['font-bold tracking-tight text-foreground tabular-nums', valueSizeClass]">
-            {{ value }}
-        </span>
+        <!-- Value -->
+        <div :class="['mt-3', icon ? '' : '']">
+            <div v-if="loading" :class="['bg-muted animate-pulse rounded-lg', skeletonClass]" />
+            <span v-else :class="['font-semibold text-foreground tabular-nums leading-none', valueSizeClass]">
+                {{ value }}
+            </span>
+        </div>
 
-        <div v-if="trend || description" class="flex items-center gap-2 flex-wrap">
+        <!-- Trend + description -->
+        <div v-if="trend || description" :class="['flex items-center gap-2 flex-wrap', trendGapClass]">
             <span
                 v-if="trend"
                 :class="[
-                    'inline-flex items-center gap-0.5 font-semibold tabular-nums',
+                    'inline-flex items-center gap-0.5 font-medium tabular-nums rounded-md px-1.5 py-0.5',
                     trendSizeClass,
-                    trendColorClass,
+                    trendBadgeClasses,
                 ]"
             >
                 <ArrowUpIcon v-if="trendDirection === 'up'" :class="trendIconClass" />
@@ -46,9 +51,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { ArrowUpIcon, ArrowDownIcon, MinusIcon } from '@heroicons/vue/24/solid';
+import { ArrowUpIcon, ArrowDownIcon, MinusIcon } from '@heroicons/vue/20/solid';
 import type { Stat } from '../../interfaces/data-display/Stat.interface';
-import { useResolvedColor, useResolvedSize } from '../../composables/useModoConfig';
+import { useResolvedColor, useResolvedSize, useResolvedRadius } from '../../composables/useModoConfig';
 
 const props = withDefaults(defineProps<Stat>(), {
     variant: 'plain',
@@ -58,6 +63,7 @@ const props = withDefaults(defineProps<Stat>(), {
 
 const resolvedSize = useResolvedSize(() => props.size);
 const resolvedColor = useResolvedColor(() => props.color);
+const resolvedRadius = useResolvedRadius(() => (props as any).radius);
 
 const trendDirection = computed<'up' | 'down' | 'neutral'>(() => {
     if (!props.trend) return 'neutral';
@@ -74,10 +80,21 @@ const trendLabel = computed(() => {
     return `${sign}${props.trend.value}%`;
 });
 
+const radiusClass = computed(() => {
+    switch (resolvedRadius.value) {
+        case 'none':   return 'rounded-none';
+        case 'small':  return 'rounded-sm';
+        case 'large':  return 'rounded-xl';
+        case 'full':   return 'rounded-3xl';
+        case 'medium':
+        default:       return 'rounded-lg';
+    }
+});
+
 const cardClasses = computed(() => {
     switch (props.variant) {
-        case 'outlined': return 'border border-border bg-card rounded-xl';
-        case 'filled':   return 'bg-muted/40 border border-border/50 rounded-xl';
+        case 'outlined': return `border border-border bg-card ${radiusClass.value} shadow-sm`;
+        case 'filled':   return `bg-muted/50 border border-border/60 ${radiusClass.value}`;
         case 'plain':
         default:         return '';
     }
@@ -86,19 +103,19 @@ const cardClasses = computed(() => {
 const paddingClasses = computed(() => {
     if (props.variant === 'plain') return '';
     switch (resolvedSize.value) {
-        case 'small':  return 'p-3';
+        case 'small':  return 'p-3.5';
         case 'large':  return 'p-6';
         case 'medium':
-        default:       return 'p-4';
+        default:       return 'p-5';
     }
 });
 
 const labelSizeClass = computed(() => {
     switch (resolvedSize.value) {
-        case 'small':  return 'text-xs';
-        case 'large':  return 'text-base';
+        case 'small':  return 'text-[11px] tracking-wide uppercase';
+        case 'large':  return 'text-sm tracking-wide uppercase';
         case 'medium':
-        default:       return 'text-sm';
+        default:       return 'text-xs tracking-wide uppercase';
     }
 });
 
@@ -108,6 +125,22 @@ const valueSizeClass = computed(() => {
         case 'large':  return 'text-4xl';
         case 'medium':
         default:       return 'text-3xl';
+    }
+});
+
+const trendGapClass = computed(() => {
+    switch (resolvedSize.value) {
+        case 'small':  return 'mt-2.5';
+        case 'large':  return 'mt-4';
+        default:       return 'mt-3';
+    }
+});
+
+const skeletonClass = computed(() => {
+    switch (resolvedSize.value) {
+        case 'small':  return 'h-7 w-20 mt-3';
+        case 'large':  return 'h-10 w-32 mt-3';
+        default:       return 'h-8 w-24 mt-3';
     }
 });
 
@@ -122,10 +155,8 @@ const descSizeClass = computed(() => {
 
 const trendSizeClass = computed(() => {
     switch (resolvedSize.value) {
-        case 'small':  return 'text-[11px]';
-        case 'large':  return 'text-sm';
-        case 'medium':
-        default:       return 'text-xs';
+        case 'large':  return 'text-xs';
+        default:       return 'text-[11px]';
     }
 });
 
@@ -138,10 +169,10 @@ const trendIconClass = computed(() => {
 
 const iconBoxClass = computed(() => {
     switch (resolvedSize.value) {
-        case 'small':  return 'w-7 h-7';
-        case 'large':  return 'w-12 h-12';
+        case 'small':  return 'w-7 h-7 rounded-lg';
+        case 'large':  return 'w-12 h-12 rounded-xl';
         case 'medium':
-        default:       return 'w-9 h-9';
+        default:       return 'w-9 h-9 rounded-xl';
     }
 });
 
@@ -156,18 +187,19 @@ const iconSizeClass = computed(() => {
 
 const iconColorClasses = computed(() => {
     switch (resolvedColor.value) {
-        case 'primary': return 'bg-primary-subtle text-primary';
-        case 'danger':  return 'bg-destructive-subtle text-destructive';
-        case 'success': return 'bg-success-subtle text-success';
-        case 'warning': return 'bg-warning-subtle text-warning';
+        case 'primary': return 'bg-primary/10 text-primary';
+        case 'danger':  return 'bg-destructive/10 text-destructive';
+        case 'success': return 'bg-success/10 text-success';
+        case 'warning': return 'bg-warning/10 text-warning';
         case 'default':
         default:        return 'bg-muted text-muted-foreground';
     }
 });
 
-const trendColorClass = computed(() => {
-    if (trendDirection.value === 'up')   return 'text-success';
-    if (trendDirection.value === 'down') return 'text-destructive';
-    return 'text-muted-foreground';
+const trendBadgeClasses = computed(() => {
+    if (trendDirection.value === 'up')   return 'bg-success/10 text-success';
+    if (trendDirection.value === 'down') return 'bg-destructive/10 text-destructive';
+    return 'bg-muted text-muted-foreground';
 });
 </script>
+

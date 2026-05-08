@@ -4,39 +4,46 @@ import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Slider from '../../../components/forms/Slider.vue';
 import type { PropDoc, EmitDoc } from '../../types';
+import TbPills  from '../../components/toolbar/TbPills.vue';
+import TbDots   from '../../components/toolbar/TbDots.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep    from '../../components/toolbar/TbSep.vue';
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgValue    = ref(50);
 const pgColor    = ref<'default' | 'primary' | 'success' | 'warning' | 'danger'>('primary');
 const pgSize     = ref<'small' | 'medium' | 'large'>('medium');
-const pgStep     = ref<1 | 5 | 10>(1);
+const pgStep     = ref('1');
 const pgMarks    = ref(false);
 const pgDisabled = ref(false);
+const pgReadonly = ref(false);
 
 function resetPlayground() {
     pgValue.value    = 50;
     pgColor.value    = 'primary';
     pgSize.value     = 'medium';
-    pgStep.value     = 1;
+    pgStep.value     = '1';
     pgMarks.value    = false;
     pgDisabled.value = false;
+    pgReadonly.value = false;
 }
 
 const colorDots = [
-    { value: 'default' as const, bg: '#64748b',        label: 'Default' },
-    { value: 'primary' as const, bg: 'var(--primary)', label: 'Primary' },
-    { value: 'success' as const, bg: '#22c55e',        label: 'Success' },
-    { value: 'warning' as const, bg: '#f59e0b',        label: 'Warning' },
-    { value: 'danger'  as const, bg: '#ef4444',        label: 'Danger'  },
+    { value: 'default' as const, bg: 'var(--color-slate-400)',   label: 'Default' },
+    { value: 'primary' as const, bg: 'var(--primary)',            label: 'Primary' },
+    { value: 'success' as const, bg: 'var(--color-emerald-500)', label: 'Success' },
+    { value: 'warning' as const, bg: 'var(--color-amber-500)',   label: 'Warning' },
+    { value: 'danger'  as const, bg: 'var(--color-red-500)',     label: 'Danger'  },
 ];
 
 const overviewCode = computed(() => {
     const parts: string[] = [];
     if (pgColor.value !== 'default') parts.push(`color="${pgColor.value}"`);
     if (pgSize.value  !== 'medium')  parts.push(`size="${pgSize.value}"`);
-    if (pgStep.value  !== 1)         parts.push(`:step="${pgStep.value}"`);
+    if (pgStep.value  !== '1')       parts.push(`:step="${pgStep.value}"`);
     if (pgMarks.value)               parts.push(':marks="true"');
     if (pgDisabled.value)            parts.push(':disabled="true"');
+    if (pgReadonly.value)            parts.push(':readonly="true"');
     const attrs = parts.length ? '\n    ' + parts.join('\n    ') : '';
     return `<Slider
     v-model="value"
@@ -115,93 +122,27 @@ const emitsList: EmitDoc[] = [
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="200px" @reset="resetPlayground">
                 <template #controls>
-                    <!-- Color dots -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">COLOR</span>
-                        <div class="flex items-center gap-1">
-                            <button
-                                v-for="c in colorDots"
-                                :key="c.value"
-                                type="button"
-                                class="size-4 rounded-full transition-all duration-150"
-                                :class="pgColor === c.value
-                                    ? 'ring-2 ring-offset-1 ring-foreground/30 scale-125'
-                                    : 'hover:scale-110 opacity-70 hover:opacity-100'"
-                                :style="`background: ${c.bg}`"
-                                :title="c.label"
-                                @click="pgColor = c.value"
-                            />
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Size -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">SIZE</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in ['small', 'medium', 'large']"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = (s as typeof pgSize)"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Step -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">STEP</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in [1, 5, 10] as const"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors"
-                                :class="pgStep === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgStep = s"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgMarks
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgMarks = !pgMarks"
-                    >Marks</button>
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgDisabled
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgDisabled = !pgDisabled"
-                    >Disabled</button>
+                    <TbDots label="Color" :options="colorDots" v-model="pgColor" />
+                    <TbSep />
+                    <TbPills label="Size" :options="[{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbPills label="Step" :options="[{value:'1'},{value:'5'},{value:'10'}]" v-model="pgStep" />
+                    <TbSep />
+                    <TbToggle label="Marks" v-model="pgMarks" />
+                    <TbToggle label="Disabled" v-model="pgDisabled" />
+                    <TbToggle label="Readonly" v-model="pgReadonly" />
                 </template>
 
                 <Slider
                     v-model="pgValue"
                     :min="0"
                     :max="100"
-                    :step="pgStep"
+                    :step="Number(pgStep)"
                     :color="pgColor"
                     :size="pgSize"
                     :marks="pgMarks"
                     :disabled="pgDisabled"
+                    :readonly="pgReadonly"
                     show-value
                     label="Valor"
                     class="w-72"

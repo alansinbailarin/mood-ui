@@ -1,0 +1,22 @@
+{
+    "title": "Container",
+    "category": "Layout",
+    "description": "Centered wrapper with max-width and semantic padding to constrain content width at any breakpoint.",
+    "overviewSample": "Content limited to the max width",
+    "examples": {
+        "sizes":   { "title": "Sizes",   "desc": "Each preset matches a common breakpoint for readable content." },
+        "fluid":   { "title": "Fluid",   "desc": "Without a max-width, the container fills all available space." },
+        "padding": { "title": "Padding", "desc": "Control inner spacing with system tokens." }
+    },
+    "fluidSample": "Fills the full available width with generous padding.",
+    "paddingSamples": { "none": "no padding", "small": "small", "large": "large" },
+    "props": {
+        "maxWidth":      "Maximum width of the container.",
+        "padding":       "Horizontal and vertical padding applied to the container.",
+        "centered":      "Centers the container horizontally with auto margins.",
+        "centerContent": "Centers inner content using flexbox.",
+        "height":        "Height of the container.",
+        "as":            "Root semantic tag to render."
+    },
+    "slots": { "default": "Content wrapped by the container." }
+}

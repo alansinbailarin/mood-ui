@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import AgendaView from '../../../components/data-display/calendar/AgendaView.vue';
 import type { CalendarEvent } from '../../../interfaces/data-display/calendar/MonthView.interface';
 import type { PropDoc, EmitDoc } from '../../types';
+
+const { t } = useI18n();
 
 // ── Sample events ─────────────────────────────────────────────────────────────
 const today = new Date();
@@ -67,39 +70,39 @@ const emptyCode = `<AgendaView
 const fmt12hCode = `<AgendaView v-model="date" :events="events" :days-to-show="7" format="12h" />`;
 
 // ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'modelValue',           type: 'Date',                                                              description: 'Fecha ancla a partir de la cual se calcula el rango.' },
-    { name: 'events',               type: 'CalendarEvent[]',                                                   description: 'Lista de eventos a mostrar.' },
-    { name: 'locale',               type: 'string',                                                            description: 'Locale BCP-47 para fechas y nombres de día.' },
-    { name: 'color',                type: "'default' | 'primary' | 'danger' | 'success' | 'warning'",          description: 'Color semántico aplicado a los acentos.' },
-    { name: 'daysToShow',           type: 'number',                                     default: '30',         description: 'Cantidad de días hacia adelante a mostrar.' },
-    { name: 'daysBefore',           type: 'number',                                     default: '0',          description: 'Días hacia atrás incluidos antes de la fecha ancla.' },
-    { name: 'showEmptyDays',        type: 'boolean',                                    default: 'false',      description: 'Muestra los días sin eventos como filas vacías.' },
-    { name: 'showMonthSeparator',   type: 'boolean',                                    default: 'true',       description: 'Inserta un separador al cambiar de mes.' },
-    { name: 'showHeader',           type: 'boolean',                                    default: 'true',       description: 'Muestra la cabecera con navegación.' },
-    { name: 'format',               type: "'12h' | '24h'",                              default: "'24h'",      description: 'Formato horario de los eventos.' },
-    { name: 'emptyText',            type: 'string',                                                            description: 'Texto mostrado cuando no hay eventos en el rango.' },
-    { name: 'highlightedDates',     type: 'Date[]',                                                            description: 'Fechas resaltadas visualmente.' },
-    { name: 'disabledDates',        type: 'Date[]',                                                            description: 'Fechas deshabilitadas.' },
-    { name: 'bordered',             type: 'boolean',                                    default: 'true',       description: 'Dibuja borde alrededor del contenedor.' },
-    { name: 'loadMoreChunk',        type: 'number',                                                            description: 'Número de días añadidos al cargar más eventos.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'modelValue',           type: 'Date',                                                              description: t('pages.dataDisplay.agendaView.props.modelValue') },
+    { name: 'events',               type: 'CalendarEvent[]',                                                   description: t('pages.dataDisplay.agendaView.props.events') },
+    { name: 'locale',               type: 'string',                                                            description: t('pages.dataDisplay.agendaView.props.locale') },
+    { name: 'color',                type: "'default' | 'primary' | 'danger' | 'success' | 'warning'",          description: t('pages.dataDisplay.agendaView.props.color') },
+    { name: 'daysToShow',           type: 'number',                                     default: '30',         description: t('pages.dataDisplay.agendaView.props.daysToShow') },
+    { name: 'daysBefore',           type: 'number',                                     default: '0',          description: t('pages.dataDisplay.agendaView.props.daysBefore') },
+    { name: 'showEmptyDays',        type: 'boolean',                                    default: 'false',      description: t('pages.dataDisplay.agendaView.props.showEmptyDays') },
+    { name: 'showMonthSeparator',   type: 'boolean',                                    default: 'true',       description: t('pages.dataDisplay.agendaView.props.showMonthSeparator') },
+    { name: 'showHeader',           type: 'boolean',                                    default: 'true',       description: t('pages.dataDisplay.agendaView.props.showHeader') },
+    { name: 'format',               type: "'12h' | '24h'",                              default: "'24h'",      description: t('pages.dataDisplay.agendaView.props.format') },
+    { name: 'emptyText',            type: 'string',                                                            description: t('pages.dataDisplay.agendaView.props.emptyText') },
+    { name: 'highlightedDates',     type: 'Date[]',                                                            description: t('pages.dataDisplay.agendaView.props.highlightedDates') },
+    { name: 'disabledDates',        type: 'Date[]',                                                            description: t('pages.dataDisplay.agendaView.props.disabledDates') },
+    { name: 'bordered',             type: 'boolean',                                    default: 'true',       description: t('pages.dataDisplay.agendaView.props.bordered') },
+    { name: 'loadMoreChunk',        type: 'number',                                                            description: t('pages.dataDisplay.agendaView.props.loadMoreChunk') },
+]);
 
-const emitsList: EmitDoc[] = [
-    { name: 'update:modelValue', payload: 'Date',                                                                                  description: 'Emitido al cambiar el rango visible.' },
-    { name: 'event-click',       payload: '(event: CalendarEvent, nativeEvent: MouseEvent)',                                        description: 'Click sobre un evento.' },
-    { name: 'day-click',         payload: '(date: Date, events: CalendarEvent[], nativeEvent: MouseEvent)',                         description: 'Click sobre la fila de un día.' },
-    { name: 'create-event',      payload: '(date: Date, allDay: boolean, nativeEvent: MouseEvent | KeyboardEvent)',                 description: 'Solicitud de creación de evento.' },
-    { name: 'load-more',         payload: "'forward' | 'backward'",                                                                  description: 'Solicitud de cargar más días al final del listado.' },
-];
+const emitsList = computed<EmitDoc[]>(() => [
+    { name: 'update:modelValue', payload: 'Date',                                                                                  description: t('pages.dataDisplay.agendaView.emits.updateModelValue') },
+    { name: 'event-click',       payload: '(event: CalendarEvent, nativeEvent: MouseEvent)',                                        description: t('pages.dataDisplay.agendaView.emits.eventClick') },
+    { name: 'day-click',         payload: '(date: Date, events: CalendarEvent[], nativeEvent: MouseEvent)',                         description: t('pages.dataDisplay.agendaView.emits.dayClick') },
+    { name: 'create-event',      payload: '(date: Date, allDay: boolean, nativeEvent: MouseEvent | KeyboardEvent)',                 description: t('pages.dataDisplay.agendaView.emits.createEvent') },
+    { name: 'load-more',         payload: "'forward' | 'backward'",                                                                  description: t('pages.dataDisplay.agendaView.emits.loadMore') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="AgendaView"
+        :title="t('pages.dataDisplay.agendaView.title')"
         category="Calendar"
         import-path="import { AgendaView } from 'mood-ui'"
-        description="Lista cronológica de eventos por día. Ideal para secciones “próximos eventos”, dashboards y agendas compactas."
+        :description="t('pages.dataDisplay.agendaView.description')"
         :props-list="propsList"
         :emits-list="emitsList"
     >
@@ -107,7 +110,7 @@ const emitsList: EmitDoc[] = [
             <ComponentPreview :code="overviewCode" min-height="400px" @reset="resetPlayground">
                 <template #controls>
                     <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Días</span>
+                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">{{ t('pages.dataDisplay.agendaView.controls.days') }}</span>
                         <div class="flex rounded-md border border-border overflow-hidden">
                             <button
                                 v-for="d in [3, 7, 14, 30]"
@@ -125,7 +128,7 @@ const emitsList: EmitDoc[] = [
                     <span class="w-px h-4 bg-border shrink-0" />
 
                     <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Formato</span>
+                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">{{ t('pages.dataDisplay.agendaView.controls.format') }}</span>
                         <div class="flex rounded-md border border-border overflow-hidden">
                             <button
                                 v-for="f in ['24h', '12h']"
@@ -149,7 +152,7 @@ const emitsList: EmitDoc[] = [
                             ? 'border-primary bg-primary/10 text-primary font-medium'
                             : 'border-border text-muted-foreground hover:bg-muted/60'"
                         @click="pgShowEmptyDays = !pgShowEmptyDays"
-                    >Días vacíos</button>
+                    >{{ t('pages.dataDisplay.agendaView.controls.emptyDays') }}</button>
 
                     <button
                         type="button"
@@ -158,7 +161,7 @@ const emitsList: EmitDoc[] = [
                             ? 'border-primary bg-primary/10 text-primary font-medium'
                             : 'border-border text-muted-foreground hover:bg-muted/60'"
                         @click="pgBordered = !pgBordered"
-                    >Bordes</button>
+                    >{{ t('pages.dataDisplay.agendaView.controls.borders') }}</button>
                 </template>
 
                 <div class="w-full max-w-2xl">
@@ -176,8 +179,8 @@ const emitsList: EmitDoc[] = [
 
         <template #examples>
             <ComponentPreview
-                title="Básico"
-                description="Lista de los próximos 7 días agrupada por día."
+                :title="t('pages.dataDisplay.agendaView.examples.basic.title')"
+                :description="t('pages.dataDisplay.agendaView.examples.basic.desc')"
                 :code="basicCode"
                 min-height="400px"
             >
@@ -185,8 +188,8 @@ const emitsList: EmitDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Rango extendido"
-                description="Aumenta days-to-show para mostrar más días por adelantado."
+                :title="t('pages.dataDisplay.agendaView.examples.extendedRange.title')"
+                :description="t('pages.dataDisplay.agendaView.examples.extendedRange.desc')"
                 :code="longCode"
                 min-height="400px"
             >
@@ -194,8 +197,8 @@ const emitsList: EmitDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Estado vacío"
-                description="Cuando no hay eventos, muestra un mensaje configurable."
+                :title="t('pages.dataDisplay.agendaView.examples.emptyState.title')"
+                :description="t('pages.dataDisplay.agendaView.examples.emptyState.desc')"
                 :code="emptyCode"
                 min-height="320px"
             >
@@ -211,8 +214,8 @@ const emitsList: EmitDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Formato 12 horas"
-                description="Muestra los horarios de los eventos en formato AM/PM."
+                :title="t('pages.dataDisplay.agendaView.examples.format12h.title')"
+                :description="t('pages.dataDisplay.agendaView.examples.format12h.desc')"
                 :code="fmt12hCode"
                 min-height="400px"
             >

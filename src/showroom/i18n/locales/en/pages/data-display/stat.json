@@ -1,0 +1,50 @@
+{
+    "pages": {
+        "dataDisplay": {
+            "stat": {
+                "title": "Stat",
+                "description": "Compact KPI card for displaying metrics with trend, icon and semantic color. Ideal for dashboards and summaries.",
+                "controls": {
+                    "variant": "Variant",
+                    "color": "Color",
+                    "size": "Size",
+                    "trend": "Trend",
+                    "loading": "Loading"
+                },
+                "props": {
+                    "label": "Short metric label (\"Revenue\", \"Users\").",
+                    "value": "Main value pre-formatted by the consumer.",
+                    "description": "Auxiliary text shown below the value.",
+                    "icon": "Optional icon component (heroicons or other).",
+                    "trend": "Trend metadata. Renders an arrow and the delta.",
+                    "variant": "Visual style of the card.",
+                    "color": "Semantic color applied to the icon and trend.",
+                    "size": "Size scale. Inherited from ModoProvider if omitted.",
+                    "loading": "Shows a skeleton on the value while loading."
+                },
+                "examples": {
+                    "basic": {
+                        "title": "Basic",
+                        "desc": "Label and main value with no extras."
+                    },
+                    "trend": {
+                        "title": "With trend",
+                        "desc": "The trend prop shows an arrow and the percentage delta."
+                    },
+                    "icon": {
+                        "title": "With icon and color",
+                        "desc": "Combines icon, semantic color and the outlined variant."
+                    },
+                    "sizes": {
+                        "title": "Sizes",
+                        "desc": "Three scales to align with the page hierarchy."
+                    },
+                    "grid": {
+                        "title": "Metrics grid",
+                        "desc": "Four Stat cards in a grid simulating a dashboard."
+                    }
+                }
+            }
+        }
+    }
+}

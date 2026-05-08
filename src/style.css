@@ -404,7 +404,20 @@ body {
 @media (prefers-reduced-motion: reduce) { 
   .modo-field-wrapper { transition: none; } 
 } 
- 
+
+/* Subtle affordance tint for field/menu icons and clear/toggle actions.
+ * Uses surface tokens so it follows accent/base tinting instead of primary. */
+.modo-affordance-icon {
+  color: color-mix(in oklab, var(--muted-foreground) 84%, var(--ring) 16%);
+}
+.modo-affordance-action {
+  color: color-mix(in oklab, var(--muted-foreground) 80%, var(--ring) 20%);
+}
+.modo-affordance-action:hover,
+.modo-affordance-action:focus-visible {
+  color: color-mix(in oklab, var(--muted-foreground) 60%, var(--ring) 40%);
+}
+
 /* Native <input>/<textarea> reset — focus feedback lives on the wrapper, 
  * not on the native element. Prevents double rings and platform drift. */ 
 .modo-field-native, 

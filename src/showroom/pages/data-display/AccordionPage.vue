@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { CreditCardIcon, ShieldCheckIcon, BoltIcon } from '@heroicons/vue/24/outline';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Accordion from '../../../components/data-display/Accordion.vue';
 import type { PropDoc, EmitDoc, SlotDoc } from '../../types';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
+
+const { t } = useI18n();
 
 // ── Items ───────────────────────────────────────────────────────────────────
 const faqItems = [
@@ -20,18 +26,22 @@ const iconItems = [
 ];
 
 // ── Overview playground state ─────────────────────────────────────────────────
-const pgVariant  = ref<'separated' | 'bordered' | 'flush'>('separated');
-const pgSize     = ref<'small' | 'medium' | 'large'>('medium');
-const pgMultiple = ref(false);
-const pgSingle   = ref<string | number | null>('what');
-const pgMulti    = ref<(string | number)[]>(['what']);
+const pgVariant      = ref<'separated' | 'bordered' | 'flush'>('separated');
+const pgSize         = ref<'small' | 'medium' | 'large'>('medium');
+const pgMultiple     = ref(false);
+const pgSingle       = ref<string | number | null>('what');
+const pgMulti        = ref<(string | number)[]>(['what']);
+const pgRadius       = ref<'none' | 'small' | 'medium' | 'large' | 'full'>('medium');
+const pgIconPosition = ref<'start' | 'end'>('end');
 
 function resetPlayground() {
-    pgVariant.value = 'separated';
-    pgSize.value = 'medium';
-    pgMultiple.value = false;
-    pgSingle.value = 'what';
-    pgMulti.value = ['what'];
+    pgVariant.value      = 'separated';
+    pgSize.value         = 'medium';
+    pgMultiple.value     = false;
+    pgSingle.value       = 'what';
+    pgMulti.value        = ['what'];
+    pgRadius.value       = 'medium';
+    pgIconPosition.value = 'end';
 }
 
 const overviewCode = computed(() => {
@@ -39,6 +49,8 @@ const overviewCode = computed(() => {
     if (pgVariant.value !== 'separated') parts.push(`variant="${pgVariant.value}"`);
     if (pgSize.value    !== 'medium')    parts.push(`size="${pgSize.value}"`);
     if (pgMultiple.value)                parts.push('multiple');
+    if (pgRadius.value  !== 'medium')    parts.push(`radius="${pgRadius.value}"`);
+    if (pgIconPosition.value !== 'end')  parts.push(`icon-position="${pgIconPosition.value}"`);
     return `<Accordion ${parts.join(' ')} />`;
 });
 
@@ -59,32 +71,32 @@ const sizesCode = `<Accordion :items="items" size="small"  />
 <Accordion :items="items" size="large"  />`;
 
 // ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'items',        type: 'AccordionItem[]',                                           required: true,         description: 'Lista de ítems a renderizar (cada uno con value, title y content).' },
-    { name: 'modelValue',   type: 'string | number | (string | number)[] | null',                                      description: 'Vínculo v-model. El tipo depende de multiple.' },
-    { name: 'multiple',     type: 'boolean',                                                   default: 'false',       description: 'Permite tener varios paneles abiertos a la vez.' },
-    { name: 'variant',      type: "'separated' | 'bordered' | 'flush'",                        default: "'separated'", description: 'Variante visual del contenedor.' },
-    { name: 'size',         type: "'small' | 'medium' | 'large'",                                                      description: 'Escala de padding y tipografía. Hereda del ModoProvider.' },
-    { name: 'radius',       type: "'none' | 'small' | 'medium' | 'large' | 'full'",                                    description: 'Radio de borde (para separated y bordered).' },
-    { name: 'iconPosition', type: "'start' | 'end'",                                           default: "'end'",       description: 'Lado donde se muestra el chevron.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'items',        type: 'AccordionItem[]',                                           required: true,         description: t('pages.dataDisplay.accordion.props.items') },
+    { name: 'modelValue',   type: 'string | number | (string | number)[] | null',                                      description: t('pages.dataDisplay.accordion.props.modelValue') },
+    { name: 'multiple',     type: 'boolean',                                                   default: 'false',       description: t('pages.dataDisplay.accordion.props.multiple') },
+    { name: 'variant',      type: "'separated' | 'bordered' | 'flush'",                        default: "'separated'", description: t('pages.dataDisplay.accordion.props.variant') },
+    { name: 'size',         type: "'small' | 'medium' | 'large'",                                                      description: t('pages.dataDisplay.accordion.props.size') },
+    { name: 'radius',       type: "'none' | 'small' | 'medium' | 'large' | 'full'",                                    description: t('pages.dataDisplay.accordion.props.radius') },
+    { name: 'iconPosition', type: "'start' | 'end'",                                           default: "'end'",       description: t('pages.dataDisplay.accordion.props.iconPosition') },
+]);
 
-const emitsList: EmitDoc[] = [
-    { name: 'update:modelValue', payload: 'string | number | (string|number)[] | null', description: 'Emitido cuando cambia el conjunto de paneles abiertos.' },
-    { name: 'change',            payload: 'string | number | (string|number)[] | null', description: 'Alias de update:modelValue para uso sin v-model.' },
-];
+const emitsList = computed<EmitDoc[]>(() => [
+    { name: 'update:modelValue', payload: 'string | number | (string|number)[] | null', description: t('pages.dataDisplay.accordion.emits.updateModelValue') },
+    { name: 'change',            payload: 'string | number | (string|number)[] | null', description: t('pages.dataDisplay.accordion.emits.change') },
+]);
 
-const slotsList: SlotDoc[] = [
-    { name: 'item-<value>', description: 'Slot por item para renderizar contenido rico (HTML, formularios, listas).' },
-];
+const slotsList = computed<SlotDoc[]>(() => [
+    { name: 'item-<value>', description: t('pages.dataDisplay.accordion.slots.itemValue') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="Accordion"
+        :title="t('pages.dataDisplay.accordion.title')"
         category="Data Display"
         import-path="import { Accordion } from 'mood-ui'"
-        description="Paneles expandibles para mostrar contenido jerárquico de forma compacta. Ideal para FAQs, configuraciones y filtros."
+        :description="t('pages.dataDisplay.accordion.description')"
         :props-list="propsList"
         :emits-list="emitsList"
         :slots-list="slotsList"
@@ -92,50 +104,15 @@ const slotsList: SlotDoc[] = [
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="280px" @reset="resetPlayground">
                 <template #controls>
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Variant</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="v in ['separated', 'bordered', 'flush']"
-                                :key="v"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgVariant === v
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgVariant = (v as typeof pgVariant)"
-                            >{{ v }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Size</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in ['small', 'medium', 'large']"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = (s as typeof pgSize)"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgMultiple
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgMultiple = !pgMultiple"
-                    >Multiple</button>
+                    <TbPills :label="t('pages.dataDisplay.accordion.controls.variant')" :options="[{value:'separated'},{value:'bordered'},{value:'flush'}]" v-model="pgVariant" />
+                    <TbSep />
+                    <TbPills :label="t('pages.dataDisplay.accordion.controls.size')" :options="[{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbPills :label="t('pages.dataDisplay.accordion.controls.radius')" :options="[{value:'none'},{value:'small'},{value:'medium'},{value:'large'},{value:'full'}]" v-model="pgRadius" />
+                    <TbSep />
+                    <TbPills :label="t('pages.dataDisplay.accordion.controls.icon')" :options="[{value:'start'},{value:'end'}]" v-model="pgIconPosition" />
+                    <TbSep />
+                    <TbToggle :label="t('pages.dataDisplay.accordion.controls.multiple')" v-model="pgMultiple" />
                 </template>
 
                 <div class="w-full max-w-md">
@@ -145,6 +122,8 @@ const slotsList: SlotDoc[] = [
                         :items="faqItems"
                         :variant="pgVariant"
                         :size="pgSize"
+                        :radius="pgRadius"
+                        :icon-position="pgIconPosition"
                         multiple
                     />
                     <Accordion
@@ -153,6 +132,8 @@ const slotsList: SlotDoc[] = [
                         :items="faqItems"
                         :variant="pgVariant"
                         :size="pgSize"
+                        :radius="pgRadius"
+                        :icon-position="pgIconPosition"
                     />
                 </div>
             </ComponentPreview>
@@ -160,8 +141,8 @@ const slotsList: SlotDoc[] = [
 
         <template #examples>
             <ComponentPreview
-                title="Básico"
-                description="Tres paneles single-open con v-model."
+                :title="t('pages.dataDisplay.accordion.examples.basic.title')"
+                :description="t('pages.dataDisplay.accordion.examples.basic.desc')"
                 :code="basicCode"
             >
                 <div class="w-full max-w-md">
@@ -170,8 +151,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Multiple abiertos"
-                description="Permite mantener varios paneles expandidos simultáneamente."
+                :title="t('pages.dataDisplay.accordion.examples.multiple.title')"
+                :description="t('pages.dataDisplay.accordion.examples.multiple.desc')"
                 :code="multipleCode"
             >
                 <div class="w-full max-w-md">
@@ -180,8 +161,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Variantes"
-                description="separated (cards independientes), bordered (caja única) y flush (sin contenedor)."
+                :title="t('pages.dataDisplay.accordion.examples.variants.title')"
+                :description="t('pages.dataDisplay.accordion.examples.variants.desc')"
                 :code="variantsCode"
             >
                 <div class="w-full max-w-md flex flex-col gap-6">
@@ -192,8 +173,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con iconos"
-                description="Cada item puede declarar un icono opcional junto al título."
+                :title="t('pages.dataDisplay.accordion.examples.icons.title')"
+                :description="t('pages.dataDisplay.accordion.examples.icons.desc')"
                 :code="iconsCode"
             >
                 <div class="w-full max-w-md">
@@ -202,8 +183,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Tamaños"
-                description="Tres escalas de padding y tipografía."
+                :title="t('pages.dataDisplay.accordion.examples.sizes.title')"
+                :description="t('pages.dataDisplay.accordion.examples.sizes.desc')"
                 :code="sizesCode"
             >
                 <div class="w-full max-w-md flex flex-col gap-6">

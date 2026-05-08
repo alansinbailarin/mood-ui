@@ -1,20 +1,28 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import HStack from '../../../components/layout/HStack.vue';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
 import type { PropDoc, SlotDoc } from '../../types';
+
+const { t } = useI18n();
 
 const pgSpacing = ref<'none' | 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge'>('medium');
 const pgAlign = ref<'start' | 'center' | 'end' | 'stretch' | 'baseline'>('center');
 const pgJustify = ref<'start' | 'center' | 'end' | 'between' | 'around' | 'evenly'>('start');
 const pgWrap = ref<'nowrap' | 'wrap' | 'wrap-reverse'>('nowrap');
+const pgDivider = ref(false);
 
 function resetPlayground() {
     pgSpacing.value = 'medium';
     pgAlign.value = 'center';
     pgJustify.value = 'start';
     pgWrap.value = 'nowrap';
+    pgDivider.value = false;
 }
 
 const overviewCode = computed(() => {
@@ -23,6 +31,7 @@ const overviewCode = computed(() => {
     if (pgAlign.value !== 'stretch') parts.push(`align="${pgAlign.value}"`);
     if (pgJustify.value !== 'start') parts.push(`justify="${pgJustify.value}"`);
     if (pgWrap.value !== 'nowrap') parts.push(`wrap="${pgWrap.value}"`);
+    if (pgDivider.value) parts.push('divider');
     const attrs = parts.length ? ' ' + parts.join(' ') : '';
     return `<HStack${attrs}>
     <div>1</div>
@@ -51,88 +60,43 @@ const wrapCode = `<HStack spacing="small" wrap="wrap">
     <div v-for="n in 8" :key="n">{{ n }}</div>
 </HStack>`;
 
-const propsList: PropDoc[] = [
-    { name: 'spacing',    type: "'none' | 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge'", default: "'medium'", description: 'Gap horizontal entre los hijos.' },
-    { name: 'align',      type: "'start' | 'center' | 'end' | 'stretch' | 'baseline'",          default: "'stretch'", description: 'Alineación vertical (cross-axis).' },
-    { name: 'justify',    type: "'start' | 'center' | 'end' | 'between' | 'around' | 'evenly'", default: "'start'",   description: 'Distribución horizontal (main-axis).' },
-    { name: 'wrap',       type: "'nowrap' | 'wrap' | 'wrap-reverse'",                          default: "'nowrap'",  description: 'Comportamiento de salto de línea cuando no hay espacio.' },
-    { name: 'divider',    type: 'boolean',                                                      default: 'false',     description: 'Inserta un Divider vertical entre cada hijo.' },
-    { name: 'fullWidth',  type: 'boolean',                                                      default: 'false',     description: 'Ocupa todo el ancho disponible.' },
-    { name: 'fullHeight', type: 'boolean',                                                      default: 'false',     description: 'Ocupa todo el alto disponible.' },
-    { name: 'as',         type: 'string',                                                       default: "'div'",     description: 'Etiqueta raíz a renderizar.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'spacing',    type: "'none' | 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge'", default: "'medium'", description: t('pages.layout.hstack.props.spacing') },
+    { name: 'align',      type: "'start' | 'center' | 'end' | 'stretch' | 'baseline'",          default: "'stretch'", description: t('pages.layout.hstack.props.align') },
+    { name: 'justify',    type: "'start' | 'center' | 'end' | 'between' | 'around' | 'evenly'", default: "'start'",   description: t('pages.layout.hstack.props.justify') },
+    { name: 'wrap',       type: "'nowrap' | 'wrap' | 'wrap-reverse'",                          default: "'nowrap'",  description: t('pages.layout.hstack.props.wrap') },
+    { name: 'divider',    type: 'boolean',                                                      default: 'false',     description: t('pages.layout.hstack.props.divider') },
+    { name: 'fullWidth',  type: 'boolean',                                                      default: 'false',     description: t('pages.layout.hstack.props.fullWidth') },
+    { name: 'fullHeight', type: 'boolean',                                                      default: 'false',     description: t('pages.layout.hstack.props.fullHeight') },
+    { name: 'as',         type: 'string',                                                       default: "'div'",     description: t('pages.layout.hstack.props.as') },
+]);
 
-const slotsList: SlotDoc[] = [
-    { name: 'default', description: 'Hijos a apilar horizontalmente.' },
-];
+const slotsList = computed<SlotDoc[]>(() => [
+    { name: 'default', description: t('pages.layout.hstack.slots.default') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="HStack"
-        category="Layout"
+        :title="t('pages.layout.hstack.title')"
+        :category="t('pages.layout.hstack.category')"
         import-path="import { HStack } from 'mood-ui'"
-        description="Atajo de Stack con dirección horizontal. Útil para alinear ítems en fila con spacing y align consistentes."
+        :description="t('pages.layout.hstack.description')"
         :props-list="propsList"
         :slots-list="slotsList"
     >
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="200px" @reset="resetPlayground">
                 <template #controls>
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Gap</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="g in ['none','small','medium','large']"
-                                :key="g"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors"
-                                :class="pgSpacing === g ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSpacing = (g as typeof pgSpacing)"
-                            >{{ g }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Align</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="a in ['start','center','end','stretch']"
-                                :key="a"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors"
-                                :class="pgAlign === a ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgAlign = (a as typeof pgAlign)"
-                            >{{ a }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Justify</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="j in ['start','center','end','between']"
-                                :key="j"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors"
-                                :class="pgJustify === j ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgJustify = (j as typeof pgJustify)"
-                            >{{ j }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgWrap === 'wrap' ? 'border-primary bg-primary/10 text-primary font-medium' : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgWrap = pgWrap === 'wrap' ? 'nowrap' : 'wrap'"
-                    >Wrap</button>
+                    <TbPills label="Gap" :options="[{value:'none'},{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSpacing" />
+                    <TbSep />
+                    <TbPills label="Align" :options="[{value:'start'},{value:'center'},{value:'end'},{value:'stretch'}]" v-model="pgAlign" />
+                    <TbSep />
+                    <TbPills label="Justify" :options="[{value:'start'},{value:'center'},{value:'end'},{value:'between'}]" v-model="pgJustify" />
+                    <TbSep />
+                    <TbPills label="Wrap" :options="[{value:'nowrap'},{value:'wrap'},{value:'wrap-reverse',label:'wrap-rev'}]" v-model="pgWrap" />
+                    <TbSep />
+                    <TbToggle label="Divider" v-model="pgDivider" />
                 </template>
 
                 <HStack
@@ -140,6 +104,7 @@ const slotsList: SlotDoc[] = [
                     :align="pgAlign"
                     :justify="pgJustify"
                     :wrap="pgWrap"
+                    :divider="pgDivider"
                     class="w-full p-4 border border-dashed border-border rounded-md min-h-[120px]"
                 >
                     <div class="size-12 bg-primary/10 rounded-md grid place-items-center text-primary font-medium">1</div>
@@ -151,8 +116,8 @@ const slotsList: SlotDoc[] = [
 
         <template #examples>
             <ComponentPreview
-                title="Básico"
-                description="Distribuye hijos horizontalmente con spacing."
+                :title="t('pages.layout.hstack.examples.basic.title')"
+                :description="t('pages.layout.hstack.examples.basic.desc')"
                 :code="basicCode"
             >
                 <HStack spacing="medium">
@@ -163,8 +128,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Spacings"
-                description="Tokens del sistema: xsmall, small, medium, large."
+                :title="t('pages.layout.hstack.examples.spacings.title')"
+                :description="t('pages.layout.hstack.examples.spacings.desc')"
                 :code="gapCode"
             >
                 <div class="flex flex-col gap-3 w-full">
@@ -176,8 +141,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Alineaciones"
-                description="Combina justify y align para distintos layouts."
+                :title="t('pages.layout.hstack.examples.alignments.title')"
+                :description="t('pages.layout.hstack.examples.alignments.desc')"
                 :code="alignmentsCode"
             >
                 <div class="flex flex-col gap-2 w-full">
@@ -189,8 +154,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Wrapping"
-                description="Activa wrap para que los hijos salten cuando no hay espacio."
+                :title="t('pages.layout.hstack.examples.wrapping.title')"
+                :description="t('pages.layout.hstack.examples.wrapping.desc')"
                 :code="wrapCode"
             >
                 <HStack spacing="small" wrap="wrap" class="max-w-[260px]">

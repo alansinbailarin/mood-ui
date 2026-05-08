@@ -1,25 +1,34 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import EmptyState from '../../../components/feedback/EmptyState.vue';
 import Button from '../../../components/forms/Button.vue';
 import { InboxIcon, MagnifyingGlassIcon, ExclamationTriangleIcon, FolderOpenIcon } from '@heroicons/vue/24/outline';
 import type { PropDoc, EmitDoc, SlotDoc } from '../../types';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
+
+const { t } = useI18n();
 
 // ── Overview playground state ─────────────────────────────────────────────────
-const pgSize    = ref<'small' | 'medium' | 'large'>('medium');
-const pgVariant = ref<'subtle' | 'solid' | 'outline'>('subtle');
+const pgSize     = ref<'small' | 'medium' | 'large'>('medium');
+const pgVariant  = ref<'subtle' | 'solid' | 'outline'>('subtle');
+const pgCentered = ref(true);
 
 function resetPlayground() {
-    pgSize.value    = 'medium';
-    pgVariant.value = 'subtle';
+    pgSize.value     = 'medium';
+    pgVariant.value  = 'subtle';
+    pgCentered.value = true;
 }
 
 const overviewCode = computed(() => {
     const parts: string[] = [];
-    if (pgVariant.value !== 'subtle') parts.push(`variant="${pgVariant.value}"`);
-    if (pgSize.value    !== 'medium') parts.push(`size="${pgSize.value}"`);
+    if (pgVariant.value  !== 'subtle') parts.push(`variant="${pgVariant.value}"`);
+    if (pgSize.value     !== 'medium') parts.push(`size="${pgSize.value}"`);
+    if (!pgCentered.value)             parts.push(':centered="false"');
     parts.push(':icon="InboxIcon"');
     parts.push('title="Sin notificaciones"');
     parts.push('description="Cuando recibas algo aparecerá aquí."');
@@ -59,30 +68,30 @@ const errorCode = `<EmptyState
 </EmptyState>`;
 
 // ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'title',       type: 'string',                                                                       description: 'Encabezado principal del empty state.' },
-    { name: 'description', type: 'string',                                                                       description: 'Texto secundario debajo del título.' },
-    { name: 'icon',        type: 'Component',                                                                    description: 'Icono mostrado encima del título. Por defecto se usa InboxIcon.' },
-    { name: 'size',        type: "'small' | 'medium' | 'large'",                       default: "'medium'",      description: 'Tamaño visual del empty state.' },
-    { name: 'variant',     type: "'subtle' | 'solid' | 'outline'",                     default: "'subtle'",      description: 'Tratamiento visual del contenedor.' },
-    { name: 'centered',    type: 'boolean',                                            default: 'true',          description: 'Centra horizontalmente el contenido.' },
-    { name: 'radius',      type: "'none' | 'small' | 'medium' | 'large' | 'full'",                              description: 'Radio de las esquinas para variant solid u outline.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'title',       type: 'string',                                                                       description: t('pages.feedback.emptyState.props.title') },
+    { name: 'description', type: 'string',                                                                       description: t('pages.feedback.emptyState.props.description') },
+    { name: 'icon',        type: 'Component',                                                                    description: t('pages.feedback.emptyState.props.icon') },
+    { name: 'size',        type: "'small' | 'medium' | 'large'",                       default: "'medium'",      description: t('pages.feedback.emptyState.props.size') },
+    { name: 'variant',     type: "'subtle' | 'solid' | 'outline'",                     default: "'subtle'",      description: t('pages.feedback.emptyState.props.variant') },
+    { name: 'centered',    type: 'boolean',                                            default: 'true',          description: t('pages.feedback.emptyState.props.centered') },
+    { name: 'radius',      type: "'none' | 'small' | 'medium' | 'large' | 'full'",                              description: t('pages.feedback.emptyState.props.radius') },
+]);
 
 const emitsList: EmitDoc[] = [];
 
-const slotsList: SlotDoc[] = [
-    { name: 'actions', description: 'Acciones debajo de la descripción (típicamente botones).' },
-    { name: 'default', description: 'Contenido extra renderizado al final del empty state.' },
-];
+const slotsList = computed<SlotDoc[]>(() => [
+    { name: 'actions', description: t('pages.feedback.emptyState.slots.actions') },
+    { name: 'default', description: t('pages.feedback.emptyState.slots.default') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="EmptyState"
+        :title="t('pages.feedback.emptyState.title')"
         category="Feedback"
         import-path="import { EmptyState } from 'mood-ui'"
-        description="Estado vacío para listas, búsquedas y secciones sin datos. Soporta icono, descripción, acciones y variantes visuales."
+        :description="t('pages.feedback.emptyState.description')"
         :props-list="propsList"
         :slots-list="slotsList"
     >
@@ -90,41 +99,11 @@ const slotsList: SlotDoc[] = [
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="280px" @reset="resetPlayground">
                 <template #controls>
-                    <!-- Variant -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Variante</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="v in ['subtle', 'solid', 'outline']"
-                                :key="v"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgVariant === v
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgVariant = (v as typeof pgVariant)"
-                            >{{ v }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Size -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Tamaño</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in ['small', 'medium', 'large']"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = (s as typeof pgSize)"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
+                    <TbPills :label="t('pages.feedback.emptyState.controls.variant')" :options="[{value:'subtle'},{value:'solid'},{value:'outline'}]" v-model="pgVariant" />
+                    <TbSep />
+                    <TbPills :label="t('pages.feedback.emptyState.controls.size')" :options="[{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbToggle :label="t('pages.feedback.emptyState.controls.centered')" v-model="pgCentered" />
                 </template>
 
                 <EmptyState
@@ -132,8 +111,9 @@ const slotsList: SlotDoc[] = [
                     :icon="InboxIcon"
                     :size="pgSize"
                     :variant="pgVariant"
-                    title="Sin notificaciones"
-                    description="Cuando recibas algo aparecerá aquí."
+                    :centered="pgCentered"
+                    :title="t('pages.feedback.emptyState.playground.title')"
+                    :description="t('pages.feedback.emptyState.playground.description')"
                 />
             </ComponentPreview>
         </template>
@@ -141,61 +121,61 @@ const slotsList: SlotDoc[] = [
         <!-- ── Examples ────────────────────────────────────────────────────── -->
         <template #examples>
             <ComponentPreview
-                title="Con acción"
-                description="Slot actions para añadir un CTA debajo de la descripción."
+                :title="t('pages.feedback.emptyState.examples.action.title')"
+                :description="t('pages.feedback.emptyState.examples.action.desc')"
                 :code="actionCode"
             >
                 <EmptyState
                     class="w-full max-w-md"
                     :icon="MagnifyingGlassIcon"
-                    title="Sin resultados"
-                    description="Intenta con otra búsqueda o limpia los filtros."
+                    :title="t('pages.feedback.emptyState.examples.action.emptyTitle')"
+                    :description="t('pages.feedback.emptyState.examples.action.emptyDesc')"
                 >
                     <template #actions>
-                        <Button color="primary">Limpiar filtros</Button>
+                        <Button color="primary">{{ t('pages.feedback.emptyState.examples.action.cta') }}</Button>
                     </template>
                 </EmptyState>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Variantes"
-                description="Tres superficies: subtle (default), solid (con borde) y outline (borde discontinuo)."
+                :title="t('pages.feedback.emptyState.examples.variants.title')"
+                :description="t('pages.feedback.emptyState.examples.variants.desc')"
                 :code="variantsCode"
             >
                 <div class="flex flex-col gap-3 w-full max-w-md">
-                    <EmptyState :icon="FolderOpenIcon" title="Subtle"  description="Sin borde."         variant="subtle"  />
-                    <EmptyState :icon="FolderOpenIcon" title="Solid"   description="Con superficie."    variant="solid"   />
-                    <EmptyState :icon="FolderOpenIcon" title="Outline" description="Borde discontinuo." variant="outline" />
+                    <EmptyState :icon="FolderOpenIcon" title="Subtle"  :description="t('pages.feedback.emptyState.examples.variants.subtleDesc')"  variant="subtle"  />
+                    <EmptyState :icon="FolderOpenIcon" title="Solid"   :description="t('pages.feedback.emptyState.examples.variants.solidDesc')"   variant="solid"   />
+                    <EmptyState :icon="FolderOpenIcon" title="Outline" :description="t('pages.feedback.emptyState.examples.variants.outlineDesc')" variant="outline" />
                 </div>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Sin resultados"
-                description="Patrón típico para una búsqueda sin coincidencias."
+                :title="t('pages.feedback.emptyState.examples.noResults.title')"
+                :description="t('pages.feedback.emptyState.examples.noResults.desc')"
                 :code="noResultsCode"
             >
                 <EmptyState
                     class="w-full max-w-md"
                     :icon="MagnifyingGlassIcon"
-                    title="Sin resultados"
-                    description='No encontramos nada que coincida con "facturas 2025". Prueba otros términos.'
+                    :title="t('pages.feedback.emptyState.examples.noResults.emptyTitle')"
+                    :description="t('pages.feedback.emptyState.examples.noResults.emptyDesc')"
                 />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Estado de error"
-                description="Combina variant outline con un CTA para reintentar la operación."
+                :title="t('pages.feedback.emptyState.examples.error.title')"
+                :description="t('pages.feedback.emptyState.examples.error.desc')"
                 :code="errorCode"
             >
                 <EmptyState
                     class="w-full max-w-md"
                     :icon="ExclamationTriangleIcon"
-                    title="Algo salió mal"
-                    description="Reintenta en unos segundos."
+                    :title="t('pages.feedback.emptyState.examples.error.emptyTitle')"
+                    :description="t('pages.feedback.emptyState.examples.error.emptyDesc')"
                     variant="outline"
                 >
                     <template #actions>
-                        <Button color="primary" variant="outline">Reintentar</Button>
+                        <Button color="primary" variant="outline">{{ t('pages.feedback.emptyState.examples.error.cta') }}</Button>
                     </template>
                 </EmptyState>
             </ComponentPreview>

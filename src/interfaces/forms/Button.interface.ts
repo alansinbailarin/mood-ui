@@ -24,4 +24,8 @@ export interface Button {
      * @default false 
      */ 
     skeleton?: boolean; 
+    as?: 'button' | 'a';
+    href?: string;
+    target?: string;
+    rel?: string;
 }

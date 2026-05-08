@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Scheduler from '../../../components/data-display/calendar/Scheduler.vue';
 import type { SchedulerEvent, SchedulerResource } from '../../../interfaces/data-display/calendar/Scheduler.interface';
 import type { PropDoc, EmitDoc } from '../../types';
+
+const { t } = useI18n();
 
 // ── Sample resources & events ────────────────────────────────────────────────
 const resources: SchedulerResource[] = [
@@ -75,47 +78,47 @@ const bizCode    = `<Scheduler
 />`;
 
 // ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'modelValue',           type: 'Date',                                                              description: 'Día visible (v-model).' },
-    { name: 'resources',            type: 'SchedulerResource[]',                                              required: true, description: 'Filas del scheduler (salas, personas, equipos).' },
-    { name: 'events',               type: 'SchedulerEvent[]',                                                  description: 'Eventos asignados a recursos por `resourceId`.' },
-    { name: 'locale',               type: 'string',                                                            description: 'Locale BCP-47 para fechas y horas.' },
-    { name: 'color',                type: "'default' | 'primary' | 'danger' | 'success' | 'warning'",          description: 'Color semántico aplicado a acentos.' },
-    { name: 'format',               type: "'12h' | '24h'",                              default: "'24h'",      description: 'Formato horario de la columna de horas.' },
-    { name: 'hourStart',            type: 'number',                                     default: '0',          description: 'Hora inicial visible (0-23).' },
-    { name: 'hourEnd',              type: 'number',                                     default: '24',         description: 'Hora final visible (1-24).' },
-    { name: 'slotMinutes',          type: '15 | 30 | 60',                               default: '30',         description: 'Granularidad de los slots de tiempo.' },
-    { name: 'slotHeight',           type: 'number',                                                            description: 'Altura en px de cada slot horario.' },
-    { name: 'minResourceWidth',     type: 'number',                                                            description: 'Ancho mínimo de cada columna de recurso antes de hacer scroll horizontal.' },
-    { name: 'showResourceHeader',   type: 'boolean',                                    default: 'true',       description: 'Muestra la cabecera por recurso.' },
-    { name: 'resourceHeaderHeight', type: 'number',                                                            description: 'Altura en px de la cabecera de recurso.' },
-    { name: 'showAllDayRow',        type: 'boolean',                                    default: 'true',       description: 'Muestra la fila para eventos all-day.' },
-    { name: 'showCurrentTime',      type: 'boolean',                                    default: 'true',       description: 'Dibuja la línea de hora actual.' },
-    { name: 'businessHours',        type: 'BusinessHours | BusinessHours[]',                                   description: 'Resalta el rango de horas laborales.' },
-    { name: 'bordered',             type: 'boolean',                                    default: 'true',       description: 'Dibuja borde alrededor de la grilla.' },
-    { name: 'useResourceColor',     type: 'boolean',                                    default: 'true',       description: 'Aplica el color del recurso a sus eventos cuando no tienen color propio.' },
-    { name: 'draggableEvents',      type: 'boolean',                                    default: 'false',      description: 'Permite arrastrar eventos.' },
-    { name: 'allowCrossResourceDrag', type: 'boolean',                                  default: 'false',      description: 'Permite mover eventos entre recursos al arrastrarlos.' },
-    { name: 'resizableEvents',      type: 'boolean',                                    default: 'false',      description: 'Permite redimensionar eventos.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'modelValue',           type: 'Date',                                                              description: t('pages.dataDisplay.scheduler.props.modelValue') },
+    { name: 'resources',            type: 'SchedulerResource[]',                                              required: true, description: t('pages.dataDisplay.scheduler.props.resources') },
+    { name: 'events',               type: 'SchedulerEvent[]',                                                  description: t('pages.dataDisplay.scheduler.props.events') },
+    { name: 'locale',               type: 'string',                                                            description: t('pages.dataDisplay.scheduler.props.locale') },
+    { name: 'color',                type: "'default' | 'primary' | 'danger' | 'success' | 'warning'",          description: t('pages.dataDisplay.scheduler.props.color') },
+    { name: 'format',               type: "'12h' | '24h'",                              default: "'24h'",      description: t('pages.dataDisplay.scheduler.props.format') },
+    { name: 'hourStart',            type: 'number',                                     default: '0',          description: t('pages.dataDisplay.scheduler.props.hourStart') },
+    { name: 'hourEnd',              type: 'number',                                     default: '24',         description: t('pages.dataDisplay.scheduler.props.hourEnd') },
+    { name: 'slotMinutes',          type: '15 | 30 | 60',                               default: '30',         description: t('pages.dataDisplay.scheduler.props.slotMinutes') },
+    { name: 'slotHeight',           type: 'number',                                                            description: t('pages.dataDisplay.scheduler.props.slotHeight') },
+    { name: 'minResourceWidth',     type: 'number',                                                            description: t('pages.dataDisplay.scheduler.props.minResourceWidth') },
+    { name: 'showResourceHeader',   type: 'boolean',                                    default: 'true',       description: t('pages.dataDisplay.scheduler.props.showResourceHeader') },
+    { name: 'resourceHeaderHeight', type: 'number',                                                            description: t('pages.dataDisplay.scheduler.props.resourceHeaderHeight') },
+    { name: 'showAllDayRow',        type: 'boolean',                                    default: 'true',       description: t('pages.dataDisplay.scheduler.props.showAllDayRow') },
+    { name: 'showCurrentTime',      type: 'boolean',                                    default: 'true',       description: t('pages.dataDisplay.scheduler.props.showCurrentTime') },
+    { name: 'businessHours',        type: 'BusinessHours | BusinessHours[]',                                   description: t('pages.dataDisplay.scheduler.props.businessHours') },
+    { name: 'bordered',             type: 'boolean',                                    default: 'true',       description: t('pages.dataDisplay.scheduler.props.bordered') },
+    { name: 'useResourceColor',     type: 'boolean',                                    default: 'true',       description: t('pages.dataDisplay.scheduler.props.useResourceColor') },
+    { name: 'draggableEvents',      type: 'boolean',                                    default: 'false',      description: t('pages.dataDisplay.scheduler.props.draggableEvents') },
+    { name: 'allowCrossResourceDrag', type: 'boolean',                                  default: 'false',      description: t('pages.dataDisplay.scheduler.props.allowCrossResourceDrag') },
+    { name: 'resizableEvents',      type: 'boolean',                                    default: 'false',      description: t('pages.dataDisplay.scheduler.props.resizableEvents') },
+]);
 
-const emitsList: EmitDoc[] = [
-    { name: 'update:modelValue', payload: 'Date',                                                                                                                description: 'Emitido al cambiar el día visible.' },
-    { name: 'event-click',       payload: '(event: SchedulerEvent, nativeEvent: MouseEvent)',                                                                     description: 'Click sobre un evento.' },
-    { name: 'slot-click',        payload: '(date: Date, resource: SchedulerResource, nativeEvent: MouseEvent)',                                                   description: 'Click sobre un slot vacío de un recurso.' },
-    { name: 'create-event',      payload: '(date: Date, resource: SchedulerResource, allDay: boolean, nativeEvent: MouseEvent | KeyboardEvent)',                  description: 'Solicitud de creación de evento.' },
-    { name: 'event-drop',        payload: '(event: SchedulerEvent, newStart: Date, newEnd: Date | undefined, newResource: SchedulerResource)',                    description: 'Evento arrastrado a otra posición o recurso.' },
-    { name: 'event-resize',      payload: '(event: SchedulerEvent, newStart: Date, newEnd: Date)',                                                                description: 'Evento redimensionado.' },
-    { name: 'select-range',      payload: '(start: Date, end: Date, resource: SchedulerResource)',                                                                description: 'Rango seleccionado dentro de un recurso.' },
-];
+const emitsList = computed<EmitDoc[]>(() => [
+    { name: 'update:modelValue', payload: 'Date',                                                                                                                description: t('pages.dataDisplay.scheduler.emits.updateModelValue') },
+    { name: 'event-click',       payload: '(event: SchedulerEvent, nativeEvent: MouseEvent)',                                                                     description: t('pages.dataDisplay.scheduler.emits.eventClick') },
+    { name: 'slot-click',        payload: '(date: Date, resource: SchedulerResource, nativeEvent: MouseEvent)',                                                   description: t('pages.dataDisplay.scheduler.emits.slotClick') },
+    { name: 'create-event',      payload: '(date: Date, resource: SchedulerResource, allDay: boolean, nativeEvent: MouseEvent | KeyboardEvent)',                  description: t('pages.dataDisplay.scheduler.emits.createEvent') },
+    { name: 'event-drop',        payload: '(event: SchedulerEvent, newStart: Date, newEnd: Date | undefined, newResource: SchedulerResource)',                    description: t('pages.dataDisplay.scheduler.emits.eventDrop') },
+    { name: 'event-resize',      payload: '(event: SchedulerEvent, newStart: Date, newEnd: Date)',                                                                description: t('pages.dataDisplay.scheduler.emits.eventResize') },
+    { name: 'select-range',      payload: '(start: Date, end: Date, resource: SchedulerResource)',                                                                description: t('pages.dataDisplay.scheduler.emits.selectRange') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="Scheduler"
+        :title="t('pages.dataDisplay.scheduler.title')"
         category="Calendar"
         import-path="import { Scheduler } from 'mood-ui'"
-        description="Vista tipo agenda con recursos en columnas (salas, personas, equipos). Cada recurso muestra sus eventos sobre una grilla horaria compartida."
+        :description="t('pages.dataDisplay.scheduler.description')"
         :props-list="propsList"
         :emits-list="emitsList"
     >
@@ -123,7 +126,7 @@ const emitsList: EmitDoc[] = [
             <ComponentPreview :code="overviewCode" min-height="400px" @reset="resetPlayground">
                 <template #controls>
                     <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Formato</span>
+                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">{{ t('pages.dataDisplay.scheduler.controls.format') }}</span>
                         <div class="flex rounded-md border border-border overflow-hidden">
                             <button
                                 v-for="f in ['24h', '12h']"
@@ -147,7 +150,7 @@ const emitsList: EmitDoc[] = [
                             ? 'border-primary bg-primary/10 text-primary font-medium'
                             : 'border-border text-muted-foreground hover:bg-muted/60'"
                         @click="pgBordered = !pgBordered"
-                    >Bordes</button>
+                    >{{ t('pages.dataDisplay.scheduler.controls.borders') }}</button>
 
                     <button
                         type="button"
@@ -156,7 +159,7 @@ const emitsList: EmitDoc[] = [
                             ? 'border-primary bg-primary/10 text-primary font-medium'
                             : 'border-border text-muted-foreground hover:bg-muted/60'"
                         @click="pgShowAllDay = !pgShowAllDay"
-                    >Fila all-day</button>
+                    >{{ t('pages.dataDisplay.scheduler.controls.allDayRow') }}</button>
 
                     <button
                         type="button"
@@ -165,7 +168,7 @@ const emitsList: EmitDoc[] = [
                             ? 'border-primary bg-primary/10 text-primary font-medium'
                             : 'border-border text-muted-foreground hover:bg-muted/60'"
                         @click="pgUseResColor = !pgUseResColor"
-                    >Color del recurso</button>
+                    >{{ t('pages.dataDisplay.scheduler.controls.resourceColor') }}</button>
                 </template>
 
                 <div class="w-full">
@@ -184,8 +187,8 @@ const emitsList: EmitDoc[] = [
 
         <template #examples>
             <ComponentPreview
-                title="Sólo recursos"
-                description="Scheduler vacío que muestra la grilla de recursos sin eventos."
+                :title="t('pages.dataDisplay.scheduler.examples.basic.title')"
+                :description="t('pages.dataDisplay.scheduler.examples.basic.desc')"
                 :code="basicCode"
                 min-height="400px"
             >
@@ -193,8 +196,8 @@ const emitsList: EmitDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con eventos"
-                description="Eventos asignados a cada recurso por resourceId."
+                :title="t('pages.dataDisplay.scheduler.examples.events.title')"
+                :description="t('pages.dataDisplay.scheduler.examples.events.desc')"
                 :code="eventsCode"
                 min-height="400px"
             >
@@ -202,8 +205,8 @@ const emitsList: EmitDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Formato 12 horas"
-                description="Cambia la columna horaria a formato AM/PM."
+                :title="t('pages.dataDisplay.scheduler.examples.format12h.title')"
+                :description="t('pages.dataDisplay.scheduler.examples.format12h.desc')"
                 :code="fmt12hCode"
                 min-height="400px"
             >
@@ -211,8 +214,8 @@ const emitsList: EmitDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Business hours"
-                description="Resalta el horario laboral y limita el rango horario."
+                :title="t('pages.dataDisplay.scheduler.examples.businessHours.title')"
+                :description="t('pages.dataDisplay.scheduler.examples.businessHours.desc')"
                 :code="bizCode"
                 min-height="400px"
             >

@@ -1,0 +1,25 @@
+{
+    "kicker": "Documentation",
+    "title": "Mood-UI",
+    "intro": "A Vue 3 component library with {n}+ accessible pieces, reactive theming and dark mode with customizable surfaces. Built to ship fast without fighting your design system.",
+
+    "whyTitle": "Why mood-ui?",
+    "principles": {
+        "theming":   { "title": "Reactive theming", "text": "Every token is a CSS var. Change color, radius, halo or density and every component reacts instantly — no remount." },
+        "i18n":      { "title": "Built-in i18n", "text": "Spanish and English dictionaries by default, with an API to extend or override any string." },
+        "a11y":      { "title": "Accessible by default", "text": "ARIA roles, visible focus rings, keyboard nav and verified contrast ratios — no extra work." },
+        "treeShake": { "title": "Tree-shakeable", "text": "Import only what you use. Minimal initial bundle, modern ESM, full types." },
+        "tailwind":  { "title": "Tailwind v4 native", "text": "\\@theme inline + design tokens. Override from your own config without hacks." },
+        "ts":        { "title": "TypeScript first", "text": "Every prop, slot and event typed. IntelliSense that actually helps." }
+    },
+
+    "orgTitle": "How is it organized?",
+    "orgIntro": "The docs are split into four big areas. Start with installation, take a tour through theming, then jump into the component catalog.",
+
+    "tiles": {
+        "installation": { "desc": "npm, peer deps and 60-second setup.",        "cta": "Start" },
+        "theming":      { "desc": "Tokens, palettes, surfaces and dark mode.",  "cta": "Customize" },
+        "i18n":         { "desc": "Switch languages at runtime, extend dicts.", "cta": "Translate" },
+        "changelog":    { "desc": "What's new in every release.",                "cta": "See history" }
+    }
+}

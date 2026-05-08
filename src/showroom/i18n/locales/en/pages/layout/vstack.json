@@ -1,0 +1,23 @@
+{
+    "title": "VStack",
+    "category": "Layout",
+    "description": "Stack shortcut with vertical direction. Stacks children in a column with consistent spacing and alignment.",
+    "examples": {
+        "basic":      { "title": "Basic",      "desc": "Stacks children vertically with system spacing." },
+        "spacings":   { "title": "Spacings",   "desc": "Pick the vertical gap based on the desired density." },
+        "alignments": { "title": "Alignments", "desc": "Controls horizontal alignment of content." },
+        "divider":    { "title": "With divider", "desc": "Inserts horizontal separators between each element." }
+    },
+    "sections": { "s1": "Section 1", "s2": "Section 2", "s3": "Section 3" },
+    "props": {
+        "spacing":    "Vertical gap between children.",
+        "align":      "Horizontal alignment (cross-axis).",
+        "justify":    "Vertical distribution (main-axis).",
+        "wrap":       "Line-break behavior.",
+        "divider":    "Inserts a horizontal Divider between each child.",
+        "fullWidth":  "Takes full available width.",
+        "fullHeight": "Takes full available height.",
+        "as":         "Root tag to render."
+    },
+    "slots": { "default": "Children to stack vertically." }
+}

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import {
     UsersIcon, BanknotesIcon, ShoppingCartIcon, ArrowTrendingUpIcon,
 } from '@heroicons/vue/24/outline';
@@ -7,26 +8,34 @@ import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Stat from '../../../components/data-display/Stat.vue';
 import type { PropDoc } from '../../types';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbDots from '../../components/toolbar/TbDots.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
+
+const { t } = useI18n();
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgVariant = ref<'plain' | 'outlined' | 'filled'>('outlined');
 const pgSize    = ref<'small' | 'medium' | 'large'>('medium');
 const pgColor   = ref<'default' | 'primary' | 'success' | 'warning' | 'danger'>('primary');
 const pgTrend   = ref<'up' | 'down' | 'none'>('up');
+const pgLoading = ref(false);
 
 function resetPlayground() {
     pgVariant.value = 'outlined';
     pgSize.value = 'medium';
     pgColor.value = 'primary';
     pgTrend.value = 'up';
+    pgLoading.value = false;
 }
 
 const colorDots = [
-    { value: 'default'  as const, bg: '#64748b',        label: 'Default'  },
-    { value: 'primary'  as const, bg: 'var(--primary)', label: 'Primary'  },
-    { value: 'success'  as const, bg: '#22c55e',        label: 'Success'  },
-    { value: 'warning'  as const, bg: '#f59e0b',        label: 'Warning'  },
-    { value: 'danger'   as const, bg: '#ef4444',        label: 'Danger'   },
+    { value: 'default'  as const, bg: 'var(--color-slate-400)',  label: 'Default'  },
+    { value: 'primary'  as const, bg: 'var(--primary)',           label: 'Primary'  },
+    { value: 'success'  as const, bg: 'var(--color-emerald-500)', label: 'Success'  },
+    { value: 'warning'  as const, bg: 'var(--color-amber-500)',   label: 'Warning'  },
+    { value: 'danger'   as const, bg: 'var(--color-red-500)',     label: 'Danger'   },
 ];
 
 const playgroundTrend = computed(() => {
@@ -42,6 +51,7 @@ const overviewCode = computed(() => {
     if (pgColor.value   !== 'default') parts.push(`color="${pgColor.value}"`);
     if (pgTrend.value === 'up')        parts.push(':trend="{ value: 12.5 }"');
     if (pgTrend.value === 'down')      parts.push(':trend="{ value: -8.3 }"');
+    if (pgLoading.value)               parts.push('loading');
     return `<Stat ${parts.join(' ')} />`;
 });
 
@@ -76,105 +86,39 @@ const gridCode = `<div class="grid sm:grid-cols-2 gap-4">
 </div>`;
 
 // ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'label',       type: 'string',                                                                  required: true, description: 'Etiqueta corta de la métrica (“Revenue”, “Users”).' },
-    { name: 'value',       type: 'string | number',                                                          required: true, description: 'Valor principal pre-formateado por el consumidor.' },
-    { name: 'description', type: 'string',                                                                                    description: 'Texto auxiliar mostrado debajo del valor.' },
-    { name: 'icon',        type: 'Component',                                                                                 description: 'Componente de icono opcional (heroicons u otro).' },
-    { name: 'trend',       type: "{ value: number; label?: string; direction?: 'up' | 'down' | 'neutral' }",                  description: 'Metadatos de tendencia. Renderiza una flecha y el delta.' },
-    { name: 'variant',     type: "'plain' | 'outlined' | 'filled'",                                          default: "'plain'",   description: 'Estilo visual del card.' },
-    { name: 'color',       type: "'default' | 'primary' | 'danger' | 'success' | 'warning'",                 default: "'default'", description: 'Color semántico aplicado al icono y a la tendencia.' },
-    { name: 'size',        type: "'small' | 'medium' | 'large'",                                                              description: 'Escala de tamaño. Hereda del ModoProvider si se omite.' },
-    { name: 'loading',     type: 'boolean',                                                                  default: 'false',     description: 'Muestra un skeleton en el valor mientras se carga.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'label',       type: 'string',                                                                  required: true, description: t('pages.dataDisplay.stat.props.label') },
+    { name: 'value',       type: 'string | number',                                                          required: true, description: t('pages.dataDisplay.stat.props.value') },
+    { name: 'description', type: 'string',                                                                                    description: t('pages.dataDisplay.stat.props.description') },
+    { name: 'icon',        type: 'Component',                                                                                 description: t('pages.dataDisplay.stat.props.icon') },
+    { name: 'trend',       type: "{ value: number; label?: string; direction?: 'up' | 'down' | 'neutral' }",                  description: t('pages.dataDisplay.stat.props.trend') },
+    { name: 'variant',     type: "'plain' | 'outlined' | 'filled'",                                          default: "'plain'",   description: t('pages.dataDisplay.stat.props.variant') },
+    { name: 'color',       type: "'default' | 'primary' | 'danger' | 'success' | 'warning'",                 default: "'default'", description: t('pages.dataDisplay.stat.props.color') },
+    { name: 'size',        type: "'small' | 'medium' | 'large'",                                                              description: t('pages.dataDisplay.stat.props.size') },
+    { name: 'loading',     type: 'boolean',                                                                  default: 'false',     description: t('pages.dataDisplay.stat.props.loading') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="Stat"
+        :title="t('pages.dataDisplay.stat.title')"
         category="Data Display"
         import-path="import { Stat } from 'mood-ui'"
-        description="Tarjeta KPI compacta para mostrar métricas con tendencia, icono y color semántico. Ideal para dashboards y resumenes."
+        :description="t('pages.dataDisplay.stat.description')"
         :props-list="propsList"
     >
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="220px" @reset="resetPlayground">
                 <template #controls>
-                    <!-- Variant -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Variant</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="v in ['plain', 'outlined', 'filled']"
-                                :key="v"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgVariant === v
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgVariant = (v as typeof pgVariant)"
-                            >{{ v }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Color dots -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Color</span>
-                        <div class="flex items-center gap-1">
-                            <button
-                                v-for="c in colorDots"
-                                :key="c.value"
-                                type="button"
-                                class="size-4 rounded-full transition-all duration-150"
-                                :class="pgColor === c.value
-                                    ? 'ring-2 ring-offset-1 ring-foreground/30 scale-125'
-                                    : 'hover:scale-110 opacity-70 hover:opacity-100'"
-                                :style="`background: ${c.bg}`"
-                                :title="c.label"
-                                @click="pgColor = c.value"
-                            />
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Size -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Size</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in ['small', 'medium', 'large']"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = (s as typeof pgSize)"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Trend -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Trend</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="t in ['up', 'down', 'none']"
-                                :key="t"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgTrend === t
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgTrend = (t as typeof pgTrend)"
-                            >{{ t }}</button>
-                        </div>
-                    </div>
+                    <TbPills :label="t('pages.dataDisplay.stat.controls.variant')" :options="[{value:'plain'},{value:'outlined'},{value:'filled'}]" v-model="pgVariant" />
+                    <TbSep />
+                    <TbDots :label="t('pages.dataDisplay.stat.controls.color')" :options="colorDots" v-model="pgColor" />
+                    <TbSep />
+                    <TbPills :label="t('pages.dataDisplay.stat.controls.size')" :options="[{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbPills :label="t('pages.dataDisplay.stat.controls.trend')" :options="[{value:'up'},{value:'down'},{value:'none'}]" v-model="pgTrend" />
+                    <TbSep />
+                    <TbToggle :label="t('pages.dataDisplay.stat.controls.loading')" v-model="pgLoading" />
                 </template>
 
                 <Stat
@@ -186,22 +130,23 @@ const propsList: PropDoc[] = [
                     :icon="BanknotesIcon"
                     :trend="playgroundTrend"
                     description="vs. mes pasado"
+                    :loading="pgLoading"
                 />
             </ComponentPreview>
         </template>
 
         <template #examples>
             <ComponentPreview
-                title="Básico"
-                description="Etiqueta y valor principal sin extras."
+                :title="t('pages.dataDisplay.stat.examples.basic.title')"
+                :description="t('pages.dataDisplay.stat.examples.basic.desc')"
                 :code="basicCode"
             >
                 <Stat label="Revenue" value="$48,592" />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con tendencia"
-                description="La prop trend muestra una flecha y el delta porcentual."
+                :title="t('pages.dataDisplay.stat.examples.trend.title')"
+                :description="t('pages.dataDisplay.stat.examples.trend.desc')"
                 :code="trendCode"
             >
                 <Stat
@@ -213,8 +158,8 @@ const propsList: PropDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con icono y color"
-                description="Combina icono, color semántico y variante outlined."
+                :title="t('pages.dataDisplay.stat.examples.icon.title')"
+                :description="t('pages.dataDisplay.stat.examples.icon.desc')"
                 :code="iconCode"
             >
                 <Stat
@@ -228,8 +173,8 @@ const propsList: PropDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Tamaños"
-                description="Tres escalas para alinear con la jerarquía de la página."
+                :title="t('pages.dataDisplay.stat.examples.sizes.title')"
+                :description="t('pages.dataDisplay.stat.examples.sizes.desc')"
                 :code="sizesCode"
             >
                 <div class="grid sm:grid-cols-3 gap-4 w-full">
@@ -240,8 +185,8 @@ const propsList: PropDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Grid de métricas"
-                description="Cuatro Stat en un grid simulando un dashboard."
+                :title="t('pages.dataDisplay.stat.examples.grid.title')"
+                :description="t('pages.dataDisplay.stat.examples.grid.desc')"
                 :code="gridCode"
             >
                 <div class="grid sm:grid-cols-2 gap-4 w-full">

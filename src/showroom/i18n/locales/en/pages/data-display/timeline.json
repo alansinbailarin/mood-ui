@@ -1,0 +1,48 @@
+{
+    "pages": {
+        "dataDisplay": {
+            "timeline": {
+                "title": "Timeline",
+                "description": "Vertical timeline for displaying events in chronological order. Useful for history, changelogs, tracking and activity feeds.",
+                "controls": {
+                    "variant": "Variant",
+                    "color": "Color",
+                    "size": "Size",
+                    "side": "Side"
+                },
+                "props": {
+                    "items": "Events to render in chronological order.",
+                    "variant": "Default marker style. Each item can override it.",
+                    "color": "Default semantic color for the marker.",
+                    "size": "Visual scale of the marker and typography.",
+                    "side": "Side where the marker rail is rendered."
+                },
+                "slots": {
+                    "itemId": "Extra content rendered below the title and description of the item with the corresponding id."
+                },
+                "examples": {
+                    "basic": {
+                        "title": "Basic",
+                        "desc": "Simple list of events with title and timestamp."
+                    },
+                    "icons": {
+                        "title": "With icons",
+                        "desc": "Each item defines an icon component and variant 'icon'."
+                    },
+                    "colors": {
+                        "title": "Per-event colors",
+                        "desc": "The marker color can be overridden per item to reflect states."
+                    },
+                    "description": {
+                        "title": "With description",
+                        "desc": "Adds secondary text below the title to give context to the event."
+                    },
+                    "rightSide": {
+                        "title": "Right side",
+                        "desc": "Rail inverted with side='right' — useful for asymmetric layouts."
+                    }
+                }
+            }
+        }
+    }
+}

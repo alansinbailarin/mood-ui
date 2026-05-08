@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, inject, onMounted, onBeforeUnmount, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import CodePreview from './CodePreview.vue';
 import Typography from '../../components/data-display/Typography.vue';
 import ModoProvider from '../../components/ModoProvider.vue';
 import { ArrowPathIcon } from '@heroicons/vue/24/outline';
-import { useShowroomT } from '../composables/useShowroomLocale';
 import { DOC_TOC_KEY, slugify, type DocTocApi } from '../composables/useDocToc';
 import type { BundledLanguage } from '../composables/useHighlighter';
 
@@ -32,7 +32,7 @@ const props = withDefaults(
 
 defineEmits<{ reset: [] }>();
 
-const t = useShowroomT();
+const { t } = useI18n();
 const activeTab = ref<'preview' | 'code'>('preview');
 
 // ── TOC auto-registration ────────────────────────────────────────────────────
@@ -62,16 +62,18 @@ onBeforeUnmount(() => {
         </div>
 
         <!-- Card -->
-        <div class="rounded-xl border border-border overflow-hidden">
+        <div class="rounded-xl border border-border">
             <!-- Toolbar -->
-            <div class="flex items-center gap-2 px-3 py-2 border-b border-border bg-card/60 flex-wrap min-h-[44px]">
-                <slot name="controls" />
+            <div class="flex items-center gap-2 px-3 py-2 border-b border-border bg-muted/20 min-h-[44px] rounded-t-xl overflow-x-auto no-scrollbar">
+                <div class="flex items-center gap-2 shrink-0">
+                    <slot name="controls" />
+                </div>
 
                 <div class="ml-auto flex items-center gap-2 shrink-0">
                     <button
                         v-if="$slots.controls"
                         type="button"
-                        :title="t.docReset"
+                        :title="t('doc.reset')"
                         class="size-7 flex items-center justify-center rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors cursor-pointer"
                         @click="$emit('reset')"
                     >
@@ -86,7 +88,7 @@ onBeforeUnmount(() => {
                                 : 'text-muted-foreground hover:text-foreground'"
                             @click="activeTab = 'preview'"
                         >
-                            {{ t.docPreview }}
+                            {{ t('doc.preview') }}
                         </button>
                         <button
                             type="button"
@@ -96,7 +98,7 @@ onBeforeUnmount(() => {
                                 : 'text-muted-foreground hover:text-foreground'"
                             @click="activeTab = 'code'"
                         >
-                            {{ t.docCode }}
+                            {{ t('doc.code') }}
                         </button>
                     </div>
                 </div>
@@ -107,18 +109,23 @@ onBeforeUnmount(() => {
                 <div
                     v-if="activeTab === 'preview'"
                     key="preview"
-                    class="relative flex items-center justify-center overflow-hidden bg-background"
-                    :style="`min-height: ${minHeight}; padding: 2.5rem;`"
+                    class="relative bg-background rounded-b-xl overflow-y-auto"
+                    :style="`max-height: 560px;`"
                 >
                     <div
-                        class="pointer-events-none absolute inset-0 opacity-[0.55]"
-                        style="background-image: radial-gradient(circle, var(--border) 1px, transparent 1px); background-size: 24px 24px;"
+                        class="pointer-events-none absolute inset-0 opacity-[0.45]"
+                        style="background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(to right, var(--border) 1px, transparent 1px); background-size: 24px 24px;"
                     />
-                    <ModoProvider v-if="!noScope" scoped class="relative z-10 flex flex-wrap items-center justify-center gap-3">
-                        <slot />
-                    </ModoProvider>
-                    <div v-else class="relative z-10 flex flex-wrap items-center justify-center gap-3">
-                        <slot />
+                    <div
+                        class="relative z-10 flex flex-wrap items-center justify-center gap-3"
+                        :style="`min-height: ${minHeight}; padding: 2.5rem;`"
+                    >
+                        <ModoProvider v-if="!noScope" scoped class="w-full flex flex-wrap items-center justify-center gap-3">
+                            <slot />
+                        </ModoProvider>
+                        <template v-else>
+                            <slot />
+                        </template>
                     </div>
                 </div>
 

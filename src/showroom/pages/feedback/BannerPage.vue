@@ -1,30 +1,38 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Banner from '../../../components/feedback/Banner.vue';
 import Button from '../../../components/forms/Button.vue';
 import { SparklesIcon } from '@heroicons/vue/24/outline';
 import type { PropDoc, EmitDoc, SlotDoc } from '../../types';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbDots from '../../components/toolbar/TbDots.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
 
-// ── Overview playground state ─────────────────────────────────────────────────
+const { t } = useI18n();
+
 const pgColor       = ref<'info' | 'success' | 'warning' | 'danger'>('info');
 const pgVariant     = ref<'subtle' | 'filled' | 'outline'>('subtle');
 const pgDismissable = ref(false);
+const pgShowIcon    = ref(true);
 const pgVisible     = ref(true);
 
 function resetPlayground() {
     pgColor.value       = 'info';
     pgVariant.value     = 'subtle';
     pgDismissable.value = false;
+    pgShowIcon.value    = true;
     pgVisible.value     = true;
 }
 
 const colorDots = [
-    { value: 'info'    as const, bg: '#3b82f6', label: 'Info'    },
-    { value: 'success' as const, bg: '#22c55e', label: 'Success' },
-    { value: 'warning' as const, bg: '#f59e0b', label: 'Warning' },
-    { value: 'danger'  as const, bg: '#ef4444', label: 'Danger'  },
+    { value: 'info'    as const, bg: 'var(--color-blue-500)',    label: 'Info'    },
+    { value: 'success' as const, bg: 'var(--color-emerald-500)', label: 'Success' },
+    { value: 'warning' as const, bg: 'var(--color-amber-500)',   label: 'Warning' },
+    { value: 'danger'  as const, bg: 'var(--color-red-500)',     label: 'Danger'  },
 ];
 
 const overviewCode = computed(() => {
@@ -32,118 +40,74 @@ const overviewCode = computed(() => {
     if (pgColor.value   !== 'info')   parts.push(`color="${pgColor.value}"`);
     if (pgVariant.value !== 'subtle') parts.push(`variant="${pgVariant.value}"`);
     if (pgDismissable.value)          parts.push('dismissable');
-    parts.push('title="Información"');
-    parts.push('description="Tu cuenta se sincronizará en unos minutos."');
+    if (!pgShowIcon.value)            parts.push(':show-icon="false"');
+    parts.push(`title="${t('pages.feedback.banner.demo.infoTitle')}"`);
+    parts.push(`description="${t('pages.feedback.banner.demo.infoDesc')}"`);
     return `<Banner ${parts.join(' ')} />`;
 });
 
-// ── Example code strings ──────────────────────────────────────────────────────
-const colorsCode = `<Banner color="info"    title="Información" description="Tu cuenta se sincronizará en unos minutos." />
-<Banner color="success" title="Listo"        description="Los cambios se guardaron correctamente." />
-<Banner color="warning" title="Atención"     description="Tu plan caduca en 5 días." />
-<Banner color="danger"  title="Error"        description="No pudimos procesar el pago." />`;
+const colorsCode = `<Banner color="info"    title="…" description="…" />
+<Banner color="success" title="…" description="…" />
+<Banner color="warning" title="…" description="…" />
+<Banner color="danger"  title="…" description="…" />`;
 
-const variantsCode = `<Banner color="info" variant="filled"  title="Filled"  description="Estilo sólido." />
-<Banner color="info" variant="subtle"  title="Subtle"  description="Estilo suave (default)." />
-<Banner color="info" variant="outline" title="Outline" description="Estilo con borde." />`;
+const variantsCode = `<Banner color="info" variant="filled"  title="Filled"  />
+<Banner color="info" variant="subtle"  title="Subtle"  />
+<Banner color="info" variant="outline" title="Outline" />`;
 
-const actionCode = `<Banner color="warning" title="Plan próximo a vencer" description="Renueva para no perder acceso a las funciones premium.">
+const actionCode = `<Banner color="warning" title="…" description="…">
   <template #actions>
-    <Button color="warning" size="small">Renovar</Button>
+    <Button color="warning" size="small">…</Button>
   </template>
 </Banner>`;
 
-const dismissCode = `<Banner color="info" title="Tip" description="Puedes cerrar este aviso." dismissable @dismiss="visible = false" />`;
+const dismissCode = `<Banner color="info" title="…" description="…" dismissable />`;
 
-const iconCode = `<Banner color="primary" :icon="SparklesIcon" title="Nueva versión" description="La v2 trae soporte para temas y nuevos componentes." />`;
+const iconCode = `<Banner color="info" :icon="SparklesIcon" title="…" description="…" />`;
 
-// ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'color',            type: "'info' | 'success' | 'warning' | 'danger'",       default: "'info'",     description: 'Color semántico del banner.' },
-    { name: 'variant',          type: "'filled' | 'subtle' | 'outline'",                  default: "'subtle'",   description: 'Estilo visual aplicado al banner.' },
-    { name: 'title',            type: 'string',                                                                   description: 'Título destacado del banner.' },
-    { name: 'description',      type: 'string',                                                                   description: 'Texto descriptivo. Se reemplaza por el slot default si se provee.' },
-    { name: 'dismissable',      type: 'boolean',                                          default: 'false',       description: 'Muestra un botón de cierre que emite el evento dismiss.' },
-    { name: 'dismissAnimation', type: "'collapse' | 'shrink'",                            default: "'collapse'",  description: 'Animación usada al cerrar el banner.' },
-    { name: 'icon',             type: 'Component',                                                                description: 'Icono personalizado. Si se omite usa el icono por color.' },
-    { name: 'showIcon',         type: 'boolean',                                          default: 'true',        description: 'Muestra u oculta el icono del banner.' },
-    { name: 'position',         type: "'inline' | 'sticky-top' | 'sticky-bottom'",        default: "'inline'",    description: 'Posicionamiento del banner.' },
-    { name: 'fullWidth',        type: 'boolean',                                          default: 'false',       description: 'Elimina el radius para anclar el banner de borde a borde.' },
-    { name: 'radius',           type: "'none' | 'small' | 'medium' | 'large' | 'full'",                          description: 'Radio de las esquinas. Cascada desde ModoProvider.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'color',            type: "'info' | 'success' | 'warning' | 'danger'",       default: "'info'",     description: t('pages.feedback.banner.props.color') },
+    { name: 'variant',          type: "'filled' | 'subtle' | 'outline'",                  default: "'subtle'",   description: t('pages.feedback.banner.props.variant') },
+    { name: 'title',            type: 'string',                                                                   description: t('pages.feedback.banner.props.title') },
+    { name: 'description',      type: 'string',                                                                   description: t('pages.feedback.banner.props.description') },
+    { name: 'dismissable',      type: 'boolean',                                          default: 'false',       description: t('pages.feedback.banner.props.dismissable') },
+    { name: 'dismissAnimation', type: "'collapse' | 'shrink'",                            default: "'collapse'",  description: t('pages.feedback.banner.props.dismissAnimation') },
+    { name: 'icon',             type: 'Component',                                                                description: t('pages.feedback.banner.props.icon') },
+    { name: 'showIcon',         type: 'boolean',                                          default: 'true',        description: t('pages.feedback.banner.props.showIcon') },
+    { name: 'position',         type: "'inline' | 'sticky-top' | 'sticky-bottom'",        default: "'inline'",    description: t('pages.feedback.banner.props.position') },
+    { name: 'fullWidth',        type: 'boolean',                                          default: 'false',       description: t('pages.feedback.banner.props.fullWidth') },
+    { name: 'radius',           type: "'none' | 'small' | 'medium' | 'large' | 'full'",                          description: t('pages.feedback.banner.props.radius') },
+]);
 
-const emitsList: EmitDoc[] = [
-    { name: 'dismiss', payload: '—', description: 'Emitido al cerrar el banner cuando dismissable está activo.' },
-];
+const emitsList = computed<EmitDoc[]>(() => [
+    { name: 'dismiss', payload: '—', description: t('pages.feedback.banner.emits.dismiss') },
+]);
 
-const slotsList: SlotDoc[] = [
-    { name: 'default', description: 'Contenido del cuerpo del banner. Reemplaza la prop description cuando se necesita HTML.' },
-    { name: 'actions', description: 'Acciones a la derecha del banner (típicamente botones).' },
-];
+const slotsList = computed<SlotDoc[]>(() => [
+    { name: 'default', description: t('pages.feedback.banner.slots.default') },
+    { name: 'actions', description: t('pages.feedback.banner.slots.actions') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="Banner"
-        category="Feedback"
+        :title="t('pages.feedback.banner.title')"
+        :category="t('pages.feedback.banner.category')"
         import-path="import { Banner } from 'mood-ui'"
-        description="Aviso prominente para comunicar estado a nivel de página o sección. Soporta colores semánticos, variantes, dismiss y posición sticky."
+        :description="t('pages.feedback.banner.description')"
         :props-list="propsList"
         :emits-list="emitsList"
         :slots-list="slotsList"
     >
-        <!-- ── Overview ────────────────────────────────────────────────────── -->
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="200px" @reset="resetPlayground">
                 <template #controls>
-                    <!-- Color dots -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Color</span>
-                        <div class="flex items-center gap-1">
-                            <button
-                                v-for="c in colorDots"
-                                :key="c.value"
-                                type="button"
-                                class="size-4 rounded-full transition-all duration-150"
-                                :class="pgColor === c.value
-                                    ? 'ring-2 ring-offset-1 ring-foreground/30 scale-125'
-                                    : 'hover:scale-110 opacity-70 hover:opacity-100'"
-                                :style="`background: ${c.bg}`"
-                                :title="c.label"
-                                @click="pgColor = c.value"
-                            />
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Variant -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Variante</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="v in ['subtle', 'filled', 'outline']"
-                                :key="v"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgVariant === v
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgVariant = (v as typeof pgVariant)"
-                            >{{ v }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgDismissable
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgDismissable = !pgDismissable"
-                    >Dismissable</button>
+                    <TbDots label="Color" :options="colorDots" v-model="pgColor" />
+                    <TbSep />
+                    <TbPills label="Variant" :options="[{value:'subtle'},{value:'filled'},{value:'outline'}]" v-model="pgVariant" />
+                    <TbSep />
+                    <TbToggle label="Dismissable" v-model="pgDismissable" />
+                    <TbToggle label="Icon" v-model="pgShowIcon" />
                 </template>
 
                 <Banner
@@ -152,8 +116,9 @@ const slotsList: SlotDoc[] = [
                     :color="pgColor"
                     :variant="pgVariant"
                     :dismissable="pgDismissable"
-                    title="Información"
-                    description="Tu cuenta se sincronizará en unos minutos."
+                    :show-icon="pgShowIcon"
+                    :title="t('pages.feedback.banner.demo.infoTitle')"
+                    :description="t('pages.feedback.banner.demo.infoDesc')"
                     @dismiss="pgVisible = false"
                 />
                 <button
@@ -161,79 +126,78 @@ const slotsList: SlotDoc[] = [
                     type="button"
                     class="text-sm text-primary underline"
                     @click="pgVisible = true"
-                >Mostrar de nuevo</button>
+                >{{ t('pages.feedback.banner.demo.showAgain') }}</button>
             </ComponentPreview>
         </template>
 
-        <!-- ── Examples ────────────────────────────────────────────────────── -->
         <template #examples>
             <ComponentPreview
-                title="Colores"
-                description="Cuatro colores semánticos con sus iconos por defecto."
+                :title="t('pages.feedback.banner.examples.colors.title')"
+                :description="t('pages.feedback.banner.examples.colors.desc')"
                 :code="colorsCode"
             >
                 <div class="flex flex-col gap-2 w-full max-w-md">
-                    <Banner color="info"    title="Información" description="Tu cuenta se sincronizará en unos minutos." />
-                    <Banner color="success" title="Listo"       description="Los cambios se guardaron correctamente." />
-                    <Banner color="warning" title="Atención"    description="Tu plan caduca en 5 días." />
-                    <Banner color="danger"  title="Error"       description="No pudimos procesar el pago." />
+                    <Banner color="info"    :title="t('pages.feedback.banner.demo.infoTitle')"    :description="t('pages.feedback.banner.demo.infoDesc')" />
+                    <Banner color="success" :title="t('pages.feedback.banner.demo.successTitle')" :description="t('pages.feedback.banner.demo.successDesc')" />
+                    <Banner color="warning" :title="t('pages.feedback.banner.demo.warnTitle')"    :description="t('pages.feedback.banner.demo.warnDesc')" />
+                    <Banner color="danger"  :title="t('pages.feedback.banner.demo.errTitle')"     :description="t('pages.feedback.banner.demo.errDesc')" />
                 </div>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Variantes"
-                description="Tres tratamientos visuales: filled, subtle (default) y outline."
+                :title="t('pages.feedback.banner.examples.variants.title')"
+                :description="t('pages.feedback.banner.examples.variants.desc')"
                 :code="variantsCode"
             >
                 <div class="flex flex-col gap-2 w-full max-w-md">
-                    <Banner color="info" variant="filled"  title="Filled"  description="Estilo sólido." />
-                    <Banner color="info" variant="subtle"  title="Subtle"  description="Estilo suave (default)." />
-                    <Banner color="info" variant="outline" title="Outline" description="Estilo con borde." />
+                    <Banner color="info" variant="filled"  :title="t('pages.feedback.banner.demo.filledTitle')"  :description="t('pages.feedback.banner.demo.filledDesc')" />
+                    <Banner color="info" variant="subtle"  :title="t('pages.feedback.banner.demo.subtleTitle')"  :description="t('pages.feedback.banner.demo.subtleDesc')" />
+                    <Banner color="info" variant="outline" :title="t('pages.feedback.banner.demo.outlineTitle')" :description="t('pages.feedback.banner.demo.outlineDesc')" />
                 </div>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con acción"
-                description="Slot actions a la derecha para anclar un CTA."
+                :title="t('pages.feedback.banner.examples.action.title')"
+                :description="t('pages.feedback.banner.examples.action.desc')"
                 :code="actionCode"
             >
                 <Banner
                     class="w-full max-w-md"
                     color="warning"
-                    title="Plan próximo a vencer"
-                    description="Renueva para no perder acceso a las funciones premium."
+                    :title="t('pages.feedback.banner.demo.renewTitle')"
+                    :description="t('pages.feedback.banner.demo.renewDesc')"
                 >
                     <template #actions>
-                        <Button color="warning" size="small">Renovar</Button>
+                        <Button color="warning" size="small">{{ t('pages.feedback.banner.demo.renewBtn') }}</Button>
                     </template>
                 </Banner>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Dismissable"
-                description="Permite al usuario cerrar el banner. Emite el evento dismiss."
+                :title="t('pages.feedback.banner.examples.dismiss.title')"
+                :description="t('pages.feedback.banner.examples.dismiss.desc')"
                 :code="dismissCode"
             >
                 <Banner
                     class="w-full max-w-md"
                     color="info"
-                    title="Tip"
-                    description="Puedes cerrar este aviso."
+                    :title="t('pages.feedback.banner.demo.tipTitle')"
+                    :description="t('pages.feedback.banner.demo.tipDesc')"
                     dismissable
                 />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con icono personalizado"
-                description="Sustituye el icono por uno propio mediante la prop icon."
+                :title="t('pages.feedback.banner.examples.icon.title')"
+                :description="t('pages.feedback.banner.examples.icon.desc')"
                 :code="iconCode"
             >
                 <Banner
                     class="w-full max-w-md"
                     color="info"
                     :icon="SparklesIcon"
-                    title="Nueva versión"
-                    description="La v2 trae soporte para temas y nuevos componentes."
+                    :title="t('pages.feedback.banner.demo.newTitle')"
+                    :description="t('pages.feedback.banner.demo.newDesc')"
                 />
             </ComponentPreview>
         </template>

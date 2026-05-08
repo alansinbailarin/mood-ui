@@ -108,8 +108,8 @@ const config = ref<ModoConfig>({
     theme: pick(props.theme, parent?.value.theme, defaultModoConfig.theme), 
     halo: pick(props.halo, parent?.value.halo, defaultModoConfig.halo), 
     palettes: mergePalettes(props.palettes, parent?.value.palettes),
-    surfaces: props.surfaces,
-    darkSurfaces: props.darkSurfaces,
+    surfaces: props.surfaces ?? parent?.value.surfaces,
+    darkSurfaces: props.darkSurfaces ?? parent?.value.darkSurfaces,
 });
  
 watch( 
@@ -151,10 +151,34 @@ watch(
 );
 
 // Sync surfaces / darkSurfaces props into config.
-watch(() => props.surfaces,    (v) => { config.value.surfaces     = v; }, { deep: true });
-watch(() => props.darkSurfaces, (v) => { config.value.darkSurfaces = v; }, { deep: true });
+// Fall back to parent's value when local prop is not set.
+watch(() => props.surfaces,    (v) => { config.value.surfaces     = v ?? parent?.value.surfaces; }, { deep: true });
+watch(() => props.darkSurfaces, (v) => { config.value.darkSurfaces = v ?? parent?.value.darkSurfaces; }, { deep: true });
+// Inherit parent surface changes when we don't override them locally.
+watch(
+    () => parent?.value.surfaces,
+    (ps) => { if (props.surfaces === undefined) config.value.surfaces = ps; },
+    { deep: true },
+);
+watch(
+    () => parent?.value.darkSurfaces,
+    (pds) => { if (props.darkSurfaces === undefined) config.value.darkSurfaces = pds; },
+    { deep: true },
+);
 
 const { isDark } = useColorMode();
+
+// For scoped providers the dark state is determined by the locally resolved
+// theme (light / dark after resolving "system"), NOT by the global isDark
+// signal. This is critical: without this, light-surface CSS vars applied as
+// inline styles would override the dark-mode CSS custom properties that the
+// browser sets via [data-modo-theme="dark"] selectors, making dark mode
+// invisible whenever a tinted surface override is active.
+const isDarkLocal = computed(() =>
+    (props.scoped && resolvedScopedTheme.value !== undefined)
+        ? resolvedScopedTheme.value === 'dark'
+        : isDark.value,
+);
 
 const cssVarStyle = computed(() => {
     const legacy = palettesToCssVars(config.value.palettes);
@@ -163,11 +187,12 @@ const cssVarStyle = computed(() => {
         hexToOklchString,
         pickForegroundOklch,
     );
-    // Apply surface overrides: light surfaces always, dark surfaces only when dark.
-    const surfaceVars = config.value.surfaces
+    // Light surface overrides are skipped in dark mode so they don't take
+    // precedence over the dark-mode CSS vars via [data-modo-theme="dark"].
+    const surfaceVars = (!isDarkLocal.value && config.value.surfaces)
         ? surfacesToCssVars(config.value.surfaces)
         : {};
-    const darkSurfaceVars = (isDark.value && config.value.darkSurfaces)
+    const darkSurfaceVars = (isDarkLocal.value && config.value.darkSurfaces)
         ? surfacesToCssVars(config.value.darkSurfaces)
         : {};
     return { ...legacy, ...derived, ...surfaceVars, ...darkSurfaceVars };

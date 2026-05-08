@@ -1,0 +1,58 @@
+{
+    "kicker": "Documentation",
+    "intro": "Every release listed newest first. We follow SemVer.",
+
+    "releases": {
+        "v0.5.2": {
+            "title": "Showroom polish + a11y",
+            "items": [
+                "New surface-preset picker inside the settings popover.",
+                "Search palette now uses the native SearchInput component.",
+                "View transitions between routes (Chromium / Safari TP).",
+                "Lighter welcome headline with scroll-reveal animations.",
+                "\"Star on GitHub\" button in the header, translated ES/EN."
+            ]
+        },
+        "v0.5.0": {
+            "title": "Templates + theme studio",
+            "items": [
+                "Templates: Dashboard, Auth, Pricing and Settings.",
+                "Interactive Theme Studio with live preview.",
+                "New Scheduler component with drag & drop.",
+                "Support for 6 dark surface presets."
+            ]
+        },
+        "v0.4.0": {
+            "title": "Calendar suite + Table",
+            "items": [
+                "Calendar, MonthView, WeekView, DayView, AgendaView.",
+                "Table: virtualization, multi-sort, server-side, tree rows.",
+                "DateRangePicker and DateTimePicker."
+            ]
+        },
+        "v0.3.0": {
+            "title": "Dark surfaces + i18n",
+            "items": [
+                "Dark surface presets (navy, zinc, charcoal, midnight, forest).",
+                "Built-in i18n with ES/EN dicts.",
+                "useToast / useConfirm composables."
+            ]
+        },
+        "v0.1.0": {
+            "title": "First public release",
+            "items": [
+                "40+ base components.",
+                "ModoProvider with reactive theming.",
+                "Tailwind v4 + design tokens."
+            ]
+        }
+    },
+
+    "nextSteps": "Next steps",
+    "next": {
+        "introductionTitle": "Introduction",
+        "introductionDesc":  "Fundamentals, architecture and why mood-ui.",
+        "themingTitle":      "Theming",
+        "themingDesc":       "Tokens, palettes, surfaces and dark mode."
+    }
+}

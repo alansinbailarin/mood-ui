@@ -1,0 +1,26 @@
+{
+    "section": {
+        "overview": "Overview",
+        "examples": "Ejemplos",
+        "api": "API Reference",
+        "props": "Props",
+        "emits": "Emits",
+        "slots": "Slots"
+    },
+    "col": {
+        "prop": "Prop",
+        "type": "Tipo",
+        "default": "Default",
+        "description": "Descripción",
+        "event": "Evento",
+        "payload": "Payload",
+        "slot": "Slot",
+        "bindings": "Props"
+    },
+    "reset": "Resetear",
+    "preview": "Preview",
+    "code": "Código",
+    "onThisPage": "En esta página",
+    "prev": "Anterior",
+    "next": "Siguiente"
+}

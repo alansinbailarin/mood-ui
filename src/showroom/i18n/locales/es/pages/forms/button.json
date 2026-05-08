@@ -1,0 +1,54 @@
+{
+    "category": "Forms",
+    "title": "Button",
+    "description": "La acción primaria de cualquier interfaz. Cuatro variantes, cinco colores semánticos, cuatro tamaños, iconos configurables, estado de carga y soporte para renderizar como link o cualquier elemento.",
+    "controls": {
+        "variant": "Variante",
+        "color": "Color",
+        "size": "Tamaño",
+        "loading": "Loading",
+        "disabled": "Disabled"
+    },
+    "examples": {
+        "variants": {
+            "title": "Variantes",
+            "desc": "Cuatro estilos visuales para distintos niveles de jerarquía de acción."
+        },
+        "colors": {
+            "title": "Colores",
+            "desc": "Cinco colores semánticos que mapean al sistema de design tokens del ModoProvider."
+        },
+        "sizes": {
+            "title": "Tamaños",
+            "desc": "El padding, la fuente y el alto se ajustan proporcionalmente en cada escala."
+        },
+        "icons": {
+            "title": "Con iconos",
+            "desc": "Posición izquierda, derecha o solo icono. Usa aria-label en botones icon-only."
+        },
+        "states": {
+            "title": "Estados",
+            "desc": "Loading bloquea clicks y muestra spinner. Disabled deshabilita visualmente e impide eventos."
+        }
+    },
+    "props": {
+        "variant": "Variante visual. Normal es el botón sólido por defecto.",
+        "color": "Color semántico aplicado al botón.",
+        "size": "Controla el padding, fuente y alto del botón.",
+        "label": "Texto del botón. Equivalente al slot default para contenido plano.",
+        "loading": "Muestra un spinner y bloquea clicks mientras está activo.",
+        "loadingText": "Texto mostrado junto al spinner durante el estado loading.",
+        "disabled": "Deshabilita el botón visualmente e impide cualquier interacción.",
+        "icon": "Componente de icono renderizado junto al label (heroicons u otro).",
+        "iconPosition": "Lado donde aparece el icono respecto al label.",
+        "fullWidth": "El botón se expande para ocupar el 100% del ancho disponible.",
+        "as": "Elemento raíz a renderizar. Usa \"a\" para links o un router-link.",
+        "ariaLabel": "Label accesible. Imprescindible en botones icon-only sin texto visible."
+    },
+    "emits": {
+        "click": "Emitido al hacer click cuando el botón no está deshabilitado ni en estado loading."
+    },
+    "slots": {
+        "default": "Contenido personalizado del botón. Reemplaza la prop label cuando se necesita HTML o componentes internos."
+    }
+}

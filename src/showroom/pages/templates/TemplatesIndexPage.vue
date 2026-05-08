@@ -9,49 +9,82 @@ import {
 } from '@heroicons/vue/24/outline';
 
 import Card from '../../../components/data-display/Card.vue';
-import Badge from '../../../components/feedback/Badge.vue';
 import Stack from '../../../components/layout/Stack.vue';
+import Typography from '../../../components/data-display/Typography.vue';
 
+import { useI18n } from 'vue-i18n';
 import { useShowroomRouter } from '../../composables/useShowroomRouter';
-import { useShowroomT } from '../../composables/useShowroomLocale';
 import { vReveal, vRevealChildren } from '../../composables/useScrollReveal';
 
 const { go } = useShowroomRouter();
-const t = useShowroomT();
+const { t } = useI18n();
 
 interface Tpl {
-    id: string;
+    id: 'dashboard' | 'auth' | 'pricing' | 'settings';
     icon: unknown;
-    es: { title: string; desc: string };
-    en: { title: string; desc: string };
     tone: 'primary' | 'success' | 'warning' | 'danger';
 }
 
 const templates: Tpl[] = [
-    { id: 'dashboard', icon: ChartBarIcon,       tone: 'primary', es: { title: 'Dashboard', desc: 'Panel de control con KPIs, tabla de pedidos y timeline de actividad.' }, en: { title: 'Dashboard', desc: 'Admin panel with KPIs, orders table and activity timeline.' } },
-    { id: 'auth',      icon: LockClosedIcon,     tone: 'success', es: { title: 'Auth', desc: 'Login, registro y recuperación con layout dual y branding flexible.' }, en: { title: 'Auth', desc: 'Login, signup and recovery with dual layout and flexible branding.' } },
-    { id: 'pricing',   icon: CurrencyDollarIcon, tone: 'warning', es: { title: 'Pricing', desc: 'Tabla comparativa de planes con badges, FAQ y CTA destacado.' }, en: { title: 'Pricing', desc: 'Comparative plan table with badges, FAQ and highlighted CTA.' } },
-    { id: 'settings',  icon: Cog6ToothIcon,      tone: 'danger',  es: { title: 'Settings', desc: 'Página de ajustes con secciones agrupadas, tabs y forms accesibles.' }, en: { title: 'Settings', desc: 'Settings page with grouped sections, tabs and accessible forms.' } },
+    { id: 'dashboard', icon: ChartBarIcon,       tone: 'primary' },
+    { id: 'auth',      icon: LockClosedIcon,     tone: 'success' },
+    { id: 'pricing',   icon: CurrencyDollarIcon, tone: 'warning' },
+    { id: 'settings',  icon: Cog6ToothIcon,      tone: 'danger'  },
 ];
 
-const items = computed(() => templates.map((tpl) => ({
+const cardStyles = [
+    {   // Dashboard — grid lines, primary
+        iconClasses:    'bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground',
+        patternClasses: 'text-primary [background-image:linear-gradient(to_right,currentColor_1px,transparent_1px),linear-gradient(to_bottom,currentColor_1px,transparent_1px)] [background-size:22px_22px]',
+        hoverBorder:    'hover:border-primary/50',
+        barClasses:     'text-primary',
+        barHeights:     ['h-3', 'h-6', 'h-4', 'h-8', 'h-5', 'h-7', 'h-2'],
+    },
+    {   // Auth — dot matrix, success
+        iconClasses:    'bg-success/10 text-success group-hover:bg-success group-hover:text-white',
+        patternClasses: 'text-success [background-image:radial-gradient(circle,currentColor_1.5px,transparent_1.5px)] [background-size:18px_18px]',
+        hoverBorder:    'hover:border-success/40',
+        barClasses:     'text-success',
+        barHeights:     ['h-6', 'h-3', 'h-7', 'h-4', 'h-8', 'h-2', 'h-5'],
+    },
+    {   // Pricing — diagonal stripes, warning
+        iconClasses:    'bg-warning/10 text-warning group-hover:bg-warning group-hover:text-white',
+        patternClasses: 'text-warning [background-image:repeating-linear-gradient(-55deg,currentColor_0,currentColor_1px,transparent_0,transparent_14px)]',
+        hoverBorder:    'hover:border-warning/40',
+        barClasses:     'text-warning',
+        barHeights:     ['h-8', 'h-5', 'h-7', 'h-3', 'h-6', 'h-4', 'h-8'],
+    },
+    {   // Settings — crosshatch, danger
+        iconClasses:    'bg-danger/10 text-danger group-hover:bg-danger group-hover:text-white',
+        patternClasses: 'text-danger [background-image:linear-gradient(45deg,currentColor_1px,transparent_1px),linear-gradient(-45deg,currentColor_1px,transparent_1px)] [background-size:14px_14px]',
+        hoverBorder:    'hover:border-danger/40',
+        barClasses:     'text-danger',
+        barHeights:     ['h-4', 'h-7', 'h-3', 'h-6', 'h-8', 'h-5', 'h-4'],
+    },
+];
+
+const items = computed(() => templates.map((tpl, i) => ({
     ...tpl,
-    body: t.value.lang === 'es' ? tpl.es : tpl.en,
+    body: {
+        title: t(`pages.templates.index.items.${tpl.id}.title`),
+        desc:  t(`pages.templates.index.items.${tpl.id}.desc`),
+    },
+    style: cardStyles[i],
 })));
 </script>
 
 <template>
     <div class="flex flex-col gap-10 pb-12">
         <header v-reveal class="flex flex-col gap-3 max-w-2xl">
-            <Badge color="primary" variant="subtle" class="self-start">
-                {{ t.templates }}
-            </Badge>
-            <h1 class="text-5xl sm:text-6xl font-extrabold tracking-tight text-foreground leading-[1.05]">
-                {{ t.templatesPickTitle }}
-            </h1>
-            <p class="text-lg text-muted-foreground font-light leading-relaxed">
-                {{ t.templatesPickSubtitle }}
-            </p>
+            <Typography variant="overline" size="medium" color="muted">
+                {{ t('templates') }}
+            </Typography>
+            <Typography variant="display" size="medium" as="h1" weight="medium">
+                {{ t('pages.templates.index.title') }}
+            </Typography>
+            <Typography variant="body" size="medium" color="muted" weight="light">
+                {{ t('pages.templates.index.subtitle') }}
+            </Typography>
         </header>
 
         <div v-reveal-children class="grid sm:grid-cols-2 gap-5">
@@ -60,45 +93,44 @@ const items = computed(() => templates.map((tpl) => ({
                 :key="tpl.id"
                 variant="outlined"
                 padding="none"
-                class="group cursor-pointer overflow-hidden hover:border-primary/60 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+                class="relative overflow-hidden group cursor-pointer hover:-translate-y-0.5 transition-all duration-300"
+                :class="tpl.style.hoverBorder"
                 @click="go(tpl.id)"
             >
-                <!-- Faux preview surface -->
+                <!-- Geometric pattern overlay -->
                 <div
-                    class="relative h-48 border-b border-border overflow-hidden"
-                    :class="{
-                        'bg-gradient-to-br from-primary/15 via-primary/5 to-transparent': tpl.tone === 'primary',
-                        'bg-gradient-to-br from-success/15 via-success/5 to-transparent': tpl.tone === 'success',
-                        'bg-gradient-to-br from-warning/15 via-warning/5 to-transparent': tpl.tone === 'warning',
-                        'bg-gradient-to-br from-danger/15  via-danger/5  to-transparent': tpl.tone === 'danger',
-                    }"
-                >
-                    <!-- Faux UI shapes -->
-                    <div class="absolute inset-0 p-5 flex flex-col gap-2">
-                        <div class="h-3 w-1/2 rounded bg-card/80 ring-1 ring-border"></div>
-                        <div class="h-2.5 w-1/3 rounded bg-card/60 ring-1 ring-border"></div>
-                        <div class="grid grid-cols-3 gap-2 mt-2">
-                            <div class="h-12 rounded bg-card/80 ring-1 ring-border"></div>
-                            <div class="h-12 rounded bg-card/80 ring-1 ring-border"></div>
-                            <div class="h-12 rounded bg-card/80 ring-1 ring-border"></div>
+                    class="pointer-events-none absolute inset-0 opacity-[0.055]"
+                    :class="tpl.style.patternClasses"
+                />
+
+                <div class="relative flex flex-col gap-6 p-6">
+                    <!-- Header: icon + mini bar chart -->
+                    <div class="flex items-end justify-between">
+                        <div
+                            class="size-11 rounded-xl grid place-items-center transition-colors duration-300 shrink-0"
+                            :class="tpl.style.iconClasses"
+                        >
+                            <component :is="tpl.icon" class="size-5" />
                         </div>
-                        <div class="flex-1 rounded bg-card/70 ring-1 ring-border mt-2"></div>
+
+                        <!-- Faux bar chart — decorative, tone-colored -->
+                        <div class="flex items-end gap-1 opacity-25 group-hover:opacity-50 transition-opacity duration-300" :class="tpl.style.barClasses">
+                            <div v-for="(h, j) in tpl.style.barHeights" :key="j" class="w-2 rounded-sm bg-current" :class="h" />
+                        </div>
                     </div>
 
-                    <!-- Icon badge -->
-                    <div class="absolute top-3 right-3 size-9 rounded-lg bg-card/90 ring-1 ring-border grid place-items-center text-foreground/80 group-hover:scale-110 transition-transform">
-                        <component :is="tpl.icon" class="size-5" />
-                    </div>
-                </div>
+                    <!-- Text -->
+                    <Stack direction="column" spacing="xsmall">
+                        <Typography variant="title" size="medium" as="h3">{{ tpl.body.title }}</Typography>
+                        <Typography variant="body" size="small" color="muted">{{ tpl.body.desc }}</Typography>
+                    </Stack>
 
-                <Stack direction="column" spacing="small" class="p-5">
-                    <h3 class="text-lg font-semibold text-foreground !m-0">{{ tpl.body.title }}</h3>
-                    <p class="text-sm text-muted-foreground leading-relaxed">{{ tpl.body.desc }}</p>
-                    <span class="inline-flex items-center gap-1 text-primary text-sm font-medium mt-1 group-hover:gap-2 transition-all">
-                        {{ t.openTemplate }}
+                    <!-- CTA -->
+                    <span class="inline-flex items-center gap-1 text-primary text-sm font-medium group-hover:gap-2 transition-all duration-200">
+                        {{ t('pages.templates.index.open') }}
                         <ArrowRightIcon class="size-4" />
                     </span>
-                </Stack>
+                </div>
             </Card>
         </div>
     </div>

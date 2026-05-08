@@ -9,7 +9,7 @@
     > 
         <div 
             :class="[ 
-                'flex items-center gap-3 w-full', 
+                'relative flex items-center gap-3 w-full', 
                 heightClass, 
                 paddingClasses, 
             ]" 
@@ -57,18 +57,19 @@
                 <slot name="nav" /> 
             </nav> 
  
-            <!-- Search (flex-grow center area) --> 
+<!-- Search (truly centered over the full topbar width) --> 
             <div 
                 v-if="$slots.search" 
-                class="flex-1 min-w-0 flex justify-center" 
+                class="absolute inset-0 flex items-center justify-center pointer-events-none" 
+                :class="paddingClasses"
             > 
-                <div class="w-full max-w-md"> 
+                <div class="w-full max-w-md pointer-events-auto"> 
                     <slot name="search" /> 
                 </div> 
             </div> 
- 
-            <!-- Spacer when no search slot to push actions/user to the right --> 
-            <div v-else class="flex-1 min-w-0" aria-hidden="true" /> 
+
+            <!-- Spacer: always present to push actions/user to the right --> 
+            <div class="flex-1 min-w-0" aria-hidden="true" />
  
             <!-- Actions (notifications, etc.) --> 
             <div 

@@ -2,7 +2,7 @@ import { computed } from 'vue';
 import { useLocalStorage } from './useLocalStorage';
 import type { ModoTheme, ModoColor, ModoRadius, ModoSize, ModoHalo } from '../../config/ModoConfig';
 import type { DarkSurfacePreset } from '../../config/surfaces';
-import type { ShowroomLocale } from './useShowroomI18n';
+import type { ShowroomLocale } from '../i18n';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 

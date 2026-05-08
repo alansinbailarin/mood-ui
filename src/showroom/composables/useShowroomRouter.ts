@@ -70,6 +70,7 @@ export function useShowroomRouter() {
             if (window.location.hash !== target) {
                 history.pushState(null, '', target);
             }
+            window.scrollTo({ top: 0, behavior: 'instant' });
         }
         runWithTransition(() => { current.value = id; });
     }

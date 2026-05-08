@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import DropdownMenu from '../../../components/navigation/DropdownMenu.vue';
@@ -13,251 +14,191 @@ import {
     Cog6ToothIcon,
     ArrowRightOnRectangleIcon,
 } from '@heroicons/vue/24/outline';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
 import type { DropdownMenuEntry } from '../../../interfaces/navigation/DropdownMenu.interface';
 import type { PropDoc, EmitDoc, SlotDoc } from '../../types';
 
-// ── Overview playground state ─────────────────────────────────────────────────
+const { t } = useI18n();
+
 const pgPlacement = ref<'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'>('bottom-start');
 const pgSize      = ref<'small' | 'medium' | 'large'>('medium');
+const pgTriggerVariant = ref<'normal' | 'outline' | 'ghost' | 'text'>('outline');
+const pgDisabled  = ref(false);
 
 function resetPlayground() {
     pgPlacement.value = 'bottom-start';
     pgSize.value      = 'medium';
+    pgTriggerVariant.value = 'outline';
+    pgDisabled.value  = false;
 }
 
-const playgroundItems: DropdownMenuEntry[] = [
-    { id: 'edit',   label: 'Editar',   icon: PencilSquareIcon },
-    { id: 'dup',    label: 'Duplicar', icon: DocumentDuplicateIcon },
-    { id: 'export', label: 'Exportar', icon: ArrowDownTrayIcon },
-];
+const playgroundItems = computed<DropdownMenuEntry[]>(() => [
+    { id: 'edit',   label: t('pages.navigation.dropdownMenu.items.edit'),      icon: PencilSquareIcon },
+    { id: 'dup',    label: t('pages.navigation.dropdownMenu.items.duplicate'), icon: DocumentDuplicateIcon },
+    { id: 'export', label: t('pages.navigation.dropdownMenu.items.export'),    icon: ArrowDownTrayIcon },
+]);
 
 const overviewCode = computed(() => {
     const parts: string[] = [];
     if (pgPlacement.value !== 'bottom-start') parts.push(`placement="${pgPlacement.value}"`);
     if (pgSize.value      !== 'medium')       parts.push(`size="${pgSize.value}"`);
+    if (pgTriggerVariant.value !== 'outline') parts.push(`trigger-variant="${pgTriggerVariant.value}"`);
+    if (pgDisabled.value) parts.push('disabled');
     const attrs = parts.length ? ' ' + parts.join(' ') : '';
-    return `<DropdownMenu trigger-label="Acciones" :items="items"${attrs} />`;
+    return `<DropdownMenu trigger-label="${t('pages.navigation.dropdownMenu.trigger.actions')}" :items="items"${attrs} />`;
 });
 
-// ── Example data ──────────────────────────────────────────────────────────────
-const basicItems: DropdownMenuEntry[] = [
-    { id: 'edit',   label: 'Editar' },
-    { id: 'dup',    label: 'Duplicar' },
-    { id: 'export', label: 'Exportar' },
-];
+const basicItems = computed<DropdownMenuEntry[]>(() => [
+    { id: 'edit',   label: t('pages.navigation.dropdownMenu.items.edit') },
+    { id: 'dup',    label: t('pages.navigation.dropdownMenu.items.duplicate') },
+    { id: 'export', label: t('pages.navigation.dropdownMenu.items.export') },
+]);
 
-const iconItems: DropdownMenuEntry[] = [
-    { id: 'edit',   label: 'Editar',   icon: PencilSquareIcon, shortcut: '⌘E' },
-    { id: 'dup',    label: 'Duplicar', icon: DocumentDuplicateIcon, shortcut: '⌘D' },
-    { id: 'export', label: 'Exportar', icon: ArrowDownTrayIcon, description: 'Descargar como JSON' },
-];
+const iconItems = computed<DropdownMenuEntry[]>(() => [
+    { id: 'edit',   label: t('pages.navigation.dropdownMenu.items.edit'),      icon: PencilSquareIcon, shortcut: '⌘E' },
+    { id: 'dup',    label: t('pages.navigation.dropdownMenu.items.duplicate'), icon: DocumentDuplicateIcon, shortcut: '⌘D' },
+    { id: 'export', label: t('pages.navigation.dropdownMenu.items.export'),    icon: ArrowDownTrayIcon, description: t('pages.navigation.dropdownMenu.items.exportDesc') },
+]);
 
-const dividerItems: DropdownMenuEntry[] = [
-    { type: 'header', label: 'Acciones' },
-    { id: 'edit',   label: 'Editar',   icon: PencilSquareIcon },
-    { id: 'dup',    label: 'Duplicar', icon: DocumentDuplicateIcon },
+const dividerItems = computed<DropdownMenuEntry[]>(() => [
+    { type: 'header', label: t('pages.navigation.dropdownMenu.items.actionsHeader') },
+    { id: 'edit',   label: t('pages.navigation.dropdownMenu.items.edit'),      icon: PencilSquareIcon },
+    { id: 'dup',    label: t('pages.navigation.dropdownMenu.items.duplicate'), icon: DocumentDuplicateIcon },
     { type: 'divider' },
-    { id: 'open',   label: 'Abrir en nueva pestaña', icon: ArrowTopRightOnSquareIcon, href: '#', external: true },
-];
+    { id: 'open',   label: t('pages.navigation.dropdownMenu.items.openTab'),   icon: ArrowTopRightOnSquareIcon, href: '#', external: true },
+]);
 
-const userMenuItems: DropdownMenuEntry[] = [
-    { type: 'header', label: 'modo@ejemplo.com' },
-    { id: 'profile',  label: 'Mi perfil',     icon: UserIcon },
-    { id: 'settings', label: 'Preferencias',  icon: Cog6ToothIcon },
+const userMenuItems = computed<DropdownMenuEntry[]>(() => [
+    { type: 'header', label: t('pages.navigation.dropdownMenu.items.userEmail') },
+    { id: 'profile',  label: t('pages.navigation.dropdownMenu.items.profile'),     icon: UserIcon },
+    { id: 'settings', label: t('pages.navigation.dropdownMenu.items.preferences'), icon: Cog6ToothIcon },
     { type: 'divider' },
-    { id: 'logout',   label: 'Cerrar sesión', icon: ArrowRightOnRectangleIcon },
-];
+    { id: 'logout',   label: t('pages.navigation.dropdownMenu.items.logout'),      icon: ArrowRightOnRectangleIcon },
+]);
 
-const dangerItems: DropdownMenuEntry[] = [
-    { id: 'edit',   label: 'Editar',   icon: PencilSquareIcon },
-    { id: 'dup',    label: 'Duplicar', icon: DocumentDuplicateIcon },
+const dangerItems = computed<DropdownMenuEntry[]>(() => [
+    { id: 'edit',   label: t('pages.navigation.dropdownMenu.items.edit'),      icon: PencilSquareIcon },
+    { id: 'dup',    label: t('pages.navigation.dropdownMenu.items.duplicate'), icon: DocumentDuplicateIcon },
     { type: 'divider' },
-    { id: 'delete', label: 'Eliminar', icon: TrashIcon, danger: true, shortcut: '⌫' },
-];
+    { id: 'delete', label: t('pages.navigation.dropdownMenu.items.delete'),    icon: TrashIcon, danger: true, shortcut: '⌫' },
+]);
 
-// ── Example code strings ──────────────────────────────────────────────────────
-const basicCode = `const items = [
-    { id: 'edit',   label: 'Editar' },
-    { id: 'dup',    label: 'Duplicar' },
-    { id: 'export', label: 'Exportar' },
-];
+const basicCode = `<DropdownMenu trigger-label="…" :items="items" />`;
+const iconsCode = `<DropdownMenu trigger-label="…" :items="items" />`;
+const dividersCode = `<DropdownMenu trigger-label="…" :items="items" />`;
+const userMenuCode = `<DropdownMenu trigger-label="…" :items="items" trigger-variant="ghost" />`;
+const dangerCode = `<DropdownMenu trigger-label="…" :items="items" />`;
 
-<DropdownMenu trigger-label="Acciones" :items="items" />`;
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'items',             type: 'DropdownMenuEntry[]',                                       required: true,         description: t('pages.navigation.dropdownMenu.props.items') },
+    { name: 'triggerLabel',      type: 'string',                                                                            description: t('pages.navigation.dropdownMenu.props.triggerLabel') },
+    { name: 'triggerIcon',       type: 'Component',                                                                         description: t('pages.navigation.dropdownMenu.props.triggerIcon') },
+    { name: 'triggerVariant',    type: "'normal' | 'outline' | 'ghost' | 'text'",                   default: "'outline'",   description: t('pages.navigation.dropdownMenu.props.triggerVariant') },
+    { name: 'color',             type: "'default' | 'primary' | 'danger' | 'success' | 'warning'",  default: "'default'",   description: t('pages.navigation.dropdownMenu.props.color') },
+    { name: 'size',              type: "'small' | 'medium' | 'large'",                              default: "'medium'",    description: t('pages.navigation.dropdownMenu.props.size') },
+    { name: 'radius',            type: "'none' | 'small' | 'medium' | 'large' | 'full'",                                    description: t('pages.navigation.dropdownMenu.props.radius') },
+    { name: 'showChevron',       type: 'boolean',                                                   default: 'true',        description: t('pages.navigation.dropdownMenu.props.showChevron') },
+    { name: 'placement',         type: "'bottom-start' | 'bottom-end' | 'bottom-center' | 'top-start' | 'top-end' | 'top-center'", default: "'bottom-start'", description: t('pages.navigation.dropdownMenu.props.placement') },
+    { name: 'matchTriggerWidth', type: 'boolean',                                                   default: 'false',       description: t('pages.navigation.dropdownMenu.props.matchTriggerWidth') },
+    { name: 'minWidth',          type: 'string',                                                    default: "'12rem'",     description: t('pages.navigation.dropdownMenu.props.minWidth') },
+    { name: 'disabled',          type: 'boolean',                                                   default: 'false',       description: t('pages.navigation.dropdownMenu.props.disabled') },
+    { name: 'closeOnSelect',     type: 'boolean',                                                   default: 'true',        description: t('pages.navigation.dropdownMenu.props.closeOnSelect') },
+    { name: 'ariaLabel',         type: 'string',                                                                            description: t('pages.navigation.dropdownMenu.props.ariaLabel') },
+]);
 
-const iconsCode = `const items = [
-    { id: 'edit',   label: 'Editar',   icon: PencilSquareIcon, shortcut: '⌘E' },
-    { id: 'dup',    label: 'Duplicar', icon: DocumentDuplicateIcon, shortcut: '⌘D' },
-    { id: 'export', label: 'Exportar', icon: ArrowDownTrayIcon, description: 'Descargar como JSON' },
-];
+const emitsList = computed<EmitDoc[]>(() => [
+    { name: 'update:open', payload: 'boolean',          description: t('pages.navigation.dropdownMenu.emits.updateOpen') },
+    { name: 'select',      payload: 'DropdownMenuItem', description: t('pages.navigation.dropdownMenu.emits.select') },
+]);
 
-<DropdownMenu trigger-label="Acciones" :items="items" />`;
-
-const dividersCode = `const items = [
-    { type: 'header', label: 'Acciones' },
-    { id: 'edit', label: 'Editar', icon: PencilSquareIcon },
-    { id: 'dup',  label: 'Duplicar', icon: DocumentDuplicateIcon },
-    { type: 'divider' },
-    { id: 'open', label: 'Abrir en nueva pestaña', icon: ArrowTopRightOnSquareIcon, href: '#', external: true },
-];
-
-<DropdownMenu trigger-label="Más" :items="items" />`;
-
-const userMenuCode = `const items = [
-    { type: 'header', label: 'modo@ejemplo.com' },
-    { id: 'profile',  label: 'Mi perfil',    icon: UserIcon },
-    { id: 'settings', label: 'Preferencias', icon: Cog6ToothIcon },
-    { type: 'divider' },
-    { id: 'logout',   label: 'Cerrar sesión', icon: ArrowRightOnRectangleIcon },
-];
-
-<DropdownMenu trigger-label="modo@ejemplo.com" :items="items" trigger-variant="ghost" />`;
-
-const dangerCode = `const items = [
-    { id: 'edit',   label: 'Editar',   icon: PencilSquareIcon },
-    { id: 'dup',    label: 'Duplicar', icon: DocumentDuplicateIcon },
-    { type: 'divider' },
-    { id: 'delete', label: 'Eliminar', icon: TrashIcon, danger: true, shortcut: '⌫' },
-];
-
-<DropdownMenu trigger-label="Acciones" :items="items" />`;
-
-// ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'items',             type: 'DropdownMenuEntry[]',                                       required: true,         description: 'Lista heterogénea de items, headers y dividers.' },
-    { name: 'triggerLabel',      type: 'string',                                                                            description: 'Texto del trigger por defecto. Ignorado si usas el slot `#trigger`.' },
-    { name: 'triggerIcon',       type: 'Component',                                                                         description: 'Icono opcional del trigger por defecto.' },
-    { name: 'triggerVariant',    type: "'normal' | 'outline' | 'ghost' | 'text'",                   default: "'outline'",   description: 'Variante del Button usado como trigger.' },
-    { name: 'color',             type: "'default' | 'primary' | 'danger' | 'success' | 'warning'",  default: "'default'",   description: 'Color del trigger por defecto.' },
-    { name: 'size',              type: "'small' | 'medium' | 'large'",                              default: "'medium'",    description: 'Tamaño del trigger y de los items del menú.' },
-    { name: 'radius',            type: "'none' | 'small' | 'medium' | 'large' | 'full'",                                    description: 'Radio aplicado a trigger y panel.' },
-    { name: 'showChevron',       type: 'boolean',                                                   default: 'true',        description: 'Muestra un chevron en el trigger por defecto.' },
-    { name: 'placement',         type: "'bottom-start' | 'bottom-end' | 'bottom-center' | 'top-start' | 'top-end' | 'top-center'", default: "'bottom-start'", description: 'Posición del panel respecto al trigger.' },
-    { name: 'matchTriggerWidth', type: 'boolean',                                                   default: 'false',       description: 'Fuerza al panel a tener el mismo ancho que el trigger.' },
-    { name: 'minWidth',          type: 'string',                                                    default: "'12rem'",     description: 'Ancho mínimo del panel (CSS length).' },
-    { name: 'disabled',          type: 'boolean',                                                   default: 'false',       description: 'Deshabilita el menú completo.' },
-    { name: 'closeOnSelect',     type: 'boolean',                                                   default: 'true',        description: 'Cierra el menú tras seleccionar un item no deshabilitado.' },
-    { name: 'ariaLabel',         type: 'string',                                                                            description: 'Etiqueta accesible aplicada al panel.' },
-];
-
-const emitsList: EmitDoc[] = [
-    { name: 'update:open', payload: 'boolean',          description: 'Emitido cuando el menú se abre o se cierra.' },
-    { name: 'select',      payload: 'DropdownMenuItem', description: 'Emitido al activar un item (click o teclado), no se dispara para headers/dividers.' },
-];
-
-const slotsList: SlotDoc[] = [
-    { name: 'trigger', bindings: '{ open, toggle }', description: 'Sustituye el trigger por defecto. Útil para envolver un Avatar u otro componente.' },
-];
+const slotsList = computed<SlotDoc[]>(() => [
+    { name: 'trigger', bindings: '{ open, toggle }', description: t('pages.navigation.dropdownMenu.slots.trigger') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="DropdownMenu"
-        category="Navigation"
+        :title="t('pages.navigation.dropdownMenu.title')"
+        :category="t('pages.navigation.dropdownMenu.category')"
         import-path="import { DropdownMenu } from 'mood-ui'"
-        description="Menú flotante de acciones con headers, dividers, atajos de teclado, descripciones, items destructivos y enlaces externos."
+        :description="t('pages.navigation.dropdownMenu.description')"
         :props-list="propsList"
         :emits-list="emitsList"
         :slots-list="slotsList"
     >
-        <!-- ── Overview ────────────────────────────────────────────────────── -->
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="260px" @reset="resetPlayground">
                 <template #controls>
-                    <!-- Placement -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Placement</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="p in ['bottom-start', 'bottom-end', 'top-start', 'top-end']"
-                                :key="p"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors"
-                                :class="pgPlacement === p
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgPlacement = (p as typeof pgPlacement)"
-                            >{{ p }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Size -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Size</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in ['small', 'medium', 'large']"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = (s as typeof pgSize)"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
+                    <TbPills label="Placement" :options="[{value:'bottom-start',label:'↙ start'},{value:'bottom-end',label:'↘ end'},{value:'top-start',label:'↖ top-start'},{value:'top-end',label:'↗ top-end'}]" v-model="pgPlacement" />
+                    <TbSep />
+                    <TbPills label="Size" :options="[{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbPills label="Trigger" :options="[{value:'normal'},{value:'outline'},{value:'ghost'},{value:'text'}]" v-model="pgTriggerVariant" />
+                    <TbSep />
+                    <TbToggle label="Disabled" v-model="pgDisabled" />
                 </template>
 
                 <DropdownMenu
-                    trigger-label="Acciones"
+                    :trigger-label="t('pages.navigation.dropdownMenu.trigger.actions')"
                     :items="playgroundItems"
                     :placement="pgPlacement"
                     :size="pgSize"
+                    :trigger-variant="pgTriggerVariant"
+                    :disabled="pgDisabled"
                 />
             </ComponentPreview>
         </template>
 
-        <!-- ── Examples ────────────────────────────────────────────────────── -->
         <template #examples>
             <ComponentPreview
-                title="Básico"
-                description="Menú mínimo: una lista de items con label. El trigger por defecto usa el componente Button."
+                :title="t('pages.navigation.dropdownMenu.examples.basic.title')"
+                :description="t('pages.navigation.dropdownMenu.examples.basic.desc')"
                 :code="basicCode"
                 min-height="220px"
             >
-                <DropdownMenu trigger-label="Acciones" :items="basicItems" />
+                <DropdownMenu :trigger-label="t('pages.navigation.dropdownMenu.trigger.actions')" :items="basicItems" />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con iconos y atajos"
-                description="Cada item soporta `icon`, `shortcut` y `description` opcionales para enriquecer la lectura."
+                :title="t('pages.navigation.dropdownMenu.examples.icons.title')"
+                :description="t('pages.navigation.dropdownMenu.examples.icons.desc')"
                 :code="iconsCode"
                 min-height="240px"
             >
-                <DropdownMenu trigger-label="Acciones" :items="iconItems" />
+                <DropdownMenu :trigger-label="t('pages.navigation.dropdownMenu.trigger.actions')" :items="iconItems" />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con headers y dividers"
-                description="Agrupa items con entradas tipo `header` y separa secciones con `divider`."
+                :title="t('pages.navigation.dropdownMenu.examples.dividers.title')"
+                :description="t('pages.navigation.dropdownMenu.examples.dividers.desc')"
                 :code="dividersCode"
                 min-height="260px"
             >
-                <DropdownMenu trigger-label="Más" :items="dividerItems" />
+                <DropdownMenu :trigger-label="t('pages.navigation.dropdownMenu.trigger.more')" :items="dividerItems" />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Menú de usuario"
-                description="Patrón habitual: header con email, opciones y un divider antes de cerrar sesión."
+                :title="t('pages.navigation.dropdownMenu.examples.user.title')"
+                :description="t('pages.navigation.dropdownMenu.examples.user.desc')"
                 :code="userMenuCode"
                 min-height="280px"
             >
                 <DropdownMenu
-                    trigger-label="modo@ejemplo.com"
+                    :trigger-label="t('pages.navigation.dropdownMenu.items.userEmail')"
                     :items="userMenuItems"
                     trigger-variant="ghost"
                 />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Item destructivo"
-                description="Marca un item como `danger` para teñirlo del color destructivo y reforzar acciones irreversibles."
+                :title="t('pages.navigation.dropdownMenu.examples.danger.title')"
+                :description="t('pages.navigation.dropdownMenu.examples.danger.desc')"
                 :code="dangerCode"
                 min-height="240px"
             >
-                <DropdownMenu trigger-label="Acciones" :items="dangerItems" />
+                <DropdownMenu :trigger-label="t('pages.navigation.dropdownMenu.trigger.actions')" :items="dangerItems" />
             </ComponentPreview>
         </template>
     </ComponentDoc>

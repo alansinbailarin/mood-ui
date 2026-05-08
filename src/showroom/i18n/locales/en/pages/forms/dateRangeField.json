@@ -1,0 +1,55 @@
+{
+    "category": "Forms",
+    "title": "DateRangeField",
+    "description": "Date range picker with a dual-calendar popover and preset shortcuts.",
+    "controls": {
+        "size": "Size",
+        "presets": "Presets",
+        "clearable": "Clearable",
+        "disabled": "Disabled"
+    },
+    "playground": {
+        "label": "Period"
+    },
+    "examples": {
+        "basic": {
+            "title": "Basic",
+            "desc": "Range picker with a dual-calendar popover and medium display format by default."
+        },
+        "presets": {
+            "title": "With presets",
+            "desc": "Enable show-presets to add quick shortcuts like today, this week or this month."
+        },
+        "minMax": {
+            "title": "Min and max",
+            "desc": "Restrict the selectable range using minDate and maxDate."
+        },
+        "disabled": {
+            "title": "Disabled",
+            "desc": "The field dims, blocks the popover and preserves the visible range."
+        }
+    },
+    "props": {
+        "modelValue": "Selected range [start, end]. Supports v-model.",
+        "label": "Visible label above the field.",
+        "placeholder": "Text shown when no range is selected.",
+        "size": "Input size.",
+        "months": "Number of months visible in the popover.",
+        "showPresets": "Shows a column with preset shortcuts (today, week, month…).",
+        "minDate": "Minimum selectable date in the calendar.",
+        "maxDate": "Maximum selectable date in the calendar.",
+        "minRange": "Minimum number of days between start and end.",
+        "maxRange": "Maximum number of days between start and end.",
+        "clearable": "Shows a button to clear the range.",
+        "disabled": "Disables the field.",
+        "readonly": "Makes the field non-interactive.",
+        "fullWidth": "Occupies 100% of the available width."
+    },
+    "emits": {
+        "updateModelValue": "Emitted when the range changes.",
+        "change": "Semantic alias of update:modelValue.",
+        "open": "Emitted when the popover opens.",
+        "close": "Emitted when the popover closes.",
+        "clear": "Emitted when the range is cleared."
+    }
+}

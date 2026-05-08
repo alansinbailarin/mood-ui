@@ -1,0 +1,22 @@
+{
+    "title": "Container",
+    "category": "Layout",
+    "description": "Wrapper centrado con ancho máximo y padding semántico para limitar el ancho del contenido en cualquier breakpoint.",
+    "overviewSample": "Contenido limitado al ancho máximo",
+    "examples": {
+        "sizes":   { "title": "Tamaños", "desc": "Cada preset corresponde a un breakpoint común para contenido legible." },
+        "fluid":   { "title": "Fluid",   "desc": "Sin ancho máximo, el contenedor ocupa todo el espacio disponible." },
+        "padding": { "title": "Padding", "desc": "Controla el espaciado interno con los tokens del sistema." }
+    },
+    "fluidSample": "Ocupa todo el ancho disponible con padding generoso.",
+    "paddingSamples": { "none": "sin padding", "small": "small", "large": "large" },
+    "props": {
+        "maxWidth":      "Ancho máximo del contenedor.",
+        "padding":       "Padding horizontal y vertical aplicado al contenedor.",
+        "centered":      "Centra el contenedor horizontalmente con margen automático.",
+        "centerContent": "Centra el contenido interior usando flexbox.",
+        "height":        "Altura del contenedor.",
+        "as":            "Etiqueta semántica raíz a renderizar."
+    },
+    "slots": { "default": "Contenido envuelto por el contenedor." }
+}

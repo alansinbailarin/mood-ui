@@ -1,0 +1,58 @@
+{
+    "pages": {
+        "dataDisplay": {
+            "card": {
+                "title": "Card",
+                "description": "Contenedor estructural con tres variantes (elevated, outlined, filled), control de padding, radio y estado hover. Bloque base para métricas, listas, formularios y secciones.",
+                "controls": {
+                    "variant": "Variante",
+                    "padding": "Padding",
+                    "radius": "Radio",
+                    "hoverable": "Hoverable",
+                    "clickable": "Clickable",
+                    "divided": "Divided"
+                },
+                "playground": {
+                    "title": "Card de ejemplo",
+                    "body": "Ajusta los controles para ver los cambios en vivo."
+                },
+                "props": {
+                    "variant": "Estilo visual del contenedor.",
+                    "padding": "Padding interno aplicado a header, body y footer.",
+                    "radius": "Radio de borde. Hereda del ModoProvider si se omite.",
+                    "hoverable": "Aplica estado hover (sombra, borde) sin convertirlo en botón.",
+                    "clickable": "Renderiza el card como <button> con foco accesible y cursor pointer.",
+                    "divided": "Muestra una línea divisoria entre header / body / footer."
+                },
+                "slots": {
+                    "default": "Contenido principal del card.",
+                    "header": "Cabecera opcional encima del contenido.",
+                    "image": "Slot sin padding para imágenes o medios edge-to-edge.",
+                    "footer": "Footer opcional para acciones o metadatos."
+                },
+                "examples": {
+                    "basic": {
+                        "title": "Básico",
+                        "desc": "Card simple con título y descripción."
+                    },
+                    "headerFooter": {
+                        "title": "Con header y footer",
+                        "desc": "Slots #header y #footer con divisor entre secciones."
+                    },
+                    "image": {
+                        "title": "Con imagen",
+                        "desc": "Slot #image edge-to-edge combinado con padding=none."
+                    },
+                    "hover": {
+                        "title": "Hover effect",
+                        "desc": "Activa hoverable para realzar el card al pasar el cursor."
+                    },
+                    "clickable": {
+                        "title": "Clickeable",
+                        "desc": "Renderiza el card como <button> accesible con foco visible."
+                    }
+                }
+            }
+        }
+    }
+}

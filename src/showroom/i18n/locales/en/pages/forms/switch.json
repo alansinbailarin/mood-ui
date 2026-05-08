@@ -1,0 +1,74 @@
+{
+    "title": "Switch",
+    "description": "Semantically accessible on/off toggle. Supports left or right label position, description and all color and size variants.",
+
+    "controls": {
+        "color":    "Color",
+        "size":     "Size",
+        "label":    "Label",
+        "loading":  "Loading",
+        "disabled": "Disabled"
+    },
+
+    "playground": {
+        "label": "Notifications"
+    },
+
+    "examples": {
+        "basic": {
+            "title":     "Basic usage",
+            "desc":      "Binary toggle with v-model and a visible label.",
+            "pushLabel": "Push notifications",
+            "darkLabel": "Dark mode"
+        },
+        "description": {
+            "title":       "With description",
+            "desc":        "Secondary text below the label to add context.",
+            "label":       "Marketing",
+            "description": "Receive product news and updates."
+        },
+        "labelLeft": {
+            "title": "Label on the left",
+            "desc":  "Useful in settings rows with the control aligned to the right.",
+            "label": "Active"
+        },
+        "colors": {
+            "title": "Colors",
+            "desc":  "Semantic variants for the on state."
+        },
+        "sizes": {
+            "title": "Sizes",
+            "desc":  "Three sizes available for different UI densities."
+        },
+        "disabled": {
+            "title":    "Disabled",
+            "desc":     "Disabled state preserving the visual value.",
+            "labelOn":  "Disabled on",
+            "labelOff": "Disabled off"
+        }
+    },
+
+    "props": {
+        "modelValue":    "Switch value (v-model). true = on.",
+        "label":         "Visible label next to the control.",
+        "description":   "Secondary descriptive text below the label.",
+        "helperText":    "Helper text below the control. Hidden when errorText is present.",
+        "errorText":     "Error message that replaces helperText and applies error state.",
+        "color":         "Semantic color applied in the on state.",
+        "size":          "Track and thumb size.",
+        "radius":        "Track radius. The thumb remains circular.",
+        "labelPosition": "Position of the label relative to the control.",
+        "disabled":      "Disables the switch and prevents interaction.",
+        "readonly":      "Locks changes but keeps focus and active styles.",
+        "required":      "Marks the field as required and shows an asterisk.",
+        "loading":       "Loading state during async operations.",
+        "name":          "HTML name attribute for form submission.",
+        "id":            "Input id. Auto-generated if omitted.",
+        "ariaLabel":     "Accessible name when there is no visible label."
+    },
+
+    "emits": {
+        "updateModelValue": "Emitted when the value changes (syncs v-model).",
+        "change":           "Emitted after each user-confirmed change."
+    }
+}

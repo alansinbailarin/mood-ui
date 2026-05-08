@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref, provide, onMounted, watch, nextTick } from 'vue';
+import { ref, provide, inject, onMounted, watch, nextTick, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import Typography from '../../components/data-display/Typography.vue';
-import { ClipboardIcon, CheckIcon } from '@heroicons/vue/24/outline';
+import { ClipboardIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline';
 import { vReveal } from '../composables/useScrollReveal';
-import { useShowroomT } from '../composables/useShowroomLocale';
 import { createDocToc, DOC_TOC_KEY } from '../composables/useDocToc';
-import DocToc from './DocToc.vue';
+import { showroomNav } from '../registry';
+import { useShowroomRouter } from '../composables/useShowroomRouter';
 import type { PropDoc, EmitDoc, SlotDoc } from '../types';
 
 const props = defineProps<{
@@ -18,8 +19,21 @@ const props = defineProps<{
     slotsList?: SlotDoc[];
 }>();
 
-const t = useShowroomT();
+const { t, locale } = useI18n();
 const copied = ref(false);
+
+// ── Prev / Next navigation ────────────────────────────────────────────────────
+const { currentId, go } = useShowroomRouter();
+
+// Flat ordered list of all component entries (exclude non-component categories)
+const HIDDEN = new Set(['getting-started', 'docs', 'templates', 'theme-studio']);
+const allEntries = showroomNav
+    .filter((c) => !HIDDEN.has(c.id))
+    .flatMap((c) => c.entries);
+
+const currentIdx = computed(() => allEntries.findIndex((e) => e.id === currentId.value));
+const prevEntry  = computed(() => currentIdx.value > 0 ? allEntries[currentIdx.value - 1] : null);
+const nextEntry  = computed(() => currentIdx.value < allEntries.length - 1 ? allEntries[currentIdx.value + 1] : null);
 
 function copyImport() {
     navigator.clipboard.writeText(props.importPath).then(() => {
@@ -29,19 +43,21 @@ function copyImport() {
 }
 
 // ── TOC ──────────────────────────────────────────────────────────────────────
-const toc = createDocToc();
+// Prefer the toc provided by a parent (DocsShell), fall back to own instance
+// when rendered standalone (e.g. tests / storybook).
+const toc = inject(DOC_TOC_KEY, null) ?? createDocToc();
 provide(DOC_TOC_KEY, toc);
 
 // Re-register fixed sections when locale changes (labels are translated)
 function registerFixedSections() {
-    toc.register({ id: 'overview', label: t.value.docSection_overview, level: 1 });
-    if (slots.examples) toc.register({ id: 'examples', label: t.value.docSection_examples, level: 1 });
+    toc.register({ id: 'overview', label: t('doc.section.overview'), level: 1 });
+    if (slots.examples) toc.register({ id: 'examples', label: t('doc.section.examples'), level: 1 });
     const hasApi = (props.propsList?.length || props.emitsList?.length || props.slotsList?.length);
     if (hasApi) {
-        toc.register({ id: 'api', label: t.value.docSection_api, level: 1 });
-        if (props.propsList?.length) toc.register({ id: 'api-props', label: t.value.docSection_props, level: 2 });
-        if (props.emitsList?.length) toc.register({ id: 'api-emits', label: t.value.docSection_emits, level: 2 });
-        if (props.slotsList?.length) toc.register({ id: 'api-slots', label: t.value.docSection_slots, level: 2 });
+        toc.register({ id: 'api', label: t('doc.section.api'), level: 1 });
+        if (props.propsList?.length) toc.register({ id: 'api-props', label: t('doc.section.props'), level: 2 });
+        if (props.emitsList?.length) toc.register({ id: 'api-emits', label: t('doc.section.emits'), level: 2 });
+        if (props.slotsList?.length) toc.register({ id: 'api-slots', label: t('doc.section.slots'), level: 2 });
     }
 }
 
@@ -60,15 +76,13 @@ onMounted(() => {
 });
 
 watch(
-    () => t.value.lang,
+    locale,
     () => registerFixedSections(),
 );
 </script>
 
 <template>
-    <div class="flex gap-12">
-        <!-- Main content -->
-        <article class="flex-1 min-w-0 flex flex-col gap-12 pb-12">
+    <article class="flex-1 min-w-0 flex flex-col gap-12 pb-12">
             <!-- Header -->
             <header v-reveal class="flex flex-col gap-4">
                 <Typography variant="overline" size="medium" color="muted">
@@ -95,13 +109,13 @@ watch(
 
             <!-- Overview -->
             <section id="overview" v-reveal class="flex flex-col gap-4 scroll-mt-20">
-                <Typography variant="heading" size="large" weight="medium" as="h2">{{ t.docSection_overview }}</Typography>
+                <Typography variant="heading" size="large" weight="medium" as="h2">{{ t('doc.section.overview') }}</Typography>
                 <slot name="overview" />
             </section>
 
             <!-- Examples -->
             <section v-if="$slots.examples" id="examples" v-reveal class="flex flex-col gap-6 scroll-mt-20">
-                <Typography variant="heading" size="large" weight="medium" as="h2">{{ t.docSection_examples }}</Typography>
+                <Typography variant="heading" size="large" weight="medium" as="h2">{{ t('doc.section.examples') }}</Typography>
                 <div class="flex flex-col gap-8">
                     <slot name="examples" />
                 </div>
@@ -114,18 +128,18 @@ watch(
                 v-reveal
                 class="flex flex-col gap-8 scroll-mt-20"
             >
-                <Typography variant="heading" size="large" weight="medium" as="h2">{{ t.docSection_api }}</Typography>
+                <Typography variant="heading" size="large" weight="medium" as="h2">{{ t('doc.section.api') }}</Typography>
 
                 <div v-if="propsList?.length" id="api-props" class="flex flex-col gap-3 scroll-mt-20">
-                    <Typography variant="title" size="medium" weight="medium" as="h3">{{ t.docSection_props }}</Typography>
+                    <Typography variant="title" size="medium" weight="medium" as="h3">{{ t('doc.section.props') }}</Typography>
                     <div class="rounded-xl border border-border overflow-auto">
                         <table class="w-full text-sm min-w-[580px]">
                             <thead class="bg-muted/30 border-b border-border">
                                 <tr>
-                                    <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-32">{{ t.docCol_prop }}</th>
-                                    <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{{ t.docCol_type }}</th>
-                                    <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-28">{{ t.docCol_default }}</th>
-                                    <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{{ t.docCol_description }}</th>
+                                    <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-32">{{ t('doc.col.prop') }}</th>
+                                    <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{{ t('doc.col.type') }}</th>
+                                    <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-28">{{ t('doc.col.default') }}</th>
+                                    <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{{ t('doc.col.description') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -153,14 +167,14 @@ watch(
                 </div>
 
                 <div v-if="emitsList?.length" id="api-emits" class="flex flex-col gap-3 scroll-mt-20">
-                    <Typography variant="title" size="medium" weight="medium" as="h3">{{ t.docSection_emits }}</Typography>
+                    <Typography variant="title" size="medium" weight="medium" as="h3">{{ t('doc.section.emits') }}</Typography>
                     <div class="rounded-xl border border-border overflow-auto">
                         <table class="w-full text-sm min-w-[400px]">
                             <thead class="bg-muted/30 border-b border-border">
                                 <tr>
-                                    <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-32">{{ t.docCol_event }}</th>
-                                    <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-36">{{ t.docCol_payload }}</th>
-                                    <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{{ t.docCol_description }}</th>
+                                    <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-32">{{ t('doc.col.event') }}</th>
+                                    <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-36">{{ t('doc.col.payload') }}</th>
+                                    <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{{ t('doc.col.description') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -179,14 +193,14 @@ watch(
                 </div>
 
                 <div v-if="slotsList?.length" id="api-slots" class="flex flex-col gap-3 scroll-mt-20">
-                    <Typography variant="title" size="medium" weight="medium" as="h3">{{ t.docSection_slots }}</Typography>
+                    <Typography variant="title" size="medium" weight="medium" as="h3">{{ t('doc.section.slots') }}</Typography>
                     <div class="rounded-xl border border-border overflow-auto">
                         <table class="w-full text-sm min-w-[400px]">
                             <thead class="bg-muted/30 border-b border-border">
                                 <tr>
-                                    <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-32">{{ t.docCol_slot }}</th>
-                                    <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-40">{{ t.docCol_bindings }}</th>
-                                    <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{{ t.docCol_description }}</th>
+                                    <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-32">{{ t('doc.col.slot') }}</th>
+                                    <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-40">{{ t('doc.col.bindings') }}</th>
+                                    <th class="text-left px-4 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{{ t('doc.col.description') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -207,11 +221,42 @@ watch(
                     </div>
                 </div>
             </section>
-        </article>
 
-        <!-- Right TOC -->
-        <DocToc :toc="toc" />
-    </div>
+            <!-- ── Page footer: prev/next + npm + issue ─────────────────── -->
+            <footer class="flex flex-col gap-8 pt-4 border-t border-border">
+                <!-- Prev / Next -->
+                <div class="flex items-stretch gap-4">
+                    <button
+                        v-if="prevEntry"
+                        type="button"
+                        class="group flex-1 flex items-center gap-3 rounded-xl border border-border px-4 py-3 text-left hover:bg-muted/40 hover:border-primary/30 transition-all cursor-pointer"
+                        @click="go(prevEntry.id)"
+                    >
+                        <ChevronLeftIcon class="size-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                        <div class="flex flex-col gap-0.5 min-w-0">
+                            <span class="text-[11px] text-muted-foreground uppercase tracking-wide">{{ t('doc.prev') }}</span>
+                            <span class="text-sm font-medium text-foreground truncate">{{ prevEntry.label }}</span>
+                        </div>
+                    </button>
+                    <div v-else class="flex-1" />
+
+                    <button
+                        v-if="nextEntry"
+                        type="button"
+                        class="group flex-1 flex items-center justify-end gap-3 rounded-xl border border-border px-4 py-3 text-right hover:bg-muted/40 hover:border-primary/30 transition-all cursor-pointer"
+                        @click="go(nextEntry.id)"
+                    >
+                        <div class="flex flex-col gap-0.5 min-w-0">
+                            <span class="text-[11px] text-muted-foreground uppercase tracking-wide">{{ t('doc.next') }}</span>
+                            <span class="text-sm font-medium text-foreground truncate">{{ nextEntry.label }}</span>
+                        </div>
+                        <ChevronRightIcon class="size-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                    </button>
+                    <div v-else class="flex-1" />
+                </div>
+
+            </footer>
+        </article>
 </template>
 
 <style scoped>

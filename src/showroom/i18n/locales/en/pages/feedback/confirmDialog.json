@@ -1,0 +1,47 @@
+{
+    "title": "ConfirmDialog",
+    "description": "Imperative confirmation dialog. Mount the <ConfirmDialog /> host once near the root and call useConfirm().confirm({...}) from any component to get a Promise<boolean>.",
+
+    "controls": {
+        "tone": "Tone",
+        "size": "Size"
+    },
+
+    "playground": {
+        "title":        "Continue with this action?",
+        "description":  "Component preview with the current playground settings.",
+        "confirmLabel": "Continue",
+        "cancelLabel":  "Cancel",
+        "launch":       "Launch confirm()",
+        "lastResult":   "Last result:",
+        "confirmed":    "confirmed",
+        "cancelled":    "cancelled"
+    },
+
+    "examples": {
+        "basic": {
+            "title": "Basic confirmation",
+            "desc":  "Passing just a string gives you a minimal yes/no dialog.",
+            "cta":   "Launch confirm"
+        },
+        "danger": {
+            "title": "Destructive action",
+            "desc":  "For deletions and irreversible operations, use color='danger' with an explicit confirmLabel.",
+            "cta":   "Delete item"
+        },
+        "async": {
+            "title": "Async confirm",
+            "desc":  "confirm() returns Promise<boolean>: perfect for chaining await + API calls.",
+            "cta":   "Publish"
+        },
+        "custom": {
+            "title": "Custom labels",
+            "desc":  "Override confirmLabel and cancelLabel so the button reflects the exact action.",
+            "cta":   "Sign out"
+        }
+    },
+
+    "props": {
+        "radius": "Default radius for confirmations that don't specify one."
+    }
+}

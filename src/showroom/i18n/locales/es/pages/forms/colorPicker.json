@@ -1,0 +1,53 @@
+{
+    "category": "Forms",
+    "title": "ColorPicker",
+    "description": "Selector de color con popover, swatches preconfigurables, input hex y canvas HSV avanzado para escoger cualquier color.",
+    "controls": {
+        "size": "Tamaño",
+        "variant": "Variante",
+        "advanced": "Avanzado",
+        "hex": "Hex",
+        "swatches": "Swatches",
+        "disabled": "Disabled"
+    },
+    "examples": {
+        "basic": {
+            "title": "Uso básico",
+            "desc": "Solo swatches. Click en cualquier color para seleccionarlo."
+        },
+        "advanced": {
+            "title": "Picker avanzado",
+            "desc": "Canvas HSV + slider de tono para escoger cualquier color del espectro. El input hex permite introducir valores exactos."
+        },
+        "swatches": {
+            "title": "Swatches + picker avanzado",
+            "desc": "Combina una paleta predefinida con el canvas completo para máxima flexibilidad."
+        },
+        "sizes": {
+            "title": "Tamaños",
+            "desc": "Tres tamaños disponibles para encajar con la densidad del formulario."
+        },
+        "disabled": {
+            "title": "Disabled",
+            "desc": "Estado deshabilitado preservando el color visible."
+        }
+    },
+    "props": {
+        "modelValue": "Color hex activo (v-model). Ej: \"#3b82f6\".",
+        "swatches": "Lista opcional de colores hex preseleccionables en el panel.",
+        "showHex": "Muestra el input hex debajo de los swatches.",
+        "advanced": "Activa el canvas HSV + slider de tono para escoger cualquier color.",
+        "disabled": "Deshabilita el picker.",
+        "variant": "Variante visual del trigger (igual que Input/Select).",
+        "color": "Color del ring de foco.",
+        "size": "Tamaño del trigger.",
+        "radius": "Radio del trigger y del panel.",
+        "label": "Etiqueta visible encima del trigger.",
+        "placement": "Posición del popover relativa al trigger.",
+        "ariaLabel": "Nombre accesible del trigger cuando no hay label."
+    },
+    "emits": {
+        "updateModelValue": "Emitido al cambiar el color seleccionado (sincroniza v-model).",
+        "change": "Emitido tras una selección confirmada por el usuario."
+    }
+}

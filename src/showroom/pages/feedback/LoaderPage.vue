@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Loader from '../../../components/feedback/Loader.vue';
 import type { PropDoc, SlotDoc } from '../../types';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbDots from '../../components/toolbar/TbDots.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
+
+const { t } = useI18n();
 
 type Variant = 'normal' | 'outline';
 type Size    = 'small' | 'medium' | 'large';
@@ -53,81 +59,33 @@ const inlineCode = `<span class="inline-flex items-center gap-2">
   <span>Cargando proyectos…</span>
 </span>`;
 
-const propsList: PropDoc[] = [
-    { name: 'variant', type: "'normal' | 'outline' | 'ghost' | 'text'", default: "'normal'",       description: 'Variante visual. outline pinta el track de fondo del anillo.' },
-    { name: 'size',    type: "'small' | 'medium' | 'large'",            default: "'medium'",       description: 'Tamaño del spinner. Cascada desde ModoProvider.' },
-    { name: 'color',   type: 'string',                                  default: "'currentColor'", description: 'Color del trazo. Acepta cualquier valor CSS válido.' },
-    { name: 'label',   type: 'string',                                  default: "'Loading'",      description: 'Texto accesible visualmente oculto para lectores de pantalla.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'variant', type: "'normal' | 'outline' | 'ghost' | 'text'", default: "'normal'",       description: t('pages.feedback.loader.props.variant') },
+    { name: 'size',    type: "'small' | 'medium' | 'large'",            default: "'medium'",       description: t('pages.feedback.loader.props.size') },
+    { name: 'color',   type: 'string',                                  default: "'currentColor'", description: t('pages.feedback.loader.props.color') },
+    { name: 'label',   type: 'string',                                  default: "'Loading'",      description: t('pages.feedback.loader.props.label') },
+]);
 
 const slotsList: SlotDoc[] = [];
 </script>
 
 <template>
     <ComponentDoc
-        title="Loader"
+        :title="t('pages.feedback.loader.title')"
         category="Feedback"
         import-path="import { Loader } from 'mood-ui'"
-        description="Spinner circular para indicar progreso indeterminado. Pequeño, accesible y con color heredado por defecto para integrarse en botones, banners o cualquier contenedor."
+        :description="t('pages.feedback.loader.description')"
         :props-list="propsList"
         :slots-list="slotsList"
     >
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="200px" @reset="resetPlayground">
                 <template #controls>
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Variante</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="v in (['normal', 'outline'] as Variant[])"
-                                :key="v"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgVariant === v
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgVariant = v"
-                            >{{ v }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Tamaño</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in (['small', 'medium', 'large'] as Size[])"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = s"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Color</span>
-                        <div class="flex items-center gap-1">
-                            <button
-                                v-for="c in colorDots"
-                                :key="c.value"
-                                type="button"
-                                class="size-4 rounded-full transition-all duration-150"
-                                :class="pgColor === c.value
-                                    ? 'ring-2 ring-offset-1 ring-foreground/30 scale-125'
-                                    : 'hover:scale-110 opacity-70 hover:opacity-100'"
-                                :style="`background: ${c.bg}`"
-                                :title="c.label"
-                                @click="pgColor = c.value"
-                            />
-                        </div>
-                    </div>
+                    <TbPills :label="t('pages.feedback.loader.controls.variant')" :options="[{value:'normal'},{value:'outline'}]" v-model="pgVariant" />
+                    <TbSep />
+                    <TbPills :label="t('pages.feedback.loader.controls.size')" :options="[{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbDots :label="t('pages.feedback.loader.controls.color')" :options="colorDots" v-model="pgColor" />
                 </template>
 
                 <Loader :variant="pgVariant" :size="pgSize" :color="pgColor" />
@@ -136,8 +94,8 @@ const slotsList: SlotDoc[] = [];
 
         <template #examples>
             <ComponentPreview
-                title="Variantes"
-                description="normal muestra solo el arco; outline añade un track sutil de fondo."
+                :title="t('pages.feedback.loader.examples.variants.title')"
+                :description="t('pages.feedback.loader.examples.variants.desc')"
                 :code="variantsCode"
                 min-height="160px"
             >
@@ -146,8 +104,8 @@ const slotsList: SlotDoc[] = [];
             </ComponentPreview>
 
             <ComponentPreview
-                title="Tamaños"
-                description="Tres tamaños alineados con el resto del sistema (14, 18 y 22 px)."
+                :title="t('pages.feedback.loader.examples.sizes.title')"
+                :description="t('pages.feedback.loader.examples.sizes.desc')"
                 :code="sizesCode"
                 min-height="160px"
             >
@@ -157,8 +115,8 @@ const slotsList: SlotDoc[] = [];
             </ComponentPreview>
 
             <ComponentPreview
-                title="Colores personalizados"
-                description="La prop color acepta cualquier valor CSS — útil para aplicar tokens semánticos del proyecto."
+                :title="t('pages.feedback.loader.examples.colors.title')"
+                :description="t('pages.feedback.loader.examples.colors.desc')"
                 :code="colorsCode"
                 min-height="160px"
             >
@@ -169,14 +127,14 @@ const slotsList: SlotDoc[] = [];
             </ComponentPreview>
 
             <ComponentPreview
-                title="Inline con texto"
-                description="Combinado con texto, el spinner hereda el color del contenedor por defecto."
+                :title="t('pages.feedback.loader.examples.inline.title')"
+                :description="t('pages.feedback.loader.examples.inline.desc')"
                 :code="inlineCode"
                 min-height="160px"
             >
                 <span class="inline-flex items-center gap-2">
                     <Loader size="small" />
-                    <span>Cargando proyectos…</span>
+                    <span>{{ t('pages.feedback.loader.examples.inline.loading') }}</span>
                 </span>
             </ComponentPreview>
         </template>

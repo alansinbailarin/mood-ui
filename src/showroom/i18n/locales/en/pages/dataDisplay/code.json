@@ -1,0 +1,45 @@
+{
+    "title": "Code",
+    "description": "Inline code snippets for highlighting values, props or errors in docs and messages.",
+
+    "controls": {
+        "variant": "Variant",
+        "color": "Color",
+        "size": "Size",
+        "radius": "Radius"
+    },
+
+    "props": {
+        "size": "Text size of the snippet.",
+        "variant": "Visual style of the background / border.",
+        "color": "Semantic color applied to the snippet.",
+        "radius": "Border radius. Inherited from ModoProvider if omitted."
+    },
+
+    "slots": {
+        "default": "Content of the code snippet (plain text or short expression)."
+    },
+
+    "examples": {
+        "basic": {
+            "title": "Basic",
+            "desc": "Inline code snippet with default styles."
+        },
+        "variants": {
+            "title": "Variants",
+            "desc": "subtle (filled), outline (border) and ghost (transparent)."
+        },
+        "colors": {
+            "title": "Semantic colors",
+            "desc": "Five colors to differentiate values, errors or states."
+        },
+        "sizes": {
+            "title": "Sizes",
+            "desc": "Three scales that align with the surrounding text."
+        },
+        "inline": {
+            "title": "Inline in text",
+            "desc": "Vertically aligned, preserving the baseline."
+        }
+    }
+}

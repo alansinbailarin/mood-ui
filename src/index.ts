@@ -69,6 +69,18 @@ export { useColorMode, resolveColorMode, type ColorMode } from './composables/us
 export { useToast, useToastQueue } from './composables/useToast'; 
 export { useConfirm, useConfirmQueue } from './composables/useConfirm';
 export { useLocale } from './composables/useLocale'; 
+export { 
+    useCalendar, 
+    isSameDay, 
+    startOfDay, 
+    type CalendarDay, 
+    type UseCalendarOptions, 
+} from './composables/useCalendar'; 
+export { 
+    eventColorClass, 
+    eventColorClassStrong, 
+    type EventColor, 
+} from './composables/eventColors'; 
  
 /* ------------------------------------------------------------------ */ 
 /*  Forms                                                               */ 
@@ -242,3 +254,16 @@ export type * from './interfaces/data-display/Code.interface';
 export type * from './interfaces/data-display/Accordion.interface';
 export type * from './interfaces/data-display/Stat.interface';
 export type * from './interfaces/data-display/Timeline.interface';
+export type * from './interfaces/data-display/avatar/Avatar.interface';
+export type * from './interfaces/data-display/avatar/AvatarGroup.interface';
+export type * from './interfaces/data-display/calendar/Calendar.interface';
+export type * from './interfaces/data-display/calendar/AgendaView.interface';
+export type * from './interfaces/data-display/calendar/MonthView.interface';
+export type * from './interfaces/data-display/calendar/WeekView.interface';
+export type * from './interfaces/data-display/calendar/DayView.interface';
+export type * from './interfaces/data-display/calendar/Scheduler.interface';
+export type * from './interfaces/data-display/date-picker/DateRangePicker.interface';
+export type * from './interfaces/data-display/date-picker/DateTimePicker.interface';
+export type * from './interfaces/data-display/table/Table.interface';
+export type * from './interfaces/data-display/table/TableColumn.interface';
+export type * from './interfaces/data-display/table/TablePagination.interface';

@@ -1,0 +1,54 @@
+{
+    "category": "Forms",
+    "title": "Button",
+    "description": "The primary action of any interface. Four variants, five semantic colors, four sizes, configurable icons, loading state and support for rendering as a link or any element.",
+    "controls": {
+        "variant": "Variant",
+        "color": "Color",
+        "size": "Size",
+        "loading": "Loading",
+        "disabled": "Disabled"
+    },
+    "examples": {
+        "variants": {
+            "title": "Variants",
+            "desc": "Four visual styles for different levels of action hierarchy in the interface."
+        },
+        "colors": {
+            "title": "Colors",
+            "desc": "Five semantic colors that map directly to the ModoProvider design token system."
+        },
+        "sizes": {
+            "title": "Sizes",
+            "desc": "Padding, font and height scale proportionally at each level."
+        },
+        "icons": {
+            "title": "With icons",
+            "desc": "Left, right or icon-only position. Use aria-label on icon-only buttons."
+        },
+        "states": {
+            "title": "States",
+            "desc": "Loading blocks clicks and shows spinner. Disabled prevents all interaction."
+        }
+    },
+    "props": {
+        "variant": "Visual variant. Normal is the solid button (default).",
+        "color": "Semantic color applied to the button.",
+        "size": "Controls padding, font size and height.",
+        "label": "Button text. Equivalent to the default slot for plain content.",
+        "loading": "Shows a spinner and blocks clicks while active.",
+        "loadingText": "Text shown alongside the spinner during loading state.",
+        "disabled": "Visually disables the button and prevents all interaction.",
+        "icon": "Icon component rendered next to the label (heroicons or any component).",
+        "iconPosition": "Side where the icon appears relative to the label.",
+        "fullWidth": "Button expands to fill 100% of available width.",
+        "as": "Root element to render. Use \"a\" for links or a router-link component.",
+        "ariaLabel": "Accessible label. Required for icon-only buttons without visible text."
+    },
+    "emits": {
+        "click": "Emitted on click when the button is not disabled or in loading state."
+    },
+    "slots": {
+        "default": "Custom button content. Replaces the label prop when HTML or inner components are needed."
+    }
+}

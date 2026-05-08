@@ -136,6 +136,22 @@ export interface UseFieldClassesSource {
      */ 
     halo?: MaybeRefOrGetter<ModoHalo | undefined>; 
 } 
+
+export const FIELD_AFFORDANCE_ICON_BY_COLOR: Record<string, string> = {
+    default: 'modo-affordance-icon',
+    primary: 'modo-affordance-icon',
+    danger: 'text-destructive/85',
+    success: 'modo-affordance-icon',
+    warning: 'modo-affordance-icon',
+};
+
+export const FIELD_AFFORDANCE_ACTION_BY_COLOR: Record<string, string> = {
+    default: 'modo-affordance-action',
+    primary: 'modo-affordance-action',
+    danger: 'text-destructive/80 hover:text-destructive',
+    success: 'modo-affordance-action',
+    warning: 'modo-affordance-action',
+};
  
 const FOCUS_RING_BY_COLOR: Record<string, string> = { 
     default: 'focus-within:ring-ring/10', 

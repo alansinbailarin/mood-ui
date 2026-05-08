@@ -1,0 +1,11 @@
+{
+    "title": "Plantillas",
+    "subtitle": "Pantallas completas listas para copiar/pegar — dashboards, auth, pricing y más.",
+    "open": "Abrir plantilla",
+    "items": {
+        "dashboard": { "title": "Dashboard", "desc": "Panel de control con KPIs, tabla de pedidos y timeline de actividad." },
+        "auth":      { "title": "Auth",      "desc": "Login, registro y recuperación con layout dual y branding flexible." },
+        "pricing":   { "title": "Pricing",   "desc": "Tabla comparativa de planes con badges, FAQ y CTA destacado." },
+        "settings":  { "title": "Settings",  "desc": "Página de ajustes con secciones agrupadas, tabs y forms accesibles." }
+    }
+}

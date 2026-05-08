@@ -1,0 +1,70 @@
+{
+    "title": "RangeSlider",
+    "description": "Dual-thumb slider for selecting a numeric range. Supports marks, value formatting and the usual visual modes.",
+
+    "controls": {
+        "color":    "Color",
+        "size":     "Size",
+        "marks":    "Marks",
+        "disabled": "Disabled",
+        "readonly": "Readonly"
+    },
+
+    "playground": {
+        "label": "Range"
+    },
+
+    "examples": {
+        "basic": {
+            "title": "Basic usage",
+            "desc":  "Range selection with two thumbs and v-model as a tuple.",
+            "label": "Range"
+        },
+        "marks": {
+            "title": "With marks",
+            "desc":  "Marks at regular intervals to guide selection.",
+            "label": "Age"
+        },
+        "formatted": {
+            "title": "Formatted values",
+            "desc":  "formatValue lets you display units, prefixes or any custom format.",
+            "label": "Price"
+        },
+        "colors": {
+            "title": "Colors",
+            "desc":  "Semantic variants aligned with the rest of the system."
+        },
+        "disabled": {
+            "title": "Disabled",
+            "desc":  "Disabled state preserving the visible values.",
+            "label": "Disabled"
+        }
+    },
+
+    "props": {
+        "modelValue":  "Tuple [from, to] with the range values (v-model).",
+        "min":         "Minimum allowed value.",
+        "max":         "Maximum allowed value.",
+        "step":        "Increment between values.",
+        "minDistance": "Minimum distance between the two thumbs.",
+        "showValue":   "Displays the current range next to the label.",
+        "formatValue": "Function to format the displayed values.",
+        "marks":       "Discrete marks along the track.",
+        "orientation": "Slider orientation.",
+        "label":       "Visible label above the control.",
+        "helperText":  "Helper text below the control.",
+        "errorText":   "Error message that replaces helperText.",
+        "color":       "Semantic color of the filled segment and thumbs.",
+        "size":        "Track and thumb size.",
+        "radius":      "Track corner radius.",
+        "fullWidth":   "Applies w-full to the wrapper.",
+        "disabled":    "Disables the slider.",
+        "readonly":    "Locks changes while keeping values visible.",
+        "required":    "Marks the field as required."
+    },
+
+    "emits": {
+        "updateModelValue": "Emitted when the range changes (syncs v-model).",
+        "change":           "Emitted when a drag or keyboard interaction ends."
+    }
+}

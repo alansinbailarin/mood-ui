@@ -4,27 +4,41 @@ import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Typography from '../../../components/data-display/Typography.vue';
 import type { PropDoc, SlotDoc } from '../../types';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbDots from '../../components/toolbar/TbDots.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
 
 // ── Overview playground state ─────────────────────────────────────────────────
-const pgVariant = ref<'display' | 'heading' | 'title' | 'subtitle' | 'body' | 'caption' | 'overline'>('heading');
-const pgSize    = ref<'small' | 'medium' | 'large'>('large');
-const pgWeight  = ref<'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold'>('semibold');
-const pgColor   = ref<'default' | 'muted' | 'primary' | 'success' | 'warning' | 'danger'>('default');
+const pgVariant    = ref<'display' | 'heading' | 'title' | 'subtitle' | 'body' | 'caption' | 'overline'>('heading');
+const pgSize       = ref<'small' | 'medium' | 'large'>('large');
+const pgWeight     = ref<'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold'>('semibold');
+const pgColor      = ref<'default' | 'muted' | 'primary' | 'success' | 'warning' | 'danger'>('default');
+const pgAlign      = ref<'left' | 'center' | 'right'>('left');
+const pgTruncate   = ref(false);
+const pgItalic     = ref(false);
+const pgUnderline  = ref(false);
+const pgStrike     = ref(false);
 
 function resetPlayground() {
-    pgVariant.value = 'heading';
-    pgSize.value = 'large';
-    pgWeight.value = 'semibold';
-    pgColor.value = 'default';
+    pgVariant.value   = 'heading';
+    pgSize.value      = 'large';
+    pgWeight.value    = 'semibold';
+    pgColor.value     = 'default';
+    pgAlign.value     = 'left';
+    pgTruncate.value  = false;
+    pgItalic.value    = false;
+    pgUnderline.value = false;
+    pgStrike.value    = false;
 }
 
 const colorDots = [
-    { value: 'default'  as const, bg: '#0f172a',        label: 'Default'  },
-    { value: 'muted'    as const, bg: '#94a3b8',        label: 'Muted'    },
-    { value: 'primary'  as const, bg: 'var(--primary)', label: 'Primary'  },
-    { value: 'success'  as const, bg: '#22c55e',        label: 'Success'  },
-    { value: 'warning'  as const, bg: '#f59e0b',        label: 'Warning'  },
-    { value: 'danger'   as const, bg: '#ef4444',        label: 'Danger'   },
+    { value: 'default'  as const, bg: 'var(--foreground)',        label: 'Default'  },
+    { value: 'muted'    as const, bg: 'var(--muted-foreground)',  label: 'Muted'    },
+    { value: 'primary'  as const, bg: 'var(--primary)',           label: 'Primary'  },
+    { value: 'success'  as const, bg: 'var(--color-emerald-500)', label: 'Success'  },
+    { value: 'warning'  as const, bg: 'var(--color-amber-500)',   label: 'Warning'  },
+    { value: 'danger'   as const, bg: 'var(--color-red-500)',     label: 'Danger'   },
 ];
 
 const overviewCode = computed(() => {
@@ -33,6 +47,11 @@ const overviewCode = computed(() => {
     if (pgSize.value    !== 'medium')   parts.push(`size="${pgSize.value}"`);
     if (pgWeight.value  !== 'normal')   parts.push(`weight="${pgWeight.value}"`);
     if (pgColor.value   !== 'default')  parts.push(`color="${pgColor.value}"`);
+    if (pgAlign.value   !== 'left')     parts.push(`align="${pgAlign.value}"`);
+    if (pgTruncate.value)               parts.push('truncate');
+    if (pgItalic.value)                 parts.push('italic');
+    if (pgUnderline.value)              parts.push('underline');
+    if (pgStrike.value)                 parts.push('strikethrough');
     const attrs = parts.length ? ' ' + parts.join(' ') : '';
     return `<Typography${attrs}>\n  Mood UI Typography\n</Typography>`;
 });
@@ -101,81 +120,20 @@ const slotsList: SlotDoc[] = [
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="200px" @reset="resetPlayground">
                 <template #controls>
-                    <!-- Variant -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Variant</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="v in ['display', 'heading', 'title', 'subtitle', 'body', 'caption', 'overline']"
-                                :key="v"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgVariant === v
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgVariant = (v as typeof pgVariant)"
-                            >{{ v }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Size -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Size</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in ['small', 'medium', 'large']"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = (s as typeof pgSize)"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Weight -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Weight</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="w in ['light', 'normal', 'medium', 'semibold', 'bold', 'extrabold']"
-                                :key="w"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgWeight === w
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgWeight = (w as typeof pgWeight)"
-                            >{{ w }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Color dots -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Color</span>
-                        <div class="flex items-center gap-1">
-                            <button
-                                v-for="c in colorDots"
-                                :key="c.value"
-                                type="button"
-                                class="size-4 rounded-full transition-all duration-150"
-                                :class="pgColor === c.value
-                                    ? 'ring-2 ring-offset-1 ring-foreground/30 scale-125'
-                                    : 'hover:scale-110 opacity-70 hover:opacity-100'"
-                                :style="`background: ${c.bg}`"
-                                :title="c.label"
-                                @click="pgColor = c.value"
-                            />
-                        </div>
-                    </div>
+                    <TbPills label="Variant" :options="[{value:'display'},{value:'heading'},{value:'title'},{value:'subtitle'},{value:'body'},{value:'caption'},{value:'overline'}]" v-model="pgVariant" />
+                    <TbSep />
+                    <TbPills label="Size" :options="[{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbPills label="Weight" :options="[{value:'light'},{value:'normal'},{value:'medium'},{value:'semibold'},{value:'bold'},{value:'extrabold'}]" v-model="pgWeight" />
+                    <TbSep />
+                    <TbPills label="Align" :options="[{value:'left'},{value:'center'},{value:'right'}]" v-model="pgAlign" />
+                    <TbSep />
+                    <TbDots label="Color" :options="colorDots" v-model="pgColor" />
+                    <TbSep />
+                    <TbToggle label="Truncate" v-model="pgTruncate" />
+                    <TbToggle label="Italic" v-model="pgItalic" />
+                    <TbToggle label="Underline" v-model="pgUnderline" />
+                    <TbToggle label="Strikethrough" v-model="pgStrike" />
                 </template>
 
                 <Typography
@@ -183,6 +141,11 @@ const slotsList: SlotDoc[] = [
                     :size="pgSize"
                     :weight="pgWeight"
                     :color="pgColor"
+                    :align="pgAlign"
+                    :truncate="pgTruncate"
+                    :italic="pgItalic"
+                    :underline="pgUnderline"
+                    :strikethrough="pgStrike"
                 >
                     Mood UI Typography
                 </Typography>

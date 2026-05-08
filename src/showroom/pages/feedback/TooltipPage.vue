@@ -1,11 +1,18 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Tooltip from '../../../components/feedback/Tooltip.vue';
 import Button from '../../../components/forms/Button.vue';
 import { HeartIcon } from '@heroicons/vue/24/outline';
 import type { PropDoc, EmitDoc, SlotDoc } from '../../types';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbDots from '../../components/toolbar/TbDots.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
+
+const { t } = useI18n();
 
 type Placement = 'top' | 'right' | 'bottom' | 'left';
 type Color = 'default' | 'primary' | 'danger' | 'success' | 'warning' | 'inverted';
@@ -13,20 +20,28 @@ type Color = 'default' | 'primary' | 'danger' | 'success' | 'warning' | 'inverte
 const pgPlacement = ref<Placement>('top');
 const pgColor     = ref<Color>('default');
 const pgDelay     = ref<0 | 200 | 500>(200);
+const pgDelayStr  = computed({
+    get: () => String(pgDelay.value),
+    set: (v: string) => { pgDelay.value = Number(v) as 0 | 200 | 500; },
+});
+const pgArrow     = ref(true);
+const pgDisabled  = ref(false);
 
 function resetPlayground() {
     pgPlacement.value = 'top';
     pgColor.value     = 'default';
     pgDelay.value     = 200;
+    pgArrow.value     = true;
+    pgDisabled.value  = false;
 }
 
 const colorDots = [
-    { value: 'default'  as const, bg: '#1f2937',        label: 'Default'  },
-    { value: 'primary'  as const, bg: 'var(--primary)', label: 'Primary'  },
-    { value: 'success'  as const, bg: '#22c55e',        label: 'Success'  },
-    { value: 'warning'  as const, bg: '#f59e0b',        label: 'Warning'  },
-    { value: 'danger'   as const, bg: '#ef4444',        label: 'Danger'   },
-    { value: 'inverted' as const, bg: '#f8fafc',        label: 'Inverted' },
+    { value: 'default'  as const, bg: 'var(--color-slate-800)',  label: 'Default'  },
+    { value: 'primary'  as const, bg: 'var(--primary)',          label: 'Primary'  },
+    { value: 'success'  as const, bg: 'var(--color-emerald-500)',label: 'Success'  },
+    { value: 'warning'  as const, bg: 'var(--color-amber-500)',  label: 'Warning'  },
+    { value: 'danger'   as const, bg: 'var(--color-red-500)',    label: 'Danger'   },
+    { value: 'inverted' as const, bg: 'var(--color-slate-100)',  label: 'Inverted' },
 ];
 
 const overviewCode = computed(() => {
@@ -34,6 +49,8 @@ const overviewCode = computed(() => {
     if (pgPlacement.value !== 'top')     parts.push(`placement="${pgPlacement.value}"`);
     if (pgColor.value     !== 'default') parts.push(`color="${pgColor.value}"`);
     if (pgDelay.value     !== 200)       parts.push(`:open-delay="${pgDelay.value}"`);
+    if (!pgArrow.value)                  parts.push(':arrow="false"');
+    if (pgDisabled.value)                parts.push('disabled');
     return `<Tooltip ${parts.join(' ')}>
   <Button>Hover me</Button>
 </Tooltip>`;
@@ -62,41 +79,41 @@ const delayCode = `<Tooltip content="Sin delay" :open-delay="0"><Button>Inmediat
 <Tooltip content="Delay corto" :open-delay="200"><Button>200 ms</Button></Tooltip>
 <Tooltip content="Delay largo" :open-delay="600"><Button>600 ms</Button></Tooltip>`;
 
-const propsList: PropDoc[] = [
-    { name: 'content',      type: 'string',                                                                                                  description: 'Texto del tooltip. Para markup, usa el slot content.' },
-    { name: 'placement',    type: "'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end' | 'right' | 'right-start' | 'right-end'", default: "'top'", description: 'Posición respecto al trigger.' },
-    { name: 'offset',       type: 'number',                                          default: '8',                                            description: 'Distancia en px entre el trigger y el panel.' },
-    { name: 'trigger',      type: "'hover' | 'focus' | 'click' | 'manual' | array", default: "['hover','focus']",                             description: 'Eventos que abren el tooltip.' },
-    { name: 'openDelay',    type: 'number',                                          default: '200',                                          description: 'Delay en ms antes de abrir.' },
-    { name: 'closeDelay',   type: 'number',                                          default: '100',                                          description: 'Delay en ms antes de cerrar.' },
-    { name: 'arrow',        type: 'boolean',                                         default: 'true',                                         description: 'Muestra una flecha apuntando al trigger.' },
-    { name: 'color',        type: "'default' | 'primary' | 'danger' | 'success' | 'warning' | 'inverted'", default: "'default'",              description: 'Color del panel.' },
-    { name: 'size',         type: "'small' | 'medium' | 'large'",                    default: "'medium'",                                     description: 'Tamaño del panel y la tipografía.' },
-    { name: 'radius',       type: "'none' | 'small' | 'medium' | 'large' | 'full'",                                                           description: 'Radio de las esquinas. Cascada desde ModoProvider.' },
-    { name: 'disabled',     type: 'boolean',                                         default: 'false',                                        description: 'No abre nunca el tooltip.' },
-    { name: 'open',         type: 'boolean',                                                                                                  description: 'Control externo del estado abierto (v-model:open).' },
-    { name: 'maxWidth',     type: 'number',                                          default: '260',                                          description: 'Ancho máximo del panel en px.' },
-    { name: 'wrapperClass', type: 'string',                                                                                                   description: 'Clases extra para el wrapper del trigger.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'content',      type: 'string',                                                                                                  description: t('pages.feedback.tooltip.props.content') },
+    { name: 'placement',    type: "'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end' | 'right' | 'right-start' | 'right-end'", default: "'top'", description: t('pages.feedback.tooltip.props.placement') },
+    { name: 'offset',       type: 'number',                                          default: '8',                                            description: t('pages.feedback.tooltip.props.offset') },
+    { name: 'trigger',      type: "'hover' | 'focus' | 'click' | 'manual' | array", default: "['hover','focus']",                             description: t('pages.feedback.tooltip.props.trigger') },
+    { name: 'openDelay',    type: 'number',                                          default: '200',                                          description: t('pages.feedback.tooltip.props.openDelay') },
+    { name: 'closeDelay',   type: 'number',                                          default: '100',                                          description: t('pages.feedback.tooltip.props.closeDelay') },
+    { name: 'arrow',        type: 'boolean',                                         default: 'true',                                         description: t('pages.feedback.tooltip.props.arrow') },
+    { name: 'color',        type: "'default' | 'primary' | 'danger' | 'success' | 'warning' | 'inverted'", default: "'default'",              description: t('pages.feedback.tooltip.props.color') },
+    { name: 'size',         type: "'small' | 'medium' | 'large'",                    default: "'medium'",                                     description: t('pages.feedback.tooltip.props.size') },
+    { name: 'radius',       type: "'none' | 'small' | 'medium' | 'large' | 'full'",                                                           description: t('pages.feedback.tooltip.props.radius') },
+    { name: 'disabled',     type: 'boolean',                                         default: 'false',                                        description: t('pages.feedback.tooltip.props.disabled') },
+    { name: 'open',         type: 'boolean',                                                                                                  description: t('pages.feedback.tooltip.props.open') },
+    { name: 'maxWidth',     type: 'number',                                          default: '260',                                          description: t('pages.feedback.tooltip.props.maxWidth') },
+    { name: 'wrapperClass', type: 'string',                                                                                                   description: t('pages.feedback.tooltip.props.wrapperClass') },
+]);
 
-const emitsList: EmitDoc[] = [
-    { name: 'update:open', payload: 'boolean', description: 'Cambio del estado abierto/cerrado del tooltip.' },
-    { name: 'show',        payload: '—',       description: 'Emitido cuando el panel se abre.' },
-    { name: 'hide',        payload: '—',       description: 'Emitido cuando el panel se cierra.' },
-];
+const emitsList = computed<EmitDoc[]>(() => [
+    { name: 'update:open', payload: 'boolean', description: t('pages.feedback.tooltip.emits.updateOpen') },
+    { name: 'show',        payload: '—',       description: t('pages.feedback.tooltip.emits.show') },
+    { name: 'hide',        payload: '—',       description: t('pages.feedback.tooltip.emits.hide') },
+]);
 
-const slotsList: SlotDoc[] = [
-    { name: 'default', description: 'Elemento trigger sobre el que se muestra el tooltip.' },
-    { name: 'content', description: 'Contenido personalizado del panel. Reemplaza la prop content.' },
-];
+const slotsList = computed<SlotDoc[]>(() => [
+    { name: 'default', description: t('pages.feedback.tooltip.slots.default') },
+    { name: 'content', description: t('pages.feedback.tooltip.slots.content') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="Tooltip"
+        :title="t('pages.feedback.tooltip.title')"
         category="Feedback"
         import-path="import { Tooltip } from 'mood-ui'"
-        description="Pista contextual mostrada al hacer hover o focus sobre un elemento. Soporta múltiples placements, colores semánticos, delays configurables y contenido enriquecido."
+        :description="t('pages.feedback.tooltip.description')"
         :props-list="propsList"
         :emits-list="emitsList"
         :slots-list="slotsList"
@@ -104,59 +121,14 @@ const slotsList: SlotDoc[] = [
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="220px" @reset="resetPlayground">
                 <template #controls>
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Posición</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="p in (['top', 'right', 'bottom', 'left'] as Placement[])"
-                                :key="p"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgPlacement === p
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgPlacement = p"
-                            >{{ p }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Color</span>
-                        <div class="flex items-center gap-1">
-                            <button
-                                v-for="c in colorDots"
-                                :key="c.value"
-                                type="button"
-                                class="size-4 rounded-full transition-all duration-150 border border-border"
-                                :class="pgColor === c.value
-                                    ? 'ring-2 ring-offset-1 ring-foreground/30 scale-125'
-                                    : 'hover:scale-110 opacity-70 hover:opacity-100'"
-                                :style="`background: ${c.bg}`"
-                                :title="c.label"
-                                @click="pgColor = c.value"
-                            />
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Delay</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="d in ([0, 200, 500] as const)"
-                                :key="d"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors"
-                                :class="pgDelay === d
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgDelay = d"
-                            >{{ d }}ms</button>
-                        </div>
-                    </div>
+                    <TbPills :label="t('pages.feedback.tooltip.controls.placement')" :options="[{value:'top'},{value:'right'},{value:'bottom'},{value:'left'}]" v-model="pgPlacement" />
+                    <TbSep />
+                    <TbDots :label="t('pages.feedback.tooltip.controls.color')" :options="colorDots" v-model="pgColor" />
+                    <TbSep />
+                    <TbPills :label="t('pages.feedback.tooltip.controls.delay')" :options="[{value:'0',label:'0ms'},{value:'200',label:'200ms'},{value:'500',label:'500ms'}]" v-model="pgDelayStr" />
+                    <TbSep />
+                    <TbToggle :label="t('pages.feedback.tooltip.controls.arrow')" v-model="pgArrow" />
+                    <TbToggle :label="t('pages.feedback.tooltip.controls.disabled')" v-model="pgDisabled" />
                 </template>
 
                 <Tooltip
@@ -164,6 +136,8 @@ const slotsList: SlotDoc[] = [
                     :placement="pgPlacement"
                     :color="pgColor"
                     :open-delay="pgDelay"
+                    :arrow="pgArrow"
+                    :disabled="pgDisabled"
                 >
                     <Button>Hover me</Button>
                 </Tooltip>
@@ -172,8 +146,8 @@ const slotsList: SlotDoc[] = [
 
         <template #examples>
             <ComponentPreview
-                title="Posiciones"
-                description="Cuatro placements principales. Cada variante también admite -start y -end para alinear con un borde del trigger."
+                :title="t('pages.feedback.tooltip.examples.placements.title')"
+                :description="t('pages.feedback.tooltip.examples.placements.desc')"
                 :code="placementsCode"
                 min-height="200px"
             >
@@ -184,42 +158,48 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Contenido enriquecido"
-                description="Usa el slot content para incluir markup, iconos o atajos de teclado dentro del panel."
+                :title="t('pages.feedback.tooltip.examples.rich.title')"
+                :description="t('pages.feedback.tooltip.examples.rich.desc')"
                 :code="richCode"
                 min-height="200px"
             >
                 <Tooltip placement="top" :max-width="280">
                     <template #content>
                         <div class="flex flex-col gap-1">
-                            <strong>Atajo de teclado</strong>
-                            <span class="opacity-80">Pulsa <kbd>Ctrl</kbd>+<kbd>K</kbd> para abrir el buscador.</span>
+                            <strong>{{ t('pages.feedback.tooltip.examples.rich.heading') }}</strong>
+                            <span class="opacity-80">{{ t('pages.feedback.tooltip.examples.rich.shortcut') }}</span>
                         </div>
                     </template>
-                    <Button variant="outline">Ver atajo</Button>
+                    <Button variant="outline">{{ t('pages.feedback.tooltip.examples.rich.cta') }}</Button>
                 </Tooltip>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Sobre botón con icono"
-                description="Imprescindible en botones icon-only para describir la acción a usuarios de lectores de pantalla."
+                :title="t('pages.feedback.tooltip.examples.icon.title')"
+                :description="t('pages.feedback.tooltip.examples.icon.desc')"
                 :code="iconCode"
                 min-height="180px"
             >
-                <Tooltip content="Me gusta">
+                <Tooltip :content="t('pages.feedback.tooltip.examples.icon.tooltip')">
                     <Button :icon="HeartIcon" color="danger" variant="ghost" aria-label="Like" />
                 </Tooltip>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Delays"
-                description="Ajusta el openDelay para evitar tooltips intrusivos al pasar el cursor de un botón a otro."
+                :title="t('pages.feedback.tooltip.examples.delays.title')"
+                :description="t('pages.feedback.tooltip.examples.delays.desc')"
                 :code="delayCode"
                 min-height="180px"
             >
-                <Tooltip content="Sin delay" :open-delay="0"><Button>Inmediato</Button></Tooltip>
-                <Tooltip content="Delay corto" :open-delay="200"><Button>200 ms</Button></Tooltip>
-                <Tooltip content="Delay largo" :open-delay="600"><Button>600 ms</Button></Tooltip>
+                <Tooltip :content="t('pages.feedback.tooltip.examples.delays.zero')" :open-delay="0">
+                    <Button>{{ t('pages.feedback.tooltip.examples.delays.zeroBtn') }}</Button>
+                </Tooltip>
+                <Tooltip :content="t('pages.feedback.tooltip.examples.delays.short')" :open-delay="200">
+                    <Button>200 ms</Button>
+                </Tooltip>
+                <Tooltip :content="t('pages.feedback.tooltip.examples.delays.long')" :open-delay="600">
+                    <Button>600 ms</Button>
+                </Tooltip>
             </ComponentPreview>
         </template>
     </ComponentDoc>

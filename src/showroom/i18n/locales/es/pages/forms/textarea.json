@@ -1,0 +1,86 @@
+{
+    "title": "Textarea",
+    "description": "Área de texto multilínea con autoresize, contador de caracteres, helper/error text y todas las variantes visuales del Input.",
+
+    "controls": {
+        "variant":    "Variant",
+        "color":      "Color",
+        "size":       "Size",
+        "autoresize": "Autoresize",
+        "clearable":  "Clearable",
+        "disabled":   "Disabled",
+        "readonly":   "Readonly"
+    },
+
+    "playground": {
+        "label":       "Comentario",
+        "placeholder": "Escribe algo…"
+    },
+
+    "examples": {
+        "basic": {
+            "title":       "Uso básico",
+            "desc":        "Textarea simple con label, placeholder y filas iniciales.",
+            "label":       "Comentario",
+            "placeholder": "Escribe algo…"
+        },
+        "variants": {
+            "title": "Variantes",
+            "desc":  "outline (default), filled y ghost."
+        },
+        "autoresize": {
+            "title":       "Autoresize + contador",
+            "desc":        "Crece con el contenido hasta maxRows y muestra contador de caracteres.",
+            "label":       "Bio",
+            "placeholder": "Cuéntanos sobre ti"
+        },
+        "error": {
+            "title":     "Error",
+            "desc":      "errorText marca el campo como inválido y reemplaza al helperText.",
+            "label":     "Descripción",
+            "errorText": "La descripción es requerida"
+        },
+        "disabled": {
+            "title": "Disabled",
+            "desc":  "Estado deshabilitado preservando el valor visual.",
+            "value": "No editable"
+        }
+    },
+
+    "props": {
+        "modelValue":  "Valor del textarea (v-model).",
+        "label":       "Etiqueta visible encima del textarea.",
+        "placeholder": "Placeholder cuando está vacío.",
+        "helperText":  "Texto de ayuda bajo el textarea. Se oculta si hay errorText.",
+        "errorText":   "Mensaje de error que marca el textarea como inválido.",
+        "variant":     "Estilo visual.",
+        "color":       "Color semántico aplicado al estado de foco.",
+        "size":        "Controla padding y tipografía.",
+        "radius":      "Radio de las esquinas. Hereda del ModoProvider si se omite.",
+        "halo":        "Estilo del halo persistente (ring).",
+        "fullWidth":   "Aplica w-full al root.",
+        "disabled":    "Deshabilita el textarea.",
+        "readonly":    "Solo lectura.",
+        "required":    "Marca el campo como requerido.",
+        "loading":     "Estado de carga (deshabilita y muestra loader).",
+        "clearable":   "Muestra botón ✕ para limpiar el valor.",
+        "maxLength":   "Longitud máxima. Activa el contador si showCounter.",
+        "showCounter": "Muestra contador de caracteres (requiere maxLength).",
+        "rows":        "Número mínimo de filas visibles.",
+        "autoresize":  "Crece automáticamente con el contenido hasta maxRows.",
+        "maxRows":     "Máximo de filas cuando autoresize=true.",
+        "resize":      "Dirección de redimensionamiento manual del navegador.",
+        "name":        "Atributo name HTML.",
+        "id":          "id del textarea. Se autogenera si se omite.",
+        "autofocus":   "Foco automático al montar.",
+        "ariaLabel":   "Nombre accesible cuando no hay label visible."
+    },
+
+    "emits": {
+        "updateModelValue": "Emitido en cada cambio del valor (sincroniza v-model).",
+        "change":           "Emitido tras un cambio confirmado por el usuario.",
+        "focus":            "Emitido cuando el textarea recibe foco.",
+        "blur":             "Emitido cuando el textarea pierde foco.",
+        "clear":            "Emitido al pulsar el botón de limpiar (clearable)."
+    }
+}

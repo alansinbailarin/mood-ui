@@ -1,19 +1,26 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Divider from '../../../components/layout/Divider.vue';
 import { StarIcon } from '@heroicons/vue/24/outline';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
 import type { PropDoc, SlotDoc } from '../../types';
+
+const { t } = useI18n();
 
 const pgOrientation = ref<'horizontal' | 'vertical'>('horizontal');
 const pgVariant = ref<'solid' | 'dashed' | 'dotted'>('solid');
 const pgEmphasis = ref<'subtle' | 'default' | 'strong'>('default');
+const pgSpacing = ref<'none' | 'small' | 'medium' | 'large'>('medium');
 
 function resetPlayground() {
     pgOrientation.value = 'horizontal';
     pgVariant.value = 'solid';
     pgEmphasis.value = 'default';
+    pgSpacing.value = 'medium';
 }
 
 const overviewCode = computed(() => {
@@ -21,23 +28,22 @@ const overviewCode = computed(() => {
     if (pgOrientation.value !== 'horizontal') parts.push(`orientation="${pgOrientation.value}"`);
     if (pgVariant.value !== 'solid') parts.push(`variant="${pgVariant.value}"`);
     if (pgEmphasis.value !== 'default') parts.push(`emphasis="${pgEmphasis.value}"`);
+    if (pgSpacing.value !== 'medium') parts.push(`spacing="${pgSpacing.value}"`);
     const attrs = parts.length ? ' ' + parts.join(' ') : '';
     return `<Divider${attrs} />`;
 });
 
-const orientationsCode = `<!-- Horizontal -->
-<Divider />
+const orientationsCode = `<Divider />
 
-<!-- Vertical (el host necesita flex/grid) -->
 <div class="flex items-center gap-3 h-12">
     <span>A</span>
     <Divider orientation="vertical" />
     <span>B</span>
 </div>`;
 
-const labelCode = `<Divider label="o" />
-<Divider :icon="StarIcon" label="Featured" />
-<Divider label="Sección" label-align="start" />`;
+const labelCode = `<Divider label="${t('pages.layout.divider.labels.or')}" />
+<Divider :icon="StarIcon" label="${t('pages.layout.divider.labels.featured')}" />
+<Divider label="${t('pages.layout.divider.labels.section')}" label-align="start" />`;
 
 const variantsCode = `<Divider variant="solid"  label="solid"  />
 <Divider variant="dashed" label="dashed" />
@@ -47,93 +53,49 @@ const emphasisCode = `<Divider emphasis="subtle"  label="subtle"  />
 <Divider emphasis="default" label="default" />
 <Divider emphasis="strong"  label="strong"  />`;
 
-const propsList: PropDoc[] = [
-    { name: 'orientation', type: "'horizontal' | 'vertical'",            default: "'horizontal'", description: 'Orientación del separador.' },
-    { name: 'variant',     type: "'solid' | 'dashed' | 'dotted'",        default: "'solid'",      description: 'Estilo de la línea.' },
-    { name: 'emphasis',    type: "'subtle' | 'default' | 'strong'",      default: "'default'",    description: 'Intensidad visual del divisor.' },
-    { name: 'spacing',     type: "'none' | 'small' | 'medium' | 'large'", default: "'medium'",    description: 'Margen perpendicular a la línea.' },
-    { name: 'label',       type: 'string',                                                        description: 'Etiqueta inline (solo orientación horizontal).' },
-    { name: 'icon',        type: 'Component',                                                     description: 'Icono opcional junto al label.' },
-    { name: 'labelAlign',  type: "'start' | 'center' | 'end'",            default: "'center'",    description: 'Posición del label dentro del divisor.' },
-    { name: 'decorative',  type: 'boolean',                                default: 'false',      description: 'Si es decorativo, se ignora por tecnologías de asistencia.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'orientation', type: "'horizontal' | 'vertical'",            default: "'horizontal'", description: t('pages.layout.divider.props.orientation') },
+    { name: 'variant',     type: "'solid' | 'dashed' | 'dotted'",        default: "'solid'",      description: t('pages.layout.divider.props.variant') },
+    { name: 'emphasis',    type: "'subtle' | 'default' | 'strong'",      default: "'default'",    description: t('pages.layout.divider.props.emphasis') },
+    { name: 'spacing',     type: "'none' | 'small' | 'medium' | 'large'", default: "'medium'",    description: t('pages.layout.divider.props.spacing') },
+    { name: 'label',       type: 'string',                                                        description: t('pages.layout.divider.props.label') },
+    { name: 'icon',        type: 'Component',                                                     description: t('pages.layout.divider.props.icon') },
+    { name: 'labelAlign',  type: "'start' | 'center' | 'end'",            default: "'center'",    description: t('pages.layout.divider.props.labelAlign') },
+    { name: 'decorative',  type: 'boolean',                                default: 'false',      description: t('pages.layout.divider.props.decorative') },
+]);
 
-const slotsList: SlotDoc[] = [
-    { name: 'default', description: 'Contenido inline alternativo a la prop label.' },
-];
+const slotsList = computed<SlotDoc[]>(() => [
+    { name: 'default', description: t('pages.layout.divider.slots.default') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="Divider"
-        category="Layout"
+        :title="t('pages.layout.divider.title')"
+        :category="t('pages.layout.divider.category')"
         import-path="import { Divider } from 'mood-ui'"
-        description="Línea separadora horizontal o vertical, opcionalmente con label o icono central."
+        :description="t('pages.layout.divider.description')"
         :props-list="propsList"
         :slots-list="slotsList"
     >
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="200px" @reset="resetPlayground">
                 <template #controls>
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Orientación</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="o in ['horizontal','vertical']"
-                                :key="o"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgOrientation === o
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgOrientation = (o as typeof pgOrientation)"
-                            >{{ o }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Variant</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="v in ['solid','dashed','dotted']"
-                                :key="v"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgVariant === v
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgVariant = (v as typeof pgVariant)"
-                            >{{ v }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Emphasis</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="e in ['subtle','default','strong']"
-                                :key="e"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgEmphasis === e
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgEmphasis = (e as typeof pgEmphasis)"
-                            >{{ e }}</button>
-                        </div>
-                    </div>
+                    <TbPills label="Orientation" :options="[{value:'horizontal'},{value:'vertical'}]" v-model="pgOrientation" />
+                    <TbSep />
+                    <TbPills label="Variant" :options="[{value:'solid'},{value:'dashed'},{value:'dotted'}]" v-model="pgVariant" />
+                    <TbSep />
+                    <TbPills label="Emphasis" :options="[{value:'subtle'},{value:'default'},{value:'strong'}]" v-model="pgEmphasis" />
+                    <TbSep />
+                    <TbPills label="Spacing" :options="[{value:'none'},{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSpacing" />
                 </template>
 
                 <div v-if="pgOrientation === 'horizontal'" class="w-full max-w-md">
-                    <Divider :variant="pgVariant" :emphasis="pgEmphasis" />
+                    <Divider :variant="pgVariant" :emphasis="pgEmphasis" :spacing="pgSpacing" />
                 </div>
                 <div v-else class="flex items-center gap-3 h-16">
                     <span class="text-sm text-muted-foreground">A</span>
-                    <Divider orientation="vertical" :variant="pgVariant" :emphasis="pgEmphasis" />
+                    <Divider orientation="vertical" :variant="pgVariant" :emphasis="pgEmphasis" :spacing="pgSpacing" />
                     <span class="text-sm text-muted-foreground">B</span>
                 </div>
             </ComponentPreview>
@@ -141,8 +103,8 @@ const slotsList: SlotDoc[] = [
 
         <template #examples>
             <ComponentPreview
-                title="Orientaciones"
-                description="Horizontal por defecto; vertical cuando el host es flex/grid."
+                :title="t('pages.layout.divider.examples.orientations.title')"
+                :description="t('pages.layout.divider.examples.orientations.desc')"
                 :code="orientationsCode"
             >
                 <div class="w-full flex flex-col gap-3">
@@ -158,20 +120,20 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con label e icono"
-                description="Inserta una etiqueta o icono centrado en horizontal."
+                :title="t('pages.layout.divider.examples.label.title')"
+                :description="t('pages.layout.divider.examples.label.desc')"
                 :code="labelCode"
             >
                 <div class="w-full flex flex-col gap-3">
-                    <Divider label="o" />
-                    <Divider :icon="StarIcon" label="Featured" />
-                    <Divider label="Sección" label-align="start" />
+                    <Divider :label="t('pages.layout.divider.labels.or')" />
+                    <Divider :icon="StarIcon" :label="t('pages.layout.divider.labels.featured')" />
+                    <Divider :label="t('pages.layout.divider.labels.section')" label-align="start" />
                 </div>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Variantes de línea"
-                description="Solid, dashed y dotted para distintos niveles de jerarquía."
+                :title="t('pages.layout.divider.examples.variants.title')"
+                :description="t('pages.layout.divider.examples.variants.desc')"
                 :code="variantsCode"
             >
                 <div class="w-full flex flex-col gap-3">
@@ -182,8 +144,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Énfasis"
-                description="Controla el contraste de la línea respecto al fondo."
+                :title="t('pages.layout.divider.examples.emphasis.title')"
+                :description="t('pages.layout.divider.examples.emphasis.desc')"
                 :code="emphasisCode"
             >
                 <div class="w-full flex flex-col gap-3">

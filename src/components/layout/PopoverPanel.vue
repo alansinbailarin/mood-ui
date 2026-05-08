@@ -10,11 +10,10 @@
                 :role="role" 
                 :aria-labelledby="labelledBy" 
                 :style="mergedStyle" 
-                :class="[ 
-                    'modo-popover bg-card text-foreground border border-border shadow-md', 
-                    'ring-4 ring-border/25', 
-                    radiusClass, 
-                    $attrs.class, 
+                :class="[
+                    'modo-popover bg-popover text-popover-foreground border border-border shadow-lg',
+                    radiusClass,
+                    $attrs.class,
                 ]" 
                 :data-modo-theme="scopedTheme || undefined" 
             > 

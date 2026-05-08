@@ -1,0 +1,66 @@
+{
+    "pages": {
+        "dataDisplay": {
+            "scheduler": {
+                "title": "Scheduler",
+                "description": "Agenda-style view with resources as columns (rooms, people, teams). Each resource shows its events on a shared hourly grid.",
+                "controls": {
+                    "format": "Format",
+                    "borders": "Borders",
+                    "allDayRow": "All-day row",
+                    "resourceColor": "Resource color"
+                },
+                "props": {
+                    "modelValue": "Visible day (v-model).",
+                    "resources": "Scheduler rows (rooms, people, teams).",
+                    "events": "Events assigned to resources via `resourceId`.",
+                    "locale": "BCP-47 locale for dates and times.",
+                    "color": "Semantic color applied to accents.",
+                    "format": "Time format for the hour column.",
+                    "hourStart": "First visible hour (0-23).",
+                    "hourEnd": "Last visible hour (1-24).",
+                    "slotMinutes": "Granularity of time slots.",
+                    "slotHeight": "Height in px of each time slot.",
+                    "minResourceWidth": "Minimum width of each resource column before horizontal scroll.",
+                    "showResourceHeader": "Shows the per-resource header.",
+                    "resourceHeaderHeight": "Height in px of the resource header.",
+                    "showAllDayRow": "Shows the row for all-day events.",
+                    "showCurrentTime": "Draws the current-time line.",
+                    "businessHours": "Highlights the business hours range.",
+                    "bordered": "Draws a border around the grid.",
+                    "useResourceColor": "Applies the resource color to its events when they have no own color.",
+                    "draggableEvents": "Allows dragging events.",
+                    "allowCrossResourceDrag": "Allows moving events between resources by dragging.",
+                    "resizableEvents": "Allows resizing events."
+                },
+                "emits": {
+                    "updateModelValue": "Emitted when the visible day changes.",
+                    "eventClick": "Click on an event.",
+                    "slotClick": "Click on an empty slot of a resource.",
+                    "createEvent": "Request to create an event.",
+                    "eventDrop": "Event dragged to another position or resource.",
+                    "eventResize": "Event resized.",
+                    "selectRange": "Range selected within a resource."
+                },
+                "examples": {
+                    "basic": {
+                        "title": "Resources only",
+                        "desc": "Empty scheduler showing the resource grid with no events."
+                    },
+                    "events": {
+                        "title": "With events",
+                        "desc": "Events assigned to each resource by resourceId."
+                    },
+                    "format12h": {
+                        "title": "12-hour format",
+                        "desc": "Switches the hour column to AM/PM format."
+                    },
+                    "businessHours": {
+                        "title": "Business hours",
+                        "desc": "Highlights business hours and limits the visible time range."
+                    }
+                }
+            }
+        }
+    }
+}

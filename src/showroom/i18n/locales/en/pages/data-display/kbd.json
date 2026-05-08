@@ -1,0 +1,46 @@
+{
+    "pages": {
+        "dataDisplay": {
+            "kbd": {
+                "title": "Kbd",
+                "description": "Visual representation of keyboard keys or shortcuts. Useful in docs, tooltips and command palettes.",
+                "controls": {
+                    "variant": "Variant",
+                    "size": "Size",
+                    "radius": "Radius"
+                },
+                "props": {
+                    "size": "Key size.",
+                    "variant": "Visual style of the key.",
+                    "radius": "Border radius. Inherited from ModoProvider if omitted."
+                },
+                "slots": {
+                    "default": "Text or glyph of the key (Enter, ⌘, ↑, etc.)."
+                },
+                "examples": {
+                    "basic": {
+                        "title": "Basic",
+                        "desc": "A single key."
+                    },
+                    "combo": {
+                        "title": "Combination",
+                        "desc": "Join multiple Kbd components with a separator."
+                    },
+                    "variants": {
+                        "title": "Variants",
+                        "desc": "Three visual styles: subtle (default), outline and solid."
+                    },
+                    "sizes": {
+                        "title": "Sizes",
+                        "desc": "Three scales to align with text in different contexts."
+                    },
+                    "inline": {
+                        "title": "Inline in text",
+                        "desc": "Vertically aligned with surrounding text.",
+                        "text": "Press {key} to open quick search."
+                    }
+                }
+            }
+        }
+    }
+}

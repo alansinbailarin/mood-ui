@@ -15,14 +15,30 @@ export interface TagInput {
     disabled?: boolean;
     /** Mark as readonly (display, no edits). */
     readonly?: boolean;
-    /** Semantic color family for the chips. */
+    /** Semantic color family — applies to both chips and the field focus ring. */
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning';
-    /** Visual variant for the chips. */
+    /** Visual variant for the chips (subtle / outline / solid). */
     variant?: 'subtle' | 'outline' | 'solid';
+    /** Visual variant for the field wrapper. Matches Input/Select/Combobox. */
+    fieldVariant?: 'outline' | 'filled' | 'ghost';
     /** Size scale. Inherits from `ModoProvider` if omitted. */
     size?: 'small' | 'medium' | 'large';
     /** Corner radius. Inherits from `ModoProvider` if omitted. */
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
+    /** Halo style. Inherits from `ModoProvider` if omitted. */
+    halo?: 'tinted' | 'neutral' | 'off';
     /** Optional accessible name for the input. */
     ariaLabel?: string;
+    /** Visible label rendered above the field. */
+    label?: string;
+    /** Optional DOM id for the internal input. */
+    id?: string;
+    /** Error message — activates error state and renders below the field. */
+    errorText?: string;
+    /** Helper text rendered below the field when there is no error. */
+    helperText?: string;
+    /** Forces error state without rendering an error message (e.g. from FormField). */
+    invalid?: boolean;
+    /** Stretch to full container width. */
+    fullWidth?: boolean;
 }

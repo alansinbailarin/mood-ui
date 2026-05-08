@@ -31,7 +31,7 @@
                 :ariaLabel="loc.numberInput.decrement" 
                 :disabled="isDisabled || readonly || !canDecrement" 
                 tabindex="-1" 
-                class="shrink-0 text-muted-foreground hover:text-foreground" 
+                :class="['shrink-0', affordanceActionClass]" 
                 @pointerdown.prevent="startHold(-1)" 
                 @pointerup="stopHold" 
                 @pointerleave="stopHold" 
@@ -42,7 +42,7 @@
                 :is="iconLeft" 
                 v-if="iconLeft" 
                 aria-hidden="true" 
-                :class="['shrink-0 text-muted-foreground', iconSizeClasses]" 
+                :class="['shrink-0', affordanceIconClass, iconSizeClasses]" 
             /> 
             <span 
                 v-if="prefix" 
@@ -96,7 +96,7 @@
             <Loader 
                 v-if="loading" 
                 :size="size === 'large' ? 'medium' : 'small'" 
-                class="shrink-0 text-muted-foreground" 
+                :class="['shrink-0', affordanceIconClass]" 
             /> 
  
             <!-- Steppers a la derecha (right) --> 
@@ -142,7 +142,7 @@
                 :ariaLabel="loc.numberInput.increment" 
                 :disabled="isDisabled || readonly || !canIncrement" 
                 tabindex="-1" 
-                class="shrink-0 text-muted-foreground hover:text-foreground" 
+                :class="['shrink-0', affordanceActionClass]" 
                 @pointerdown.prevent="startHold(1)" 
                 @pointerup="stopHold" 
                 @pointerleave="stopHold" 
@@ -178,7 +178,12 @@
 <script setup lang="ts"> 
 import { computed, onBeforeUnmount, ref, watch } from 'vue'; 
 import type { NumberInput } from '../../interfaces/forms/NumberInput.interface'; 
-import { useFieldState, useFieldClasses } from '../../composables/useField'; 
+import {
+    useFieldState,
+    useFieldClasses,
+    FIELD_AFFORDANCE_ACTION_BY_COLOR,
+    FIELD_AFFORDANCE_ICON_BY_COLOR,
+} from '../../composables/useField'; 
 import { useModoLocale, useResolvedSize } from '../../composables/useModoConfig'; 
 import Loader from '../feedback/Loader.vue'; 
 import Button from './Button.vue'; 
@@ -232,6 +237,9 @@ const { wrapperVariantClasses, radiusClasses } = useFieldClasses({
     radius, 
     halo: () => props.halo, 
 }); 
+
+const affordanceIconClass = computed(() => FIELD_AFFORDANCE_ICON_BY_COLOR[stateColor.value] ?? 'text-muted-foreground');
+const affordanceActionClass = computed(() => FIELD_AFFORDANCE_ACTION_BY_COLOR[stateColor.value] ?? 'text-muted-foreground hover:text-foreground');
  
 /** Texto en edición. Separado del modelValue para permitir 
  *  estados intermedios ("-", "1.", "1,5", vacío…). */ 
@@ -458,7 +466,8 @@ const stepperButtonSize = computed<'xs' | 'small'>(() => (resolvedSize.value ===
  
 const stackedStepperClasses = computed(() => [ 
     'inline-flex items-center justify-center w-6 h-4', 
-    'text-muted-foreground hover:text-foreground hover:bg-foreground/10', 
+    affordanceActionClass.value,
+    stateColor.value === 'default' ? 'hover:bg-foreground/10' : '',
     'focus:outline-none focus-visible:ring-2 focus-visible:ring-ring', 
     'disabled:opacity-40 disabled:pointer-events-none', 
     'transition-colors duration-base ease-standard rounded-sm', 

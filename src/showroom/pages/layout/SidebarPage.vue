@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Sidebar from '../../../components/layout/Sidebar.vue';
 import { HomeIcon, UsersIcon, ChartBarIcon, Cog6ToothIcon, InboxIcon, ArrowRightOnRectangleIcon } from '@heroicons/vue/24/outline';
 import type { PropDoc, EmitDoc, SlotDoc } from '../../types';
+
+const { t } = useI18n();
 
 const pgCollapsed = ref(false);
 const pgVariant = ref<'tonal' | 'solid' | 'bar'>('tonal');
@@ -17,32 +20,32 @@ function resetPlayground() {
 }
 
 const active = ref<string | number>('home');
-const items = [
-    { id: 'home',    label: 'Inicio',   icon: HomeIcon },
-    { id: 'inbox',   label: 'Inbox',    icon: InboxIcon, badge: 4, badgeColor: 'primary' as const },
-    { id: 'team',    label: 'Equipo',   icon: UsersIcon },
-    { id: 'reports', label: 'Reportes', icon: ChartBarIcon },
-];
+const items = computed(() => [
+    { id: 'home',    label: t('pages.layout.sidebar.menu.home'),    icon: HomeIcon },
+    { id: 'inbox',   label: t('pages.layout.sidebar.menu.inbox'),   icon: InboxIcon, badge: 4, badgeColor: 'primary' as const },
+    { id: 'team',    label: t('pages.layout.sidebar.menu.team'),    icon: UsersIcon },
+    { id: 'reports', label: t('pages.layout.sidebar.menu.reports'), icon: ChartBarIcon },
+]);
 
-const sectionsData = [
+const sectionsData = computed(() => [
     {
         id: 'main',
-        title: 'Principal',
+        title: t('pages.layout.sidebar.sections.main'),
         items: [
-            { id: 'home',    label: 'Inicio',   icon: HomeIcon },
-            { id: 'inbox',   label: 'Inbox',    icon: InboxIcon, badge: 4, badgeColor: 'primary' as const },
-            { id: 'team',    label: 'Equipo',   icon: UsersIcon },
+            { id: 'home',    label: t('pages.layout.sidebar.menu.home'),  icon: HomeIcon },
+            { id: 'inbox',   label: t('pages.layout.sidebar.menu.inbox'), icon: InboxIcon, badge: 4, badgeColor: 'primary' as const },
+            { id: 'team',    label: t('pages.layout.sidebar.menu.team'),  icon: UsersIcon },
         ],
     },
     {
         id: 'cfg',
-        title: 'Configuración',
+        title: t('pages.layout.sidebar.sections.config'),
         items: [
-            { id: 'reports',  label: 'Reportes', icon: ChartBarIcon },
-            { id: 'settings', label: 'Ajustes',  icon: Cog6ToothIcon },
+            { id: 'reports',  label: t('pages.layout.sidebar.menu.reports'),  icon: ChartBarIcon },
+            { id: 'settings', label: t('pages.layout.sidebar.menu.settings'), icon: Cog6ToothIcon },
         ],
     },
-];
+]);
 
 const colorDots = [
     { value: 'default'  as const, bg: '#64748b',        label: 'Default' },
@@ -81,44 +84,44 @@ const footerCode = `<Sidebar :sections="sections" v-model:active-id="active">
     <template #footer="{ collapsed }">
         <button class="…">
             <ArrowRightOnRectangleIcon />
-            <span v-if="!collapsed">Salir</span>
+            <span v-if="!collapsed">…</span>
         </button>
     </template>
 </Sidebar>`;
 
-const propsList: PropDoc[] = [
-    { name: 'sections',       type: 'SidebarSection[]',                                                 description: 'Secciones a renderizar (cada una con título e items).' },
-    { name: 'items',          type: 'SidebarItem[]',                                                    description: 'Atajo: lista plana de items renderizada como sección anónima.' },
-    { name: 'activeId',       type: 'string | number | null',                                           description: 'v-model del item activo.' },
-    { name: 'collapsed',      type: 'boolean',                              default: 'false',           description: 'Modo icon-only: oculta labels, badges y sub-items.' },
-    { name: 'size',           type: "'small' | 'medium' | 'large'",         default: "'medium'",        description: 'Tamaño visual de las filas.' },
-    { name: 'radius',         type: "'none' | 'small' | 'medium' | 'large' | 'full'", default: 'provider', description: 'Radio del hit-area de las filas.' },
-    { name: 'color',          type: "'default' | 'primary' | 'danger' | 'success' | 'warning'", default: "'default'", description: 'Color del estado activo.' },
-    { name: 'activeVariant',  type: "'tonal' | 'solid' | 'bar'",            default: "'tonal'",         description: 'Cómo se renderiza el estado activo.' },
-    { name: 'barSide',        type: "'start' | 'end'",                      default: "'start'",         description: 'Lado del accent bar (solo activeVariant="bar").' },
-    { name: 'padding',        type: "'none' | 'small' | 'medium' | 'large'", default: "'medium'",       description: 'Padding alrededor de la lista interior.' },
-    { name: 'dividers',       type: 'boolean',                              default: 'true',            description: 'Renderiza bordes entre header / body / footer.' },
-    { name: 'ariaLabel',      type: 'string',                              default: "'Sidebar'",       description: 'Aria-label del nav raíz.' },
-    { name: 'as',             type: 'string',                              default: "'nav'",           description: 'Etiqueta raíz a renderizar.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'sections',       type: 'SidebarSection[]',                                                 description: t('pages.layout.sidebar.props.sections') },
+    { name: 'items',          type: 'SidebarItem[]',                                                    description: t('pages.layout.sidebar.props.items') },
+    { name: 'activeId',       type: 'string | number | null',                                           description: t('pages.layout.sidebar.props.activeId') },
+    { name: 'collapsed',      type: 'boolean',                              default: 'false',           description: t('pages.layout.sidebar.props.collapsed') },
+    { name: 'size',           type: "'small' | 'medium' | 'large'",         default: "'medium'",        description: t('pages.layout.sidebar.props.size') },
+    { name: 'radius',         type: "'none' | 'small' | 'medium' | 'large' | 'full'", default: 'provider', description: t('pages.layout.sidebar.props.radius') },
+    { name: 'color',          type: "'default' | 'primary' | 'danger' | 'success' | 'warning'", default: "'default'", description: t('pages.layout.sidebar.props.color') },
+    { name: 'activeVariant',  type: "'tonal' | 'solid' | 'bar'",            default: "'tonal'",         description: t('pages.layout.sidebar.props.activeVariant') },
+    { name: 'barSide',        type: "'start' | 'end'",                      default: "'start'",         description: t('pages.layout.sidebar.props.barSide') },
+    { name: 'padding',        type: "'none' | 'small' | 'medium' | 'large'", default: "'medium'",       description: t('pages.layout.sidebar.props.padding') },
+    { name: 'dividers',       type: 'boolean',                              default: 'true',            description: t('pages.layout.sidebar.props.dividers') },
+    { name: 'ariaLabel',      type: 'string',                              default: "'Sidebar'",       description: t('pages.layout.sidebar.props.ariaLabel') },
+    { name: 'as',             type: 'string',                              default: "'nav'",           description: t('pages.layout.sidebar.props.as') },
+]);
 
-const emitsList: EmitDoc[] = [
-    { name: 'select',           payload: 'SidebarItem', description: 'Emitido al activar un item.' },
-    { name: 'update:activeId',  payload: 'string | number | null', description: 'v-model del item activo.' },
-];
+const emitsList = computed<EmitDoc[]>(() => [
+    { name: 'select',           payload: 'SidebarItem', description: t('pages.layout.sidebar.emits.select') },
+    { name: 'update:activeId',  payload: 'string | number | null', description: t('pages.layout.sidebar.emits.updateActiveId') },
+]);
 
-const slotsList: SlotDoc[] = [
-    { name: 'header', bindings: '{ collapsed }', description: 'Contenido renderizado encima de las secciones (logo, brand…).' },
-    { name: 'footer', bindings: '{ collapsed }', description: 'Contenido renderizado debajo de las secciones (logout, perfil…).' },
-];
+const slotsList = computed<SlotDoc[]>(() => [
+    { name: 'header', bindings: '{ collapsed }', description: t('pages.layout.sidebar.slots.header') },
+    { name: 'footer', bindings: '{ collapsed }', description: t('pages.layout.sidebar.slots.footer') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="Sidebar"
-        category="Layout"
+        :title="t('pages.layout.sidebar.title')"
+        :category="t('pages.layout.sidebar.category')"
         import-path="import { Sidebar } from 'mood-ui'"
-        description="Navegación lateral con secciones, items, iconos y badges. Soporta modo colapsado (solo iconos), items anidados y diferentes estilos de activo."
+        :description="t('pages.layout.sidebar.description')"
         :props-list="propsList"
         :emits-list="emitsList"
         :slots-list="slotsList"
@@ -186,8 +189,8 @@ const slotsList: SlotDoc[] = [
 
         <template #examples>
             <ComponentPreview
-                title="Básico"
-                description="Lista plana de items con activo controlado."
+                :title="t('pages.layout.sidebar.examples.basic.title')"
+                :description="t('pages.layout.sidebar.examples.basic.desc')"
                 :code="basicCode"
             >
                 <div class="w-64 h-80 border border-border rounded-md overflow-hidden bg-card">
@@ -196,8 +199,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Colapsado (rail)"
-                description="Modo icon-only con tooltips automáticos en hover."
+                :title="t('pages.layout.sidebar.examples.collapsed.title')"
+                :description="t('pages.layout.sidebar.examples.collapsed.desc')"
                 :code="collapsedCode"
             >
                 <div class="w-16 h-80 border border-border rounded-md overflow-hidden bg-card">
@@ -206,8 +209,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con secciones"
-                description="Agrupa items bajo títulos para mejor organización."
+                :title="t('pages.layout.sidebar.examples.sections.title')"
+                :description="t('pages.layout.sidebar.examples.sections.desc')"
                 :code="sectionsCode"
             >
                 <div class="w-64 h-80 border border-border rounded-md overflow-hidden bg-card">
@@ -216,8 +219,8 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con footer"
-                description="Slot footer para botones de logout o perfil."
+                :title="t('pages.layout.sidebar.examples.footer.title')"
+                :description="t('pages.layout.sidebar.examples.footer.desc')"
                 :code="footerCode"
             >
                 <div class="w-64 h-80 border border-border rounded-md overflow-hidden bg-card">
@@ -225,7 +228,7 @@ const slotsList: SlotDoc[] = [
                         <template #footer="{ collapsed }">
                             <button class="w-full flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors">
                                 <ArrowRightOnRectangleIcon class="size-4 shrink-0" />
-                                <span v-if="!collapsed">Salir</span>
+                                <span v-if="!collapsed">{{ t('pages.layout.sidebar.logout') }}</span>
                             </button>
                         </template>
                     </Sidebar>

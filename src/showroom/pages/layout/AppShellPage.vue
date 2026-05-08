@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import AppShell from '../../../components/layout/AppShell.vue';
@@ -7,6 +8,8 @@ import Topbar from '../../../components/layout/Topbar.vue';
 import Sidebar from '../../../components/layout/Sidebar.vue';
 import { HomeIcon, UsersIcon, ChartBarIcon, Cog6ToothIcon, InboxIcon } from '@heroicons/vue/24/outline';
 import type { PropDoc, SlotDoc } from '../../types';
+
+const { t } = useI18n();
 
 const pgVariant = ref<'standard' | 'rail' | 'dual'>('standard');
 const pgAppearance = ref<'flush' | 'contained'>('flush');
@@ -19,13 +22,13 @@ function resetPlayground() {
 }
 
 const active = ref<string | number>('home');
-const items = [
-    { id: 'home',    label: 'Inicio',   icon: HomeIcon },
-    { id: 'inbox',   label: 'Inbox',    icon: InboxIcon, badge: 3, badgeColor: 'primary' as const },
-    { id: 'team',    label: 'Equipo',   icon: UsersIcon },
-    { id: 'reports', label: 'Reportes', icon: ChartBarIcon },
-    { id: 'settings', label: 'Ajustes', icon: Cog6ToothIcon },
-];
+const items = computed(() => [
+    { id: 'home',     label: t('pages.layout.appShell.menu.home'),     icon: HomeIcon },
+    { id: 'inbox',    label: t('pages.layout.appShell.menu.inbox'),    icon: InboxIcon, badge: 3, badgeColor: 'primary' as const },
+    { id: 'team',     label: t('pages.layout.appShell.menu.team'),     icon: UsersIcon },
+    { id: 'reports',  label: t('pages.layout.appShell.menu.reports'),  icon: ChartBarIcon },
+    { id: 'settings', label: t('pages.layout.appShell.menu.settings'), icon: Cog6ToothIcon },
+]);
 
 const overviewCode = computed(() => {
     const parts: string[] = [];
@@ -36,7 +39,7 @@ const overviewCode = computed(() => {
     return `<AppShell${attrs}>
     <template #topbar><Topbar title="App" divider /></template>
     <template #sidebar><Sidebar :items="items" v-model:active-id="active" /></template>
-    <main>Contenido…</main>
+    <main>…</main>
 </AppShell>`;
 });
 
@@ -45,7 +48,7 @@ const basicCode = `<AppShell>
     <template #sidebar>
         <Sidebar :items="items" v-model:active-id="active" />
     </template>
-    <div class="p-6">Contenido principal</div>
+    <div class="p-6">…</div>
 </AppShell>`;
 
 const railCode = `<AppShell variant="rail">
@@ -53,7 +56,7 @@ const railCode = `<AppShell variant="rail">
     <template #rail>
         <Sidebar :items="items" :active-id="active" collapsed />
     </template>
-    <div class="p-6">Rail icon-only</div>
+    <div class="p-6">…</div>
 </AppShell>`;
 
 const collapsedCode = `<AppShell v-model:collapsed="collapsed">
@@ -61,50 +64,50 @@ const collapsedCode = `<AppShell v-model:collapsed="collapsed">
     <template #sidebar="{ collapsed }">
         <Sidebar :items="items" :active-id="active" :collapsed="collapsed" />
     </template>
-    <div class="p-6">Sidebar plegable</div>
+    <div class="p-6">…</div>
 </AppShell>`;
 
 const noSidebarCode = `<AppShell>
     <template #topbar><Topbar title="App" divider /></template>
-    <div class="p-6">Layout sin sidebar (ej. landing autenticada)</div>
+    <div class="p-6">…</div>
 </AppShell>`;
 
-const propsList: PropDoc[] = [
-    { name: 'variant',         type: "'standard' | 'rail' | 'dual'",        default: "'standard'", description: 'Estructura del shell.' },
-    { name: 'appearance',      type: "'flush' | 'contained'",               default: "'flush'",    description: 'Encuadre visual: full-bleed o tarjeta.' },
-    { name: 'sidebarPosition', type: "'left' | 'right'",                    default: "'left'",     description: 'Lado del sidebar.' },
-    { name: 'sidebarWidth',    type: "'small' | 'medium' | 'large'",        default: "'medium'",   description: 'Ancho del sidebar expandido.' },
-    { name: 'collapsedWidth',  type: "'small' | 'medium'",                  default: "'small'",    description: 'Ancho del sidebar colapsado (variant standard).' },
-    { name: 'railWidth',       type: "'small' | 'medium'",                  default: "'small'",    description: 'Ancho del rail (variants rail / dual).' },
-    { name: 'collapsed',       type: 'boolean',                              default: 'false',      description: 'v-model — sidebar plegado en escritorio.' },
-    { name: 'mobileOpen',      type: 'boolean',                              default: 'false',      description: 'v-model — drawer móvil abierto.' },
-    { name: 'breakpoint',      type: "'md' | 'lg' | 'xl'",                  default: "'lg'",       description: 'Breakpoint donde el sidebar se vuelve permanente.' },
-    { name: 'stickyTopbar',    type: 'boolean',                              default: 'false',      description: 'Hace sticky el topbar.' },
-    { name: 'stickySidebar',   type: 'boolean',                              default: 'false',      description: 'Hace sticky el sidebar en escritorio.' },
-    { name: 'divider',         type: 'boolean',                              default: 'true',       description: 'Renderiza bordes entre regiones.' },
-    { name: 'mainPadding',     type: "'none' | 'small' | 'medium' | 'large'", default: "'none'",   description: 'Padding alrededor del contenido principal.' },
-    { name: 'radius',          type: "'none' | 'small' | 'medium' | 'large' | 'full'", default: 'provider', description: 'Radio cuando appearance="contained".' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'variant',         type: "'standard' | 'rail' | 'dual'",        default: "'standard'", description: t('pages.layout.appShell.props.variant') },
+    { name: 'appearance',      type: "'flush' | 'contained'",               default: "'flush'",    description: t('pages.layout.appShell.props.appearance') },
+    { name: 'sidebarPosition', type: "'left' | 'right'",                    default: "'left'",     description: t('pages.layout.appShell.props.sidebarPosition') },
+    { name: 'sidebarWidth',    type: "'small' | 'medium' | 'large'",        default: "'medium'",   description: t('pages.layout.appShell.props.sidebarWidth') },
+    { name: 'collapsedWidth',  type: "'small' | 'medium'",                  default: "'small'",    description: t('pages.layout.appShell.props.collapsedWidth') },
+    { name: 'railWidth',       type: "'small' | 'medium'",                  default: "'small'",    description: t('pages.layout.appShell.props.railWidth') },
+    { name: 'collapsed',       type: 'boolean',                              default: 'false',      description: t('pages.layout.appShell.props.collapsed') },
+    { name: 'mobileOpen',      type: 'boolean',                              default: 'false',      description: t('pages.layout.appShell.props.mobileOpen') },
+    { name: 'breakpoint',      type: "'md' | 'lg' | 'xl'",                  default: "'lg'",       description: t('pages.layout.appShell.props.breakpoint') },
+    { name: 'stickyTopbar',    type: 'boolean',                              default: 'false',      description: t('pages.layout.appShell.props.stickyTopbar') },
+    { name: 'stickySidebar',   type: 'boolean',                              default: 'false',      description: t('pages.layout.appShell.props.stickySidebar') },
+    { name: 'divider',         type: 'boolean',                              default: 'true',       description: t('pages.layout.appShell.props.divider') },
+    { name: 'mainPadding',     type: "'none' | 'small' | 'medium' | 'large'", default: "'none'",   description: t('pages.layout.appShell.props.mainPadding') },
+    { name: 'radius',          type: "'none' | 'small' | 'medium' | 'large' | 'full'", default: 'provider', description: t('pages.layout.appShell.props.radius') },
+]);
 
-const slotsList: SlotDoc[] = [
-    { name: 'topbar',          bindings: '{ collapsed, mobileOpen, toggleSidebar, openMobile, closeMobile }', description: 'Barra superior de la aplicación.' },
-    { name: 'sidebar',         bindings: '{ collapsed, toggleCollapsed, isMobile, closeMobile }',             description: 'Sidebar en variants standard y dual (panel secundario).' },
-    { name: 'sidebar-header',  bindings: '{ collapsed }', description: 'Cabecera fija del sidebar.' },
-    { name: 'sidebar-footer',  bindings: '{ collapsed }', description: 'Pie fijo del sidebar.' },
-    { name: 'rail',            bindings: '{ collapsed, toggleCollapsed }', description: 'Rail icon-only (variants rail y dual).' },
-    { name: 'rail-header',     description: 'Cabecera fija del rail.' },
-    { name: 'rail-footer',     description: 'Pie fijo del rail.' },
-    { name: 'default',         description: 'Contenido principal de la aplicación.' },
-    { name: 'footer',          description: 'Pie global del shell.' },
-];
+const slotsList = computed<SlotDoc[]>(() => [
+    { name: 'topbar',          bindings: '{ collapsed, mobileOpen, toggleSidebar, openMobile, closeMobile }', description: t('pages.layout.appShell.slots.topbar') },
+    { name: 'sidebar',         bindings: '{ collapsed, toggleCollapsed, isMobile, closeMobile }',             description: t('pages.layout.appShell.slots.sidebar') },
+    { name: 'sidebar-header',  bindings: '{ collapsed }', description: t('pages.layout.appShell.slots.sidebarHeader') },
+    { name: 'sidebar-footer',  bindings: '{ collapsed }', description: t('pages.layout.appShell.slots.sidebarFooter') },
+    { name: 'rail',            bindings: '{ collapsed, toggleCollapsed }', description: t('pages.layout.appShell.slots.rail') },
+    { name: 'rail-header',     description: t('pages.layout.appShell.slots.railHeader') },
+    { name: 'rail-footer',     description: t('pages.layout.appShell.slots.railFooter') },
+    { name: 'default',         description: t('pages.layout.appShell.slots.default') },
+    { name: 'footer',          description: t('pages.layout.appShell.slots.footer') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="AppShell"
-        category="Layout"
+        :title="t('pages.layout.appShell.title')"
+        :category="t('pages.layout.appShell.category')"
         import-path="import { AppShell } from 'mood-ui'"
-        description="Frame de aplicación: topbar + sidebar + contenido principal con drawer móvil automático. Soporta variantes standard, rail (icon-only) y dual (rail + panel)."
+        :description="t('pages.layout.appShell.description')"
         :props-list="propsList"
         :slots-list="slotsList"
     >
@@ -160,7 +163,7 @@ const slotsList: SlotDoc[] = [
                         class="h-full"
                     >
                         <template #topbar>
-                            <Topbar title="Modo UI" subtitle="Demo" divider>
+                            <Topbar title="Modo UI" :subtitle="t('pages.layout.appShell.content.subtitleDemo')" divider>
                                 <template #logo><div class="size-7 rounded bg-primary" /></template>
                             </Topbar>
                         </template>
@@ -171,7 +174,7 @@ const slotsList: SlotDoc[] = [
                             <Sidebar :items="items" :active-id="active" :collapsed="collapsed || true" color="primary" />
                         </template>
                         <div class="p-6 text-sm text-muted-foreground">
-                            Contenido principal del shell — esta zona es el slot default.
+                            {{ t('pages.layout.appShell.content.main') }}
                         </div>
                     </AppShell>
                 </div>
@@ -180,8 +183,8 @@ const slotsList: SlotDoc[] = [
 
         <template #examples>
             <ComponentPreview
-                title="Básico"
-                description="Topbar + sidebar + contenido — la composición más usada."
+                :title="t('pages.layout.appShell.examples.basic.title')"
+                :description="t('pages.layout.appShell.examples.basic.desc')"
                 :code="basicCode"
             >
                 <div class="w-full border border-border rounded-md overflow-hidden bg-card" style="height: 320px;">
@@ -194,14 +197,14 @@ const slotsList: SlotDoc[] = [
                         <template #sidebar>
                             <Sidebar :items="items" v-model:active-id="active" color="primary" />
                         </template>
-                        <div class="p-6 text-sm">Contenido principal</div>
+                        <div class="p-6 text-sm">{{ t('pages.layout.appShell.content.basic') }}</div>
                     </AppShell>
                 </div>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Variant rail"
-                description="Rail icon-only persistente, ideal para apps densas."
+                :title="t('pages.layout.appShell.examples.rail.title')"
+                :description="t('pages.layout.appShell.examples.rail.desc')"
                 :code="railCode"
             >
                 <div class="w-full border border-border rounded-md overflow-hidden bg-card" style="height: 320px;">
@@ -214,14 +217,14 @@ const slotsList: SlotDoc[] = [
                         <template #rail>
                             <Sidebar :items="items" :active-id="active" collapsed color="primary" />
                         </template>
-                        <div class="p-6 text-sm">Rail icon-only</div>
+                        <div class="p-6 text-sm">{{ t('pages.layout.appShell.content.rail') }}</div>
                     </AppShell>
                 </div>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Sidebar colapsado"
-                description="v-model:collapsed permite plegar el sidebar manteniendo los iconos."
+                :title="t('pages.layout.appShell.examples.collapsed.title')"
+                :description="t('pages.layout.appShell.examples.collapsed.desc')"
                 :code="collapsedCode"
             >
                 <div class="w-full border border-border rounded-md overflow-hidden bg-card" style="height: 320px;">
@@ -234,14 +237,14 @@ const slotsList: SlotDoc[] = [
                         <template #sidebar="{ collapsed }">
                             <Sidebar :items="items" :active-id="active" :collapsed="collapsed" color="primary" />
                         </template>
-                        <div class="p-6 text-sm">Sidebar plegado</div>
+                        <div class="p-6 text-sm">{{ t('pages.layout.appShell.content.collapsed') }}</div>
                     </AppShell>
                 </div>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Sin sidebar"
-                description="Layout solo con topbar — útil para landings o flujos lineales."
+                :title="t('pages.layout.appShell.examples.noSidebar.title')"
+                :description="t('pages.layout.appShell.examples.noSidebar.desc')"
                 :code="noSidebarCode"
             >
                 <div class="w-full border border-border rounded-md overflow-hidden bg-card" style="height: 280px;">
@@ -251,7 +254,7 @@ const slotsList: SlotDoc[] = [
                                 <template #logo><div class="size-7 rounded bg-primary" /></template>
                             </Topbar>
                         </template>
-                        <div class="p-6 text-sm">Layout sin sidebar (ej. landing autenticada)</div>
+                        <div class="p-6 text-sm">{{ t('pages.layout.appShell.content.noSidebar') }}</div>
                     </AppShell>
                 </div>
             </ComponentPreview>

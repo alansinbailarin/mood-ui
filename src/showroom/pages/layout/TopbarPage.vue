@@ -1,11 +1,19 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Topbar from '../../../components/layout/Topbar.vue';
 import Button from '../../../components/forms/Button.vue';
-import { BellIcon, MagnifyingGlassIcon, Cog6ToothIcon } from '@heroicons/vue/24/outline';
+import SearchInput from '../../../components/forms/SearchInput.vue';
+import Avatar from '../../../components/data-display/avatar/Avatar.vue';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
+import { BellIcon, Cog6ToothIcon } from '@heroicons/vue/24/outline';
 import type { PropDoc, EmitDoc, SlotDoc } from '../../types';
+
+const { t } = useI18n();
 
 const pgSize = ref<'small' | 'medium' | 'large'>('medium');
 const pgDivider = ref(true);
@@ -23,11 +31,10 @@ const overviewCode = computed(() => {
     if (pgDivider.value) parts.push('divider');
     if (pgMenuToggle.value) parts.push('menu-toggle');
     const attrs = parts.length ? ' ' + parts.join(' ') : '';
-    return `<Topbar${attrs} title="Modo UI" subtitle="Workspace #1">
+    return `<Topbar${attrs} title="Modo UI" subtitle="${t('pages.layout.topbar.demo.subtitle')}">
     <template #logo><div class="size-8 rounded bg-primary" /></template>
-    <template #actions>
-        <Button variant="ghost" size="small" :icon="BellIcon" aria-label="Notificaciones" />
-    </template>
+    <template #actions>…</template>
+    <template #user>…</template>
 </Topbar>`;
 });
 
@@ -40,59 +47,57 @@ const basicCode = `<Topbar title="Modo UI" divider>
 const searchCode = `<Topbar title="App" divider>
     <template #logo><div class="size-8 rounded bg-primary" /></template>
     <template #search>
-        <input class="…" placeholder="Buscar…" />
+        <SearchInput placeholder="…" full-width />
+    </template>
+    <template #user>
+        <Avatar name="…" size="small" />
     </template>
 </Topbar>`;
 
 const actionsCode = `<Topbar title="Dashboard" divider>
     <template #logo><div class="size-8 rounded bg-primary" /></template>
-    <template #actions>
-        <Button variant="ghost" size="small" :icon="BellIcon"      aria-label="Notificaciones" />
-        <Button variant="ghost" size="small" :icon="Cog6ToothIcon" aria-label="Ajustes"        />
-    </template>
-    <template #user>
-        <div class="size-8 rounded-full bg-muted" />
-    </template>
+    <template #actions>…</template>
+    <template #user><Avatar name="…" size="small" /></template>
 </Topbar>`;
 
 const transparentCode = `<Topbar title="Hero" :divider="false">
     <template #logo><div class="size-8 rounded bg-primary" /></template>
 </Topbar>`;
 
-const propsList: PropDoc[] = [
-    { name: 'title',          type: 'string',                                          description: 'Título visible junto al logo.' },
-    { name: 'subtitle',       type: 'string',                                          description: 'Texto secundario debajo del título.' },
-    { name: 'size',           type: "'small' | 'medium' | 'large'",   default: "'medium'", description: 'Altura visual de la barra.' },
-    { name: 'divider',        type: 'boolean',                        default: 'false',    description: 'Renderiza un borde inferior.' },
-    { name: 'sticky',         type: 'boolean',                        default: 'false',    description: 'Activa position: sticky con fondo translúcido.' },
-    { name: 'padding',        type: "'none' | 'small' | 'medium' | 'large'", default: "'medium'", description: 'Padding horizontal de la barra.' },
-    { name: 'menuToggle',     type: 'boolean',                        default: 'false',    description: 'Muestra un botón hamburguesa a la izquierda.' },
-    { name: 'menuIcon',       type: 'Component',                                       description: 'Icono del botón menú (por defecto hamburguesa).' },
-    { name: 'menuAriaLabel',  type: 'string',                                          description: 'Nombre accesible para el botón menú icon-only.' },
-    { name: 'as',             type: 'string',                        default: "'header'", description: 'Etiqueta raíz a renderizar.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'title',          type: 'string',                                          description: t('pages.layout.topbar.props.title') },
+    { name: 'subtitle',       type: 'string',                                          description: t('pages.layout.topbar.props.subtitle') },
+    { name: 'size',           type: "'small' | 'medium' | 'large'",   default: "'medium'", description: t('pages.layout.topbar.props.size') },
+    { name: 'divider',        type: 'boolean',                        default: 'false',    description: t('pages.layout.topbar.props.divider') },
+    { name: 'sticky',         type: 'boolean',                        default: 'false',    description: t('pages.layout.topbar.props.sticky') },
+    { name: 'padding',        type: "'none' | 'small' | 'medium' | 'large'", default: "'medium'", description: t('pages.layout.topbar.props.padding') },
+    { name: 'menuToggle',     type: 'boolean',                        default: 'false',    description: t('pages.layout.topbar.props.menuToggle') },
+    { name: 'menuIcon',       type: 'Component',                                       description: t('pages.layout.topbar.props.menuIcon') },
+    { name: 'menuAriaLabel',  type: 'string',                                          description: t('pages.layout.topbar.props.menuAriaLabel') },
+    { name: 'as',             type: 'string',                        default: "'header'", description: t('pages.layout.topbar.props.as') },
+]);
 
-const emitsList: EmitDoc[] = [
-    { name: 'menu-toggle', payload: 'MouseEvent', description: 'Emitido al hacer click en el botón menú.' },
-];
+const emitsList = computed<EmitDoc[]>(() => [
+    { name: 'menu-toggle', payload: 'MouseEvent', description: t('pages.layout.topbar.emits.menuToggle') },
+]);
 
-const slotsList: SlotDoc[] = [
-    { name: 'logo',     description: 'Logo o marca al inicio de la barra.' },
-    { name: 'title',    description: 'Reemplaza el título plano por contenido rico.' },
-    { name: 'subtitle', description: 'Reemplaza el subtítulo plano por contenido rico.' },
-    { name: 'nav',      description: 'Navegación principal (links, tabs).' },
-    { name: 'search',   description: 'Zona de búsqueda en el centro/derecha.' },
-    { name: 'actions',  description: 'Acciones rápidas (notificaciones, ajustes…).' },
-    { name: 'user',     description: 'Avatar / menú de usuario al final.' },
-];
+const slotsList = computed<SlotDoc[]>(() => [
+    { name: 'logo',     description: t('pages.layout.topbar.slots.logo') },
+    { name: 'title',    description: t('pages.layout.topbar.slots.title') },
+    { name: 'subtitle', description: t('pages.layout.topbar.slots.subtitle') },
+    { name: 'nav',      description: t('pages.layout.topbar.slots.nav') },
+    { name: 'search',   description: t('pages.layout.topbar.slots.search') },
+    { name: 'actions',  description: t('pages.layout.topbar.slots.actions') },
+    { name: 'user',     description: t('pages.layout.topbar.slots.user') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="Topbar"
-        category="Layout"
+        :title="t('pages.layout.topbar.title')"
+        :category="t('pages.layout.topbar.category')"
         import-path="import { Topbar } from 'mood-ui'"
-        description="Barra superior de aplicación con slots logo, title, subtitle, nav, search, actions y user. Diseñada para usarse dentro de AppShell o de forma standalone."
+        :description="t('pages.layout.topbar.description')"
         :props-list="propsList"
         :emits-list="emitsList"
         :slots-list="slotsList"
@@ -100,35 +105,10 @@ const slotsList: SlotDoc[] = [
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="220px" @reset="resetPlayground">
                 <template #controls>
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Size</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in ['small','medium','large']"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgSize === s ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = (s as typeof pgSize)"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgDivider ? 'border-primary bg-primary/10 text-primary font-medium' : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgDivider = !pgDivider"
-                    >Divider</button>
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgMenuToggle ? 'border-primary bg-primary/10 text-primary font-medium' : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgMenuToggle = !pgMenuToggle"
-                    >Menu</button>
+                    <TbPills label="Size" :options="[{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbToggle label="Divider" v-model="pgDivider" />
+                    <TbToggle label="Menu" v-model="pgMenuToggle" />
                 </template>
 
                 <div class="w-full border border-border rounded-md overflow-hidden bg-card">
@@ -137,14 +117,18 @@ const slotsList: SlotDoc[] = [
                         :divider="pgDivider"
                         :menu-toggle="pgMenuToggle"
                         title="Modo UI"
-                        subtitle="Workspace #1"
+                        :subtitle="t('pages.layout.topbar.demo.subtitle')"
                     >
                         <template #logo><div class="size-8 rounded bg-primary" /></template>
                         <template #actions>
-                            <Button variant="ghost" size="small" :icon="BellIcon" aria-label="Notificaciones" />
+                            <div class="relative">
+                                <Button variant="ghost" size="small" :icon="BellIcon" :aria-label="t('pages.layout.topbar.demo.notifs')" />
+                                <span class="absolute top-1 right-1 size-2 rounded-full bg-destructive ring-2 ring-card" />
+                            </div>
+                            <Button variant="ghost" size="small" :icon="Cog6ToothIcon" :aria-label="t('pages.layout.topbar.demo.settings')" />
                         </template>
                         <template #user>
-                            <div class="size-8 rounded-full bg-muted" />
+                            <Avatar :name="t('pages.layout.topbar.demo.user')" size="small" />
                         </template>
                     </Topbar>
                 </div>
@@ -153,8 +137,8 @@ const slotsList: SlotDoc[] = [
 
         <template #examples>
             <ComponentPreview
-                title="Básico"
-                description="Logo y título — la versión más simple."
+                :title="t('pages.layout.topbar.examples.basic.title')"
+                :description="t('pages.layout.topbar.examples.basic.desc')"
                 :code="basicCode"
             >
                 <div class="w-full border border-border rounded-md overflow-hidden bg-card">
@@ -165,48 +149,48 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con búsqueda"
-                description="Slot search en el centro de la barra."
+                :title="t('pages.layout.topbar.examples.search.title')"
+                :description="t('pages.layout.topbar.examples.search.desc')"
                 :code="searchCode"
             >
                 <div class="w-full border border-border rounded-md overflow-hidden bg-card">
                     <Topbar title="App" divider>
                         <template #logo><div class="size-8 rounded bg-primary" /></template>
                         <template #search>
-                            <div class="relative w-full max-w-md">
-                                <MagnifyingGlassIcon class="absolute left-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-                                <input
-                                    class="w-full pl-8 pr-3 py-1.5 text-sm rounded-md border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20"
-                                    placeholder="Buscar…"
-                                />
-                            </div>
+                            <SearchInput :placeholder="t('pages.layout.topbar.demo.searchPh')" full-width />
+                        </template>
+                        <template #user>
+                            <Avatar :name="t('pages.layout.topbar.demo.user')" size="small" />
                         </template>
                     </Topbar>
                 </div>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con acciones y usuario"
-                description="Combinación típica para una app autenticada."
+                :title="t('pages.layout.topbar.examples.actions.title')"
+                :description="t('pages.layout.topbar.examples.actions.desc')"
                 :code="actionsCode"
             >
                 <div class="w-full border border-border rounded-md overflow-hidden bg-card">
                     <Topbar title="Dashboard" divider>
                         <template #logo><div class="size-8 rounded bg-primary" /></template>
                         <template #actions>
-                            <Button variant="ghost" size="small" :icon="BellIcon"      aria-label="Notificaciones" />
-                            <Button variant="ghost" size="small" :icon="Cog6ToothIcon" aria-label="Ajustes" />
+                            <div class="relative">
+                                <Button variant="ghost" size="small" :icon="BellIcon" :aria-label="t('pages.layout.topbar.demo.notifs')" />
+                                <span class="absolute top-1 right-1 size-2 rounded-full bg-destructive ring-2 ring-card" />
+                            </div>
+                            <Button variant="ghost" size="small" :icon="Cog6ToothIcon" :aria-label="t('pages.layout.topbar.demo.settings')" />
                         </template>
                         <template #user>
-                            <div class="size-8 rounded-full bg-muted" />
+                            <Avatar :name="t('pages.layout.topbar.demo.user')" size="small" />
                         </template>
                     </Topbar>
                 </div>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Sin divider"
-                description="Sin borde inferior — útil para integrarse con un hero o canvas."
+                :title="t('pages.layout.topbar.examples.transparent.title')"
+                :description="t('pages.layout.topbar.examples.transparent.desc')"
                 :code="transparentCode"
             >
                 <div class="w-full border border-border rounded-md overflow-hidden bg-card">

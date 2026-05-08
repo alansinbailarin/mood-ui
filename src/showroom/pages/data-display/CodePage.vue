@@ -4,24 +4,29 @@ import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Code from '../../../components/data-display/Code.vue';
 import type { PropDoc, SlotDoc } from '../../types';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbDots from '../../components/toolbar/TbDots.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgVariant = ref<'subtle' | 'outline' | 'ghost'>('subtle');
 const pgColor   = ref<'default' | 'primary' | 'success' | 'warning' | 'danger'>('default');
 const pgSize    = ref<'small' | 'medium' | 'large'>('medium');
+const pgRadius  = ref<'none' | 'small' | 'medium' | 'large' | 'full'>('medium');
 
 function resetPlayground() {
     pgVariant.value = 'subtle';
     pgColor.value = 'default';
     pgSize.value = 'medium';
+    pgRadius.value = 'medium';
 }
 
 const colorDots = [
-    { value: 'default'  as const, bg: '#64748b',        label: 'Default'  },
-    { value: 'primary'  as const, bg: 'var(--primary)', label: 'Primary'  },
-    { value: 'success'  as const, bg: '#22c55e',        label: 'Success'  },
-    { value: 'warning'  as const, bg: '#f59e0b',        label: 'Warning'  },
-    { value: 'danger'   as const, bg: '#ef4444',        label: 'Danger'   },
+    { value: 'default'  as const, bg: 'var(--color-slate-400)',  label: 'Default'  },
+    { value: 'primary'  as const, bg: 'var(--primary)',           label: 'Primary'  },
+    { value: 'success'  as const, bg: 'var(--color-emerald-500)', label: 'Success'  },
+    { value: 'warning'  as const, bg: 'var(--color-amber-500)',   label: 'Warning'  },
+    { value: 'danger'   as const, bg: 'var(--color-red-500)',     label: 'Danger'   },
 ];
 
 const overviewCode = computed(() => {
@@ -29,6 +34,7 @@ const overviewCode = computed(() => {
     if (pgVariant.value !== 'subtle')  parts.push(`variant="${pgVariant.value}"`);
     if (pgColor.value   !== 'default') parts.push(`color="${pgColor.value}"`);
     if (pgSize.value    !== 'medium')  parts.push(`size="${pgSize.value}"`);
+    if (pgRadius.value  !== 'medium')  parts.push(`radius="${pgRadius.value}"`);
     const attrs = parts.length ? ' ' + parts.join(' ') : '';
     return `<Code${attrs}>npm install mood-ui</Code>`;
 });
@@ -73,65 +79,16 @@ const slotsList: SlotDoc[] = [
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="160px" @reset="resetPlayground">
                 <template #controls>
-                    <!-- Variant -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Variant</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="v in ['subtle', 'outline', 'ghost']"
-                                :key="v"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgVariant === v
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgVariant = (v as typeof pgVariant)"
-                            >{{ v }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Color dots -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Color</span>
-                        <div class="flex items-center gap-1">
-                            <button
-                                v-for="c in colorDots"
-                                :key="c.value"
-                                type="button"
-                                class="size-4 rounded-full transition-all duration-150"
-                                :class="pgColor === c.value
-                                    ? 'ring-2 ring-offset-1 ring-foreground/30 scale-125'
-                                    : 'hover:scale-110 opacity-70 hover:opacity-100'"
-                                :style="`background: ${c.bg}`"
-                                :title="c.label"
-                                @click="pgColor = c.value"
-                            />
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Size -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Size</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in ['small', 'medium', 'large']"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = (s as typeof pgSize)"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
+                    <TbPills label="Variant" :options="[{value:'subtle'},{value:'outline'},{value:'ghost'}]" v-model="pgVariant" />
+                    <TbSep />
+                    <TbDots label="Color" :options="colorDots" v-model="pgColor" />
+                    <TbSep />
+                    <TbPills label="Size" :options="[{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbPills label="Radius" :options="[{value:'none'},{value:'small'},{value:'medium'},{value:'large'},{value:'full'}]" v-model="pgRadius" />
                 </template>
 
-                <Code :variant="pgVariant" :color="pgColor" :size="pgSize">npm install mood-ui</Code>
+                <Code :variant="pgVariant" :color="pgColor" :size="pgSize" :radius="pgRadius">npm install mood-ui</Code>
             </ComponentPreview>
         </template>
 

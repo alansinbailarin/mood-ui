@@ -1,0 +1,56 @@
+{
+    "title": "Banner",
+    "category": "Feedback",
+    "description": "Aviso prominente para comunicar estado a nivel de página o sección. Soporta colores semánticos, variantes, dismiss y posición sticky.",
+    "examples": {
+        "colors":   { "title": "Colores",                "desc": "Cuatro colores semánticos con sus iconos por defecto." },
+        "variants": { "title": "Variantes",              "desc": "Tres tratamientos visuales: filled, subtle (default) y outline." },
+        "action":   { "title": "Con acción",             "desc": "Slot actions a la derecha para anclar un CTA." },
+        "dismiss":  { "title": "Dismissable",            "desc": "Permite al usuario cerrar el banner. Emite el evento dismiss." },
+        "icon":     { "title": "Con icono personalizado", "desc": "Sustituye el icono por uno propio mediante la prop icon." }
+    },
+    "demo": {
+        "infoTitle":     "Información",
+        "infoDesc":      "Tu cuenta se sincronizará en unos minutos.",
+        "successTitle":  "Listo",
+        "successDesc":   "Los cambios se guardaron correctamente.",
+        "warnTitle":     "Atención",
+        "warnDesc":      "Tu plan caduca en 5 días.",
+        "errTitle":      "Error",
+        "errDesc":       "No pudimos procesar el pago.",
+        "filledTitle":   "Filled",
+        "filledDesc":    "Estilo sólido.",
+        "subtleTitle":   "Subtle",
+        "subtleDesc":    "Estilo suave (default).",
+        "outlineTitle":  "Outline",
+        "outlineDesc":   "Estilo con borde.",
+        "renewTitle":    "Plan próximo a vencer",
+        "renewDesc":     "Renueva para no perder acceso a las funciones premium.",
+        "renewBtn":      "Renovar",
+        "tipTitle":      "Tip",
+        "tipDesc":       "Puedes cerrar este aviso.",
+        "newTitle":      "Nueva versión",
+        "newDesc":       "La v2 trae soporte para temas y nuevos componentes.",
+        "showAgain":     "Mostrar de nuevo"
+    },
+    "props": {
+        "color":            "Color semántico del banner.",
+        "variant":          "Estilo visual aplicado al banner.",
+        "title":            "Título destacado del banner.",
+        "description":      "Texto descriptivo. Se reemplaza por el slot default si se provee.",
+        "dismissable":      "Muestra un botón de cierre que emite el evento dismiss.",
+        "dismissAnimation": "Animación usada al cerrar el banner.",
+        "icon":             "Icono personalizado. Si se omite usa el icono por color.",
+        "showIcon":         "Muestra u oculta el icono del banner.",
+        "position":         "Posicionamiento del banner.",
+        "fullWidth":        "Elimina el radius para anclar el banner de borde a borde.",
+        "radius":           "Radio de las esquinas. Cascada desde ModoProvider."
+    },
+    "emits": {
+        "dismiss": "Emitido al cerrar el banner cuando dismissable está activo."
+    },
+    "slots": {
+        "default": "Contenido del cuerpo del banner. Reemplaza la prop description cuando se necesita HTML.",
+        "actions": "Acciones a la derecha del banner (típicamente botones)."
+    }
+}

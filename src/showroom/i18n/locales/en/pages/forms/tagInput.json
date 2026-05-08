@@ -1,0 +1,57 @@
+{
+    "title": "TagInput",
+    "description": "Tag editor: the user types text, presses Enter (or a delimiter) and a chip is added. Supports validation, maximums and visual variants.",
+
+    "playground": {
+        "placeholder": "Add a tag and press Enter…"
+    },
+
+    "examples": {
+        "basic": {
+            "title": "Basic usage",
+            "desc":  "Press Enter or comma to confirm. Duplicates are discarded by default.",
+            "ph":    "Add a tag and press Enter…"
+        },
+        "max": {
+            "title": "Maximum tags",
+            "desc":  "Limit the number of tags with the max prop.",
+            "ph":    "Up to 3 tags"
+        },
+        "validator": {
+            "title": "Custom validator",
+            "desc":  "Only tags that pass the validator are confirmed (here, valid emails).",
+            "ph":    "Valid emails only"
+        },
+        "colors": {
+            "title": "Colors",
+            "desc":  "Semantic variants for the chips."
+        },
+        "sizes": {
+            "title": "Sizes",
+            "desc":  "Three heights to match the form density."
+        }
+    },
+
+    "props": {
+        "modelValue":  "Current array of tags (v-model).",
+        "placeholder": "Placeholder when there are no tags and the input is empty.",
+        "max":         "Maximum number of tags. Beyond the limit the input is disabled.",
+        "unique":      "Rejects duplicates (case-insensitive comparison).",
+        "validator":   "Optional validator. Return false to reject the tag.",
+        "delimiters":  "Characters that also confirm the current tag when typed.",
+        "color":       "Semantic color of the chips.",
+        "variant":     "Visual variant of the chips.",
+        "size":        "Size of the input and chips.",
+        "radius":      "Corner radius of the wrapper and chips.",
+        "disabled":    "Disables interaction.",
+        "readonly":    "Read-only mode — tags cannot be removed.",
+        "ariaLabel":   "Accessible name for the input."
+    },
+
+    "emits": {
+        "updateModelValue": "Emitted when the tag list changes (v-model).",
+        "add":              "Emitted when a new tag is added.",
+        "remove":           "Emitted when a tag is removed, with its value and original index.",
+        "change":           "Emitted after any change (add or remove)."
+    }
+}

@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Combobox from '../../../components/forms/Combobox.vue';
 import type { PropDoc, EmitDoc } from '../../types';
+
+const { t } = useI18n();
 
 const frameworks = [
     { value: 'vue',     label: 'Vue' },
@@ -103,48 +106,48 @@ async function demoLoad(query: string) {
 const ex4 = ref<string | null>(null);
 
 // ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'modelValue',     type: 'string | null',                                                                       description: 'Texto actual del input (v-model).' },
-    { name: 'options',        type: 'SelectOption[]',                                                                       description: 'Lista de opciones estáticas. Ignorado si se define loadOptions.' },
-    { name: 'loadOptions',    type: '(query: string) => Promise<SelectOption[]>',                                          description: 'Fuente async de opciones invocada en cada cambio del query.' },
-    { name: 'debounce',       type: 'number',                                                       default: '200',         description: 'Delay en ms para llamar a loadOptions.' },
-    { name: 'minChars',       type: 'number',                                                       default: '0',           description: 'Mínimo de caracteres antes de disparar la búsqueda async.' },
-    { name: 'freeSolo',       type: 'boolean',                                                      default: 'true',        description: 'Permite cualquier texto como valor. Si false, sólo se aceptan options válidas.' },
-    { name: 'label',          type: 'string',                                                                               description: 'Etiqueta visible sobre el campo.' },
-    { name: 'placeholder',    type: 'string',                                                                               description: 'Placeholder del input.' },
-    { name: 'helperText',     type: 'string',                                                                               description: 'Texto de ayuda bajo el campo.' },
-    { name: 'errorText',      type: 'string',                                                                               description: 'Mensaje de error que reemplaza al helperText.' },
-    { name: 'emptyText',      type: 'string',                                                       default: "'No results.'", description: 'Texto cuando no hay opciones que mostrar.' },
-    { name: 'loadingText',    type: 'string',                                                                               description: 'Texto mientras la búsqueda async está en curso.' },
-    { name: 'variant',        type: "'outline' | 'filled' | 'ghost'",                               default: "'outline'",   description: 'Estilo visual del input.' },
-    { name: 'color',          type: "'default' | 'primary' | 'success' | 'warning' | 'danger'",    default: "'default'",   description: 'Color semántico del foco y acento.' },
-    { name: 'size',           type: "'small' | 'medium' | 'large'",                                 default: "'medium'",    description: 'Altura del input.' },
-    { name: 'radius',         type: "'none' | 'small' | 'medium' | 'large' | 'full'",               default: "'medium'",    description: 'Radio de esquinas.' },
-    { name: 'clearable',      type: 'boolean',                                                      default: 'false',       description: 'Muestra un botón X para limpiar.' },
-    { name: 'disabled',       type: 'boolean',                                                      default: 'false',       description: 'Deshabilita el control.' },
-    { name: 'readonly',       type: 'boolean',                                                      default: 'false',       description: 'Modo solo lectura.' },
-    { name: 'required',       type: 'boolean',                                                      default: 'false',       description: 'Marca el campo como requerido.' },
-    { name: 'loading',        type: 'boolean',                                                      default: 'false',       description: 'Estado de carga forzado (independiente de loadOptions).' },
-    { name: 'fullWidth',      type: 'boolean',                                                      default: 'false',       description: 'Aplica w-full al control raíz.' },
-    { name: 'iconLeft',       type: 'Component',                                                                            description: 'Icono a la izquierda del input.' },
-    { name: 'maxLength',      type: 'number',                                                                               description: 'Máximo de caracteres del input.' },
-    { name: 'name',           type: 'string',                                                                               description: 'name HTML para envío en formularios.' },
-    { name: 'ariaLabel',      type: 'string',                                                                               description: 'Nombre accesible cuando no hay label visible.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'modelValue',     type: 'string | null',                                                                       description: t('pages.forms.combobox.props.modelValue') },
+    { name: 'options',        type: 'SelectOption[]',                                                                       description: t('pages.forms.combobox.props.options') },
+    { name: 'loadOptions',    type: '(query: string) => Promise<SelectOption[]>',                                          description: t('pages.forms.combobox.props.loadOptions') },
+    { name: 'debounce',       type: 'number',                                                       default: '200',         description: t('pages.forms.combobox.props.debounce') },
+    { name: 'minChars',       type: 'number',                                                       default: '0',           description: t('pages.forms.combobox.props.minChars') },
+    { name: 'freeSolo',       type: 'boolean',                                                      default: 'true',        description: t('pages.forms.combobox.props.freeSolo') },
+    { name: 'label',          type: 'string',                                                                               description: t('pages.forms.combobox.props.label') },
+    { name: 'placeholder',    type: 'string',                                                                               description: t('pages.forms.combobox.props.placeholder') },
+    { name: 'helperText',     type: 'string',                                                                               description: t('pages.forms.combobox.props.helperText') },
+    { name: 'errorText',      type: 'string',                                                                               description: t('pages.forms.combobox.props.errorText') },
+    { name: 'emptyText',      type: 'string',                                                       default: "'No results.'", description: t('pages.forms.combobox.props.emptyText') },
+    { name: 'loadingText',    type: 'string',                                                                               description: t('pages.forms.combobox.props.loadingText') },
+    { name: 'variant',        type: "'outline' | 'filled' | 'ghost'",                               default: "'outline'",   description: t('pages.forms.combobox.props.variant') },
+    { name: 'color',          type: "'default' | 'primary' | 'success' | 'warning' | 'danger'",    default: "'default'",   description: t('pages.forms.combobox.props.color') },
+    { name: 'size',           type: "'small' | 'medium' | 'large'",                                 default: "'medium'",    description: t('pages.forms.combobox.props.size') },
+    { name: 'radius',         type: "'none' | 'small' | 'medium' | 'large' | 'full'",               default: "'medium'",    description: t('pages.forms.combobox.props.radius') },
+    { name: 'clearable',      type: 'boolean',                                                      default: 'false',       description: t('pages.forms.combobox.props.clearable') },
+    { name: 'disabled',       type: 'boolean',                                                      default: 'false',       description: t('pages.forms.combobox.props.disabled') },
+    { name: 'readonly',       type: 'boolean',                                                      default: 'false',       description: t('pages.forms.combobox.props.readonly') },
+    { name: 'required',       type: 'boolean',                                                      default: 'false',       description: t('pages.forms.combobox.props.required') },
+    { name: 'loading',        type: 'boolean',                                                      default: 'false',       description: t('pages.forms.combobox.props.loading') },
+    { name: 'fullWidth',      type: 'boolean',                                                      default: 'false',       description: t('pages.forms.combobox.props.fullWidth') },
+    { name: 'iconLeft',       type: 'Component',                                                                            description: t('pages.forms.combobox.props.iconLeft') },
+    { name: 'maxLength',      type: 'number',                                                                               description: t('pages.forms.combobox.props.maxLength') },
+    { name: 'name',           type: 'string',                                                                               description: t('pages.forms.combobox.props.name') },
+    { name: 'ariaLabel',      type: 'string',                                                                               description: t('pages.forms.combobox.props.ariaLabel') },
+]);
 
-const emitsList: EmitDoc[] = [
-    { name: 'update:modelValue', payload: 'string | null',         description: 'Emitido al cambiar el valor del input.' },
-    { name: 'change',            payload: 'string | null',         description: 'Emitido tras seleccionar una opción o confirmar texto.' },
-    { name: 'select',            payload: 'SelectOption',          description: 'Emitido al elegir una opción del listado.' },
-];
+const emitsList = computed<EmitDoc[]>(() => [
+    { name: 'update:modelValue', payload: 'string | null',         description: t('pages.forms.combobox.emits.updateModelValue') },
+    { name: 'change',            payload: 'string | null',         description: t('pages.forms.combobox.emits.change') },
+    { name: 'select',            payload: 'SelectOption',          description: t('pages.forms.combobox.emits.select') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="Combobox"
-        category="Forms"
+        :title="t('pages.forms.combobox.title')"
+        :category="t('pages.forms.combobox.category')"
         import-path="import { Combobox } from 'mood-ui'"
-        description="Input de texto autocompletado con sugerencias estáticas o async. Permite valores libres (combobox) o estrictos (autocomplete)."
+        :description="t('pages.forms.combobox.description')"
         :props-list="propsList"
         :emits-list="emitsList"
     >
@@ -237,40 +240,40 @@ const emitsList: EmitDoc[] = [
         <!-- ── Examples ────────────────────────────────────────────────────── -->
         <template #examples>
             <ComponentPreview
-                title="Uso básico"
-                description="Sugerencias estáticas mostradas mientras el usuario escribe."
+                :title="t('pages.forms.combobox.examples.basic.title')"
+                :description="t('pages.forms.combobox.examples.basic.desc')"
                 :code="basicCode"
             >
                 <Combobox v-model="ex1" :options="frameworks" label="Framework" placeholder="Buscar framework…" class="w-64" />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Free solo (creatable)"
-                description="Permite confirmar cualquier texto aunque no esté en la lista de opciones."
+                :title="t('pages.forms.combobox.examples.freeSolo.title')"
+                :description="t('pages.forms.combobox.examples.freeSolo.desc')"
                 :code="freeSoloCode"
             >
                 <Combobox v-model="ex2" :options="frameworks" label="Framework (puedes inventar uno)" free-solo placeholder="Vue, React o el tuyo…" class="w-64" />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Estricto (autocomplete)"
-                description="Con free-solo en false sólo se aceptan valores presentes en options."
+                :title="t('pages.forms.combobox.examples.strict.title')"
+                :description="t('pages.forms.combobox.examples.strict.desc')"
                 :code="strictCode"
             >
                 <Combobox v-model="ex3" :options="frameworks" label="Solo frameworks listados" :free-solo="false" placeholder="Empieza a escribir…" class="w-64" />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Búsqueda async"
-                description="Pasa loadOptions para resolver opciones desde un backend con debounce."
+                :title="t('pages.forms.combobox.examples.async.title')"
+                :description="t('pages.forms.combobox.examples.async.desc')"
                 :code="asyncCode"
             >
                 <Combobox v-model="ex4" :load-options="demoLoad" :debounce="250" :min-chars="1" label="Búsqueda async" class="w-64" />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Tamaños"
-                description="Tres tamaños para distintas densidades de UI."
+                :title="t('pages.forms.combobox.examples.sizes.title')"
+                :description="t('pages.forms.combobox.examples.sizes.desc')"
                 :code="sizesCode"
             >
                 <Combobox :options="frameworks" size="small"  placeholder="Small"  class="w-48" />

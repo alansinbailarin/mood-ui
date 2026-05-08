@@ -1,0 +1,38 @@
+{
+    "pages": {
+        "templates": {
+            "pricing": {
+                "badge": "Pricing",
+                "title": "Pay only for what you need",
+                "subtitle": "Start free and scale when your product grows. No surprises, cancel anytime.",
+                "monthly": "Monthly",
+                "yearly": "Yearly",
+                "savings": "Save ~17%",
+                "mostPopular": "Most popular",
+                "perMonthYearly": "mo (yearly)",
+                "perMonth": "mo",
+                "footer": "All prices in USD. Taxes not included. Cancel anytime.",
+                "starterDesc": "For personal projects and prototypes.",
+                "starterF1": "Up to 3 projects",
+                "starterF2": "Basic components",
+                "starterF3": "Discord community",
+                "starterF4": "Monthly updates",
+                "starterCta": "Get started free",
+                "proDesc": "For small teams shipping real products.",
+                "proF1": "Unlimited projects",
+                "proF2": "All components",
+                "proF3": "Theme Studio",
+                "proF4": "Premium templates",
+                "proF5": "Email support",
+                "proCta": "Start 14-day free trial",
+                "teamDesc": "For companies that need SLA and onboarding.",
+                "teamF1": "Everything in Pro",
+                "teamF2": "SSO + audit log",
+                "teamF3": "Priority support",
+                "teamF4": "Guided onboarding",
+                "teamF5": "99.9% SLA",
+                "teamCta": "Talk to sales"
+            }
+        }
+    }
+}

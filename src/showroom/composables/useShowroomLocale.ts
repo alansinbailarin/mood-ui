@@ -1,27 +1,22 @@
 /**
- * Module-level reactive signal for the active showroom locale.
- *
- * Owned by `App.vue` (it calls `setShowroomLocale`); pages and child
- * components read it via `useShowroomLocale()` without prop drilling.
+ * Module-level reactive signal for the active showroom locale, kept in sync
+ * with the vue-i18n instance. Owned by `App.vue` (it calls `setShowroomLocale`);
+ * pages and child components read it via `useShowroomLocale()` without prop drilling.
  */
-import { ref, computed, type ComputedRef } from 'vue';
-import type { ShowroomLocale, ShowroomDict } from './useShowroomI18n';
-import { useShowroomI18n } from './useShowroomI18n';
+import { ref, computed } from 'vue';
+import { setShowroomI18nLocale, type ShowroomLocale } from '../i18n';
+
+export type { ShowroomLocale };
 
 const locale = ref<ShowroomLocale>('es');
 
-export function setShowroomLocale(v: ShowroomLocale) {
+export function setShowroomLocale(v: ShowroomLocale): void {
     locale.value = v;
+    setShowroomI18nLocale(v);
 }
 
-export function useShowroomLocale(): { locale: typeof locale; t: ComputedRef<ShowroomDict> } {
-    const t = useShowroomI18n(() => locale.value);
-    return { locale, t };
+export function useShowroomLocale(): { locale: typeof locale } {
+    return { locale };
 }
 
-export function useShowroomT(): ComputedRef<ShowroomDict> {
-    return useShowroomI18n(() => locale.value);
-}
-
-// Helper for use outside Vue render (rare).
 export const currentShowroomLocale = computed(() => locale.value);

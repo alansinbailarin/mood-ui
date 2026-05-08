@@ -1,0 +1,42 @@
+{
+    "pages": {
+        "templates": {
+            "settings": {
+                "workspaceLabel": "Settings",
+                "workspaceSubtitle": "mood-ui workspace",
+                "navAccount": "Account",
+                "navTeam": "Team",
+                "navBilling": "Billing",
+                "navNotif": "Notifications",
+                "navSecurity": "Security",
+                "navApiKeys": "API keys",
+                "accountTitle": "Account",
+                "accountSubtitle": "Your public profile information.",
+                "changePhoto": "Change photo",
+                "photoHint": "JPG/PNG, max 2 MB.",
+                "fieldFullName": "Full name",
+                "fieldEmail": "Email",
+                "emailHint": "We will send you a confirmation email if you change it.",
+                "fieldBio": "Bio",
+                "cancel": "Cancel",
+                "saveChanges": "Save changes",
+                "notifTitle": "Notifications",
+                "notifSubtitle": "Choose how you want to receive updates.",
+                "notifEmailLabel": "Email",
+                "notifEmailDesc": "Daily digest of your workspace activity.",
+                "notifPushLabel": "Push",
+                "notifPushDesc": "Real-time notifications in the browser.",
+                "notifMarketingLabel": "Marketing",
+                "notifMarketingDesc": "Monthly newsletter with news and tips.",
+                "billingTitle": "Billing",
+                "billingSubtitle": "Your current plan and payment method.",
+                "billingBannerTitle": "You are on the Pro plan",
+                "billingBannerDesc": "Renews on June 12. You can change plans at any time.",
+                "changeCard": "Change",
+                "defaultSectionSubtitle": "Demo section. Replace with your content.",
+                "comingSoon": "Coming soon",
+                "comingSoonDesc": "This is a placeholder. Combine the components you need for this section."
+            }
+        }
+    }
+}

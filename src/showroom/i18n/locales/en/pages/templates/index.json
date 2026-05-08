@@ -1,0 +1,11 @@
+{
+    "title": "Templates",
+    "subtitle": "Full screens ready to copy/paste — dashboards, auth, pricing and more.",
+    "open": "Open template",
+    "items": {
+        "dashboard": { "title": "Dashboard", "desc": "Admin panel with KPIs, orders table and activity timeline." },
+        "auth":      { "title": "Auth",      "desc": "Login, signup and recovery with dual layout and flexible branding." },
+        "pricing":   { "title": "Pricing",   "desc": "Comparative plan table with badges, FAQ and highlighted CTA." },
+        "settings":  { "title": "Settings",  "desc": "Settings page with grouped sections, tabs and accessible forms." }
+    }
+}

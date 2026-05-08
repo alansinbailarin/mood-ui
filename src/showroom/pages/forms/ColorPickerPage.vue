@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import ColorPicker from '../../../components/forms/ColorPicker.vue';
 import type { PropDoc, EmitDoc } from '../../types';
+import TbPills  from '../../components/toolbar/TbPills.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep    from '../../components/toolbar/TbSep.vue';
+
+const { t } = useI18n();
 
 const brandSwatches = [
     '#0ea5e9', '#3b82f6', '#6366f1', '#8b5cf6',
@@ -11,44 +17,58 @@ const brandSwatches = [
 ];
 
 // ── Overview playground state ─────────────────────────────────────────────────
-const pgValue       = ref('#3b82f6');
-const pgSize        = ref<'small' | 'medium' | 'large'>('medium');
-const pgSwatches    = ref(true);
-const pgShowHex     = ref(true);
-const pgShowNative  = ref(false);
-const pgDisabled    = ref(false);
+const pgValue    = ref('#6366f1');
+const pgSize     = ref<'small' | 'medium' | 'large'>('medium');
+const pgVariant  = ref<'outline' | 'filled'>('outline');
+const pgAdvanced = ref(true);
+const pgShowHex  = ref(true);
+const pgSwatches = ref(true);
+const pgDisabled = ref(false);
 
 function resetPlayground() {
-    pgValue.value      = '#3b82f6';
-    pgSize.value       = 'medium';
-    pgSwatches.value   = true;
-    pgShowHex.value    = true;
-    pgShowNative.value = false;
-    pgDisabled.value   = false;
+    pgValue.value    = '#6366f1';
+    pgSize.value     = 'medium';
+    pgVariant.value  = 'outline';
+    pgAdvanced.value = true;
+    pgShowHex.value  = true;
+    pgSwatches.value = true;
+    pgDisabled.value = false;
 }
 
 const overviewCode = computed(() => {
-    const parts: string[] = [];
-    if (pgSize.value !== 'medium') parts.push(`size="${pgSize.value}"`);
-    if (pgSwatches.value)          parts.push(':swatches="brandSwatches"');
-    if (pgShowHex.value)           parts.push(':show-hex="true"');
-    if (pgShowNative.value)        parts.push(':show-native="true"');
-    if (pgDisabled.value)          parts.push(':disabled="true"');
-    const attrs = parts.length ? '\n    ' + parts.join('\n    ') : '';
-    return `<ColorPicker v-model="color"${attrs} />`;
+    const parts: string[] = ['v-model="color"'];
+    if (pgSize.value !== 'medium')    parts.push(`size="${pgSize.value}"`);
+    if (pgVariant.value !== 'outline') parts.push(`variant="${pgVariant.value}"`);
+    if (pgSwatches.value)             parts.push(':swatches="brandSwatches"');
+    if (pgAdvanced.value)             parts.push(':advanced="true"');
+    if (pgShowHex.value)              parts.push(':show-hex="true"');
+    if (pgDisabled.value)             parts.push(':disabled="true"');
+    return `<ColorPicker ${parts.join(' ')} />`;
 });
+
+// ── Example state ─────────────────────────────────────────────────────────────
+const exBasic    = ref('#3b82f6');
+const exAdvanced = ref('#6366f1');
+const exSwatches = ref('#22c55e');
+const exSm       = ref('#3b82f6');
+const exMd       = ref('#3b82f6');
+const exLg       = ref('#3b82f6');
 
 // ── Example code strings ──────────────────────────────────────────────────────
 const basicCode = `<ColorPicker v-model="color" />`;
 
-const swatchesCode = `<ColorPicker
+const advancedCode = `<ColorPicker
     v-model="color"
-    :swatches="['#ef4444', '#f59e0b', '#22c55e', '#3b82f6', '#8b5cf6', '#ec4899']"
+    :advanced="true"
+    :show-hex="true"
 />`;
 
-const hexInputCode = `<ColorPicker v-model="color" :show-hex="true" />`;
-
-const nativeCode = `<ColorPicker v-model="color" :show-native="true" :show-hex="true" />`;
+const swatchesCode = `<ColorPicker
+    v-model="color"
+    :swatches="['#ef4444','#f59e0b','#22c55e','#3b82f6','#8b5cf6','#ec4899']"
+    :show-hex="true"
+    :advanced="true"
+/>`;
 
 const sizesCode = `<ColorPicker v-model="color" size="small" />
 <ColorPicker v-model="color" size="medium" />
@@ -56,39 +76,34 @@ const sizesCode = `<ColorPicker v-model="color" size="small" />
 
 const disabledCode = `<ColorPicker :model-value="'#3b82f6'" disabled />`;
 
-const ex1 = ref('#3b82f6');
-const ex2 = ref('#22c55e');
-const ex3 = ref('#ec4899');
-const ex4 = ref('#f59e0b');
-const ex5a = ref('#3b82f6');
-const ex5b = ref('#3b82f6');
-const ex5c = ref('#3b82f6');
-
 // ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'modelValue', type: 'string',                                                                description: 'Color hex actual (v-model). Por ejemplo "#3b82f6".' },
-    { name: 'swatches',   type: 'string[]',                                                              description: 'Lista opcional de colores hex preseleccionables en el panel.' },
-    { name: 'showHex',    type: 'boolean',                              default: 'false',                description: 'Muestra el input de texto para introducir un valor hex.' },
-    { name: 'showNative', type: 'boolean',                              default: 'false',                description: 'Muestra el picker nativo del navegador como fallback avanzado.' },
-    { name: 'disabled',   type: 'boolean',                              default: 'false',                description: 'Deshabilita el picker.' },
-    { name: 'size',       type: "'small' | 'medium' | 'large'",         default: "'medium'",             description: 'Tamaño del trigger y del swatch interno.' },
-    { name: 'radius',     type: "'none' | 'small' | 'medium' | 'large' | 'full'", default: "'medium'",  description: 'Radio del trigger y del panel.' },
-    { name: 'placement',  type: "'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'", default: "'bottom-start'", description: 'Posición del popover relativa al trigger.' },
-    { name: 'ariaLabel',  type: 'string',                                                                description: 'Nombre accesible del trigger.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'modelValue', type: 'string',                                                                           description: t('pages.forms.colorPicker.props.modelValue') },
+    { name: 'swatches',   type: 'string[]',                                                                         description: t('pages.forms.colorPicker.props.swatches') },
+    { name: 'showHex',    type: 'boolean',              default: 'true',                                            description: t('pages.forms.colorPicker.props.showHex') },
+    { name: 'advanced',   type: 'boolean',              default: 'false',                                           description: t('pages.forms.colorPicker.props.advanced') },
+    { name: 'disabled',   type: 'boolean',              default: 'false',                                           description: t('pages.forms.colorPicker.props.disabled') },
+    { name: 'variant',    type: "'outline' | 'filled' | 'ghost'",   default: "'outline'",                           description: t('pages.forms.colorPicker.props.variant') },
+    { name: 'color',      type: "'default' | 'primary' | 'danger' | 'success' | 'warning'", default: "'default'",  description: t('pages.forms.colorPicker.props.color') },
+    { name: 'size',       type: "'small' | 'medium' | 'large'",     default: "'medium'",                           description: t('pages.forms.colorPicker.props.size') },
+    { name: 'radius',     type: "'none' | 'small' | 'medium' | 'large' | 'full'", default: "'medium'",             description: t('pages.forms.colorPicker.props.radius') },
+    { name: 'label',      type: 'string',                                                                           description: t('pages.forms.colorPicker.props.label') },
+    { name: 'placement',  type: "'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'", default: "'bottom-start'", description: t('pages.forms.colorPicker.props.placement') },
+    { name: 'ariaLabel',  type: 'string',                                                                           description: t('pages.forms.colorPicker.props.ariaLabel') },
+]);
 
-const emitsList: EmitDoc[] = [
-    { name: 'update:modelValue', payload: 'string', description: 'Emitido al cambiar el color seleccionado (sincroniza v-model).' },
-    { name: 'change',            payload: 'string', description: 'Emitido tras una selección confirmada por el usuario.' },
-];
+const emitsList = computed<EmitDoc[]>(() => [
+    { name: 'update:modelValue', payload: 'string', description: t('pages.forms.colorPicker.emits.updateModelValue') },
+    { name: 'change',            payload: 'string', description: t('pages.forms.colorPicker.emits.change') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="ColorPicker"
-        category="Forms"
+        :title="t('pages.forms.colorPicker.title')"
+        :category="t('pages.forms.colorPicker.category')"
         import-path="import { ColorPicker } from 'mood-ui'"
-        description="Selector de color con popover, swatches preconfigurables, input hex y soporte opcional para el picker nativo del navegador."
+        :description="t('pages.forms.colorPicker.description')"
         :props-list="propsList"
         :emits-list="emitsList"
     >
@@ -96,68 +111,22 @@ const emitsList: EmitDoc[] = [
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="240px" @reset="resetPlayground">
                 <template #controls>
-                    <!-- Size -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">SIZE</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in ['small', 'medium', 'large']"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = (s as typeof pgSize)"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgSwatches
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgSwatches = !pgSwatches"
-                    >Swatches</button>
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgShowHex
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgShowHex = !pgShowHex"
-                    >Hex input</button>
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgShowNative
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgShowNative = !pgShowNative"
-                    >Native</button>
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgDisabled
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgDisabled = !pgDisabled"
-                    >Disabled</button>
+                    <TbPills :label="t('pages.forms.colorPicker.controls.size')"    :options="[{value:'small'},{value:'medium'},{value:'large'}]"    v-model="pgSize" />
+                    <TbPills :label="t('pages.forms.colorPicker.controls.variant')" :options="[{value:'outline'},{value:'filled'}]"                  v-model="pgVariant" />
+                    <TbSep />
+                    <TbToggle :label="t('pages.forms.colorPicker.controls.advanced')" v-model="pgAdvanced" />
+                    <TbToggle :label="t('pages.forms.colorPicker.controls.hex')"      v-model="pgShowHex" />
+                    <TbToggle :label="t('pages.forms.colorPicker.controls.swatches')" v-model="pgSwatches" />
+                    <TbToggle :label="t('pages.forms.colorPicker.controls.disabled')" v-model="pgDisabled" />
                 </template>
 
                 <ColorPicker
                     v-model="pgValue"
                     :size="pgSize"
-                    :swatches="pgSwatches ? brandSwatches : undefined"
+                    :variant="pgVariant"
+                    :swatches="pgSwatches ? brandSwatches : []"
+                    :advanced="pgAdvanced"
                     :show-hex="pgShowHex"
-                    :show-native="pgShowNative"
                     :disabled="pgDisabled"
                 />
             </ComponentPreview>
@@ -166,55 +135,53 @@ const emitsList: EmitDoc[] = [
         <!-- ── Examples ────────────────────────────────────────────────────── -->
         <template #examples>
             <ComponentPreview
-                title="Uso básico"
-                description="Trigger con el color actual visible y popover básico."
+                :title="t('pages.forms.colorPicker.examples.basic.title')"
+                :description="t('pages.forms.colorPicker.examples.basic.desc')"
                 :code="basicCode"
             >
-                <ColorPicker v-model="ex1" />
+                <ColorPicker v-model="exBasic" />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con swatches"
-                description="Pre-define una paleta de colores mostrada como cuadrícula dentro del popover."
-                :code="swatchesCode"
+                :title="t('pages.forms.colorPicker.examples.advanced.title')"
+                :description="t('pages.forms.colorPicker.examples.advanced.desc')"
+                :code="advancedCode"
             >
                 <ColorPicker
-                    v-model="ex2"
-                    :swatches="['#ef4444', '#f59e0b', '#22c55e', '#3b82f6', '#8b5cf6', '#ec4899']"
+                    v-model="exAdvanced"
+                    :advanced="true"
+                    :show-hex="true"
                 />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Input hex"
-                description="Permite introducir el valor hex manualmente para mayor precisión."
-                :code="hexInputCode"
+                :title="t('pages.forms.colorPicker.examples.swatches.title')"
+                :description="t('pages.forms.colorPicker.examples.swatches.desc')"
+                :code="swatchesCode"
             >
-                <ColorPicker v-model="ex3" :show-hex="true" />
+                <ColorPicker
+                    v-model="exSwatches"
+                    :swatches="['#ef4444','#f59e0b','#22c55e','#3b82f6','#8b5cf6','#ec4899']"
+                    :show-hex="true"
+                    :advanced="true"
+                />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Picker nativo"
-                description="Activa show-native para añadir el color picker del navegador como fallback."
-                :code="nativeCode"
-            >
-                <ColorPicker v-model="ex4" :show-native="true" :show-hex="true" />
-            </ComponentPreview>
-
-            <ComponentPreview
-                title="Tamaños"
-                description="Tres tamaños disponibles para encajar con la densidad del formulario."
+                :title="t('pages.forms.colorPicker.examples.sizes.title')"
+                :description="t('pages.forms.colorPicker.examples.sizes.desc')"
                 :code="sizesCode"
             >
                 <div class="flex items-center gap-3">
-                    <ColorPicker v-model="ex5a" size="small" />
-                    <ColorPicker v-model="ex5b" size="medium" />
-                    <ColorPicker v-model="ex5c" size="large" />
+                    <ColorPicker v-model="exSm" size="small" />
+                    <ColorPicker v-model="exMd" size="medium" />
+                    <ColorPicker v-model="exLg" size="large" />
                 </div>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Disabled"
-                description="Estado deshabilitado preservando el color visible."
+                :title="t('pages.forms.colorPicker.examples.disabled.title')"
+                :description="t('pages.forms.colorPicker.examples.disabled.desc')"
                 :code="disabledCode"
             >
                 <ColorPicker :model-value="'#3b82f6'" disabled />

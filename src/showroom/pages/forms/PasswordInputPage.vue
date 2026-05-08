@@ -1,9 +1,16 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import PasswordInput from '../../../components/forms/PasswordInput.vue';
 import type { PropDoc, EmitDoc } from '../../types';
+import TbPills  from '../../components/toolbar/TbPills.vue';
+import TbDots   from '../../components/toolbar/TbDots.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep    from '../../components/toolbar/TbSep.vue';
+
+const { t } = useI18n();
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgValue            = ref('SuperSecret123');
@@ -25,11 +32,11 @@ function resetPlayground() {
 }
 
 const colorDots = [
-    { value: 'default' as const, bg: '#64748b',        label: 'Default' },
-    { value: 'primary' as const, bg: 'var(--primary)', label: 'Primary' },
-    { value: 'success' as const, bg: '#22c55e',        label: 'Success' },
-    { value: 'warning' as const, bg: '#f59e0b',        label: 'Warning' },
-    { value: 'danger'  as const, bg: '#ef4444',        label: 'Danger'  },
+    { value: 'default' as const, bg: 'var(--color-slate-400)',   label: 'Default' },
+    { value: 'primary' as const, bg: 'var(--primary)',            label: 'Primary' },
+    { value: 'success' as const, bg: 'var(--color-emerald-500)', label: 'Success' },
+    { value: 'warning' as const, bg: 'var(--color-amber-500)',   label: 'Warning' },
+    { value: 'danger'  as const, bg: 'var(--color-red-500)',     label: 'Danger'  },
 ];
 
 const overviewCode = computed(() => {
@@ -62,53 +69,53 @@ const exBasic    = ref('');
 const exStrength = ref('Mood-UI-2025!');
 
 // ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'modelValue',       type: 'string | null',                                            description: 'Valor del input (v-model).' },
-    { name: 'label',            type: 'string',                                                   description: 'Etiqueta visible encima del input.' },
-    { name: 'placeholder',      type: 'string',                                                   description: 'Placeholder cuando está vacío.' },
-    { name: 'helperText',       type: 'string',                                                   description: 'Texto de ayuda. Oculto si hay errorText.' },
-    { name: 'errorText',        type: 'string',                                                   description: 'Mensaje de error que marca el input como inválido.' },
-    { name: 'variant',          type: "'outline' | 'filled' | 'ghost'",                           default: "'outline'",          description: 'Estilo visual.' },
-    { name: 'color',            type: "'default' | 'primary' | 'success' | 'warning' | 'danger'", default: "'default'",          description: 'Color semántico aplicado al estado de foco.' },
-    { name: 'size',             type: "'small' | 'medium' | 'large'",                             default: "'medium'",           description: 'Tamaño visual.' },
-    { name: 'radius',           type: "'none' | 'small' | 'medium' | 'large' | 'full'",                                            description: 'Radio de las esquinas. Hereda del ModoProvider si se omite.' },
-    { name: 'halo',             type: "'tinted' | 'neutral' | 'off'",                                                              description: 'Estilo del halo persistente (ring).' },
-    { name: 'fullWidth',        type: 'boolean',                                                  default: 'false',              description: 'Aplica w-full al root.' },
-    { name: 'disabled',         type: 'boolean',                                                  default: 'false',              description: 'Deshabilita el input.' },
-    { name: 'readonly',         type: 'boolean',                                                  default: 'false',              description: 'Solo lectura.' },
-    { name: 'required',         type: 'boolean',                                                  default: 'false',              description: 'Marca el campo como requerido.' },
-    { name: 'loading',          type: 'boolean',                                                  default: 'false',              description: 'Estado de carga.' },
-    { name: 'maxLength',        type: 'number',                                                                                  description: 'Longitud máxima. Activa el contador si showCounter.' },
-    { name: 'showCounter',      type: 'boolean',                                                  default: 'false',              description: 'Muestra contador de caracteres.' },
-    { name: 'toggleVisibility', type: 'boolean',                                                  default: 'true',               description: 'Muestra el botón para alternar visibilidad de la contraseña.' },
-    { name: 'defaultVisible',   type: 'boolean',                                                  default: 'false',              description: 'Si el contenido arranca visible al montar.' },
-    { name: 'strengthMeter',    type: 'boolean',                                                  default: 'false',              description: 'Muestra una barra de fortaleza heurística debajo del input.' },
-    { name: 'strengthLabels',   type: 'PasswordStrengthLabels',                                                                  description: 'Labels custom para cada nivel del strength meter (i18n).' },
-    { name: 'iconLeft',         type: 'Component',                                                                               description: 'Icono renderizado dentro del input a la izquierda.' },
-    { name: 'prefix',           type: 'string',                                                                                  description: 'Texto fijo a la izquierda del input.' },
-    { name: 'name',             type: 'string',                                                                                  description: 'Atributo name HTML.' },
-    { name: 'id',               type: 'string',                                                                                  description: 'id del input. Se autogenera si se omite.' },
-    { name: 'autocomplete',     type: 'string',                                                  default: "'current-password'", description: 'Atributo autocomplete HTML.' },
-    { name: 'autofocus',        type: 'boolean',                                                  default: 'false',              description: 'Foco automático al montar.' },
-    { name: 'ariaLabel',        type: 'string',                                                                                  description: 'Nombre accesible cuando no hay label visible.' },
-];
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'modelValue',       type: 'string | null',                                            description: t('pages.forms.passwordInput.props.modelValue') },
+    { name: 'label',            type: 'string',                                                   description: t('pages.forms.passwordInput.props.label') },
+    { name: 'placeholder',      type: 'string',                                                   description: t('pages.forms.passwordInput.props.placeholder') },
+    { name: 'helperText',       type: 'string',                                                   description: t('pages.forms.passwordInput.props.helperText') },
+    { name: 'errorText',        type: 'string',                                                   description: t('pages.forms.passwordInput.props.errorText') },
+    { name: 'variant',          type: "'outline' | 'filled' | 'ghost'",                           default: "'outline'",          description: t('pages.forms.passwordInput.props.variant') },
+    { name: 'color',            type: "'default' | 'primary' | 'success' | 'warning' | 'danger'", default: "'default'",          description: t('pages.forms.passwordInput.props.color') },
+    { name: 'size',             type: "'small' | 'medium' | 'large'",                             default: "'medium'",           description: t('pages.forms.passwordInput.props.size') },
+    { name: 'radius',           type: "'none' | 'small' | 'medium' | 'large' | 'full'",                                            description: t('pages.forms.passwordInput.props.radius') },
+    { name: 'halo',             type: "'tinted' | 'neutral' | 'off'",                                                              description: t('pages.forms.passwordInput.props.halo') },
+    { name: 'fullWidth',        type: 'boolean',                                                  default: 'false',              description: t('pages.forms.passwordInput.props.fullWidth') },
+    { name: 'disabled',         type: 'boolean',                                                  default: 'false',              description: t('pages.forms.passwordInput.props.disabled') },
+    { name: 'readonly',         type: 'boolean',                                                  default: 'false',              description: t('pages.forms.passwordInput.props.readonly') },
+    { name: 'required',         type: 'boolean',                                                  default: 'false',              description: t('pages.forms.passwordInput.props.required') },
+    { name: 'loading',          type: 'boolean',                                                  default: 'false',              description: t('pages.forms.passwordInput.props.loading') },
+    { name: 'maxLength',        type: 'number',                                                                                  description: t('pages.forms.passwordInput.props.maxLength') },
+    { name: 'showCounter',      type: 'boolean',                                                  default: 'false',              description: t('pages.forms.passwordInput.props.showCounter') },
+    { name: 'toggleVisibility', type: 'boolean',                                                  default: 'true',               description: t('pages.forms.passwordInput.props.toggleVisibility') },
+    { name: 'defaultVisible',   type: 'boolean',                                                  default: 'false',              description: t('pages.forms.passwordInput.props.defaultVisible') },
+    { name: 'strengthMeter',    type: 'boolean',                                                  default: 'false',              description: t('pages.forms.passwordInput.props.strengthMeter') },
+    { name: 'strengthLabels',   type: 'PasswordStrengthLabels',                                                                  description: t('pages.forms.passwordInput.props.strengthLabels') },
+    { name: 'iconLeft',         type: 'Component',                                                                               description: t('pages.forms.passwordInput.props.iconLeft') },
+    { name: 'prefix',           type: 'string',                                                                                  description: t('pages.forms.passwordInput.props.prefix') },
+    { name: 'name',             type: 'string',                                                                                  description: t('pages.forms.passwordInput.props.name') },
+    { name: 'id',               type: 'string',                                                                                  description: t('pages.forms.passwordInput.props.id') },
+    { name: 'autocomplete',     type: 'string',                                                  default: "'current-password'", description: t('pages.forms.passwordInput.props.autocomplete') },
+    { name: 'autofocus',        type: 'boolean',                                                  default: 'false',              description: t('pages.forms.passwordInput.props.autofocus') },
+    { name: 'ariaLabel',        type: 'string',                                                                                  description: t('pages.forms.passwordInput.props.ariaLabel') },
+]);
 
-const emitsList: EmitDoc[] = [
-    { name: 'update:modelValue', payload: 'string',                description: 'Emitido en cada cambio del valor (sincroniza v-model).' },
-    { name: 'change',            payload: 'string',                description: 'Emitido tras un cambio confirmado por el usuario.' },
-    { name: 'focus',             payload: 'FocusEvent',            description: 'Emitido cuando el input recibe foco.' },
-    { name: 'blur',              payload: 'FocusEvent',            description: 'Emitido cuando el input pierde foco.' },
-    { name: 'update:visible',    payload: 'boolean',               description: 'Emitido al alternar la visibilidad de la contraseña.' },
-    { name: 'strength-change',   payload: 'PasswordStrengthScore', description: 'Emitido cuando cambia el score de fortaleza (0–4).' },
-];
+const emitsList = computed<EmitDoc[]>(() => [
+    { name: 'update:modelValue', payload: 'string',                description: t('pages.forms.passwordInput.emits.updateModelValue') },
+    { name: 'change',            payload: 'string',                description: t('pages.forms.passwordInput.emits.change') },
+    { name: 'focus',             payload: 'FocusEvent',            description: t('pages.forms.passwordInput.emits.focus') },
+    { name: 'blur',              payload: 'FocusEvent',            description: t('pages.forms.passwordInput.emits.blur') },
+    { name: 'update:visible',    payload: 'boolean',               description: t('pages.forms.passwordInput.emits.updateVisible') },
+    { name: 'strength-change',   payload: 'PasswordStrengthScore', description: t('pages.forms.passwordInput.emits.strengthChange') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="PasswordInput"
+        :title="t('pages.forms.passwordInput.title')"
         category="Forms"
         import-path="import { PasswordInput } from 'mood-ui'"
-        description="Input de contraseña con toggle de visibilidad y opcional medidor heurístico de fortaleza."
+        :description="t('pages.forms.passwordInput.description')"
         :props-list="propsList"
         :emits-list="emitsList"
     >
@@ -116,97 +123,21 @@ const emitsList: EmitDoc[] = [
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="200px" @reset="resetPlayground">
                 <template #controls>
-                    <!-- Variant -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">VARIANT</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="v in ['outline', 'filled', 'ghost']"
-                                :key="v"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgVariant === v
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgVariant = (v as typeof pgVariant)"
-                            >{{ v }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Color dots -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">COLOR</span>
-                        <div class="flex items-center gap-1">
-                            <button
-                                v-for="c in colorDots"
-                                :key="c.value"
-                                type="button"
-                                class="size-4 rounded-full transition-all duration-150"
-                                :class="pgColor === c.value
-                                    ? 'ring-2 ring-offset-1 ring-foreground/30 scale-125'
-                                    : 'hover:scale-110 opacity-70 hover:opacity-100'"
-                                :style="`background: ${c.bg}`"
-                                :title="c.label"
-                                @click="pgColor = c.value"
-                            />
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Size -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">SIZE</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in ['small', 'medium', 'large']"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = (s as typeof pgSize)"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgToggleVisibility
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgToggleVisibility = !pgToggleVisibility"
-                    >Toggle</button>
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgStrengthMeter
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgStrengthMeter = !pgStrengthMeter"
-                    >Strength</button>
-
-                    <button
-                        type="button"
-                        class="px-2 py-1 rounded-md text-xs border transition-colors"
-                        :class="pgDisabled
-                            ? 'border-primary bg-primary/10 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:bg-muted/60'"
-                        @click="pgDisabled = !pgDisabled"
-                    >Disabled</button>
+                    <TbPills :label="t('pages.forms.passwordInput.controls.variant')" :options="[{value:'outline'},{value:'filled'},{value:'ghost'}]" v-model="pgVariant" />
+                    <TbSep />
+                    <TbDots :label="t('pages.forms.passwordInput.controls.color')" :options="colorDots" v-model="pgColor" />
+                    <TbSep />
+                    <TbPills :label="t('pages.forms.passwordInput.controls.size')" :options="[{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbToggle :label="t('pages.forms.passwordInput.controls.toggle')" v-model="pgToggleVisibility" />
+                    <TbToggle :label="t('pages.forms.passwordInput.controls.strength')" v-model="pgStrengthMeter" />
+                    <TbToggle :label="t('pages.forms.passwordInput.controls.disabled')" v-model="pgDisabled" />
                 </template>
 
                 <PasswordInput
                     v-model="pgValue"
-                    label="Contraseña"
-                    placeholder="Escribe tu contraseña"
+                    :label="t('pages.forms.passwordInput.playground.label')"
+                    :placeholder="t('pages.forms.passwordInput.playground.placeholder')"
                     :variant="pgVariant"
                     :color="pgColor"
                     :size="pgSize"
@@ -221,32 +152,46 @@ const emitsList: EmitDoc[] = [
         <!-- ── Examples ────────────────────────────────────────────────────── -->
         <template #examples>
             <ComponentPreview
-                title="Uso básico"
-                description="Toggle de visibilidad activado por defecto."
+                :title="t('pages.forms.passwordInput.examples.basic.title')"
+                :description="t('pages.forms.passwordInput.examples.basic.desc')"
                 :code="basicCode"
             >
-                <PasswordInput v-model="exBasic" label="Contraseña" placeholder="Escribe tu contraseña" style="width: 280px" />
+                <PasswordInput
+                    v-model="exBasic"
+                    :label="t('pages.forms.passwordInput.examples.basic.label')"
+                    :placeholder="t('pages.forms.passwordInput.examples.basic.ph')"
+                    style="width: 280px"
+                />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con medidor de fortaleza"
-                description="strengthMeter calcula score heurístico (longitud + clases de caracteres) y lo muestra debajo."
+                :title="t('pages.forms.passwordInput.examples.strength.title')"
+                :description="t('pages.forms.passwordInput.examples.strength.desc')"
                 :code="strengthCode"
             >
-                <PasswordInput v-model="exStrength" label="Nueva contraseña" strength-meter style="width: 280px" />
+                <PasswordInput
+                    v-model="exStrength"
+                    :label="t('pages.forms.passwordInput.examples.strength.label')"
+                    strength-meter
+                    style="width: 280px"
+                />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Sin toggle de visibilidad"
-                description="Útil cuando la visibilidad la controla la app o no aplica."
+                :title="t('pages.forms.passwordInput.examples.noToggle.title')"
+                :description="t('pages.forms.passwordInput.examples.noToggle.desc')"
                 :code="noToggleCode"
             >
-                <PasswordInput :toggle-visibility="false" placeholder="Sin toggle" style="width: 280px" />
+                <PasswordInput
+                    :toggle-visibility="false"
+                    :placeholder="t('pages.forms.passwordInput.examples.noToggle.ph')"
+                    style="width: 280px"
+                />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Tamaños"
-                description="Tres tamaños alineados con el resto de inputs."
+                :title="t('pages.forms.passwordInput.examples.sizes.title')"
+                :description="t('pages.forms.passwordInput.examples.sizes.desc')"
                 :code="sizesCode"
             >
                 <PasswordInput size="small"  model-value="secret" style="width: 220px" />
@@ -255,11 +200,16 @@ const emitsList: EmitDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Disabled"
-                description="Estado deshabilitado preservando el valor."
+                :title="t('pages.forms.passwordInput.examples.disabled.title')"
+                :description="t('pages.forms.passwordInput.examples.disabled.desc')"
                 :code="disabledCode"
             >
-                <PasswordInput disabled model-value="hidden" label="Contraseña" style="width: 280px" />
+                <PasswordInput
+                    disabled
+                    model-value="hidden"
+                    :label="t('pages.forms.passwordInput.examples.disabled.label')"
+                    style="width: 280px"
+                />
             </ComponentPreview>
         </template>
     </ComponentDoc>

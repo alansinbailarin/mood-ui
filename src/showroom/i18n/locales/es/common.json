@@ -1,0 +1,81 @@
+{
+    "home": "Inicio",
+    "components": "Componentes",
+    "templates": "Plantillas",
+    "themeStudio": "Theme Studio",
+    "docs": "Documentación",
+    "backHome": "Volver al inicio",
+    "starOnGithub": "Star en GitHub",
+    "soon": "Próximamente",
+
+    "search": {
+        "label": "Buscar",
+        "labelLong": "Buscar componentes…",
+        "placeholder": "Buscar componentes, acciones, docs…",
+        "empty": "Sin resultados para \"{q}\"",
+        "navigate": "navegar",
+        "select": "seleccionar",
+        "esc": "cerrar",
+        "groupActions": "Acciones",
+        "groupLinks": "Enlaces",
+        "groupDocs": "Documentación",
+        "actionLanguageEs": "Cambiar a Español",
+        "actionLanguageEsDesc": "Idioma actual del showroom",
+        "actionLanguageEn": "Switch to English",
+        "actionLanguageEnDesc": "Cambiar idioma a English",
+        "descWelcome": "Página de inicio del showroom",
+        "descIntroduction": "¿Qué es mood-ui y por qué usarlo?",
+        "descInstallation": "Instala mood-ui en tu proyecto",
+        "descTheming": "Tokens de diseño y personalización",
+        "descI18n": "Soporte multiidioma integrado",
+        "descChangelog": "Historial de versiones y cambios"
+    },
+
+    "settings": {
+        "customizeTheme": "Personalizar tema",
+        "colorMode": "Modo",
+        "accent": "Accent",
+        "primary": "Primary",
+        "radius": "Radius",
+        "density": "Densidad",
+        "focusHalo": "Halo de focus",
+        "language": "Idioma",
+        "base": "Base",
+        "baseHelp": "Tinta el fondo con el color accent",
+        "surface": "Surface (oscuro)",
+        "surfaceHelp": "Preset de superficies para el modo oscuro",
+        "reset": "Restablecer",
+        "light": "Claro",
+        "dark": "Oscuro",
+        "system": "Sistema"
+    },
+
+    "sidebar": {
+        "openMenu": "Abrir menú",
+        "closeMenu": "Cerrar menú",
+        "expand": "Expandir sidebar",
+        "collapse": "Colapsar sidebar"
+    },
+
+    "header": {
+        "sections": "Secciones",
+        "docsDesc": "Guía de inicio, instalación y temas",
+        "componentsDesc": "Todos los componentes UI disponibles",
+        "templatesDesc": "Plantillas listas para usar",
+        "themeStudioDesc": "Personaliza colores, radios y más"
+    },
+
+    "toc": {
+        "weeklySuffix": "/sem",
+        "issueTitle": "¿Encontraste un problema?",
+        "issueBody": "Abre un issue en GitHub"
+    },
+
+    "docsNav": {
+        "introduction": "Introducción",
+        "installation": "Instalación",
+        "theming": "Theming",
+        "i18n": "i18n",
+        "changelog": "Changelog"
+    }
+}

@@ -1,29 +1,37 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ComponentDoc from '../../components/ComponentDoc.vue';
 import ComponentPreview from '../../components/ComponentPreview.vue';
 import Tabs from '../../../components/navigation/Tabs.vue';
 import { HomeIcon, ChartBarIcon, Cog6ToothIcon, BellIcon } from '@heroicons/vue/24/outline';
+import TbPills from '../../components/toolbar/TbPills.vue';
+import TbDots from '../../components/toolbar/TbDots.vue';
+import TbToggle from '../../components/toolbar/TbToggle.vue';
+import TbSep from '../../components/toolbar/TbSep.vue';
 import type { PropDoc, EmitDoc, SlotDoc } from '../../types';
 
-// ── Overview playground state ─────────────────────────────────────────────────
+const { t } = useI18n();
+
 const pgVariant = ref<'line' | 'pill' | 'segmented'>('line');
 const pgColor   = ref<'default' | 'primary' | 'danger' | 'success' | 'warning'>('primary');
 const pgSize    = ref<'small' | 'medium' | 'large'>('medium');
 const pgActive  = ref<string | number>('overview');
+const pgFullWidth = ref(false);
 
 function resetPlayground() {
     pgVariant.value = 'line';
     pgColor.value   = 'primary';
     pgSize.value    = 'medium';
     pgActive.value  = 'overview';
+    pgFullWidth.value = false;
 }
 
-const playgroundItems = [
-    { value: 'overview',  label: 'Resumen' },
-    { value: 'analytics', label: 'Analítica' },
-    { value: 'settings',  label: 'Ajustes' },
-];
+const playgroundItems = computed(() => [
+    { value: 'overview',  label: t('pages.navigation.tabs.playground.overview') },
+    { value: 'analytics', label: t('pages.navigation.tabs.playground.analytics') },
+    { value: 'settings',  label: t('pages.navigation.tabs.playground.settings') },
+]);
 
 const colorDots = [
     { value: 'default' as const, bg: '#64748b',        label: 'Default' },
@@ -38,169 +46,92 @@ const overviewCode = computed(() => {
     if (pgVariant.value !== 'line')    parts.push(`variant="${pgVariant.value}"`);
     if (pgColor.value   !== 'default') parts.push(`color="${pgColor.value}"`);
     if (pgSize.value    !== 'medium')  parts.push(`size="${pgSize.value}"`);
+    if (pgFullWidth.value) parts.push('full-width');
     const attrs = parts.length ? ' ' + parts.join(' ') : '';
     return `<Tabs v-model="active" :items="items"${attrs} class="w-full max-w-md" />`;
 });
 
-// ── Example data ──────────────────────────────────────────────────────────────
 const variantsActive   = ref<string | number>('overview');
 const iconsActive      = ref<string | number>('home');
 const verticalActive   = ref<string | number>('account');
 const controlledActive = ref<string | number>('inbox');
 const badgesActive     = ref<string | number>('inbox');
 
-const iconItems = [
-    { value: 'home',     label: 'Inicio',       icon: HomeIcon },
-    { value: 'stats',    label: 'Estadísticas', icon: ChartBarIcon },
-    { value: 'settings', label: 'Ajustes',      icon: Cog6ToothIcon },
-];
+const iconItems = computed(() => [
+    { value: 'home',     label: t('pages.navigation.tabs.icons.home'),     icon: HomeIcon },
+    { value: 'stats',    label: t('pages.navigation.tabs.icons.stats'),    icon: ChartBarIcon },
+    { value: 'settings', label: t('pages.navigation.tabs.icons.settings'), icon: Cog6ToothIcon },
+]);
 
-const verticalItems = [
-    { value: 'account',  label: 'Cuenta' },
-    { value: 'security', label: 'Seguridad' },
-    { value: 'billing',  label: 'Facturación' },
-];
+const verticalItems = computed(() => [
+    { value: 'account',  label: t('pages.navigation.tabs.vertical.account') },
+    { value: 'security', label: t('pages.navigation.tabs.vertical.security') },
+    { value: 'billing',  label: t('pages.navigation.tabs.vertical.billing') },
+]);
 
-const badgeItems = [
-    { value: 'inbox',  label: 'Bandeja',    icon: BellIcon, badge: 12 },
-    { value: 'sent',   label: 'Enviados',   badge: 3 },
-    { value: 'drafts', label: 'Borradores' },
-];
+const badgeItems = computed(() => [
+    { value: 'inbox',  label: t('pages.navigation.tabs.badges.inbox'),  icon: BellIcon, badge: 12 },
+    { value: 'sent',   label: t('pages.navigation.tabs.badges.sent'),   badge: 3 },
+    { value: 'drafts', label: t('pages.navigation.tabs.badges.drafts') },
+]);
 
-// ── Example code strings ──────────────────────────────────────────────────────
 const variantsCode = `<Tabs v-model="active" :items="items" variant="line" />
 <Tabs v-model="active" :items="items" variant="pill" />
 <Tabs v-model="active" :items="items" variant="segmented" />`;
-
-const iconsCode = `const items = [
-    { value: 'home',     label: 'Inicio',       icon: HomeIcon },
-    { value: 'stats',    label: 'Estadísticas', icon: ChartBarIcon },
-    { value: 'settings', label: 'Ajustes',      icon: Cog6ToothIcon },
-];
-
-<Tabs v-model="active" :items="items" variant="pill" color="primary" />`;
-
+const iconsCode = `<Tabs v-model="active" :items="items" variant="pill" color="primary" />`;
 const verticalCode = `<Tabs v-model="active" :items="items" variant="line">
-    <template #panel-account>
-        <div class="p-4 text-sm">Datos de tu cuenta</div>
-    </template>
-    <template #panel-security>
-        <div class="p-4 text-sm">Contraseña y 2FA</div>
-    </template>
-    <template #panel-billing>
-        <div class="p-4 text-sm">Métodos de pago</div>
-    </template>
+    <template #panel-account>…</template>
+    <template #panel-security>…</template>
+    <template #panel-billing>…</template>
 </Tabs>`;
+const controlledCode = `<Tabs v-model="active" :items="items" variant="segmented" />`;
+const badgesCode = `<Tabs v-model="active" :items="items" variant="pill" color="danger" />`;
 
-const controlledCode = `const active = ref('inbox');
+const propsList = computed<PropDoc[]>(() => [
+    { name: 'items',         type: 'TabItem[]',                                                 required: true,       description: t('pages.navigation.tabs.props.items') },
+    { name: 'modelValue',    type: 'string | number | null',                                                          description: t('pages.navigation.tabs.props.modelValue') },
+    { name: 'variant',       type: "'line' | 'pill' | 'segmented'",                             default: "'line'",    description: t('pages.navigation.tabs.props.variant') },
+    { name: 'color',         type: "'default' | 'primary' | 'danger' | 'success' | 'warning'",  default: "'default'", description: t('pages.navigation.tabs.props.color') },
+    { name: 'size',          type: "'small' | 'medium' | 'large'",                              default: "'medium'",  description: t('pages.navigation.tabs.props.size') },
+    { name: 'radius',        type: "'none' | 'small' | 'medium' | 'large' | 'full'",                                  description: t('pages.navigation.tabs.props.radius') },
+    { name: 'fullWidth',     type: 'boolean',                                                   default: 'false',     description: t('pages.navigation.tabs.props.fullWidth') },
+    { name: 'lazy',          type: 'boolean',                                                   default: 'false',     description: t('pages.navigation.tabs.props.lazy') },
+    { name: 'keepMounted',   type: 'boolean',                                                   default: 'true',      description: t('pages.navigation.tabs.props.keepMounted') },
+    { name: 'linkComponent', type: 'string | Component',                                        default: "'a'",       description: t('pages.navigation.tabs.props.linkComponent') },
+    { name: 'ariaLabel',     type: 'string',                                                                          description: t('pages.navigation.tabs.props.ariaLabel') },
+]);
 
-<Tabs v-model="active" :items="items" variant="segmented" />
-<p>Tab activa: {{ active }}</p>`;
+const emitsList = computed<EmitDoc[]>(() => [
+    { name: 'update:modelValue', payload: 'string | number',        description: t('pages.navigation.tabs.emits.updateModelValue') },
+    { name: 'change',            payload: '(value, item: TabItem)', description: t('pages.navigation.tabs.emits.change') },
+]);
 
-const badgesCode = `const items = [
-    { value: 'inbox',  label: 'Bandeja',    icon: BellIcon, badge: 12 },
-    { value: 'sent',   label: 'Enviados',   badge: 3 },
-    { value: 'drafts', label: 'Borradores' },
-];
-
-<Tabs v-model="active" :items="items" variant="pill" color="danger" />`;
-
-// ── API docs ──────────────────────────────────────────────────────────────────
-const propsList: PropDoc[] = [
-    { name: 'items',         type: 'TabItem[]',                                                 required: true,       description: 'Lista de tabs. Cada item acepta value, label, icon, badge, disabled, to.' },
-    { name: 'modelValue',    type: 'string | number | null',                                                          description: 'Valor de la tab activa. Usa v-model.' },
-    { name: 'variant',       type: "'line' | 'pill' | 'segmented'",                             default: "'line'",    description: 'Estilo visual del tablist.' },
-    { name: 'color',         type: "'default' | 'primary' | 'danger' | 'success' | 'warning'",  default: "'default'", description: 'Color semántico aplicado a la tab activa.' },
-    { name: 'size',          type: "'small' | 'medium' | 'large'",                              default: "'medium'",  description: 'Tamaño y padding de cada tab.' },
-    { name: 'radius',        type: "'none' | 'small' | 'medium' | 'large' | 'full'",                                  description: 'Radio de las pills/segmented. Hereda de ModoProvider.' },
-    { name: 'fullWidth',     type: 'boolean',                                                   default: 'false',     description: 'Estira el tablist al 100% y reparte items por igual.' },
-    { name: 'lazy',          type: 'boolean',                                                   default: 'false',     description: 'Solo monta los paneles al activarlos por primera vez.' },
-    { name: 'keepMounted',   type: 'boolean',                                                   default: 'true',      description: 'Mantiene los paneles montados (ocultos) al cambiar de tab.' },
-    { name: 'linkComponent', type: 'string | Component',                                        default: "'a'",       description: 'Componente para items con `to`. Usa RouterLink para vue-router.' },
-    { name: 'ariaLabel',     type: 'string',                                                                          description: 'Etiqueta accesible del tablist.' },
-];
-
-const emitsList: EmitDoc[] = [
-    { name: 'update:modelValue', payload: 'string | number',        description: 'Emitido al cambiar de tab. Usado por v-model.' },
-    { name: 'change',            payload: '(value, item: TabItem)', description: 'Emitido tras un cambio de tab con el item completo.' },
-];
-
-const slotsList: SlotDoc[] = [
-    { name: 'panel-<value>', bindings: '{ item, active }', description: 'Contenido del panel para cada item, identificado por su value.' },
-    { name: 'panel',         bindings: '{ item, active }', description: 'Slot fallback aplicado a los paneles que no definen su propio slot.' },
-];
+const slotsList = computed<SlotDoc[]>(() => [
+    { name: 'panel-<value>', bindings: '{ item, active }', description: t('pages.navigation.tabs.slots.panelByValue') },
+    { name: 'panel',         bindings: '{ item, active }', description: t('pages.navigation.tabs.slots.panel') },
+]);
 </script>
 
 <template>
     <ComponentDoc
-        title="Tabs"
-        category="Navigation"
+        :title="t('pages.navigation.tabs.title')"
+        :category="t('pages.navigation.tabs.category')"
         import-path="import { Tabs } from 'mood-ui'"
-        description="Tabs accesibles con tres variantes (line, pill, segmented), iconos, badges y soporte para paneles vía slots `panel-<value>`."
+        :description="t('pages.navigation.tabs.description')"
         :props-list="propsList"
         :emits-list="emitsList"
         :slots-list="slotsList"
     >
-        <!-- ── Overview ────────────────────────────────────────────────────── -->
         <template #overview>
             <ComponentPreview :code="overviewCode" min-height="220px" @reset="resetPlayground">
                 <template #controls>
-                    <!-- Variant -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Variant</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="v in ['line', 'pill', 'segmented']"
-                                :key="v"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors capitalize"
-                                :class="pgVariant === v
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgVariant = (v as typeof pgVariant)"
-                            >{{ v }}</button>
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Color dots -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Color</span>
-                        <div class="flex items-center gap-1">
-                            <button
-                                v-for="c in colorDots"
-                                :key="c.value"
-                                type="button"
-                                class="size-4 rounded-full transition-all duration-150"
-                                :class="pgColor === c.value
-                                    ? 'ring-2 ring-offset-1 ring-foreground/30 scale-125'
-                                    : 'hover:scale-110 opacity-70 hover:opacity-100'"
-                                :style="`background: ${c.bg}`"
-                                :title="c.label"
-                                @click="pgColor = c.value"
-                            />
-                        </div>
-                    </div>
-
-                    <span class="w-px h-4 bg-border shrink-0" />
-
-                    <!-- Size -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline">Size</span>
-                        <div class="flex rounded-md border border-border overflow-hidden">
-                            <button
-                                v-for="s in ['small', 'medium', 'large']"
-                                :key="s"
-                                type="button"
-                                class="px-2 py-1 text-xs transition-colors"
-                                :class="pgSize === s
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'text-muted-foreground hover:bg-muted/60'"
-                                @click="pgSize = (s as typeof pgSize)"
-                            >{{ s }}</button>
-                        </div>
-                    </div>
+                    <TbPills label="Variant" :options="[{value:'line'},{value:'pill'},{value:'segmented'}]" v-model="pgVariant" />
+                    <TbSep />
+                    <TbDots label="Color" :options="colorDots" v-model="pgColor" />
+                    <TbSep />
+                    <TbPills label="Size" :options="[{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSize" />
+                    <TbSep />
+                    <TbToggle label="Full width" v-model="pgFullWidth" />
                 </template>
 
                 <Tabs
@@ -209,16 +140,16 @@ const slotsList: SlotDoc[] = [
                     :variant="pgVariant"
                     :color="pgColor"
                     :size="pgSize"
+                    :full-width="pgFullWidth"
                     class="w-full max-w-md"
                 />
             </ComponentPreview>
         </template>
 
-        <!-- ── Examples ────────────────────────────────────────────────────── -->
         <template #examples>
             <ComponentPreview
-                title="Variantes"
-                description="Tres estilos visuales: línea inferior, pill rellena y control segmentado."
+                :title="t('pages.navigation.tabs.examples.variants.title')"
+                :description="t('pages.navigation.tabs.examples.variants.desc')"
                 :code="variantsCode"
             >
                 <div class="flex flex-col gap-4 w-full max-w-md">
@@ -229,45 +160,45 @@ const slotsList: SlotDoc[] = [
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con iconos"
-                description="Cada item puede declarar un icono opcional que se renderiza a la izquierda del label."
+                :title="t('pages.navigation.tabs.examples.icons.title')"
+                :description="t('pages.navigation.tabs.examples.icons.desc')"
                 :code="iconsCode"
             >
                 <Tabs v-model="iconsActive" :items="iconItems" variant="pill" color="primary" class="w-full max-w-md" />
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con paneles"
-                description="Define un slot `panel-<value>` por cada tab para mostrar contenido sincronizado con la selección."
+                :title="t('pages.navigation.tabs.examples.panels.title')"
+                :description="t('pages.navigation.tabs.examples.panels.desc')"
                 :code="verticalCode"
             >
                 <Tabs v-model="verticalActive" :items="verticalItems" variant="line" class="w-full max-w-md">
                     <template #panel-account>
-                        <div class="p-4 text-sm">Datos de tu cuenta</div>
+                        <div class="p-4 text-sm">{{ t('pages.navigation.tabs.vertical.panelAccount') }}</div>
                     </template>
                     <template #panel-security>
-                        <div class="p-4 text-sm">Contraseña y 2FA</div>
+                        <div class="p-4 text-sm">{{ t('pages.navigation.tabs.vertical.panelSecurity') }}</div>
                     </template>
                     <template #panel-billing>
-                        <div class="p-4 text-sm">Métodos de pago</div>
+                        <div class="p-4 text-sm">{{ t('pages.navigation.tabs.vertical.panelBilling') }}</div>
                     </template>
                 </Tabs>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Controlado"
-                description="El estado activo vive en tu componente; lee y escribe vía v-model."
+                :title="t('pages.navigation.tabs.examples.controlled.title')"
+                :description="t('pages.navigation.tabs.examples.controlled.desc')"
                 :code="controlledCode"
             >
                 <div class="flex flex-col items-center gap-3 w-full max-w-md">
                     <Tabs v-model="controlledActive" :items="badgeItems" variant="segmented" class="w-full" />
-                    <p class="text-xs text-muted-foreground">Tab activa: <code class="font-mono text-primary">{{ controlledActive }}</code></p>
+                    <p class="text-xs text-muted-foreground">{{ t('pages.navigation.tabs.controlled') }} <code class="font-mono text-primary">{{ controlledActive }}</code></p>
                 </div>
             </ComponentPreview>
 
             <ComponentPreview
-                title="Con badges"
-                description="Cada item soporta un `badge` numérico o de texto que se muestra a la derecha del label."
+                :title="t('pages.navigation.tabs.examples.badges.title')"
+                :description="t('pages.navigation.tabs.examples.badges.desc')"
                 :code="badgesCode"
             >
                 <Tabs v-model="badgesActive" :items="badgeItems" variant="pill" color="danger" class="w-full max-w-md" />
