@@ -1,5 +1,5 @@
 {
-  "badge": "v0.7.0 · MIT · Open source",
+  "badge": "v0.7.1 · MIT · Open source",
   "headline1": "La librería Vue 3",
   "headline2": "más completa para shippear rápido.",
   "lead": "{n}+ componentes accesibles, theming reactivo en vivo, dark mode con superficies personalizables y soporte i18n nativo. Tailwind CSS v4. TypeScript first. Sin lock‑in.",
@@ -22,8 +22,8 @@
   "finalCtaBody": "Open source, MIT, sin lock-in. Solo Vue 3 + Tailwind v4 + tu propia creatividad.",
 
   "seo": {
-    "title": "Mood UI — {n}+ componentes Vue 3 con theming reactivo",
-    "description": "Librería open source de {n}+ componentes Vue 3 con Tailwind CSS v4, TypeScript, dark mode, accesibilidad WAI-ARIA e i18n nativo. MIT."
+    "title": "Mood UI — La librería de componentes para Vue y Nuxt más hermosa",
+    "description": "La librería open source de componentes para Vue y Nuxt más hermosa, con {n}+ componentes accesibles, Tailwind CSS v4, TypeScript, dark mode, accesibilidad WAI-ARIA e i18n nativo. MIT."
   },
 
   "stats": {

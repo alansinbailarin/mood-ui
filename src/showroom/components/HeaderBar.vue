@@ -199,7 +199,7 @@ function goSection(tab: SectionTab) {
       <span
         class="hidden lg:inline-flex text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded bg-muted text-muted-foreground border border-border"
       >
-        v0.7.0
+        v0.7.1
       </span>
     </a>
 

@@ -3,6 +3,15 @@
   "intro": "Every release listed newest first. We follow SemVer.",
 
   "releases": {
+    "v0.7.1": {
+      "title": "Color mode hotfix",
+      "items": [
+        "useColorMode now reacts when the exposed mode ref is changed directly.",
+        "Direct assignments like mode.value = 'dark' now persist to localStorage and update the html .dark class.",
+        "System mode continues to react to OS color-scheme changes through the resolved mode watcher.",
+        "Removed the automatic GitHub Pages showroom deployment workflow."
+      ]
+    },
     "v0.7.0": {
       "title": "ColorModeSwitch + mobile UX + component fixes",
       "items": [
