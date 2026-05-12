@@ -1,47 +1,106 @@
 {
-    "title": "Stepper",
-    "category": "Navigation",
-    "description": "Indicador de progreso por pasos. Útil para wizards, onboarding y checkouts. Soporta variantes numbered, dots y progress, en horizontal o vertical.",
-    "examples": {
-        "basic":        { "title": "Básico",                  "desc": "Tres pasos numerados; el `current` marca el activo y todos los anteriores quedan completados." },
-        "descriptions": { "title": "Con descripciones e iconos", "desc": "Cada paso acepta `description` y un `icon` propio para reforzar el contexto." },
-        "vertical":     { "title": "Vertical",                "desc": "Cambia `orientation` a vertical para flujos largos con descripciones extensas." },
-        "error":        { "title": "Con error",                "desc": "Override el estado de un paso a `error` para señalar un problema sin bloquear el resto del flujo." }
+  "title": "Stepper",
+  "category": "Navigation",
+  "description": "Indicador de progreso por pasos. Útil para wizards, onboarding y checkouts. Soporta variantes numbered, dots y progress, en horizontal o vertical.",
+  "examples": {
+    "basic": {
+      "title": "Básico",
+      "desc": "Tres pasos numerados; el `current` marca el activo y todos los anteriores quedan completados."
     },
-    "demo": { "prev": "← Anterior", "next": "Siguiente →" },
-    "playgroundSteps": {
-        "account": { "label": "Cuenta",  "description": "Datos básicos" },
-        "billing": { "label": "Pago",    "description": "Tarjeta o PayPal" },
-        "review":  { "label": "Revisar", "description": "Confirma tu pedido" }
+    "descriptions": {
+      "title": "Con descripciones e iconos",
+      "desc": "Cada paso acepta `description` y un `icon` propio para reforzar el contexto."
     },
-    "basicSteps": { "cart": "Carrito", "shipping": "Envío", "payment": "Pago" },
-    "detailedSteps": {
-        "account": { "label": "Cuenta",  "description": "Email y contraseña" },
-        "billing": { "label": "Pago",    "description": "Método de pago" },
-        "review":  { "label": "Revisar", "description": "Confirma tu pedido" }
+    "vertical": {
+      "title": "Vertical",
+      "desc": "Cambia `orientation` a vertical para flujos largos con descripciones extensas."
     },
-    "verticalSteps": {
-        "personal":     { "label": "Datos personales", "description": "Nombre, email y teléfono" },
-        "address":      { "label": "Dirección",        "description": "Datos de envío" },
-        "payment":      { "label": "Pago",             "description": "Tarjeta o transferencia" },
-        "confirmation": { "label": "Confirmación",     "description": "Revisa antes de enviar" }
-    },
-    "errorSteps": {
-        "data":    "Datos",
-        "payment": "Pago",
-        "paymentDesc": "Tarjeta declinada",
-        "confirm": "Confirmar"
-    },
-    "props": {
-        "steps":       "Pasos a renderizar en orden. Cada paso acepta id, label, description, icon, disabled y state.",
-        "current":     "Índice 0-based del paso activo. Los anteriores se marcan como completados.",
-        "variant":     "Estilo del indicador (número, punto o barra de progreso).",
-        "orientation": "Disposición del stepper.",
-        "color":       "Color semántico de los pasos activo y completados.",
-        "size":        "Tamaño del indicador y de los labels.",
-        "clickable":   "Permite click en pasos completados; emite `step-click`."
-    },
-    "emits": {
-        "stepClick": "Emitido al hacer click en un paso cuando `clickable` es true."
+    "error": {
+      "title": "Con error",
+      "desc": "Override el estado de un paso a `error` para señalar un problema sin bloquear el resto del flujo."
     }
+  },
+  "demo": {
+    "prev": "← Anterior",
+    "next": "Siguiente →"
+  },
+  "playgroundSteps": {
+    "account": {
+      "label": "Cuenta",
+      "description": "Datos básicos"
+    },
+    "billing": {
+      "label": "Pago",
+      "description": "Tarjeta o PayPal"
+    },
+    "review": {
+      "label": "Revisar",
+      "description": "Confirma tu pedido"
+    }
+  },
+  "basicSteps": {
+    "cart": "Carrito",
+    "shipping": "Envío",
+    "payment": "Pago"
+  },
+  "detailedSteps": {
+    "account": {
+      "label": "Cuenta",
+      "description": "Email y contraseña"
+    },
+    "billing": {
+      "label": "Pago",
+      "description": "Método de pago"
+    },
+    "review": {
+      "label": "Revisar",
+      "description": "Confirma tu pedido"
+    }
+  },
+  "verticalSteps": {
+    "personal": {
+      "label": "Datos personales",
+      "description": "Nombre, email y teléfono"
+    },
+    "address": {
+      "label": "Dirección",
+      "description": "Datos de envío"
+    },
+    "payment": {
+      "label": "Pago",
+      "description": "Tarjeta o transferencia"
+    },
+    "confirmation": {
+      "label": "Confirmación",
+      "description": "Revisa antes de enviar"
+    }
+  },
+  "errorSteps": {
+    "data": "Datos",
+    "payment": "Pago",
+    "paymentDesc": "Tarjeta declinada",
+    "confirm": "Confirmar"
+  },
+  "props": {
+    "steps": "Pasos a renderizar en orden. Cada paso acepta id, label, description, icon, disabled y state.",
+    "current": "Índice 0-based del paso activo. Los anteriores se marcan como completados.",
+    "variant": "Estilo del indicador (número, punto o barra de progreso).",
+    "orientation": "Disposición del stepper.",
+    "color": "Color semántico de los pasos activo y completados.",
+    "size": "Tamaño del indicador y de los labels.",
+    "clickable": "Permite click en pasos completados; emite `step-click`."
+  },
+  "emits": {
+    "stepClick": "Emitido al hacer click en un paso cuando `clickable` es true."
+  },
+  "types": {
+    "title": "Tipos",
+    "desc": "Interfaces de TypeScript para este componente."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "ariaLabel": "Proporciona un nombre accesible para el stepper",
+    "focusNative": "Elemento no interactivo a menos que la prop clickable esté habilitada"
+  }
 }

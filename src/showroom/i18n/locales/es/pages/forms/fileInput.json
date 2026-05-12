@@ -1,68 +1,94 @@
 {
-    "category": "Forms",
-    "title": "FileInput",
-    "description": "Selector de archivos con soporte de drag & drop, validación, previews de imágenes y dos variantes visuales (inline y área prominente).",
-    "controls": {
-        "variant": "Variante",
-        "color": "Color",
-        "size": "Tamaño",
-        "multiple": "Multiple",
-        "dashed": "Dashed",
-        "disabled": "Disabled"
+  "category": "Forms",
+  "title": "FileInput",
+  "description": "Selector de archivos con soporte de drag & drop, validación, previews de imágenes y dos variantes visuales (inline y área prominente).",
+  "controls": {
+    "variant": "Variante",
+    "color": "Color",
+    "size": "Tamaño",
+    "multiple": "Multiple",
+    "dashed": "Dashed",
+    "disabled": "Disabled"
+  },
+  "playground": {
+    "label": "Adjunta tus archivos"
+  },
+  "examples": {
+    "basic": {
+      "title": "Uso básico",
+      "desc": "Selección de un único archivo con presentación inline."
     },
-    "playground": {
-        "label": "Adjunta tus archivos"
+    "multiple": {
+      "title": "Múltiples archivos",
+      "desc": "Activa multiple para permitir seleccionar varios archivos a la vez."
     },
-    "examples": {
-        "basic": {
-            "title": "Uso básico",
-            "desc": "Selección de un único archivo con presentación inline."
-        },
-        "multiple": {
-            "title": "Múltiples archivos",
-            "desc": "Activa multiple para permitir seleccionar varios archivos a la vez."
-        },
-        "accept": {
-            "title": "Solo imágenes",
-            "desc": "Restringe los tipos aceptados con el atributo accept."
-        },
-        "dropzone": {
-            "title": "Drag & drop",
-            "desc": "La variante 'area' muestra un dropzone prominente con borde punteado opcional."
-        },
-        "previews": {
-            "title": "Con previews",
-            "desc": "Las imágenes seleccionadas muestran una miniatura automáticamente."
-        }
+    "accept": {
+      "title": "Solo imágenes",
+      "desc": "Restringe los tipos aceptados con el atributo accept."
     },
-    "props": {
-        "modelValue": "Lista de archivos seleccionados (v-model).",
-        "multiple": "Permite seleccionar varios archivos.",
-        "accept": "Filtro de tipos aceptados (MIME types o extensiones).",
-        "maxSize": "Tamaño máximo por archivo en bytes.",
-        "maxFiles": "Cantidad máxima de archivos en modo multiple.",
-        "previews": "Muestra thumbnails para imágenes seleccionadas.",
-        "dropzone": "Habilita drag & drop sobre el área.",
-        "dropzoneVariant": "Presentación: fila compacta o área prominente tipo dropzone.",
-        "dropzoneHeight": "Altura mínima del área cuando dropzoneVariant=\"area\".",
-        "dashed": "Aplica borde punteado al wrapper.",
-        "dropzoneLabel": "Texto principal del área (solo dropzoneVariant=\"area\").",
-        "dropzoneHint": "Texto secundario del área (solo dropzoneVariant=\"area\").",
-        "clickToSelect": "El click sobre el área completa abre el picker nativo.",
-        "label": "Etiqueta visible sobre el control.",
-        "placeholder": "Texto mostrado cuando no hay archivos seleccionados.",
-        "helperText": "Texto de ayuda bajo el control.",
-        "errorText": "Mensaje de error que reemplaza al helperText.",
-        "variant": "Estilo visual del wrapper.",
-        "color": "Color semántico del foco y acento.",
-        "size": "Tamaño general del control.",
-        "disabled": "Deshabilita el control.",
-        "readonly": "Modo solo lectura.",
-        "required": "Marca el campo como requerido."
+    "dropzone": {
+      "title": "Drag & drop",
+      "desc": "La variante 'area' muestra un dropzone prominente con borde punteado opcional."
     },
-    "emits": {
-        "updateModelValue": "Emitido al cambiar la lista de archivos (sincroniza v-model).",
-        "change": "Emitido tras cada cambio confirmado.",
-        "reject": "Emitido cuando un archivo es rechazado por tipo, tamaño o cantidad."
+    "previews": {
+      "title": "Con previews",
+      "desc": "Las imágenes seleccionadas muestran una miniatura automáticamente."
     }
+  },
+  "props": {
+    "modelValue": "Lista de archivos seleccionados (v-model).",
+    "multiple": "Permite seleccionar varios archivos.",
+    "accept": "Filtro de tipos aceptados (MIME types o extensiones).",
+    "maxSize": "Tamaño máximo por archivo en bytes.",
+    "maxFiles": "Cantidad máxima de archivos en modo multiple.",
+    "previews": "Muestra thumbnails para imágenes seleccionadas.",
+    "dropzone": "Habilita drag & drop sobre el área.",
+    "dropzoneVariant": "Presentación: fila compacta o área prominente tipo dropzone.",
+    "dropzoneHeight": "Altura mínima del área cuando dropzoneVariant=\"area\".",
+    "dashed": "Aplica borde punteado al wrapper.",
+    "dropzoneLabel": "Texto principal del área (solo dropzoneVariant=\"area\").",
+    "dropzoneHint": "Texto secundario del área (solo dropzoneVariant=\"area\").",
+    "clickToSelect": "El click sobre el área completa abre el picker nativo.",
+    "label": "Etiqueta visible sobre el control.",
+    "placeholder": "Texto mostrado cuando no hay archivos seleccionados.",
+    "helperText": "Texto de ayuda bajo el control.",
+    "errorText": "Mensaje de error que reemplaza al helperText.",
+    "variant": "Estilo visual del wrapper.",
+    "color": "Color semántico del foco y acento.",
+    "size": "Tamaño general del control.",
+    "disabled": "Deshabilita el control.",
+    "readonly": "Modo solo lectura.",
+    "required": "Marca el campo como requerido."
+  },
+  "emits": {
+    "updateModelValue": "Emitido al cambiar la lista de archivos (sincroniza v-model).",
+    "change": "Emitido tras cada cambio confirmado.",
+    "reject": "Emitido cuando un archivo es rechazado por tipo, tamaño o cantidad."
+  },
+
+  "types": {
+    "title": "FileInputFile",
+    "desc": "Estructura de cada archivo gestionado por el componente. Útil cuando se proveen mapas de progreso o error externos.",
+    "file": "El objeto File subyacente.",
+    "id": "Identificador estable para el archivo.",
+    "name": "Nombre del archivo (legible).",
+    "size": "Tamaño en bytes.",
+    "type": "Cadena de tipo MIME.",
+    "previewUrl": "URL de objeto local para vistas previas de imagen (creada vía URL.createObjectURL).",
+    "progress": "Progreso de carga 0–100 cuando se provee externamente.",
+    "error": "Mensaje de error de validación o subida."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "kbEnter": "Abre el selector de archivos nativo",
+    "kbSpace": "Abre el selector de archivos nativo (cuando clickToSelect es true)",
+    "ariaInvalid": "Se activa a true cuando hay errorText presente",
+    "ariaDescribedBy": "Vincula el texto de helper o error al control para contexto del lector de pantalla",
+    "ariaRequired": "Se activa a true cuando la prop required está activa",
+    "ariaDisabled": "Comunica el estado deshabilitado a las tecnologías asistivas",
+    "ariaLabel": "Proporciona un nombre accesible cuando no hay etiqueta visible",
+    "focusNative": "El input de archivo es un elemento nativo — participa en el orden de tabulación por defecto",
+    "focusDropzone": "El área de dropzone es enfocable cuando clickToSelect está activado"
+  }
 }

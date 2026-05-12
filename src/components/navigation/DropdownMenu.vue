@@ -37,7 +37,7 @@
         > 
             <ul 
                 ref="listEl" 
-                class="modo-dropdown-list flex flex-col py-1" 
+                class="modo-dropdown-list flex flex-col" 
                 :style="{ minWidth }" 
                 @keydown="onKeydown" 
             > 

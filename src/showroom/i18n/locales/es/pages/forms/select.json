@@ -79,5 +79,31 @@
     "change": "Emitido tras cada selección confirmada por el usuario.",
     "open": "Emitido cuando el panel se abre.",
     "close": "Emitido cuando el panel se cierra."
+  },
+
+  "types": {
+    "title": "SelectOption",
+    "desc": "Estructura de cada elemento en el array de options. Impórtalo cuando quieras tipar tus datos antes de pasarlos al componente.",
+    "value": "Identificador único. Debe ser string o number.",
+    "label": "Texto mostrado en el trigger y en el elemento del dropdown.",
+    "description": "Texto secundario renderizado debajo del label dentro del dropdown.",
+    "icon": "Icono opcional renderizado a la izquierda del label.",
+    "disabled": "Cuando es true, el elemento es visible pero no seleccionable.",
+    "group": "Nombre del grupo — los elementos con el mismo grupo se agrupan visualmente."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "kbEnter": "Abre el panel desplegable",
+    "kbEsc": "Cierra el panel desplegable",
+    "kbArrow": "Navega entre opciones dentro del panel",
+    "ariaExpanded": "Comunica si el panel desplegable está abierto o cerrado",
+    "ariaInvalid": "Se activa a true cuando hay errorText presente",
+    "ariaDescribedBy": "Vincula el texto de helper o error al trigger para contexto del lector de pantalla",
+    "ariaRequired": "Se activa a true cuando la prop required está activa",
+    "ariaDisabled": "Comunica el estado deshabilitado a las tecnologías asistivas",
+    "ariaLabel": "Proporciona un nombre accesible cuando no hay etiqueta visible",
+    "focusNative": "Usa un botón nativo como trigger — participa en el orden de tabulación por defecto",
+    "focusTrap": "El foco queda atrapado dentro del panel desplegable mientras está abierto"
   }
 }

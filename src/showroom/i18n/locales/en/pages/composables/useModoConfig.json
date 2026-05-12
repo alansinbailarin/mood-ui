@@ -1,0 +1,29 @@
+{
+    "title": "useModoConfig",
+    "description": "Access the global ModoProvider configuration and helper functions that resolve component props against the global theme. Works inside ModoProvider; falls back to sensible defaults when used outside.",
+    "api": {
+        "config": "Returns the full `ModoConfig` object injected by ModoProvider. Returns `undefined` outside a provider.",
+        "resolvedColor": "Resolves a local `color` prop with fallback to global brand color. Semantic values ('primary', 'danger', etc.) always win; 'default' or undefined falls back.",
+        "resolvedRadius": "Resolves radius: local prop → global config → default ('medium').",
+        "resolvedSize": "Resolves size: local prop → global config → default ('medium').",
+        "resolvedTheme": "Resolves theme: local prop → global config → default ('zinc').",
+        "resolvedHalo": "Resolves halo: local prop → global config → default ('tinted').",
+        "modoLocale": "Returns the deep-merged locale object. Works outside ModoProvider too.",
+        "localeString": "Resolves a locale string getter + interpolates `{name}` placeholders."
+    },
+    "examples": {
+        "resolve": {
+            "title": "Resolving props",
+            "desc": "When a component prop is 'default' or undefined, use the global theme value."
+        },
+        "locale": {
+            "title": "Locale helpers",
+            "desc": "Access the merged locale and interpolate strings with placeholders.",
+            "body": "useModoLocale and useLocaleString work even outside a ModoProvider."
+        }
+    },
+    "types": {
+        "title": "Types",
+        "desc": "TypeScript interfaces for this composable."
+    }
+}

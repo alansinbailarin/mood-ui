@@ -1,47 +1,106 @@
 {
-    "title": "Stepper",
-    "category": "Navigation",
-    "description": "Step-by-step progress indicator. Useful for wizards, onboarding and checkouts. Supports numbered, dots and progress variants, horizontal or vertical.",
-    "examples": {
-        "basic":        { "title": "Basic",                "desc": "Three numbered steps; `current` marks the active one and all previous ones are marked completed." },
-        "descriptions": { "title": "With descriptions & icons", "desc": "Each step accepts a `description` and its own `icon` to reinforce context." },
-        "vertical":     { "title": "Vertical",             "desc": "Switch `orientation` to vertical for long flows with extensive descriptions." },
-        "error":        { "title": "With error",            "desc": "Override a step's state to `error` to flag a problem without blocking the rest of the flow." }
+  "title": "Stepper",
+  "category": "Navigation",
+  "description": "Step-by-step progress indicator. Useful for wizards, onboarding and checkouts. Supports numbered, dots and progress variants, horizontal or vertical.",
+  "examples": {
+    "basic": {
+      "title": "Basic",
+      "desc": "Three numbered steps; `current` marks the active one and all previous ones are marked completed."
     },
-    "demo": { "prev": "← Previous", "next": "Next →" },
-    "playgroundSteps": {
-        "account": { "label": "Account", "description": "Basic info" },
-        "billing": { "label": "Payment", "description": "Card or PayPal" },
-        "review":  { "label": "Review",  "description": "Confirm your order" }
+    "descriptions": {
+      "title": "With descriptions & icons",
+      "desc": "Each step accepts a `description` and its own `icon` to reinforce context."
     },
-    "basicSteps": { "cart": "Cart", "shipping": "Shipping", "payment": "Payment" },
-    "detailedSteps": {
-        "account": { "label": "Account", "description": "Email and password" },
-        "billing": { "label": "Payment", "description": "Payment method" },
-        "review":  { "label": "Review",  "description": "Confirm your order" }
+    "vertical": {
+      "title": "Vertical",
+      "desc": "Switch `orientation` to vertical for long flows with extensive descriptions."
     },
-    "verticalSteps": {
-        "personal":     { "label": "Personal info", "description": "Name, email and phone" },
-        "address":      { "label": "Address",       "description": "Shipping address" },
-        "payment":      { "label": "Payment",       "description": "Card or transfer" },
-        "confirmation": { "label": "Confirmation",  "description": "Review before submitting" }
-    },
-    "errorSteps": {
-        "data":    "Info",
-        "payment": "Payment",
-        "paymentDesc": "Card declined",
-        "confirm": "Confirm"
-    },
-    "props": {
-        "steps":       "Steps to render in order. Each step accepts id, label, description, icon, disabled and state.",
-        "current":     "0-based index of the active step. Previous steps are marked completed.",
-        "variant":     "Indicator style (number, dot or progress bar).",
-        "orientation": "Stepper layout.",
-        "color":       "Semantic color for active and completed steps.",
-        "size":        "Indicator and label size.",
-        "clickable":   "Enables clicks on completed steps; emits `step-click`."
-    },
-    "emits": {
-        "stepClick": "Emitted when clicking a step with `clickable` enabled."
+    "error": {
+      "title": "With error",
+      "desc": "Override a step's state to `error` to flag a problem without blocking the rest of the flow."
     }
+  },
+  "demo": {
+    "prev": "← Previous",
+    "next": "Next →"
+  },
+  "playgroundSteps": {
+    "account": {
+      "label": "Account",
+      "description": "Basic info"
+    },
+    "billing": {
+      "label": "Payment",
+      "description": "Card or PayPal"
+    },
+    "review": {
+      "label": "Review",
+      "description": "Confirm your order"
+    }
+  },
+  "basicSteps": {
+    "cart": "Cart",
+    "shipping": "Shipping",
+    "payment": "Payment"
+  },
+  "detailedSteps": {
+    "account": {
+      "label": "Account",
+      "description": "Email and password"
+    },
+    "billing": {
+      "label": "Payment",
+      "description": "Payment method"
+    },
+    "review": {
+      "label": "Review",
+      "description": "Confirm your order"
+    }
+  },
+  "verticalSteps": {
+    "personal": {
+      "label": "Personal info",
+      "description": "Name, email and phone"
+    },
+    "address": {
+      "label": "Address",
+      "description": "Shipping address"
+    },
+    "payment": {
+      "label": "Payment",
+      "description": "Card or transfer"
+    },
+    "confirmation": {
+      "label": "Confirmation",
+      "description": "Review before submitting"
+    }
+  },
+  "errorSteps": {
+    "data": "Info",
+    "payment": "Payment",
+    "paymentDesc": "Card declined",
+    "confirm": "Confirm"
+  },
+  "props": {
+    "steps": "Steps to render in order. Each step accepts id, label, description, icon, disabled and state.",
+    "current": "0-based index of the active step. Previous steps are marked completed.",
+    "variant": "Indicator style (number, dot or progress bar).",
+    "orientation": "Stepper layout.",
+    "color": "Semantic color for active and completed steps.",
+    "size": "Indicator and label size.",
+    "clickable": "Enables clicks on completed steps; emits `step-click`."
+  },
+  "emits": {
+    "stepClick": "Emitted when clicking a step with `clickable` enabled."
+  },
+  "types": {
+    "title": "Types",
+    "desc": "TypeScript interfaces for this component."
+  },
+  "a11y": {
+    "kbTab": "Move focus to the next focusable element",
+    "kbShiftTab": "Move focus to the previous focusable element",
+    "ariaLabel": "Provides an accessible name for the stepper",
+    "focusNative": "Non-interactive element unless clickable prop is enabled"
+  }
 }

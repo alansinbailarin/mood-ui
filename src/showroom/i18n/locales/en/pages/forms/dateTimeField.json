@@ -1,59 +1,78 @@
 {
-    "category": "Forms",
-    "title": "DateTimeField",
-    "description": "Combined date and time input with a calendar popover and built-in time picker.",
-    "controls": {
-        "size": "Size",
-        "format": "Format",
-        "clearable": "Clearable",
-        "disabled": "Disabled"
+  "category": "Forms",
+  "title": "DateTimeField",
+  "description": "Combined date and time input with a calendar popover and built-in time picker.",
+  "controls": {
+    "size": "Size",
+    "format": "Format",
+    "clearable": "Clearable",
+    "disabled": "Disabled"
+  },
+  "playground": {
+    "label": "Start"
+  },
+  "examples": {
+    "basic": {
+      "title": "Basic",
+      "desc": "Combined date and time picker using 24-hour format by default."
     },
-    "playground": {
-        "label": "Start"
+    "format12h": {
+      "title": "12-hour format",
+      "desc": "Switch the time picker to AM/PM format with format='12h'."
     },
-    "examples": {
-        "basic": {
-            "title": "Basic",
-            "desc": "Combined date and time picker using 24-hour format by default."
-        },
-        "format12h": {
-            "title": "12-hour format",
-            "desc": "Switch the time picker to AM/PM format with format='12h'."
-        },
-        "minMax": {
-            "title": "Min and max",
-            "desc": "Restrict the range using minDate and maxDate applied to both date and time."
-        },
-        "clearable": {
-            "title": "Clearable",
-            "desc": "An ✕ button is visible when a value is set to clear the selection."
-        },
-        "disabled": {
-            "title": "Disabled",
-            "desc": "The field dims and prevents opening the popover."
-        }
+    "minMax": {
+      "title": "Min and max",
+      "desc": "Restrict the range using minDate and maxDate applied to both date and time."
     },
-    "props": {
-        "modelValue": "Selected date + time. Supports v-model.",
-        "label": "Visible label above the field.",
-        "placeholder": "Text shown when there is no value.",
-        "size": "Input size.",
-        "format": "Time picker format.",
-        "step": "Minute granularity in the time picker.",
-        "showSeconds": "Shows a seconds column in the time picker.",
-        "minDate": "Minimum selectable date and time.",
-        "maxDate": "Maximum selectable date and time.",
-        "clearable": "Shows a button to clear the value.",
-        "disabled": "Disables the field.",
-        "readonly": "Makes the field non-interactive.",
-        "required": "Marks the field as required.",
-        "fullWidth": "Occupies 100% of the available width."
+    "clearable": {
+      "title": "Clearable",
+      "desc": "An ✕ button is visible when a value is set to clear the selection."
     },
-    "emits": {
-        "updateModelValue": "Emitted when the value is selected or cleared.",
-        "change": "Semantic alias of update:modelValue.",
-        "open": "Emitted when the popover opens.",
-        "close": "Emitted when the popover closes.",
-        "clear": "Emitted when the value is cleared."
+    "disabled": {
+      "title": "Disabled",
+      "desc": "The field dims and prevents opening the popover."
     }
+  },
+  "props": {
+    "modelValue": "Selected date + time. Supports v-model.",
+    "label": "Visible label above the field.",
+    "placeholder": "Text shown when there is no value.",
+    "size": "Input size.",
+    "format": "Time picker format.",
+    "step": "Minute granularity in the time picker.",
+    "showSeconds": "Shows a seconds column in the time picker.",
+    "minDate": "Minimum selectable date and time.",
+    "maxDate": "Maximum selectable date and time.",
+    "clearable": "Shows a button to clear the value.",
+    "disabled": "Disables the field.",
+    "readonly": "Makes the field non-interactive.",
+    "required": "Marks the field as required.",
+    "fullWidth": "Occupies 100% of the available width."
+  },
+  "emits": {
+    "updateModelValue": "Emitted when the value changes.",
+    "change": "Semantic alias of update:modelValue.",
+    "open": "Emitted when the popover opens.",
+    "close": "Emitted when the popover closes.",
+    "clear": "Emitted when the value is cleared."
+  },
+  "types": {
+    "title": "DateTimeField",
+    "desc": "TypeScript interface for the DateTimeField component props. Supports combined date and time picker with calendar popover, time format, step control and min/max constraints."
+  },
+  "a11y": {
+    "kbTab": "Move focus to the next focusable element",
+    "kbShiftTab": "Move focus to the previous focusable element",
+    "kbEnter": "Open the date-time popover",
+    "kbEsc": "Close the popover without selecting",
+    "kbArrow": "Navigate days, hours or minutes in the picker",
+    "ariaExpanded": "Communicates whether the popover is open or closed",
+    "ariaInvalid": "Set to true when errorText is present",
+    "ariaDescribedBy": "Links helper or error text to the trigger for screen reader context",
+    "ariaRequired": "Set to true when the required prop is active",
+    "ariaDisabled": "Communicates disabled state to assistive technologies",
+    "ariaLabel": "Provides an accessible name when no visible label is present",
+    "focusNative": "Uses a native button as trigger — participates in the tab order by default",
+    "focusTrap": "Focus is trapped inside the popover while it is open"
+  }
 }

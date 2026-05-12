@@ -21,7 +21,7 @@
         "padding": "Padding interno aplicado a header, body y footer.",
         "radius": "Radio de borde. Hereda del ModoProvider si se omite.",
         "hoverable": "Aplica estado hover (sombra, borde) sin convertirlo en botón.",
-        "clickable": "Renderiza el card como <button> con foco accesible y cursor pointer.",
+        "clickable": "Renderiza el card como button con foco accesible y cursor pointer.",
         "divided": "Muestra una línea divisoria entre header / body / footer."
     },
 
@@ -51,7 +51,7 @@
         },
         "clickable": {
             "title": "Clickeable",
-            "desc": "Renderiza el card como <button> accesible con foco visible."
+            "desc": "Renderiza el card como button accesible con foco visible."
         }
     }
 }

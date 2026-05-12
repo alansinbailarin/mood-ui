@@ -1,54 +1,68 @@
 {
-    "title": "Rating",
-    "description": "Star rating control. Supports half steps, read-only mode and all color and size variants.",
+  "title": "Rating",
+  "description": "Star rating control. Supports half steps, read-only mode and all color and size variants.",
 
-    "controls": {
-        "max":      "Max",
-        "color":    "Color",
-        "size":     "Size",
-        "half":     "Half",
-        "readonly": "Readonly",
-        "disabled": "Disabled"
+  "controls": {
+    "max": "Max",
+    "color": "Color",
+    "size": "Size",
+    "half": "Half",
+    "readonly": "Readonly",
+    "disabled": "Disabled"
+  },
+
+  "examples": {
+    "basic": {
+      "title": "Basic usage",
+      "desc": "Five stars, warning color by default. Clicking the active value resets it."
     },
-
-    "examples": {
-        "basic": {
-            "title": "Basic usage",
-            "desc":  "Five stars, warning color by default. Clicking the active value resets it."
-        },
-        "half": {
-            "title": "Half stars",
-            "desc":  "Enable allow-half for ratings in 0.5 steps and show the numeric value."
-        },
-        "colors": {
-            "title": "Colors",
-            "desc":  "Semantic variants for different contexts."
-        },
-        "sizes": {
-            "title": "Sizes",
-            "desc":  "Three sizes available."
-        },
-        "readonlyDisabled": {
-            "title": "Read-only and disabled",
-            "desc":  "readonly preserves active styles; disabled adds opacity."
-        }
+    "half": {
+      "title": "Half stars",
+      "desc": "Enable allow-half for ratings in 0.5 steps and show the numeric value."
     },
-
-    "props": {
-        "modelValue": "Current value (v-model).",
-        "max":        "Total number of items (stars) rendered.",
-        "allowHalf":  "Allows values in 0.5 steps.",
-        "readonly":   "Read-only mode — no interaction accepted.",
-        "disabled":   "Disables and reduces opacity.",
-        "clearable":  "Re-clicking the active value resets it to 0.",
-        "color":      "Semantic color of the filled stars.",
-        "size":       "Star size.",
-        "showValue":  "Displays the numeric value next to the rating.",
-        "ariaLabel":  "Accessible name."
+    "colors": {
+      "title": "Colors",
+      "desc": "Semantic variants for different contexts."
     },
-
-    "emits": {
-        "updateModelValue": "Emitted when the value changes (syncs v-model).",
-        "change":           "Emitted after each user-confirmed change."
+    "sizes": {
+      "title": "Sizes",
+      "desc": "Three sizes available."
+    },
+    "readonlyDisabled": {
+      "title": "Read-only and disabled",
+      "desc": "readonly preserves active styles; disabled adds opacity."
     }
+  },
+
+  "props": {
+    "modelValue": "Current value (v-model).",
+    "max": "Total number of items (stars) rendered.",
+    "allowHalf": "Allows values in 0.5 steps.",
+    "readonly": "Read-only mode — no interaction accepted.",
+    "disabled": "Disables and reduces opacity.",
+    "clearable": "Re-clicking the active value resets it to 0.",
+    "color": "Semantic color of the filled stars.",
+    "size": "Star size.",
+    "showValue": "Displays the numeric value next to the rating.",
+    "ariaLabel": "Accessible name."
+  },
+
+  "emits": {
+    "updateModelValue": "Emitted when the value changes (syncs v-model).",
+    "change": "Emitted after each user-confirmed change."
+  },
+  "types": {
+    "title": "Rating",
+    "desc": "TypeScript interface for the Rating component props. Supports half-steps, clearable stars, and numeric value display."
+  },
+  "a11y": {
+    "kbTab": "Move focus to the next focusable element",
+    "kbShiftTab": "Move focus to the previous focusable element",
+    "kbArrow": "Change the rating value by one step",
+    "kbEnter": "Confirm the current rating value",
+    "ariaLabel": "Provides an accessible name for the rating group",
+    "ariaDisabled": "Communicates disabled state to assistive technologies",
+    "focusNative": "Each star is a focusable button — arrow keys navigate and change the value",
+    "focusReadonly": "Read-only mode preserves visual state and announces the current value without allowing edits"
+  }
 }

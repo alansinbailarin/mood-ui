@@ -2,6 +2,7 @@
 import { ref, computed, defineAsyncComponent, h, watch } from "vue";
 import ModoProvider from "./components/ModoProvider.vue";
 import ToastContainer from "./components/feedback/ToastContainer.vue";
+import ConfirmDialog from "./components/feedback/ConfirmDialog.vue";
 import Loader from "./components/feedback/Loader.vue";
 
 import { showroomNav } from "./showroom/registry";
@@ -105,9 +106,16 @@ const locale = computed<PartialLocale>(() => localeMap[localeName.value]);
 // ── Router & route classification ─────────────────────────────────────────────
 const { entry, currentId, go } = useShowroomRouter();
 
-// Scroll to top whenever the active page changes
+// Scroll to top whenever the active page changes.
+// Delayed by the leave-transition duration (100 ms) so the snap happens
+// while the old page is already faded out — not before the animation starts.
+let _scrollTimer: ReturnType<typeof setTimeout> | null = null;
 watch(currentId, () => {
-  window.scrollTo({ top: 0, behavior: "instant" });
+  if (_scrollTimer !== null) clearTimeout(_scrollTimer);
+  _scrollTimer = setTimeout(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+    _scrollTimer = null;
+  }, 100);
 });
 
 const activeCategoryId = computed<string | null>(() => {
@@ -167,7 +175,7 @@ function onHeaderNavigate(id: string) {
 <template>
   <ModoProvider
     :theme="theme"
-    color="default"
+    :color="color"
     :radius="radius"
     :size="size"
     halo="off"
@@ -211,7 +219,7 @@ function onHeaderNavigate(id: string) {
           @reset="resetTheme"
         />
       </header>
-      <div style="view-transition-name: showroom-content">
+      <div>
         <Suspense>
           <component :is="ActivePage" v-if="ActivePage" />
           <template #fallback>
@@ -261,10 +269,7 @@ function onHeaderNavigate(id: string) {
           @reset="resetTheme"
         />
       </header>
-      <div
-        class="max-w-7xl mx-auto px-4 sm:px-6 py-8"
-        style="view-transition-name: showroom-content"
-      >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <Suspense>
           <component :is="ActivePage" v-if="ActivePage" />
           <template #fallback>
@@ -330,7 +335,8 @@ function onHeaderNavigate(id: string) {
       </Suspense>
     </DocsShell>
 
-    <ToastContainer position="bottom-right" />
+    <ToastContainer placement="bottom-right" />
+    <ConfirmDialog />
 
     <CommandPalette
       v-model="paletteOpen"

@@ -1,50 +1,63 @@
 {
-    "title": "ProgressBar",
-    "description": "Barra de progreso lineal determinada o indeterminada. Soporta etiqueta, valor numérico, colores, tamaños y animación striped.",
+  "title": "ProgressBar",
+  "description": "Barra de progreso lineal determinada o indeterminada. Soporta etiqueta, valor numérico, colores, tamaños y animación striped.",
 
-    "controls": {
-        "value":         "Valor",
-        "color":         "Color",
-        "size":          "Tamaño",
-        "indeterminate": "Indeterminado",
-        "striped":       "Striped",
-        "showValue":     "Valor"
+  "controls": {
+    "value": "Valor",
+    "color": "Color",
+    "size": "Tamaño",
+    "indeterminate": "Indeterminado",
+    "striped": "Striped",
+    "showValue": "Valor"
+  },
+
+  "examples": {
+    "label": {
+      "title": "Con label y valor",
+      "desc": "Combina label encima y showValue para mostrar el porcentaje numérico.",
+      "uploadLabel": "Subiendo archivo"
     },
-
-    "examples": {
-        "label": {
-            "title":       "Con label y valor",
-            "desc":        "Combina label encima y showValue para mostrar el porcentaje numérico.",
-            "uploadLabel": "Subiendo archivo"
-        },
-        "indeterminate": {
-            "title": "Indeterminado",
-            "desc":  "Omite la prop value para mostrar la animación deslizante."
-        },
-        "colors": {
-            "title": "Colores",
-            "desc":  "Cinco colores semánticos para reflejar el estado del proceso."
-        },
-        "sizes": {
-            "title": "Tamaños",
-            "desc":  "Tres grosores: small, medium (default) y large."
-        },
-        "striped": {
-            "title": "Striped",
-            "desc":  "Activa stripes animadas para procesos en curso."
-        }
+    "indeterminate": {
+      "title": "Indeterminado",
+      "desc": "Omite la prop value para mostrar la animación deslizante."
     },
-
-    "props": {
-        "value":     "Valor actual entre min y max. Omitir para modo indeterminado.",
-        "min":       "Valor mínimo del rango.",
-        "max":       "Valor máximo del rango.",
-        "color":     "Color de la barra.",
-        "size":      "Grosor de la barra.",
-        "radius":    "Radio del track. Cascada desde ModoProvider.",
-        "showValue": "Muestra el porcentaje numérico junto a la barra.",
-        "label":     "Etiqueta opcional renderizada encima de la barra.",
-        "ariaLabel": "Label accesible cuando se omite la prop label.",
-        "striped":   "Activa la animación de stripes (útil para \"subiendo…\")."
+    "colors": {
+      "title": "Colores",
+      "desc": "Cinco colores semánticos para reflejar el estado del proceso."
+    },
+    "sizes": {
+      "title": "Tamaños",
+      "desc": "Tres grosores: small, medium (default) y large."
+    },
+    "striped": {
+      "title": "Striped",
+      "desc": "Activa stripes animadas para procesos en curso."
     }
+  },
+
+  "props": {
+    "value": "Valor actual entre min y max. Omitir para modo indeterminado.",
+    "min": "Valor mínimo del rango.",
+    "max": "Valor máximo del rango.",
+    "color": "Color de la barra.",
+    "size": "Grosor de la barra.",
+    "radius": "Radio del track. Cascada desde ModoProvider.",
+    "showValue": "Muestra el porcentaje numérico junto a la barra.",
+    "label": "Etiqueta opcional renderizada encima de la barra.",
+    "ariaLabel": "Label accesible cuando se omite la prop label.",
+    "striped": "Activa la animación de stripes (útil para \"subiendo…\")."
+  },
+  "types": {
+    "title": "ProgressBar",
+    "desc": "Interfaz TypeScript de las props del componente ProgressBar. Incluye los tipos unión ProgressBarColor y ProgressBarSize con modos determinate e indeterminate."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "ariaProgress": "Usa role progressbar para identificación del lector de pantalla",
+    "ariaValueNow": "Anuncia el valor actual de progreso a los lectores de pantalla",
+    "ariaValueMin": "Comunica el valor mínimo (0 por defecto)",
+    "ariaValueMax": "Comunica el valor máximo (100 por defecto)",
+    "focusNative": "Elemento no interactivo; no participa en el orden de tabulación"
+  }
 }

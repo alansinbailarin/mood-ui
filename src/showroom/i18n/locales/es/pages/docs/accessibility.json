@@ -1,0 +1,163 @@
+{
+  "overline": "Documentación",
+  "title": "Accesibilidad",
+  "subtitle": "Los componentes de Mood UI incluyen semántica ARIA, navegación por teclado y gestión de foco visible desde el principio. Así es como entendemos la accesibilidad.",
+
+  "disclaimerTitle": "No es una certificación formal",
+  "disclaimerBody": "Mood UI no está auditado ni certificado oficialmente contra WCAG 2.2 AA. La conformidad se evalúa con criterio de mejor esfuerzo. La accesibilidad final de tu app también depende de cómo compongas los componentes: proporcionando labels, preservando el foco y manteniendo contraste adecuado en tus overrides de color.",
+
+  "targetTitle": "Objetivo: WCAG 2.2 AA",
+  "targetDesc": "Diseñamos cada componente para cumplir WCAG 2.2 nivel AA donde corresponda. Esto cubre los cuatro principios POUR: Perceptible, Operable, Comprensible y Robusto.",
+
+  "principlesTitle": "Qué incluimos",
+  "principles": {
+    "contrast": {
+      "title": "Contraste de color",
+      "text": "Los tokens de color por defecto cumplen una relación de 4.5:1 para texto normal y 3:1 para texto grande y componentes UI. Las paletas generadas con paletteFromHex() siguen las mismas reglas."
+    },
+    "keyboard": {
+      "title": "Navegación por teclado",
+      "text": "Todos los componentes interactivos funcionan sin ratón. Tab, Space, Enter, Escape y las teclas de flecha siguen los patrones WAI-ARIA establecidos."
+    },
+    "focus": {
+      "title": "Gestión del foco",
+      "text": "El foco siempre es visible. Modal, Drawer y ConfirmDialog implementan un focus trap: el foco permanece dentro del overlay y regresa al trigger al cerrar."
+    },
+    "aria": {
+      "title": "Semántica ARIA",
+      "text": "Se prefiere HTML nativo. Los roles, estados y propiedades ARIA (dialog, combobox, aria-live, aria-expanded…) solo se añaden cuando es necesario."
+    },
+    "motion": {
+      "title": "Movimiento reducido",
+      "text": "Todas las transiciones respetan prefers-reduced-motion. Cuando el usuario lo desactiva, las animaciones se reemplazan por cambios de estado instantáneos."
+    },
+    "labels": {
+      "title": "Labels accesibles",
+      "text": "Los botones solo de icono y los botones de cierre exponen aria-label. Usa la prop label o aria-label para dar texto significativo a los lectores de pantalla."
+    }
+  },
+
+  "wcagTitle": "WCAG 2.2 — los cuatro principios",
+  "wcagDesc": "WCAG 2.2 es el estándar del W3C para la accesibilidad web. El nivel AA es la línea base ampliamente aceptada para software empresarial y del sector público.",
+  "pour": {
+    "perceivable": {
+      "label": "Perceptible",
+      "text": "La información y la UI deben presentarse de formas que los usuarios puedan percibir: alternativas de texto, contraste suficiente, contenido adaptable."
+    },
+    "operable": {
+      "label": "Operable",
+      "text": "Los componentes y la navegación deben ser completamente operables: accesibles por teclado, sin destellos que causen convulsiones, foco visible."
+    },
+    "understandable": {
+      "label": "Comprensible",
+      "text": "El contenido y su operación deben ser comprensibles: texto legible, comportamiento predecible, mensajes de error útiles."
+    },
+    "robust": {
+      "label": "Robusto",
+      "text": "El contenido debe poder ser interpretado por las tecnologías asistivas actuales y futuras: semántica válida, nombre/rol/valor para cada componente."
+    }
+  },
+
+  "nextTitle": "Próximos pasos",
+  "nextDesc": "Cada página de componente incluye una sección de notas de accesibilidad con atajos de teclado, roles ARIA y comportamiento del foco.",
+  "nextComponents": "Explorar componentes",
+  "nextComponentsDesc": "Todos los componentes están documentados con su comportamiento a11y.",
+  "nextComponentsCta": "Explorar",
+  "nextWcag": "Especificación oficial WCAG 2.2",
+  "nextWcagDesc": "Lee la especificación completa del W3C.",
+  "nextWcagCta": "Abrir W3C",
+
+  "kbTitle": "Referencia de teclado",
+  "kbDesc": "Referencia completa de atajos de teclado organizada por categoría de componente.",
+  "kbColComponent": "Componente",
+  "kbColKey": "Tecla",
+  "kbColAction": "Acción",
+  "kbGroups": {
+    "controls": "Controles de formulario",
+    "selection": "Desplegables y selección",
+    "datetime": "Fecha, hora y sliders",
+    "overlays": "Overlays y diálogos",
+    "navigation": "Navegación y disclosure",
+    "calendar": "Calendario"
+  },
+  "kbActions": {
+    "toggleChecked": "Alternar estado marcado",
+    "navigateGroup": "Navegar dentro del grupo de radio",
+    "toggleSwitch": "Activar / desactivar",
+    "navigateSegmented": "Navegar entre opciones",
+    "adjustRating": "Ajustar valoración",
+    "addTag": "Añadir nueva etiqueta",
+    "removeTag": "Eliminar última etiqueta",
+    "openDropdown": "Abrir desplegable",
+    "navigateOptions": "Navegar opciones",
+    "selectOption": "Seleccionar opción enfocada",
+    "closeDropdown": "Cerrar desplegable",
+    "filterOptions": "Filtrar opciones escribiendo",
+    "nextSegment": "Ir al siguiente segmento de fecha",
+    "incrDecr": "Incrementar / decrementar valor del segmento",
+    "adjustSlider": "Ajustar valor del slider",
+    "minMax": "Ir al mínimo / máximo",
+    "closeOverlay": "Cerrar overlay, devolver foco al trigger",
+    "moveFocusTrapped": "Mover foco (atrapado dentro del overlay)",
+    "cancel": "Cancelar y cerrar",
+    "confirm": "Confirmar acción",
+    "cycleFocus": "Ciclar entre botones de acción",
+    "navTabs": "Navegar al tab anterior / siguiente",
+    "firstLastTab": "Ir al primer / último tab",
+    "navMenu": "Navegar elementos del menú",
+    "selectItem": "Seleccionar elemento",
+    "closeMenu": "Cerrar menú",
+    "togglePanel": "Expandir o colapsar panel",
+    "navDay": "Día anterior / siguiente",
+    "navWeek": "Semana anterior / siguiente",
+    "navMonth": "Mes anterior / siguiente",
+    "selectDate": "Seleccionar fecha enfocada"
+  },
+
+  "ariaTitle": "Patrones ARIA",
+  "ariaDesc": "Roles y atributos ARIA que utilizan los componentes de Mood UI para comunicar semántica a las tecnologías asistivas.",
+  "ariaColPattern": "Patrón",
+  "ariaColComponents": "Componentes",
+  "ariaColDesc": "Propósito",
+  "ariaPatterns": {
+    "dialog": "Diálogo overlay con focus trap. El fondo queda inerte mientras está abierto.",
+    "combobox": "Selector desplegable. Comunica el estado expandido/colapsado a los lectores de pantalla.",
+    "listbox": "Lista navegable por teclado con opciones seleccionables.",
+    "radiogroup": "Inputs de radio agrupados con navegación por teclas de flecha.",
+    "switch": "Control toggle binario que anuncia el estado on/off.",
+    "slider": "Control de rango numérico que anuncia valor actual, mínimo y máximo.",
+    "tablist": "Tira de tabs con navegación por teclado y paneles de contenido asociados.",
+    "live": "Región live polite para anuncios dinámicos a lectores de pantalla.",
+    "progressbar": "Indicador de progreso con valor numérico, mínimo y máximo.",
+    "tooltip": "Descripción contextual vinculada al elemento trigger mediante aria-describedby."
+  },
+
+  "testTitle": "Guía de testing",
+  "testDesc": "Herramientas recomendadas y un checklist básico para verificar la accesibilidad de tu aplicación.",
+  "testToolsTitle": "Herramientas recomendadas",
+  "toolType": {
+    "library": "Librería",
+    "extension": "Extensión",
+    "builtin": "Integrado",
+    "screenreader": "Lector de pantalla"
+  },
+  "tools": {
+    "axe": "Motor JS de código abierto. Intégralo en Jest/Vitest para detectar problemas en pipelines CI/CD.",
+    "axeExt": "Extensión para Chrome y Firefox. Ejecuta auditorías bajo demanda directamente en las DevTools.",
+    "wave": "Herramienta de overlay visual. Resalta errores, alertas y problemas de estructura en la página en tiempo real.",
+    "lighthouse": "Integrado en las DevTools de Chrome. Auditoría completa de accesibilidad junto a rendimiento y SEO.",
+    "voiceover": "Lector de pantalla nativo de macOS/iOS. Sin instalación — pulsa Cmd+F5 para iniciarlo.",
+    "nvda": "Lector de pantalla gratuito y de código abierto para Windows. El más usado con Chrome y Firefox."
+  },
+  "testChecklistTitle": "Checklist básico",
+  "checklist": {
+    "item1": "Todos los elementos interactivos son alcanzables y operables solo con teclado.",
+    "item2": "El indicador de foco siempre es visible — nunca ocultado con outline: none.",
+    "item3": "No hay trampas de teclado no intencionadas fuera de los overlays modales.",
+    "item4": "El contraste del texto cumple 4.5:1 (texto normal) o 3:1 (texto grande y componentes UI).",
+    "item5": "Las imágenes no decorativas tienen un atributo alt significativo.",
+    "item6": "Los cambios de estado dinámicos (abierto, seleccionado, error) se anuncian a los lectores de pantalla.",
+    "item7": "La página es totalmente usable al 200% de zoom sin scroll horizontal.",
+    "item8": "Los mensajes de error están vinculados programáticamente a sus inputs mediante aria-describedby."
+  }
+}

@@ -46,5 +46,25 @@
   "emits": {
     "updateModelValue": "Emitted when the active segment changes (syncs v-model).",
     "change": "Emitted after each user-confirmed selection."
+  },
+
+  "types": {
+    "title": "SegmentedItem",
+    "desc": "Shape of each segment in the items array. Import it to type your data before passing it to the component.",
+    "value": "Unique value emitted via update:modelValue when selected. Must be a string or number.",
+    "label": "Visible label. Optional when an icon is provided.",
+    "icon": "Optional leading icon rendered to the left of the label.",
+    "disabled": "When true, the segment is visible but not selectable.",
+    "ariaLabel": "Override the accessible name. Required when label is omitted."
+  },
+  "a11y": {
+    "kbTab": "Move focus into or out of the segmented control",
+    "kbArrow": "Move selection between segments",
+    "kbSpace": "Select the focused segment",
+    "ariaGroup": "The wrapper is exposed as a radiogroup for screen readers",
+    "ariaLabel": "Provides an accessible name for the radiogroup",
+    "ariaDisabled": "Communicates disabled state to assistive technologies",
+    "focusGroup": "Arrow keys cycle between segments; Tab moves focus out of the group",
+    "focusDisabled": "Disabled segments remain visible but are skipped by keyboard navigation"
   }
 }

@@ -1,58 +1,77 @@
 {
-    "category": "Forms",
-    "title": "DateField",
-    "description": "Date input with a calendar popover. Localizable, with minDate / maxDate and configurable display format.",
-    "controls": {
-        "size": "Size",
-        "variant": "Variant",
-        "clearable": "Clearable",
-        "disabled": "Disabled"
+  "category": "Forms",
+  "title": "DateField",
+  "description": "Date input with a calendar popover. Localizable, with minDate / maxDate and configurable display format.",
+  "controls": {
+    "size": "Size",
+    "variant": "Variant",
+    "clearable": "Clearable",
+    "disabled": "Disabled"
+  },
+  "playground": {
+    "label": "Date"
+  },
+  "examples": {
+    "basic": {
+      "title": "Basic",
+      "desc": "Field with label, calendar popover and medium display format by default."
     },
-    "playground": {
-        "label": "Date"
+    "sizes": {
+      "title": "Sizes",
+      "desc": "Available in small, medium and large sharing the input proportions."
     },
-    "examples": {
-        "basic": {
-            "title": "Basic",
-            "desc": "Field with label, calendar popover and medium display format by default."
-        },
-        "sizes": {
-            "title": "Sizes",
-            "desc": "Available in small, medium and large sharing the input proportions."
-        },
-        "minMax": {
-            "title": "Min and max",
-            "desc": "Restrict the selectable range using minDate and maxDate."
-        },
-        "clearable": {
-            "title": "Clearable",
-            "desc": "An ✕ button appears when a date is set to quickly clear the value."
-        },
-        "disabled": {
-            "title": "Disabled",
-            "desc": "The field dims, blocks the popover and preserves the visible value."
-        }
+    "minMax": {
+      "title": "Min and max",
+      "desc": "Restrict the selectable range using minDate and maxDate."
     },
-    "props": {
-        "modelValue": "Selected date. Supports v-model.",
-        "label": "Visible label above the field.",
-        "placeholder": "Text shown when no date is selected.",
-        "size": "Input size.",
-        "variant": "Visual style of the wrapper.",
-        "displayFormat": "Intl format used to display the selected date.",
-        "minDate": "Minimum selectable date in the calendar.",
-        "maxDate": "Maximum selectable date in the calendar.",
-        "clearable": "Shows a clear button when a date is set.",
-        "disabled": "Disables the field and prevents opening the popover.",
-        "readonly": "Makes the field non-interactive while preserving the visible value.",
-        "required": "Marks the field as required for validation.",
-        "fullWidth": "The field occupies 100% of the available width."
+    "clearable": {
+      "title": "Clearable",
+      "desc": "An ✕ button appears when a date is set to quickly clear the value."
     },
-    "emits": {
-        "updateModelValue": "Emitted when the user selects or clears the date.",
-        "change": "Semantic alias of update:modelValue.",
-        "open": "Emitted when the calendar popover opens.",
-        "close": "Emitted when the popover closes.",
-        "clear": "Emitted when the clear button is pressed."
+    "disabled": {
+      "title": "Disabled",
+      "desc": "The field dims, blocks the popover and preserves the visible value."
     }
+  },
+  "props": {
+    "modelValue": "Selected date. Supports v-model.",
+    "label": "Visible label above the field.",
+    "placeholder": "Text shown when no date is selected.",
+    "size": "Input size.",
+    "variant": "Visual style of the wrapper.",
+    "displayFormat": "Intl format used to display the selected date.",
+    "minDate": "Minimum selectable date in the calendar.",
+    "maxDate": "Maximum selectable date in the calendar.",
+    "clearable": "Shows a clear button when a date is set.",
+    "disabled": "Disables the field and prevents opening the popover.",
+    "readonly": "Makes the field non-interactive while preserving the visible value.",
+    "required": "Marks the field as required for validation.",
+    "fullWidth": "The field occupies 100% of the available width."
+  },
+  "emits": {
+    "updateModelValue": "Emitted when the user selects or clears the date.",
+    "change": "Semantic alias of update:modelValue.",
+    "open": "Emitted when the calendar popover opens.",
+    "close": "Emitted when the popover closes.",
+    "clear": "Emitted when the clear button is pressed."
+  },
+  "types": {
+    "title": "DateField",
+    "desc": "TypeScript interface for the DateField component props. Supports date selection with calendar popover, min/max constraints, locale and display format."
+  },
+  "a11y": {
+    "kbTab": "Move focus to the next focusable element",
+    "kbShiftTab": "Move focus to the previous focusable element",
+    "kbEnter": "Open the calendar popover",
+    "kbEsc": "Close the calendar popover without selecting",
+    "kbArrow": "Navigate days in the calendar grid",
+    "ariaExpanded": "Communicates whether the calendar popover is open or closed",
+    "ariaInvalid": "Set to true when errorText is present",
+    "ariaDescribedBy": "Links helper or error text to the trigger for screen reader context",
+    "ariaRequired": "Set to true when the required prop is active",
+    "ariaDisabled": "Communicates disabled state to assistive technologies",
+    "ariaLabel": "Provides an accessible name when no visible label is present",
+    "focusNative": "Uses a native button as trigger — participates in the tab order by default",
+    "focusTrap": "Focus is trapped inside the calendar popover while it is open"
+  }
 }

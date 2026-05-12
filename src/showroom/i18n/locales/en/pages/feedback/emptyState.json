@@ -1,60 +1,71 @@
 {
-    "title": "EmptyState",
-    "description": "Empty state for lists, searches and data-less sections. Supports icon, description, actions and visual variants.",
+  "title": "EmptyState",
+  "description": "Empty state for lists, searches and data-less sections. Supports icon, description, actions and visual variants.",
 
-    "controls": {
-        "variant":  "Variant",
-        "size":     "Size",
-        "centered": "Centered"
+  "controls": {
+    "variant": "Variant",
+    "size": "Size",
+    "centered": "Centered"
+  },
+
+  "playground": {
+    "title": "No notifications",
+    "description": "When you receive something it will appear here."
+  },
+
+  "examples": {
+    "action": {
+      "title": "With action",
+      "desc": "Actions slot for adding a CTA below the description.",
+      "emptyTitle": "No results",
+      "emptyDesc": "Try a different search or clear the filters.",
+      "cta": "Clear filters"
     },
-
-    "playground": {
-        "title":       "No notifications",
-        "description": "When you receive something it will appear here."
+    "variants": {
+      "title": "Variants",
+      "desc": "Three surfaces: subtle (default), solid (with border) and outline (dashed border).",
+      "subtleDesc": "No border.",
+      "solidDesc": "With surface.",
+      "outlineDesc": "Dashed border."
     },
-
-    "examples": {
-        "action": {
-            "title":       "With action",
-            "desc":        "Actions slot for adding a CTA below the description.",
-            "emptyTitle":  "No results",
-            "emptyDesc":   "Try a different search or clear the filters.",
-            "cta":         "Clear filters"
-        },
-        "variants": {
-            "title":        "Variants",
-            "desc":         "Three surfaces: subtle (default), solid (with border) and outline (dashed border).",
-            "subtleDesc":   "No border.",
-            "solidDesc":    "With surface.",
-            "outlineDesc":  "Dashed border."
-        },
-        "noResults": {
-            "title":       "No results",
-            "desc":        "Typical pattern for a search with no matches.",
-            "emptyTitle":  "No results",
-            "emptyDesc":   "We couldn't find anything matching \"invoices 2025\". Try other terms."
-        },
-        "error": {
-            "title":       "Error state",
-            "desc":        "Combine variant outline with a CTA to retry the operation.",
-            "emptyTitle":  "Something went wrong",
-            "emptyDesc":   "Please retry in a few seconds.",
-            "cta":         "Retry"
-        }
+    "noResults": {
+      "title": "No results",
+      "desc": "Typical pattern for a search with no matches.",
+      "emptyTitle": "No results",
+      "emptyDesc": "We couldn't find anything matching \"invoices 2025\". Try other terms."
     },
-
-    "props": {
-        "title":       "Main heading of the empty state.",
-        "description": "Secondary text below the title.",
-        "icon":        "Icon shown above the title. Defaults to InboxIcon.",
-        "size":        "Visual size of the empty state.",
-        "variant":     "Visual treatment of the container.",
-        "centered":    "Horizontally centers the content.",
-        "radius":      "Corner radius for solid or outline variants."
-    },
-
-    "slots": {
-        "actions": "Actions below the description (typically buttons).",
-        "default": "Extra content rendered at the end of the empty state."
+    "error": {
+      "title": "Error state",
+      "desc": "Combine variant outline with a CTA to retry the operation.",
+      "emptyTitle": "Something went wrong",
+      "emptyDesc": "Please retry in a few seconds.",
+      "cta": "Retry"
     }
+  },
+
+  "props": {
+    "title": "Main heading of the empty state.",
+    "description": "Secondary text below the title.",
+    "icon": "Icon shown above the title. Defaults to InboxIcon.",
+    "size": "Visual size of the empty state.",
+    "variant": "Visual treatment of the container.",
+    "centered": "Horizontally centers the content.",
+    "radius": "Corner radius for solid or outline variants."
+  },
+
+  "slots": {
+    "actions": "Actions below the description (typically buttons).",
+    "default": "Extra content rendered at the end of the empty state."
+  },
+  "types": {
+    "title": "EmptyState",
+    "desc": "TypeScript interface for the EmptyState component props. Includes EmptyStateSize and EmptyStateVariant union types for size and visual treatment."
+  },
+  "a11y": {
+    "kbTab": "Move focus to the next focusable element",
+    "kbShiftTab": "Move focus to the previous focusable element",
+    "ariaRegion": "Uses role region to identify the empty state as a navigable landmark",
+    "ariaLabel": "Provides an accessible name for the empty state region",
+    "focusNative": "Actions inside the empty state are focusable; the container itself is not"
+  }
 }

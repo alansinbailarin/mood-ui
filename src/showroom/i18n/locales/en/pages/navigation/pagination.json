@@ -1,30 +1,60 @@
 {
-    "title": "Pagination",
-    "category": "Navigation",
-    "description": "Accessible paginator with first/last jumps, configurable siblings and all the design system's visual tokens.",
-    "examples": {
-        "basic":    { "title": "Basic",             "desc": "Paginator with first/last, prev/next and one sibling on each side by default." },
-        "siblings": { "title": "More siblings",     "desc": "Increase `sibling-count` to show more pages around the current one." },
-        "jump":     { "title": "Quick jump",        "desc": "Combine the paginator with a NumberInput to jump directly to a specific page." },
-        "sizes":    { "title": "Sizes",             "desc": "Three sizes match the visual hierarchy of the surrounding context." },
-        "compact":  { "title": "Compact",           "desc": "Hides first/last buttons when space is tight or the context doesn't need them." }
+  "title": "Pagination",
+  "category": "Navigation",
+  "description": "Accessible paginator with first/last jumps, configurable siblings and all the design system's visual tokens.",
+  "examples": {
+    "basic": {
+      "title": "Basic",
+      "desc": "Paginator with first/last, prev/next and one sibling on each side by default."
     },
-    "demo": { "pagePh": "Pg.", "go": "Go" },
-    "props": {
-        "modelValue":    "Current page (1-indexed). Use v-model.",
-        "pageCount":     "Total page count (≥ 1).",
-        "siblingCount":  "Sibling pages shown on each side of the current one.",
-        "boundaryCount": "Pages pinned at the start and end of the range.",
-        "showFirstLast": "Shows the first and last page buttons.",
-        "showPrevNext":  "Shows the previous and next page buttons.",
-        "color":         "Active page color.",
-        "size":          "Paginator button size.",
-        "radius":        "Radius applied to the buttons.",
-        "disabled":      "Disables all buttons.",
-        "ariaLabel":     "Accessible nav label."
+    "siblings": {
+      "title": "More siblings",
+      "desc": "Increase `sibling-count` to show more pages around the current one."
     },
-    "emits": {
-        "updateModelValue": "Emitted when the page changes. Used by v-model.",
-        "change":           "Same payload as update:modelValue, useful for external listeners."
+    "jump": {
+      "title": "Quick jump",
+      "desc": "Combine the paginator with a NumberInput to jump directly to a specific page."
+    },
+    "sizes": {
+      "title": "Sizes",
+      "desc": "Three sizes match the visual hierarchy of the surrounding context."
+    },
+    "compact": {
+      "title": "Compact",
+      "desc": "Hides first/last buttons when space is tight or the context doesn't need them."
     }
+  },
+  "demo": {
+    "pagePh": "Pg.",
+    "go": "Go"
+  },
+  "props": {
+    "modelValue": "Current page (1-indexed). Use v-model.",
+    "pageCount": "Total page count (≥ 1).",
+    "siblingCount": "Sibling pages shown on each side of the current one.",
+    "boundaryCount": "Pages pinned at the start and end of the range.",
+    "showFirstLast": "Shows the first and last page buttons.",
+    "showPrevNext": "Shows the previous and next page buttons.",
+    "color": "Active page color.",
+    "size": "Paginator button size.",
+    "radius": "Radius applied to the buttons.",
+    "disabled": "Disables all buttons.",
+    "ariaLabel": "Accessible nav label."
+  },
+  "emits": {
+    "updateModelValue": "Emitted when the page changes. Used by v-model.",
+    "change": "Same payload as update:modelValue, useful for external listeners."
+  },
+  "types": {
+    "title": "Types",
+    "desc": "TypeScript interfaces for this component."
+  },
+  "a11y": {
+    "kbTab": "Move focus to the next page button",
+    "kbShiftTab": "Move focus to the previous page button",
+    "kbEnter": "Activate the focused page button",
+    "ariaLabel": "Provides an accessible name for the pagination navigation",
+    "ariaCurrent": "Indicates the currently active page",
+    "focusNative": "Focus moves between page buttons using Tab"
+  }
 }

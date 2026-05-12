@@ -84,5 +84,22 @@
     "focus": "Emitido cuando el input recibe foco.",
     "blur": "Emitido cuando el input pierde foco.",
     "clear": "Emitido al pulsar el botón de limpiar (clearable)."
+  },
+  "types": {
+    "title": "Input",
+    "desc": "Interfaz TypeScript de las props del componente Input. Soporta tipos HTML text-like con theming completo y helpers de validación."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "kbType": "Escribe texto en el input",
+    "kbEnter": "Envía el formulario (cuando está dentro de un formulario)",
+    "ariaInvalid": "Se activa a true cuando hay errorText presente",
+    "ariaDescribedBy": "Vincula el texto de helper o error al input para contexto del lector de pantalla",
+    "ariaRequired": "Se activa a true cuando la prop required está activa",
+    "ariaDisabled": "Comunica el estado deshabilitado a las tecnologías asistivas",
+    "ariaLabel": "Proporciona un nombre accesible cuando no hay etiqueta visible",
+    "focusNative": "Usa un elemento input nativo — participa en el orden de tabulación por defecto",
+    "focusClear": "El botón de limpiar es enfocable y activable por teclado (Enter o Space)"
   }
 }

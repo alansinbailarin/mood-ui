@@ -3,11 +3,39 @@ import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import ComponentDoc from "../../components/ComponentDoc.vue";
 import ComponentPreview from "../../components/ComponentPreview.vue";
+import CodePreview from "../../components/CodePreview.vue";
+import Typography from "../../../components/data-display/Typography.vue";
 import WeekView from "../../../components/data-display/calendar/WeekView.vue";
 import type { CalendarEvent } from "../../../interfaces/data-display/calendar/MonthView.interface";
 import type { PropDoc, EmitDoc } from "../../types";
+import A11yDoc from "../../components/A11yDoc.vue";
+import type {
+  A11yKeyboardRow,
+  A11yAriaRow,
+} from "../../components/A11yDoc.vue";
 
 const { t } = useI18n();
+
+// ── A11y data ─────────────────────────────────────────────────────────────────
+const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
+  { keys: ["Tab"], action: t("pages.data-display.weekView.a11y.kbTab") },
+  {
+    keys: ["Shift+Tab"],
+    action: t("pages.data-display.weekView.a11y.kbShiftTab"),
+  },
+]);
+
+const a11yAria = computed<A11yAriaRow[]>(() => [
+  {
+    attribute: "aria-label",
+    value: "string",
+    desc: t("pages.data-display.weekView.a11y.ariaLabel"),
+  },
+]);
+
+const a11yFocus = computed<string[]>(() => [
+  t("pages.data-display.weekView.a11y.focusNative"),
+]);
 
 // ── Sample events ─────────────────────────────────────────────────────────────
 const today = new Date();
@@ -25,7 +53,7 @@ const sampleEvents: CalendarEvent[] = [
     end: at(9, 30),
     color: "primary",
   },
-  { id: "2", title: "Diseño UI", start: at(10), end: at(12), color: "success" },
+  { id: "2", title: "UI Design", start: at(10), end: at(12), color: "success" },
   { id: "3", title: "Lunch", start: at(13), end: at(14), color: "warning" },
   {
     id: "4",
@@ -36,14 +64,14 @@ const sampleEvents: CalendarEvent[] = [
   },
   {
     id: "5",
-    title: "Demo cliente",
+    title: "Client demo",
     start: at(11, 0, 2),
     end: at(12, 0, 2),
     color: "danger",
   },
   {
     id: "6",
-    title: "Conferencia",
+    title: "Conference",
     start: at(0, 0, 3),
     end: at(23, 59, 3),
     color: "purple",
@@ -81,136 +109,244 @@ const dateAllDay = ref(new Date());
 const date12h = ref(new Date());
 const dateBiz = ref(new Date());
 
-const basicCode = `<WeekView v-model="date" :events="events" />`;
-const allDayCode = `<WeekView v-model="date" :events="events" show-all-day-row />`;
-const fmt12hCode = `<WeekView v-model="date" :events="events" format="12h" />`;
-const bizCode = `<WeekView
+const basicCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { WeekView } from 'mood-ui';
+import type { CalendarEvent } from 'mood-ui';
+
+const date = ref(new Date());
+const events: CalendarEvent[] = [];
+<\/script>
+
+<template>
+  <WeekView v-model="date" :events="events" />
+</template>`;
+
+const allDayCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { WeekView } from 'mood-ui';
+import type { CalendarEvent } from 'mood-ui';
+
+const date = ref(new Date());
+const events: CalendarEvent[] = [];
+<\/script>
+
+<template>
+  <WeekView v-model="date" :events="events" show-all-day-row />
+</template>`;
+
+const fmt12hCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { WeekView } from 'mood-ui';
+import type { CalendarEvent } from 'mood-ui';
+
+const date = ref(new Date());
+const events: CalendarEvent[] = [];
+<\/script>
+
+<template>
+  <WeekView v-model="date" :events="events" format="12h" />
+</template>`;
+
+const bizCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { WeekView } from 'mood-ui';
+import type { CalendarEvent } from 'mood-ui';
+
+const date = ref(new Date());
+const events: CalendarEvent[] = [];
+<\/script>
+
+<template>
+  <WeekView
     v-model="date"
     :events="events"
     :business-hours="{ start: '09:00', end: '18:00' }"
     :hour-start="7"
     :hour-end="20"
-/>`;
+  />
+</template>`;
+
+const typesCode = `export interface DisabledTimeRange {
+  start: string;
+  end: string;
+  daysOfWeek?: number[];
+}
+
+export interface BusinessHours {
+  start: string;
+  end: string;
+  daysOfWeek?: number[];
+}
+
+export interface WeekView {
+  modelValue?: Date;
+  events?: CalendarEvent[];
+  locale?: string;
+  firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+  color?: 'default' | 'primary' | 'danger' | 'success' | 'warning';
+  radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
+  bordered?: boolean;
+  minDate?: Date;
+  maxDate?: Date;
+  dayNameFormat?: 'narrow' | 'short' | 'long';
+  dayNameCase?: 'upper' | 'lower' | 'capitalize' | 'normal';
+  highlightedWeekdays?: number[];
+  highlightedDates?: Date[];
+  disabledDates?: Date[];
+  disabledWeekdays?: number[];
+  disabledTimeRanges?: DisabledTimeRange[];
+  businessHours?: BusinessHours | BusinessHours[];
+  showHeader?: boolean;
+  showYearJump?: boolean;
+  showTodayButton?: boolean;
+  showMonthYearSelects?: boolean;
+  showWeekSelect?: boolean;
+  hourStart?: number;
+  hourEnd?: number;
+  slotMinutes?: 15 | 30 | 60;
+  slotHeight?: number;
+  minDayWidth?: number;
+  format?: '12h' | '24h';
+  showCurrentTime?: boolean;
+  showCurrentTimeLabel?: boolean;
+  currentTimeSpan?: 'today' | 'week';
+  currentTimeColor?: 'red' | 'default' | 'primary' | 'danger' | 'success' | 'warning';
+  currentTimeDimOtherDays?: boolean;
+  currentTimeUpdateInterval?: number;
+  draggableEvents?: boolean;
+  resizableEvents?: boolean;
+  allowRangeSelection?: boolean;
+  allowDropOnDisabled?: boolean;
+  allowResizeOverDisabled?: boolean;
+  readonly?: boolean;
+  preventOverlap?: boolean;
+  autoScrollOnDrag?: boolean;
+  showAllDayRow?: boolean;
+  enableKeyboardNavigation?: boolean;
+  showFocusIndicator?: boolean;
+  showNowPill?: boolean;
+}`;
 
 // ── API docs ──────────────────────────────────────────────────────────────────
 const propsList = computed<PropDoc[]>(() => [
   {
     name: "modelValue",
     type: "Date",
-    description: t("pages.dataDisplay.weekView.props.modelValue"),
+    description: t("pages.data-display.weekView.props.modelValue"),
   },
   {
     name: "events",
     type: "CalendarEvent[]",
-    description: t("pages.dataDisplay.weekView.props.events"),
+    description: t("pages.data-display.weekView.props.events"),
   },
   {
     name: "locale",
     type: "string",
-    description: t("pages.dataDisplay.weekView.props.locale"),
+    description: t("pages.data-display.weekView.props.locale"),
   },
   {
     name: "firstDayOfWeek",
     type: "0 | 1 | 2 | 3 | 4 | 5 | 6",
-    description: t("pages.dataDisplay.weekView.props.firstDayOfWeek"),
+    description: t("pages.data-display.weekView.props.firstDayOfWeek"),
   },
   {
     name: "color",
     type: "'default' | 'primary' | 'danger' | 'success' | 'warning'",
-    description: t("pages.dataDisplay.weekView.props.color"),
+    description: t("pages.data-display.weekView.props.color"),
   },
   {
     name: "format",
     type: "'12h' | '24h'",
     default: "'24h'",
-    description: t("pages.dataDisplay.weekView.props.format"),
+    description: t("pages.data-display.weekView.props.format"),
   },
   {
     name: "hourStart",
     type: "number",
     default: "0",
-    description: t("pages.dataDisplay.weekView.props.hourStart"),
+    description: t("pages.data-display.weekView.props.hourStart"),
   },
   {
     name: "hourEnd",
     type: "number",
     default: "24",
-    description: t("pages.dataDisplay.weekView.props.hourEnd"),
+    description: t("pages.data-display.weekView.props.hourEnd"),
   },
   {
     name: "slotMinutes",
     type: "15 | 30 | 60",
     default: "30",
-    description: t("pages.dataDisplay.weekView.props.slotMinutes"),
+    description: t("pages.data-display.weekView.props.slotMinutes"),
   },
   {
     name: "slotHeight",
     type: "number",
-    description: t("pages.dataDisplay.weekView.props.slotHeight"),
+    description: t("pages.data-display.weekView.props.slotHeight"),
   },
   {
     name: "minDayWidth",
     type: "number",
     default: "140",
-    description: t("pages.dataDisplay.weekView.props.minDayWidth"),
+    description: t("pages.data-display.weekView.props.minDayWidth"),
   },
   {
     name: "showAllDayRow",
     type: "boolean",
     default: "true",
-    description: t("pages.dataDisplay.weekView.props.showAllDayRow"),
+    description: t("pages.data-display.weekView.props.showAllDayRow"),
   },
   {
     name: "showHeader",
     type: "boolean",
     default: "true",
-    description: t("pages.dataDisplay.weekView.props.showHeader"),
+    description: t("pages.data-display.weekView.props.showHeader"),
   },
   {
     name: "showCurrentTime",
     type: "boolean",
     default: "true",
-    description: t("pages.dataDisplay.weekView.props.showCurrentTime"),
+    description: t("pages.data-display.weekView.props.showCurrentTime"),
   },
   {
     name: "showNowPill",
     type: "boolean",
     default: "true",
-    description: t("pages.dataDisplay.weekView.props.showNowPill"),
+    description: t("pages.data-display.weekView.props.showNowPill"),
   },
   {
     name: "businessHours",
     type: "BusinessHours | BusinessHours[]",
-    description: t("pages.dataDisplay.weekView.props.businessHours"),
+    description: t("pages.data-display.weekView.props.businessHours"),
   },
   {
     name: "disabledTimeRanges",
     type: "DisabledTimeRange[]",
-    description: t("pages.dataDisplay.weekView.props.disabledTimeRanges"),
+    description: t("pages.data-display.weekView.props.disabledTimeRanges"),
   },
   {
     name: "bordered",
     type: "boolean",
     default: "true",
-    description: t("pages.dataDisplay.weekView.props.bordered"),
+    description: t("pages.data-display.weekView.props.bordered"),
   },
   {
     name: "draggableEvents",
     type: "boolean",
     default: "false",
-    description: t("pages.dataDisplay.weekView.props.draggableEvents"),
+    description: t("pages.data-display.weekView.props.draggableEvents"),
   },
   {
     name: "resizableEvents",
     type: "boolean",
     default: "false",
-    description: t("pages.dataDisplay.weekView.props.resizableEvents"),
+    description: t("pages.data-display.weekView.props.resizableEvents"),
   },
   {
     name: "allowRangeSelection",
     type: "boolean",
     default: "false",
-    description: t("pages.dataDisplay.weekView.props.allowRangeSelection"),
+    description: t("pages.data-display.weekView.props.allowRangeSelection"),
   },
 ]);
 
@@ -218,53 +354,53 @@ const emitsList = computed<EmitDoc[]>(() => [
   {
     name: "update:modelValue",
     payload: "Date",
-    description: t("pages.dataDisplay.weekView.emits.updateModelValue"),
+    description: t("pages.data-display.weekView.emits.updateModelValue"),
   },
   {
     name: "event-click",
     payload: "(event: CalendarEvent, nativeEvent: MouseEvent)",
-    description: t("pages.dataDisplay.weekView.emits.eventClick"),
+    description: t("pages.data-display.weekView.emits.eventClick"),
   },
   {
     name: "day-click",
     payload: "(date: Date, events: CalendarEvent[], nativeEvent: MouseEvent)",
-    description: t("pages.dataDisplay.weekView.emits.dayClick"),
+    description: t("pages.data-display.weekView.emits.dayClick"),
   },
   {
     name: "slot-click",
     payload: "(date: Date, nativeEvent: MouseEvent)",
-    description: t("pages.dataDisplay.weekView.emits.slotClick"),
+    description: t("pages.data-display.weekView.emits.slotClick"),
   },
   {
     name: "create-event",
     payload:
       "(date: Date, allDay: boolean, nativeEvent: MouseEvent | KeyboardEvent)",
-    description: t("pages.dataDisplay.weekView.emits.createEvent"),
+    description: t("pages.data-display.weekView.emits.createEvent"),
   },
   {
     name: "event-drop",
     payload: "(event: CalendarEvent, newStart: Date, newEnd: Date | undefined)",
-    description: t("pages.dataDisplay.weekView.emits.eventDrop"),
+    description: t("pages.data-display.weekView.emits.eventDrop"),
   },
   {
     name: "event-resize",
     payload: "(event: CalendarEvent, newStart: Date, newEnd: Date)",
-    description: t("pages.dataDisplay.weekView.emits.eventResize"),
+    description: t("pages.data-display.weekView.emits.eventResize"),
   },
   {
     name: "select-range",
     payload: "(start: Date, end: Date)",
-    description: t("pages.dataDisplay.weekView.emits.selectRange"),
+    description: t("pages.data-display.weekView.emits.selectRange"),
   },
 ]);
 </script>
 
 <template>
   <ComponentDoc
-    :title="t('pages.dataDisplay.weekView.title')"
+    :title="t('pages.data-display.weekView.title')"
     category="Calendar"
     import-path="import { WeekView } from 'mood-ui'"
-    :description="t('pages.dataDisplay.weekView.description')"
+    :description="t('pages.data-display.weekView.description')"
     :props-list="propsList"
     :emits-list="emitsList"
   >
@@ -278,7 +414,7 @@ const emitsList = computed<EmitDoc[]>(() => [
           <div class="flex items-center gap-1.5">
             <span
               class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline"
-              >Formato</span
+              >Format</span
             >
             <div class="flex rounded-md border border-border overflow-hidden">
               <button
@@ -310,7 +446,7 @@ const emitsList = computed<EmitDoc[]>(() => [
             "
             @click="pgShowAllDay = !pgShowAllDay"
           >
-            Fila all-day
+            All-day row
           </button>
 
           <button
@@ -323,7 +459,7 @@ const emitsList = computed<EmitDoc[]>(() => [
             "
             @click="pgBordered = !pgBordered"
           >
-            Bordes
+            Borders
           </button>
 
           <button
@@ -336,7 +472,7 @@ const emitsList = computed<EmitDoc[]>(() => [
             "
             @click="pgShowNowPill = !pgShowNowPill"
           >
-            Hora actual
+            Current time
           </button>
         </template>
 
@@ -355,8 +491,8 @@ const emitsList = computed<EmitDoc[]>(() => [
 
     <template #examples>
       <ComponentPreview
-        :title="t('pages.dataDisplay.weekView.examples.basic.title')"
-        :description="t('pages.dataDisplay.weekView.examples.basic.desc')"
+        :title="t('pages.data-display.weekView.examples.basic.title')"
+        :description="t('pages.data-display.weekView.examples.basic.desc')"
         :code="basicCode"
         min-height="400px"
       >
@@ -366,8 +502,8 @@ const emitsList = computed<EmitDoc[]>(() => [
       </ComponentPreview>
 
       <ComponentPreview
-        :title="t('pages.dataDisplay.weekView.examples.allDay.title')"
-        :description="t('pages.dataDisplay.weekView.examples.allDay.desc')"
+        :title="t('pages.data-display.weekView.examples.allDay.title')"
+        :description="t('pages.data-display.weekView.examples.allDay.desc')"
         :code="allDayCode"
         min-height="400px"
       >
@@ -381,8 +517,8 @@ const emitsList = computed<EmitDoc[]>(() => [
       </ComponentPreview>
 
       <ComponentPreview
-        :title="t('pages.dataDisplay.weekView.examples.format12h.title')"
-        :description="t('pages.dataDisplay.weekView.examples.format12h.desc')"
+        :title="t('pages.data-display.weekView.examples.format12h.title')"
+        :description="t('pages.data-display.weekView.examples.format12h.desc')"
         :code="fmt12hCode"
         min-height="400px"
       >
@@ -392,9 +528,9 @@ const emitsList = computed<EmitDoc[]>(() => [
       </ComponentPreview>
 
       <ComponentPreview
-        :title="t('pages.dataDisplay.weekView.examples.businessHours.title')"
+        :title="t('pages.data-display.weekView.examples.businessHours.title')"
         :description="
-          t('pages.dataDisplay.weekView.examples.businessHours.desc')
+          t('pages.data-display.weekView.examples.businessHours.desc')
         "
         :code="bizCode"
         min-height="400px"
@@ -409,6 +545,24 @@ const emitsList = computed<EmitDoc[]>(() => [
           />
         </div>
       </ComponentPreview>
+    </template>
+
+    <template #a11y>
+      <A11yDoc
+        :keyboard-rows="a11yKeyboard"
+        :aria-rows="a11yAria"
+        :focus-notes="a11yFocus"
+      />
+    </template>
+
+    <template #extra>
+      <Typography variant="heading" size="large" weight="medium" as="h2">
+        {{ t("pages.data-display.weekView.types.title") }}
+      </Typography>
+      <Typography variant="body" size="small" class="text-muted-foreground">
+        {{ t("pages.data-display.weekView.types.desc") }}
+      </Typography>
+      <CodePreview :code="typesCode" lang="ts" code-only />
     </template>
   </ComponentDoc>
 </template>

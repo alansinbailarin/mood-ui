@@ -1,75 +1,92 @@
 {
-    "title": "Checkbox",
-    "description": "Checkbox accesible con soporte para estado indeterminado, descripción y todas las variantes de color y tamaño.",
+  "title": "Checkbox",
+  "description": "Checkbox accesible con soporte para estado indeterminado, descripción y todas las variantes de color y tamaño.",
 
-    "controls": {
-        "color":         "Color",
-        "size":          "Size",
-        "indeterminate": "Indeterminate",
-        "loading":       "Loading",
-        "disabled":      "Disabled"
+  "controls": {
+    "color": "Color",
+    "size": "Size",
+    "indeterminate": "Indeterminate",
+    "loading": "Loading",
+    "disabled": "Disabled"
+  },
+
+  "playground": {
+    "label": "Acepto los términos"
+  },
+
+  "examples": {
+    "basic": {
+      "title": "Uso básico",
+      "desc": "Checkbox controlado con v-model.",
+      "label1": "Acepto los términos",
+      "label2": "Suscribirme al newsletter"
     },
-
-    "playground": {
-        "label": "Acepto los términos"
+    "description": {
+      "title": "Con descripción",
+      "desc": "Texto secundario bajo el label para clarificar el propósito.",
+      "label": "Notificaciones",
+      "helpText": "Recibe alertas por email cuando hay actividad."
     },
-
-    "examples": {
-        "basic": {
-            "title":      "Uso básico",
-            "desc":       "Checkbox controlado con v-model.",
-            "label1":     "Acepto los términos",
-            "label2":     "Suscribirme al newsletter"
-        },
-        "description": {
-            "title":      "Con descripción",
-            "desc":       "Texto secundario bajo el label para clarificar el propósito.",
-            "label":      "Notificaciones",
-            "helpText":   "Recibe alertas por email cuando hay actividad."
-        },
-        "indeterminate": {
-            "title": "Indeterminado",
-            "desc":  "Útil para representar selección parcial en listas con \"seleccionar todos\".",
-            "label": "Selección parcial"
-        },
-        "colors": {
-            "title": "Colores",
-            "desc":  "Variantes semánticas para el estado checked."
-        },
-        "sizes": {
-            "title": "Tamaños",
-            "desc":  "Tres tamaños para adaptarse a la densidad del formulario."
-        },
-        "disabled": {
-            "title":   "Disabled",
-            "desc":    "Estado deshabilitado preservando el valor visual.",
-            "checked": "Disabled marcado",
-            "empty":   "Disabled vacío"
-        }
+    "indeterminate": {
+      "title": "Indeterminado",
+      "desc": "Útil para representar selección parcial en listas con \"seleccionar todos\".",
+      "label": "Selección parcial"
     },
-
-    "props": {
-        "modelValue":    "Valor del checkbox (v-model).",
-        "label":         "Etiqueta visible a la derecha del control.",
-        "description":   "Texto descriptivo secundario bajo el label.",
-        "helperText":    "Texto de ayuda bajo el control. Se oculta si hay errorText.",
-        "errorText":     "Mensaje de error que reemplaza al helperText y aplica estado de error.",
-        "color":         "Color semántico aplicado en estado checked.",
-        "size":          "Tamaño del cuadro y del label.",
-        "radius":        "Radio del cuadro del checkbox.",
-        "indeterminate": "Estado tri-estado: muestra un guión en lugar del check.",
-        "disabled":      "Deshabilita el checkbox e impide la interacción.",
-        "readonly":      "Bloquea cambios pero mantiene foco y estilos activos.",
-        "required":      "Marca el campo como requerido y muestra asterisco.",
-        "loading":       "Estado de carga durante operaciones asíncronas.",
-        "name":          "Atributo name HTML para envío en formularios.",
-        "value":         "Atributo value HTML, útil dentro de un grupo de checkboxes.",
-        "id":            "id del input. Se autogenera si se omite.",
-        "ariaLabel":     "Nombre accesible cuando no hay label visible."
+    "colors": {
+      "title": "Colores",
+      "desc": "Variantes semánticas para el estado checked."
     },
-
-    "emits": {
-        "updateModelValue": "Emitido al cambiar el valor (sincroniza v-model).",
-        "change":           "Emitido tras cada cambio confirmado por el usuario."
+    "sizes": {
+      "title": "Tamaños",
+      "desc": "Tres tamaños para adaptarse a la densidad del formulario."
+    },
+    "disabled": {
+      "title": "Disabled",
+      "desc": "Estado deshabilitado preservando el valor visual.",
+      "checked": "Disabled marcado",
+      "empty": "Disabled vacío"
     }
+  },
+
+  "props": {
+    "modelValue": "Valor del checkbox (v-model).",
+    "label": "Etiqueta visible a la derecha del control.",
+    "description": "Texto descriptivo secundario bajo el label.",
+    "helperText": "Texto de ayuda bajo el control. Se oculta si hay errorText.",
+    "errorText": "Mensaje de error que reemplaza al helperText y aplica estado de error.",
+    "color": "Color semántico aplicado en estado checked.",
+    "size": "Tamaño del cuadro y del label.",
+    "radius": "Radio del cuadro del checkbox.",
+    "indeterminate": "Estado tri-estado: muestra un guión en lugar del check.",
+    "disabled": "Deshabilita el checkbox e impide la interacción.",
+    "readonly": "Bloquea cambios pero mantiene foco y estilos activos.",
+    "required": "Marca el campo como requerido y muestra asterisco.",
+    "loading": "Estado de carga durante operaciones asíncronas.",
+    "name": "Atributo name HTML para envío en formularios.",
+    "value": "Atributo value HTML, útil dentro de un grupo de checkboxes.",
+    "id": "id del input. Se autogenera si se omite.",
+    "ariaLabel": "Nombre accesible cuando no hay label visible."
+  },
+
+  "emits": {
+    "updateModelValue": "Emitido al cambiar el valor (sincroniza v-model).",
+    "change": "Emitido tras cada cambio confirmado por el usuario."
+  },
+  "types": {
+    "title": "Checkbox",
+    "desc": "Interfaz TypeScript de las props del componente Checkbox. Soporta tri-estado con indeterminate, helpers de validación y theming completo."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "kbSpace": "Alterna el estado checked / indeterminate",
+    "ariaChecked": "Comunica el estado checked, unchecked o indeterminate",
+    "ariaInvalid": "Se activa a true cuando hay errorText presente",
+    "ariaDescribedBy": "Vincula el texto de helper o error al checkbox para contexto del lector de pantalla",
+    "ariaRequired": "Se activa a true cuando la prop required está activa",
+    "ariaDisabled": "Comunica el estado deshabilitado a las tecnologías asistivas",
+    "ariaLabel": "Proporciona un nombre accesible cuando no hay etiqueta visible",
+    "focusNative": "Usa un input[type=checkbox] nativo — participa en el orden de tabulación por defecto",
+    "focusIndeterminate": "El estado indeterminate se refleja visualmente y se anuncia a los lectores de pantalla"
+  }
 }

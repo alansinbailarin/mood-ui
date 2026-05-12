@@ -87,11 +87,9 @@ function go(id: string) {
 </script>
 
 <template>
-  <nav
-    v-if="toc.items.value.length"
-    class="hidden xl:flex xl:flex-col w-56 shrink-0"
-  >
+  <nav class="hidden xl:flex xl:flex-col w-56 shrink-0">
     <div
+      v-if="toc.items.value.length"
       class="sticky top-20 flex flex-col justify-between"
       style="height: calc(95dvh - 5rem)"
     >

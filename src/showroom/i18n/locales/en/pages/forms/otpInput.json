@@ -1,0 +1,101 @@
+{
+  "title": "OTPInput",
+  "description": "One-time password input with configurable digit slots, paste support, auto-advance and mask mode.",
+
+  "controls": {
+    "length": "Length",
+    "mask": "Mask",
+    "numeric": "Numeric only",
+    "separator": "Separator",
+    "disabled": "Disabled"
+  },
+
+  "playground": {
+    "label": "Verification code"
+  },
+
+  "examples": {
+    "basic": {
+      "title": "Basic usage",
+      "desc": "Six numeric slots. Auto-advances to the next slot on input and supports paste."
+    },
+    "separator": {
+      "title": "With separator",
+      "desc": "A dash is rendered after a given slot index, useful for 6-digit codes split as 3+3."
+    },
+    "mask": {
+      "title": "Masked",
+      "desc": "Set mask to hide the entered characters — useful for PIN entry."
+    },
+    "alphanumeric": {
+      "title": "Alphanumeric",
+      "desc": "Disable numeric-only mode to accept letters and numbers."
+    },
+    "states": {
+      "title": "States",
+      "desc": "Error, disabled and loading states.",
+      "errorLabel": "Error",
+      "errorText": "Invalid code. Please try again.",
+      "disabledLabel": "Disabled",
+      "loadingLabel": "Loading"
+    },
+    "sizes": {
+      "title": "Sizes",
+      "desc": "Three sizes to match form density."
+    }
+  },
+
+  "props": {
+    "modelValue": "The full OTP string (v-model).",
+    "length": "Number of input slots.",
+    "mask": "Mask slot values (show dots).",
+    "numeric": "Restrict input to digits only. Set to false for alphanumeric OTPs.",
+    "separator": "Slot index after which a separator dash is rendered.",
+    "label": "Visible label above the slots.",
+    "helperText": "Helper text (hidden when errorText is present).",
+    "errorText": "Error message. Marks the field as invalid when set.",
+    "color": "Semantic color applied to focus ring and accent states.",
+    "size": "Slot size.",
+    "radius": "Corner radius for each slot. Inherits from ModoProvider when omitted.",
+    "halo": "Persistent halo (ring) style.",
+    "fullWidth": "Applies w-full to the root element.",
+    "disabled": "Disables all slots.",
+    "readonly": "Read-only mode: shows values but prevents editing.",
+    "required": "Marks the group as required.",
+    "autofocus": "Auto-focus the first slot on mount.",
+    "loading": "Shows a loading spinner (implies disabled).",
+    "name": "HTML name attribute for the hidden native input (form submission).",
+    "id": "id prefix. Auto-generated if omitted.",
+    "ariaLabel": "Accessible name for the slot group when no visible label is provided.",
+    "invalid": "Forces the invalid state without rendering errorText.",
+    "ariaDescribedBy": "Extra IDs to concatenate into aria-describedby."
+  },
+
+  "emits": {
+    "updateModelValue": "Emitted on every slot change (syncs v-model).",
+    "change": "Emitted after each slot change.",
+    "complete": "Emitted once all slots are filled."
+  },
+
+  "types": {
+    "title": "OTPInput",
+    "desc": "TypeScript interface for the OTPInput component props."
+  },
+
+  "a11y": {
+    "kbTab": "Move focus to the next focusable element",
+    "kbShiftTab": "Move focus to the previous focusable element",
+    "kbType": "Type a digit (or alphanumeric character) to fill the slot and advance",
+    "kbBackspace": "Clear the current slot or move back and clear the previous",
+    "kbArrow": "Navigate between slots with ArrowLeft / ArrowRight",
+    "kbHome": "Jump to the first slot",
+    "kbEnd": "Jump to the last slot",
+    "kbPaste": "Paste a full OTP code — characters are distributed across slots",
+    "ariaGroup": "Slots are wrapped in a role=group with an accessible label",
+    "ariaInvalid": "Set to true when errorText is present",
+    "ariaDescribedBy": "Links helper or error text to the group for screen reader context",
+    "ariaLabel": "Each slot has its own aria-label (e.g. \"Digit 1\")",
+    "focusNative": "Each slot is a native input — participates in the tab order by default",
+    "autocomplete": "The first slot uses autocomplete=one-time-code for SMS auto-fill"
+  }
+}

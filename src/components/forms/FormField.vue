@@ -78,10 +78,11 @@
     </component> 
 </template> 
  
-<script setup lang="ts"> 
-import { computed, useId, useSlots } from 'vue'; 
-import Typography from '../data-display/Typography.vue'; 
-import type { FormField } from '../../interfaces/forms/FormField.interface'; 
+<script setup lang="ts">
+import { computed, provide, useId, useSlots } from 'vue';
+import Typography from '../data-display/Typography.vue';
+import type { FormField } from '../../interfaces/forms/FormField.interface';
+import { FORM_FIELD_ID_KEY } from '../../composables/useField';
  
 const props = withDefaults(defineProps<FormField>(), { 
     orientation: 'vertical', 
@@ -92,8 +93,12 @@ const props = withDefaults(defineProps<FormField>(), {
  
 const slots = useSlots(); 
  
-const autoId = useId(); 
-const resolvedId = computed(() => props.id ?? `modo-field-${autoId}`); 
+const autoId = useId();
+const resolvedId = computed(() => props.id ?? `modo-field-${autoId}`);
+
+// Provide the resolved id so child form controls (Input, Textarea, etc.) automatically
+// use it as their own id — connecting the FormField's <label for="..."> without v-slot.
+provide(FORM_FIELD_ID_KEY, resolvedId); 
  
 const hasError = computed(() => !!props.errorText); 
 const isHorizontal = computed(() => props.orientation === 'horizontal'); 

@@ -1,7 +1,14 @@
-import { computed, useId, toValue, type ComputedRef, type MaybeRefOrGetter } from 'vue'; 
-import { useResolvedHalo } from './useModoConfig'; 
-import type { ModoHalo } from '../config/ModoConfig'; 
-import { useResolvedColor, useResolvedRadius } from './useModoConfig'; 
+import { computed, inject, useId, toValue, type ComputedRef, type InjectionKey, type MaybeRefOrGetter, type Ref } from 'vue';
+import { useResolvedHalo } from './useModoConfig';
+import type { ModoHalo } from '../config/ModoConfig';
+import { useResolvedColor, useResolvedRadius } from './useModoConfig';
+
+/**
+ * Injection key provided by FormField so child form controls can:
+ * 1. Use the FormField's id as their own (connecting `<label for="...">` automatically).
+ * 2. Suppress the "no label" a11y warning — the FormField already renders a visible label.
+ */
+export const FORM_FIELD_ID_KEY: InjectionKey<Ref<string>> = Symbol('FormFieldId');
  
 /** 
  * Props del campo de formulario que necesita `useFieldState`. 
@@ -45,12 +52,15 @@ export interface UseFieldStateOptions {
  * - Contador y flags derivadas. 
  * - Warning DEV cuando falta label/ariaLabel. 
  */ 
-export function useFieldState( 
-    props: FieldStateSource, 
-    options: UseFieldStateOptions, 
-) { 
-    const autoId = useId(); 
-    const fieldId = computed(() => props.id ?? `${options.idPrefix}-${autoId}`); 
+export function useFieldState(
+    props: FieldStateSource,
+    options: UseFieldStateOptions,
+) {
+    const autoId = useId();
+    // If a parent FormField provides its id, use it — this connects the FormField's
+    // `<label for="...">` to this input automatically without needing v-slot binding.
+    const formFieldId = inject(FORM_FIELD_ID_KEY, null);
+    const fieldId = computed(() => props.id ?? formFieldId?.value ?? `${options.idPrefix}-${autoId}`);
  
     const color = useResolvedColor(() => props.color); 
     const radius = useResolvedRadius(() => props.radius); 
@@ -88,11 +98,13 @@ export function useFieldState(
         return ids.length ? ids.join(' ') : undefined; 
     }); 
  
-    if (import.meta.env.DEV && !props.label && !props.ariaLabel && !props.id) { 
-        console.warn( 
-            `[mood-ui ${options.componentName}] Se requiere \`label\` o \`ariaLabel\` para accesibilidad.`, 
-        ); 
-    } 
+    // Warn only when there is genuinely no accessible label: no label/ariaLabel prop
+    // AND no parent FormField providing one (detected via injection key).
+    if (import.meta.env.DEV && !props.label && !props.ariaLabel && !props.id && !formFieldId) {
+        console.warn(
+            `[mood-ui ${options.componentName}] Se requiere \`label\` o \`ariaLabel\` para accesibilidad.`,
+        );
+    }
  
     return { 
         fieldId, 

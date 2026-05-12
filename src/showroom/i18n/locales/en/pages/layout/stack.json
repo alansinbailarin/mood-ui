@@ -1,24 +1,52 @@
 {
-    "title": "Stack",
-    "category": "Layout",
-    "description": "Generic flex primitive to stack children in row or column with consistent spacing, alignment and wrap. HStack and VStack are shortcuts.",
-    "examples": {
-        "vertical":   { "title": "Vertical (default)", "desc": "Stacks children in a column with system spacing." },
-        "horizontal": { "title": "Horizontal",         "desc": "Switch direction to row for a horizontal layout." },
-        "divider":    { "title": "With divider",       "desc": "Inserts automatic separators between children." },
-        "wrapping":   { "title": "Wrapping",           "desc": "Lets children jump to the next line when there's no space." }
+  "title": "Stack",
+  "category": "Layout",
+  "description": "Generic flex primitive to stack children in row or column with consistent spacing, alignment and wrap. HStack and VStack are shortcuts.",
+  "examples": {
+    "vertical": {
+      "title": "Vertical (default)",
+      "desc": "Stacks children in a column with system spacing."
     },
-    "sections": { "start": "Start", "center": "Center", "end": "End" },
-    "props": {
-        "direction":  "Stack orientation.",
-        "spacing":    "Gap between child elements.",
-        "align":      "Cross-axis alignment (align-items).",
-        "justify":    "Main-axis distribution (justify-content).",
-        "wrap":       "Line-break behavior.",
-        "divider":    "Inserts a Divider between each child.",
-        "fullWidth":  "Makes the stack take full available width.",
-        "fullHeight": "Makes the stack take full available height.",
-        "as":         "Root tag to render."
+    "horizontal": {
+      "title": "Horizontal",
+      "desc": "Switch direction to row for a horizontal layout."
     },
-    "slots": { "default": "Children to stack." }
+    "divider": {
+      "title": "With divider",
+      "desc": "Inserts automatic separators between children."
+    },
+    "wrapping": {
+      "title": "Wrapping",
+      "desc": "Lets children jump to the next line when there's no space."
+    }
+  },
+  "sections": {
+    "start": "Start",
+    "center": "Center",
+    "end": "End"
+  },
+  "props": {
+    "direction": "Stack orientation.",
+    "spacing": "Gap between child elements.",
+    "align": "Cross-axis alignment (align-items).",
+    "justify": "Main-axis distribution (justify-content).",
+    "wrap": "Line-break behavior.",
+    "divider": "Inserts a Divider between each child.",
+    "fullWidth": "Makes the stack take full available width.",
+    "fullHeight": "Makes the stack take full available height.",
+    "as": "Root tag to render."
+  },
+  "slots": {
+    "default": "Children to stack."
+  },
+  "types": {
+    "title": "Types",
+    "desc": "TypeScript interfaces for this component."
+  },
+  "a11y": {
+    "kbTab": "Move focus to the next focusable element",
+    "kbShiftTab": "Move focus to the previous focusable element",
+    "ariaLabel": "Provides an accessible name for the stack",
+    "focusNative": "Non-interactive layout element; does not participate in the tab order"
+  }
 }

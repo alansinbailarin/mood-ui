@@ -100,8 +100,5 @@
     "vue": "^3.5.32",
     "vue-i18n": "^11.4.2",
     "vue-tsc": "^3.2.7"
-  },
-  "dependencies": {
-    "@vercel/analytics": "^2.0.1"
   }
 }

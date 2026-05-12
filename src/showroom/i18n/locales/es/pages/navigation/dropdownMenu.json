@@ -2,7 +2,10 @@
   "title": "DropdownMenu",
   "category": "Navigation",
   "description": "Menú flotante de acciones con headers, dividers, atajos de teclado, descripciones, items destructivos y enlaces externos.",
-  "trigger": { "actions": "Acciones", "more": "Más" },
+  "trigger": {
+    "actions": "Acciones",
+    "more": "Más"
+  },
   "items": {
     "edit": "Editar",
     "duplicate": "Duplicar",
@@ -60,5 +63,20 @@
   },
   "slots": {
     "trigger": "Sustituye el trigger por defecto. Útil para envolver un Avatar u otro componente."
+  },
+  "types": {
+    "title": "Tipos",
+    "desc": "Interfaces de TypeScript para este componente."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "kbEnter": "Activa el item enfocado o abre el menú",
+    "kbEsc": "Cierra el menú y devuelve el foco al trigger",
+    "kbArrow": "Navega entre los items del menú",
+    "ariaExpanded": "Indica si el panel del menú está abierto",
+    "ariaLabel": "Proporciona un nombre accesible para el panel del menú",
+    "focusTrigger": "El foco vuelve al botón trigger cuando el menú se cierra",
+    "focusTrap": "El foco queda atrapado dentro del menú mientras está abierto"
   }
 }

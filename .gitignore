@@ -24,3 +24,6 @@ build_output.txt
 *.njsproj
 *.sln
 *.sw?
+
+# Project planning
+# plan.md

@@ -1,44 +1,48 @@
 {
-    "pages": {
-        "dataDisplay": {
-            "avatarGroup": {
-                "title": "AvatarGroup",
-                "description": "Apila avatares solapados mostrando hasta N visibles y un contador con el resto. Ideal para listas de colaboradores, asignados o miembros.",
-                "controls": {
-                    "size": "Tamaño",
-                    "max": "Máximo",
-                    "radius": "Radio",
-                    "bordered": "Borde"
-                },
-                "props": {
-                    "max": "Número máximo de avatares visibles. Los restantes se agrupan en un contador +N.",
-                    "size": "Tamaño aplicado a todos los avatares hijos.",
-                    "radius": "Forma compartida por todos los avatares del grupo.",
-                    "bordered": "Borde alrededor de cada avatar para separarlos visualmente.",
-                    "ariaLabel": "Nombre accesible para el grupo."
-                },
-                "slots": {
-                    "default": "Lista de componentes <Avatar>. El grupo controla su tamaño y forma."
-                },
-                "examples": {
-                    "basic": {
-                        "title": "Básico",
-                        "desc": "Tres avatares solapados sin límite."
-                    },
-                    "maxOverflow": {
-                        "title": "Con max y overflow",
-                        "desc": "Limita los visibles y muestra un contador +N con el resto."
-                    },
-                    "sizes": {
-                        "title": "Tamaños",
-                        "desc": "El size se aplica a todos los avatares hijos."
-                    },
-                    "mixed": {
-                        "title": "Mixto",
-                        "desc": "Combina imágenes, iniciales e icono fallback en el mismo grupo."
-                    }
-                }
-            }
-        }
+  "title": "AvatarGroup",
+  "description": "Apila avatares solapados mostrando hasta N visibles y un contador con el resto. Ideal para listas de colaboradores, asignados o miembros.",
+  "controls": {
+    "size": "Tamaño",
+    "max": "Máximo",
+    "radius": "Radio",
+    "bordered": "Borde"
+  },
+  "props": {
+    "max": "Número máximo de avatares visibles. Los restantes se agrupan en un contador +N.",
+    "size": "Tamaño aplicado a todos los avatares hijos.",
+    "radius": "Forma compartida por todos los avatares del grupo.",
+    "bordered": "Borde alrededor de cada avatar para separarlos visualmente.",
+    "ariaLabel": "Nombre accesible para el grupo."
+  },
+  "slots": {
+    "default": "Lista de componentes Avatar. El grupo controla su tamaño y forma."
+  },
+  "examples": {
+    "basic": {
+      "title": "Básico",
+      "desc": "Tres avatares solapados sin límite."
+    },
+    "maxOverflow": {
+      "title": "Con max y overflow",
+      "desc": "Limita los visibles y muestra un contador +N con el resto."
+    },
+    "sizes": {
+      "title": "Tamaños",
+      "desc": "El size se aplica a todos los avatares hijos."
+    },
+    "mixed": {
+      "title": "Mixto",
+      "desc": "Combina imágenes, iniciales e icono fallback en el mismo grupo."
     }
+  },
+  "types": {
+    "title": "AvatarGroup",
+    "desc": "Interfaz TypeScript de las props del componente AvatarGroup. Soporta max, size, radius, bordered y ariaLabel."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "ariaLabel": "Proporciona un nombre accesible que describe el grupo de avatares",
+    "focusNative": "Contenedor no interactivo; los avatares hijos no son enfocables"
+  }
 }

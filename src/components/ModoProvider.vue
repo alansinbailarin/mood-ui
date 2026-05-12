@@ -9,8 +9,8 @@
 </template> 
  
 <script setup lang="ts"> 
-import { ref, computed, watch, provide, inject } from 'vue'; 
-import { MODO_CONFIG, defaultModoConfig, type ModoColor, type ModoConfig, type ModoHalo, type ModoRadius, type ModoSize, type ModoTheme, type ModoSurfaces } from '../config/ModoConfig'; 
+import { ref, computed, watch, provide, inject } from 'vue';
+import { MODO_CONFIG, defaultModoConfig, type ModoAiConfig, type ModoColor, type ModoConfig, type ModoHalo, type ModoRadius, type ModoSize, type ModoTheme, type ModoSurfaces } from '../config/ModoConfig'; 
 import { MODO_LOCALE, defaultLocale, mergeLocale, type ModoLocale, type PartialLocale } from '../config/ModoLocale'; 
 import { mergePalettes, palettesToCssVars, semanticTokensFromPalettes, type ModoPalette } from '../config/palettes'; 
 import { surfacesToCssVars } from '../config/surfaces';
@@ -65,13 +65,20 @@ const props = withDefaults(defineProps<{
      * `src/config/ModoLocale.ts` for the full shape. 
      */ 
     locale?: PartialLocale; 
-    /** 
-     * When true, the provider becomes a self-contained theme island: 
-     * renders a real `<div>`, sets `data-modo-theme` on it, and does not 
-     * mutate the global color mode. Useful for nested sections with their 
-     * own palette / light/dark mode. 
-     */ 
-    scoped?: boolean; 
+    /**
+     * Global AI provider config. Passes AI functions down to any AI-enabled
+     * component (`<AvatarUpload ai />`, etc.) without requiring per-instance
+     * `:provider` props. The developer supplies their own API key / model.
+     * Mood UI never provides or manages AI services.
+     */
+    ai?: ModoAiConfig;
+    /**
+     * When true, the provider becomes a self-contained theme island:
+     * renders a real `<div>`, sets `data-modo-theme` on it, and does not
+     * mutate the global color mode. Useful for nested sections with their
+     * own palette / light/dark mode.
+     */
+    scoped?: boolean;
 }>(), { 
     scoped: false, 
 }); 
@@ -101,15 +108,16 @@ const resolvedScopedTheme = computed<'light' | 'dark' | undefined>(() => {
     return resolveColorMode(props.theme); 
 }); 
  
-const config = ref<ModoConfig>({ 
-    color: pick(props.color, parent?.value.color, defaultModoConfig.color), 
-    radius: pick(props.radius, parent?.value.radius, defaultModoConfig.radius), 
-    size: pick(props.size, parent?.value.size, defaultModoConfig.size), 
-    theme: pick(props.theme, parent?.value.theme, defaultModoConfig.theme), 
-    halo: pick(props.halo, parent?.value.halo, defaultModoConfig.halo), 
+const config = ref<ModoConfig>({
+    color: pick(props.color, parent?.value.color, defaultModoConfig.color),
+    radius: pick(props.radius, parent?.value.radius, defaultModoConfig.radius),
+    size: pick(props.size, parent?.value.size, defaultModoConfig.size),
+    theme: pick(props.theme, parent?.value.theme, defaultModoConfig.theme),
+    halo: pick(props.halo, parent?.value.halo, defaultModoConfig.halo),
     palettes: mergePalettes(props.palettes, parent?.value.palettes),
     surfaces: props.surfaces ?? parent?.value.surfaces,
     darkSurfaces: props.darkSurfaces ?? parent?.value.darkSurfaces,
+    ai: props.ai ?? parent?.value.ai,
 });
  
 watch( 
@@ -154,6 +162,7 @@ watch(
 // Fall back to parent's value when local prop is not set.
 watch(() => props.surfaces,    (v) => { config.value.surfaces     = v ?? parent?.value.surfaces; }, { deep: true });
 watch(() => props.darkSurfaces, (v) => { config.value.darkSurfaces = v ?? parent?.value.darkSurfaces; }, { deep: true });
+watch(() => props.ai,           (v) => { config.value.ai           = v ?? parent?.value.ai; }, { deep: true });
 // Inherit parent surface changes when we don't override them locally.
 watch(
     () => parent?.value.surfaces,

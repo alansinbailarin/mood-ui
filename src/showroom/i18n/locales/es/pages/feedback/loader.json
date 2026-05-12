@@ -1,37 +1,49 @@
 {
-    "title": "Loader",
-    "description": "Spinner circular para indicar progreso indeterminado. Pequeño, accesible y con color heredado por defecto para integrarse en botones, banners o cualquier contenedor.",
+  "title": "Loader",
+  "description": "Spinner circular para indicar progreso indeterminado. Pequeño, accesible y con color heredado por defecto para integrarse en botones, banners o cualquier contenedor.",
 
-    "controls": {
-        "variant": "Variante",
-        "size":    "Tamaño",
-        "color":   "Color"
+  "controls": {
+    "variant": "Variante",
+    "size": "Tamaño",
+    "color": "Color"
+  },
+
+  "examples": {
+    "variants": {
+      "title": "Variantes",
+      "desc": "normal muestra solo el arco; outline añade un track sutil de fondo."
     },
-
-    "examples": {
-        "variants": {
-            "title": "Variantes",
-            "desc":  "normal muestra solo el arco; outline añade un track sutil de fondo."
-        },
-        "sizes": {
-            "title": "Tamaños",
-            "desc":  "Tres tamaños alineados con el resto del sistema (14, 18 y 22 px)."
-        },
-        "colors": {
-            "title": "Colores personalizados",
-            "desc":  "La prop color acepta cualquier valor CSS — útil para aplicar tokens semánticos del proyecto."
-        },
-        "inline": {
-            "title":   "Inline con texto",
-            "desc":    "Combinado con texto, el spinner hereda el color del contenedor por defecto.",
-            "loading": "Cargando proyectos…"
-        }
+    "sizes": {
+      "title": "Tamaños",
+      "desc": "Tres tamaños alineados con el resto del sistema (14, 18 y 22 px)."
     },
-
-    "props": {
-        "variant": "Variante visual. outline pinta el track de fondo del anillo.",
-        "size":    "Tamaño del spinner. Cascada desde ModoProvider.",
-        "color":   "Color del trazo. Acepta cualquier valor CSS válido.",
-        "label":   "Texto accesible visualmente oculto para lectores de pantalla."
+    "colors": {
+      "title": "Colores personalizados",
+      "desc": "La prop color acepta cualquier valor CSS — útil para aplicar tokens semánticos del proyecto."
+    },
+    "inline": {
+      "title": "Inline con texto",
+      "desc": "Combinado con texto, el spinner hereda el color del contenedor por defecto.",
+      "loading": "Cargando proyectos…"
     }
+  },
+
+  "props": {
+    "variant": "Variante visual. outline pinta el track de fondo del anillo.",
+    "size": "Tamaño del spinner. Cascada desde ModoProvider.",
+    "color": "Color del trazo. Acepta cualquier valor CSS válido.",
+    "label": "Texto accesible visualmente oculto para lectores de pantalla."
+  },
+  "types": {
+    "title": "Loader",
+    "desc": "Interfaz TypeScript de las props del componente Loader. Spinner simple con variant, size, color y label accesible."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "ariaStatus": "Usa role status para anunciar el estado de carga a los lectores de pantalla",
+    "ariaLive": "Anuncia los cambios de estado de carga a las tecnologías asistivas",
+    "ariaLabel": "Proporciona un nombre accesible vía la prop label",
+    "focusNative": "Elemento no interactivo; no participa en el orden de tabulación"
+  }
 }

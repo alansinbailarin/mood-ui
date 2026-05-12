@@ -1,67 +1,80 @@
 {
-    "title": "Tooltip",
-    "description": "Contextual hint shown on hover or focus over an element. Supports multiple placements, semantic colors, configurable delays and rich content.",
+  "title": "Tooltip",
+  "description": "Contextual hint shown on hover or focus over an element. Supports multiple placements, semantic colors, configurable delays and rich content.",
 
-    "controls": {
-        "placement": "Placement",
-        "color":     "Color",
-        "delay":     "Delay",
-        "arrow":     "Arrow",
-        "disabled":  "Disabled"
+  "controls": {
+    "placement": "Placement",
+    "color": "Color",
+    "delay": "Delay",
+    "arrow": "Arrow",
+    "disabled": "Disabled"
+  },
+
+  "examples": {
+    "placements": {
+      "title": "Placements",
+      "desc": "Four main placements. Each variant also accepts -start and -end to align with a trigger edge."
     },
-
-    "examples": {
-        "placements": {
-            "title": "Placements",
-            "desc":  "Four main placements. Each variant also accepts -start and -end to align with a trigger edge."
-        },
-        "rich": {
-            "title":    "Rich content",
-            "desc":     "Use the content slot to include markup, icons or keyboard shortcuts inside the panel.",
-            "heading":  "Keyboard shortcut",
-            "shortcut": "Press Ctrl+K to open the search.",
-            "cta":      "View shortcut"
-        },
-        "icon": {
-            "title":   "Over icon-only button",
-            "desc":    "Essential on icon-only buttons to describe the action to screen reader users.",
-            "tooltip": "Like"
-        },
-        "delays": {
-            "title":      "Delays",
-            "desc":       "Adjust openDelay to avoid intrusive tooltips when moving the cursor between buttons.",
-            "zero":       "No delay",
-            "zeroBtn":    "Instant",
-            "short":      "Short delay",
-            "long":       "Long delay"
-        }
+    "rich": {
+      "title": "Rich content",
+      "desc": "Use the content slot to include markup, icons or keyboard shortcuts inside the panel.",
+      "heading": "Keyboard shortcut",
+      "shortcut": "Press Ctrl+K to open the search.",
+      "cta": "View shortcut"
     },
-
-    "props": {
-        "content":      "Tooltip text. Use the content slot for markup.",
-        "placement":    "Position relative to the trigger.",
-        "offset":       "Distance in px between trigger and panel.",
-        "trigger":      "Events that open the tooltip.",
-        "openDelay":    "Delay in ms before opening.",
-        "closeDelay":   "Delay in ms before closing.",
-        "arrow":        "Shows an arrow pointing to the trigger.",
-        "color":        "Panel color.",
-        "size":         "Panel and typography size.",
-        "radius":       "Corner radius. Cascades from ModoProvider.",
-        "disabled":     "Never opens the tooltip.",
-        "open":         "External open state control (v-model:open).",
-        "maxWidth":     "Maximum panel width in px.",
-        "wrapperClass": "Extra classes for the trigger wrapper."
+    "icon": {
+      "title": "Over icon-only button",
+      "desc": "Essential on icon-only buttons to describe the action to screen reader users.",
+      "tooltip": "Like"
     },
-
-    "emits": {
-        "updateOpen": "Change in open/closed state of the tooltip.",
-        "show":       "Emitted when the panel opens.",
-        "hide":       "Emitted when the panel closes."
-    },
-
-    "slots": {
-        "default": "Trigger element over which the tooltip is shown.",
-        "content": "Custom panel content. Replaces the content prop."
+    "delays": {
+      "title": "Delays",
+      "desc": "Adjust openDelay to avoid intrusive tooltips when moving the cursor between buttons.",
+      "zero": "No delay",
+      "zeroBtn": "Instant",
+      "short": "Short delay",
+      "long": "Long delay"
     }
+  },
+
+  "props": {
+    "content": "Tooltip text. Use the content slot for markup.",
+    "placement": "Position relative to the trigger.",
+    "offset": "Distance in px between trigger and panel.",
+    "trigger": "Events that open the tooltip.",
+    "openDelay": "Delay in ms before opening.",
+    "closeDelay": "Delay in ms before closing.",
+    "arrow": "Shows an arrow pointing to the trigger.",
+    "color": "Panel color.",
+    "size": "Panel and typography size.",
+    "radius": "Corner radius. Cascades from ModoProvider.",
+    "disabled": "Never opens the tooltip.",
+    "open": "External open state control (v-model:open).",
+    "maxWidth": "Maximum panel width in px.",
+    "wrapperClass": "Extra classes for the trigger wrapper."
+  },
+
+  "emits": {
+    "updateOpen": "Change in open/closed state of the tooltip.",
+    "show": "Emitted when the panel opens.",
+    "hide": "Emitted when the panel closes."
+  },
+
+  "slots": {
+    "default": "Trigger element over which the tooltip is shown.",
+    "content": "Custom panel content. Replaces the content prop."
+  },
+  "types": {
+    "title": "Tooltip",
+    "desc": "TypeScript interface for the Tooltip component props. Includes TooltipPlacement and TooltipTrigger union types for positioning and interaction control."
+  },
+  "a11y": {
+    "kbTab": "Move focus to the trigger; tooltip opens on focus",
+    "kbShiftTab": "Move focus to the previous focusable element",
+    "kbEsc": "Close the tooltip when it is open",
+    "ariaTooltip": "The panel uses role tooltip for screen reader identification",
+    "ariaDescribedBy": "Links the tooltip text to the trigger element for screen reader context",
+    "focusNative": "The trigger element remains focusable; the tooltip is announced on focus",
+    "focusKeyboard": "Escape closes the tooltip; focus movement keeps it open"
+  }
 }

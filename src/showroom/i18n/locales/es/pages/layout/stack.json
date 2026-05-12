@@ -1,24 +1,52 @@
 {
-    "title": "Stack",
-    "category": "Layout",
-    "description": "Primitiva flex genérica para apilar hijos en fila o columna con spacing, alineación y wrap consistentes. HStack y VStack son atajos.",
-    "examples": {
-        "vertical":   { "title": "Vertical (default)", "desc": "Apila hijos en columna con el spacing del sistema." },
-        "horizontal": { "title": "Horizontal",         "desc": "Cambia direction a row para una fila." },
-        "divider":    { "title": "Con divider",        "desc": "Inserta separadores automáticos entre los hijos." },
-        "wrapping":   { "title": "Wrapping",           "desc": "Permite que los hijos salten a la siguiente línea cuando no hay espacio." }
+  "title": "Stack",
+  "category": "Layout",
+  "description": "Primitiva flex genérica para apilar hijos en fila o columna con spacing, alineación y wrap consistentes. HStack y VStack son atajos.",
+  "examples": {
+    "vertical": {
+      "title": "Vertical (default)",
+      "desc": "Apila hijos en columna con el spacing del sistema."
     },
-    "sections": { "start": "Inicio", "center": "Centro", "end": "Final" },
-    "props": {
-        "direction":  "Orientación del stack.",
-        "spacing":    "Gap entre elementos hijos.",
-        "align":      "Alineación cross-axis (align-items).",
-        "justify":    "Distribución main-axis (justify-content).",
-        "wrap":       "Comportamiento de salto de línea.",
-        "divider":    "Inserta un Divider entre cada hijo.",
-        "fullWidth":  "Hace que el stack ocupe todo el ancho disponible.",
-        "fullHeight": "Hace que el stack ocupe todo el alto disponible.",
-        "as":         "Etiqueta raíz a renderizar."
+    "horizontal": {
+      "title": "Horizontal",
+      "desc": "Cambia direction a row para una fila."
     },
-    "slots": { "default": "Hijos a apilar." }
+    "divider": {
+      "title": "Con divider",
+      "desc": "Inserta separadores automáticos entre los hijos."
+    },
+    "wrapping": {
+      "title": "Wrapping",
+      "desc": "Permite que los hijos salten a la siguiente línea cuando no hay espacio."
+    }
+  },
+  "sections": {
+    "start": "Inicio",
+    "center": "Centro",
+    "end": "Final"
+  },
+  "props": {
+    "direction": "Orientación del stack.",
+    "spacing": "Gap entre elementos hijos.",
+    "align": "Alineación cross-axis (align-items).",
+    "justify": "Distribución main-axis (justify-content).",
+    "wrap": "Comportamiento de salto de línea.",
+    "divider": "Inserta un Divider entre cada hijo.",
+    "fullWidth": "Hace que el stack ocupe todo el ancho disponible.",
+    "fullHeight": "Hace que el stack ocupe todo el alto disponible.",
+    "as": "Etiqueta raíz a renderizar."
+  },
+  "slots": {
+    "default": "Hijos a apilar."
+  },
+  "types": {
+    "title": "Tipos",
+    "desc": "Interfaces de TypeScript para este componente."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "ariaLabel": "Proporciona un nombre accesible para la pila",
+    "focusNative": "Elemento de layout no interactivo; no participa en el orden de tabulación"
+  }
 }

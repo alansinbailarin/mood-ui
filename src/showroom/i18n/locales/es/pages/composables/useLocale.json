@@ -1,0 +1,27 @@
+{
+    "title": "useLocale",
+    "description": "Cambiador de locale reactivo global. Todos los llamadores comparten el mismo estado, así que cambiar el locale actualiza toda la aplicación. Pasa el objeto locale reactivo directamente a ModoProvider :locale.",
+    "api": {
+        "locale": "Objeto `ModoLocale` reactivo — pásalo directamente a ModoProvider :locale.",
+        "current": "Clave del locale activo (`'en'` o `'es'`).",
+        "set": "Cambia el locale activo globalmente."
+    },
+    "playground": {
+        "note": "Cambiar el locale aquí actualiza todo el contenido traducido del showroom."
+    },
+    "examples": {
+        "basic": {
+            "title": "Cambio básico",
+            "desc": "Lee `current` y llama `set(lang)` para cambiar."
+        },
+        "provider": {
+            "title": "Con ModoProvider",
+            "desc": "Vincula el locale reactivo a ModoProvider para que los componentes hijos se re-rendericen con strings traducidos.",
+            "body": "El objeto locale es reactivo. Pásalo a ModoProvider y todos los descendientes reaccionan a los cambios."
+        }
+    },
+    "types": {
+        "title": "Tipos",
+        "desc": "Interfaces de TypeScript para este composable."
+    }
+}

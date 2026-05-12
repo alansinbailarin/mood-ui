@@ -1,0 +1,29 @@
+{
+    "title": "useModoConfig",
+    "description": "Accede a la configuración global de ModoProvider y a funciones auxiliares que resuelven props de componentes contra el tema global. Funciona dentro de ModoProvider; usa valores por defecto sensatos cuando se usa fuera.",
+    "api": {
+        "config": "Devuelve el objeto `ModoConfig` completo inyectado por ModoProvider. Devuelve `undefined` fuera de un provider.",
+        "resolvedColor": "Resuelve un prop `color` local con fallback al color de marca global. Los valores semánticos ('primary', 'danger', etc.) siempre ganan; 'default' o undefined hacen fallback.",
+        "resolvedRadius": "Resuelve radio: prop local → config global → default ('medium').",
+        "resolvedSize": "Resuelve tamaño: prop local → config global → default ('medium').",
+        "resolvedTheme": "Resuelve tema: prop local → config global → default ('zinc').",
+        "resolvedHalo": "Resuelve halo: prop local → config global → default ('tinted').",
+        "modoLocale": "Devuelve el objeto locale fusionado. Funciona fuera de ModoProvider también.",
+        "localeString": "Resuelve un getter de string de locale e interpola placeholders `{name}`."
+    },
+    "examples": {
+        "resolve": {
+            "title": "Resolución de props",
+            "desc": "Cuando un prop de componente es 'default' o undefined, usa el valor del tema global."
+        },
+        "locale": {
+            "title": "Helpers de locale",
+            "desc": "Accede al locale fusionado e interpola strings con placeholders.",
+            "body": "useModoLocale y useLocaleString funcionan incluso fuera de un ModoProvider."
+        }
+    },
+    "types": {
+        "title": "Tipos",
+        "desc": "Interfaces de TypeScript para este composable."
+    }
+}

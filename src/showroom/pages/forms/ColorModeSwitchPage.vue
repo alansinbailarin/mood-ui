@@ -6,6 +6,11 @@ import ComponentPreview from "../../components/ComponentPreview.vue";
 import ColorModeSwitch from "../../../components/forms/ColorModeSwitch.vue";
 import { useColorMode } from "../../../composables/useColorMode";
 import type { PropDoc, EmitDoc } from "../../types";
+import A11yDoc from "../../components/A11yDoc.vue";
+import type {
+  A11yKeyboardRow,
+  A11yAriaRow,
+} from "../../components/A11yDoc.vue";
 import TbPills from "../../components/toolbar/TbPills.vue";
 import TbToggle from "../../components/toolbar/TbToggle.vue";
 import TbSep from "../../components/toolbar/TbSep.vue";
@@ -13,28 +18,61 @@ import type { ModoTheme } from "../../../config/ModoConfig";
 
 const { t } = useI18n();
 
+// ── A11y data ─────────────────────────────────────────────────────────────────
+const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
+  { keys: ["Tab"], action: t("pages.forms.colorModeSwitch.a11y.kbTab") },
+  {
+    keys: ["↑", "↓", "←", "→"],
+    action: t("pages.forms.colorModeSwitch.a11y.kbArrow"),
+  },
+  { keys: ["Space"], action: t("pages.forms.colorModeSwitch.a11y.kbSpace") },
+]);
+
+const a11yAria = computed<A11yAriaRow[]>(() => [
+  {
+    attribute: "role",
+    value: '"radiogroup"',
+    desc: t("pages.forms.colorModeSwitch.a11y.ariaGroup"),
+  },
+  {
+    attribute: "aria-label",
+    value: "string",
+    desc: t("pages.forms.colorModeSwitch.a11y.ariaLabel"),
+  },
+  {
+    attribute: "aria-disabled",
+    value: "true",
+    desc: t("pages.forms.colorModeSwitch.a11y.ariaDisabled"),
+  },
+]);
+
+const a11yFocus = computed<string[]>(() => [
+  t("pages.forms.colorModeSwitch.a11y.focusGroup"),
+  t("pages.forms.colorModeSwitch.a11y.focusCollapsed"),
+]);
+
 // Global color mode — the overview playground and basic example actually change the theme
 const { mode } = useColorMode();
 
 // ── Overview playground state ─────────────────────────────────────────────────
-const pgVariant   = ref<"default" | "collapsed">("default");
-const pgSize      = ref<"small" | "medium" | "large">("medium");
+const pgVariant = ref<"default" | "collapsed">("default");
+const pgSize = ref<"small" | "medium" | "large">("medium");
 const pgShowLabels = ref(false);
-const pgDisabled  = ref(false);
+const pgDisabled = ref(false);
 
 function resetPlayground() {
-  pgVariant.value    = "default";
-  pgSize.value       = "medium";
+  pgVariant.value = "default";
+  pgSize.value = "medium";
   pgShowLabels.value = false;
-  pgDisabled.value   = false;
+  pgDisabled.value = false;
 }
 
 const overviewCode = computed(() => {
   const parts: string[] = ['v-model="colorMode"'];
-  if (pgVariant.value !== "default")   parts.push(`variant="${pgVariant.value}"`);
-  if (pgSize.value !== "medium")       parts.push(`size="${pgSize.value}"`);
-  if (pgShowLabels.value)              parts.push(':show-labels="true"');
-  if (pgDisabled.value)                parts.push(':disabled="true"');
+  if (pgVariant.value !== "default") parts.push(`variant="${pgVariant.value}"`);
+  if (pgSize.value !== "medium") parts.push(`size="${pgSize.value}"`);
+  if (pgShowLabels.value) parts.push(':show-labels="true"');
+  if (pgDisabled.value) parts.push(':disabled="true"');
   return `<ColorModeSwitch ${parts.join(" ")} />`;
 });
 
@@ -54,19 +92,51 @@ const { mode } = useColorMode();
 <!-- Muestra solo el modo activo; en hover se expande -->
 <ColorModeSwitch v-model="mode" variant="collapsed" />`;
 
-const sizesCode = `<ColorModeSwitch v-model="mode" size="small" />
-<ColorModeSwitch v-model="mode" size="medium" />
-<ColorModeSwitch v-model="mode" size="large" />`;
+const sizesCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { ColorModeSwitch } from 'mood-ui';
+import type { ModoTheme } from 'mood-ui';
 
-const withLabelsCode = `<ColorModeSwitch v-model="mode" :show-labels="true" />`;
+const modeS = ref<ModoTheme>('system');
+const modeM = ref<ModoTheme>('light');
+const modeL = ref<ModoTheme>('dark');
+<\/script>
 
-const disabledCode = `<ColorModeSwitch v-model="mode" :disabled="true" />`;
+<template>
+  <ColorModeSwitch v-model="modeS" size="small" />
+  <ColorModeSwitch v-model="modeM" size="medium" />
+  <ColorModeSwitch v-model="modeL" size="large" />
+</template>`;
+
+const withLabelsCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { ColorModeSwitch } from 'mood-ui';
+import type { ModoTheme } from 'mood-ui';
+
+const mode = ref<ModoTheme>('system');
+<\/script>
+
+<template>
+  <ColorModeSwitch v-model="mode" :show-labels="true" />
+</template>`;
+
+const disabledCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { ColorModeSwitch } from 'mood-ui';
+import type { ModoTheme } from 'mood-ui';
+
+const mode = ref<ModoTheme>('system');
+<\/script>
+
+<template>
+  <ColorModeSwitch v-model="mode" :disabled="true" />
+</template>`;
 
 // Example local state (visual only — not connected to global theme)
 const exSizeS = ref<ModoTheme>("system");
 const exSizeM = ref<ModoTheme>("light");
 const exSizeL = ref<ModoTheme>("dark");
-const exLabels  = ref<ModoTheme>("system");
+const exLabels = ref<ModoTheme>("system");
 const exDisabled = ref<ModoTheme>("system");
 
 // ── API docs ──────────────────────────────────────────────────────────────────
@@ -142,7 +212,11 @@ const emitsList = computed<EmitDoc[]>(() => [
           <TbSep />
           <TbPills
             label="Size"
-            :options="[{ value: 'small' }, { value: 'medium' }, { value: 'large' }]"
+            :options="[
+              { value: 'small' },
+              { value: 'medium' },
+              { value: 'large' },
+            ]"
             v-model="pgSize"
           />
           <TbSep />
@@ -210,6 +284,14 @@ const emitsList = computed<EmitDoc[]>(() => [
       >
         <ColorModeSwitch v-model="exDisabled" :disabled="true" />
       </ComponentPreview>
+    </template>
+
+    <template #a11y>
+      <A11yDoc
+        :keyboard-rows="a11yKeyboard"
+        :aria-rows="a11yAria"
+        :focus-notes="a11yFocus"
+      />
     </template>
   </ComponentDoc>
 </template>

@@ -46,6 +46,11 @@ export const showroomNav: NavCategory[] = [
         page: () => import("./pages/docs/I18nPage.vue"),
       },
       {
+        id: "accessibility",
+        label: "Accessibility",
+        page: () => import("./pages/docs/AccessibilityPage.vue"),
+      },
+      {
         id: "changelog",
         label: "Changelog",
         page: () => import("./pages/docs/ChangelogPage.vue"),
@@ -213,6 +218,24 @@ export const showroomNav: NavCategory[] = [
         id: "color-mode-switch",
         label: "ColorModeSwitch",
         page: () => import("./pages/forms/ColorModeSwitchPage.vue"),
+        badge: "New",
+      },
+      {
+        id: "avatar-upload",
+        label: "AvatarUpload",
+        page: () => import("./pages/forms/AvatarUploadPage.vue"),
+        badge: "New",
+      },
+      {
+        id: "phone-input",
+        label: "PhoneInput",
+        page: () => import("./pages/forms/PhoneInputPage.vue"),
+        badge: "New",
+      },
+      {
+        id: "otp-input",
+        label: "OTPInput",
+        page: () => import("./pages/forms/OTPInputPage.vue"),
         badge: "New",
       },
     ],
@@ -500,6 +523,58 @@ export const showroomNav: NavCategory[] = [
         label: "Stepper",
         page: () => import("./pages/navigation/StepperPage.vue"),
         badge: "New",
+      },
+    ],
+  },
+  {
+    id: "composables",
+    title: "Composables",
+    entries: [
+      {
+        id: "use-color-mode",
+        label: "useColorMode",
+        page: () => import("./pages/composables/UseColorModePage.vue"),
+      },
+      {
+        id: "use-toast",
+        label: "useToast",
+        page: () => import("./pages/composables/UseToastPage.vue"),
+      },
+      {
+        id: "use-confirm",
+        label: "useConfirm",
+        page: () => import("./pages/composables/UseConfirmPage.vue"),
+      },
+      {
+        id: "use-locale",
+        label: "useLocale",
+        page: () => import("./pages/composables/UseLocalePage.vue"),
+      },
+      {
+        id: "use-modo-config",
+        label: "useModoConfig",
+        page: () => import("./pages/composables/UseModoConfigPage.vue"),
+      },
+      {
+        id: "use-calendar",
+        label: "useCalendar",
+        page: () => import("./pages/composables/UseCalendarPage.vue"),
+      },
+      {
+        id: "use-auto-scroll",
+        label: "useAutoScroll",
+        page: () => import("./pages/composables/UseAutoScrollPage.vue"),
+      },
+    ],
+  },
+  {
+    id: "utilities",
+    title: "Utilities",
+    entries: [
+      {
+        id: "event-colors",
+        label: "eventColors",
+        page: () => import("./pages/utilities/EventColorsPage.vue"),
       },
     ],
   },
