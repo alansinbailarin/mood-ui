@@ -1,42 +1,64 @@
 {
-    "title": "Topbar",
-    "category": "Layout",
-    "description": "Barra superior de aplicación con slots logo, title, subtitle, nav, search, actions y user. Diseñada para usarse dentro de AppShell o de forma standalone.",
-    "examples": {
-        "basic":       { "title": "Básico",                "desc": "Logo y título — la versión más simple." },
-        "search":      { "title": "Con búsqueda",          "desc": "SearchInput centrado en la barra con Avatar de usuario." },
-        "actions":     { "title": "Con acciones y usuario", "desc": "Combinación típica para una app autenticada." },
-        "transparent": { "title": "Sin divider",           "desc": "Sin borde inferior — útil para integrarse con un hero o canvas." }
+  "title": "Topbar",
+  "category": "Layout",
+  "description": "Barra superior de aplicación con slots logo, title, subtitle, nav, search, actions y user. Diseñada para usarse dentro de AppShell o de forma standalone.",
+  "examples": {
+    "basic": {
+      "title": "Básico",
+      "desc": "Logo y título — la versión más simple."
     },
-    "demo": {
-        "subtitle":     "Workspace #1",
-        "notifs":       "Notificaciones",
-        "settings":     "Ajustes",
-        "searchPh":     "Buscar…",
-        "user":         "Alan Pacheco"
+    "search": {
+      "title": "Con búsqueda",
+      "desc": "SearchInput centrado en la barra con Avatar de usuario."
     },
-    "props": {
-        "title":         "Título visible junto al logo.",
-        "subtitle":      "Texto secundario debajo del título.",
-        "size":          "Altura visual de la barra.",
-        "divider":       "Renderiza un borde inferior.",
-        "sticky":        "Activa position: sticky con fondo translúcido.",
-        "padding":       "Padding horizontal de la barra.",
-        "menuToggle":    "Muestra un botón hamburguesa a la izquierda.",
-        "menuIcon":      "Icono del botón menú (por defecto hamburguesa).",
-        "menuAriaLabel": "Nombre accesible para el botón menú icon-only.",
-        "as":            "Etiqueta raíz a renderizar."
+    "actions": {
+      "title": "Con acciones y usuario",
+      "desc": "Combinación típica para una app autenticada."
     },
-    "emits": {
-        "menuToggle": "Emitido al hacer click en el botón menú."
-    },
-    "slots": {
-        "logo":     "Logo o marca al inicio de la barra.",
-        "title":    "Reemplaza el título plano por contenido rico.",
-        "subtitle": "Reemplaza el subtítulo plano por contenido rico.",
-        "nav":      "Navegación principal (links, tabs).",
-        "search":   "Zona de búsqueda en el centro/derecha.",
-        "actions":  "Acciones rápidas (notificaciones, ajustes…).",
-        "user":     "Avatar / menú de usuario al final."
+    "transparent": {
+      "title": "Sin divider",
+      "desc": "Sin borde inferior — útil para integrarse con un hero o canvas."
     }
+  },
+  "demo": {
+    "subtitle": "Workspace #1",
+    "notifs": "Notificaciones",
+    "settings": "Ajustes",
+    "searchPh": "Buscar…",
+    "user": "Alan Pacheco"
+  },
+  "props": {
+    "title": "Título visible junto al logo.",
+    "subtitle": "Texto secundario debajo del título.",
+    "size": "Altura visual de la barra.",
+    "divider": "Renderiza un borde inferior.",
+    "sticky": "Activa position: sticky con fondo translúcido.",
+    "padding": "Padding horizontal de la barra.",
+    "menuToggle": "Muestra un botón hamburguesa a la izquierda.",
+    "menuIcon": "Icono del botón menú (por defecto hamburguesa).",
+    "menuAriaLabel": "Nombre accesible para el botón menú icon-only.",
+    "as": "Etiqueta raíz a renderizar."
+  },
+  "emits": {
+    "menuToggle": "Emitido al hacer click en el botón menú."
+  },
+  "slots": {
+    "logo": "Logo o marca al inicio de la barra.",
+    "title": "Reemplaza el título plano por contenido rico.",
+    "subtitle": "Reemplaza el subtítulo plano por contenido rico.",
+    "nav": "Navegación principal (links, tabs).",
+    "search": "Zona de búsqueda en el centro/derecha.",
+    "actions": "Acciones rápidas (notificaciones, ajustes…).",
+    "user": "Avatar / menú de usuario al final."
+  },
+  "types": {
+    "title": "Tipos",
+    "desc": "Interfaces de TypeScript para este componente."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "ariaLabel": "Proporciona un nombre accesible para la barra superior",
+    "focusNative": "El foco es gestionado por elementos interactivos dentro del topbar (menú, acciones, búsqueda)"
+  }
 }

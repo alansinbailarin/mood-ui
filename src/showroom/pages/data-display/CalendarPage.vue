@@ -3,10 +3,38 @@ import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import ComponentDoc from "../../components/ComponentDoc.vue";
 import ComponentPreview from "../../components/ComponentPreview.vue";
+import CodePreview from "../../components/CodePreview.vue";
+import Typography from "../../../components/data-display/Typography.vue";
 import Calendar from "../../../components/data-display/calendar/Calendar.vue";
 import type { PropDoc, EmitDoc } from "../../types";
+import A11yDoc from "../../components/A11yDoc.vue";
+import type {
+  A11yKeyboardRow,
+  A11yAriaRow,
+} from "../../components/A11yDoc.vue";
 
 const { t } = useI18n();
+
+// ── A11y data ─────────────────────────────────────────────────────────────────
+const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
+  { keys: ["Tab"], action: t("pages.data-display.calendar.a11y.kbTab") },
+  {
+    keys: ["Shift+Tab"],
+    action: t("pages.data-display.calendar.a11y.kbShiftTab"),
+  },
+]);
+
+const a11yAria = computed<A11yAriaRow[]>(() => [
+  {
+    attribute: "aria-label",
+    value: "string",
+    desc: t("pages.data-display.calendar.a11y.ariaLabel"),
+  },
+]);
+
+const a11yFocus = computed<string[]>(() => [
+  t("pages.data-display.calendar.a11y.focusNative"),
+]);
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgValue = ref<Date | null>(new Date());
@@ -51,96 +79,149 @@ const dateRange = ref<Date | null>(new Date());
 const dateOutline = ref<Date | null>(new Date());
 const dateLocale = ref<Date | null>(new Date());
 
-const basicCode = `<Calendar v-model="date" />`;
+const basicCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { Calendar } from 'mood-ui';
 
-const minMaxCode = `<Calendar
+const date = ref<Date | null>(new Date());
+<\/script>
+
+<template>
+  <Calendar v-model="date" />
+</template>`;
+
+const minMaxCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { Calendar } from 'mood-ui';
+
+const date = ref<Date | null>(new Date());
+<\/script>
+
+<template>
+  <Calendar
     v-model="date"
     :min-date="new Date()"
     :max-date="new Date(Date.now() + 30 * 86400000)"
     color="primary"
-/>`;
+  />
+</template>`;
 
-const outlineCode = `<Calendar v-model="date" variant="outline" color="primary" radius="large" />`;
+const outlineCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { Calendar } from 'mood-ui';
 
-const localeCode = `<Calendar v-model="date" locale="en-US" :first-day-of-week="0" />`;
+const date = ref<Date | null>(new Date());
+<\/script>
+
+<template>
+  <Calendar v-model="date" variant="outline" color="primary" radius="large" />
+</template>`;
+
+const localeCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { Calendar } from 'mood-ui';
+
+const date = ref<Date | null>(new Date());
+<\/script>
+
+<template>
+  <Calendar v-model="date" locale="en-US" :first-day-of-week="0" />
+</template>`;
+
+const typesCode = `export interface Calendar {
+  modelValue?: Date | null;
+  month?: number;
+  year?: number;
+  locale?: string;
+  firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+  minDate?: Date;
+  maxDate?: Date;
+  disabledDates?: Date[];
+  color?: 'default' | 'primary' | 'danger' | 'success' | 'warning';
+  variant?: 'filled' | 'outline';
+  radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
+  showOutsideDays?: boolean;
+  showHeader?: boolean;
+  fixedWeeks?: boolean;
+}`;
 
 // ── API docs ──────────────────────────────────────────────────────────────────
 const propsList = computed<PropDoc[]>(() => [
   {
     name: "modelValue",
     type: "Date | null",
-    description: t("pages.dataDisplay.calendar.props.modelValue"),
+    description: t("pages.data-display.calendar.props.modelValue"),
   },
   {
     name: "month",
     type: "number",
-    description: t("pages.dataDisplay.calendar.props.month"),
+    description: t("pages.data-display.calendar.props.month"),
   },
   {
     name: "year",
     type: "number",
-    description: t("pages.dataDisplay.calendar.props.year"),
+    description: t("pages.data-display.calendar.props.year"),
   },
   {
     name: "locale",
     type: "string",
-    description: t("pages.dataDisplay.calendar.props.locale"),
+    description: t("pages.data-display.calendar.props.locale"),
   },
   {
     name: "firstDayOfWeek",
     type: "0 | 1 | 2 | 3 | 4 | 5 | 6",
-    description: t("pages.dataDisplay.calendar.props.firstDayOfWeek"),
+    description: t("pages.data-display.calendar.props.firstDayOfWeek"),
   },
   {
     name: "minDate",
     type: "Date",
-    description: t("pages.dataDisplay.calendar.props.minDate"),
+    description: t("pages.data-display.calendar.props.minDate"),
   },
   {
     name: "maxDate",
     type: "Date",
-    description: t("pages.dataDisplay.calendar.props.maxDate"),
+    description: t("pages.data-display.calendar.props.maxDate"),
   },
   {
     name: "disabledDates",
     type: "Date[]",
-    description: t("pages.dataDisplay.calendar.props.disabledDates"),
+    description: t("pages.data-display.calendar.props.disabledDates"),
   },
   {
     name: "color",
     type: "'default' | 'primary' | 'danger' | 'success' | 'warning'",
     default: "'default'",
-    description: t("pages.dataDisplay.calendar.props.color"),
+    description: t("pages.data-display.calendar.props.color"),
   },
   {
     name: "variant",
     type: "'filled' | 'outline'",
     default: "'filled'",
-    description: t("pages.dataDisplay.calendar.props.variant"),
+    description: t("pages.data-display.calendar.props.variant"),
   },
   {
     name: "radius",
     type: "'none' | 'small' | 'medium' | 'large' | 'full'",
     default: "'medium'",
-    description: t("pages.dataDisplay.calendar.props.radius"),
+    description: t("pages.data-display.calendar.props.radius"),
   },
   {
     name: "showOutsideDays",
     type: "boolean",
     default: "true",
-    description: t("pages.dataDisplay.calendar.props.showOutsideDays"),
+    description: t("pages.data-display.calendar.props.showOutsideDays"),
   },
   {
     name: "showHeader",
     type: "boolean",
     default: "true",
-    description: t("pages.dataDisplay.calendar.props.showHeader"),
+    description: t("pages.data-display.calendar.props.showHeader"),
   },
   {
     name: "fixedWeeks",
     type: "boolean",
     default: "true",
-    description: t("pages.dataDisplay.calendar.props.fixedWeeks"),
+    description: t("pages.data-display.calendar.props.fixedWeeks"),
   },
 ]);
 
@@ -148,22 +229,22 @@ const emitsList = computed<EmitDoc[]>(() => [
   {
     name: "update:modelValue",
     payload: "Date",
-    description: t("pages.dataDisplay.calendar.emits.updateModelValue"),
+    description: t("pages.data-display.calendar.emits.updateModelValue"),
   },
   {
     name: "monthChange",
     payload: "{ month: number; year: number }",
-    description: t("pages.dataDisplay.calendar.emits.monthChange"),
+    description: t("pages.data-display.calendar.emits.monthChange"),
   },
 ]);
 </script>
 
 <template>
   <ComponentDoc
-    :title="t('pages.dataDisplay.calendar.title')"
+    :title="t('pages.data-display.calendar.title')"
     category="Calendar"
     import-path="import { Calendar } from 'mood-ui'"
-    :description="t('pages.dataDisplay.calendar.description')"
+    :description="t('pages.data-display.calendar.description')"
     :props-list="propsList"
     :emits-list="emitsList"
   >
@@ -177,7 +258,7 @@ const emitsList = computed<EmitDoc[]>(() => [
           <div class="flex items-center gap-1.5">
             <span
               class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline"
-              >Variante</span
+              >Variant</span
             >
             <div class="flex rounded-md border border-border overflow-hidden">
               <button
@@ -227,7 +308,7 @@ const emitsList = computed<EmitDoc[]>(() => [
           <div class="flex items-center gap-1.5">
             <span
               class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline"
-              >Radio</span
+              >Radius</span
             >
             <div class="flex rounded-md border border-border overflow-hidden">
               <button
@@ -259,7 +340,7 @@ const emitsList = computed<EmitDoc[]>(() => [
             "
             @click="pgShowOutsideDays = !pgShowOutsideDays"
           >
-            Días externos
+            Outside days
           </button>
 
           <button
@@ -272,7 +353,7 @@ const emitsList = computed<EmitDoc[]>(() => [
             "
             @click="pgShowHeader = !pgShowHeader"
           >
-            Cabecera
+            Header
           </button>
         </template>
 
@@ -289,8 +370,8 @@ const emitsList = computed<EmitDoc[]>(() => [
 
     <template #examples>
       <ComponentPreview
-        :title="t('pages.dataDisplay.calendar.examples.basic.title')"
-        :description="t('pages.dataDisplay.calendar.examples.basic.desc')"
+        :title="t('pages.data-display.calendar.examples.basic.title')"
+        :description="t('pages.data-display.calendar.examples.basic.desc')"
         :code="basicCode"
         min-height="380px"
       >
@@ -298,8 +379,8 @@ const emitsList = computed<EmitDoc[]>(() => [
       </ComponentPreview>
 
       <ComponentPreview
-        :title="t('pages.dataDisplay.calendar.examples.minMax.title')"
-        :description="t('pages.dataDisplay.calendar.examples.minMax.desc')"
+        :title="t('pages.data-display.calendar.examples.minMax.title')"
+        :description="t('pages.data-display.calendar.examples.minMax.desc')"
         :code="minMaxCode"
         min-height="380px"
       >
@@ -312,8 +393,8 @@ const emitsList = computed<EmitDoc[]>(() => [
       </ComponentPreview>
 
       <ComponentPreview
-        :title="t('pages.dataDisplay.calendar.examples.outline.title')"
-        :description="t('pages.dataDisplay.calendar.examples.outline.desc')"
+        :title="t('pages.data-display.calendar.examples.outline.title')"
+        :description="t('pages.data-display.calendar.examples.outline.desc')"
         :code="outlineCode"
         min-height="380px"
       >
@@ -326,13 +407,31 @@ const emitsList = computed<EmitDoc[]>(() => [
       </ComponentPreview>
 
       <ComponentPreview
-        :title="t('pages.dataDisplay.calendar.examples.locale.title')"
-        :description="t('pages.dataDisplay.calendar.examples.locale.desc')"
+        :title="t('pages.data-display.calendar.examples.locale.title')"
+        :description="t('pages.data-display.calendar.examples.locale.desc')"
         :code="localeCode"
         min-height="380px"
       >
         <Calendar v-model="dateLocale" locale="en-US" :first-day-of-week="0" />
       </ComponentPreview>
+    </template>
+
+    <template #a11y>
+      <A11yDoc
+        :keyboard-rows="a11yKeyboard"
+        :aria-rows="a11yAria"
+        :focus-notes="a11yFocus"
+      />
+    </template>
+
+    <template #extra>
+      <Typography variant="heading" size="large" weight="medium" as="h2">
+        {{ t("pages.data-display.calendar.types.title") }}
+      </Typography>
+      <Typography variant="body" size="small" class="text-muted-foreground">
+        {{ t("pages.data-display.calendar.types.desc") }}
+      </Typography>
+      <CodePreview :code="typesCode" lang="ts" code-only />
     </template>
   </ComponentDoc>
 </template>

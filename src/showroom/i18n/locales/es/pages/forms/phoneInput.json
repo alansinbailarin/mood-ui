@@ -1,0 +1,119 @@
+{
+  "title": "PhoneInput",
+  "description": "Campo de teléfono internacional con selector de país con búsqueda, formato de salida configurable y soporte completo de accesibilidad.",
+
+  "controls": {
+    "variant": "Variante",
+    "color": "Color",
+    "size": "Tamaño",
+    "format": "Formato",
+    "disabled": "Deshabilitado",
+    "readonly": "Solo lectura",
+    "loading": "Cargando",
+    "required": "Requerido"
+  },
+
+  "playground": {
+    "label": "Número de teléfono",
+    "placeholder": "555 123 4567"
+  },
+
+  "examples": {
+    "basic": {
+      "title": "Uso básico",
+      "desc": "Campo de teléfono con etiqueta. El país por defecto es EE.UU. El número se enlaza con v-model.",
+      "label": "Teléfono"
+    },
+    "country": {
+      "title": "País controlado",
+      "desc": "Usa v-model:country para controlar el país externamente y reaccionar a cambios de país.",
+      "label": "Teléfono",
+      "countryLabel": "País"
+    },
+    "formats": {
+      "title": "Formatos de salida",
+      "desc": "La prop format controla qué emite update:modelValue. national devuelve lo que escribió el usuario, international antepone +{dialCode}, y e164 elimina no-dígitos y antepone +{dialCode}.",
+      "nationalLabel": "Nacional",
+      "intlLabel": "Internacional",
+      "e164Label": "E.164"
+    },
+    "states": {
+      "title": "Estados",
+      "desc": "Estados deshabilitado, solo lectura y error.",
+      "disabledLabel": "Deshabilitado",
+      "readonlyLabel": "Solo lectura",
+      "errorLabel": "Error",
+      "errorText": "Número de teléfono inválido"
+    },
+    "variants": {
+      "title": "Variantes",
+      "desc": "Estilos visuales outline (predeterminado), filled y ghost.",
+      "label": "Teléfono"
+    },
+    "sizes": {
+      "title": "Tamaños",
+      "desc": "Tres tamaños de campo para diferentes densidades de UI.",
+      "label": "Teléfono"
+    }
+  },
+
+  "props": {
+    "modelValue": "Valor del número de teléfono. El formato lo controla la prop format.",
+    "country": "Código ISO 3166-1 alpha-2 del país seleccionado (v-model:country).",
+    "defaultCountry": "País por defecto al primer render cuando country no está enlazado.",
+    "format": "Formato de salida emitido por update:modelValue. national devuelve el valor tal como se escribió; international antepone +{dialCode}; e164 devuelve solo dígitos en formato E.164.",
+    "label": "Etiqueta visible encima del campo.",
+    "placeholder": "Texto de placeholder para el input numérico.",
+    "helperText": "Texto de ayuda debajo del campo. Se oculta cuando hay errorText.",
+    "errorText": "Mensaje de error que marca el campo como inválido.",
+    "variant": "Estilo visual del campo.",
+    "color": "Color semántico aplicado al estado de foco.",
+    "size": "Controla la altura y la tipografía.",
+    "radius": "Radio de esquinas. Hereda del ModoProvider cuando se omite.",
+    "halo": "Estilo del halo persistente (ring). Hereda del ModoProvider.",
+    "fullWidth": "Aplica w-full al elemento raíz.",
+    "disabled": "Deshabilita todo el campo.",
+    "readonly": "Solo lectura: mantiene el estilo normal pero impide la edición.",
+    "required": "Marca el campo como requerido y muestra el indicador visual.",
+    "loading": "Muestra un spinner y deshabilita el campo durante operaciones asíncronas.",
+    "name": "Atributo name de HTML. Se envía como name-local (número) y name (valor completo formateado).",
+    "id": "Id del input. Se autogenera si se omite.",
+    "autocomplete": "Atributo autocomplete de HTML. Por defecto tel-national.",
+    "autofocus": "Enfoca automáticamente al montar.",
+    "ariaLabel": "Nombre accesible cuando no hay etiqueta visible.",
+    "invalid": "Fuerza el estado inválido sin renderizar errorText. Útil dentro de FormField.",
+    "ariaDescribedBy": "IDs adicionales para concatenar en aria-describedby."
+  },
+
+  "emits": {
+    "updateModelValue": "Emitido en cada cambio de entrada. El formato del valor lo determina la prop format.",
+    "updateCountry": "Emitido cuando el usuario selecciona un nuevo país. El payload es el código ISO 3166-1 alpha-2.",
+    "change": "Emitido tras un cambio confirmado por el usuario (blur/enter).",
+    "focus": "Emitido cuando el input numérico recibe el foco.",
+    "blur": "Emitido cuando el input numérico pierde el foco."
+  },
+
+  "types": {
+    "title": "PhoneInput & PhoneCountry",
+    "desc": "Interfaces TypeScript para las props del componente PhoneInput y la forma de los datos de país."
+  },
+
+  "a11y": {
+    "kbTab": "Mueve el foco entre el botón selector de país, el input numérico y el siguiente campo",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "kbEnterSpace": "Abre el desplegable de países cuando el botón selector tiene el foco",
+    "kbArrowDown": "Se mueve al siguiente país en la lista desplegable",
+    "kbArrowUp": "Se mueve al país anterior en la lista desplegable",
+    "kbEnterSelect": "Selecciona el país resaltado en el desplegable",
+    "kbEscape": "Cierra el desplegable de países y devuelve el foco al botón activador",
+    "kbType": "Escribe en el buscador para filtrar países por nombre, código ISO o prefijo",
+    "ariaInvalid": "Se establece en true en el input cuando hay errorText",
+    "ariaDescribedBy": "Vincula el texto de ayuda o error al input para contexto del lector de pantalla",
+    "ariaRequired": "Se establece en true cuando la prop required está activa",
+    "ariaExpanded": "Refleja el estado abierto/cerrado del desplegable en el botón activador",
+    "ariaHasPopup": "Se establece en listbox en el activador para anunciar el tipo de desplegable",
+    "ariaLabel": "El botón selector de país siempre tiene un aria-label ('Seleccionar país' por defecto)",
+    "focusComposite": "El campo es compuesto: el botón de país y el input tel son elementos enfocables independientes",
+    "focusDropdown": "Al abrirse, el foco se mueve al input de búsqueda del desplegable para filtrado inmediato"
+  }
+}

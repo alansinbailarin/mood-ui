@@ -3,10 +3,53 @@ import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import ComponentDoc from "../../components/ComponentDoc.vue";
 import ComponentPreview from "../../components/ComponentPreview.vue";
+import CodePreview from "../../components/CodePreview.vue";
+import Typography from "../../../components/data-display/Typography.vue";
 import TagInput from "../../../components/forms/TagInput.vue";
 import type { PropDoc, EmitDoc } from "../../types";
+import A11yDoc from "../../components/A11yDoc.vue";
+import type {
+  A11yKeyboardRow,
+  A11yAriaRow,
+} from "../../components/A11yDoc.vue";
 
 const { t } = useI18n();
+
+// ── A11y data ─────────────────────────────────────────────────────────────────
+const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
+  { keys: ["Tab"], action: t("pages.forms.tagInput.a11y.kbTab") },
+  { keys: ["Shift+Tab"], action: t("pages.forms.tagInput.a11y.kbShiftTab") },
+  { keys: ["Type"], action: t("pages.forms.tagInput.a11y.kbType") },
+  { keys: ["Backspace"], action: t("pages.forms.tagInput.a11y.kbBackspace") },
+]);
+
+const a11yAria = computed<A11yAriaRow[]>(() => [
+  {
+    attribute: "aria-invalid",
+    value: "true",
+    desc: t("pages.forms.tagInput.a11y.ariaInvalid"),
+  },
+  {
+    attribute: "aria-describedby",
+    value: "id",
+    desc: t("pages.forms.tagInput.a11y.ariaDescribedBy"),
+  },
+  {
+    attribute: "aria-disabled",
+    value: "true",
+    desc: t("pages.forms.tagInput.a11y.ariaDisabled"),
+  },
+  {
+    attribute: "aria-label",
+    value: "string",
+    desc: t("pages.forms.tagInput.a11y.ariaLabel"),
+  },
+]);
+
+const a11yFocus = computed<string[]>(() => [
+  t("pages.forms.tagInput.a11y.focusNative"),
+  t("pages.forms.tagInput.a11y.focusChips"),
+]);
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgValue = ref<string[]>(["vue", "tailwind"]);
@@ -40,31 +83,78 @@ const overviewCode = computed(() => {
   if (pgSize.value !== "medium") parts.push(`size="${pgSize.value}"`);
   if (pgDisabled.value) parts.push(':disabled="true"');
   const attrs = parts.length ? "\n    " + parts.join("\n    ") : "";
-  return `<TagInput\n    v-model="tags"\n    placeholder="Añade un tag y pulsa Enter…"${attrs}\n/>`;
+  return `<TagInput\n    v-model="tags"\n    placeholder="${t("pages.forms.tagInput.playground.placeholder")}"${attrs}\n/>`;
 });
 
 // ── Example code strings ──────────────────────────────────────────────────────
-const basicCode = `<TagInput v-model="tags" placeholder="Añade un tag y pulsa Enter…" />`;
+const basicCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { TagInput } from 'mood-ui';
 
-const maxCode = `<TagInput v-model="tags" :max="3" placeholder="Hasta 3 tags" />`;
+const tags = ref<string[]>(['design', 'typography']);
+<\/script>
 
-const validatorCode = `function isEmail(t: string) {
-    return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(t);
+<template>
+  <TagInput v-model="tags" placeholder="Add a tag and press Enter…" />
+</template>`;
+
+const maxCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { TagInput } from 'mood-ui';
+
+const tags = ref<string[]>(['react', 'vue']);
+<\/script>
+
+<template>
+  <TagInput v-model="tags" :max="3" placeholder="Up to 3 tags" />
+</template>`;
+
+const validatorCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { TagInput } from 'mood-ui';
+
+const emails = ref<string[]>(['hello@modo.dev']);
+
+function isEmail(t: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(t);
 }
+<\/script>
 
-<TagInput
+<template>
+  <TagInput
     v-model="emails"
-    placeholder="Sólo emails válidos"
+    placeholder="Valid emails only"
     :validator="isEmail"
-/>`;
+  />
+</template>`;
 
-const colorsCode = `<TagInput v-model="t1" color="primary" />
-<TagInput v-model="t2" color="success" />
-<TagInput v-model="t3" color="danger" />`;
+const colorsCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { TagInput } from 'mood-ui';
 
-const sizesCode = `<TagInput v-model="t" size="small"  />
-<TagInput v-model="t" size="medium" />
-<TagInput v-model="t" size="large"  />`;
+const t1 = ref<string[]>(['vue', 'pinia']);
+const t2 = ref<string[]>(['ok', 'shipped']);
+const t3 = ref<string[]>(['error', 'warning']);
+<\/script>
+
+<template>
+  <TagInput v-model="t1" color="primary" />
+  <TagInput v-model="t2" color="success" />
+  <TagInput v-model="t3" color="danger" />
+</template>`;
+
+const sizesCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { TagInput } from 'mood-ui';
+
+const tags = ref<string[]>(['hello', 'world']);
+<\/script>
+
+<template>
+  <TagInput v-model="tags" size="small"  />
+  <TagInput v-model="tags" size="medium" />
+  <TagInput v-model="tags" size="large"  />
+</template>`;
 
 const ex1 = ref<string[]>(["design", "typography"]);
 const ex2 = ref<string[]>(["react", "vue"]);
@@ -76,6 +166,30 @@ const t1 = ref<string[]>(["vue", "pinia"]);
 const t2 = ref<string[]>(["ok", "shipped"]);
 const t3 = ref<string[]>(["error", "warning"]);
 const tt = ref<string[]>(["hola", "mundo"]);
+
+const typesCode = `export interface TagInput {
+  modelValue?: string[];
+  placeholder?: string;
+  max?: number;
+  unique?: boolean;
+  validator?: (tag: string) => boolean;
+  delimiters?: string[];
+  disabled?: boolean;
+  readonly?: boolean;
+  color?: 'default' | 'primary' | 'danger' | 'success' | 'warning';
+  variant?: 'subtle' | 'outline' | 'solid';
+  fieldVariant?: 'outline' | 'filled' | 'ghost';
+  size?: 'small' | 'medium' | 'large';
+  radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
+  halo?: 'tinted' | 'neutral' | 'off';
+  ariaLabel?: string;
+  label?: string;
+  id?: string;
+  errorText?: string;
+  helperText?: string;
+  invalid?: boolean;
+  fullWidth?: boolean;
+}`;
 
 // ── API docs ──────────────────────────────────────────────────────────────────
 const propsList = computed<PropDoc[]>(() => [
@@ -296,7 +410,8 @@ const emitsList = computed<EmitDoc[]>(() => [
             :color="pgColor"
             :size="pgSize"
             :disabled="pgDisabled"
-            placeholder="Añade un tag y pulsa Enter…"
+            :placeholder="t('pages.forms.tagInput.playground.placeholder')"
+            ariaLabel="Tags"
           />
         </div>
       </ComponentPreview>
@@ -310,7 +425,11 @@ const emitsList = computed<EmitDoc[]>(() => [
         :code="basicCode"
       >
         <div class="w-80">
-          <TagInput v-model="ex1" placeholder="Añade un tag y pulsa Enter…" />
+          <TagInput
+            v-model="ex1"
+            :placeholder="t('pages.forms.tagInput.examples.basic.ph')"
+            ariaLabel="Tags"
+          />
         </div>
       </ComponentPreview>
 
@@ -320,7 +439,12 @@ const emitsList = computed<EmitDoc[]>(() => [
         :code="maxCode"
       >
         <div class="w-80">
-          <TagInput v-model="ex2" :max="3" placeholder="Hasta 3 tags" />
+          <TagInput
+            v-model="ex2"
+            :max="3"
+            :placeholder="t('pages.forms.tagInput.examples.max.ph')"
+            ariaLabel="Tags"
+          />
         </div>
       </ComponentPreview>
 
@@ -332,8 +456,9 @@ const emitsList = computed<EmitDoc[]>(() => [
         <div class="w-80">
           <TagInput
             v-model="ex3"
-            placeholder="Sólo emails válidos"
+            :placeholder="t('pages.forms.tagInput.examples.validator.ph')"
             :validator="isEmail"
+            ariaLabel="Email tags"
           />
         </div>
       </ComponentPreview>
@@ -344,9 +469,9 @@ const emitsList = computed<EmitDoc[]>(() => [
         :code="colorsCode"
       >
         <div class="flex flex-col gap-3 w-80">
-          <TagInput v-model="t1" color="primary" />
-          <TagInput v-model="t2" color="success" />
-          <TagInput v-model="t3" color="danger" />
+          <TagInput v-model="t1" color="primary" ariaLabel="Primary tags" />
+          <TagInput v-model="t2" color="success" ariaLabel="Success tags" />
+          <TagInput v-model="t3" color="danger" ariaLabel="Danger tags" />
         </div>
       </ComponentPreview>
 
@@ -356,11 +481,30 @@ const emitsList = computed<EmitDoc[]>(() => [
         :code="sizesCode"
       >
         <div class="flex flex-col gap-3 w-80">
-          <TagInput v-model="tt" size="small" />
-          <TagInput v-model="tt" size="medium" />
-          <TagInput v-model="tt" size="large" />
+          <TagInput v-model="tt" size="small" ariaLabel="Tags small" />
+          <TagInput v-model="tt" size="medium" ariaLabel="Tags medium" />
+          <TagInput v-model="tt" size="large" ariaLabel="Tags large" />
         </div>
       </ComponentPreview>
+    </template>
+
+    <template #a11y>
+      <A11yDoc
+        :keyboard-rows="a11yKeyboard"
+        :aria-rows="a11yAria"
+        :focus-notes="a11yFocus"
+      />
+    </template>
+
+    <template #extra>
+      <Typography variant="heading" size="large" weight="medium" as="h2">
+        {{ t("pages.forms.tagInput.types.title") }}
+      </Typography>
+      <Typography variant="body" size="small" class="text-muted-foreground">
+        {{ t("pages.forms.tagInput.types.desc") }}
+      </Typography>
+
+      <CodePreview :code="typesCode" lang="ts" code-only />
     </template>
   </ComponentDoc>
 </template>

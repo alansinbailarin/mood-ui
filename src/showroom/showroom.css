@@ -5,84 +5,85 @@
  * library defaults if needed without leaking into the published bundle.
  * ============================================================ */
 
-/* ───────── View Transitions API ─────────
- * Crossfade between routes scoped to the page content only — the header
- * (HeaderBar + animated indicator) MUST stay still so the sliding tab
- * indicator can animate naturally instead of fading with the rest.
- *
- * The content wrapper opts in via `style="view-transition-name: showroom-content"`.
- * Everything else inherits the `root` snapshot, which we silence below.
- * ──────────────────────────────────────────────────────────────── */
-@media (prefers-reduced-motion: no-preference) {
-    /* Freeze the root snapshot — header/sidebar do not animate. */
-    ::view-transition-old(root),
-    ::view-transition-new(root) {
-        animation: none;
-        mix-blend-mode: normal;
-    }
-
-    ::view-transition-old(showroom-content) {
-        animation: showroom-fade-out 180ms ease-out both;
-    }
-    ::view-transition-new(showroom-content) {
-        animation: showroom-fade-in 340ms ease-out both;
-    }
-}
-
-@keyframes showroom-fade-out {
-    to { opacity: 0; }
-}
-@keyframes showroom-fade-in {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
-
 /* ───────── Scroll reveal ─────────
  * Toggled by `useScrollReveal()` composable — element starts at
  * the `from` state, IntersectionObserver flips `data-revealed` to
  * trigger the transition.
  * ──────────────────────────────────────────────────────────────── */
 [data-reveal] {
-    opacity: 0;
-    transform: translateY(24px);
-    transition:
-        opacity 700ms cubic-bezier(0.2, 0, 0, 1),
-        transform 700ms cubic-bezier(0.2, 0, 0, 1);
-    will-change: opacity, transform;
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 700ms cubic-bezier(0.2, 0, 0, 1),
+    transform 700ms cubic-bezier(0.2, 0, 0, 1);
+  will-change: opacity, transform;
 }
-[data-reveal][data-revealed='true'] {
-    opacity: 1;
-    transform: translateY(0);
+[data-reveal][data-revealed="true"] {
+  opacity: 1;
+  transform: translateY(0);
 }
-[data-reveal='left']                 { transform: translateX(-32px); }
-[data-reveal='left'][data-revealed]  { transform: translateX(0); }
-[data-reveal='right']                { transform: translateX(32px); }
-[data-reveal='right'][data-revealed] { transform: translateX(0); }
-[data-reveal='scale']                { transform: scale(0.94); }
-[data-reveal='scale'][data-revealed] { transform: scale(1); }
+[data-reveal="left"] {
+  transform: translateX(-32px);
+}
+[data-reveal="left"][data-revealed] {
+  transform: translateX(0);
+}
+[data-reveal="right"] {
+  transform: translateX(32px);
+}
+[data-reveal="right"][data-revealed] {
+  transform: translateX(0);
+}
+[data-reveal="scale"] {
+  transform: scale(0.94);
+}
+[data-reveal="scale"][data-revealed] {
+  transform: scale(1);
+}
 
 /* Stagger children inside a `[data-reveal-children]` group. */
-[data-reveal-children] > *      { transition-delay: 0ms; }
-[data-reveal-children] > *:nth-child(2)  { transition-delay: 80ms; }
-[data-reveal-children] > *:nth-child(3)  { transition-delay: 160ms; }
-[data-reveal-children] > *:nth-child(4)  { transition-delay: 240ms; }
-[data-reveal-children] > *:nth-child(5)  { transition-delay: 320ms; }
-[data-reveal-children] > *:nth-child(6)  { transition-delay: 400ms; }
-[data-reveal-children] > *:nth-child(n+7){ transition-delay: 460ms; }
+[data-reveal-children] > * {
+  transition-delay: 0ms;
+}
+[data-reveal-children] > *:nth-child(2) {
+  transition-delay: 80ms;
+}
+[data-reveal-children] > *:nth-child(3) {
+  transition-delay: 160ms;
+}
+[data-reveal-children] > *:nth-child(4) {
+  transition-delay: 240ms;
+}
+[data-reveal-children] > *:nth-child(5) {
+  transition-delay: 320ms;
+}
+[data-reveal-children] > *:nth-child(6) {
+  transition-delay: 400ms;
+}
+[data-reveal-children] > *:nth-child(n + 7) {
+  transition-delay: 460ms;
+}
 
 @media (prefers-reduced-motion: reduce) {
-    [data-reveal] {
-        opacity: 1 !important;
-        transform: none !important;
-        transition: none !important;
-    }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }
 
 /* ───────── Hero gradient breathing ───────── */
 @keyframes showroom-breath {
-    0%, 100% { transform: translate(-50%, 0) scale(1);    opacity: 0.85; }
-    50%      { transform: translate(-50%, 0) scale(1.08); opacity: 1; }
+  0%,
+  100% {
+    transform: translate(-50%, 0) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate(-50%, 0) scale(1.08);
+    opacity: 1;
+  }
 }
 .showroom-hero-glow {
-    animation: showroom-breath 9s ease-in-out infinite;
+  animation: showroom-breath 9s ease-in-out infinite;
 }

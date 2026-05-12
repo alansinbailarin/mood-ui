@@ -1,50 +1,63 @@
 {
-    "title": "ProgressBar",
-    "description": "Determinate or indeterminate linear progress bar. Supports label, numeric value, colors, sizes and striped animation.",
+  "title": "ProgressBar",
+  "description": "Determinate or indeterminate linear progress bar. Supports label, numeric value, colors, sizes and striped animation.",
 
-    "controls": {
-        "value":         "Value",
-        "color":         "Color",
-        "size":          "Size",
-        "indeterminate": "Indeterminate",
-        "striped":       "Striped",
-        "showValue":     "Value"
+  "controls": {
+    "value": "Value",
+    "color": "Color",
+    "size": "Size",
+    "indeterminate": "Indeterminate",
+    "striped": "Striped",
+    "showValue": "Value"
+  },
+
+  "examples": {
+    "label": {
+      "title": "With label and value",
+      "desc": "Combine a label above and showValue to display the numeric percentage.",
+      "uploadLabel": "Uploading file"
     },
-
-    "examples": {
-        "label": {
-            "title":       "With label and value",
-            "desc":        "Combine a label above and showValue to display the numeric percentage.",
-            "uploadLabel": "Uploading file"
-        },
-        "indeterminate": {
-            "title": "Indeterminate",
-            "desc":  "Omit the value prop to show the sliding animation."
-        },
-        "colors": {
-            "title": "Colors",
-            "desc":  "Five semantic colors to reflect the process state."
-        },
-        "sizes": {
-            "title": "Sizes",
-            "desc":  "Three thicknesses: small, medium (default) and large."
-        },
-        "striped": {
-            "title": "Striped",
-            "desc":  "Enable animated stripes for in-progress operations."
-        }
+    "indeterminate": {
+      "title": "Indeterminate",
+      "desc": "Omit the value prop to show the sliding animation."
     },
-
-    "props": {
-        "value":     "Current value between min and max. Omit for indeterminate mode.",
-        "min":       "Minimum value of the range.",
-        "max":       "Maximum value of the range.",
-        "color":     "Bar color.",
-        "size":      "Bar thickness.",
-        "radius":    "Track radius. Cascades from ModoProvider.",
-        "showValue": "Shows the numeric percentage next to the bar.",
-        "label":     "Optional label rendered above the bar.",
-        "ariaLabel": "Accessible label when the label prop is omitted.",
-        "striped":   "Enables stripe animation (useful for \"uploading…\")."
+    "colors": {
+      "title": "Colors",
+      "desc": "Five semantic colors to reflect the process state."
+    },
+    "sizes": {
+      "title": "Sizes",
+      "desc": "Three thicknesses: small, medium (default) and large."
+    },
+    "striped": {
+      "title": "Striped",
+      "desc": "Enable animated stripes for in-progress operations."
     }
+  },
+
+  "props": {
+    "value": "Current value between min and max. Omit for indeterminate mode.",
+    "min": "Minimum value of the range.",
+    "max": "Maximum value of the range.",
+    "color": "Bar color.",
+    "size": "Bar thickness.",
+    "radius": "Track radius. Cascades from ModoProvider.",
+    "showValue": "Shows the numeric percentage next to the bar.",
+    "label": "Optional label rendered above the bar.",
+    "ariaLabel": "Accessible label when the label prop is omitted.",
+    "striped": "Enables stripe animation (useful for \"uploading…\")."
+  },
+  "types": {
+    "title": "ProgressBar",
+    "desc": "TypeScript interface for the ProgressBar component props. Includes ProgressBarColor and ProgressBarSize union types with determinate and indeterminate modes."
+  },
+  "a11y": {
+    "kbTab": "Move focus to the next focusable element",
+    "kbShiftTab": "Move focus to the previous focusable element",
+    "ariaProgress": "Uses role progressbar for screen reader identification",
+    "ariaValueNow": "Announces the current progress value to screen readers",
+    "ariaValueMin": "Communicates the minimum value (0 by default)",
+    "ariaValueMax": "Communicates the maximum value (100 by default)",
+    "focusNative": "Non-interactive element; does not participate in the tab order"
+  }
 }

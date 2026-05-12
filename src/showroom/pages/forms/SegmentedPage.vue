@@ -3,6 +3,7 @@ import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import ComponentDoc from "../../components/ComponentDoc.vue";
 import ComponentPreview from "../../components/ComponentPreview.vue";
+import CodePreview from "../../components/CodePreview.vue";
 import Segmented from "../../../components/forms/Segmented.vue";
 import {
   ListBulletIcon,
@@ -10,12 +11,51 @@ import {
   TableCellsIcon,
 } from "@heroicons/vue/24/outline";
 import type { PropDoc, EmitDoc } from "../../types";
+import A11yDoc from "../../components/A11yDoc.vue";
+import type {
+  A11yKeyboardRow,
+  A11yAriaRow,
+} from "../../components/A11yDoc.vue";
 import TbPills from "../../components/toolbar/TbPills.vue";
 import TbDots from "../../components/toolbar/TbDots.vue";
 import TbToggle from "../../components/toolbar/TbToggle.vue";
 import TbSep from "../../components/toolbar/TbSep.vue";
+import Typography from "../../../components/data-display/Typography.vue";
 
 const { t } = useI18n();
+
+// ── A11y data ─────────────────────────────────────────────────────────────────
+const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
+  { keys: ["Tab"], action: t("pages.forms.segmented.a11y.kbTab") },
+  {
+    keys: ["↑", "↓", "←", "→"],
+    action: t("pages.forms.segmented.a11y.kbArrow"),
+  },
+  { keys: ["Space"], action: t("pages.forms.segmented.a11y.kbSpace") },
+]);
+
+const a11yAria = computed<A11yAriaRow[]>(() => [
+  {
+    attribute: "role",
+    value: '"radiogroup"',
+    desc: t("pages.forms.segmented.a11y.ariaGroup"),
+  },
+  {
+    attribute: "aria-label",
+    value: "string",
+    desc: t("pages.forms.segmented.a11y.ariaLabel"),
+  },
+  {
+    attribute: "aria-disabled",
+    value: "true",
+    desc: t("pages.forms.segmented.a11y.ariaDisabled"),
+  },
+]);
+
+const a11yFocus = computed<string[]>(() => [
+  t("pages.forms.segmented.a11y.focusGroup"),
+  t("pages.forms.segmented.a11y.focusDisabled"),
+]);
 
 const viewItems = [
   { value: "list", label: "Lista" },
@@ -75,33 +115,109 @@ const overviewCode = computed(() => {
   return `<Segmented\n    v-model="view"\n    :items="items"${attrs}\n/>`;
 });
 
-// ── Example code strings ──────────────────────────────────────────────────────
-const basicCode = `const items = [
-    { value: 'list',  label: 'Lista' },
-    { value: 'grid',  label: 'Cuadrícula' },
-    { value: 'table', label: 'Tabla' },
+// ── Example code strings (self-contained) ─────────────────────────────────────
+const basicCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { Segmented } from 'mood-ui';
+
+const view = ref('list');
+
+const items = [
+  { value: 'list',  label: 'List' },
+  { value: 'grid',  label: 'Grid' },
+  { value: 'table', label: 'Table' },
 ];
+<\/script>
 
-<Segmented v-model="view" :items="items" />`;
+<template>
+  <Segmented v-model="view" :items="items" />
+</template>`;
 
-const iconsCode = `const items = [
-    { value: 'list',  label: 'Lista',     icon: ListBulletIcon },
-    { value: 'grid',  label: 'Cuadrícula', icon: Squares2X2Icon },
-    { value: 'table', label: 'Tabla',     icon: TableCellsIcon },
+const iconsCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { Segmented } from 'mood-ui';
+import { ListBulletIcon, Squares2X2Icon, TableCellsIcon } from '@heroicons/vue/24/outline';
+
+const view = ref('list');
+
+const items = [
+  { value: 'list',  label: 'List',     icon: ListBulletIcon },
+  { value: 'grid',  label: 'Grid',     icon: Squares2X2Icon },
+  { value: 'table', label: 'Table',    icon: TableCellsIcon },
 ];
+<\/script>
 
-<Segmented v-model="view" :items="items" />`;
+<template>
+  <Segmented v-model="view" :items="items" />
+</template>`;
 
-const colorsCode = `<Segmented v-model="v" :items="items" color="primary" />
-<Segmented v-model="v" :items="items" color="success" />
-<Segmented v-model="v" :items="items" color="warning" />
-<Segmented v-model="v" :items="items" color="danger" />`;
+const colorsCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { Segmented } from 'mood-ui';
 
-const sizesCode = `<Segmented v-model="v" :items="items" size="small"  />
-<Segmented v-model="v" :items="items" size="medium" />
-<Segmented v-model="v" :items="items" size="large"  />`;
+const v = ref('grid');
 
-const fullWidthCode = `<Segmented v-model="period" :items="periodItems" full-width />`;
+const items = [
+  { value: 'list', label: 'List' },
+  { value: 'grid', label: 'Grid' },
+  { value: 'table', label: 'Table' },
+];
+<\/script>
+
+<template>
+  <Segmented v-model="v" :items="items" color="primary" />
+  <Segmented v-model="v" :items="items" color="success" />
+  <Segmented v-model="v" :items="items" color="warning" />
+  <Segmented v-model="v" :items="items" color="danger" />
+</template>`;
+
+const sizesCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { Segmented } from 'mood-ui';
+
+const v = ref('grid');
+
+const items = [
+  { value: 'list', label: 'List' },
+  { value: 'grid', label: 'Grid' },
+  { value: 'table', label: 'Table' },
+];
+<\/script>
+
+<template>
+  <Segmented v-model="v" :items="items" size="small"  />
+  <Segmented v-model="v" :items="items" size="medium" />
+  <Segmented v-model="v" :items="items" size="large"  />
+</template>`;
+
+const fullWidthCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { Segmented } from 'mood-ui';
+
+const period = ref('w');
+
+const periodItems = [
+  { value: 'd', label: 'Day' },
+  { value: 'w', label: 'Week' },
+  { value: 'm', label: 'Month' },
+  { value: 'y', label: 'Year' },
+];
+<\/script>
+
+<template>
+  <Segmented v-model="period" :items="periodItems" full-width />
+</template>`;
+
+const typesCode = `export interface Segmented {
+  items: SegmentedItem[];
+  modelValue?: string | number | null;
+  color?: 'default' | 'primary' | 'danger' | 'success' | 'warning';
+  size?: 'small' | 'medium' | 'large';
+  radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
+  fullWidth?: boolean;
+  disabled?: boolean;
+  ariaLabel?: string;
+}`;
 
 const ex1 = ref<string | number>("list");
 const ex2 = ref<string | number>("grid");
@@ -271,6 +387,25 @@ const emitsList = computed<EmitDoc[]>(() => [
           <Segmented v-model="ex5" :items="periodItems" full-width />
         </div>
       </ComponentPreview>
+    </template>
+
+    <template #a11y>
+      <A11yDoc
+        :keyboard-rows="a11yKeyboard"
+        :aria-rows="a11yAria"
+        :focus-notes="a11yFocus"
+      />
+    </template>
+
+    <template #extra>
+      <Typography variant="heading" size="large" weight="medium" as="h2">
+        {{ t("pages.forms.segmented.types.title") }}
+      </Typography>
+      <Typography variant="body" size="small" class="text-muted-foreground">
+        {{ t("pages.forms.segmented.types.desc") }}
+      </Typography>
+
+      <CodePreview :code="typesCode" lang="ts" code-only />
     </template>
   </ComponentDoc>
 </template>

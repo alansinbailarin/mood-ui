@@ -1,0 +1,27 @@
+{
+    "title": "useLocale",
+    "description": "Global reactive locale switcher. All callers share the same state, so changing the locale updates the entire application. Pass the reactive locale object directly to ModoProvider :locale.",
+    "api": {
+        "locale": "Reactive `ModoLocale` object — pass directly to ModoProvider :locale.",
+        "current": "Currently active locale key (`'en'` or `'es'`).",
+        "set": "Switch the active locale globally."
+    },
+    "playground": {
+        "note": "Changing the locale here updates all translated content in the showroom."
+    },
+    "examples": {
+        "basic": {
+            "title": "Basic switch",
+            "desc": "Read `current` and call `set(lang)` to switch."
+        },
+        "provider": {
+            "title": "With ModoProvider",
+            "desc": "Bind the reactive locale to ModoProvider so child components re-render with translated strings.",
+            "body": "The locale object is reactive. Pass it to ModoProvider and all descendants react to changes."
+        }
+    },
+    "types": {
+        "title": "Types",
+        "desc": "TypeScript interfaces for this composable."
+    }
+}

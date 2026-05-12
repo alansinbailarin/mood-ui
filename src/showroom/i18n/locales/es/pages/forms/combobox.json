@@ -1,60 +1,80 @@
 {
-    "category": "Forms",
-    "title": "Combobox",
-    "description": "Input de texto autocompletado con sugerencias estáticas o async. Permite valores libres (combobox) o estrictos (autocomplete).",
-    "examples": {
-        "basic": {
-            "title": "Uso básico",
-            "desc": "Sugerencias estáticas mostradas mientras el usuario escribe."
-        },
-        "freeSolo": {
-            "title": "Free solo (creatable)",
-            "desc": "Permite confirmar cualquier texto aunque no esté en la lista de opciones."
-        },
-        "strict": {
-            "title": "Estricto (autocomplete)",
-            "desc": "Con free-solo en false sólo se aceptan valores presentes en options."
-        },
-        "async": {
-            "title": "Búsqueda async",
-            "desc": "Pasa loadOptions para resolver opciones desde un backend con debounce."
-        },
-        "sizes": {
-            "title": "Tamaños",
-            "desc": "Tres tamaños para distintas densidades de UI."
-        }
+  "category": "Forms",
+  "title": "Combobox",
+  "description": "Input de texto autocompletado con sugerencias estáticas o async. Permite valores libres (combobox) o estrictos (autocomplete).",
+  "examples": {
+    "basic": {
+      "title": "Uso básico",
+      "desc": "Sugerencias estáticas mostradas mientras el usuario escribe."
     },
-    "props": {
-        "modelValue": "Texto actual del input (v-model).",
-        "options": "Lista de opciones estáticas. Ignorado si se define loadOptions.",
-        "loadOptions": "Fuente async de opciones invocada en cada cambio del query.",
-        "debounce": "Delay en ms para llamar a loadOptions.",
-        "minChars": "Mínimo de caracteres antes de disparar la búsqueda async.",
-        "freeSolo": "Permite cualquier texto como valor. Si false, sólo se aceptan options válidas.",
-        "label": "Etiqueta visible sobre el campo.",
-        "placeholder": "Placeholder del input.",
-        "helperText": "Texto de ayuda bajo el campo.",
-        "errorText": "Mensaje de error que reemplaza al helperText.",
-        "emptyText": "Texto cuando no hay opciones que mostrar.",
-        "loadingText": "Texto mientras la búsqueda async está en curso.",
-        "variant": "Estilo visual del input.",
-        "color": "Color semántico del foco y acento.",
-        "size": "Altura del input.",
-        "radius": "Radio de esquinas.",
-        "clearable": "Muestra un botón X para limpiar.",
-        "disabled": "Deshabilita el control.",
-        "readonly": "Modo solo lectura.",
-        "required": "Marca el campo como requerido.",
-        "loading": "Estado de carga forzado (independiente de loadOptions).",
-        "fullWidth": "Aplica w-full al control raíz.",
-        "iconLeft": "Icono a la izquierda del input.",
-        "maxLength": "Máximo de caracteres del input.",
-        "name": "name HTML para envío en formularios.",
-        "ariaLabel": "Nombre accesible cuando no hay label visible."
+    "freeSolo": {
+      "title": "Free solo (creatable)",
+      "desc": "Escribe un valor nuevo y presiona Enter. El panel se mantiene abierto para que puedas ver la opción añadida a la lista. El handler \\@change detecta valores desconocidos y los inserta en el array reactivo de opciones."
     },
-    "emits": {
-        "updateModelValue": "Emitido al cambiar el valor del input.",
-        "change": "Emitido tras seleccionar una opción o confirmar texto.",
-        "select": "Emitido al elegir una opción del listado."
+    "strict": {
+      "title": "Estricto (autocomplete)",
+      "desc": "Con free-solo en false sólo se aceptan valores presentes en options."
+    },
+    "async": {
+      "title": "Búsqueda async",
+      "desc": "Pasa loadOptions para resolver opciones desde un backend con debounce."
+    },
+    "sizes": {
+      "title": "Tamaños",
+      "desc": "Tres tamaños para distintas densidades de UI."
     }
+  },
+  "props": {
+    "modelValue": "Texto actual del input (v-model).",
+    "options": "Lista de opciones estáticas. Ignorado si se define loadOptions.",
+    "loadOptions": "Fuente async de opciones invocada en cada cambio del query.",
+    "debounce": "Delay en ms para llamar a loadOptions.",
+    "minChars": "Mínimo de caracteres antes de disparar la búsqueda async.",
+    "freeSolo": "Permite cualquier texto como valor. Si false, sólo se aceptan options válidas.",
+    "label": "Etiqueta visible sobre el campo.",
+    "placeholder": "Placeholder del input.",
+    "helperText": "Texto de ayuda bajo el campo.",
+    "errorText": "Mensaje de error que reemplaza al helperText.",
+    "emptyText": "Texto cuando no hay opciones que mostrar.",
+    "loadingText": "Texto mientras la búsqueda async está en curso.",
+    "variant": "Estilo visual del input.",
+    "color": "Color semántico del foco y acento.",
+    "size": "Altura del input.",
+    "radius": "Radio de esquinas.",
+    "clearable": "Muestra un botón X para limpiar.",
+    "disabled": "Deshabilita el control.",
+    "readonly": "Modo solo lectura.",
+    "required": "Marca el campo como requerido.",
+    "loading": "Estado de carga forzado (independiente de loadOptions).",
+    "fullWidth": "Aplica w-full al control raíz.",
+    "iconLeft": "Icono a la izquierda del input.",
+    "maxLength": "Máximo de caracteres del input.",
+    "name": "name HTML para envío en formularios.",
+    "ariaLabel": "Nombre accesible cuando no hay label visible."
+  },
+  "emits": {
+    "updateModelValue": "Emitido al cambiar el valor del input.",
+    "change": "Emitido tras seleccionar una opción o confirmar texto.",
+    "select": "Emitido al elegir una opción del listado."
+  },
+  "types": {
+    "title": "Combobox",
+    "desc": "Interfaz TypeScript de las props del componente Combobox. Usa SelectOption para su array de opciones. Ve a la página de Select para ver la forma de la opción."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "kbType": "Filtra la lista de opciones escribiendo",
+    "kbEnter": "Selecciona la opción resaltada",
+    "kbEsc": "Cierra el panel desplegable sin seleccionar",
+    "kbArrow": "Navega entre las opciones filtradas",
+    "ariaExpanded": "Comunica si el panel desplegable está abierto o cerrado",
+    "ariaInvalid": "Se activa a true cuando hay errorText presente",
+    "ariaDescribedBy": "Vincula el texto de helper o error al input para contexto del lector de pantalla",
+    "ariaRequired": "Se activa a true cuando la prop required está activa",
+    "ariaDisabled": "Comunica el estado deshabilitado a las tecnologías asistivas",
+    "ariaLabel": "Proporciona un nombre accesible cuando no hay etiqueta visible",
+    "focusNative": "Usa un elemento input nativo — participa en el orden de tabulación por defecto",
+    "focusTrap": "El foco queda atrapado dentro del panel desplegable mientras está abierto"
+  }
 }

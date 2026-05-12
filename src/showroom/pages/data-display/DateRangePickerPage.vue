@@ -3,6 +3,8 @@ import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import ComponentDoc from "../../components/ComponentDoc.vue";
 import ComponentPreview from "../../components/ComponentPreview.vue";
+import CodePreview from "../../components/CodePreview.vue";
+import Typography from "../../../components/data-display/Typography.vue";
 import DateRangePicker from "../../../components/data-display/date-picker/DateRangePicker.vue";
 import type { PropDoc } from "../../types";
 import TbPills from "../../components/toolbar/TbPills.vue";
@@ -58,11 +60,60 @@ const overviewCode = computed(() => {
 });
 
 // ── Example codes ─────────────────────────────────────────────────────────────
-const twoMonthsCode = `<DateRangePicker v-model="range" :months="2" />`;
-const oneMonthCode = `<DateRangePicker v-model="range" :months="1" />`;
-const presetsCode = `<DateRangePicker v-model="range" :months="2" show-presets />`;
-const colorCode = `<DateRangePicker v-model="range" :months="2" color="primary" />`;
-const outlineCode = `<DateRangePicker v-model="range" :months="2" variant="outline" color="primary" />`;
+const twoMonthsCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { DateRangePicker } from 'mood-ui';
+
+const range = ref<[Date | null, Date | null]>([new Date(), new Date(Date.now() + 7 * 86400000)]);
+<\/script>
+
+<template>
+  <DateRangePicker v-model="range" :months="2" />
+</template>`;
+
+const oneMonthCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { DateRangePicker } from 'mood-ui';
+
+const range = ref<[Date | null, Date | null]>([new Date(), new Date(Date.now() + 7 * 86400000)]);
+<\/script>
+
+<template>
+  <DateRangePicker v-model="range" :months="1" />
+</template>`;
+
+const presetsCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { DateRangePicker } from 'mood-ui';
+
+const range = ref<[Date | null, Date | null]>([new Date(), new Date(Date.now() + 7 * 86400000)]);
+<\/script>
+
+<template>
+  <DateRangePicker v-model="range" :months="2" show-presets />
+</template>`;
+
+const colorCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { DateRangePicker } from 'mood-ui';
+
+const range = ref<[Date | null, Date | null]>([new Date(), new Date(Date.now() + 7 * 86400000)]);
+<\/script>
+
+<template>
+  <DateRangePicker v-model="range" :months="2" color="primary" />
+</template>`;
+
+const outlineCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { DateRangePicker } from 'mood-ui';
+
+const range = ref<[Date | null, Date | null]>([new Date(), new Date(Date.now() + 7 * 86400000)]);
+<\/script>
+
+<template>
+  <DateRangePicker v-model="range" :months="2" variant="outline" color="primary" />
+</template>`;
 
 const ex1 = ref<[Date | null, Date | null]>([
   new Date(),
@@ -85,93 +136,115 @@ const ex5 = ref<[Date | null, Date | null]>([
   new Date(Date.now() + 7 * 86400000),
 ]);
 
+const typesCode = `export interface RangePreset {
+  label: string;
+  range: () => [Date, Date];
+}
+
+export interface DateRangePicker {
+  modelValue?: [Date | null, Date | null];
+  locale?: string;
+  firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+  minDate?: Date;
+  maxDate?: Date;
+  disabledDates?: Date[];
+  color?: 'default' | 'primary' | 'danger' | 'success' | 'warning';
+  variant?: 'filled' | 'outline';
+  radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
+  months?: 1 | 2;
+  showPresets?: boolean;
+  presets?: RangePreset[];
+  minRange?: number;
+  maxRange?: number;
+}`;
+
 // ── API docs ──────────────────────────────────────────────────────────────────
 const propsList = computed<PropDoc[]>(() => [
   {
     name: "modelValue",
     type: "[Date | null, Date | null]",
     default: "[null, null]",
-    description: t("pages.dataDisplay.dateRangePicker.props.modelValue"),
+    description: t("pages.data-display.dateRangePicker.props.modelValue"),
   },
   {
     name: "months",
     type: "1 | 2",
     default: "2",
-    description: t("pages.dataDisplay.dateRangePicker.props.months"),
+    description: t("pages.data-display.dateRangePicker.props.months"),
   },
   {
     name: "showPresets",
     type: "boolean",
     default: "false",
-    description: t("pages.dataDisplay.dateRangePicker.props.showPresets"),
+    description: t("pages.data-display.dateRangePicker.props.showPresets"),
   },
   {
     name: "presets",
     type: "RangePreset[]",
-    description: t("pages.dataDisplay.dateRangePicker.props.presets"),
+    description: t("pages.data-display.dateRangePicker.props.presets"),
   },
   {
     name: "color",
     type: "'default' | 'primary' | 'success' | 'warning' | 'danger'",
     default: "'default'",
-    description: t("pages.dataDisplay.dateRangePicker.props.color"),
+    description: t("pages.data-display.dateRangePicker.props.color"),
   },
   {
     name: "variant",
     type: "'filled' | 'outline'",
     default: "'filled'",
-    description: t("pages.dataDisplay.dateRangePicker.props.variant"),
+    description: t("pages.data-display.dateRangePicker.props.variant"),
   },
   {
     name: "radius",
     type: "'none' | 'small' | 'medium' | 'large' | 'full'",
-    description: t("pages.dataDisplay.dateRangePicker.props.radius"),
+    description: t("pages.data-display.dateRangePicker.props.radius"),
   },
   {
     name: "minDate",
     type: "Date",
-    description: t("pages.dataDisplay.dateRangePicker.props.minDate"),
+    description: t("pages.data-display.dateRangePicker.props.minDate"),
   },
   {
     name: "maxDate",
     type: "Date",
-    description: t("pages.dataDisplay.dateRangePicker.props.maxDate"),
+    description: t("pages.data-display.dateRangePicker.props.maxDate"),
   },
   {
     name: "minRange",
     type: "number",
-    description: t("pages.dataDisplay.dateRangePicker.props.minRange"),
+    description: t("pages.data-display.dateRangePicker.props.minRange"),
   },
   {
     name: "maxRange",
     type: "number",
-    description: t("pages.dataDisplay.dateRangePicker.props.maxRange"),
+    description: t("pages.data-display.dateRangePicker.props.maxRange"),
   },
   {
     name: "disabledDates",
     type: "Date[]",
-    description: t("pages.dataDisplay.dateRangePicker.props.disabledDates"),
+    description: t("pages.data-display.dateRangePicker.props.disabledDates"),
   },
   {
     name: "locale",
     type: "string",
-    description: t("pages.dataDisplay.dateRangePicker.props.locale"),
+    description: t("pages.data-display.dateRangePicker.props.locale"),
   },
   {
     name: "firstDayOfWeek",
     type: "0 | 1 | 2 | 3 | 4 | 5 | 6",
     default: "1",
-    description: t("pages.dataDisplay.dateRangePicker.props.firstDayOfWeek"),
+    description: t("pages.data-display.dateRangePicker.props.firstDayOfWeek"),
   },
 ]);
 </script>
 
 <template>
   <ComponentDoc
-    :title="t('pages.dataDisplay.dateRangePicker.title')"
+    :title="t('pages.data-display.dateRangePicker.title')"
     category="Data Display"
     import-path="import { DateRangePicker } from 'mood-ui'"
-    :description="t('pages.dataDisplay.dateRangePicker.description')"
+    :description="t('pages.data-display.dateRangePicker.description')"
     :props-list="propsList"
   >
     <!-- ── Overview ─────────────────────────────────────────────────────── -->
@@ -230,9 +303,11 @@ const propsList = computed<PropDoc[]>(() => [
     <!-- ── Examples ─────────────────────────────────────────────────────── -->
     <template #examples>
       <ComponentPreview
-        :title="t('pages.dataDisplay.dateRangePicker.examples.twoMonths.title')"
+        :title="
+          t('pages.data-display.dateRangePicker.examples.twoMonths.title')
+        "
         :description="
-          t('pages.dataDisplay.dateRangePicker.examples.twoMonths.desc')
+          t('pages.data-display.dateRangePicker.examples.twoMonths.desc')
         "
         :code="twoMonthsCode"
         min-height="340px"
@@ -241,9 +316,9 @@ const propsList = computed<PropDoc[]>(() => [
       </ComponentPreview>
 
       <ComponentPreview
-        :title="t('pages.dataDisplay.dateRangePicker.examples.oneMonth.title')"
+        :title="t('pages.data-display.dateRangePicker.examples.oneMonth.title')"
         :description="
-          t('pages.dataDisplay.dateRangePicker.examples.oneMonth.desc')
+          t('pages.data-display.dateRangePicker.examples.oneMonth.desc')
         "
         :code="oneMonthCode"
         min-height="340px"
@@ -252,9 +327,9 @@ const propsList = computed<PropDoc[]>(() => [
       </ComponentPreview>
 
       <ComponentPreview
-        :title="t('pages.dataDisplay.dateRangePicker.examples.presets.title')"
+        :title="t('pages.data-display.dateRangePicker.examples.presets.title')"
         :description="
-          t('pages.dataDisplay.dateRangePicker.examples.presets.desc')
+          t('pages.data-display.dateRangePicker.examples.presets.desc')
         "
         :code="presetsCode"
         min-height="340px"
@@ -264,10 +339,10 @@ const propsList = computed<PropDoc[]>(() => [
 
       <ComponentPreview
         :title="
-          t('pages.dataDisplay.dateRangePicker.examples.colorPrimary.title')
+          t('pages.data-display.dateRangePicker.examples.colorPrimary.title')
         "
         :description="
-          t('pages.dataDisplay.dateRangePicker.examples.colorPrimary.desc')
+          t('pages.data-display.dateRangePicker.examples.colorPrimary.desc')
         "
         :code="colorCode"
         min-height="340px"
@@ -276,9 +351,9 @@ const propsList = computed<PropDoc[]>(() => [
       </ComponentPreview>
 
       <ComponentPreview
-        :title="t('pages.dataDisplay.dateRangePicker.examples.outline.title')"
+        :title="t('pages.data-display.dateRangePicker.examples.outline.title')"
         :description="
-          t('pages.dataDisplay.dateRangePicker.examples.outline.desc')
+          t('pages.data-display.dateRangePicker.examples.outline.desc')
         "
         :code="outlineCode"
         min-height="340px"
@@ -290,6 +365,16 @@ const propsList = computed<PropDoc[]>(() => [
           color="primary"
         />
       </ComponentPreview>
+    </template>
+
+    <template #extra>
+      <Typography variant="heading" size="large" weight="medium" as="h2">
+        {{ t("pages.data-display.dateRangePicker.types.title") }}
+      </Typography>
+      <Typography variant="body" size="small" class="text-muted-foreground">
+        {{ t("pages.data-display.dateRangePicker.types.desc") }}
+      </Typography>
+      <CodePreview :code="typesCode" lang="ts" code-only />
     </template>
   </ComponentDoc>
 </template>

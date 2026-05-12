@@ -1,144 +1,220 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { useI18n } from 'vue-i18n';
-import ComponentDoc from '../../components/ComponentDoc.vue';
-import ComponentPreview from '../../components/ComponentPreview.vue';
-import ConfirmDialog from '../../../components/feedback/ConfirmDialog.vue';
-import Button from '../../../components/forms/Button.vue';
-import { useConfirm } from '../../../composables/useConfirm';
-import { useToast } from '../../../composables/useToast';
-import type { PropDoc, EmitDoc, SlotDoc } from '../../types';
-import TbPills from '../../components/toolbar/TbPills.vue';
-import TbSep from '../../components/toolbar/TbSep.vue';
+import { ref, computed } from "vue";
+import { useI18n } from "vue-i18n";
+import ComponentDoc from "../../components/ComponentDoc.vue";
+import CodePreview from "../../components/CodePreview.vue";
+import Typography from "../../../components/data-display/Typography.vue";
+import ComponentPreview from "../../components/ComponentPreview.vue";
+import ConfirmDialog from "../../../components/feedback/ConfirmDialog.vue";
+import Button from "../../../components/forms/Button.vue";
+import { useConfirm } from "../../../composables/useConfirm";
+import { useToast } from "../../../composables/useToast";
+import type { PropDoc, EmitDoc, SlotDoc } from "../../types";
+import A11yDoc from "../../components/A11yDoc.vue";
+import type {
+  A11yKeyboardRow,
+  A11yAriaRow,
+} from "../../components/A11yDoc.vue";
+import TbPills from "../../components/toolbar/TbPills.vue";
+import TbSep from "../../components/toolbar/TbSep.vue";
 
 const { t } = useI18n();
 
-type Tone = 'default' | 'primary' | 'danger';
-type Size = 'small' | 'medium' | 'large';
+// ── A11y data ─────────────────────────────────────────────────────────────────
+const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
+  { keys: ["Tab"], action: t("pages.feedback.confirmDialog.a11y.kbTab") },
+  {
+    keys: ["Shift+Tab"],
+    action: t("pages.feedback.confirmDialog.a11y.kbShiftTab"),
+  },
+  { keys: ["Escape"], action: t("pages.feedback.confirmDialog.a11y.kbEsc") },
+]);
+
+const a11yAria = computed<A11yAriaRow[]>(() => [
+  {
+    attribute: "role",
+    value: '"dialog"',
+    desc: t("pages.feedback.confirmDialog.a11y.ariaDialog"),
+  },
+  {
+    attribute: "aria-modal",
+    value: "true",
+    desc: t("pages.feedback.confirmDialog.a11y.ariaModal"),
+  },
+  {
+    attribute: "aria-labelledby",
+    value: "id",
+    desc: t("pages.feedback.confirmDialog.a11y.ariaLabelledBy"),
+  },
+]);
+
+const a11yFocus = computed<string[]>(() => [
+  t("pages.feedback.confirmDialog.a11y.focusTrap"),
+  t("pages.feedback.confirmDialog.a11y.focusReturn"),
+]);
+
+type Tone = "default" | "primary" | "danger";
+type Size = "small" | "medium" | "large";
 
 const { confirm } = useConfirm();
 const toast = useToast();
 
-const pgTone = ref<Tone>('primary');
-const pgSize = ref<Size>('small');
-const lastResult = ref<string>('—');
+const pgTone = ref<Tone>("primary");
+const pgSize = ref<Size>("small");
+const lastResult = ref<string>("—");
 
 function resetPlayground() {
-    pgTone.value = 'primary';
-    pgSize.value = 'small';
-    lastResult.value = '—';
+  pgTone.value = "primary";
+  pgSize.value = "small";
+  lastResult.value = "—";
 }
 
 async function runPlayground() {
-    const ok = await confirm({
-        title:        t('pages.feedback.confirmDialog.playground.title'),
-        description:  t('pages.feedback.confirmDialog.playground.description'),
-        confirmLabel: t('pages.feedback.confirmDialog.playground.confirmLabel'),
-        cancelLabel:  t('pages.feedback.confirmDialog.playground.cancelLabel'),
-        color: pgTone.value,
-        size:  pgSize.value,
-    });
-    lastResult.value = ok
-        ? t('pages.feedback.confirmDialog.playground.confirmed')
-        : t('pages.feedback.confirmDialog.playground.cancelled');
+  const ok = await confirm({
+    title: t("pages.feedback.confirmDialog.playground.title"),
+    description: t("pages.feedback.confirmDialog.playground.description"),
+    confirmLabel: t("pages.feedback.confirmDialog.playground.confirmLabel"),
+    cancelLabel: t("pages.feedback.confirmDialog.playground.cancelLabel"),
+    color: pgTone.value,
+    size: pgSize.value,
+  });
+  lastResult.value = ok
+    ? t("pages.feedback.confirmDialog.playground.confirmed")
+    : t("pages.feedback.confirmDialog.playground.cancelled");
 }
 
 const overviewCode = computed(() => {
-    const parts: string[] = [
-        `title: '¿Continuar con la acción?'`,
-        `description: '...'`,
-    ];
-    if (pgTone.value !== 'primary') parts.push(`color: '${pgTone.value}'`);
-    if (pgSize.value !== 'small')   parts.push(`size: '${pgSize.value}'`);
-    return `// Mount once cerca del root:
+  const parts: string[] = [
+    `title: 'Continue with the action?'`,
+    `description: '...'`,
+  ];
+  if (pgTone.value !== "primary") parts.push(`color: '${pgTone.value}'`);
+  if (pgSize.value !== "small") parts.push(`size: '${pgSize.value}'`);
+  return `<!-- Mount once near the root -->
 <ConfirmDialog />
 
-// Desde cualquier componente:
+// From any component:
+import { useConfirm } from 'mood-ui';
 const { confirm } = useConfirm();
 const ok = await confirm({
-  ${parts.join(',\n  ')},
+  ${parts.join(",\n  ")},
 });`;
 });
 
-const basicCode = `const { confirm } = useConfirm();
+const basicCode = `import { useConfirm } from 'mood-ui';
+const { confirm } = useConfirm();
 
 async function ask() {
-  const ok = await confirm('¿Confirmar acción?');
-  if (ok) console.log('Confirmado');
+  const ok = await confirm('Confirm action?');
+  if (ok) console.log('Confirmed');
 }`;
 
-const dangerCode = `const ok = await confirm({
-  title: '¿Eliminar elemento?',
-  description: 'Esta acción no se puede deshacer.',
-  confirmLabel: 'Eliminar',
-  cancelLabel: 'Cancelar',
+const dangerCode = `import { useConfirm } from 'mood-ui';
+const { confirm } = useConfirm();
+const ok = await confirm({
+  title: 'Delete item?',
+  description: 'This action cannot be undone.',
+  confirmLabel: 'Delete',
+  cancelLabel: 'Cancel',
   color: 'danger',
 });`;
 
-const asyncCode = `async function publish() {
+const asyncCode = `import { useConfirm, useToast } from 'mood-ui';
+const { confirm } = useConfirm();
+const toast = useToast();
+
+async function publish() {
   const ok = await confirm({
-    title: '¿Publicar ahora?',
-    description: 'El contenido será visible para todos los usuarios.',
-    confirmLabel: 'Publicar',
+    title: 'Publish now?',
+    description: 'The content will be visible to all users.',
+    confirmLabel: 'Publish',
     color: 'primary',
   });
   if (!ok) return;
   await api.publish();
-  toast.success('Publicado');
+  toast.success('Published');
 }`;
 
-const customCode = `await confirm({
-  title: 'Cerrar sesión',
-  description: 'Tendrás que volver a iniciar sesión para acceder.',
-  confirmLabel: 'Cerrar sesión',
-  cancelLabel: 'Quedarme',
+const customCode = `import { useConfirm } from 'mood-ui';
+const { confirm } = useConfirm();
+
+await confirm({
+  title: 'Log out',
+  description: 'You will need to sign in again to access.',
+  confirmLabel: 'Log out',
+  cancelLabel: 'Stay',
   color: 'warning',
   hideCancel: false,
 });`;
 
 async function runBasic() {
-    const ok = await confirm('¿Confirmar acción?');
-    toast.info(ok ? 'Confirmado' : 'Cancelado');
+  const ok = await confirm("Confirm action?");
+  toast.info(ok ? "Confirmed" : "Cancelled");
 }
 
 async function runDanger() {
-    const ok = await confirm({
-        title:        '¿Eliminar elemento?',
-        description:  'Esta acción no se puede deshacer.',
-        confirmLabel: 'Eliminar',
-        cancelLabel:  'Cancelar',
-        color: 'danger',
-    });
-    if (ok) toast.success('Eliminado');
-    else toast.info('Cancelado');
+  const ok = await confirm({
+    title: "Delete item?",
+    description: "This action cannot be undone.",
+    confirmLabel: "Delete",
+    cancelLabel: "Cancel",
+    color: "danger",
+  });
+  if (ok) toast.success("Deleted");
+  else toast.info("Cancelled");
 }
 
 async function runAsync() {
-    const ok = await confirm({
-        title:        '¿Publicar ahora?',
-        description:  'El contenido será visible para todos los usuarios.',
-        confirmLabel: 'Publicar',
-        color: 'primary',
-    });
-    if (!ok) return;
-    toast.info('Publicando…');
-    await new Promise((r) => setTimeout(r, 800));
-    toast.success('Publicado');
+  const ok = await confirm({
+    title: "Publish now?",
+    description: "The content will be visible to all users.",
+    confirmLabel: "Publish",
+    color: "primary",
+  });
+  if (!ok) return;
+  toast.info("Publishing…");
+  await new Promise((r) => setTimeout(r, 800));
+  toast.success("Published");
 }
 
 async function runCustom() {
-    const ok = await confirm({
-        title:        'Cerrar sesión',
-        description:  'Tendrás que volver a iniciar sesión para acceder.',
-        confirmLabel: 'Cerrar sesión',
-        cancelLabel:  'Quedarme',
-        color: 'warning',
-    });
-    toast.info(ok ? 'Sesión cerrada' : 'Te quedaste');
+  const ok = await confirm({
+    title: "Log out",
+    description: "You will need to sign in again to access.",
+    confirmLabel: "Log out",
+    cancelLabel: "Stay",
+    color: "warning",
+  });
+  toast.info(ok ? "Logged out" : "Stayed");
 }
 
+const typesCode = `export type ConfirmColor = 'default' | 'primary' | 'danger' | 'warning' | 'success';
+
+export interface ConfirmInput {
+  title?: string;
+  description?: string;
+  icon?: Component;
+  hideIcon?: boolean;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  color?: ConfirmColor;
+  size?: ModalSize;
+  radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
+  hideCancel?: boolean;
+  dismissable?: boolean;
+  autoFocusConfirm?: boolean;
+}
+
+export interface ConfirmDialog {
+  radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
+}`;
+
 const propsList = computed<PropDoc[]>(() => [
-    { name: 'radius', type: "'none' | 'small' | 'medium' | 'large' | 'full'", description: t('pages.feedback.confirmDialog.props.radius') },
+  {
+    name: "radius",
+    type: "'none' | 'small' | 'medium' | 'large' | 'full'",
+    description: t("pages.feedback.confirmDialog.props.radius"),
+  },
 ]);
 
 const emitsList: EmitDoc[] = [];
@@ -146,71 +222,122 @@ const slotsList: SlotDoc[] = [];
 </script>
 
 <template>
-    <!-- Mount global del host -->
-    <ConfirmDialog />
+  <!-- Mount global del host -->
+  <ConfirmDialog />
 
-    <ComponentDoc
-        :title="t('pages.feedback.confirmDialog.title')"
-        category="Feedback"
-        import-path="import { ConfirmDialog, useConfirm } from 'mood-ui'"
-        :description="t('pages.feedback.confirmDialog.description')"
-        :props-list="propsList"
-        :emits-list="emitsList"
-        :slots-list="slotsList"
-    >
-        <template #overview>
-            <ComponentPreview :code="overviewCode" min-height="220px" lang="vue" @reset="resetPlayground">
-                <template #controls>
-                    <TbPills :label="t('pages.feedback.confirmDialog.controls.tone')" :options="[{value:'default'},{value:'primary'},{value:'danger'}]" v-model="pgTone" />
-                    <TbSep />
-                    <TbPills :label="t('pages.feedback.confirmDialog.controls.size')" :options="[{value:'small'},{value:'medium'},{value:'large'}]" v-model="pgSize" />
-                </template>
-
-                <Button :color="pgTone === 'default' ? 'default' : pgTone" @click="runPlayground">
-                    {{ t('pages.feedback.confirmDialog.playground.launch') }}
-                </Button>
-                <span class="text-sm text-muted-foreground">
-                    {{ t('pages.feedback.confirmDialog.playground.lastResult') }} {{ lastResult }}
-                </span>
-            </ComponentPreview>
+  <ComponentDoc
+    :title="t('pages.feedback.confirmDialog.title')"
+    category="Feedback"
+    import-path="import { ConfirmDialog, useConfirm } from 'mood-ui'"
+    :description="t('pages.feedback.confirmDialog.description')"
+    :props-list="propsList"
+    :emits-list="emitsList"
+    :slots-list="slotsList"
+  >
+    <template #overview>
+      <ComponentPreview
+        :code="overviewCode"
+        min-height="220px"
+        lang="vue"
+        @reset="resetPlayground"
+      >
+        <template #controls>
+          <TbPills
+            :label="t('pages.feedback.confirmDialog.controls.tone')"
+            :options="[
+              { value: 'default' },
+              { value: 'primary' },
+              { value: 'danger' },
+            ]"
+            v-model="pgTone"
+          />
+          <TbSep />
+          <TbPills
+            :label="t('pages.feedback.confirmDialog.controls.size')"
+            :options="[
+              { value: 'small' },
+              { value: 'medium' },
+              { value: 'large' },
+            ]"
+            v-model="pgSize"
+          />
         </template>
 
-        <template #examples>
-            <ComponentPreview
-                :title="t('pages.feedback.confirmDialog.examples.basic.title')"
-                :description="t('pages.feedback.confirmDialog.examples.basic.desc')"
-                :code="basicCode"
-                min-height="180px"
-            >
-                <Button @click="runBasic">{{ t('pages.feedback.confirmDialog.examples.basic.cta') }}</Button>
-            </ComponentPreview>
+        <Button
+          :color="pgTone === 'default' ? 'default' : pgTone"
+          @click="runPlayground"
+        >
+          {{ t("pages.feedback.confirmDialog.playground.launch") }}
+        </Button>
+        <span class="text-sm text-muted-foreground">
+          {{ t("pages.feedback.confirmDialog.playground.lastResult") }}
+          {{ lastResult }}
+        </span>
+      </ComponentPreview>
+    </template>
 
-            <ComponentPreview
-                :title="t('pages.feedback.confirmDialog.examples.danger.title')"
-                :description="t('pages.feedback.confirmDialog.examples.danger.desc')"
-                :code="dangerCode"
-                min-height="180px"
-            >
-                <Button color="danger" @click="runDanger">{{ t('pages.feedback.confirmDialog.examples.danger.cta') }}</Button>
-            </ComponentPreview>
+    <template #examples>
+      <ComponentPreview
+        :title="t('pages.feedback.confirmDialog.examples.basic.title')"
+        :description="t('pages.feedback.confirmDialog.examples.basic.desc')"
+        :code="basicCode"
+        min-height="180px"
+      >
+        <Button @click="runBasic">{{
+          t("pages.feedback.confirmDialog.examples.basic.cta")
+        }}</Button>
+      </ComponentPreview>
 
-            <ComponentPreview
-                :title="t('pages.feedback.confirmDialog.examples.async.title')"
-                :description="t('pages.feedback.confirmDialog.examples.async.desc')"
-                :code="asyncCode"
-                min-height="180px"
-            >
-                <Button color="primary" @click="runAsync">{{ t('pages.feedback.confirmDialog.examples.async.cta') }}</Button>
-            </ComponentPreview>
+      <ComponentPreview
+        :title="t('pages.feedback.confirmDialog.examples.danger.title')"
+        :description="t('pages.feedback.confirmDialog.examples.danger.desc')"
+        :code="dangerCode"
+        min-height="180px"
+      >
+        <Button color="danger" @click="runDanger">{{
+          t("pages.feedback.confirmDialog.examples.danger.cta")
+        }}</Button>
+      </ComponentPreview>
 
-            <ComponentPreview
-                :title="t('pages.feedback.confirmDialog.examples.custom.title')"
-                :description="t('pages.feedback.confirmDialog.examples.custom.desc')"
-                :code="customCode"
-                min-height="180px"
-            >
-                <Button color="warning" @click="runCustom">{{ t('pages.feedback.confirmDialog.examples.custom.cta') }}</Button>
-            </ComponentPreview>
-        </template>
-    </ComponentDoc>
+      <ComponentPreview
+        :title="t('pages.feedback.confirmDialog.examples.async.title')"
+        :description="t('pages.feedback.confirmDialog.examples.async.desc')"
+        :code="asyncCode"
+        min-height="180px"
+      >
+        <Button color="primary" @click="runAsync">{{
+          t("pages.feedback.confirmDialog.examples.async.cta")
+        }}</Button>
+      </ComponentPreview>
+
+      <ComponentPreview
+        :title="t('pages.feedback.confirmDialog.examples.custom.title')"
+        :description="t('pages.feedback.confirmDialog.examples.custom.desc')"
+        :code="customCode"
+        min-height="180px"
+      >
+        <Button color="warning" @click="runCustom">{{
+          t("pages.feedback.confirmDialog.examples.custom.cta")
+        }}</Button>
+      </ComponentPreview>
+    </template>
+
+    <template #a11y>
+      <A11yDoc
+        :keyboard-rows="a11yKeyboard"
+        :aria-rows="a11yAria"
+        :focus-notes="a11yFocus"
+      />
+    </template>
+
+    <template #extra>
+      <Typography variant="heading" size="large" weight="medium" as="h2">
+        {{ t("pages.feedback.confirmDialog.types.title") }}
+      </Typography>
+      <Typography variant="body" size="small" class="text-muted-foreground">
+        {{ t("pages.feedback.confirmDialog.types.desc") }}
+      </Typography>
+      <CodePreview :code="typesCode" lang="ts" code-only />
+    </template>
+  </ComponentDoc>
 </template>

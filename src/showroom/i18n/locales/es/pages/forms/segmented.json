@@ -46,5 +46,25 @@
   "emits": {
     "updateModelValue": "Emitido al cambiar el segmento activo (sincroniza v-model).",
     "change": "Emitido tras cada selección confirmada por el usuario."
+  },
+
+  "types": {
+    "title": "SegmentedItem",
+    "desc": "Estructura de cada segmento en el array de items. Impórtalo para tipar tus datos antes de pasarlos al componente.",
+    "value": "Valor único emitido vía update:modelValue al seleccionarse. Debe ser string o number.",
+    "label": "Label visible. Opcional cuando se proporciona un icono.",
+    "icon": "Icono opcional renderizado a la izquierda del label.",
+    "disabled": "Cuando es true, el segmento es visible pero no seleccionable.",
+    "ariaLabel": "Sobrescribe el nombre accesible. Requerido cuando no hay label."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco hacia o desde el control segmentado",
+    "kbArrow": "Mueve la selección entre segmentos",
+    "kbSpace": "Selecciona el segmento enfocado",
+    "ariaGroup": "El wrapper se expone como radiogroup para los lectores de pantalla",
+    "ariaLabel": "Proporciona un nombre accesible para el radiogroup",
+    "ariaDisabled": "Comunica el estado deshabilitado a las tecnologías asistivas",
+    "focusGroup": "Las flechas ciclan entre segmentos; Tab mueve el foco fuera del grupo",
+    "focusDisabled": "Los segmentos deshabilitados permanecen visibles pero se saltan en la navegación por teclado"
   }
 }

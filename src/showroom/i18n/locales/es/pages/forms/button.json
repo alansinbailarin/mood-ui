@@ -1,54 +1,96 @@
 {
-    "category": "Forms",
-    "title": "Button",
-    "description": "La acción primaria de cualquier interfaz. Cuatro variantes, cinco colores semánticos, cuatro tamaños, iconos configurables, estado de carga y soporte para renderizar como link o cualquier elemento.",
-    "controls": {
-        "variant": "Variante",
-        "color": "Color",
-        "size": "Tamaño",
-        "loading": "Loading",
-        "disabled": "Disabled"
+  "category": "Forms",
+  "title": "Button",
+  "description": "La acción primaria de cualquier interfaz. Cuatro variantes, cinco colores semánticos, cuatro tamaños, iconos configurables, estado de carga y soporte para renderizar como link o cualquier elemento.",
+  "controls": {
+    "variant": "Variante",
+    "color": "Color",
+    "size": "Tamaño",
+    "radius": "Radio",
+    "loading": "Loading",
+    "disabled": "Disabled",
+    "gradient": "Gradiente",
+    "skeleton": "Skeleton"
+  },
+  "examples": {
+    "variants": {
+      "title": "Variantes",
+      "desc": "Cuatro estilos visuales para distintos niveles de jerarquía de acción."
     },
-    "examples": {
-        "variants": {
-            "title": "Variantes",
-            "desc": "Cuatro estilos visuales para distintos niveles de jerarquía de acción."
-        },
-        "colors": {
-            "title": "Colores",
-            "desc": "Cinco colores semánticos que mapean al sistema de design tokens del ModoProvider."
-        },
-        "sizes": {
-            "title": "Tamaños",
-            "desc": "El padding, la fuente y el alto se ajustan proporcionalmente en cada escala."
-        },
-        "icons": {
-            "title": "Con iconos",
-            "desc": "Posición izquierda, derecha o solo icono. Usa aria-label en botones icon-only."
-        },
-        "states": {
-            "title": "Estados",
-            "desc": "Loading bloquea clicks y muestra spinner. Disabled deshabilita visualmente e impide eventos."
-        }
+    "colors": {
+      "title": "Colores",
+      "desc": "Cinco colores semánticos que mapean al sistema de design tokens del ModoProvider."
     },
-    "props": {
-        "variant": "Variante visual. Normal es el botón sólido por defecto.",
-        "color": "Color semántico aplicado al botón.",
-        "size": "Controla el padding, fuente y alto del botón.",
-        "label": "Texto del botón. Equivalente al slot default para contenido plano.",
-        "loading": "Muestra un spinner y bloquea clicks mientras está activo.",
-        "loadingText": "Texto mostrado junto al spinner durante el estado loading.",
-        "disabled": "Deshabilita el botón visualmente e impide cualquier interacción.",
-        "icon": "Componente de icono renderizado junto al label (heroicons u otro).",
-        "iconPosition": "Lado donde aparece el icono respecto al label.",
-        "fullWidth": "El botón se expande para ocupar el 100% del ancho disponible.",
-        "as": "Elemento raíz a renderizar. Usa \"a\" para links o un router-link.",
-        "ariaLabel": "Label accesible. Imprescindible en botones icon-only sin texto visible."
+    "sizes": {
+      "title": "Tamaños",
+      "desc": "El padding, la fuente y el alto se ajustan proporcionalmente en cada escala."
     },
-    "emits": {
-        "click": "Emitido al hacer click cuando el botón no está deshabilitado ni en estado loading."
+    "icons": {
+      "title": "Con iconos",
+      "desc": "Posición izquierda, derecha o solo icono. Usa aria-label en botones icon-only."
     },
-    "slots": {
-        "default": "Contenido personalizado del botón. Reemplaza la prop label cuando se necesita HTML o componentes internos."
+    "states": {
+      "title": "Estados",
+      "desc": "Loading bloquea clicks y muestra spinner. Disabled deshabilita visualmente e impide eventos."
+    },
+    "gradient": {
+      "title": "Gradiente",
+      "desc": "Fondo degradado para un look más premium en colores soportados."
+    },
+    "radius": {
+      "title": "Radio de esquinas",
+      "desc": "Desde bordes rectos hasta píldoras completamente redondeadas."
+    },
+    "link": {
+      "title": "Como link",
+      "desc": "Renderiza como etiqueta anchor conservando el estilo de botón. Útil para navegación con apariencia de CTA."
+    },
+    "skeleton": {
+      "title": "Skeleton",
+      "desc": "Muestra un placeholder skeleton con la misma huella visual mientras carga el contexto."
     }
+  },
+  "props": {
+    "variant": "Variante visual. Normal es el botón sólido por defecto.",
+    "color": "Color semántico aplicado al botón.",
+    "size": "Controla el padding, fuente y alto del botón.",
+    "radius": "Radio de esquinas. Sobrescribe el radius activo de ModoProvider cuando se define.",
+    "label": "Texto del botón. Equivalente al slot default para contenido plano.",
+    "type": "Atributo HTML type del botón. Usa 'submit' dentro de formularios.",
+    "loading": "Muestra un spinner y bloquea clicks mientras está activo.",
+    "loadingText": "Texto mostrado junto al spinner durante el estado loading.",
+    "disabled": "Deshabilita el botón visualmente e impide cualquier interacción.",
+    "icon": "Componente de icono renderizado junto al label (heroicons u otro).",
+    "iconPosition": "Lado donde aparece el icono respecto al label.",
+    "fullWidth": "El botón se expande para ocupar el 100% del ancho disponible.",
+    "gradient": "Aplica un fondo degradado en colores soportados.",
+    "skeleton": "Renderiza un placeholder skeleton en lugar del botón real.",
+    "as": "Elemento raíz a renderizar. Usa \"a\" para links o un router-link.",
+    "href": "Href del anchor cuando as='a'.",
+    "target": "Target del anchor cuando as='a' (ej. '_blank').",
+    "rel": "Rel del anchor cuando as='a' (ej. 'noopener noreferrer').",
+    "ariaLabel": "Label accesible. Imprescindible en botones icon-only sin texto visible."
+  },
+  "emits": {
+    "click": "Emitido al hacer click cuando el botón no está deshabilitado ni en estado loading."
+  },
+  "slots": {
+    "default": "Contenido personalizado del botón. Reemplaza la prop label cuando se necesita HTML o componentes internos."
+  },
+  "types": {
+    "title": "Button",
+    "desc": "Interfaz TypeScript de las props del componente Button. Todas las props son opcionales y tienen valores por defecto razonables."
+  },
+  "a11y": {
+    "kbActivate": "Activa el botón",
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "ariaType": "Evita envíos de formulario accidentales cuando el botón está dentro de un elemento form",
+    "ariaDisabled": "Comunica el estado deshabilitado a las tecnologías asistivas",
+    "ariaBusy": "Comunica el estado de carga mientras la acción está en curso",
+    "ariaLabel": "Proporciona un nombre accesible para botones de solo icono (sin texto visible)",
+    "focusNative": "Usa un elemento button nativo — participa en el orden de tabulación por defecto",
+    "focusDisabled": "Excluido del orden de tabulación cuando la prop disabled es true",
+    "focusRing": "El anillo de foco siempre es visible; su estilo se controla con focusHalo en ModoConfig"
+  }
 }

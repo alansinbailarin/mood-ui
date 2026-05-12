@@ -1,22 +1,46 @@
 {
-    "title": "HStack",
-    "category": "Layout",
-    "description": "Atajo de Stack con dirección horizontal. Útil para alinear ítems en fila con spacing y align consistentes.",
-    "examples": {
-        "basic":      { "title": "Básico",        "desc": "Distribuye hijos horizontalmente con spacing." },
-        "spacings":   { "title": "Spacings",      "desc": "Tokens del sistema: xsmall, small, medium, large." },
-        "alignments": { "title": "Alineaciones",  "desc": "Combina justify y align para distintos layouts." },
-        "wrapping":   { "title": "Wrapping",      "desc": "Activa wrap para que los hijos salten cuando no hay espacio." }
+  "title": "HStack",
+  "category": "Layout",
+  "description": "Atajo de Stack con dirección horizontal. Útil para alinear ítems en fila con spacing y align consistentes.",
+  "examples": {
+    "basic": {
+      "title": "Básico",
+      "desc": "Distribuye hijos horizontalmente con spacing."
     },
-    "props": {
-        "spacing":    "Gap horizontal entre los hijos.",
-        "align":      "Alineación vertical (cross-axis).",
-        "justify":    "Distribución horizontal (main-axis).",
-        "wrap":       "Comportamiento de salto de línea cuando no hay espacio.",
-        "divider":    "Inserta un Divider vertical entre cada hijo.",
-        "fullWidth":  "Ocupa todo el ancho disponible.",
-        "fullHeight": "Ocupa todo el alto disponible.",
-        "as":         "Etiqueta raíz a renderizar."
+    "spacings": {
+      "title": "Spacings",
+      "desc": "Tokens del sistema: xsmall, small, medium, large."
     },
-    "slots": { "default": "Hijos a apilar horizontalmente." }
+    "alignments": {
+      "title": "Alineaciones",
+      "desc": "Combina justify y align para distintos layouts."
+    },
+    "wrapping": {
+      "title": "Wrapping",
+      "desc": "Activa wrap para que los hijos salten cuando no hay espacio."
+    }
+  },
+  "props": {
+    "spacing": "Gap horizontal entre los hijos.",
+    "align": "Alineación vertical (cross-axis).",
+    "justify": "Distribución horizontal (main-axis).",
+    "wrap": "Comportamiento de salto de línea cuando no hay espacio.",
+    "divider": "Inserta un Divider vertical entre cada hijo.",
+    "fullWidth": "Ocupa todo el ancho disponible.",
+    "fullHeight": "Ocupa todo el alto disponible.",
+    "as": "Etiqueta raíz a renderizar."
+  },
+  "slots": {
+    "default": "Hijos a apilar horizontalmente."
+  },
+  "types": {
+    "title": "Tipos",
+    "desc": "Interfaces de TypeScript para este componente."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "ariaLabel": "Proporciona un nombre accesible para la pila horizontal",
+    "focusNative": "Elemento de layout no interactivo; no participa en el orden de tabulación"
+  }
 }

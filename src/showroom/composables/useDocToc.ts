@@ -12,6 +12,14 @@ export interface TocItem {
     label: string;
     /** 1 = top-level section, 2 = nested (e.g. example title) */
     level: 1 | 2;
+    /**
+     * For level-2 items: the id of the parent level-1 section.
+     * When provided, the item is inserted right after all existing items
+     * that share the same parentId (or right after the parent itself if
+     * no children exist yet), keeping examples nested under "examples"
+     * even though they register asynchronously in onMounted.
+     */
+    parentId?: string;
 }
 
 export interface DocTocApi {
@@ -31,8 +39,26 @@ export function createDocToc(): DocTocApi {
 
     function register(item: TocItem) {
         const idx = items.value.findIndex((i) => i.id === item.id);
-        if (idx === -1) items.value.push(item);
-        else items.value[idx] = item;
+        if (idx !== -1) {
+            items.value[idx] = item; // update label/level in place
+            return;
+        }
+        if (item.parentId) {
+            // Insert right after the last sibling (same parentId) or after the
+            // parent itself, so children always stay grouped under their section.
+            let insertAt = -1;
+            for (let i = items.value.length - 1; i >= 0; i--) {
+                if (items.value[i].parentId === item.parentId || items.value[i].id === item.parentId) {
+                    insertAt = i + 1;
+                    break;
+                }
+            }
+            if (insertAt !== -1) {
+                items.value.splice(insertAt, 0, item);
+                return;
+            }
+        }
+        items.value.push(item);
     }
     function unregister(id: string) {
         const idx = items.value.findIndex((i) => i.id === id);

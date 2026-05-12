@@ -1,5 +1,6 @@
-import type { InjectionKey, Ref } from 'vue'; 
+import type { InjectionKey, Ref } from 'vue';
 import { defaultPalettes, type ModoPalette } from './palettes';
+import type { AvatarProvider } from '../interfaces/forms/AvatarUpload.interface';
 
 /**
  * Surface tokens — backgrounds, cards, popovers, borders and neutral fills.
@@ -42,18 +43,30 @@ export type ModoTheme = 'light' | 'dark' | 'system';
  */ 
 export type ModoHalo = 'tinted' | 'neutral' | 'off'; 
  
-export interface ModoConfig { 
-    color: ModoColor; 
-    radius: ModoRadius; 
-    size: ModoSize; 
-    theme: ModoTheme; 
-    halo: ModoHalo; 
-    palettes: { 
-        default: ModoPalette; 
-        primary: ModoPalette; 
+/** Global AI configuration. Each field maps to a specific AI-enabled component. */
+export interface ModoAiConfig {
+    /**
+     * Default avatar generation function used by `<AvatarUpload ai />` when
+     * no `:provider` prop is passed. The developer implements this with their
+     * own API key / model. Mood UI never provides AI directly.
+     */
+    avatarProvider?: AvatarProvider;
+}
+
+export interface ModoConfig {
+    color: ModoColor;
+    radius: ModoRadius;
+    size: ModoSize;
+    theme: ModoTheme;
+    halo: ModoHalo;
+    palettes: {
+        default: ModoPalette;
+        primary: ModoPalette;
     };
     surfaces?: ModoSurfaces;
     darkSurfaces?: ModoSurfaces;
+    /** Optional AI provider config. See `ModoAiConfig`. */
+    ai?: ModoAiConfig;
 } 
  
 export const MODO_CONFIG: InjectionKey<Ref<ModoConfig>> = Symbol('modo-config'); 

@@ -1,0 +1,32 @@
+{
+    "title": "useCalendar",
+    "description": "Composable for building calendar UIs. Generates day grids, handles month/year navigation, supports date ranges, disabled dates, and locale-aware labels.",
+    "api": {
+        "monthLabel": "Localized full month name + year (e.g. 'May 2026').",
+        "weekDayLabels": "Array of 7 localized weekday names in the configured format.",
+        "calendarDays": "Array of 35 or 42 `CalendarDay` objects covering the visible grid.",
+        "navMonth": "Decrement / increment the visible month (rolls over year).",
+        "navYear": "Decrement / increment the visible year.",
+        "goToToday": "Jump to the current month and year. Returns today's date.",
+        "goToDate": "Jump to the month and year containing the given date.",
+        "isDateDisabled": "Check if a date falls outside min/max bounds or is in the disabled list."
+    },
+    "playground": {
+        "today": "Today"
+    },
+    "examples": {
+        "basic": {
+            "title": "Basic calendar",
+            "desc": "Bind a reactive date to `modelValue` and navigate months."
+        },
+        "range": {
+            "title": "With range and constraints",
+            "desc": "Use `rangeValue`, `minDate`, and `maxDate` to restrict selection.",
+            "body": "calendarDays exposes `inRange`, `isRangeStart`, and `isRangeEnd` for styling range selections."
+        }
+    },
+    "types": {
+        "title": "Types",
+        "desc": "TypeScript interfaces for this composable."
+    }
+}

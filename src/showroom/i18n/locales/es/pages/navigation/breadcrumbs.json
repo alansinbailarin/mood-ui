@@ -1,38 +1,63 @@
 {
-    "title": "Breadcrumbs",
-    "category": "Navigation",
-    "description": "Migas de pan accesibles con iconos por item, separadores intercambiables y colapsado opcional cuando el trail supera el máximo.",
-    "items": {
-        "home":        "Inicio",
-        "products":    "Productos",
-        "detail":      "Detalle",
-        "projects":    "Proyectos",
-        "modo":        "Modo",
-        "breadcrumbs": "Breadcrumbs",
-        "documents":   "Documentos",
-        "report":      "Reporte",
-        "spaces":      "Espacios",
-        "team":        "Equipo",
-        "components":  "Componentes",
-        "navigation":  "Navegación"
+  "title": "Breadcrumbs",
+  "category": "Navigation",
+  "description": "Migas de pan accesibles con iconos por item, separadores intercambiables y colapsado opcional cuando el trail supera el máximo.",
+  "items": {
+    "home": "Inicio",
+    "products": "Productos",
+    "detail": "Detalle",
+    "projects": "Proyectos",
+    "modo": "Modo",
+    "breadcrumbs": "Breadcrumbs",
+    "documents": "Documentos",
+    "report": "Reporte",
+    "spaces": "Espacios",
+    "team": "Equipo",
+    "components": "Componentes",
+    "navigation": "Navegación"
+  },
+  "examples": {
+    "basic": {
+      "title": "Básico",
+      "desc": "Trail simple con separador chevron por defecto. El último item es la página actual."
     },
-    "examples": {
-        "basic":      { "title": "Básico",         "desc": "Trail simple con separador chevron por defecto. El último item es la página actual." },
-        "icons":      { "title": "Con iconos",      "desc": "Cada item puede declarar un icono opcional. Útil para reforzar la jerarquía visual." },
-        "homeIcon":   { "title": "Con icono Home",  "desc": "`show-home-icon` añade automáticamente un icono Home al primer item cuando éste no define el suyo." },
-        "separators": { "title": "Separadores",     "desc": "Cuatro separadores integrados (chevron, slash, dot, arrow) o uno propio vía `separator-text`." },
-        "truncated":  { "title": "Truncado",        "desc": "Cuando el trail supera `max`, los items del medio colapsan en una elipsis interactiva." }
+    "icons": {
+      "title": "Con iconos",
+      "desc": "Cada item puede declarar un icono opcional. Útil para reforzar la jerarquía visual."
     },
-    "props": {
-        "items":         "Trail de migas. Cada item acepta label, icon, to, href, disabled.",
-        "max":           "Máximo de items visibles. Si se supera, colapsa el medio en `…`.",
-        "separator":     "Separador visual entre items.",
-        "separatorText": "Texto literal que sustituye el separador (override).",
-        "size":          "Tamaño tipográfico del trail.",
-        "showHomeIcon":  "Muestra un icono Home en el primer item si éste no define `icon`.",
-        "ariaLabel":     "Etiqueta accesible del nav."
+    "homeIcon": {
+      "title": "Con icono Home",
+      "desc": "`show-home-icon` añade automáticamente un icono Home al primer item cuando éste no define el suyo."
     },
-    "emits": {
-        "navigate": "Emitido al hacer click en un item con `to` (no en items con `href` ni en el actual)."
+    "separators": {
+      "title": "Separadores",
+      "desc": "Cuatro separadores integrados (chevron, slash, dot, arrow) o uno propio vía `separator-text`."
+    },
+    "truncated": {
+      "title": "Truncado",
+      "desc": "Cuando el trail supera `max`, los items del medio colapsan en una elipsis interactiva."
     }
+  },
+  "props": {
+    "items": "Trail de migas. Cada item acepta label, icon, to, href, disabled.",
+    "max": "Máximo de items visibles. Si se supera, colapsa el medio en `…`.",
+    "separator": "Separador visual entre items.",
+    "separatorText": "Texto literal que sustituye el separador (override).",
+    "size": "Tamaño tipográfico del trail.",
+    "showHomeIcon": "Muestra un icono Home en el primer item si éste no define `icon`.",
+    "ariaLabel": "Etiqueta accesible del nav."
+  },
+  "emits": {
+    "navigate": "Emitido al hacer click en un item con `to` (no en items con `href` ni en el actual)."
+  },
+  "types": {
+    "title": "Tipos",
+    "desc": "Interfaces de TypeScript para este componente."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "ariaLabel": "Proporciona un nombre accesible para la navegación de breadcrumbs",
+    "focusNative": "El foco es gestionado por los enlaces interactivos dentro del breadcrumb"
+  }
 }

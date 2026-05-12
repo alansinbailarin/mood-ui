@@ -1,59 +1,153 @@
 {
-    "pages": {
-        "dataDisplay": {
-            "table": {
-                "title": "Table",
-                "description": "Tabla potente con sorting, paginación, selección, sticky header, filas expandibles y soporte de árbol. Las columnas se definen con key + accessor.",
-                "controls": {
-                    "size": "Tamaño",
-                    "density": "Densidad",
-                    "bordered": "Bordered",
-                    "select": "Select",
-                    "striped": "Striped",
-                    "hover": "Hover",
-                    "stickyHeader": "Sticky header"
-                },
-                "props": {
-                    "data": "Filas a renderizar.",
-                    "columns": "Definición de columnas (key, header, accessor, sortable, align…).",
-                    "rowKey": "Identificador único de fila usado por v-for y selección.",
-                    "size": "Tamaño de fuente y altura base de las filas.",
-                    "density": "Padding vertical aplicado a las celdas.",
-                    "striped": "Aplica un fondo alterno a las filas pares.",
-                    "hover": "Resalta la fila bajo el cursor.",
-                    "bordered": "Configura los bordes internos de la tabla.",
-                    "stickyHeader": "Mantiene la cabecera visible al hacer scroll vertical.",
-                    "selectable": "Activa selección de filas con checkboxes.",
-                    "pageSize": "Activa paginación cliente con el tamaño indicado."
-                },
-                "emits": {
-                    "updateSort": "Emitido al cambiar el orden de las columnas.",
-                    "updateSelected": "Emitido al cambiar la selección de filas.",
-                    "updatePagination": "Emitido al cambiar de página o page size."
-                },
-                "examples": {
-                    "basic": {
-                        "title": "Básica",
-                        "desc": "Configuración por defecto con cuatro columnas y tipografía estándar."
-                    },
-                    "striped": {
-                        "title": "Striped + bordered",
-                        "desc": "Filas alternas y bordes completos para mejor lectura en tablas densas."
-                    },
-                    "sort": {
-                        "title": "Con orden",
-                        "desc": "Marca cualquier columna como sortable para activar el orden ascendente / descendente."
-                    },
-                    "compact": {
-                        "title": "Densidad compacta",
-                        "desc": "Reduce el padding vertical para mostrar más filas en menos espacio."
-                    },
-                    "stickyHeader": {
-                        "title": "Sticky header",
-                        "desc": "La cabecera permanece fija mientras se hace scroll dentro del contenedor."
-                    }
-                }
-            }
-        }
+  "title": "Table",
+  "description": "Tabla potente con sorting, paginación, selección, sticky header, filas expandibles y soporte de árbol. Las columnas se definen con key + accessor.",
+  "controls": {
+    "size": "Tamaño",
+    "density": "Densidad",
+    "bordered": "Bordered",
+    "select": "Select",
+    "striped": "Striped",
+    "hover": "Hover",
+    "stickyHeader": "Sticky header"
+  },
+  "props": {
+    "data": "Filas a renderizar.",
+    "columns": "Definición de columnas (key, header, accessor, sortable, align…).",
+    "rowKey": "Identificador único de fila usado por v-for y selección.",
+    "size": "Tamaño de fuente y altura base de las filas.",
+    "density": "Padding vertical aplicado a las celdas.",
+    "striped": "Aplica un fondo alterno a las filas pares.",
+    "hover": "Resalta la fila bajo el cursor.",
+    "bordered": "Configura los bordes internos de la tabla.",
+    "stickyHeader": "Mantiene la cabecera visible al hacer scroll vertical.",
+    "radius": "Redondea las esquinas externas del contenedor de la tabla.",
+    "overflow": "Controla cómo las celdas manejan el contenido que supera su ancho.",
+    "loading": "Muestra un estado de carga mientras se obtienen los datos.",
+    "loadingRows": "Número de filas skeleton mostradas cuando loading es true.",
+    "loadingMode": "Estrategia de renderizado del estado de carga: filas skeleton o spinner superpuesto.",
+    "emptyText": "Mensaje mostrado cuando data está vacía.",
+    "noResultsText": "Mensaje mostrado cuando los filtros no arrojan resultados.",
+    "ariaLabel": "Etiqueta accesible para el elemento tabla.",
+    "sort": "Estado de ordenación controlado: array de objetos \\{ key, direction \\}.",
+    "multiSort": "Permite ordenar por múltiples columnas simultáneamente.",
+    "sortClearable": "Si al hacer clic una tercera vez en una columna ordenada se borra su ordenación.",
+    "selectable": "Activa selección de filas. 'single' permite una fila; 'multi' permite varias.",
+    "selected": "Array controlado de keys de filas seleccionadas.",
+    "isRowSelectable": "Predicado para deshabilitar la selección en filas específicas.",
+    "filter": "Valores de filtro por columna controlados como mapa key → valor.",
+    "filterRow": "Muestra una fila de inputs de filtro debajo de la cabecera.",
+    "expandable": "Añade un toggle de expansión a cada fila para revelar contenido adicional.",
+    "expanded": "Array controlado de keys de filas expandidas.",
+    "isRowExpandable": "Predicado para ocultar el toggle de expansión en filas específicas.",
+    "pagination": "Estado de paginación controlado: \\{ page, pageSize, total \\}.",
+    "pageSizeOptions": "Opciones disponibles en el selector de page size.",
+    "serverSide": "Desactiva el sorting/filtrado cliente; lo delega al servidor mediante emits.",
+    "resizable": "Permite arrastrar el ancho de las columnas para redimensionarlas.",
+    "reorderable": "Permite arrastrar las columnas para reordenarlas.",
+    "columnsState": "Estado por columna controlado (ancho, orden, visibilidad).",
+    "state": "Snapshot serializable del estado completo de la tabla.",
+    "minColumnWidth": "Ancho mínimo de columna en píxeles al redimensionar.",
+    "virtual": "Activa el scroll virtual para datasets grandes.",
+    "rowHeight": "Altura fija de fila en píxeles requerida para el scroll virtual.",
+    "overscan": "Número de filas renderizadas fuera del área visible para el scroll virtual.",
+    "virtualHeight": "Altura del contenedor cuando virtual es true.",
+    "tree": "Activa el modo árbol: las filas hijas se leen de la propiedad childrenKey.",
+    "childrenKey": "Nombre de la propiedad que contiene las filas hijas en modo árbol.",
+    "treeExpanded": "Array controlado de keys de nodos árbol expandidos.",
+    "loadChildren": "Función async que carga hijos bajo demanda para una fila dada.",
+    "hasChildrenHint": "Predicado que indica que una fila puede tener hijos antes de que se carguen.",
+    "groupBy": "Agrupa filas por el key o función accessor dados.",
+    "groupExpanded": "Array controlado de keys de grupos expandidos.",
+    "stickyFirstColumn": "Fija la primera columna al hacer scroll horizontal.",
+    "toolbar": "Muestra la barra de herramientas integrada con búsqueda y controles de columna.",
+    "globalSearch": "Activa un input de búsqueda global en la barra de herramientas.",
+    "globalSearchScope": "Si la búsqueda global actúa sobre todas las columnas o sólo las filtrables.",
+    "globalSearchTerm": "Valor controlado del input de búsqueda global.",
+    "columnVisibility": "Añade un toggle de visibilidad de columnas a la barra de herramientas.",
+    "exportable": "Añade botones de exportación (CSV, JSON, portapapeles) a la barra de herramientas.",
+    "exportFileName": "Nombre base del archivo al exportar CSV o JSON."
+  },
+  "emits": {
+    "updateSort": "Emitido al cambiar el orden de las columnas. Payload: TableSortState.",
+    "updateSelected": "Emitido al cambiar la selección de filas. Payload: (string | number)[].",
+    "updateFilter": "Emitido al cambiar un filtro de columna. Payload: TableFilterState.",
+    "updateExpanded": "Emitido al expandir o contraer filas. Payload: (string | number)[].",
+    "updatePagination": "Emitido al cambiar de página o page size. Payload: TablePaginationState.",
+    "updateColumnsState": "Emitido al redimensionar o reordenar columnas. Payload: TableColumnState[].",
+    "updateTreeExpanded": "Emitido al expandir o contraer nodos árbol. Payload: (string | number)[].",
+    "updateGroupExpanded": "Emitido al expandir o contraer grupos. Payload: (string | number)[].",
+    "updateGlobalSearchTerm": "Emitido al cambiar el input de búsqueda global. Payload: string.",
+    "rowActivate": "Emitido al activar una fila mediante Enter o doble clic.",
+    "rowClick": "Emitido al hacer clic en una fila.",
+    "cellEdit": "Emitido al confirmar el valor de una celda editable. Payload: TableCellEditEvent.",
+    "cellEditCancel": "Emitido al cancelar la edición de una celda.",
+    "updateState": "Emitido con un snapshot completo del estado de la tabla."
+  },
+  "slots": {
+    "default": "Slot de reserva — actualmente sin uso, reservado para futuras extensiones.",
+    "caption": "Leyenda accesible de la tabla renderizada como elemento caption.",
+    "empty": "Contenido personalizado cuando data está vacía. Expone { message }.",
+    "noResults": "Contenido personalizado cuando los filtros no arrojan resultados. Expone \\{ message, clear \\}.",
+    "footer": "Contenido añadido debajo del cuerpo de la tabla.",
+    "toolbar": "Contenido personalizado de la barra de herramientas. Expone \\{ searchTerm, setSearchTerm, clearSearch \\}.",
+    "bulkActions": "Mostrado en la barra cuando hay filas seleccionadas. Expone \\{ selected, rows, count, clear \\}.",
+    "rowExpanded": "Contenido dentro de una fila expandida. Expone \\{ row, index \\}.",
+    "groupHeader": "Cabecera de grupo personalizada. Expone \\{ value, rows, count, expanded, toggle, aggregations \\}.",
+    "cellKey": "Renderer de celda personalizado para la columna con el key dado. Expone \\{ row, value, index \\}.",
+    "headerKey": "Renderer de cabecera personalizado para la columna con el key dado. Expone \\{ column \\}.",
+    "filterKey": "Input de filtro personalizado para la columna con el key dado. Expone \\{ column, value, setValue, clear \\}."
+  },
+  "examples": {
+    "basic": {
+      "title": "Básico",
+      "desc": "Configuración por defecto con cuatro columnas y tipografía estándar."
+    },
+    "striped": {
+      "title": "Striped + bordered",
+      "desc": "Filas alternadas y bordes completos para facilitar la lectura en tablas densas."
+    },
+    "sort": {
+      "title": "Con sorting",
+      "desc": "Marca cualquier columna como sortable para habilitar orden ascendente / descendente."
+    },
+    "compact": {
+      "title": "Densidad compacta",
+      "desc": "Reduce el padding vertical para mostrar más filas en menos espacio."
+    },
+    "stickyHeader": {
+      "title": "Sticky header",
+      "desc": "La cabecera permanece fija mientras se hace scroll dentro del contenedor."
+    },
+    "selection": {
+      "title": "Selección de filas",
+      "desc": "Activa la selección de una o varias filas con checkboxes. Enlaza :selected y escucha \\@update:selected."
+    },
+    "pagination": {
+      "title": "Paginación",
+      "desc": "Pasa un objeto de paginación con page, pageSize y total para dividir los datos en páginas."
+    },
+    "loading": {
+      "title": "Estado de carga",
+      "desc": "Establece :loading=\"true\" para mostrar filas skeleton mientras se obtienen los datos. Usa loading-rows para controlar cuántas aparecen."
+    },
+    "customCell": {
+      "title": "Slot de celda personalizada",
+      "desc": "Usa el slot #cell-{key} para renderizar cualquier contenido dentro de una columna. El slot expone \\{ row, value, index \\}."
     }
+  },
+  "types": {
+    "title": "Interfaces TypeScript",
+    "desc": "Tipos principales exportados por Table: TableColumn, TableSortState, TableFilterState, TablePaginationState, TableCellEditEvent y TableColumnState."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable (cabecera sortable, checkbox o control de paginación)",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "kbEnter": "Activa una cabecera sortable (cicla asc → desc → ninguno) o confirma una celda editable",
+    "kbSpace": "Alterna la selección en el checkbox de la fila enfocada",
+    "ariaSort": "Se establece a 'ascending' o 'descending' en cabeceras activas; 'none' en columnas sortables sin ordenar",
+    "ariaLabel": "Proporciona un nombre accesible para el elemento tabla",
+    "ariaSelected": "Se establece a 'true' en las filas seleccionadas cuando selectable está activo",
+    "focusNative": "El foco es gestionado nativamente; usa Tab para navegar entre cabeceras, checkboxes y controles de paginación",
+    "focusTrap": "Las celdas editables atrapan el foco hasta que se confirma o cancela la edición"
+  }
 }

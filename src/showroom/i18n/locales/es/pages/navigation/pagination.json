@@ -1,30 +1,60 @@
 {
-    "title": "Pagination",
-    "category": "Navigation",
-    "description": "Paginador accesible con saltos a primera/última página, hermanos configurables y todos los tokens visuales del sistema.",
-    "examples": {
-        "basic":    { "title": "Básico",            "desc": "Paginador con primera/última, prev/next y un hermano por defecto a cada lado." },
-        "siblings": { "title": "Con más hermanos",   "desc": "Aumenta `sibling-count` para mostrar más páginas alrededor de la actual." },
-        "jump":     { "title": "Salto rápido",       "desc": "Combina el paginador con un NumberInput para saltar directamente a una página concreta." },
-        "sizes":    { "title": "Tamaños",            "desc": "Tres tamaños responden a la jerarquía visual del entorno donde se inserte el paginador." },
-        "compact":  { "title": "Compacto",           "desc": "Oculta los botones de primera/última cuando el espacio escasea o el contexto no los necesita." }
+  "title": "Pagination",
+  "category": "Navigation",
+  "description": "Paginador accesible con saltos a primera/última página, hermanos configurables y todos los tokens visuales del sistema.",
+  "examples": {
+    "basic": {
+      "title": "Básico",
+      "desc": "Paginador con primera/última, prev/next y un hermano por defecto a cada lado."
     },
-    "demo": { "pagePh": "Pág.", "go": "Ir" },
-    "props": {
-        "modelValue":    "Página actual (1-indexed). Usa v-model.",
-        "pageCount":     "Número total de páginas (≥ 1).",
-        "siblingCount":  "Páginas hermanas mostradas a cada lado de la actual.",
-        "boundaryCount": "Páginas pinned al inicio y final del rango.",
-        "showFirstLast": "Muestra los botones de primera y última página.",
-        "showPrevNext":  "Muestra los botones de página anterior y siguiente.",
-        "color":         "Color de la página activa.",
-        "size":          "Tamaño de los botones del paginador.",
-        "radius":        "Radio aplicado a los botones.",
-        "disabled":      "Deshabilita todos los botones.",
-        "ariaLabel":     "Etiqueta accesible del nav."
+    "siblings": {
+      "title": "Con más hermanos",
+      "desc": "Aumenta `sibling-count` para mostrar más páginas alrededor de la actual."
     },
-    "emits": {
-        "updateModelValue": "Emitido al cambiar de página. Usado por v-model.",
-        "change":           "Mismo payload que update:modelValue, útil para listeners externos."
+    "jump": {
+      "title": "Salto rápido",
+      "desc": "Combina el paginador con un NumberInput para saltar directamente a una página concreta."
+    },
+    "sizes": {
+      "title": "Tamaños",
+      "desc": "Tres tamaños responden a la jerarquía visual del entorno donde se inserte el paginador."
+    },
+    "compact": {
+      "title": "Compacto",
+      "desc": "Oculta los botones de primera/última cuando el espacio escasea o el contexto no los necesita."
     }
+  },
+  "demo": {
+    "pagePh": "Pág.",
+    "go": "Ir"
+  },
+  "props": {
+    "modelValue": "Página actual (1-indexed). Usa v-model.",
+    "pageCount": "Número total de páginas (≥ 1).",
+    "siblingCount": "Páginas hermanas mostradas a cada lado de la actual.",
+    "boundaryCount": "Páginas pinned al inicio y final del rango.",
+    "showFirstLast": "Muestra los botones de primera y última página.",
+    "showPrevNext": "Muestra los botones de página anterior y siguiente.",
+    "color": "Color de la página activa.",
+    "size": "Tamaño de los botones del paginador.",
+    "radius": "Radio aplicado a los botones.",
+    "disabled": "Deshabilita todos los botones.",
+    "ariaLabel": "Etiqueta accesible del nav."
+  },
+  "emits": {
+    "updateModelValue": "Emitido al cambiar de página. Usado por v-model.",
+    "change": "Mismo payload que update:modelValue, útil para listeners externos."
+  },
+  "types": {
+    "title": "Tipos",
+    "desc": "Interfaces de TypeScript para este componente."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente botón de página",
+    "kbShiftTab": "Mueve el foco al botón de página anterior",
+    "kbEnter": "Activa el botón de página enfocado",
+    "ariaLabel": "Proporciona un nombre accesible para la navegación de paginación",
+    "ariaCurrent": "Indica la página actualmente activa",
+    "focusNative": "El foco se mueve entre botones de página usando Tab"
+  }
 }

@@ -1,60 +1,71 @@
 {
-    "title": "EmptyState",
-    "description": "Estado vacío para listas, búsquedas y secciones sin datos. Soporta icono, descripción, acciones y variantes visuales.",
+  "title": "EmptyState",
+  "description": "Estado vacío para listas, búsquedas y secciones sin datos. Soporta icono, descripción, acciones y variantes visuales.",
 
-    "controls": {
-        "variant":  "Variante",
-        "size":     "Tamaño",
-        "centered": "Centrado"
+  "controls": {
+    "variant": "Variante",
+    "size": "Tamaño",
+    "centered": "Centrado"
+  },
+
+  "playground": {
+    "title": "Sin notificaciones",
+    "description": "Cuando recibas algo aparecerá aquí."
+  },
+
+  "examples": {
+    "action": {
+      "title": "Con acción",
+      "desc": "Slot actions para añadir un CTA debajo de la descripción.",
+      "emptyTitle": "Sin resultados",
+      "emptyDesc": "Intenta con otra búsqueda o limpia los filtros.",
+      "cta": "Limpiar filtros"
     },
-
-    "playground": {
-        "title":       "Sin notificaciones",
-        "description": "Cuando recibas algo aparecerá aquí."
+    "variants": {
+      "title": "Variantes",
+      "desc": "Tres superficies: subtle (default), solid (con borde) y outline (borde discontinuo).",
+      "subtleDesc": "Sin borde.",
+      "solidDesc": "Con superficie.",
+      "outlineDesc": "Borde discontinuo."
     },
-
-    "examples": {
-        "action": {
-            "title":       "Con acción",
-            "desc":        "Slot actions para añadir un CTA debajo de la descripción.",
-            "emptyTitle":  "Sin resultados",
-            "emptyDesc":   "Intenta con otra búsqueda o limpia los filtros.",
-            "cta":         "Limpiar filtros"
-        },
-        "variants": {
-            "title":        "Variantes",
-            "desc":         "Tres superficies: subtle (default), solid (con borde) y outline (borde discontinuo).",
-            "subtleDesc":   "Sin borde.",
-            "solidDesc":    "Con superficie.",
-            "outlineDesc":  "Borde discontinuo."
-        },
-        "noResults": {
-            "title":       "Sin resultados",
-            "desc":        "Patrón típico para una búsqueda sin coincidencias.",
-            "emptyTitle":  "Sin resultados",
-            "emptyDesc":   "No encontramos nada que coincida con \"facturas 2025\". Prueba otros términos."
-        },
-        "error": {
-            "title":       "Estado de error",
-            "desc":        "Combina variant outline con un CTA para reintentar la operación.",
-            "emptyTitle":  "Algo salió mal",
-            "emptyDesc":   "Reintenta en unos segundos.",
-            "cta":         "Reintentar"
-        }
+    "noResults": {
+      "title": "Sin resultados",
+      "desc": "Patrón típico para una búsqueda sin coincidencias.",
+      "emptyTitle": "Sin resultados",
+      "emptyDesc": "No encontramos nada que coincida con \"facturas 2025\". Prueba otros términos."
     },
-
-    "props": {
-        "title":       "Encabezado principal del empty state.",
-        "description": "Texto secundario debajo del título.",
-        "icon":        "Icono mostrado encima del título. Por defecto se usa InboxIcon.",
-        "size":        "Tamaño visual del empty state.",
-        "variant":     "Tratamiento visual del contenedor.",
-        "centered":    "Centra horizontalmente el contenido.",
-        "radius":      "Radio de las esquinas para variant solid u outline."
-    },
-
-    "slots": {
-        "actions": "Acciones debajo de la descripción (típicamente botones).",
-        "default": "Contenido extra renderizado al final del empty state."
+    "error": {
+      "title": "Estado de error",
+      "desc": "Combina variant outline con un CTA para reintentar la operación.",
+      "emptyTitle": "Algo salió mal",
+      "emptyDesc": "Reintenta en unos segundos.",
+      "cta": "Reintentar"
     }
+  },
+
+  "props": {
+    "title": "Encabezado principal del empty state.",
+    "description": "Texto secundario debajo del título.",
+    "icon": "Icono mostrado encima del título. Por defecto se usa InboxIcon.",
+    "size": "Tamaño visual del empty state.",
+    "variant": "Tratamiento visual del contenedor.",
+    "centered": "Centra horizontalmente el contenido.",
+    "radius": "Radio de las esquinas para variant solid u outline."
+  },
+
+  "slots": {
+    "actions": "Acciones debajo de la descripción (típicamente botones).",
+    "default": "Contenido extra renderizado al final del empty state."
+  },
+  "types": {
+    "title": "EmptyState",
+    "desc": "Interfaz TypeScript de las props del componente EmptyState. Incluye los tipos unión EmptyStateSize y EmptyStateVariant para tamaño y tratamiento visual."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "ariaRegion": "Usa role region para identificar el empty state como un landmark navegable",
+    "ariaLabel": "Proporciona un nombre accesible para la región del empty state",
+    "focusNative": "Las acciones dentro del empty state son enfocables; el contenedor mismo no lo es"
+  }
 }

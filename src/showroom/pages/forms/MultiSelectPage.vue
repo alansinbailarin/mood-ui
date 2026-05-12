@@ -3,22 +3,79 @@ import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import ComponentDoc from "../../components/ComponentDoc.vue";
 import ComponentPreview from "../../components/ComponentPreview.vue";
+import CodePreview from "../../components/CodePreview.vue";
+import Typography from "../../../components/data-display/Typography.vue";
 import MultiSelect from "../../../components/forms/MultiSelect.vue";
 import type { PropDoc, EmitDoc } from "../../types";
+import A11yDoc from "../../components/A11yDoc.vue";
+import type {
+  A11yKeyboardRow,
+  A11yAriaRow,
+} from "../../components/A11yDoc.vue";
 
 const { t } = useI18n();
 
+// ── A11y data ─────────────────────────────────────────────────────────────────
+const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
+  { keys: ["Tab"], action: t("pages.forms.multiSelect.a11y.kbTab") },
+  { keys: ["Shift+Tab"], action: t("pages.forms.multiSelect.a11y.kbShiftTab") },
+  { keys: ["Enter"], action: t("pages.forms.multiSelect.a11y.kbEnter") },
+  { keys: ["Escape"], action: t("pages.forms.multiSelect.a11y.kbEsc") },
+  {
+    keys: ["↑", "↓", "Space"],
+    action: t("pages.forms.multiSelect.a11y.kbArrow"),
+  },
+]);
+
+const a11yAria = computed<A11yAriaRow[]>(() => [
+  {
+    attribute: "aria-expanded",
+    value: "true",
+    desc: t("pages.forms.multiSelect.a11y.ariaExpanded"),
+  },
+  {
+    attribute: "aria-invalid",
+    value: "true",
+    desc: t("pages.forms.multiSelect.a11y.ariaInvalid"),
+  },
+  {
+    attribute: "aria-describedby",
+    value: "id",
+    desc: t("pages.forms.multiSelect.a11y.ariaDescribedBy"),
+  },
+  {
+    attribute: "aria-required",
+    value: "true",
+    desc: t("pages.forms.multiSelect.a11y.ariaRequired"),
+  },
+  {
+    attribute: "aria-disabled",
+    value: "true",
+    desc: t("pages.forms.multiSelect.a11y.ariaDisabled"),
+  },
+  {
+    attribute: "aria-label",
+    value: "string",
+    desc: t("pages.forms.multiSelect.a11y.ariaLabel"),
+  },
+]);
+
+const a11yFocus = computed<string[]>(() => [
+  t("pages.forms.multiSelect.a11y.focusNative"),
+  t("pages.forms.multiSelect.a11y.focusTrap"),
+]);
+
 const fruits = [
-  { value: "apple", label: "Manzana" },
-  { value: "banana", label: "Plátano" },
-  { value: "cherry", label: "Cereza" },
-  { value: "date", label: "Dátil" },
-  { value: "grape", label: "Uva" },
+  { value: "apple", label: "Apple" },
+  { value: "banana", label: "Banana" },
+  { value: "cherry", label: "Cherry" },
+  { value: "date", label: "Date" },
+  { value: "grape", label: "Grape" },
   { value: "kiwi", label: "Kiwi" },
   { value: "mango", label: "Mango" },
-  { value: "orange", label: "Naranja" },
-  { value: "pear", label: "Pera" },
-  { value: "strawberry", label: "Fresa" },
+  { value: "orange", label: "Orange" },
+  { value: "pear", label: "Pear" },
+  { value: "strawberry", label: "Strawberry" },
 ];
 
 // ── Overview playground state ─────────────────────────────────────────────────
@@ -54,48 +111,183 @@ const overviewCode = computed(() => {
     parts.push(`:max-visible-chips="${pgMaxChips.value}"`);
   if (pgDisabled.value) parts.push(':disabled="true"');
   const attrs = parts.length ? "\n    " + parts.join("\n    ") : "";
-  return `<MultiSelect\n    v-model="values"\n    :options="fruits"\n    label="Frutas"${attrs}\n/>`;
+  return `<MultiSelect\n    v-model="values"\n    :options="fruits"\n    label="Fruits"${attrs}\n/>`;
 });
 
-// ── Example code strings ──────────────────────────────────────────────────────
-const basicCode = `<MultiSelect
-    v-model="picks"
-    :options="fruits"
-    label="Frutas"
-    placeholder="Elige una o varias"
-/>`;
+// ── Example code strings (self-contained) ─────────────────────────────────────
+const basicCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { MultiSelect } from 'mood-ui';
+import type { SelectOption } from 'mood-ui';
 
-const searchableCode = `<MultiSelect
+const picks = ref<(string | number)[]>([]);
+
+const fruits: SelectOption[] = [
+  { value: 'apple',      label: 'Apple' },
+  { value: 'banana',     label: 'Banana' },
+  { value: 'cherry',     label: 'Cherry' },
+  { value: 'date',       label: 'Date' },
+  { value: 'grape',      label: 'Grape' },
+  { value: 'kiwi',       label: 'Kiwi' },
+  { value: 'mango',      label: 'Mango' },
+  { value: 'orange',     label: 'Orange' },
+  { value: 'pear',       label: 'Pear' },
+  { value: 'strawberry', label: 'Strawberry' },
+];
+<\/script>
+
+<template>
+  <MultiSelect
     v-model="picks"
     :options="fruits"
-    label="Frutas"
+    label="Fruits"
+    placeholder="Choose one or more"
+  />
+</template>`;
+
+const searchableCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { MultiSelect } from 'mood-ui';
+import type { SelectOption } from 'mood-ui';
+
+const picks = ref<(string | number)[]>(['apple', 'kiwi', 'mango']);
+
+const fruits: SelectOption[] = [
+  { value: 'apple',      label: 'Apple' },
+  { value: 'banana',     label: 'Banana' },
+  { value: 'cherry',     label: 'Cherry' },
+  { value: 'date',       label: 'Date' },
+  { value: 'grape',      label: 'Grape' },
+  { value: 'kiwi',       label: 'Kiwi' },
+  { value: 'mango',      label: 'Mango' },
+  { value: 'orange',     label: 'Orange' },
+  { value: 'pear',       label: 'Pear' },
+  { value: 'strawberry', label: 'Strawberry' },
+];
+<\/script>
+
+<template>
+  <MultiSelect
+    v-model="picks"
+    :options="fruits"
+    label="Fruits"
     searchable
     show-select-all
-/>`;
+  />
+</template>`;
 
-const maxChipsCode = `<MultiSelect
+const maxChipsCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { MultiSelect } from 'mood-ui';
+import type { SelectOption } from 'mood-ui';
+
+const picks = ref<(string | number)[]>(['apple', 'banana', 'cherry', 'date']);
+
+const fruits: SelectOption[] = [
+  { value: 'apple',      label: 'Apple' },
+  { value: 'banana',     label: 'Banana' },
+  { value: 'cherry',     label: 'Cherry' },
+  { value: 'date',       label: 'Date' },
+  { value: 'grape',      label: 'Grape' },
+  { value: 'kiwi',       label: 'Kiwi' },
+  { value: 'mango',      label: 'Mango' },
+  { value: 'orange',     label: 'Orange' },
+  { value: 'pear',       label: 'Pear' },
+  { value: 'strawberry', label: 'Strawberry' },
+];
+<\/script>
+
+<template>
+  <MultiSelect
     v-model="picks"
     :options="fruits"
-    label="Compactado"
+    label="Compact"
     :max-visible-chips="2"
-/>`;
+  />
+</template>`;
 
-const maxSelectedCode = `<MultiSelect
+const maxSelectedCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { MultiSelect } from 'mood-ui';
+import type { SelectOption } from 'mood-ui';
+
+const picks = ref<(string | number)[]>(['apple']);
+
+const fruits: SelectOption[] = [
+  { value: 'apple',  label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+  { value: 'cherry', label: 'Cherry' },
+  { value: 'date',   label: 'Date' },
+  { value: 'grape',  label: 'Grape' },
+];
+<\/script>
+
+<template>
+  <MultiSelect
     v-model="picks"
     :options="fruits"
-    label="Hasta 3"
+    label="Up to 3"
     :max-selected="3"
-    helper-text="Máximo 3 opciones"
-/>`;
+    helper-text="Maximum 3 options"
+  />
+</template>`;
 
-const sizesCode = `<MultiSelect :options="fruits" size="small"  placeholder="Small" />
-<MultiSelect :options="fruits" size="medium" placeholder="Medium" />
-<MultiSelect :options="fruits" size="large"  placeholder="Large" />`;
+const sizesCode = `<script setup lang="ts">
+import { MultiSelect } from 'mood-ui';
+import type { SelectOption } from 'mood-ui';
+
+const fruits: SelectOption[] = [
+  { value: 'apple',  label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+  { value: 'cherry', label: 'Cherry' },
+];
+<\/script>
+
+<template>
+  <MultiSelect :options="fruits" size="small"  placeholder="Small" />
+  <MultiSelect :options="fruits" size="medium" placeholder="Medium" />
+  <MultiSelect :options="fruits" size="large"  placeholder="Large" />
+</template>`;
 
 const ex1 = ref<(string | number)[]>([]);
 const ex2 = ref<(string | number)[]>(["apple", "kiwi", "mango"]);
 const ex3 = ref<(string | number)[]>(["apple", "banana", "cherry", "date"]);
 const ex4 = ref<(string | number)[]>(["apple"]);
+
+const typesCode = `export interface MultiSelect {
+  modelValue?: SelectValue[];
+  options: SelectOption[];
+  label?: string;
+  placeholder?: string;
+  helperText?: string;
+  errorText?: string;
+  variant?: 'outline' | 'filled' | 'ghost';
+  color?: 'default' | 'primary' | 'danger' | 'success' | 'warning';
+  size?: 'small' | 'medium' | 'large';
+  radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
+  halo?: 'tinted' | 'neutral' | 'off';
+  fullWidth?: boolean;
+  disabled?: boolean;
+  readonly?: boolean;
+  required?: boolean;
+  loading?: boolean;
+  clearable?: boolean;
+  showSelectAll?: boolean;
+  selectAllLabel?: string;
+  deselectAllLabel?: string;
+  maxSelected?: number;
+  searchable?: boolean;
+  searchPlaceholder?: string;
+  emptyText?: string;
+  iconLeft?: Component;
+  maxVisibleChips?: number;
+  id?: string;
+  name?: string;
+  autofocus?: boolean;
+  ariaLabel?: string;
+  invalid?: boolean;
+  ariaDescribedBy?: string;
+}`;
 
 // ── API docs ──────────────────────────────────────────────────────────────────
 const propsList = computed<PropDoc[]>(() => [
@@ -446,21 +638,35 @@ const emitsList = computed<EmitDoc[]>(() => [
           :options="fruits"
           size="small"
           placeholder="Small"
+          ariaLabel="Small"
           class="w-48"
         />
         <MultiSelect
           :options="fruits"
           size="medium"
           placeholder="Medium"
+          ariaLabel="Medium"
           class="w-48"
         />
         <MultiSelect
           :options="fruits"
           size="large"
           placeholder="Large"
+          ariaLabel="Large"
           class="w-48"
         />
       </ComponentPreview>
+    </template>
+
+    <template #extra>
+      <Typography variant="heading" size="large" weight="medium" as="h2">
+        {{ t("pages.forms.multiSelect.types.title") }}
+      </Typography>
+      <Typography variant="body" size="small" class="text-muted-foreground">
+        {{ t("pages.forms.multiSelect.types.desc") }}
+      </Typography>
+
+      <CodePreview :code="typesCode" lang="ts" code-only />
     </template>
   </ComponentDoc>
 </template>

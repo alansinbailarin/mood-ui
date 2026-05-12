@@ -1,248 +1,338 @@
-<template> 
-    <!-- Skeleton placeholder — mirrors the real button's footprint (size, 
+<template>
+  <!-- Skeleton placeholder — mirrors the real button's footprint (size, 
          radius, fullWidth). Useful for action rows that load after the 
-         page paints. --> 
-    <Skeleton 
-        v-if="skeleton" 
-        shape="button" 
-        :size="forwardSize" 
-        :radius="radius" 
-        :fullWidth="fullWidth" 
-    /> 
- 
-    <button 
-        v-else 
-        :type="type" 
-        :disabled="isDisabled || loading"  
-        :aria-busy="loading || undefined" 
-        :aria-label="resolvedAriaLabel" 
-        :class="[baseClasses, variantClasses, colorClasses, haloClasses, sizeClasses, radiusClasses, fullWidth ? 'w-full' : '']"  
-        > 
-        <Loader v-if="loading && iconPosition === 'left'" :variant="variant" :size="forwardSize" /> 
-        <component :is="icon" v-if="icon && !loading && iconPosition === 'left'" :class="iconSizeClasses" /> 
- 
-        <template v-if="loading">{{ loadingText || label || 'Loading...' }}</template> 
-        <template v-else> 
-            <slot>{{ label }}</slot> 
-        </template> 
-        <Loader v-if="loading && iconPosition === 'right'" :variant="variant" :size="forwardSize" /> 
-        <component :is="icon" v-if="icon && !loading && iconPosition === 'right'" :class="iconSizeClasses" /> 
-    </button> 
-</template> 
- 
-<script setup lang="ts"> 
-import { computed, inject } from 'vue'; 
-import type { Button } from '../../interfaces/forms/Button.interface'; 
-import { useResolvedColor, useResolvedHalo, useResolvedRadius, useModoConfig } from '../../composables/useModoConfig'; 
-import Loader from '../feedback/Loader.vue'; 
-import Skeleton from '../feedback/Skeleton.vue'; 
- 
-const groupProps = inject<{ variant?: string; color?: string; size?: string; radius?: string; disabled?: boolean; gradient?: boolean }>('buttonGroup', {}); 
-const isInGroup = computed(() => Object.keys(groupProps).length > 0); 
- 
-const props = withDefaults(defineProps<Button>(), { 
-    disabled: false, 
-    loading: false, 
-    variant: 'normal', 
-    color: 'default', 
-    gradient: false, 
-    type: 'button', 
-    fullWidth: false, 
-    iconPosition: 'left', 
-    skeleton: false, 
-}); 
- 
-const variant = computed(() => (groupProps.variant as Button['variant']) ?? props.variant); 
-const color = useResolvedColor(() => (groupProps.color as Button['color']) ?? props.color); 
-// Inside a ButtonGroup the group's radius wins over the provider default 
-// so all corners (including the buttons' outer ones) match. 
-const radius = useResolvedRadius(() => (groupProps.radius as Button['radius']) ?? props.radius); 
-const halo = useResolvedHalo(); 
-const cfg = useModoConfig(); 
-const size = computed<Button['size']>(() => (groupProps.size as Button['size']) ?? props.size ?? cfg?.value.size ?? 'medium'); 
-// Loader/Skeleton don't have an 'xs' size — collapse it to 'small' when 
-// forwarding so the visual footprint of `<Button size="xs" loading>` and 
-// `<Button size="xs" skeleton>` stays compact but renders cleanly. 
-const forwardSize = computed<'small' | 'medium' | 'large'>(() => (size.value === 'xs' ? 'small' : (size.value as 'small' | 'medium' | 'large'))); 
-const isDisabled = computed(() => groupProps.disabled ?? props.disabled); 
-const gradient = computed(() => groupProps.gradient ?? props.gradient); 
- 
-// Accessible name resolution: 
-// - explicit `ariaLabel` wins 
-// - else fall back to visible `label` 
-// - icon-only buttons without either will emit a dev warning so consumers notice 
-const resolvedAriaLabel = computed(() => { 
-    if (props.ariaLabel) return props.ariaLabel; 
-    if (props.label) return undefined; // visible text is the name 
-    if (import.meta.env.DEV && props.icon) { 
-        console.warn('[mood-ui] <Button> is icon-only but has no `ariaLabel` — add one for screen readers.'); 
-    } 
-    return undefined; 
-}); 
- 
-const baseClasses = 'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-colors duration-300 ease-in-out inline-flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed'; 
- 
-const variantClasses = computed(() => { 
-    switch (variant.value) { 
-        case 'outline': 
-            return 'border font-medium'; 
-        case 'ghost': 
-            return 'font-medium'; 
-        case 'text': 
-            return 'font-medium'; 
-        default: 
-            return 'font-medium'; 
-    } 
-}) 
- 
-const haloClasses = computed(() => { 
-    // Halo persistente en 'normal' (relleno) y 'outline'. 
-    // 'ghost' y 'text' no lo llevan: son invisibles en idle por diseño. 
-    // Se suprime dentro de un ButtonGroup (se solaparía entre botones pegados). 
-    if (isInGroup.value) return ''; 
-    if (variant.value !== 'normal' && variant.value !== 'outline') return ''; 
- 
-    const haloMode = halo.value; 
- 
-    // 'off' (default): sin ring idle. Aparece solo en hover/focus-visible, neutro. 
-    if (haloMode === 'off') { 
-        return variant.value === 'outline' 
-            ? 'hover:ring-[3px] hover:ring-foreground/8 focus-visible:ring-[3px] focus-visible:ring-foreground/15' 
-            : 'hover:ring-[3px] hover:ring-foreground/12 focus-visible:ring-[3px] focus-visible:ring-foreground/20'; 
-    } 
- 
-    // 'neutral': idle + hover/focus siempre gris (no toma color del componente). 
-    if (haloMode === 'neutral') { 
-        return variant.value === 'outline' 
-            ? 'ring-[3px] ring-foreground/6 hover:ring-foreground/10 focus-visible:ring-foreground/18' 
-            : 'ring-[3px] ring-foreground/10 hover:ring-foreground/15 focus-visible:ring-foreground/25'; 
-    } 
- 
-    // 'tinted' (legacy): halo persistente tintado al color. 
-    const filled: Record<string, string> = { 
-        default: 'ring-[3px] ring-foreground/10 hover:ring-foreground/15 focus-visible:ring-foreground/25', 
-        primary: 'ring-[3px] ring-primary/15 hover:ring-primary/25 focus-visible:ring-primary/35', 
-        danger: 'ring-[3px] ring-destructive/15 hover:ring-destructive/25 focus-visible:ring-destructive/35', 
-        success: 'ring-[3px] ring-success/15 hover:ring-success/25 focus-visible:ring-success/35', 
-        warning: 'ring-[3px] ring-warning/15 hover:ring-warning/25 focus-visible:ring-warning/35', 
-    }; 
-    // Outline no tiene fondo lleno, el halo se ve más marcado que en filled 
-    // para la misma opacidad — lo bajamos un escalón. 
-    const outline: Record<string, string> = { 
-        default: 'ring-[3px] ring-foreground/8 hover:ring-foreground/12 focus-visible:ring-foreground/20', 
-        primary: 'ring-[3px] ring-primary/10 hover:ring-primary/18 focus-visible:ring-primary/28', 
-        danger: 'ring-[3px] ring-destructive/10 hover:ring-destructive/18 focus-visible:ring-destructive/28', 
-        success: 'ring-[3px] ring-success/10 hover:ring-success/18 focus-visible:ring-success/28', 
-        warning: 'ring-[3px] ring-warning/10 hover:ring-warning/18 focus-visible:ring-warning/28', 
-    }; 
-    const map = variant.value === 'outline' ? outline : filled; 
-    return map[color.value] ?? map.default; 
-}); 
- 
-const colorClasses = computed(() => { 
-    const isGradient = gradient.value; 
-    const map: Record<string, Record<string, string>> = { 
-        default: { 
-            normal: isGradient 
-                ? 'text-background bg-gradient-to-r from-foreground via-foreground/90 to-foreground/90 hover:from-foreground/90 hover:via-foreground/80 hover:to-foreground/80 active:from-foreground/80 active:via-foreground/70 active:to-foreground/70 disabled:opacity-40' 
-                : 'text-background bg-foreground hover:bg-foreground/90 active:bg-foreground/80 disabled:opacity-40', 
-            outline: 'border-border text-foreground hover:bg-muted active:bg-muted-hover focus-visible:ring-ring disabled:text-muted-foreground disabled:border-border disabled:bg-muted/60', 
-            ghost: 'text-foreground bg-muted hover:bg-muted-hover active:bg-accent-hover focus-visible:ring-ring disabled:text-muted-foreground disabled:bg-muted/60', 
-            text: 'text-foreground hover:bg-muted active:bg-muted-hover focus-visible:ring-ring disabled:text-muted-foreground', 
-        }, 
-        primary: { 
-            normal: isGradient 
-                ? 'text-primary-foreground bg-gradient-to-r from-primary via-primary/90 to-primary/90 hover:from-primary-hover hover:via-primary-hover/90 hover:to-primary-hover/90 active:from-primary-active active:via-primary-active/90 active:to-primary-active/90 disabled:opacity-40' 
-                : 'text-primary-foreground bg-primary hover:bg-primary-hover active:bg-primary-active disabled:opacity-40', 
-            outline: 'border-primary/40 text-primary hover:bg-primary-subtle active:bg-primary/20 focus-visible:ring-primary disabled:text-primary/50 disabled:border-primary/20 disabled:bg-primary/5', 
-            ghost: 'text-primary bg-primary-subtle hover:bg-primary/20 active:bg-primary/25 focus-visible:ring-primary disabled:text-primary/50 disabled:bg-primary/5', 
-            text: 'text-primary hover:bg-primary-subtle active:bg-primary/20 focus-visible:ring-primary disabled:text-primary/50', 
-        }, 
-        danger: { 
-            normal: isGradient 
-                ? 'text-destructive-foreground bg-gradient-to-r from-destructive via-destructive/90 to-destructive/90 hover:from-destructive-hover hover:via-destructive-hover/90 hover:to-destructive-hover/90 active:from-destructive-active active:via-destructive-active/90 active:to-destructive-active/90 disabled:opacity-40' 
-                : 'text-destructive-foreground bg-destructive hover:bg-destructive-hover active:bg-destructive-active disabled:opacity-40', 
-            outline: 'border-destructive/40 text-destructive hover:bg-destructive-subtle active:bg-destructive/20 focus-visible:ring-destructive disabled:text-destructive/50 disabled:border-destructive/20 disabled:bg-destructive/5', 
-            ghost: 'text-destructive bg-destructive-subtle hover:bg-destructive/20 active:bg-destructive/25 focus-visible:ring-destructive disabled:text-destructive/50 disabled:bg-destructive/5', 
-            text: 'text-destructive hover:bg-destructive-subtle active:bg-destructive/20 focus-visible:ring-destructive disabled:text-destructive/50', 
-        }, 
-        success: { 
-            normal: isGradient 
-                ? 'text-success-foreground bg-gradient-to-r from-success via-success/90 to-success/90 hover:from-success-hover hover:via-success-hover/90 hover:to-success-hover/90 active:from-success-active active:via-success-active/90 active:to-success-active/90 disabled:opacity-40' 
-                : 'text-success-foreground bg-success hover:bg-success-hover active:bg-success-active disabled:opacity-40', 
-            outline: 'border-success/40 text-success hover:bg-success-subtle active:bg-success/20 focus-visible:ring-success disabled:text-success/50 disabled:border-success/20 disabled:bg-success/5', 
-            ghost: 'text-success bg-success-subtle hover:bg-success/20 active:bg-success/25 focus-visible:ring-success disabled:text-success/50 disabled:bg-success/5', 
-            text: 'text-success hover:bg-success-subtle active:bg-success/20 focus-visible:ring-success disabled:text-success/50', 
-        }, 
-        warning: { 
-            normal: isGradient 
-                ? 'text-warning-foreground bg-gradient-to-r from-warning via-warning/90 to-warning/90 hover:from-warning-hover hover:via-warning-hover/90 hover:to-warning-hover/90 active:from-warning-active active:via-warning-active/90 active:to-warning-active/90 disabled:opacity-40' 
-                : 'text-warning-foreground bg-warning hover:bg-warning-hover active:bg-warning-active disabled:opacity-40', 
-            outline: 'border-warning/40 text-warning hover:bg-warning-subtle active:bg-warning/20 focus-visible:ring-warning disabled:text-warning/50 disabled:border-warning/20 disabled:bg-warning/5', 
-            ghost: 'text-warning bg-warning-subtle hover:bg-warning/20 active:bg-warning/25 focus-visible:ring-warning disabled:text-warning/50 disabled:bg-warning/5', 
-            text: 'text-warning hover:bg-warning-subtle active:bg-warning/20 focus-visible:ring-warning disabled:text-warning/50', 
-        }, 
-    }; 
-    return map[color.value]?.[variant.value] ?? map.default.normal; 
-}) 
- 
-const sizeClasses = computed(() => { 
-    if (!props.label && props.icon) { 
-        switch (size.value) { 
-            case 'xs': return 'text-xs p-1'; 
-            case 'small': return 'text-xs p-1.5'; 
-            case 'large': return 'text-md p-2.5'; 
-            default: return 'text-sm p-2'; 
-        } 
-    } 
-    switch (size.value) { 
-        case 'xs': 
-            return 'text-[11px] px-2.5 py-0.5'; 
-        case 'small': 
-            return 'text-xs px-4 py-1'; 
-        case 'large': 
-            return 'text-md px-6 py-2'; 
-        default: 
-            return 'text-sm px-5 py-1.5'; 
-    } 
-}) 
- 
-const radiusClasses = computed(() => { 
-    switch (radius.value) { 
-        case 'none': 
-            return 'rounded-none'; 
-        case 'small': 
-            return 'rounded-sm'; 
-        case 'large': 
-            return 'rounded-lg'; 
-        case 'full': 
-            return 'rounded-full'; 
-        default: 
-            return 'rounded-md'; 
-    } 
-}) 
- 
-const iconSizeClasses = computed(() => { 
-    switch (size.value) { 
-        case 'xs': 
-            return 'w-3 h-3'; 
-        case 'small': 
-            return 'w-3.5 h-3.5'; 
-        case 'large': 
-            return 'w-5 h-5'; 
-        default: 
-            return 'w-4 h-4'; 
-    } 
-}) 
-</script> 
- 
-<style scoped> 
-button { 
-    transition-property: background-color, border-color, color, box-shadow, --tw-ring-color, --tw-ring-shadow; 
-    transition-duration: 220ms; 
-    transition-timing-function: cubic-bezier(0.2, 0, 0, 1); 
-} 
-@media (prefers-reduced-motion: reduce) { 
-    button { transition: none; } 
-} 
+         page paints. -->
+  <Skeleton
+    v-if="skeleton"
+    shape="button"
+    :size="forwardSize"
+    :radius="radius"
+    :fullWidth="fullWidth"
+  />
+
+  <button
+    v-else
+    :type="type"
+    :disabled="isDisabled || loading"
+    :aria-busy="loading || undefined"
+    :aria-label="resolvedAriaLabel"
+    :class="[
+      baseClasses,
+      variantClasses,
+      colorClasses,
+      haloClasses,
+      sizeClasses,
+      radiusClasses,
+      fullWidth ? 'w-full' : '',
+    ]"
+  >
+    <Loader
+      v-if="loading && iconPosition === 'left'"
+      :variant="variant"
+      :size="forwardSize"
+    />
+    <component
+      :is="icon"
+      v-if="icon && !loading && iconPosition === 'left'"
+      :class="iconSizeClasses"
+    />
+
+    <template v-if="loading">{{
+      loadingText || label || "Loading..."
+    }}</template>
+    <template v-else>
+      <slot>{{ label }}</slot>
+    </template>
+    <Loader
+      v-if="loading && iconPosition === 'right'"
+      :variant="variant"
+      :size="forwardSize"
+    />
+    <component
+      :is="icon"
+      v-if="icon && !loading && iconPosition === 'right'"
+      :class="iconSizeClasses"
+    />
+  </button>
+</template>
+
+<script setup lang="ts">
+import { computed, inject, useSlots } from "vue";
+import type { Button } from "../../interfaces/forms/Button.interface";
+import {
+  useResolvedColor,
+  useResolvedHalo,
+  useResolvedRadius,
+  useModoConfig,
+} from "../../composables/useModoConfig";
+import Loader from "../feedback/Loader.vue";
+import Skeleton from "../feedback/Skeleton.vue";
+
+const groupProps = inject<{
+  variant?: string;
+  color?: string;
+  size?: string;
+  radius?: string;
+  disabled?: boolean;
+  gradient?: boolean;
+  fullWidth?: boolean;
+}>("buttonGroup", {});
+const isInGroup = computed(() => Object.keys(groupProps).length > 0);
+
+const props = withDefaults(defineProps<Button>(), {
+  disabled: false,
+  loading: false,
+  variant: "normal",
+  color: "default",
+  gradient: false,
+  type: "button",
+  fullWidth: false,
+  iconPosition: "left",
+  skeleton: false,
+});
+
+const variant = computed(
+  () => (groupProps.variant as Button["variant"]) ?? props.variant,
+);
+const color = useResolvedColor(() => {
+  // Child button can override group color when explicitly set
+  if (props.color !== "default") return props.color;
+  return (groupProps.color as Button["color"]) ?? props.color;
+});
+// Inside a ButtonGroup the group's radius wins over the provider default
+// so all corners (including the buttons' outer ones) match.
+const radius = useResolvedRadius(
+  () => (groupProps.radius as Button["radius"]) ?? props.radius,
+);
+const halo = useResolvedHalo();
+const cfg = useModoConfig();
+const size = computed<Button["size"]>(
+  () =>
+    (groupProps.size as Button["size"]) ??
+    props.size ??
+    cfg?.value.size ??
+    "medium",
+);
+// Loader/Skeleton don't have an 'xs' size — collapse it to 'small' when
+// forwarding so the visual footprint of `<Button size="xs" loading>` and
+// `<Button size="xs" skeleton>` stays compact but renders cleanly.
+const forwardSize = computed<"small" | "medium" | "large">(() =>
+  size.value === "xs" ? "small" : (size.value as "small" | "medium" | "large"),
+);
+const isDisabled = computed(() => groupProps.disabled ?? props.disabled);
+const gradient = computed(() => groupProps.gradient ?? props.gradient);
+const fullWidth = computed(() => groupProps.fullWidth ?? props.fullWidth);
+
+// Accessible name resolution:
+// - explicit `ariaLabel` wins
+// - else fall back to visible `label`
+// - icon-only buttons without either will emit a dev warning so consumers notice
+const slots = useSlots();
+
+const resolvedAriaLabel = computed(() => {
+  if (props.ariaLabel) return props.ariaLabel;
+  if (props.label) return undefined; // visible text via prop
+  if (slots.default) return undefined; // visible text via slot
+  if (import.meta.env.DEV && props.icon) {
+    console.warn(
+      "[mood-ui] <Button> is icon-only but has no `ariaLabel` — add one for screen readers.",
+    );
+  }
+  return undefined;
+});
+
+const baseClasses =
+  "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-colors duration-300 ease-in-out inline-flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed";
+
+const variantClasses = computed(() => {
+  switch (variant.value) {
+    case "outline":
+      return "border font-medium";
+    case "ghost":
+      return "font-medium";
+    case "text":
+      return "font-medium";
+    default:
+      return "font-medium";
+  }
+});
+
+const haloClasses = computed(() => {
+  // Halo persistente en 'normal' (relleno) y 'outline'.
+  // 'ghost' y 'text' no lo llevan: son invisibles en idle por diseño.
+  // Se suprime dentro de un ButtonGroup (se solaparía entre botones pegados).
+  if (isInGroup.value) return "";
+  if (variant.value !== "normal" && variant.value !== "outline") return "";
+
+  const haloMode = halo.value;
+
+  // 'off' (default): sin ring idle. Aparece solo en hover/focus-visible, neutro.
+  if (haloMode === "off") {
+    return variant.value === "outline"
+      ? "hover:ring-[3px] hover:ring-foreground/8 focus-visible:ring-[3px] focus-visible:ring-foreground/15"
+      : "hover:ring-[3px] hover:ring-foreground/12 focus-visible:ring-[3px] focus-visible:ring-foreground/20";
+  }
+
+  // 'neutral': idle + hover/focus siempre gris (no toma color del componente).
+  if (haloMode === "neutral") {
+    return variant.value === "outline"
+      ? "ring-[3px] ring-foreground/6 hover:ring-foreground/10 focus-visible:ring-foreground/18"
+      : "ring-[3px] ring-foreground/10 hover:ring-foreground/15 focus-visible:ring-foreground/25";
+  }
+
+  // 'tinted' (legacy): halo persistente tintado al color.
+  const filled: Record<string, string> = {
+    default:
+      "ring-[3px] ring-foreground/10 hover:ring-foreground/15 focus-visible:ring-foreground/25",
+    primary:
+      "ring-[3px] ring-primary/15 hover:ring-primary/25 focus-visible:ring-primary/35",
+    danger:
+      "ring-[3px] ring-destructive/15 hover:ring-destructive/25 focus-visible:ring-destructive/35",
+    success:
+      "ring-[3px] ring-success/15 hover:ring-success/25 focus-visible:ring-success/35",
+    warning:
+      "ring-[3px] ring-warning/15 hover:ring-warning/25 focus-visible:ring-warning/35",
+  };
+  // Outline no tiene fondo lleno, el halo se ve más marcado que en filled
+  // para la misma opacidad — lo bajamos un escalón.
+  const outline: Record<string, string> = {
+    default:
+      "ring-[3px] ring-foreground/8 hover:ring-foreground/12 focus-visible:ring-foreground/20",
+    primary:
+      "ring-[3px] ring-primary/10 hover:ring-primary/18 focus-visible:ring-primary/28",
+    danger:
+      "ring-[3px] ring-destructive/10 hover:ring-destructive/18 focus-visible:ring-destructive/28",
+    success:
+      "ring-[3px] ring-success/10 hover:ring-success/18 focus-visible:ring-success/28",
+    warning:
+      "ring-[3px] ring-warning/10 hover:ring-warning/18 focus-visible:ring-warning/28",
+  };
+  const map = variant.value === "outline" ? outline : filled;
+  return map[color.value] ?? map.default;
+});
+
+const colorClasses = computed(() => {
+  const isGradient = gradient.value;
+  const map: Record<string, Record<string, string>> = {
+    default: {
+      normal: isGradient
+        ? "text-background bg-gradient-to-r from-foreground via-foreground/90 to-foreground/90 hover:from-foreground/90 hover:via-foreground/80 hover:to-foreground/80 active:from-foreground/80 active:via-foreground/70 active:to-foreground/70 disabled:opacity-40"
+        : "text-background bg-foreground hover:bg-foreground/90 active:bg-foreground/80 disabled:opacity-40",
+      outline:
+        "border-border text-foreground hover:bg-muted active:bg-muted-hover focus-visible:ring-ring disabled:text-muted-foreground disabled:border-border disabled:bg-muted/60",
+      ghost:
+        "text-foreground bg-muted hover:bg-muted-hover active:bg-accent-hover focus-visible:ring-ring disabled:text-muted-foreground disabled:bg-muted/60",
+      text: "text-foreground hover:bg-muted active:bg-muted-hover focus-visible:ring-ring disabled:text-muted-foreground",
+    },
+    primary: {
+      normal: isGradient
+        ? "text-primary-foreground bg-gradient-to-r from-primary via-primary/90 to-primary/90 hover:from-primary-hover hover:via-primary-hover/90 hover:to-primary-hover/90 active:from-primary-active active:via-primary-active/90 active:to-primary-active/90 disabled:opacity-40"
+        : "text-primary-foreground bg-primary hover:bg-primary-hover active:bg-primary-active disabled:opacity-40",
+      outline:
+        "border-primary/40 text-primary hover:bg-primary-subtle active:bg-primary/20 focus-visible:ring-primary disabled:text-primary/50 disabled:border-primary/20 disabled:bg-primary/5",
+      ghost:
+        "text-primary bg-primary-subtle hover:bg-primary/20 active:bg-primary/25 focus-visible:ring-primary disabled:text-primary/50 disabled:bg-primary/5",
+      text: "text-primary hover:bg-primary-subtle active:bg-primary/20 focus-visible:ring-primary disabled:text-primary/50",
+    },
+    danger: {
+      normal: isGradient
+        ? "text-destructive-foreground bg-gradient-to-r from-destructive via-destructive/90 to-destructive/90 hover:from-destructive-hover hover:via-destructive-hover/90 hover:to-destructive-hover/90 active:from-destructive-active active:via-destructive-active/90 active:to-destructive-active/90 disabled:opacity-40"
+        : "text-destructive-foreground bg-destructive hover:bg-destructive-hover active:bg-destructive-active disabled:opacity-40",
+      outline:
+        "border-destructive/40 text-destructive hover:bg-destructive-subtle active:bg-destructive/20 focus-visible:ring-destructive disabled:text-destructive/50 disabled:border-destructive/20 disabled:bg-destructive/5",
+      ghost:
+        "text-destructive bg-destructive-subtle hover:bg-destructive/20 active:bg-destructive/25 focus-visible:ring-destructive disabled:text-destructive/50 disabled:bg-destructive/5",
+      text: "text-destructive hover:bg-destructive-subtle active:bg-destructive/20 focus-visible:ring-destructive disabled:text-destructive/50",
+    },
+    success: {
+      normal: isGradient
+        ? "text-success-foreground bg-gradient-to-r from-success via-success/90 to-success/90 hover:from-success-hover hover:via-success-hover/90 hover:to-success-hover/90 active:from-success-active active:via-success-active/90 active:to-success-active/90 disabled:opacity-40"
+        : "text-success-foreground bg-success hover:bg-success-hover active:bg-success-active disabled:opacity-40",
+      outline:
+        "border-success/40 text-success hover:bg-success-subtle active:bg-success/20 focus-visible:ring-success disabled:text-success/50 disabled:border-success/20 disabled:bg-success/5",
+      ghost:
+        "text-success bg-success-subtle hover:bg-success/20 active:bg-success/25 focus-visible:ring-success disabled:text-success/50 disabled:bg-success/5",
+      text: "text-success hover:bg-success-subtle active:bg-success/20 focus-visible:ring-success disabled:text-success/50",
+    },
+    warning: {
+      normal: isGradient
+        ? "text-warning-foreground bg-gradient-to-r from-warning via-warning/90 to-warning/90 hover:from-warning-hover hover:via-warning-hover/90 hover:to-warning-hover/90 active:from-warning-active active:via-warning-active/90 active:to-warning-active/90 disabled:opacity-40"
+        : "text-warning-foreground bg-warning hover:bg-warning-hover active:bg-warning-active disabled:opacity-40",
+      outline:
+        "border-warning/40 text-warning hover:bg-warning-subtle active:bg-warning/20 focus-visible:ring-warning disabled:text-warning/50 disabled:border-warning/20 disabled:bg-warning/5",
+      ghost:
+        "text-warning bg-warning-subtle hover:bg-warning/20 active:bg-warning/25 focus-visible:ring-warning disabled:text-warning/50 disabled:bg-warning/5",
+      text: "text-warning hover:bg-warning-subtle active:bg-warning/20 focus-visible:ring-warning disabled:text-warning/50",
+    },
+  };
+  return map[color.value]?.[variant.value] ?? map.default.normal;
+});
+
+const sizeClasses = computed(() => {
+  if (!props.label && props.icon) {
+    switch (size.value) {
+      case "xs":
+        return "text-xs p-1";
+      case "small":
+        return "text-xs p-1.5";
+      case "large":
+        return "text-md p-2.5";
+      default:
+        return "text-sm p-2";
+    }
+  }
+  switch (size.value) {
+    case "xs":
+      return "text-[11px] px-2.5 py-0.5";
+    case "small":
+      return "text-xs px-4 py-1";
+    case "large":
+      return "text-md px-6 py-2";
+    default:
+      return "text-sm px-5 py-1.5";
+  }
+});
+
+const radiusClasses = computed(() => {
+  switch (radius.value) {
+    case "none":
+      return "rounded-none";
+    case "small":
+      return "rounded-sm";
+    case "large":
+      return "rounded-lg";
+    case "full":
+      return "rounded-full";
+    default:
+      return "rounded-md";
+  }
+});
+
+const iconSizeClasses = computed(() => {
+  switch (size.value) {
+    case "xs":
+      return "w-3 h-3";
+    case "small":
+      return "w-3.5 h-3.5";
+    case "large":
+      return "w-5 h-5";
+    default:
+      return "w-4 h-4";
+  }
+});
+</script>
+
+<style scoped>
+button {
+  transition-property:
+    background-color, border-color, color, box-shadow, --tw-ring-color,
+    --tw-ring-shadow;
+  transition-duration: 220ms;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  button {
+    transition: none;
+  }
+}
 </style>

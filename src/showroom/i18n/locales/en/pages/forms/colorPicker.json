@@ -1,53 +1,71 @@
 {
-    "category": "Forms",
-    "title": "ColorPicker",
-    "description": "Color selector with popover, configurable swatches, hex input and advanced HSV canvas for picking any color.",
-    "controls": {
-        "size": "Size",
-        "variant": "Variant",
-        "advanced": "Advanced",
-        "hex": "Hex",
-        "swatches": "Swatches",
-        "disabled": "Disabled"
+  "category": "Forms",
+  "title": "ColorPicker",
+  "description": "Color selector with popover, configurable swatches, hex input and advanced HSV canvas for picking any color.",
+  "controls": {
+    "size": "Size",
+    "variant": "Variant",
+    "advanced": "Advanced",
+    "hex": "Hex",
+    "swatches": "Swatches",
+    "disabled": "Disabled"
+  },
+  "examples": {
+    "basic": {
+      "title": "Basic usage",
+      "desc": "Swatches only. Click any color to select it."
     },
-    "examples": {
-        "basic": {
-            "title": "Basic usage",
-            "desc": "Swatches only. Click any color to select it."
-        },
-        "advanced": {
-            "title": "Advanced picker",
-            "desc": "HSV canvas + hue slider to choose any color in the spectrum. The hex input allows entering exact values."
-        },
-        "swatches": {
-            "title": "Swatches + advanced picker",
-            "desc": "Combines a predefined palette with the full canvas for maximum flexibility."
-        },
-        "sizes": {
-            "title": "Sizes",
-            "desc": "Three available sizes to match the density of your form."
-        },
-        "disabled": {
-            "title": "Disabled",
-            "desc": "Disabled state preserving the visible color."
-        }
+    "advanced": {
+      "title": "Advanced picker",
+      "desc": "HSV canvas + hue slider to choose any color in the spectrum. The hex input allows entering exact values."
     },
-    "props": {
-        "modelValue": "Active hex color (v-model). E.g. \"#3b82f6\".",
-        "swatches": "Optional list of hex colors available as preset swatches in the panel.",
-        "showHex": "Shows the hex input below the swatches.",
-        "advanced": "Enables the HSV canvas + hue slider for picking any color.",
-        "disabled": "Disables the picker.",
-        "variant": "Visual variant of the trigger (same as Input/Select).",
-        "color": "Focus ring color.",
-        "size": "Trigger size.",
-        "radius": "Border radius of the trigger and the panel.",
-        "label": "Visible label above the trigger.",
-        "placement": "Position of the popover relative to the trigger.",
-        "ariaLabel": "Accessible name for the trigger when there is no visible label."
+    "swatches": {
+      "title": "Swatches + advanced picker",
+      "desc": "Combines a predefined palette with the full canvas for maximum flexibility."
     },
-    "emits": {
-        "updateModelValue": "Emitted when the selected color changes (syncs v-model).",
-        "change": "Emitted after a color is confirmed by the user."
+    "sizes": {
+      "title": "Sizes",
+      "desc": "Three available sizes to match the density of your form."
+    },
+    "disabled": {
+      "title": "Disabled",
+      "desc": "Disabled state preserving the visible color."
     }
+  },
+  "props": {
+    "modelValue": "Active hex color (v-model). E.g. \"#3b82f6\".",
+    "swatches": "Optional list of hex colors available as preset swatches in the panel.",
+    "showHex": "Shows the hex input below the swatches.",
+    "advanced": "Enables the HSV canvas + hue slider for picking any color.",
+    "disabled": "Disables the picker.",
+    "variant": "Visual variant of the trigger (same as Input/Select).",
+    "color": "Focus ring color.",
+    "size": "Trigger size.",
+    "radius": "Border radius of the trigger and the panel.",
+    "label": "Visible label above the trigger.",
+    "placement": "Position of the popover relative to the trigger.",
+    "ariaLabel": "Accessible name for the trigger when there is no visible label."
+  },
+  "emits": {
+    "updateModelValue": "Emitted when the selected color changes (syncs v-model).",
+    "change": "Emitted after a color is confirmed by the user."
+  },
+  "types": {
+    "title": "ColorPicker",
+    "desc": "TypeScript interface for the ColorPicker component props. Supports preset swatches, hex input, and advanced HSV canvas picking."
+  },
+  "a11y": {
+    "kbTab": "Move focus to the next focusable element",
+    "kbShiftTab": "Move focus to the previous focusable element",
+    "kbEnter": "Open the color picker popover",
+    "kbEsc": "Close the color picker popover without selecting",
+    "kbArrow": "Navigate swatches or adjust hue/saturation in advanced mode",
+    "ariaExpanded": "Communicates whether the popover is open or closed",
+    "ariaInvalid": "Set to true when errorText is present",
+    "ariaDescribedBy": "Links helper or error text to the trigger for screen reader context",
+    "ariaDisabled": "Communicates disabled state to assistive technologies",
+    "ariaLabel": "Provides an accessible name when no visible label is present",
+    "focusNative": "Uses a native button as trigger — participates in the tab order by default",
+    "focusTrap": "Focus is trapped inside the popover while it is open"
+  }
 }

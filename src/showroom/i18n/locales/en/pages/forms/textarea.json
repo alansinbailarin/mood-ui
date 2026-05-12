@@ -1,86 +1,106 @@
 {
-    "title": "Textarea",
-    "description": "Multi-line text area with autoresize, character counter, helper/error text and all the visual variants of Input.",
+  "title": "Textarea",
+  "description": "Multi-line text area with autoresize, character counter, helper/error text and all the visual variants of Input.",
 
-    "controls": {
-        "variant":    "Variant",
-        "color":      "Color",
-        "size":       "Size",
-        "autoresize": "Autoresize",
-        "clearable":  "Clearable",
-        "disabled":   "Disabled",
-        "readonly":   "Readonly"
+  "controls": {
+    "variant": "Variant",
+    "color": "Color",
+    "size": "Size",
+    "autoresize": "Autoresize",
+    "clearable": "Clearable",
+    "disabled": "Disabled",
+    "readonly": "Readonly"
+  },
+
+  "playground": {
+    "label": "Comment",
+    "placeholder": "Write something…"
+  },
+
+  "examples": {
+    "basic": {
+      "title": "Basic usage",
+      "desc": "Simple textarea with label, placeholder and initial rows.",
+      "label": "Comment",
+      "placeholder": "Write something…"
     },
-
-    "playground": {
-        "label":       "Comment",
-        "placeholder": "Write something…"
+    "variants": {
+      "title": "Variants",
+      "desc": "outline (default), filled and ghost."
     },
-
-    "examples": {
-        "basic": {
-            "title":       "Basic usage",
-            "desc":        "Simple textarea with label, placeholder and initial rows.",
-            "label":       "Comment",
-            "placeholder": "Write something…"
-        },
-        "variants": {
-            "title": "Variants",
-            "desc":  "outline (default), filled and ghost."
-        },
-        "autoresize": {
-            "title":       "Autoresize + counter",
-            "desc":        "Grows with content up to maxRows and shows a character counter.",
-            "label":       "Bio",
-            "placeholder": "Tell us about yourself"
-        },
-        "error": {
-            "title":     "Error",
-            "desc":      "errorText marks the field as invalid and replaces helperText.",
-            "label":     "Description",
-            "errorText": "Description is required"
-        },
-        "disabled": {
-            "title": "Disabled",
-            "desc":  "Disabled state preserving the visual value.",
-            "value": "Not editable"
-        }
+    "autoresize": {
+      "title": "Autoresize + counter",
+      "desc": "Grows with content up to maxRows and shows a character counter.",
+      "label": "Bio",
+      "placeholder": "Tell us about yourself"
     },
-
-    "props": {
-        "modelValue":  "Textarea value (v-model).",
-        "label":       "Visible label above the textarea.",
-        "placeholder": "Placeholder when empty.",
-        "helperText":  "Helper text below the textarea. Hidden when errorText is present.",
-        "errorText":   "Error message that marks the textarea as invalid.",
-        "variant":     "Visual style.",
-        "color":       "Semantic color applied to the focus state.",
-        "size":        "Controls padding and typography.",
-        "radius":      "Corner radius. Inherits from ModoProvider when omitted.",
-        "halo":        "Persistent halo (ring) style.",
-        "fullWidth":   "Applies w-full to the root.",
-        "disabled":    "Disables the textarea.",
-        "readonly":    "Read-only.",
-        "required":    "Marks the field as required.",
-        "loading":     "Loading state (disables and shows loader).",
-        "clearable":   "Shows an ✕ button to clear the value.",
-        "maxLength":   "Maximum length. Activates the counter if showCounter.",
-        "showCounter": "Shows the character counter (requires maxLength).",
-        "rows":        "Minimum number of visible rows.",
-        "autoresize":  "Grows automatically with content up to maxRows.",
-        "maxRows":     "Maximum rows when autoresize=true.",
-        "resize":      "Browser manual resize direction.",
-        "name":        "HTML name attribute.",
-        "id":          "Textarea id. Auto-generated if omitted.",
-        "autofocus":   "Auto-focus on mount.",
-        "ariaLabel":   "Accessible name when there is no visible label."
+    "error": {
+      "title": "Error",
+      "desc": "errorText marks the field as invalid and replaces helperText.",
+      "label": "Description",
+      "errorText": "Description is required"
     },
-
-    "emits": {
-        "updateModelValue": "Emitted on every value change (syncs v-model).",
-        "change":           "Emitted after a user-confirmed change.",
-        "focus":            "Emitted when the textarea receives focus.",
-        "blur":             "Emitted when the textarea loses focus.",
-        "clear":            "Emitted when the clear button is clicked (clearable)."
+    "disabled": {
+      "title": "Disabled",
+      "desc": "Disabled state preserving the visual value.",
+      "value": "Not editable"
+    },
+    "resize": {
+      "title": "Resize",
+      "desc": "Control the browser's manual resize handle with none, vertical, horizontal or both."
     }
+  },
+
+  "props": {
+    "modelValue": "Textarea value (v-model).",
+    "label": "Visible label above the textarea.",
+    "placeholder": "Placeholder when empty.",
+    "helperText": "Helper text below the textarea. Hidden when errorText is present.",
+    "errorText": "Error message that marks the textarea as invalid.",
+    "variant": "Visual style.",
+    "color": "Semantic color applied to the focus state.",
+    "size": "Controls padding and typography.",
+    "radius": "Corner radius. Inherits from ModoProvider when omitted.",
+    "halo": "Persistent halo (ring) style.",
+    "fullWidth": "Applies w-full to the root.",
+    "disabled": "Disables the textarea.",
+    "readonly": "Read-only.",
+    "required": "Marks the field as required.",
+    "loading": "Loading state (disables and shows loader).",
+    "clearable": "Shows an ✕ button to clear the value.",
+    "maxLength": "Maximum length. Activates the counter if showCounter.",
+    "showCounter": "Shows the character counter (requires maxLength).",
+    "rows": "Minimum number of visible rows.",
+    "autoresize": "Grows automatically with content up to maxRows.",
+    "maxRows": "Maximum rows when autoresize=true.",
+    "resize": "Browser manual resize direction.",
+    "name": "HTML name attribute.",
+    "id": "Textarea id. Auto-generated if omitted.",
+    "autofocus": "Auto-focus on mount.",
+    "ariaLabel": "Accessible name when there is no visible label."
+  },
+
+  "emits": {
+    "updateModelValue": "Emitted on every value change (syncs v-model).",
+    "change": "Emitted after a user-confirmed change.",
+    "focus": "Emitted when the textarea receives focus.",
+    "blur": "Emitted when the textarea loses focus.",
+    "clear": "Emitted when the clear button is clicked (clearable)."
+  },
+  "types": {
+    "title": "Textarea",
+    "desc": "TypeScript interface for the Textarea component props. Supports autoresize, manual resize control, and character counter."
+  },
+  "a11y": {
+    "kbTab": "Move focus to the next focusable element",
+    "kbShiftTab": "Move focus to the previous focusable element",
+    "kbType": "Type text into the textarea",
+    "ariaInvalid": "Set to true when errorText is present",
+    "ariaDescribedBy": "Links helper or error text to the textarea for screen reader context",
+    "ariaRequired": "Set to true when the required prop is active",
+    "ariaDisabled": "Communicates disabled state to assistive technologies",
+    "ariaLabel": "Provides an accessible name when no visible label is present",
+    "focusNative": "Uses a native textarea element — participates in the tab order by default",
+    "focusResize": "Manual resize handle is a browser feature and does not interfere with keyboard navigation"
+  }
 }

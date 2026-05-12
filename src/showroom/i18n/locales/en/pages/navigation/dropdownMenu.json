@@ -2,7 +2,10 @@
   "title": "DropdownMenu",
   "category": "Navigation",
   "description": "Floating action menu with headers, dividers, keyboard shortcuts, descriptions, destructive items and external links.",
-  "trigger": { "actions": "Actions", "more": "More" },
+  "trigger": {
+    "actions": "Actions",
+    "more": "More"
+  },
   "items": {
     "edit": "Edit",
     "duplicate": "Duplicate",
@@ -60,5 +63,20 @@
   },
   "slots": {
     "trigger": "Replaces the default trigger. Useful for wrapping an Avatar or other component."
+  },
+  "types": {
+    "title": "Types",
+    "desc": "TypeScript interfaces for this component."
+  },
+  "a11y": {
+    "kbTab": "Move focus to the next focusable element",
+    "kbShiftTab": "Move focus to the previous focusable element",
+    "kbEnter": "Activate the focused menu item or open the menu",
+    "kbEsc": "Close the menu and return focus to the trigger",
+    "kbArrow": "Navigate between menu items",
+    "ariaExpanded": "Indicates whether the menu panel is open",
+    "ariaLabel": "Provides an accessible name for the menu panel",
+    "focusTrigger": "Focus returns to the trigger button when the menu closes",
+    "focusTrap": "Focus is trapped inside the menu while open"
   }
 }

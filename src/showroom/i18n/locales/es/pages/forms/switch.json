@@ -1,74 +1,91 @@
 {
-    "title": "Switch",
-    "description": "Toggle on/off semánticamente accesible. Soporta etiqueta a izquierda o derecha, descripción y todas las variantes de color y tamaño.",
+  "title": "Switch",
+  "description": "Toggle on/off semánticamente accesible. Soporta etiqueta a izquierda o derecha, descripción y todas las variantes de color y tamaño.",
 
-    "controls": {
-        "color":    "Color",
-        "size":     "Size",
-        "label":    "Label",
-        "loading":  "Loading",
-        "disabled": "Disabled"
+  "controls": {
+    "color": "Color",
+    "size": "Size",
+    "label": "Label",
+    "loading": "Loading",
+    "disabled": "Disabled"
+  },
+
+  "playground": {
+    "label": "Notificaciones"
+  },
+
+  "examples": {
+    "basic": {
+      "title": "Uso básico",
+      "desc": "Toggle binario con v-model y etiqueta visible.",
+      "pushLabel": "Notificaciones push",
+      "darkLabel": "Modo oscuro"
     },
-
-    "playground": {
-        "label": "Notificaciones"
+    "description": {
+      "title": "Con descripción",
+      "desc": "Texto secundario bajo el label para añadir contexto.",
+      "label": "Marketing",
+      "description": "Recibir novedades de producto."
     },
-
-    "examples": {
-        "basic": {
-            "title":       "Uso básico",
-            "desc":        "Toggle binario con v-model y etiqueta visible.",
-            "pushLabel":   "Notificaciones push",
-            "darkLabel":   "Modo oscuro"
-        },
-        "description": {
-            "title":       "Con descripción",
-            "desc":        "Texto secundario bajo el label para añadir contexto.",
-            "label":       "Marketing",
-            "description": "Recibir novedades de producto."
-        },
-        "labelLeft": {
-            "title": "Label a la izquierda",
-            "desc":  "Útil en filas de configuración con el control alineado a la derecha.",
-            "label": "Activo"
-        },
-        "colors": {
-            "title": "Colores",
-            "desc":  "Variantes semánticas para el estado encendido."
-        },
-        "sizes": {
-            "title": "Tamaños",
-            "desc":  "Tres tamaños disponibles para distintas densidades de UI."
-        },
-        "disabled": {
-            "title":    "Disabled",
-            "desc":     "Estado deshabilitado preservando el valor visual.",
-            "labelOn":  "Disabled on",
-            "labelOff": "Disabled off"
-        }
+    "labelLeft": {
+      "title": "Label a la izquierda",
+      "desc": "Útil en filas de configuración con el control alineado a la derecha.",
+      "label": "Activo"
     },
-
-    "props": {
-        "modelValue":    "Valor del switch (v-model). true = encendido.",
-        "label":         "Etiqueta visible junto al control.",
-        "description":   "Texto descriptivo secundario bajo el label.",
-        "helperText":    "Texto de ayuda bajo el control. Se oculta si hay errorText.",
-        "errorText":     "Mensaje de error que reemplaza al helperText y aplica estado de error.",
-        "color":         "Color semántico aplicado en estado encendido.",
-        "size":          "Tamaño del track y del thumb.",
-        "radius":        "Radio del track. El thumb permanece circular.",
-        "labelPosition": "Posición de la etiqueta respecto al control.",
-        "disabled":      "Deshabilita el switch e impide la interacción.",
-        "readonly":      "Bloquea cambios pero mantiene foco y estilos activos.",
-        "required":      "Marca el campo como requerido y muestra asterisco.",
-        "loading":       "Estado de carga durante operaciones asíncronas.",
-        "name":          "Atributo name HTML para envío en formularios.",
-        "id":            "id del input. Se autogenera si se omite.",
-        "ariaLabel":     "Nombre accesible cuando no hay label visible."
+    "colors": {
+      "title": "Colores",
+      "desc": "Variantes semánticas para el estado encendido."
     },
-
-    "emits": {
-        "updateModelValue": "Emitido al cambiar el valor (sincroniza v-model).",
-        "change":           "Emitido tras cada cambio confirmado por el usuario."
+    "sizes": {
+      "title": "Tamaños",
+      "desc": "Tres tamaños disponibles para distintas densidades de UI."
+    },
+    "disabled": {
+      "title": "Disabled",
+      "desc": "Estado deshabilitado preservando el valor visual.",
+      "labelOn": "Disabled on",
+      "labelOff": "Disabled off"
     }
+  },
+
+  "props": {
+    "modelValue": "Valor del switch (v-model). true = encendido.",
+    "label": "Etiqueta visible junto al control.",
+    "description": "Texto descriptivo secundario bajo el label.",
+    "helperText": "Texto de ayuda bajo el control. Se oculta si hay errorText.",
+    "errorText": "Mensaje de error que reemplaza al helperText y aplica estado de error.",
+    "color": "Color semántico aplicado en estado encendido.",
+    "size": "Tamaño del track y del thumb.",
+    "radius": "Radio del track. El thumb permanece circular.",
+    "labelPosition": "Posición de la etiqueta respecto al control.",
+    "disabled": "Deshabilita el switch e impide la interacción.",
+    "readonly": "Bloquea cambios pero mantiene foco y estilos activos.",
+    "required": "Marca el campo como requerido y muestra asterisco.",
+    "loading": "Estado de carga durante operaciones asíncronas.",
+    "name": "Atributo name HTML para envío en formularios.",
+    "id": "id del input. Se autogenera si se omite.",
+    "ariaLabel": "Nombre accesible cuando no hay label visible."
+  },
+
+  "emits": {
+    "updateModelValue": "Emitido al cambiar el valor (sincroniza v-model).",
+    "change": "Emitido tras cada cambio confirmado por el usuario."
+  },
+  "types": {
+    "title": "Switch",
+    "desc": "Interfaz TypeScript de las props del componente Switch. Incluye posicionamiento de etiqueta y soporte completo de color semántico."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "kbSpace": "Alterna encendido / apagado",
+    "kbEnter": "Alterna encendido / apagado",
+    "ariaChecked": "Comunica el estado encendido o apagado a las tecnologías asistivas",
+    "ariaInvalid": "Se activa a true cuando hay errorText presente",
+    "ariaDescribedBy": "Vincula el texto de helper o error al switch para contexto del lector de pantalla",
+    "ariaRequired": "Se activa a true cuando la prop required está activa",
+    "ariaDisabled": "Comunica el estado deshabilitado a las tecnologías asistivas",
+    "ariaLabel": "Proporciona un nombre accesible cuando no hay etiqueta visible",
+    "focusNative": "Usa un botón nativo — participa en el orden de tabulación por defecto"
+  }
 }

@@ -1,26 +1,38 @@
 {
-    "section": {
-        "overview": "Overview",
-        "examples": "Examples",
-        "api": "API Reference",
-        "props": "Props",
-        "emits": "Emits",
-        "slots": "Slots"
-    },
-    "col": {
-        "prop": "Prop",
-        "type": "Type",
-        "default": "Default",
-        "description": "Description",
-        "event": "Event",
-        "payload": "Payload",
-        "slot": "Slot",
-        "bindings": "Props"
-    },
-    "reset": "Reset",
-    "preview": "Preview",
-    "code": "Code",
-    "onThisPage": "On this page",
-    "prev": "Previous",
-    "next": "Next"
+  "section": {
+    "overview": "Overview",
+    "examples": "Examples",
+    "types": "TypeScript",
+    "api": "API Reference",
+    "props": "Props",
+    "emits": "Emits",
+    "slots": "Slots",
+    "a11y": "Accessibility"
+  },
+  "col": {
+    "prop": "Prop",
+    "type": "Type",
+    "default": "Default",
+    "description": "Description",
+    "event": "Event",
+    "payload": "Payload",
+    "slot": "Slot",
+    "bindings": "Props"
+  },
+  "reset": "Reset",
+  "preview": "Preview",
+  "code": "Code",
+  "onThisPage": "On this page",
+  "prev": "Previous",
+  "next": "Next",
+  "a11y": {
+    "keyboard": "Keyboard",
+    "aria": "ARIA",
+    "focus": "Focus",
+    "colKey": "Key",
+    "colAction": "Action",
+    "colAttr": "Attribute",
+    "colValue": "Value",
+    "colDesc": "Purpose"
+  }
 }

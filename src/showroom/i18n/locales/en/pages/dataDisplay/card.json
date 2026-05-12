@@ -21,7 +21,7 @@
         "padding": "Internal padding applied to header, body and footer.",
         "radius": "Border radius. Inherited from ModoProvider if omitted.",
         "hoverable": "Applies hover state (shadow, border) without converting it to a button.",
-        "clickable": "Renders the card as a <button> with accessible focus and pointer cursor.",
+        "clickable": "Renders the card as a button with accessible focus and pointer cursor.",
         "divided": "Shows a dividing line between header / body / footer."
     },
 
@@ -51,7 +51,7 @@
         },
         "clickable": {
             "title": "Clickable",
-            "desc": "Renders the card as an accessible <button> with visible focus."
+            "desc": "Renders the card as an accessible button with visible focus."
         }
     }
 }

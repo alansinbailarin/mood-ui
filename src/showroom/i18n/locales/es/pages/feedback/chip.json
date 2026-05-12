@@ -1,49 +1,60 @@
 {
-    "title": "Chip",
-    "description": "Indicador overlay (counter o dot) que se posiciona sobre otro elemento como un avatar o icono. También funciona como pill inline cuando no hay anchor.",
+  "title": "Chip",
+  "description": "Indicador overlay (counter o dot) que se posiciona sobre otro elemento como un avatar o icono. También funciona como pill inline cuando no hay anchor.",
 
-    "controls": {
-        "variant": "Variante",
-        "color":   "Color",
-        "size":    "Tamaño",
-        "dot":     "Dot"
+  "controls": {
+    "variant": "Variante",
+    "color": "Color",
+    "size": "Tamaño",
+    "dot": "Dot"
+  },
+
+  "examples": {
+    "counter": {
+      "title": "Counter sobre icono",
+      "desc": "Contador overlay sobre un icono. Con max se trunca el valor a 99+."
     },
-
-    "examples": {
-        "counter": {
-            "title": "Counter sobre icono",
-            "desc":  "Contador overlay sobre un icono. Con max se trunca el valor a 99+."
-        },
-        "dot": {
-            "title": "Dot sobre avatar",
-            "desc":  "Indicador de presencia sin contenido sobre un avatar."
-        },
-        "variants": {
-            "title": "Variantes",
-            "desc":  "Tres tratamientos visuales para el chip overlay."
-        },
-        "inline": {
-            "title": "Inline (sin anchor)",
-            "desc":  "Cuando no hay slot default, el chip se renderiza en flujo como pill."
-        }
+    "dot": {
+      "title": "Dot sobre avatar",
+      "desc": "Indicador de presencia sin contenido sobre un avatar."
     },
-
-    "props": {
-        "content":   "Contenido visible (número o string corto). Se ignora si dot está activo.",
-        "dot":       "Renderiza un indicador pequeño sin contenido.",
-        "max":       "Cap superior para contenido numérico (ej. 99 → \"99+\").",
-        "invisible": "Oculta el chip manteniéndolo en el árbol.",
-        "showZero":  "Muestra el chip aun cuando content sea 0 (por defecto se oculta).",
-        "variant":   "Estilo visual aplicado al chip.",
-        "color":     "Color semántico aplicado al chip.",
-        "size":      "Tamaño del chip. Cascada desde ModoProvider si se omite.",
-        "radius":    "Radio de las esquinas. Cascada desde ModoProvider.",
-        "placement": "Esquina del anchor donde se posiciona el chip overlay.",
-        "icon":      "Icono decorativo opcional (ignorado en modo dot).",
-        "ariaLabel": "Nombre accesible. Recomendado para chips numéricos o dot."
+    "variants": {
+      "title": "Variantes",
+      "desc": "Tres tratamientos visuales para el chip overlay."
     },
-
-    "slots": {
-        "default": "Anchor del chip overlay. Si se omite, el chip se renderiza inline como pill."
+    "inline": {
+      "title": "Inline (sin anchor)",
+      "desc": "Cuando no hay slot default, el chip se renderiza en flujo como pill."
     }
+  },
+
+  "props": {
+    "content": "Contenido visible (número o string corto). Se ignora si dot está activo.",
+    "dot": "Renderiza un indicador pequeño sin contenido.",
+    "max": "Cap superior para contenido numérico (ej. 99 → \"99+\").",
+    "invisible": "Oculta el chip manteniéndolo en el árbol.",
+    "showZero": "Muestra el chip aun cuando content sea 0 (por defecto se oculta).",
+    "variant": "Estilo visual aplicado al chip.",
+    "color": "Color semántico aplicado al chip.",
+    "size": "Tamaño del chip. Cascada desde ModoProvider si se omite.",
+    "radius": "Radio de las esquinas. Cascada desde ModoProvider.",
+    "placement": "Esquina del anchor donde se posiciona el chip overlay.",
+    "icon": "Icono decorativo opcional (ignorado en modo dot).",
+    "ariaLabel": "Nombre accesible. Recomendado para chips numéricos o dot."
+  },
+
+  "slots": {
+    "default": "Anchor del chip overlay. Si se omite, el chip se renderiza inline como pill."
+  },
+  "types": {
+    "title": "Chip",
+    "desc": "Interfaz TypeScript de las props del componente Chip. Incluye el tipo union ChipPlacement para posicionamiento absoluto sobre anclas."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "ariaLabel": "Proporciona un nombre accesible para el contenido del chip",
+    "ariaHidden": "Los chips decorativos pueden ocultarse de los lectores de pantalla",
+    "focusNative": "No interactivo por defecto; los chips posicionados no capturan el foco"
+  }
 }

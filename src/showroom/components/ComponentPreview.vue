@@ -41,7 +41,7 @@ const sectionId = computed(() => (props.title ? `ex-${slugify(props.title)}` : '
 
 onMounted(() => {
     if (toc && props.title && sectionId.value) {
-        toc.register({ id: sectionId.value, label: props.title, level: 2 });
+        toc.register({ id: sectionId.value, label: props.title, level: 2, parentId: 'examples' });
     }
 });
 onBeforeUnmount(() => {

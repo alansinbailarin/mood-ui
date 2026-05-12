@@ -1,48 +1,52 @@
 {
-    "pages": {
-        "dataDisplay": {
-            "timeline": {
-                "title": "Timeline",
-                "description": "Línea de tiempo vertical para mostrar eventos en orden cronológico. Útil para historial, changelogs, tracking y feeds de actividad.",
-                "controls": {
-                    "variant": "Variante",
-                    "color": "Color",
-                    "size": "Tamaño",
-                    "side": "Lado"
-                },
-                "props": {
-                    "items": "Eventos a renderizar en orden cronológico.",
-                    "variant": "Estilo del marcador por defecto. Cada item puede sobreescribirlo.",
-                    "color": "Color semántico por defecto del marcador.",
-                    "size": "Escala visual del marcador y la tipografía.",
-                    "side": "Lado donde se renderiza la línea de marcadores."
-                },
-                "slots": {
-                    "itemId": "Contenido extra renderizado debajo del título y descripción del item con el id correspondiente."
-                },
-                "examples": {
-                    "basic": {
-                        "title": "Básico",
-                        "desc": "Lista simple de eventos con título y timestamp."
-                    },
-                    "icons": {
-                        "title": "Con iconos",
-                        "desc": "Cada item define un componente icon y variant 'icon'."
-                    },
-                    "colors": {
-                        "title": "Colores por evento",
-                        "desc": "El color del marcador puede sobreescribirse por item para reflejar estados."
-                    },
-                    "description": {
-                        "title": "Con descripción",
-                        "desc": "Añade texto secundario debajo del título para dar contexto al evento."
-                    },
-                    "rightSide": {
-                        "title": "Lado derecho",
-                        "desc": "Inversión del rail con side='right' — útil para layouts asimétricos."
-                    }
-                }
-            }
-        }
+  "title": "Timeline",
+  "description": "Línea de tiempo vertical para mostrar eventos en orden cronológico. Útil para historial, changelogs, tracking y feeds de actividad.",
+  "controls": {
+    "variant": "Variante",
+    "color": "Color",
+    "size": "Tamaño",
+    "side": "Lado"
+  },
+  "props": {
+    "items": "Eventos a renderizar en orden cronológico.",
+    "variant": "Estilo del marcador por defecto. Cada item puede sobreescribirlo.",
+    "color": "Color semántico por defecto del marcador.",
+    "size": "Escala visual del marcador y la tipografía.",
+    "side": "Lado donde se renderiza la línea de marcadores."
+  },
+  "slots": {
+    "itemId": "Contenido extra renderizado debajo del título y descripción del item con el id correspondiente."
+  },
+  "examples": {
+    "basic": {
+      "title": "Básico",
+      "desc": "Lista simple de eventos con título y timestamp."
+    },
+    "icons": {
+      "title": "Con iconos",
+      "desc": "Cada item define un componente icono y variant 'icon'."
+    },
+    "colors": {
+      "title": "Colores por evento",
+      "desc": "El color del marcador puede sobrescribirse por item para reflejar estados."
+    },
+    "description": {
+      "title": "Con descripción",
+      "desc": "Añade texto secundario debajo del título para dar contexto al evento."
+    },
+    "rightSide": {
+      "title": "Lado derecho",
+      "desc": "Rail invertido con side='right' — útil para layouts asimétricos."
     }
+  },
+  "types": {
+    "title": "Timeline",
+    "desc": "Interfaces TypeScript de Timeline y TimelineItem. Soporta items, color, side, size, variant e icon overrides por item."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "ariaLabel": "Proporciona un nombre accesible que describe el contenido del timeline",
+    "focusNative": "Elemento no interactivo; no participa en el orden de tabulación"
+  }
 }

@@ -1,52 +1,57 @@
 {
-    "pages": {
-        "dataDisplay": {
-            "avatar": {
-                "title": "Avatar",
-                "description": "Avatar de usuario con imagen, iniciales fallback, indicador de estado y múltiples tamaños y formas.",
-                "controls": {
-                    "mode": "Modo",
-                    "size": "Tamaño",
-                    "radius": "Radio",
-                    "color": "Color",
-                    "status": "Estado",
-                    "bordered": "Borde"
-                },
-                "props": {
-                    "src": "URL de la imagen del avatar. Si falla, hace fallback a initials o icono.",
-                    "alt": "Texto alternativo para la imagen.",
-                    "initials": "Iniciales mostradas cuando no hay imagen disponible.",
-                    "size": "Tamaño del avatar.",
-                    "radius": "Forma del avatar. full=círculo, none=cuadrado.",
-                    "color": "Color de fondo cuando se muestran iniciales.",
-                    "status": "Indicador de estado visible en la esquina inferior.",
-                    "bordered": "Añade un borde alrededor del avatar.",
-                    "ariaLabel": "Nombre accesible cuando se muestran iniciales o el icono fallback.",
-                    "skeleton": "Muestra un placeholder de carga con la misma huella."
-                },
-                "examples": {
-                    "image": {
-                        "title": "Imagen",
-                        "desc": "Carga la imagen desde una URL."
-                    },
-                    "initials": {
-                        "title": "Iniciales",
-                        "desc": "Fallback con iniciales y color semántico cuando no hay imagen."
-                    },
-                    "iconFallback": {
-                        "title": "Icono fallback",
-                        "desc": "Si no hay src ni initials, se muestra un icono genérico."
-                    },
-                    "sizes": {
-                        "title": "Tamaños",
-                        "desc": "Cinco escalas: xs, small, medium, large y xl."
-                    },
-                    "status": {
-                        "title": "Indicador de estado",
-                        "desc": "Punto en la esquina inferior derecha para señalar presencia."
-                    }
-                }
-            }
-        }
+  "title": "Avatar",
+  "description": "Avatar de usuario con imagen, iniciales fallback, indicador de estado y múltiples tamaños y formas.",
+  "controls": {
+    "mode": "Modo",
+    "size": "Tamaño",
+    "radius": "Radio",
+    "color": "Color",
+    "status": "Estado",
+    "bordered": "Borde"
+  },
+  "props": {
+    "src": "URL de la imagen del avatar. Si falla, hace fallback a initials o icono.",
+    "alt": "Texto alternativo para la imagen.",
+    "initials": "Iniciales mostradas cuando no hay imagen disponible.",
+    "size": "Tamaño del avatar.",
+    "radius": "Forma del avatar. full=círculo, none=cuadrado.",
+    "color": "Color de fondo cuando se muestran iniciales.",
+    "status": "Indicador de estado visible en la esquina inferior.",
+    "bordered": "Añade un borde alrededor del avatar.",
+    "ariaLabel": "Nombre accesible cuando se muestran iniciales o el icono fallback.",
+    "skeleton": "Muestra un placeholder de carga con la misma huella."
+  },
+  "examples": {
+    "image": {
+      "title": "Imagen",
+      "desc": "Carga la imagen desde una URL."
+    },
+    "initials": {
+      "title": "Iniciales",
+      "desc": "Fallback con iniciales y color semántico cuando no hay imagen."
+    },
+    "iconFallback": {
+      "title": "Icono fallback",
+      "desc": "Si no hay src ni initials, se muestra un icono genérico."
+    },
+    "sizes": {
+      "title": "Tamaños",
+      "desc": "Cinco escalas: xs, small, medium, large y xl."
+    },
+    "status": {
+      "title": "Indicador de estado",
+      "desc": "Punto en la esquina inferior derecha para señalar presencia."
     }
+  },
+  "types": {
+    "title": "Avatar",
+    "desc": "Interfaz TypeScript de las props del componente Avatar. Soporta src, alt, initials, size, radius, status, bordered, color, ariaLabel y skeleton."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "ariaLabel": "Proporciona un nombre accesible para la imagen del avatar",
+    "ariaImg": "Usa role img para identificación del lector de pantalla",
+    "focusNative": "No interactivo por defecto; no captura el foco"
+  }
 }

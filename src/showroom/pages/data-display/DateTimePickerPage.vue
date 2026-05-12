@@ -3,6 +3,8 @@ import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import ComponentDoc from "../../components/ComponentDoc.vue";
 import ComponentPreview from "../../components/ComponentPreview.vue";
+import CodePreview from "../../components/CodePreview.vue";
+import Typography from "../../../components/data-display/Typography.vue";
 import DateTimePicker from "../../../components/data-display/date-picker/DateTimePicker.vue";
 import type { PropDoc } from "../../types";
 import TbPills from "../../components/toolbar/TbPills.vue";
@@ -58,15 +60,60 @@ const overviewCode = computed(() => {
 });
 
 // ── Example codes ─────────────────────────────────────────────────────────────
-const basic24Code = `<DateTimePicker v-model="date" />`;
+const basic24Code = `<script setup lang="ts">
+import { ref } from 'vue';
+import { DateTimePicker } from 'mood-ui';
 
-const format12Code = `<DateTimePicker v-model="date" format="12h" />`;
+const date = ref<Date | null>(new Date());
+<\/script>
 
-const secondsCode = `<DateTimePicker v-model="date" format="12h" show-seconds />`;
+<template>
+  <DateTimePicker v-model="date" />
+</template>`;
 
-const stepCode = `<DateTimePicker v-model="date" :step="15" color="primary" />`;
+const format12Code = `<script setup lang="ts">
+import { ref } from 'vue';
+import { DateTimePicker } from 'mood-ui';
 
-const outlineCode = `<DateTimePicker v-model="date" variant="outline" color="primary" />`;
+const date = ref<Date | null>(new Date());
+<\/script>
+
+<template>
+  <DateTimePicker v-model="date" format="12h" />
+</template>`;
+
+const secondsCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { DateTimePicker } from 'mood-ui';
+
+const date = ref<Date | null>(new Date());
+<\/script>
+
+<template>
+  <DateTimePicker v-model="date" format="12h" show-seconds />
+</template>`;
+
+const stepCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { DateTimePicker } from 'mood-ui';
+
+const date = ref<Date | null>(new Date());
+<\/script>
+
+<template>
+  <DateTimePicker v-model="date" :step="15" color="primary" />
+</template>`;
+
+const outlineCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { DateTimePicker } from 'mood-ui';
+
+const date = ref<Date | null>(new Date());
+<\/script>
+
+<template>
+  <DateTimePicker v-model="date" variant="outline" color="primary" />
+</template>`;
 
 // Example state
 const ex1 = ref<Date | null>(new Date());
@@ -75,94 +122,111 @@ const ex3 = ref<Date | null>(new Date());
 const ex4 = ref<Date | null>(new Date());
 const ex5 = ref<Date | null>(new Date());
 
+const typesCode = `export interface DateTimePicker {
+  modelValue?: Date | null;
+  locale?: string;
+  firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+  minDate?: Date;
+  maxDate?: Date;
+  disabledDates?: Date[];
+  color?: 'default' | 'primary' | 'danger' | 'success' | 'warning';
+  variant?: 'filled' | 'outline';
+  radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
+  format?: '12h' | '24h';
+  step?: number;
+  showSeconds?: boolean;
+  minTime?: string;
+  maxTime?: string;
+}`;
+
 // ── API docs ──────────────────────────────────────────────────────────────────
 const propsList = computed<PropDoc[]>(() => [
   {
     name: "modelValue",
     type: "Date | null",
     default: "null",
-    description: t("pages.dataDisplay.dateTimePicker.props.modelValue"),
+    description: t("pages.data-display.dateTimePicker.props.modelValue"),
   },
   {
     name: "format",
     type: "'12h' | '24h'",
     default: "'24h'",
-    description: t("pages.dataDisplay.dateTimePicker.props.format"),
+    description: t("pages.data-display.dateTimePicker.props.format"),
   },
   {
     name: "step",
     type: "number",
     default: "1",
-    description: t("pages.dataDisplay.dateTimePicker.props.step"),
+    description: t("pages.data-display.dateTimePicker.props.step"),
   },
   {
     name: "showSeconds",
     type: "boolean",
     default: "false",
-    description: t("pages.dataDisplay.dateTimePicker.props.showSeconds"),
+    description: t("pages.data-display.dateTimePicker.props.showSeconds"),
   },
   {
     name: "color",
     type: "'default' | 'primary' | 'success' | 'warning' | 'danger'",
     default: "'default'",
-    description: t("pages.dataDisplay.dateTimePicker.props.color"),
+    description: t("pages.data-display.dateTimePicker.props.color"),
   },
   {
     name: "variant",
     type: "'filled' | 'outline'",
     default: "'filled'",
-    description: t("pages.dataDisplay.dateTimePicker.props.variant"),
+    description: t("pages.data-display.dateTimePicker.props.variant"),
   },
   {
     name: "radius",
     type: "'none' | 'small' | 'medium' | 'large' | 'full'",
-    description: t("pages.dataDisplay.dateTimePicker.props.radius"),
+    description: t("pages.data-display.dateTimePicker.props.radius"),
   },
   {
     name: "minDate",
     type: "Date",
-    description: t("pages.dataDisplay.dateTimePicker.props.minDate"),
+    description: t("pages.data-display.dateTimePicker.props.minDate"),
   },
   {
     name: "maxDate",
     type: "Date",
-    description: t("pages.dataDisplay.dateTimePicker.props.maxDate"),
+    description: t("pages.data-display.dateTimePicker.props.maxDate"),
   },
   {
     name: "disabledDates",
     type: "Date[]",
-    description: t("pages.dataDisplay.dateTimePicker.props.disabledDates"),
+    description: t("pages.data-display.dateTimePicker.props.disabledDates"),
   },
   {
     name: "minTime",
     type: "string",
-    description: t("pages.dataDisplay.dateTimePicker.props.minTime"),
+    description: t("pages.data-display.dateTimePicker.props.minTime"),
   },
   {
     name: "maxTime",
     type: "string",
-    description: t("pages.dataDisplay.dateTimePicker.props.maxTime"),
+    description: t("pages.data-display.dateTimePicker.props.maxTime"),
   },
   {
     name: "locale",
     type: "string",
-    description: t("pages.dataDisplay.dateTimePicker.props.locale"),
+    description: t("pages.data-display.dateTimePicker.props.locale"),
   },
   {
     name: "firstDayOfWeek",
     type: "0 | 1 | 2 | 3 | 4 | 5 | 6",
     default: "1",
-    description: t("pages.dataDisplay.dateTimePicker.props.firstDayOfWeek"),
+    description: t("pages.data-display.dateTimePicker.props.firstDayOfWeek"),
   },
 ]);
 </script>
 
 <template>
   <ComponentDoc
-    :title="t('pages.dataDisplay.dateTimePicker.title')"
+    :title="t('pages.data-display.dateTimePicker.title')"
     category="Data Display"
     import-path="import { DateTimePicker } from 'mood-ui'"
-    :description="t('pages.dataDisplay.dateTimePicker.description')"
+    :description="t('pages.data-display.dateTimePicker.description')"
     :props-list="propsList"
   >
     <!-- ── Overview ─────────────────────────────────────────────────── -->
@@ -234,9 +298,9 @@ const propsList = computed<PropDoc[]>(() => [
     <!-- ── Examples ──────────────────────────────────────────────────── -->
     <template #examples>
       <ComponentPreview
-        :title="t('pages.dataDisplay.dateTimePicker.examples.basic24.title')"
+        :title="t('pages.data-display.dateTimePicker.examples.basic24.title')"
         :description="
-          t('pages.dataDisplay.dateTimePicker.examples.basic24.desc')
+          t('pages.data-display.dateTimePicker.examples.basic24.desc')
         "
         :code="basic24Code"
         min-height="360px"
@@ -245,9 +309,9 @@ const propsList = computed<PropDoc[]>(() => [
       </ComponentPreview>
 
       <ComponentPreview
-        :title="t('pages.dataDisplay.dateTimePicker.examples.format12.title')"
+        :title="t('pages.data-display.dateTimePicker.examples.format12.title')"
         :description="
-          t('pages.dataDisplay.dateTimePicker.examples.format12.desc')
+          t('pages.data-display.dateTimePicker.examples.format12.desc')
         "
         :code="format12Code"
         min-height="360px"
@@ -256,9 +320,9 @@ const propsList = computed<PropDoc[]>(() => [
       </ComponentPreview>
 
       <ComponentPreview
-        :title="t('pages.dataDisplay.dateTimePicker.examples.seconds.title')"
+        :title="t('pages.data-display.dateTimePicker.examples.seconds.title')"
         :description="
-          t('pages.dataDisplay.dateTimePicker.examples.seconds.desc')
+          t('pages.data-display.dateTimePicker.examples.seconds.desc')
         "
         :code="secondsCode"
         min-height="360px"
@@ -267,8 +331,8 @@ const propsList = computed<PropDoc[]>(() => [
       </ComponentPreview>
 
       <ComponentPreview
-        :title="t('pages.dataDisplay.dateTimePicker.examples.step.title')"
-        :description="t('pages.dataDisplay.dateTimePicker.examples.step.desc')"
+        :title="t('pages.data-display.dateTimePicker.examples.step.title')"
+        :description="t('pages.data-display.dateTimePicker.examples.step.desc')"
         :code="stepCode"
         min-height="360px"
       >
@@ -276,15 +340,25 @@ const propsList = computed<PropDoc[]>(() => [
       </ComponentPreview>
 
       <ComponentPreview
-        :title="t('pages.dataDisplay.dateTimePicker.examples.outline.title')"
+        :title="t('pages.data-display.dateTimePicker.examples.outline.title')"
         :description="
-          t('pages.dataDisplay.dateTimePicker.examples.outline.desc')
+          t('pages.data-display.dateTimePicker.examples.outline.desc')
         "
         :code="outlineCode"
         min-height="360px"
       >
         <DateTimePicker v-model="ex5" variant="outline" color="primary" />
       </ComponentPreview>
+    </template>
+
+    <template #extra>
+      <Typography variant="heading" size="large" weight="medium" as="h2">
+        {{ t("pages.data-display.dateTimePicker.types.title") }}
+      </Typography>
+      <Typography variant="body" size="small" class="text-muted-foreground">
+        {{ t("pages.data-display.dateTimePicker.types.desc") }}
+      </Typography>
+      <CodePreview :code="typesCode" lang="ts" code-only />
     </template>
   </ComponentDoc>
 </template>

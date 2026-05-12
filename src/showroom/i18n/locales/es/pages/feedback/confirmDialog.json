@@ -1,6 +1,6 @@
 {
   "title": "ConfirmDialog",
-  "description": "Diálogo de confirmación imperativo. Monta una vez el host <ConfirmDialog /> cerca del root y usa useConfirm().confirm(\\{...\\}) desde cualquier componente para obtener un Promise<boolean>.",
+  "description": "Diálogo de confirmación imperativo. Monta una vez el host ConfirmDialog cerca del root y usa useConfirm().confirm(\\{...\\}) desde cualquier componente para obtener un Promise(boolean).",
 
   "controls": {
     "tone": "Tono",
@@ -31,7 +31,7 @@
     },
     "async": {
       "title": "Async confirm",
-      "desc": "confirm() devuelve Promise<boolean>: ideal para encadenar await + llamada a API.",
+      "desc": "confirm() devuelve Promise(boolean): ideal para encadenar await + llamada a API.",
       "cta": "Publicar"
     },
     "custom": {
@@ -43,5 +43,19 @@
 
   "props": {
     "radius": "Radio por defecto para confirmaciones que no especifican uno."
+  },
+  "types": {
+    "title": "ConfirmDialog",
+    "desc": "Interfaces TypeScript del sistema de confirmación. Incluye ConfirmInput con ConfirmColor y las props de ConfirmDialog para diálogos de confirmación imperativos."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable dentro del dialog",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior dentro del dialog",
+    "kbEsc": "Cierra el dialog y resuelve con false",
+    "ariaDialog": "Se expone como dialog para los lectores de pantalla",
+    "ariaModal": "Comunica que el dialog bloquea el resto de la página",
+    "ariaLabelledBy": "Vincula el título del dialog para contexto del lector de pantalla",
+    "focusTrap": "El foco queda atrapado dentro del dialog mientras está abierto",
+    "focusReturn": "El foco vuelve al elemento trigger cuando el dialog se cierra"
   }
 }

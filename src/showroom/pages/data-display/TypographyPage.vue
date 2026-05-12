@@ -3,14 +3,41 @@ import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import ComponentDoc from "../../components/ComponentDoc.vue";
 import ComponentPreview from "../../components/ComponentPreview.vue";
+import CodePreview from "../../components/CodePreview.vue";
 import Typography from "../../../components/data-display/Typography.vue";
 import type { PropDoc, SlotDoc } from "../../types";
+import A11yDoc from "../../components/A11yDoc.vue";
+import type {
+  A11yKeyboardRow,
+  A11yAriaRow,
+} from "../../components/A11yDoc.vue";
 import TbPills from "../../components/toolbar/TbPills.vue";
 import TbDots from "../../components/toolbar/TbDots.vue";
 import TbToggle from "../../components/toolbar/TbToggle.vue";
 import TbSep from "../../components/toolbar/TbSep.vue";
 
 const { t } = useI18n();
+
+// ── A11y data ─────────────────────────────────────────────────────────────────
+const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
+  { keys: ["Tab"], action: t("pages.data-display.typography.a11y.kbTab") },
+  {
+    keys: ["Shift+Tab"],
+    action: t("pages.data-display.typography.a11y.kbShiftTab"),
+  },
+]);
+
+const a11yAria = computed<A11yAriaRow[]>(() => [
+  {
+    attribute: "aria-hidden",
+    value: "true",
+    desc: t("pages.data-display.typography.a11y.ariaHidden"),
+  },
+]);
+
+const a11yFocus = computed<string[]>(() => [
+  t("pages.data-display.typography.a11y.focusNative"),
+]);
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgVariant = ref<
@@ -70,37 +97,80 @@ const overviewCode = computed(() => {
 });
 
 // ── Example code ──────────────────────────────────────────────────────────────
-const variantsCode = `<Typography variant="display" size="large">Display</Typography>
-<Typography variant="heading" size="large">Heading</Typography>
-<Typography variant="title"   size="medium">Title</Typography>
-<Typography variant="subtitle">Subtitle</Typography>
-<Typography variant="body">Body — Lorem ipsum dolor sit amet.</Typography>
-<Typography variant="caption" color="muted">Caption auxiliar</Typography>
-<Typography variant="overline" color="muted">Overline</Typography>`;
+const variantsCode = `<script setup lang="ts">
+import { Typography } from 'mood-ui';
+<\/script>
 
-const sizesCode = `<Typography variant="heading" size="small">Heading small</Typography>
-<Typography variant="heading" size="medium">Heading medium</Typography>
-<Typography variant="heading" size="large">Heading large</Typography>`;
+<template>
+  <Typography variant="display" size="large">Display</Typography>
+  <Typography variant="heading" size="large">Heading</Typography>
+  <Typography variant="title"   size="medium">Title</Typography>
+  <Typography variant="subtitle">Subtitle</Typography>
+  <Typography variant="body">Body — Lorem ipsum dolor sit amet.</Typography>
+  <Typography variant="caption" color="muted">Caption helper</Typography>
+  <Typography variant="overline" color="muted">Overline</Typography>
+</template>`;
 
-const weightsCode = `<Typography weight="light">Light</Typography>
-<Typography weight="normal">Normal</Typography>
-<Typography weight="medium">Medium</Typography>
-<Typography weight="semibold">Semibold</Typography>
-<Typography weight="bold">Bold</Typography>
-<Typography weight="extrabold">Extrabold</Typography>`;
+const sizesCode = `<script setup lang="ts">
+import { Typography } from 'mood-ui';
+<\/script>
 
-const colorsCode = `<Typography color="default">default</Typography>
-<Typography color="muted">muted</Typography>
-<Typography color="primary">primary</Typography>
-<Typography color="success">success</Typography>
-<Typography color="warning">warning</Typography>
-<Typography color="danger">danger</Typography>`;
+<template>
+  <Typography variant="heading" size="small">Heading small</Typography>
+  <Typography variant="heading" size="medium">Heading medium</Typography>
+  <Typography variant="heading" size="large">Heading large</Typography>
+</template>`;
 
-const truncateCode = `<div class="w-48">
-  <Typography truncate>
-    Texto que se trunca con ellipsis cuando no cabe en una sola línea.
-  </Typography>
-</div>`;
+const weightsCode = `<script setup lang="ts">
+import { Typography } from 'mood-ui';
+<\/script>
+
+<template>
+  <Typography weight="light">Light</Typography>
+  <Typography weight="normal">Normal</Typography>
+  <Typography weight="medium">Medium</Typography>
+  <Typography weight="semibold">Semibold</Typography>
+  <Typography weight="bold">Bold</Typography>
+  <Typography weight="extrabold">Extrabold</Typography>
+</template>`;
+
+const colorsCode = `<script setup lang="ts">
+import { Typography } from 'mood-ui';
+<\/script>
+
+<template>
+  <Typography color="default">default</Typography>
+  <Typography color="muted">muted</Typography>
+  <Typography color="primary">primary</Typography>
+  <Typography color="success">success</Typography>
+  <Typography color="warning">warning</Typography>
+  <Typography color="danger">danger</Typography>
+</template>`;
+
+const typesCode = `export interface Typography {
+  variant?: 'display' | 'heading' | 'title' | 'subtitle' | 'body' | 'caption' | 'overline';
+  size?: 'small' | 'medium' | 'large';
+  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' | 'label' | 'small' | 'strong' | 'em';
+  weight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold';
+  align?: 'left' | 'center' | 'right';
+  color?: 'default' | 'muted' | 'primary' | 'danger' | 'success' | 'warning';
+  truncate?: boolean;
+  italic?: boolean;
+  underline?: boolean;
+  strikethrough?: boolean;
+}`;
+
+const truncateCode = `<script setup lang="ts">
+import { Typography } from 'mood-ui';
+<\/script>
+
+<template>
+  <div class="w-48">
+    <Typography truncate>
+      Text that truncates with ellipsis when it does not fit on a single line.
+    </Typography>
+  </div>
+</template>`;
 
 // ── API docs ──────────────────────────────────────────────────────────────────
 const propsList = computed<PropDoc[]>(() => [
@@ -108,74 +178,74 @@ const propsList = computed<PropDoc[]>(() => [
     name: "variant",
     type: "'display' | 'heading' | 'title' | 'subtitle' | 'body' | 'caption' | 'overline'",
     default: "'body'",
-    description: t("pages.dataDisplay.typography.props.variant"),
+    description: t("pages.data-display.typography.props.variant"),
   },
   {
     name: "size",
     type: "'small' | 'medium' | 'large'",
-    description: t("pages.dataDisplay.typography.props.size"),
+    description: t("pages.data-display.typography.props.size"),
   },
   {
     name: "as",
     type: "'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' | 'label' | 'small' | 'strong' | 'em'",
-    description: t("pages.dataDisplay.typography.props.as"),
+    description: t("pages.data-display.typography.props.as"),
   },
   {
     name: "weight",
     type: "'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold'",
-    description: t("pages.dataDisplay.typography.props.weight"),
+    description: t("pages.data-display.typography.props.weight"),
   },
   {
     name: "align",
     type: "'left' | 'center' | 'right'",
-    description: t("pages.dataDisplay.typography.props.align"),
+    description: t("pages.data-display.typography.props.align"),
   },
   {
     name: "color",
     type: "'default' | 'muted' | 'primary' | 'danger' | 'success' | 'warning'",
     default: "'default'",
-    description: t("pages.dataDisplay.typography.props.color"),
+    description: t("pages.data-display.typography.props.color"),
   },
   {
     name: "truncate",
     type: "boolean",
     default: "false",
-    description: t("pages.dataDisplay.typography.props.truncate"),
+    description: t("pages.data-display.typography.props.truncate"),
   },
   {
     name: "italic",
     type: "boolean",
     default: "false",
-    description: t("pages.dataDisplay.typography.props.italic"),
+    description: t("pages.data-display.typography.props.italic"),
   },
   {
     name: "underline",
     type: "boolean",
     default: "false",
-    description: t("pages.dataDisplay.typography.props.underline"),
+    description: t("pages.data-display.typography.props.underline"),
   },
   {
     name: "strikethrough",
     type: "boolean",
     default: "false",
-    description: t("pages.dataDisplay.typography.props.strikethrough"),
+    description: t("pages.data-display.typography.props.strikethrough"),
   },
 ]);
 
 const slotsList = computed<SlotDoc[]>(() => [
   {
     name: "default",
-    description: t("pages.dataDisplay.typography.slots.default"),
+    description: t("pages.data-display.typography.slots.default"),
   },
 ]);
 </script>
 
 <template>
   <ComponentDoc
-    :title="t('pages.dataDisplay.typography.title')"
+    :title="t('pages.data-display.typography.title')"
     category="Data Display"
     import-path="import { Typography } from 'mood-ui'"
-    :description="t('pages.dataDisplay.typography.description')"
+    :description="t('pages.data-display.typography.description')"
     :props-list="propsList"
     :slots-list="slotsList"
   >
@@ -263,8 +333,8 @@ const slotsList = computed<SlotDoc[]>(() => [
 
     <template #examples>
       <ComponentPreview
-        :title="t('pages.dataDisplay.typography.examples.variants.title')"
-        :description="t('pages.dataDisplay.typography.examples.variants.desc')"
+        :title="t('pages.data-display.typography.examples.variants.title')"
+        :description="t('pages.data-display.typography.examples.variants.desc')"
         :code="variantsCode"
       >
         <div class="flex flex-col gap-2 items-start">
@@ -283,8 +353,8 @@ const slotsList = computed<SlotDoc[]>(() => [
       </ComponentPreview>
 
       <ComponentPreview
-        :title="t('pages.dataDisplay.typography.examples.sizes.title')"
-        :description="t('pages.dataDisplay.typography.examples.sizes.desc')"
+        :title="t('pages.data-display.typography.examples.sizes.title')"
+        :description="t('pages.data-display.typography.examples.sizes.desc')"
         :code="sizesCode"
       >
         <div class="flex flex-col gap-2 items-start">
@@ -297,8 +367,8 @@ const slotsList = computed<SlotDoc[]>(() => [
       </ComponentPreview>
 
       <ComponentPreview
-        :title="t('pages.dataDisplay.typography.examples.weights.title')"
-        :description="t('pages.dataDisplay.typography.examples.weights.desc')"
+        :title="t('pages.data-display.typography.examples.weights.title')"
+        :description="t('pages.data-display.typography.examples.weights.desc')"
         :code="weightsCode"
       >
         <div class="flex flex-col gap-1 items-start">
@@ -312,8 +382,8 @@ const slotsList = computed<SlotDoc[]>(() => [
       </ComponentPreview>
 
       <ComponentPreview
-        :title="t('pages.dataDisplay.typography.examples.colors.title')"
-        :description="t('pages.dataDisplay.typography.examples.colors.desc')"
+        :title="t('pages.data-display.typography.examples.colors.title')"
+        :description="t('pages.data-display.typography.examples.colors.desc')"
         :code="colorsCode"
       >
         <div class="flex flex-col gap-1 items-start">
@@ -327,8 +397,8 @@ const slotsList = computed<SlotDoc[]>(() => [
       </ComponentPreview>
 
       <ComponentPreview
-        :title="t('pages.dataDisplay.typography.examples.truncate.title')"
-        :description="t('pages.dataDisplay.typography.examples.truncate.desc')"
+        :title="t('pages.data-display.typography.examples.truncate.title')"
+        :description="t('pages.data-display.typography.examples.truncate.desc')"
         :code="truncateCode"
       >
         <div class="w-48">
@@ -337,6 +407,24 @@ const slotsList = computed<SlotDoc[]>(() => [
           </Typography>
         </div>
       </ComponentPreview>
+    </template>
+
+    <template #a11y>
+      <A11yDoc
+        :keyboard-rows="a11yKeyboard"
+        :aria-rows="a11yAria"
+        :focus-notes="a11yFocus"
+      />
+    </template>
+
+    <template #extra>
+      <Typography variant="heading" size="large" weight="medium" as="h2">
+        {{ t("pages.data-display.typography.types.title") }}
+      </Typography>
+      <Typography variant="body" size="small" class="text-muted-foreground">
+        {{ t("pages.data-display.typography.types.desc") }}
+      </Typography>
+      <CodePreview :code="typesCode" lang="ts" code-only />
     </template>
   </ComponentDoc>
 </template>

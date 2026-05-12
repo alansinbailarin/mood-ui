@@ -1,60 +1,80 @@
 {
-    "category": "Forms",
-    "title": "Combobox",
-    "description": "Autocomplete text input with static or async suggestions. Supports free values (combobox) or strict selection (autocomplete).",
-    "examples": {
-        "basic": {
-            "title": "Basic usage",
-            "desc": "Static suggestions shown as the user types."
-        },
-        "freeSolo": {
-            "title": "Free solo (creatable)",
-            "desc": "Allows confirming any text even if it is not in the options list."
-        },
-        "strict": {
-            "title": "Strict (autocomplete)",
-            "desc": "With free-solo set to false, only values present in options are accepted."
-        },
-        "async": {
-            "title": "Async search",
-            "desc": "Pass loadOptions to resolve options from a backend with debounce."
-        },
-        "sizes": {
-            "title": "Sizes",
-            "desc": "Three sizes for different UI densities."
-        }
+  "category": "Forms",
+  "title": "Combobox",
+  "description": "Autocomplete text input with static or async suggestions. Supports free values (combobox) or strict selection (autocomplete).",
+  "examples": {
+    "basic": {
+      "title": "Basic usage",
+      "desc": "Static suggestions shown as the user types."
     },
-    "props": {
-        "modelValue": "Current input text (v-model).",
-        "options": "Static options list. Ignored when loadOptions is defined.",
-        "loadOptions": "Async options source called on every query change.",
-        "debounce": "Delay in ms before calling loadOptions.",
-        "minChars": "Minimum characters before triggering the async search.",
-        "freeSolo": "Allows any text as value. If false, only valid options are accepted.",
-        "label": "Visible label above the field.",
-        "placeholder": "Input placeholder.",
-        "helperText": "Helper text below the field.",
-        "errorText": "Error message that replaces the helperText.",
-        "emptyText": "Text shown when there are no options to display.",
-        "loadingText": "Text shown while the async search is in progress.",
-        "variant": "Visual style of the input.",
-        "color": "Semantic color for focus and accent.",
-        "size": "Input height.",
-        "radius": "Border radius.",
-        "clearable": "Shows an X button to clear the value.",
-        "disabled": "Disables the control.",
-        "readonly": "Read-only mode.",
-        "required": "Marks the field as required.",
-        "loading": "Forced loading state (independent of loadOptions).",
-        "fullWidth": "Applies w-full to the root control.",
-        "iconLeft": "Icon on the left side of the input.",
-        "maxLength": "Maximum number of input characters.",
-        "name": "HTML name attribute for form submission.",
-        "ariaLabel": "Accessible name when there is no visible label."
+    "freeSolo": {
+      "title": "Free solo (creatable)",
+      "desc": "Type a new value and press Enter. The dropdown stays open so you can see the option being added to the list. The \\@change handler detects unknown values and pushes them into the reactive options array."
     },
-    "emits": {
-        "updateModelValue": "Emitted when the input value changes.",
-        "change": "Emitted after selecting an option or confirming text.",
-        "select": "Emitted when an option is chosen from the list."
+    "strict": {
+      "title": "Strict (autocomplete)",
+      "desc": "With free-solo set to false, only values present in options are accepted."
+    },
+    "async": {
+      "title": "Async search",
+      "desc": "Pass loadOptions to resolve options from a backend with debounce."
+    },
+    "sizes": {
+      "title": "Sizes",
+      "desc": "Three sizes for different UI densities."
     }
+  },
+  "props": {
+    "modelValue": "Current input text (v-model).",
+    "options": "Static options list. Ignored when loadOptions is defined.",
+    "loadOptions": "Async options source called on every query change.",
+    "debounce": "Delay in ms before calling loadOptions.",
+    "minChars": "Minimum characters before triggering the async search.",
+    "freeSolo": "Allows any text as value. If false, only valid options are accepted.",
+    "label": "Visible label above the field.",
+    "placeholder": "Input placeholder.",
+    "helperText": "Helper text below the field.",
+    "errorText": "Error message that replaces the helperText.",
+    "emptyText": "Text shown when there are no options to display.",
+    "loadingText": "Text shown while the async search is in progress.",
+    "variant": "Visual style of the input.",
+    "color": "Semantic color for focus and accent.",
+    "size": "Input height.",
+    "radius": "Border radius.",
+    "clearable": "Shows an X button to clear the value.",
+    "disabled": "Disables the control.",
+    "readonly": "Read-only mode.",
+    "required": "Marks the field as required.",
+    "loading": "Forced loading state (independent of loadOptions).",
+    "fullWidth": "Applies w-full to the root control.",
+    "iconLeft": "Icon on the left side of the input.",
+    "maxLength": "Maximum number of input characters.",
+    "name": "HTML name attribute for form submission.",
+    "ariaLabel": "Accessible name when there is no visible label."
+  },
+  "emits": {
+    "updateModelValue": "Emitted when the input value changes.",
+    "change": "Emitted after selecting an option or confirming text.",
+    "select": "Emitted when an option is chosen from the list."
+  },
+  "types": {
+    "title": "Combobox",
+    "desc": "TypeScript interface for the Combobox component props. Uses SelectOption for its options array. See the Select page for the option shape."
+  },
+  "a11y": {
+    "kbTab": "Move focus to the next focusable element",
+    "kbShiftTab": "Move focus to the previous focusable element",
+    "kbType": "Filter the option list by typing",
+    "kbEnter": "Select the highlighted option",
+    "kbEsc": "Close the dropdown panel without selecting",
+    "kbArrow": "Navigate between filtered options",
+    "ariaExpanded": "Communicates whether the dropdown panel is open or closed",
+    "ariaInvalid": "Set to true when errorText is present",
+    "ariaDescribedBy": "Links helper or error text to the input for screen reader context",
+    "ariaRequired": "Set to true when the required prop is active",
+    "ariaDisabled": "Communicates disabled state to assistive technologies",
+    "ariaLabel": "Provides an accessible name when no visible label is present",
+    "focusNative": "Uses a native input element — participates in the tab order by default",
+    "focusTrap": "Focus is trapped inside the dropdown panel while it is open"
+  }
 }

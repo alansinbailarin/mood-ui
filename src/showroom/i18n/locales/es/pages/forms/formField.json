@@ -1,57 +1,72 @@
 {
-    "category": "Forms",
-    "title": "FormField",
-    "description": "Wrapper accesible que provee label, helper, error y enlazado de id/aria a cualquier control de formulario.",
-    "controls": {
-        "layout": "Layout",
-        "required": "Required",
-        "disabled": "Disabled",
-        "error": "Error"
+  "category": "Forms",
+  "title": "FormField",
+  "description": "Wrapper accesible que provee label, helper, error y enlazado de id/aria a cualquier control de formulario.",
+  "controls": {
+    "layout": "Layout",
+    "required": "Required",
+    "disabled": "Disabled",
+    "error": "Error"
+  },
+  "playground": {
+    "label": "Email",
+    "helperText": "Lo usaremos para confirmar tu cuenta.",
+    "errorText": "Este campo es obligatorio",
+    "placeholder": "tu\\@email.com"
+  },
+  "examples": {
+    "input": {
+      "title": "Con Input",
+      "desc": "Wrapping de un campo de texto con label y texto de ayuda."
     },
-    "playground": {
-        "label": "Email",
-        "helperText": "Lo usaremos para confirmar tu cuenta.",
-        "errorText": "Este campo es obligatorio",
-        "placeholder": "tu\\@email.com"
+    "select": {
+      "title": "Con Select",
+      "desc": "FormField también funciona con cualquier control compuesto."
     },
-    "examples": {
-        "input": {
-            "title": "Con Input",
-            "desc": "Wrapping de un campo de texto con label y texto de ayuda."
-        },
-        "select": {
-            "title": "Con Select",
-            "desc": "FormField también funciona con cualquier control compuesto."
-        },
-        "textarea": {
-            "title": "Con Textarea",
-            "desc": "Usa la prop hint para añadir un texto auxiliar a la derecha del label."
-        },
-        "error": {
-            "title": "Con error",
-            "desc": "errorText reemplaza al helperText y propaga el estado inválido al control."
-        },
-        "horizontal": {
-            "title": "Layout horizontal",
-            "desc": "orientation='horizontal' coloca el label a la izquierda con un ancho fijo."
-        }
+    "textarea": {
+      "title": "Con Textarea",
+      "desc": "Usa la prop hint para añadir un texto auxiliar a la derecha del label."
     },
-    "props": {
-        "label": "Texto del label visible. Se enlaza al control mediante for/id.",
-        "helperText": "Texto de ayuda bajo el control. Oculto cuando hay errorText.",
-        "errorText": "Mensaje de error. Activa aria-invalid y color danger en el control.",
-        "required": "Muestra el asterisco rojo y propaga required al slot.",
-        "disabled": "Aplica estado deshabilitado y lo propaga al control hijo.",
-        "id": "id que se enlaza con el label. Se autogenera si se omite.",
-        "orientation": "Disposición del label respecto al control.",
-        "labelWidth": "Ancho del label cuando orientation=\"horizontal\".",
-        "fullWidth": "Aplica w-full al wrapper externo.",
-        "hint": "Texto auxiliar a la derecha del label (e.g. \"Opcional\").",
-        "as": "Tag HTML del wrapper raíz."
+    "error": {
+      "title": "Con error",
+      "desc": "errorText reemplaza al helperText y propaga el estado inválido al control."
     },
-    "slots": {
-        "default": "Control de formulario. Recibe \\{ id, describedBy, invalid, disabled, required, color \\} como props del slot.",
-        "label": "Reemplaza el contenido del label cuando se necesita HTML personalizado.",
-        "helper": "Reemplaza el helperText con contenido enriquecido."
+    "horizontal": {
+      "title": "Layout horizontal",
+      "desc": "orientation='horizontal' coloca el label a la izquierda con un ancho fijo."
     }
+  },
+  "props": {
+    "label": "Texto del label visible. Se enlaza al control mediante for/id.",
+    "helperText": "Texto de ayuda bajo el control. Oculto cuando hay errorText.",
+    "errorText": "Mensaje de error. Activa aria-invalid y color danger en el control.",
+    "required": "Muestra el asterisco rojo y propaga required al slot.",
+    "disabled": "Aplica estado deshabilitado y lo propaga al control hijo.",
+    "id": "id que se enlaza con el label. Se autogenera si se omite.",
+    "orientation": "Disposición del label respecto al control.",
+    "labelWidth": "Ancho del label cuando orientation=\"horizontal\".",
+    "fullWidth": "Aplica w-full al wrapper externo.",
+    "hint": "Texto auxiliar a la derecha del label (e.g. \"Opcional\").",
+    "as": "Tag HTML del wrapper raíz."
+  },
+  "slots": {
+    "default": "Control de formulario. Recibe \\{ id, describedBy, invalid, disabled, required, color \\} como props del slot.",
+    "label": "Reemplaza el contenido del label cuando se necesita HTML personalizado.",
+    "helper": "Reemplaza el helperText con contenido enriquecido."
+  },
+  "types": {
+    "title": "FormField & FormFieldSlotProps",
+    "desc": "FormField define las props del wrapper. FormFieldSlotProps son los bindings expuestos por el slot default para conectar aria/ids automáticamente al control interno."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "ariaGroup": "El wrapper se expone como grupo para los lectores de pantalla",
+    "ariaLabelledBy": "El id de la etiqueta se vincula al control para que los lectores de pantalla la anuncien",
+    "ariaDescribedBy": "El id del helper o error se vincula al control para contexto adicional",
+    "ariaInvalid": "Se activa a true cuando hay errorText, marcando el campo como inválido",
+    "ariaRequired": "Se activa a true cuando la prop required está activa",
+    "focusLabel": "Hacer clic en la etiqueta mueve el foco al control de formulario asociado",
+    "focusError": "Los mensajes de error están vinculados programáticamente al control mediante aria-describedby"
+  }
 }

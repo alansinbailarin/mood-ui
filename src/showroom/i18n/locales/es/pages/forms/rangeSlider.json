@@ -1,70 +1,89 @@
 {
-    "title": "RangeSlider",
-    "description": "Slider con dos thumbs para seleccionar un rango numérico. Soporta marcas, formateo y los modos visuales habituales.",
+  "title": "RangeSlider",
+  "description": "Slider con dos thumbs para seleccionar un rango numérico. Soporta marcas, formateo y los modos visuales habituales.",
 
-    "controls": {
-        "color":    "Color",
-        "size":     "Size",
-        "marks":    "Marks",
-        "disabled": "Disabled",
-        "readonly": "Readonly"
+  "controls": {
+    "color": "Color",
+    "size": "Size",
+    "marks": "Marks",
+    "disabled": "Disabled",
+    "readonly": "Readonly"
+  },
+
+  "playground": {
+    "label": "Rango"
+  },
+
+  "examples": {
+    "basic": {
+      "title": "Uso básico",
+      "desc": "Selección de rango con dos thumbs y v-model como tupla.",
+      "label": "Rango"
     },
-
-    "playground": {
-        "label": "Rango"
+    "marks": {
+      "title": "Con marcas",
+      "desc": "Marcas a intervalos regulares para guiar la selección.",
+      "label": "Edad"
     },
-
-    "examples": {
-        "basic": {
-            "title": "Uso básico",
-            "desc":  "Selección de rango con dos thumbs y v-model como tupla.",
-            "label": "Rango"
-        },
-        "marks": {
-            "title": "Con marcas",
-            "desc":  "Marcas a intervalos regulares para guiar la selección.",
-            "label": "Edad"
-        },
-        "formatted": {
-            "title": "Valores formateados",
-            "desc":  "formatValue permite mostrar unidades, prefijos o cualquier formato custom.",
-            "label": "Precio"
-        },
-        "colors": {
-            "title": "Colores",
-            "desc":  "Variantes semánticas alineadas con el resto del sistema."
-        },
-        "disabled": {
-            "title": "Disabled",
-            "desc":  "Estado deshabilitado preservando los valores visibles.",
-            "label": "Disabled"
-        }
+    "formatted": {
+      "title": "Valores formateados",
+      "desc": "formatValue permite mostrar unidades, prefijos o cualquier formato custom.",
+      "label": "Precio"
     },
-
-    "props": {
-        "modelValue":  "Tupla [from, to] con los valores del rango (v-model).",
-        "min":         "Valor mínimo permitido.",
-        "max":         "Valor máximo permitido.",
-        "step":        "Incremento entre valores.",
-        "minDistance": "Distancia mínima entre los dos thumbs.",
-        "showValue":   "Muestra el rango actual junto al label.",
-        "formatValue": "Función para formatear los valores mostrados.",
-        "marks":       "Marcas discretas a lo largo del track.",
-        "orientation": "Orientación del slider.",
-        "label":       "Etiqueta visible sobre el control.",
-        "helperText":  "Texto de ayuda bajo el control.",
-        "errorText":   "Mensaje de error que reemplaza al helperText.",
-        "color":       "Color semántico del segmento relleno y thumbs.",
-        "size":        "Tamaño del track y de los thumbs.",
-        "radius":      "Radio del track.",
-        "fullWidth":   "Aplica w-full al wrapper.",
-        "disabled":    "Deshabilita el slider.",
-        "readonly":    "Bloquea cambios manteniendo los valores visibles.",
-        "required":    "Marca el campo como requerido."
+    "colors": {
+      "title": "Colores",
+      "desc": "Variantes semánticas alineadas con el resto del sistema."
     },
-
-    "emits": {
-        "updateModelValue": "Emitido al cambiar el rango (sincroniza v-model).",
-        "change":           "Emitido cuando finaliza un drag/teclado."
+    "disabled": {
+      "title": "Disabled",
+      "desc": "Estado deshabilitado preservando los valores visibles.",
+      "label": "Disabled"
     }
+  },
+
+  "props": {
+    "modelValue": "Tupla [from, to] con los valores del rango (v-model).",
+    "min": "Valor mínimo permitido.",
+    "max": "Valor máximo permitido.",
+    "step": "Incremento entre valores.",
+    "minDistance": "Distancia mínima entre los dos thumbs.",
+    "showValue": "Muestra el rango actual junto al label.",
+    "formatValue": "Función para formatear los valores mostrados.",
+    "marks": "Marcas discretas a lo largo del track.",
+    "orientation": "Orientación del slider.",
+    "label": "Etiqueta visible sobre el control.",
+    "helperText": "Texto de ayuda bajo el control.",
+    "errorText": "Mensaje de error que reemplaza al helperText.",
+    "color": "Color semántico del segmento relleno y thumbs.",
+    "size": "Tamaño del track y de los thumbs.",
+    "radius": "Radio del track.",
+    "fullWidth": "Aplica w-full al wrapper.",
+    "disabled": "Deshabilita el slider.",
+    "readonly": "Bloquea cambios manteniendo los valores visibles.",
+    "required": "Marca el campo como requerido."
+  },
+
+  "emits": {
+    "updateModelValue": "Emitido al cambiar el rango (sincroniza v-model).",
+    "change": "Emitido cuando finaliza un drag/teclado."
+  },
+  "types": {
+    "title": "RangeSlider",
+    "desc": "Interfaz TypeScript de las props del componente RangeSlider. Extiende Slider con selección de rango de doble thumb y restricción de distancia mínima."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco entre los dos thumbs",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "kbArrow": "Incrementa o decrementa el thumb enfocado un paso",
+    "kbHome": "Mueve el thumb enfocado al valor mínimo",
+    "kbEnd": "Mueve el thumb enfocado al valor máximo",
+    "ariaValueNow": "Cada thumb anuncia su valor numérico actual",
+    "ariaValueMin": "Comunica el valor mínimo permitido",
+    "ariaValueMax": "Comunica el valor máximo permitido",
+    "ariaInvalid": "Se activa a true cuando hay errorText presente",
+    "ariaDescribedBy": "Vincula el texto de helper o error al slider para contexto del lector de pantalla",
+    "ariaDisabled": "Comunica el estado deshabilitado a las tecnologías asistivas",
+    "ariaLabel": "Proporciona un nombre accesible cuando no hay etiqueta visible",
+    "focusThumbs": "Ambos thumbs son independientemente enfocables y operables por teclado"
+  }
 }

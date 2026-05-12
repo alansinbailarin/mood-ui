@@ -1,58 +1,62 @@
 {
-    "pages": {
-        "dataDisplay": {
-            "agendaView": {
-                "title": "AgendaView",
-                "description": "Chronological list of events per day. Ideal for \"upcoming events\" sections, dashboards and compact agendas.",
-                "controls": {
-                    "days": "Days",
-                    "format": "Format",
-                    "emptyDays": "Empty days",
-                    "borders": "Borders"
-                },
-                "props": {
-                    "modelValue": "Anchor date from which the range is calculated.",
-                    "events": "List of events to display.",
-                    "locale": "BCP-47 locale for dates and day names.",
-                    "color": "Semantic color applied to accents.",
-                    "daysToShow": "Number of days ahead to show.",
-                    "daysBefore": "Days before the anchor date to include.",
-                    "showEmptyDays": "Shows days without events as empty rows.",
-                    "showMonthSeparator": "Inserts a separator when the month changes.",
-                    "showHeader": "Shows the header with navigation.",
-                    "format": "Time format for events.",
-                    "emptyText": "Text shown when there are no events in the range.",
-                    "highlightedDates": "Visually highlighted dates.",
-                    "disabledDates": "Disabled dates.",
-                    "bordered": "Draws a border around the container.",
-                    "loadMoreChunk": "Number of days added when loading more events."
-                },
-                "emits": {
-                    "updateModelValue": "Emitted when the visible range changes.",
-                    "eventClick": "Click on an event.",
-                    "dayClick": "Click on a day row.",
-                    "createEvent": "Request to create an event.",
-                    "loadMore": "Request to load more days at the end of the list."
-                },
-                "examples": {
-                    "basic": {
-                        "title": "Basic",
-                        "desc": "List of the next 7 days grouped by day."
-                    },
-                    "extendedRange": {
-                        "title": "Extended range",
-                        "desc": "Increase days-to-show to display more days ahead."
-                    },
-                    "emptyState": {
-                        "title": "Empty state",
-                        "desc": "When there are no events, shows a configurable message."
-                    },
-                    "format12h": {
-                        "title": "12-hour format",
-                        "desc": "Shows event times in AM/PM format."
-                    }
-                }
-            }
-        }
+  "title": "AgendaView",
+  "description": "Chronological list of events per day. Ideal for \"upcoming events\" sections, dashboards and compact agendas.",
+  "controls": {
+    "days": "Days",
+    "format": "Format",
+    "emptyDays": "Empty days",
+    "borders": "Borders"
+  },
+  "props": {
+    "modelValue": "Anchor date from which the range is calculated.",
+    "events": "List of events to display.",
+    "locale": "BCP-47 locale for dates and day names.",
+    "color": "Semantic color applied to accents.",
+    "daysToShow": "Number of days ahead to show.",
+    "daysBefore": "Days before the anchor date to include.",
+    "showEmptyDays": "Shows days without events as empty rows.",
+    "showMonthSeparator": "Inserts a separator when the month changes.",
+    "showHeader": "Shows the header with navigation.",
+    "format": "Time format for events.",
+    "emptyText": "Text shown when there are no events in the range.",
+    "highlightedDates": "Visually highlighted dates.",
+    "disabledDates": "Disabled dates.",
+    "bordered": "Draws a border around the container.",
+    "loadMoreChunk": "Number of days added when loading more events."
+  },
+  "emits": {
+    "updateModelValue": "Emitted when the visible range changes.",
+    "eventClick": "Click on an event.",
+    "dayClick": "Click on a day row.",
+    "createEvent": "Request to create an event.",
+    "loadMore": "Request to load more days at the end of the list."
+  },
+  "examples": {
+    "basic": {
+      "title": "Basic",
+      "desc": "List of the next 7 days grouped by day."
+    },
+    "extendedRange": {
+      "title": "Extended range",
+      "desc": "Increase days-to-show to display more days ahead."
+    },
+    "emptyState": {
+      "title": "Empty state",
+      "desc": "When there are no events, shows a configurable message."
+    },
+    "format12h": {
+      "title": "12-hour format",
+      "desc": "Shows event times in AM/PM format."
     }
+  },
+  "types": {
+    "title": "AgendaView",
+    "desc": "TypeScript interface for the AgendaView component props. Supports modelValue, events, locale, color, radius, bordered, minDate, maxDate, daysToShow, daysBefore, showEmptyDays, showHeader, showMonthSeparator, format, emptyText, highlightedDates, disabledDates, disabledWeekdays and loadMoreChunk."
+  },
+  "a11y": {
+    "kbTab": "Move focus to the next focusable element",
+    "kbShiftTab": "Move focus to the previous focusable element",
+    "ariaLabel": "Provides an accessible name for the agenda view",
+    "focusNative": "Focus is managed by the agenda view; use Tab to navigate events and actions"
+  }
 }

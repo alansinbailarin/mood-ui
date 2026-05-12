@@ -279,14 +279,19 @@ function navigate(id: string) {
           </aside>
         </Transition>
 
-        <!-- Main content. The view-transition-name scopes the page
-                     fade so the header/aside stay still during route changes. -->
-        <main
-          class="flex-1 min-w-0 py-8"
-          style="view-transition-name: showroom-content"
+        <!-- Main content. Keyed on activeId so Vue re-mounts the slot
+             content on route changes, triggering the page-fade transition. -->
+        <Transition
+          enter-active-class="transition-opacity duration-200 ease-out"
+          enter-from-class="opacity-0"
+          leave-active-class="transition-opacity duration-100 ease-in"
+          leave-to-class="opacity-0"
+          mode="out-in"
         >
-          <slot />
-        </main>
+          <main :key="activeId" class="flex-1 min-w-0 py-8">
+            <slot />
+          </main>
+        </Transition>
 
         <!-- Right TOC column — shown on xl+ when there are items -->
         <DocToc :toc="toc" />

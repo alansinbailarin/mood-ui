@@ -1,86 +1,106 @@
 {
-    "title": "Textarea",
-    "description": "Área de texto multilínea con autoresize, contador de caracteres, helper/error text y todas las variantes visuales del Input.",
+  "title": "Textarea",
+  "description": "Área de texto multilínea con autoresize, contador de caracteres, helper/error text y todas las variantes visuales del Input.",
 
-    "controls": {
-        "variant":    "Variant",
-        "color":      "Color",
-        "size":       "Size",
-        "autoresize": "Autoresize",
-        "clearable":  "Clearable",
-        "disabled":   "Disabled",
-        "readonly":   "Readonly"
+  "controls": {
+    "variant": "Variant",
+    "color": "Color",
+    "size": "Size",
+    "autoresize": "Autoresize",
+    "clearable": "Clearable",
+    "disabled": "Disabled",
+    "readonly": "Readonly"
+  },
+
+  "playground": {
+    "label": "Comentario",
+    "placeholder": "Escribe algo…"
+  },
+
+  "examples": {
+    "basic": {
+      "title": "Uso básico",
+      "desc": "Textarea simple con label, placeholder y filas iniciales.",
+      "label": "Comentario",
+      "placeholder": "Escribe algo…"
     },
-
-    "playground": {
-        "label":       "Comentario",
-        "placeholder": "Escribe algo…"
+    "variants": {
+      "title": "Variantes",
+      "desc": "outline (default), filled y ghost."
     },
-
-    "examples": {
-        "basic": {
-            "title":       "Uso básico",
-            "desc":        "Textarea simple con label, placeholder y filas iniciales.",
-            "label":       "Comentario",
-            "placeholder": "Escribe algo…"
-        },
-        "variants": {
-            "title": "Variantes",
-            "desc":  "outline (default), filled y ghost."
-        },
-        "autoresize": {
-            "title":       "Autoresize + contador",
-            "desc":        "Crece con el contenido hasta maxRows y muestra contador de caracteres.",
-            "label":       "Bio",
-            "placeholder": "Cuéntanos sobre ti"
-        },
-        "error": {
-            "title":     "Error",
-            "desc":      "errorText marca el campo como inválido y reemplaza al helperText.",
-            "label":     "Descripción",
-            "errorText": "La descripción es requerida"
-        },
-        "disabled": {
-            "title": "Disabled",
-            "desc":  "Estado deshabilitado preservando el valor visual.",
-            "value": "No editable"
-        }
+    "autoresize": {
+      "title": "Autoresize + contador",
+      "desc": "Crece con el contenido hasta maxRows y muestra contador de caracteres.",
+      "label": "Bio",
+      "placeholder": "Cuéntanos sobre ti"
     },
-
-    "props": {
-        "modelValue":  "Valor del textarea (v-model).",
-        "label":       "Etiqueta visible encima del textarea.",
-        "placeholder": "Placeholder cuando está vacío.",
-        "helperText":  "Texto de ayuda bajo el textarea. Se oculta si hay errorText.",
-        "errorText":   "Mensaje de error que marca el textarea como inválido.",
-        "variant":     "Estilo visual.",
-        "color":       "Color semántico aplicado al estado de foco.",
-        "size":        "Controla padding y tipografía.",
-        "radius":      "Radio de las esquinas. Hereda del ModoProvider si se omite.",
-        "halo":        "Estilo del halo persistente (ring).",
-        "fullWidth":   "Aplica w-full al root.",
-        "disabled":    "Deshabilita el textarea.",
-        "readonly":    "Solo lectura.",
-        "required":    "Marca el campo como requerido.",
-        "loading":     "Estado de carga (deshabilita y muestra loader).",
-        "clearable":   "Muestra botón ✕ para limpiar el valor.",
-        "maxLength":   "Longitud máxima. Activa el contador si showCounter.",
-        "showCounter": "Muestra contador de caracteres (requiere maxLength).",
-        "rows":        "Número mínimo de filas visibles.",
-        "autoresize":  "Crece automáticamente con el contenido hasta maxRows.",
-        "maxRows":     "Máximo de filas cuando autoresize=true.",
-        "resize":      "Dirección de redimensionamiento manual del navegador.",
-        "name":        "Atributo name HTML.",
-        "id":          "id del textarea. Se autogenera si se omite.",
-        "autofocus":   "Foco automático al montar.",
-        "ariaLabel":   "Nombre accesible cuando no hay label visible."
+    "error": {
+      "title": "Error",
+      "desc": "errorText marca el campo como inválido y reemplaza al helperText.",
+      "label": "Descripción",
+      "errorText": "La descripción es requerida"
     },
-
-    "emits": {
-        "updateModelValue": "Emitido en cada cambio del valor (sincroniza v-model).",
-        "change":           "Emitido tras un cambio confirmado por el usuario.",
-        "focus":            "Emitido cuando el textarea recibe foco.",
-        "blur":             "Emitido cuando el textarea pierde foco.",
-        "clear":            "Emitido al pulsar el botón de limpiar (clearable)."
+    "disabled": {
+      "title": "Disabled",
+      "desc": "Estado deshabilitado preservando el valor visual.",
+      "value": "No editable"
+    },
+    "resize": {
+      "title": "Resize",
+      "desc": "Controla la dirección del redimensionamiento manual del navegador: none, vertical, horizontal o both."
     }
+  },
+
+  "props": {
+    "modelValue": "Valor del textarea (v-model).",
+    "label": "Etiqueta visible encima del textarea.",
+    "placeholder": "Placeholder cuando está vacío.",
+    "helperText": "Texto de ayuda bajo el textarea. Se oculta si hay errorText.",
+    "errorText": "Mensaje de error que marca el textarea como inválido.",
+    "variant": "Estilo visual.",
+    "color": "Color semántico aplicado al estado de foco.",
+    "size": "Controla padding y tipografía.",
+    "radius": "Radio de las esquinas. Hereda del ModoProvider si se omite.",
+    "halo": "Estilo del halo persistente (ring).",
+    "fullWidth": "Aplica w-full al root.",
+    "disabled": "Deshabilita el textarea.",
+    "readonly": "Solo lectura.",
+    "required": "Marca el campo como requerido.",
+    "loading": "Estado de carga (deshabilita y muestra loader).",
+    "clearable": "Muestra botón ✕ para limpiar el valor.",
+    "maxLength": "Longitud máxima. Activa el contador si showCounter.",
+    "showCounter": "Muestra contador de caracteres (requiere maxLength).",
+    "rows": "Número mínimo de filas visibles.",
+    "autoresize": "Crece automáticamente con el contenido hasta maxRows.",
+    "maxRows": "Máximo de filas cuando autoresize=true.",
+    "resize": "Dirección de redimensionamiento manual del navegador.",
+    "name": "Atributo name HTML.",
+    "id": "id del textarea. Se autogenera si se omite.",
+    "autofocus": "Foco automático al montar.",
+    "ariaLabel": "Nombre accesible cuando no hay label visible."
+  },
+
+  "emits": {
+    "updateModelValue": "Emitido en cada cambio del valor (sincroniza v-model).",
+    "change": "Emitido tras un cambio confirmado por el usuario.",
+    "focus": "Emitido cuando el textarea recibe foco.",
+    "blur": "Emitido cuando el textarea pierde foco.",
+    "clear": "Emitido al pulsar el botón de limpiar (clearable)."
+  },
+  "types": {
+    "title": "Textarea",
+    "desc": "Interfaz TypeScript de las props del componente Textarea. Soporta autoresize, control manual de resize y contador de caracteres."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "kbType": "Escribe texto en el textarea",
+    "ariaInvalid": "Se activa a true cuando hay errorText presente",
+    "ariaDescribedBy": "Vincula el texto de helper o error al textarea para contexto del lector de pantalla",
+    "ariaRequired": "Se activa a true cuando la prop required está activa",
+    "ariaDisabled": "Comunica el estado deshabilitado a las tecnologías asistivas",
+    "ariaLabel": "Proporciona un nombre accesible cuando no hay etiqueta visible",
+    "focusNative": "Usa un elemento textarea nativo — participa en el orden de tabulación por defecto",
+    "focusResize": "El handle de redimensionamiento manual es una característica del navegador y no interfiere con la navegación por teclado"
+  }
 }

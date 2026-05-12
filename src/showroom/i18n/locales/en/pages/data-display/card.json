@@ -1,58 +1,62 @@
 {
-    "pages": {
-        "dataDisplay": {
-            "card": {
-                "title": "Card",
-                "description": "Structural container with three variants (elevated, outlined, filled), padding control, border radius and hover state. Base block for metrics, lists, forms and sections.",
-                "controls": {
-                    "variant": "Variant",
-                    "padding": "Padding",
-                    "radius": "Radius",
-                    "hoverable": "Hoverable",
-                    "clickable": "Clickable",
-                    "divided": "Divided"
-                },
-                "playground": {
-                    "title": "Example card",
-                    "body": "Adjust the controls to see live changes."
-                },
-                "props": {
-                    "variant": "Visual style of the container.",
-                    "padding": "Internal padding applied to header, body and footer.",
-                    "radius": "Border radius. Inherited from ModoProvider if omitted.",
-                    "hoverable": "Applies hover state (shadow, border) without converting it to a button.",
-                    "clickable": "Renders the card as a <button> with accessible focus and pointer cursor.",
-                    "divided": "Shows a dividing line between header / body / footer."
-                },
-                "slots": {
-                    "default": "Main content of the card.",
-                    "header": "Optional header above the content.",
-                    "image": "Padding-free slot for edge-to-edge images or media.",
-                    "footer": "Optional footer for actions or metadata."
-                },
-                "examples": {
-                    "basic": {
-                        "title": "Basic",
-                        "desc": "Simple card with title and description."
-                    },
-                    "headerFooter": {
-                        "title": "With header and footer",
-                        "desc": "#header and #footer slots with a divider between sections."
-                    },
-                    "image": {
-                        "title": "With image",
-                        "desc": "Edge-to-edge #image slot combined with padding=none."
-                    },
-                    "hover": {
-                        "title": "Hover effect",
-                        "desc": "Enable hoverable to highlight the card on cursor hover."
-                    },
-                    "clickable": {
-                        "title": "Clickable",
-                        "desc": "Renders the card as an accessible <button> with visible focus."
-                    }
-                }
-            }
-        }
+  "title": "Card",
+  "description": "Structural container with three variants (elevated, outlined, filled), padding control, border radius and hover state. Base block for metrics, lists, forms and sections.",
+  "controls": {
+    "variant": "Variant",
+    "padding": "Padding",
+    "radius": "Radius",
+    "hoverable": "Hoverable",
+    "clickable": "Clickable",
+    "divided": "Divided"
+  },
+  "playground": {
+    "title": "Example card",
+    "body": "Adjust the controls to see live changes."
+  },
+  "props": {
+    "variant": "Visual style of the container.",
+    "padding": "Internal padding applied to header, body and footer.",
+    "radius": "Border radius. Inherited from ModoProvider if omitted.",
+    "hoverable": "Applies hover state (shadow, border) without converting it to a button.",
+    "clickable": "Renders the card as a button with accessible focus and pointer cursor.",
+    "divided": "Shows a dividing line between header / body / footer."
+  },
+  "slots": {
+    "default": "Main content of the card.",
+    "header": "Optional header above the content.",
+    "image": "Padding-free slot for edge-to-edge images or media.",
+    "footer": "Optional footer for actions or metadata."
+  },
+  "examples": {
+    "basic": {
+      "title": "Basic",
+      "desc": "Simple card with title and description."
+    },
+    "headerFooter": {
+      "title": "With header and footer",
+      "desc": "#header and #footer slots with a divider between sections."
+    },
+    "image": {
+      "title": "With image",
+      "desc": "Edge-to-edge #image slot combined with padding=none."
+    },
+    "hover": {
+      "title": "Hover effect",
+      "desc": "Enable hoverable to highlight the card on cursor hover."
+    },
+    "clickable": {
+      "title": "Clickable",
+      "desc": "Renders the card as an accessible button with visible focus."
     }
+  },
+  "types": {
+    "title": "Card",
+    "desc": "TypeScript interface for the Card component props. Supports variant, padding, radius, hoverable, clickable and divided."
+  },
+  "a11y": {
+    "kbTab": "Move focus to the next focusable element inside the card",
+    "kbShiftTab": "Move focus to the previous focusable element inside the card",
+    "ariaLabel": "Provides an accessible name for clickable cards",
+    "focusNative": "Interactive content inside the card is focusable; the card itself is not unless clickable is set"
+  }
 }

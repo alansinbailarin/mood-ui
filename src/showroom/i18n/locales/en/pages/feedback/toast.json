@@ -1,42 +1,61 @@
 {
-    "title": "ToastContainer",
-    "description": "Singleton container where toasts fired by the useToast() composable appear. Mount it once near the root and push notifications from any component.",
+  "title": "ToastContainer",
+  "description": "Singleton container where toasts fired by the useToast() composable appear. Mount it once near the root and push notifications from any component.",
 
-    "controls": {
-        "placement": "Placement"
+  "controls": {
+    "placement": "Placement"
+  },
+
+  "playground": {
+    "launch": "Launch toast",
+    "dismissAll": "Dismiss all"
+  },
+
+  "examples": {
+    "success": {
+      "title": "Success",
+      "desc": "To confirm successfully completed actions."
     },
-
-    "playground": {
-        "launch":      "Launch toast",
-        "dismissAll":  "Dismiss all"
+    "error": {
+      "title": "Error / danger",
+      "desc": "For network errors, failed validation or any blocking state."
     },
-
-    "examples": {
-        "success": {
-            "title": "Success",
-            "desc":  "To confirm successfully completed actions."
-        },
-        "error": {
-            "title": "Error / danger",
-            "desc":  "For network errors, failed validation or any blocking state."
-        },
-        "info": {
-            "title": "Info pinned",
-            "desc":  "Passing duration: 0 keeps the toast anchored until the user dismisses it or you call dismiss().",
-            "cta":   "info() (pinned)"
-        },
-        "warning": {
-            "title": "Warning with action",
-            "desc":  "Add an inline action button — useful for 'Undo', 'Review' or 'Retry'."
-        }
+    "info": {
+      "title": "Info pinned",
+      "desc": "Passing duration: 0 keeps the toast anchored until the user dismisses it or you call dismiss().",
+      "cta": "info() (pinned)"
     },
-
-    "props": {
-        "placement":       "Stack position in the viewport.",
-        "max":             "Maximum number of visible toasts; older ones are evicted.",
-        "defaultDuration": "Default duration in ms for toasts without a duration.",
-        "defaultVariant":  "Default variant applied to push() calls.",
-        "offset":          "Distance in px from the viewport edge.",
-        "reducedMotion":   "Animation behavior under prefers-reduced-motion."
+    "warning": {
+      "title": "Warning with action",
+      "desc": "Add an inline action button — useful for 'Undo', 'Review' or 'Retry'."
+    },
+    "dismissAll": {
+      "title": "Dismiss all",
+      "desc": "Push multiple toasts at once, then clear the entire queue with dismissAll().",
+      "pushCta": "Push 3 toasts"
     }
+  },
+
+  "props": {
+    "placement": "Stack position in the viewport.",
+    "max": "Maximum number of visible toasts; older ones are evicted.",
+    "defaultDuration": "Default duration in ms for toasts without a duration.",
+    "defaultVariant": "Default variant applied to push() calls.",
+    "offset": "Distance in px from the viewport edge.",
+    "reducedMotion": "Animation behavior under prefers-reduced-motion."
+  },
+  "types": {
+    "title": "ToastContainer",
+    "desc": "TypeScript interfaces for the toast system. Includes ToastInput, ToastAction, ToastColor and ToastPlacement types for configuring ephemeral notifications."
+  },
+  "a11y": {
+    "kbTab": "Move focus into the toast container when toasts are present",
+    "kbShiftTab": "Move focus to the previous focusable element",
+    "kbEsc": "Dismiss the focused toast",
+    "ariaStatus": "Uses role status to announce toast messages to screen readers",
+    "ariaLive": "Announces toast content changes to assistive technologies",
+    "ariaAtomic": "Announces the entire toast content as a single unit",
+    "focusNative": "Toasts are focusable for keyboard dismissal",
+    "focusDismiss": "Each toast has a dismiss button that is focusable and keyboard-activatable"
+  }
 }

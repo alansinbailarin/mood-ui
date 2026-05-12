@@ -45,7 +45,7 @@
     "modelValue": "Valor seleccionado del grupo (v-model).",
     "options": "Opciones \\{ value, label, description?, disabled? \\} a renderizar.",
     "name": "Atributo name compartido por todos los radios. Se autogenera si se omite.",
-    "label": "Etiqueta del grupo (renderizada como <legend>).",
+    "label": "Etiqueta del grupo (renderizada como elemento legend).",
     "helperText": "Texto de ayuda bajo el grupo.",
     "errorText": "Mensaje de error que reemplaza al helperText.",
     "orientation": "Disposición de los radios dentro del grupo.",
@@ -64,5 +64,26 @@
 
   "slots": {
     "default": "Permite renderizar Radios manualmente cuando se necesita personalización por opción."
+  },
+
+  "types": {
+    "title": "RadioOption",
+    "desc": "Forma de cada elemento en el array de opciones.",
+    "value": "Identificador único usado para la comparación de v-model. Debe ser string o number.",
+    "label": "Texto renderizado junto al control de radio.",
+    "description": "Texto secundario renderizado debajo de la etiqueta.",
+    "disabled": "Cuando es true, la opción es visible pero no seleccionable."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco hacia o desde el grupo de radios",
+    "kbArrow": "Mueve la selección entre radios dentro del grupo",
+    "kbSpace": "Selecciona el radio enfocado",
+    "ariaGroup": "El wrapper se expone como radiogroup para los lectores de pantalla",
+    "ariaLabelledBy": "La etiqueta del grupo se vincula para que los lectores de pantalla anuncien el contexto",
+    "ariaInvalid": "Se activa a true cuando hay errorText presente",
+    "ariaDescribedBy": "Vincula el texto de helper o error al grupo para contexto del lector de pantalla",
+    "ariaRequired": "Se activa a true cuando la prop required está activa",
+    "focusGroup": "Las flechas ciclan entre radios; Tab mueve el foco fuera del grupo",
+    "focusDisabled": "Los radios deshabilitados permanecen en el ciclo de flechas pero no se pueden seleccionar"
   }
 }

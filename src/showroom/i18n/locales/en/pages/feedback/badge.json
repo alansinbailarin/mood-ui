@@ -1,38 +1,60 @@
 {
-    "title": "Badge",
-    "category": "Feedback",
-    "description": "Inline label to show state, counts or categories. Supports solid / subtle / outline variants, semantic colors, sizes, icon and dot mode.",
-    "examples": {
-        "variants": { "title": "Variants",  "desc": "Three visual treatments: solid for emphasis, subtle by default and outline for discretion." },
-        "colors":   { "title": "Colors",    "desc": "Semantic palette in subtle variant." },
-        "icon":     { "title": "With icon", "desc": "Add an icon to the left of the label to reinforce meaning." },
-        "dot":      { "title": "Dot mode",  "desc": "Replaces the icon with a dot to indicate presence or availability state." }
+  "title": "Badge",
+  "category": "Feedback",
+  "description": "Inline label to show state, counts or categories. Supports solid / subtle / outline variants, semantic colors, sizes, icon and dot mode.",
+  "examples": {
+    "variants": {
+      "title": "Variants",
+      "desc": "Three visual treatments: solid for emphasis, subtle by default and outline for discretion."
     },
-    "demo": {
-        "label":     "Label",
-        "active":    "Active",
-        "featured":  "Featured",
-        "pro":       "Pro",
-        "online":    "Online",
-        "away":      "Away",
-        "offline":   "Offline"
+    "colors": {
+      "title": "Colors",
+      "desc": "Semantic palette in subtle variant."
     },
-    "props": {
-        "label":           "Badge text. Equivalent to the default slot for plain content.",
-        "variant":         "Visual style applied to the badge.",
-        "color":           "Semantic color applied to the badge.",
-        "gradient":        "Applies a subtle gradient (only with solid variant).",
-        "size":            "Badge size. Cascades from ModoProvider when omitted.",
-        "radius":          "Corner radius. Cascades from ModoProvider.",
-        "icon":            "Icon component rendered to the left of the label.",
-        "removable":       "Shows a close button that emits the remove event.",
-        "dot":             "Replaces the icon with a small colored dot.",
-        "removeAriaLabel": "Overrides the aria-label of the remove button."
+    "icon": {
+      "title": "With icon",
+      "desc": "Add an icon to the left of the label to reinforce meaning."
     },
-    "emits": {
-        "remove": "Emitted when the close button is clicked while removable is active."
-    },
-    "slots": {
-        "default": "Custom badge content. Replaces the label prop when HTML or inner components are needed."
+    "dot": {
+      "title": "Dot mode",
+      "desc": "Replaces the icon with a dot to indicate presence or availability state."
     }
+  },
+  "demo": {
+    "label": "Label",
+    "active": "Active",
+    "featured": "Featured",
+    "pro": "Pro",
+    "online": "Online",
+    "away": "Away",
+    "offline": "Offline"
+  },
+  "props": {
+    "label": "Badge text. Equivalent to the default slot for plain content.",
+    "variant": "Visual style applied to the badge.",
+    "color": "Semantic color applied to the badge.",
+    "gradient": "Applies a subtle gradient (only with solid variant).",
+    "size": "Badge size. Cascades from ModoProvider when omitted.",
+    "radius": "Corner radius. Cascades from ModoProvider.",
+    "icon": "Icon component rendered to the left of the label.",
+    "removable": "Shows a close button that emits the remove event.",
+    "dot": "Replaces the icon with a small colored dot.",
+    "removeAriaLabel": "Overrides the aria-label of the remove button."
+  },
+  "emits": {
+    "remove": "Emitted when the close button is clicked while removable is active."
+  },
+  "slots": {
+    "default": "Custom badge content. Replaces the label prop when HTML or inner components are needed."
+  },
+  "types": {
+    "title": "Badge",
+    "desc": "TypeScript interface for the Badge component props. Supports solid, outline and subtle variants with semantic colors, dot mode and removable close button."
+  },
+  "a11y": {
+    "kbTab": "Move focus to the next focusable element",
+    "kbShiftTab": "Move focus to the previous focusable element",
+    "ariaLabel": "Provides an accessible name for the badge",
+    "focusNative": "Non-interactive by default; removable badges use a focusable close button"
+  }
 }

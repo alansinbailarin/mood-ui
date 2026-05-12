@@ -1,79 +1,98 @@
 {
-    "title": "SearchInput",
-    "description": "Input optimizado para búsqueda: icono de lupa, botón clear automático, debounce opcional y soporte para atajo de teclado.",
+  "title": "SearchInput",
+  "description": "Input optimizado para búsqueda: icono de lupa, botón clear automático, debounce opcional y soporte para atajo de teclado.",
 
-    "controls": {
-        "variant":   "Variant",
-        "color":     "Color",
-        "size":      "Size",
-        "shortcut":  "Shortcut",
-        "loading":   "Loading",
-        "disabled":  "Disabled"
+  "controls": {
+    "variant": "Variant",
+    "color": "Color",
+    "size": "Size",
+    "shortcut": "Shortcut",
+    "loading": "Loading",
+    "disabled": "Disabled"
+  },
+
+  "playground": {
+    "placeholder": "Buscar componentes…"
+  },
+
+  "examples": {
+    "basic": {
+      "title": "Uso básico",
+      "desc": "Icono de lupa y botón ✕ automático cuando hay valor.",
+      "ph": "Buscar componentes…"
     },
-
-    "playground": {
-        "placeholder": "Buscar componentes…"
+    "debounce": {
+      "title": "Con debounce",
+      "desc": "Emite el evento search tras el tiempo indicado. Útil para llamadas a API.",
+      "ph": "Búsqueda con debounce 400ms"
     },
-
-    "examples": {
-        "basic": {
-            "title": "Uso básico",
-            "desc":  "Icono de lupa y botón ✕ automático cuando hay valor.",
-            "ph":    "Buscar componentes…"
-        },
-        "debounce": {
-            "title": "Con debounce",
-            "desc":  "Emite el evento search tras el tiempo indicado. Útil para llamadas a API.",
-            "ph":    "Búsqueda con debounce 400ms"
-        },
-        "shortcut": {
-            "title": "Con shortcut",
-            "desc":  "Muestra un hint <kbd> a la derecha. La combinación enfoca el input globalmente.",
-            "ph":    "Buscar"
-        },
-        "sizes": {
-            "title": "Tamaños",
-            "desc":  "Tres tamaños alineados con el resto de inputs."
-        },
-        "loading": {
-            "title": "Loading",
-            "desc":  "Muestra spinner en lugar del botón clear durante la búsqueda.",
-            "ph":    "Buscando…"
-        }
+    "shortcut": {
+      "title": "Con shortcut",
+      "desc": "Muestra un hint kbd a la derecha. La combinación enfoca el input globalmente.",
+      "ph": "Buscar"
     },
-
-    "props": {
-        "modelValue":  "Valor del input (v-model).",
-        "label":       "Etiqueta visible encima del input.",
-        "placeholder": "Placeholder cuando está vacío.",
-        "helperText":  "Texto de ayuda. Oculto si hay errorText.",
-        "errorText":   "Mensaje de error que marca el input como inválido.",
-        "variant":     "Estilo visual.",
-        "color":       "Color semántico aplicado al estado de foco.",
-        "size":        "Tamaño visual.",
-        "radius":      "Radio de las esquinas. Hereda del ModoProvider si se omite.",
-        "halo":        "Estilo del halo persistente (ring).",
-        "fullWidth":   "Aplica w-full al root.",
-        "disabled":    "Deshabilita el input.",
-        "readonly":    "Solo lectura.",
-        "required":    "Marca el campo como requerido.",
-        "loading":     "Muestra spinner en lugar del botón clear.",
-        "maxLength":   "Longitud máxima. Activa el contador si showCounter.",
-        "showCounter": "Muestra contador de caracteres.",
-        "debounce":    "Tiempo (ms) antes de emitir 'search' al escribir. 0 = solo emite al pulsar Enter.",
-        "shortcut":    "Atajo de teclado global que enfoca el input. Se muestra como hint <kbd> (ej. 'cmd+k').",
-        "name":        "Atributo name HTML.",
-        "id":          "id del input. Se autogenera si se omite.",
-        "autofocus":   "Foco automático al montar.",
-        "ariaLabel":   "Nombre accesible cuando no hay label visible."
+    "sizes": {
+      "title": "Tamaños",
+      "desc": "Tres tamaños alineados con el resto de inputs."
     },
-
-    "emits": {
-        "updateModelValue": "Emitido en cada cambio del valor (sincroniza v-model).",
-        "change":           "Emitido tras un cambio confirmado por el usuario.",
-        "focus":            "Emitido cuando el input recibe foco.",
-        "blur":             "Emitido cuando el input pierde foco.",
-        "clear":            "Emitido al pulsar el botón de limpiar.",
-        "search":           "Emitido al pulsar Enter o tras el tiempo de debounce."
+    "loading": {
+      "title": "Loading",
+      "desc": "Muestra spinner en lugar del botón clear durante la búsqueda.",
+      "ph": "Buscando…"
     }
+  },
+
+  "props": {
+    "modelValue": "Valor del input (v-model).",
+    "label": "Etiqueta visible encima del input.",
+    "placeholder": "Placeholder cuando está vacío.",
+    "helperText": "Texto de ayuda. Oculto si hay errorText.",
+    "errorText": "Mensaje de error que marca el input como inválido.",
+    "variant": "Estilo visual.",
+    "color": "Color semántico aplicado al estado de foco.",
+    "size": "Tamaño visual.",
+    "radius": "Radio de las esquinas. Hereda del ModoProvider si se omite.",
+    "halo": "Estilo del halo persistente (ring).",
+    "fullWidth": "Aplica w-full al root.",
+    "disabled": "Deshabilita el input.",
+    "readonly": "Solo lectura.",
+    "required": "Marca el campo como requerido.",
+    "loading": "Muestra spinner en lugar del botón clear.",
+    "maxLength": "Longitud máxima. Activa el contador si showCounter.",
+    "showCounter": "Muestra contador de caracteres.",
+    "debounce": "Tiempo (ms) antes de emitir 'search' al escribir. 0 = solo emite al pulsar Enter.",
+    "shortcut": "Atajo de teclado global que enfoca el input. Se muestra como hint kbd (ej. 'cmd+k').",
+    "name": "Atributo name HTML.",
+    "id": "id del input. Se autogenera si se omite.",
+    "autofocus": "Foco automático al montar.",
+    "ariaLabel": "Nombre accesible cuando no hay label visible."
+  },
+
+  "emits": {
+    "updateModelValue": "Emitido en cada cambio del valor (sincroniza v-model).",
+    "change": "Emitido tras un cambio confirmado por el usuario.",
+    "focus": "Emitido cuando el input recibe foco.",
+    "blur": "Emitido cuando el input pierde foco.",
+    "clear": "Emitido al pulsar el botón de limpiar.",
+    "search": "Emitido al pulsar Enter o tras el tiempo de debounce."
+  },
+  "types": {
+    "title": "SearchInput",
+    "desc": "Interfaz TypeScript de las props del componente SearchInput. Incluye debounce y soporte de atajo de teclado global."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "kbType": "Escribe la consulta de búsqueda",
+    "kbEnter": "Dispara la acción de búsqueda",
+    "kbEsc": "Limpia el valor actual cuando es clearable",
+    "ariaSearch": "El input se expone con role search para contexto semántico",
+    "ariaInvalid": "Se activa a true cuando hay errorText presente",
+    "ariaDescribedBy": "Vincula el texto de helper o error al input para contexto del lector de pantalla",
+    "ariaRequired": "Se activa a true cuando la prop required está activa",
+    "ariaDisabled": "Comunica el estado deshabilitado a las tecnologías asistivas",
+    "ariaLabel": "Proporciona un nombre accesible cuando no hay etiqueta visible",
+    "focusNative": "Usa un elemento input nativo — participa en el orden de tabulación por defecto",
+    "focusShortcut": "El atajo de teclado global (ej. Cmd+K) mueve el foco directamente al input de búsqueda"
+  }
 }

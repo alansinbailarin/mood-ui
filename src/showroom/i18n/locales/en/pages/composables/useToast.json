@@ -1,0 +1,39 @@
+{
+    "title": "useToast",
+    "description": "Imperative API to push notifications onto a global toast queue. Mount ToastContainer once near the root; any component can call `useToast()` to fire toasts that appear in the container.",
+    "api": {
+        "push": "Push a toast with full control. Returns an id so you can `dismiss(id)` or re-push to update in place.",
+        "info": "Convenience wrapper — pushes with `color: 'info'`.",
+        "success": "Convenience wrapper — pushes with `color: 'success'`.",
+        "warning": "Convenience wrapper — pushes with `color: 'warning'`.",
+        "danger": "Convenience wrapper — pushes with `color: 'danger'`.",
+        "dismiss": "Remove a single toast by the id returned from `push()`.",
+        "dismissAll": "Clear every toast in the queue at once."
+    },
+    "examples": {
+        "basic": {
+            "title": "Basic colors",
+            "desc": "The four convenience wrappers cover most use cases."
+        },
+        "action": {
+            "title": "With action",
+            "desc": "Add an inline action button. The `close` callback dismisses the toast."
+        },
+        "pinned": {
+            "title": "Pinned toast",
+            "desc": "Set `duration: 0` to keep the toast visible until the user dismisses it."
+        },
+        "update": {
+            "title": "Update in place",
+            "desc": "Re-push with the same `id` to replace the toast without creating a new one — perfect for live progress."
+        },
+        "dismissAll": {
+            "title": "Dismiss all",
+            "desc": "Clear the entire queue programmatically."
+        }
+    },
+    "types": {
+        "title": "Types",
+        "desc": "TypeScript interfaces for this composable."
+    }
+}

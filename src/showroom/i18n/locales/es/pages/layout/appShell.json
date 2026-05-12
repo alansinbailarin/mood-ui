@@ -1,53 +1,75 @@
 {
-    "title": "AppShell",
-    "category": "Layout",
-    "description": "Frame de aplicación: topbar + sidebar + contenido principal con drawer móvil automático. Soporta variantes standard, rail (icon-only) y dual (rail + panel).",
-    "menu": {
-        "home": "Inicio",
-        "inbox": "Inbox",
-        "team": "Equipo",
-        "reports": "Reportes",
-        "settings": "Ajustes"
+  "title": "AppShell",
+  "category": "Layout",
+  "description": "Frame de aplicación: topbar + sidebar + contenido principal con drawer móvil automático. Soporta variantes standard, rail (icon-only) y dual (rail + panel).",
+  "menu": {
+    "home": "Inicio",
+    "inbox": "Inbox",
+    "team": "Equipo",
+    "reports": "Reportes",
+    "settings": "Ajustes"
+  },
+  "examples": {
+    "basic": {
+      "title": "Básico",
+      "desc": "Topbar + sidebar + contenido — la composición más usada."
     },
-    "examples": {
-        "basic":     { "title": "Básico",            "desc": "Topbar + sidebar + contenido — la composición más usada." },
-        "rail":      { "title": "Variant rail",       "desc": "Rail icon-only persistente, ideal para apps densas." },
-        "collapsed": { "title": "Sidebar colapsado",  "desc": "v-model:collapsed permite plegar el sidebar manteniendo los iconos." },
-        "noSidebar": { "title": "Sin sidebar",         "desc": "Layout solo con topbar — útil para landings o flujos lineales." }
+    "rail": {
+      "title": "Variant rail",
+      "desc": "Rail icon-only persistente, ideal para apps densas."
     },
-    "content": {
-        "main":         "Contenido principal del shell — esta zona es el slot default.",
-        "basic":        "Contenido principal",
-        "rail":         "Rail icon-only",
-        "collapsed":    "Sidebar plegado",
-        "noSidebar":    "Layout sin sidebar (ej. landing autenticada)",
-        "subtitleDemo": "Demo"
+    "collapsed": {
+      "title": "Sidebar colapsado",
+      "desc": "v-model:collapsed permite plegar el sidebar manteniendo los iconos."
     },
-    "props": {
-        "variant":         "Estructura del shell.",
-        "appearance":      "Encuadre visual: full-bleed o tarjeta.",
-        "sidebarPosition": "Lado del sidebar.",
-        "sidebarWidth":    "Ancho del sidebar expandido.",
-        "collapsedWidth":  "Ancho del sidebar colapsado (variant standard).",
-        "railWidth":       "Ancho del rail (variants rail / dual).",
-        "collapsed":       "v-model — sidebar plegado en escritorio.",
-        "mobileOpen":      "v-model — drawer móvil abierto.",
-        "breakpoint":      "Breakpoint donde el sidebar se vuelve permanente.",
-        "stickyTopbar":    "Hace sticky el topbar.",
-        "stickySidebar":   "Hace sticky el sidebar en escritorio.",
-        "divider":         "Renderiza bordes entre regiones.",
-        "mainPadding":     "Padding alrededor del contenido principal.",
-        "radius":          "Radio cuando appearance=\"contained\"."
-    },
-    "slots": {
-        "topbar":         "Barra superior de la aplicación.",
-        "sidebar":        "Sidebar en variants standard y dual (panel secundario).",
-        "sidebarHeader":  "Cabecera fija del sidebar.",
-        "sidebarFooter":  "Pie fijo del sidebar.",
-        "rail":           "Rail icon-only (variants rail y dual).",
-        "railHeader":     "Cabecera fija del rail.",
-        "railFooter":     "Pie fijo del rail.",
-        "default":        "Contenido principal de la aplicación.",
-        "footer":         "Pie global del shell."
+    "noSidebar": {
+      "title": "Sin sidebar",
+      "desc": "Layout solo con topbar — útil para landings o flujos lineales."
     }
+  },
+  "content": {
+    "main": "Contenido principal del shell — esta zona es el slot default.",
+    "basic": "Contenido principal",
+    "rail": "Rail icon-only",
+    "collapsed": "Sidebar plegado",
+    "noSidebar": "Layout sin sidebar (ej. landing autenticada)",
+    "subtitleDemo": "Demo"
+  },
+  "props": {
+    "variant": "Estructura del shell.",
+    "appearance": "Encuadre visual: full-bleed o tarjeta.",
+    "sidebarPosition": "Lado del sidebar.",
+    "sidebarWidth": "Ancho del sidebar expandido.",
+    "collapsedWidth": "Ancho del sidebar colapsado (variant standard).",
+    "railWidth": "Ancho del rail (variants rail / dual).",
+    "collapsed": "v-model — sidebar plegado en escritorio.",
+    "mobileOpen": "v-model — drawer móvil abierto.",
+    "breakpoint": "Breakpoint donde el sidebar se vuelve permanente.",
+    "stickyTopbar": "Hace sticky el topbar.",
+    "stickySidebar": "Hace sticky el sidebar en escritorio.",
+    "divider": "Renderiza bordes entre regiones.",
+    "mainPadding": "Padding alrededor del contenido principal.",
+    "radius": "Radio cuando appearance=\"contained\"."
+  },
+  "slots": {
+    "topbar": "Barra superior de la aplicación.",
+    "sidebar": "Sidebar en variants standard y dual (panel secundario).",
+    "sidebarHeader": "Cabecera fija del sidebar.",
+    "sidebarFooter": "Pie fijo del sidebar.",
+    "rail": "Rail icon-only (variants rail y dual).",
+    "railHeader": "Cabecera fija del rail.",
+    "railFooter": "Pie fijo del rail.",
+    "default": "Contenido principal de la aplicación.",
+    "footer": "Pie global del shell."
+  },
+  "types": {
+    "title": "Tipos",
+    "desc": "Interfaces de TypeScript para este componente."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "ariaLabel": "Proporciona un nombre accesible para el shell de aplicación",
+    "focusNative": "El foco es gestionado por el shell; usa Tab para navegar regiones e elementos interactivos"
+  }
 }

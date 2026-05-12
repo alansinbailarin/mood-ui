@@ -28,7 +28,8 @@
     "descInstallation": "Install mood-ui in your project",
     "descTheming": "Design tokens & customization",
     "descI18n": "Built-in multilanguage support",
-    "descChangelog": "Version history and changes"
+    "descChangelog": "Version history and changes",
+    "descAccessibility": "WCAG 2.2 AA approach and a11y principles"
   },
 
   "settings": {
@@ -78,6 +79,7 @@
     "installation": "Installation",
     "theming": "Theming",
     "i18n": "i18n",
+    "accessibility": "Accessibility",
     "changelog": "Changelog"
   },
 

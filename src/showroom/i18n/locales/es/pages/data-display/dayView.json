@@ -1,64 +1,68 @@
 {
-    "pages": {
-        "dataDisplay": {
-            "dayView": {
-                "title": "DayView",
-                "description": "Vista de un único día con grilla horaria. Ideal para agendas detalladas, bloques de tiempo y planificación operativa.",
-                "controls": {
-                    "format": "Formato",
-                    "allDayRow": "Fila all-day",
-                    "borders": "Bordes",
-                    "currentTime": "Hora actual"
-                },
-                "props": {
-                    "modelValue": "Día visible (v-model).",
-                    "events": "Eventos a renderizar en la grilla horaria.",
-                    "locale": "Locale BCP-47 para encabezados y formatos.",
-                    "color": "Color semántico aplicado a acentos.",
-                    "format": "Formato horario de la columna de horas.",
-                    "hourStart": "Hora inicial visible (0-23).",
-                    "hourEnd": "Hora final visible (1-24).",
-                    "slotMinutes": "Granularidad de los slots de tiempo.",
-                    "slotHeight": "Altura en px de cada slot horario.",
-                    "showAllDayRow": "Muestra la fila superior para eventos all-day.",
-                    "showHeader": "Muestra la cabecera con navegación.",
-                    "showCurrentTime": "Dibuja la línea de hora actual.",
-                    "showNowPill": "Muestra una píldora con la hora actual.",
-                    "businessHours": "Resalta el rango de horas laborales.",
-                    "disabledTimeRanges": "Rangos horarios no seleccionables.",
-                    "bordered": "Dibuja borde alrededor de la grilla.",
-                    "draggableEvents": "Permite arrastrar eventos.",
-                    "resizableEvents": "Permite redimensionar eventos.",
-                    "allowRangeSelection": "Permite seleccionar un rango arrastrando sobre slots vacíos."
-                },
-                "emits": {
-                    "updateModelValue": "Emitido al cambiar el día visible.",
-                    "eventClick": "Click sobre un evento.",
-                    "slotClick": "Click sobre un slot vacío.",
-                    "createEvent": "Solicitud de creación de evento.",
-                    "eventDrop": "Evento arrastrado a una nueva posición.",
-                    "eventResize": "Evento redimensionado.",
-                    "selectRange": "Rango seleccionado arrastrando."
-                },
-                "examples": {
-                    "basic": {
-                        "title": "Básico",
-                        "desc": "Día por defecto sin eventos."
-                    },
-                    "events": {
-                        "title": "Con eventos",
-                        "desc": "Eventos timed renderizados en la grilla horaria."
-                    },
-                    "format12h": {
-                        "title": "Formato 12 horas",
-                        "desc": "Columna horaria en formato AM/PM."
-                    },
-                    "businessHours": {
-                        "title": "Business hours",
-                        "desc": "Resalta horario laboral y restringe el rango horario visible."
-                    }
-                }
-            }
-        }
+  "title": "DayView",
+  "description": "Vista de un único día con grilla horaria. Ideal para agendas detalladas, bloques de tiempo y planificación operativa.",
+  "controls": {
+    "format": "Formato",
+    "allDayRow": "Fila all-day",
+    "borders": "Bordes",
+    "currentTime": "Hora actual"
+  },
+  "props": {
+    "modelValue": "Día visible (v-model).",
+    "events": "Eventos a renderizar en la grilla horaria.",
+    "locale": "Locale BCP-47 para encabezados y formatos.",
+    "color": "Color semántico aplicado a acentos.",
+    "format": "Formato horario de la columna de horas.",
+    "hourStart": "Hora inicial visible (0-23).",
+    "hourEnd": "Hora final visible (1-24).",
+    "slotMinutes": "Granularidad de los slots de tiempo.",
+    "slotHeight": "Altura en px de cada slot horario.",
+    "showAllDayRow": "Muestra la fila superior para eventos all-day.",
+    "showHeader": "Muestra la cabecera con navegación.",
+    "showCurrentTime": "Dibuja la línea de hora actual.",
+    "showNowPill": "Muestra una píldora con la hora actual.",
+    "businessHours": "Resalta el rango de horas laborales.",
+    "disabledTimeRanges": "Rangos horarios no seleccionables.",
+    "bordered": "Dibuja borde alrededor de la grilla.",
+    "draggableEvents": "Permite arrastrar eventos.",
+    "resizableEvents": "Permite redimensionar eventos.",
+    "allowRangeSelection": "Permite seleccionar un rango arrastrando sobre slots vacíos."
+  },
+  "emits": {
+    "updateModelValue": "Emitido al cambiar el día visible.",
+    "eventClick": "Click sobre un evento.",
+    "slotClick": "Click sobre un slot vacío.",
+    "createEvent": "Solicitud de creación de evento.",
+    "eventDrop": "Evento arrastrado a una nueva posición.",
+    "eventResize": "Evento redimensionado.",
+    "selectRange": "Rango seleccionado arrastrando."
+  },
+  "examples": {
+    "basic": {
+      "title": "Básico",
+      "desc": "Día por defecto sin eventos."
+    },
+    "events": {
+      "title": "Con eventos",
+      "desc": "Eventos timed renderizados en la grilla horaria."
+    },
+    "format12h": {
+      "title": "Formato 12 horas",
+      "desc": "Columna horaria en formato AM/PM."
+    },
+    "businessHours": {
+      "title": "Business hours",
+      "desc": "Resalta horario laboral y restringe el rango horario visible."
     }
+  },
+  "types": {
+    "title": "DayView",
+    "desc": "Interfaz TypeScript de las props del componente DayView. Soporta modelValue, events, locale, color, radius, bordered, minDate, maxDate, businessHours, disabledTimeRanges, showHeader, showCurrentTime, format, slotMinutes, slotHeight, hourStart, hourEnd, showAllDayRow, draggableEvents, resizableEvents y allowRangeSelection."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+    "ariaLabel": "Proporciona un nombre accesible para la vista de día",
+    "focusNative": "El foco es gestionado por la vista de día; usa Tab para navegar eventos y acciones"
+  }
 }

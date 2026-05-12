@@ -1,0 +1,29 @@
+{
+    "title": "useColorMode",
+    "description": "Reactive singleton for managing light / dark / system color mode. Persists the choice to localStorage, toggles the `.dark` class on the html element, and reacts to OS `prefers-color-scheme` changes.",
+    "props": {
+        "mode": "The raw chosen mode — `'light'`, `'dark'` or `'system'`. Writable: assigning a new value triggers persistence and class application.",
+        "resolved": "Always a concrete `'light'` or `'dark'`. When `mode` is `'system'`, it tracks the OS preference reactively.",
+        "isDark": "Convenience boolean. `true` when `resolved === 'dark'`.",
+        "set": "Programmatically change the mode and persist it to localStorage.",
+        "toggle": "Flip between light and dark. If currently `'system'`, it toggles relative to the resolved value."
+    },
+    "examples": {
+        "basic": {
+            "title": "Basic reading",
+            "desc": "Read `resolved` and `isDark` to adapt UI styling."
+        },
+        "toggle": {
+            "title": "Toggle button",
+            "desc": "Use `toggle()` to flip between light and dark with a single button."
+        },
+        "system": {
+            "title": "Follow OS preference",
+            "desc": "Set `mode` to `'system'` so the app mirrors the user's OS theme choice."
+        }
+    },
+    "types": {
+        "title": "Types",
+        "desc": "TypeScript interfaces for this composable."
+    }
+}

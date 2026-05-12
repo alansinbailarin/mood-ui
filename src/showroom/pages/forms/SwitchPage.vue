@@ -3,14 +3,66 @@ import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import ComponentDoc from "../../components/ComponentDoc.vue";
 import ComponentPreview from "../../components/ComponentPreview.vue";
+import CodePreview from "../../components/CodePreview.vue";
+import Typography from "../../../components/data-display/Typography.vue";
 import Switch from "../../../components/forms/Switch.vue";
 import type { PropDoc, EmitDoc } from "../../types";
+import A11yDoc from "../../components/A11yDoc.vue";
+import type {
+  A11yKeyboardRow,
+  A11yAriaRow,
+} from "../../components/A11yDoc.vue";
 import TbPills from "../../components/toolbar/TbPills.vue";
 import TbDots from "../../components/toolbar/TbDots.vue";
 import TbToggle from "../../components/toolbar/TbToggle.vue";
 import TbSep from "../../components/toolbar/TbSep.vue";
 
 const { t } = useI18n();
+
+// ── A11y data ─────────────────────────────────────────────────────────────────
+const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
+  { keys: ["Tab"], action: t("pages.forms.switch.a11y.kbTab") },
+  { keys: ["Shift+Tab"], action: t("pages.forms.switch.a11y.kbShiftTab") },
+  { keys: ["Space"], action: t("pages.forms.switch.a11y.kbSpace") },
+  { keys: ["Enter"], action: t("pages.forms.switch.a11y.kbEnter") },
+]);
+
+const a11yAria = computed<A11yAriaRow[]>(() => [
+  {
+    attribute: "aria-checked",
+    value: "true",
+    desc: t("pages.forms.switch.a11y.ariaChecked"),
+  },
+  {
+    attribute: "aria-invalid",
+    value: "true",
+    desc: t("pages.forms.switch.a11y.ariaInvalid"),
+  },
+  {
+    attribute: "aria-describedby",
+    value: "id",
+    desc: t("pages.forms.switch.a11y.ariaDescribedBy"),
+  },
+  {
+    attribute: "aria-required",
+    value: "true",
+    desc: t("pages.forms.switch.a11y.ariaRequired"),
+  },
+  {
+    attribute: "aria-disabled",
+    value: "true",
+    desc: t("pages.forms.switch.a11y.ariaDisabled"),
+  },
+  {
+    attribute: "aria-label",
+    value: "string",
+    desc: t("pages.forms.switch.a11y.ariaLabel"),
+  },
+]);
+
+const a11yFocus = computed<string[]>(() => [
+  t("pages.forms.switch.a11y.focusNative"),
+]);
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgChecked = ref(true);
@@ -52,36 +104,95 @@ const overviewCode = computed(() => {
   if (pgDisabled.value) parts.push(':disabled="true"');
   if (pgLoading.value) parts.push(':loading="true"');
   const attrs = parts.length ? " " + parts.join(" ") : "";
-  return `<Switch v-model="checked" label="Notificaciones"${attrs} />`;
+  return `<Switch v-model="checked" label="Notifications"${attrs} />`;
 });
 
-// ── Example code strings ──────────────────────────────────────────────────────
-const basicCode = `<Switch v-model="pushEnabled" label="Notificaciones push" />
-<Switch v-model="darkMode"    label="Modo oscuro" />`;
+// ── Example code strings (self-contained) ─────────────────────────────────────
+const basicCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { Switch } from 'mood-ui';
 
-const descriptionCode = `<Switch
+const pushEnabled = ref(true);
+const darkMode    = ref(false);
+<\/script>
+
+<template>
+  <Switch v-model="pushEnabled" label="Push notifications" />
+  <Switch v-model="darkMode"    label="Dark mode" />
+</template>`;
+
+const descriptionCode = `<script setup lang="ts">
+import { Switch } from 'mood-ui';
+<\/script>
+
+<template>
+  <Switch
     label="Marketing"
-    description="Recibir novedades de producto."
+    description="Receive product updates."
     :model-value="true"
-/>`;
+  />
+</template>`;
 
-const labelLeftCode = `<Switch label-position="left" label="Activo" :model-value="true" />`;
+const labelLeftCode = `<script setup lang="ts">
+import { Switch } from 'mood-ui';
+<\/script>
 
-const colorsCode = `<Switch :model-value="true" color="primary" label="primary" />
-<Switch :model-value="true" color="success" label="success" />
-<Switch :model-value="true" color="warning" label="warning" />
-<Switch :model-value="true" color="danger"  label="danger" />`;
+<template>
+  <Switch label-position="left" label="Active" :model-value="true" />
+</template>`;
 
-const sizesCode = `<Switch :model-value="true" size="small"  label="small" />
-<Switch :model-value="true" size="medium" label="medium" />
-<Switch :model-value="true" size="large"  label="large" />`;
+const colorsCode = `<script setup lang="ts">
+import { Switch } from 'mood-ui';
+<\/script>
 
-const disabledCode = `<Switch :model-value="true"  disabled label="Disabled on" />
-<Switch :model-value="false" disabled label="Disabled off" />`;
+<template>
+  <Switch :model-value="true" color="primary" label="primary" />
+  <Switch :model-value="true" color="success" label="success" />
+  <Switch :model-value="true" color="warning" label="warning" />
+  <Switch :model-value="true" color="danger"  label="danger" />
+</template>`;
+
+const sizesCode = `<script setup lang="ts">
+import { Switch } from 'mood-ui';
+<\/script>
+
+<template>
+  <Switch :model-value="true" size="small"  label="small" />
+  <Switch :model-value="true" size="medium" label="medium" />
+  <Switch :model-value="true" size="large"  label="large" />
+</template>`;
+
+const disabledCode = `<script setup lang="ts">
+import { Switch } from 'mood-ui';
+<\/script>
+
+<template>
+  <Switch :model-value="true"  disabled label="Disabled on" />
+  <Switch :model-value="false" disabled label="Disabled off" />
+</template>`;
 
 // Example state
 const ex1A = ref(true);
 const ex1B = ref(false);
+
+const typesCode = `export interface Switch {
+  modelValue?: boolean;
+  label?: string;
+  description?: string;
+  helperText?: string;
+  errorText?: string;
+  color?: 'default' | 'primary' | 'danger' | 'success' | 'warning';
+  size?: 'small' | 'medium' | 'large';
+  radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
+  disabled?: boolean;
+  readonly?: boolean;
+  required?: boolean;
+  loading?: boolean;
+  labelPosition?: 'left' | 'right';
+  id?: string;
+  name?: string;
+  ariaLabel?: string;
+}`;
 
 // ── API docs ──────────────────────────────────────────────────────────────────
 const propsList = computed<PropDoc[]>(() => [
@@ -231,7 +342,7 @@ const emitsList = computed<EmitDoc[]>(() => [
 
         <Switch
           v-model="pgChecked"
-          label="Notificaciones"
+          label="Notifications"
           :color="pgColor"
           :size="pgSize"
           :label-position="pgLabelPos"
@@ -249,8 +360,8 @@ const emitsList = computed<EmitDoc[]>(() => [
         :code="basicCode"
       >
         <div class="flex flex-col gap-3">
-          <Switch v-model="ex1A" label="Notificaciones push" />
-          <Switch v-model="ex1B" label="Modo oscuro" />
+          <Switch v-model="ex1A" label="Push notifications" />
+          <Switch v-model="ex1B" label="Dark mode" />
         </div>
       </ComponentPreview>
 
@@ -261,7 +372,7 @@ const emitsList = computed<EmitDoc[]>(() => [
       >
         <Switch
           label="Marketing"
-          description="Recibir novedades de producto."
+          description="Receive product updates."
           :model-value="true"
         />
       </ComponentPreview>
@@ -271,7 +382,7 @@ const emitsList = computed<EmitDoc[]>(() => [
         :description="t('pages.forms.switch.examples.labelLeft.desc')"
         :code="labelLeftCode"
       >
-        <Switch label-position="left" label="Activo" :model-value="true" />
+        <Switch label-position="left" label="Active" :model-value="true" />
       </ComponentPreview>
 
       <ComponentPreview
@@ -303,6 +414,25 @@ const emitsList = computed<EmitDoc[]>(() => [
         <Switch :model-value="true" disabled label="Disabled on" />
         <Switch :model-value="false" disabled label="Disabled off" />
       </ComponentPreview>
+    </template>
+
+    <template #a11y>
+      <A11yDoc
+        :keyboard-rows="a11yKeyboard"
+        :aria-rows="a11yAria"
+        :focus-notes="a11yFocus"
+      />
+    </template>
+
+    <template #extra>
+      <Typography variant="heading" size="large" weight="medium" as="h2">
+        {{ t("pages.forms.switch.types.title") }}
+      </Typography>
+      <Typography variant="body" size="small" class="text-muted-foreground">
+        {{ t("pages.forms.switch.types.desc") }}
+      </Typography>
+
+      <CodePreview :code="typesCode" lang="ts" code-only />
     </template>
   </ComponentDoc>
 </template>

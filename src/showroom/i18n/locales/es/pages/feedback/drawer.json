@@ -1,79 +1,94 @@
 {
-    "title": "Drawer",
-    "description": "Panel deslizable desde cualquier lado del viewport. Útil para filtros, settings, detalles y bottom-sheets en mobile. Soporta foco atrapado y bloqueo de scroll.",
+  "title": "Drawer",
+  "description": "Panel deslizable desde cualquier lado del viewport. Útil para filtros, settings, detalles y bottom-sheets en mobile. Soporta foco atrapado y bloqueo de scroll.",
 
-    "controls": {
-        "side":        "Lado",
-        "size":        "Tamaño",
-        "dismissable": "Dismissable"
+  "controls": {
+    "side": "Lado",
+    "size": "Tamaño",
+    "dismissable": "Dismissable"
+  },
+
+  "playground": {
+    "open": "Abrir drawer",
+    "title": "Filtros",
+    "description": "Vista previa interactiva.",
+    "content": "Contenido del drawer."
+  },
+
+  "examples": {
+    "right": {
+      "title": "Lado derecho (default)",
+      "desc": "El placement por defecto. Ideal para detalles secundarios sin abandonar la vista actual.",
+      "cta": "Abrir drawer derecho",
+      "drawerTitle": "Filtros",
+      "drawerDesc": "Refina los resultados"
     },
-
-    "playground": {
-        "open":        "Abrir drawer",
-        "title":       "Filtros",
-        "description": "Vista previa interactiva.",
-        "content":     "Contenido del drawer."
+    "left": {
+      "title": "Izquierdo",
+      "desc": "Patrón clásico de menú de navegación lateral.",
+      "cta": "Abrir menú",
+      "drawerTitle": "Menú",
+      "content": "Enlaces de navegación."
     },
-
-    "examples": {
-        "right": {
-            "title": "Lado derecho (default)",
-            "desc":  "El placement por defecto. Ideal para detalles secundarios sin abandonar la vista actual.",
-            "cta":   "Abrir drawer derecho",
-            "drawerTitle": "Filtros",
-            "drawerDesc":  "Refina los resultados"
-        },
-        "left": {
-            "title": "Izquierdo",
-            "desc":  "Patrón clásico de menú de navegación lateral.",
-            "cta":   "Abrir menú",
-            "drawerTitle": "Menú",
-            "content":     "Enlaces de navegación."
-        },
-        "sides": {
-            "title":       "Superior y bottom-sheet",
-            "desc":        "top funciona bien para notificaciones; bottom imita el comportamiento de bottom-sheet en móvil.",
-            "ctaTop":      "Top",
-            "ctaBottom":   "Bottom",
-            "topTitle":    "Notificaciones",
-            "bottomTitle": "Compartir",
-            "bottomContent": "Opciones para compartir."
-        },
-        "form": {
-            "title":       "Con contenido (form)",
-            "desc":        "El drawer se adapta al contenido — útil para formularios secundarios y edición rápida.",
-            "cta":         "Editar detalles",
-            "drawerTitle": "Detalles",
-            "drawerDesc":  "Edición rápida del proyecto seleccionado.",
-            "namePlaceholder":  "Nombre",
-            "notesPlaceholder": "Notas"
-        }
+    "sides": {
+      "title": "Superior y bottom-sheet",
+      "desc": "top funciona bien para notificaciones; bottom imita el comportamiento de bottom-sheet en móvil.",
+      "ctaTop": "Top",
+      "ctaBottom": "Bottom",
+      "topTitle": "Notificaciones",
+      "bottomTitle": "Compartir",
+      "bottomContent": "Opciones para compartir."
     },
-
-    "props": {
-        "modelValue":     "Visibilidad. Usa v-model.",
-        "side":           "Lado desde el que entra el panel.",
-        "size":           "Tamaño en el eje principal del panel.",
-        "radius":         "Radio de las esquinas (el lado pegado al borde no se redondea).",
-        "title":          "Título accesible — renderizado en header si no hay slot.",
-        "description":    "Descripción opcional bajo el título.",
-        "closeOnOverlay": "Cierra al hacer click en el backdrop.",
-        "closeOnEscape":  "Cierra al pulsar Escape.",
-        "showClose":      "Muestra el botón de cerrar (X) en el header.",
-        "lockScroll":     "Bloquea el scroll del body mientras está abierto.",
-        "color":          "Color de acento aplicado a borde y ring.",
-        "overlay":        "Estilo del backdrop.",
-        "innerBorder":    "Borde interior sutil dentro del panel.",
-        "ariaLabel":      "Etiqueta accesible cuando no hay title."
-    },
-
-    "emits": {
-        "updateModelValue": "Cambio del estado abierto/cerrado."
-    },
-
-    "slots": {
-        "default": "Cuerpo principal del drawer.",
-        "header":  "Reemplaza el header generado por title/description.",
-        "footer":  "Acciones al pie del drawer."
+    "form": {
+      "title": "Con contenido (form)",
+      "desc": "El drawer se adapta al contenido — útil para formularios secundarios y edición rápida.",
+      "cta": "Editar detalles",
+      "drawerTitle": "Detalles",
+      "drawerDesc": "Edición rápida del proyecto seleccionado.",
+      "namePlaceholder": "Nombre",
+      "notesPlaceholder": "Notas"
     }
+  },
+
+  "props": {
+    "modelValue": "Visibilidad. Usa v-model.",
+    "side": "Lado desde el que entra el panel.",
+    "size": "Tamaño en el eje principal del panel.",
+    "radius": "Radio de las esquinas (el lado pegado al borde no se redondea).",
+    "title": "Título accesible — renderizado en header si no hay slot.",
+    "description": "Descripción opcional bajo el título.",
+    "closeOnOverlay": "Cierra al hacer click en el backdrop.",
+    "closeOnEscape": "Cierra al pulsar Escape.",
+    "showClose": "Muestra el botón de cerrar (X) en el header.",
+    "lockScroll": "Bloquea el scroll del body mientras está abierto.",
+    "color": "Color de acento aplicado a borde y ring.",
+    "overlay": "Estilo del backdrop.",
+    "innerBorder": "Borde interior sutil dentro del panel.",
+    "ariaLabel": "Etiqueta accesible cuando no hay title."
+  },
+
+  "emits": {
+    "updateModelValue": "Cambio del estado abierto/cerrado."
+  },
+
+  "slots": {
+    "default": "Cuerpo principal del drawer.",
+    "header": "Reemplaza el header generado por title/description.",
+    "footer": "Acciones al pie del drawer."
+  },
+  "types": {
+    "title": "Drawer",
+    "desc": "Interfaz TypeScript de las props del componente Drawer. Incluye los tipos unión DrawerSide, DrawerSize y DrawerOverlay para configuración de lado, tamaño y backdrop."
+  },
+  "a11y": {
+    "kbTab": "Mueve el foco al siguiente elemento enfocable dentro del drawer",
+    "kbShiftTab": "Mueve el foco al elemento enfocable anterior dentro del drawer",
+    "kbEsc": "Cierra el drawer cuando closeOnEscape está activado",
+    "ariaDialog": "Se expone como dialog para los lectores de pantalla",
+    "ariaModal": "Comunica que el drawer bloquea el resto de la página",
+    "ariaLabelledBy": "Vincula el título del drawer al dialog para contexto del lector de pantalla",
+    "ariaDescribedBy": "Vincula la descripción al dialog para contexto adicional",
+    "focusTrap": "El foco queda atrapado dentro del drawer mientras está abierto",
+    "focusReturn": "El foco vuelve al elemento trigger cuando el drawer se cierra"
+  }
 }
