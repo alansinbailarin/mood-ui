@@ -53,10 +53,9 @@ mood-ui/                          ← raíz del monorepo (git repo actual)
 | i18n               | `@nuxtjs/i18n`             | reemplaza `vue-i18n` standalone        |
 | Code highlighting  | `shiki`                    | ya se usa, integrar en server plugin   |
 | Iconos             | `@heroicons/vue`            | sin cambios                            |
-| Analytics          | `@vercel/analytics`         | módulo Nuxt o script directo           |
 | SEO                | `nuxt-seo` o built-in      | `useSeoMeta`, `useHead` por página     |
 | Sitemap            | `@nuxtjs/sitemap`           | auto-generado                          |
-| Despliegue         | Vercel / Netlify            | con `nuxt generate` (SSG)              |
+| Despliegue         | Vercel            | con `nuxt generate` (SSG)              |
 
 ---
 
