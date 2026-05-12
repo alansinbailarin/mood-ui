@@ -10,6 +10,13 @@ export default defineNuxtConfig({
   // independently indexable by search engines.
   nitro: {
     preset: "vercel-static",
+    prerender: {
+      // During Fase 4 the sidebar links to many routes that don't have a
+      // page yet. Tolerate 404s on those routes so the build keeps shipping
+      // what exists. Tighten back to `failOnError: true` once Fase 4 is
+      // complete.
+      failOnError: false,
+    },
   },
 
   modules: ["@nuxtjs/i18n", "@nuxtjs/sitemap"],
