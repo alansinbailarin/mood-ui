@@ -252,8 +252,15 @@ function onClear() {
     inputRef.value?.focus(); 
 } 
  
-/* ---------- Shortcut ---------- */ 
-const isMac = typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform); 
+/* ---------- Shortcut ---------- */
+// Stays `false` on SSR and on the first client paint to keep them
+// identical, then flips to the real platform value in onMounted. Without
+// this guard the server would render `Ctrl+K` and the client would
+// immediately replace it with `⌘K`, triggering a hydration warning.
+const isMac = ref(false);
+onMounted(() => {
+    isMac.value = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+});
  
 interface ParsedShortcut { 
     key: string; 
@@ -269,7 +276,7 @@ const parsedShortcut = computed<ParsedShortcut | null>(() => {
     const result: ParsedShortcut = { key: '', ctrl: false, meta: false, shift: false, alt: false }; 
     for (const part of parts) { 
         if (part === 'cmd' || part === 'meta' || part === 'command') { 
-            if (isMac) result.meta = true; 
+            if (isMac.value) result.meta = true; 
             else result.ctrl = true; 
         } else if (part === 'ctrl' || part === 'control') { 
             result.ctrl = true; 
@@ -288,12 +295,12 @@ const shortcutLabel = computed(() => {
     const s = parsedShortcut.value; 
     if (!s) return ''; 
     const segs: string[] = []; 
-    if (s.meta) segs.push(isMac ? '⌘' : 'Ctrl'); 
-    else if (s.ctrl) segs.push(isMac ? '⌃' : 'Ctrl'); 
-    if (s.alt) segs.push(isMac ? '⌥' : 'Alt'); 
-    if (s.shift) segs.push(isMac ? '⇧' : 'Shift'); 
+    if (s.meta) segs.push(isMac.value ? '⌘' : 'Ctrl');
+    else if (s.ctrl) segs.push(isMac.value ? '⌃' : 'Ctrl');
+    if (s.alt) segs.push(isMac.value ? '⌥' : 'Alt');
+    if (s.shift) segs.push(isMac.value ? '⇧' : 'Shift');
     segs.push(s.key.length === 1 ? s.key.toUpperCase() : s.key); 
-    return segs.join(isMac ? '' : '+'); 
+    return segs.join(isMac.value ? '' : '+'); 
 }); 
  
 function onGlobalKeydown(e: KeyboardEvent) { 

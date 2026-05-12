@@ -180,9 +180,16 @@ const affordanceActionClass = computed(() => FIELD_AFFORDANCE_ACTION_BY_COLOR[st
  
 const triggerEl = ref<HTMLButtonElement | null>(null);
 
-const isMobileViewport = ref(typeof window !== 'undefined' ? window.innerWidth < 640 : false);
+// Start as `false` so SSR and the first client paint render identically.
+// The real viewport check runs in onMounted to avoid a hydration mismatch
+// when the user opens the page on a phone — server thinks desktop, the
+// initial client render thinks mobile.
+const isMobileViewport = ref(false);
 function onViewportResize() { isMobileViewport.value = window.innerWidth < 640; }
-onMounted(() => window.addEventListener('resize', onViewportResize));
+onMounted(() => {
+    isMobileViewport.value = window.innerWidth < 640;
+    window.addEventListener('resize', onViewportResize);
+});
 onBeforeUnmount(() => window.removeEventListener('resize', onViewportResize));
 const effectiveMonths = computed(() => isMobileViewport.value ? 1 : props.months);
  
