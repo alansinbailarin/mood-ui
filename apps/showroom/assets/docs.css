@@ -4,3 +4,15 @@
  * or `data-modo-theme="dark"` on a scoped provider. Keep this consistent
  * so docs pages and component demos pick up dark mode from the same root. */
 @custom-variant dark (&:where(.dark, .dark *, [data-modo-theme="dark"], [data-modo-theme="dark"] *));
+
+/* Page transition — paired with app.pageTransition in nuxt.config.
+ * Fades out the old page, fades in the new, identical timing to the
+ * legacy DocsShell `<Transition mode="out-in">` wrapper. */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 200ms ease-out;
+}
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+}

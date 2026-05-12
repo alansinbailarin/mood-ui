@@ -37,14 +37,14 @@ mood-ui/                          ← raíz del monorepo (git repo actual)
 ```
 
 **Por qué monorepo y no repo separado:**
-- `apps/docs` importa `mood-ui` como `workspace:*` → cambios en la librería
+- `apps/showroom` importa `mood-ui` como `workspace:*` → cambios en la librería
   se ven en tiempo real sin publicar a npm
 - Un solo `git push` despliega librería + docs en sync
 - No hay riesgo de que la doc quede desfasada de la versión real
 
 ---
 
-## Stack del nuevo `apps/docs`
+## Stack del nuevo `apps/showroom`
 
 | Pieza              | Paquete                    | Nota                                   |
 |--------------------|----------------------------|----------------------------------------|
@@ -165,9 +165,9 @@ pages/
    - `vite.config.ts`, `tsconfig.lib.json` → `packages/mood-ui/`
    - `packages/mood-ui/package.json` = el `package.json` actual (librería)
 
-3. Crear `apps/docs/` vacío con `nuxt init`
+3. Crear `apps/showroom/` vacío con `nuxt init`
 
-4. En `apps/docs/package.json`:
+4. En `apps/showroom/package.json`:
    ```json
    {
      "dependencies": {
@@ -182,7 +182,7 @@ pages/
 
 ### Fase 2 — Nuxt base + layout (1 día)
 
-**`apps/docs/nuxt.config.ts`:**
+**`apps/showroom/nuxt.config.ts`:**
 ```ts
 export default defineNuxtConfig({
   compatibilityDate: '2025-01-01',
@@ -225,7 +225,7 @@ export default defineNuxtConfig({
 })
 ```
 
-**`apps/docs/app.vue`** — layout raíz con `DocsShell` (el sidebar + header actual, adaptado):
+**`apps/showroom/app.vue`** — layout raíz con `DocsShell` (el sidebar + header actual, adaptado):
 ```vue
 <template>
   <NuxtLayout>
@@ -234,7 +234,7 @@ export default defineNuxtConfig({
 </template>
 ```
 
-**`apps/docs/layouts/default.vue`** — DocsShell migrado:
+**`apps/showroom/layouts/default.vue`** — DocsShell migrado:
 - El sidebar pasa de leer `useShowroomRouter` a usar `useRoute`/`NuxtLink`
 - El header con búsqueda y selector de idioma queda igual visualmente
 - `<router-view>` → `<slot />`
@@ -327,7 +327,7 @@ para las ~80 páginas en minutos, luego ajustar descriptions a mano.
 Las URLs actuales son `mood-ui.com/#button`. Con Nuxt pasan a ser
 `mood-ui.com/forms/button`. Hay que redirigir para no perder el tráfico existente.
 
-**`apps/docs/public/_redirects`** (Netlify) o **`vercel.json`**:
+**`apps/showroom/public/_redirects`** (Netlify) o **`vercel.json`**:
 ```json
 {
   "redirects": [

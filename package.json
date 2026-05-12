@@ -9,8 +9,8 @@
   "packageManager": "pnpm@10.33.0",
   "scripts": {
     "build": "pnpm --filter mood-ui build",
-    "build:docs": "pnpm --filter docs generate",
-    "dev": "pnpm --filter docs dev",
+    "build:showroom": "pnpm --filter showroom generate",
+    "dev": "pnpm --filter showroom dev",
     "dev:lib": "pnpm --filter mood-ui dev",
     "test": "pnpm --filter mood-ui test",
     "test:watch": "pnpm --filter mood-ui test:watch",

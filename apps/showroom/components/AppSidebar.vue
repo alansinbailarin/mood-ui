@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { MagnifyingGlassIcon } from "@heroicons/vue/24/outline";
+import { useI18n } from "vue-i18n";
 import { navManifest } from "~/utils/nav-manifest";
 
 const props = defineProps<{
@@ -13,6 +14,7 @@ const emit = defineEmits<{
 }>();
 
 const route = useRoute();
+const { t } = useI18n();
 </script>
 
 <template>
@@ -27,11 +29,11 @@ const route = useRoute();
         <button
           type="button"
           class="w-full flex items-center gap-2 h-9 px-2.5 pr-2 rounded-full border border-border bg-card hover:bg-muted/40 text-muted-foreground hover:text-foreground transition-colors text-xs"
-          aria-label="Search (⌘K)"
+          :aria-label="`${t('search.label')} (⌘K)`"
           @click="emit('open-search')"
         >
           <MagnifyingGlassIcon class="w-3.5 h-3.5" />
-          <span class="text-[12px]">Search…</span>
+          <span class="text-[12px]">{{ t("search.label") }}…</span>
           <kbd
             class="ml-auto font-mono font-semibold px-1.5 py-0.5 rounded border border-border bg-background text-[10px]"
             >⌘K</kbd

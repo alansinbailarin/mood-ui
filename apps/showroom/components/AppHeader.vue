@@ -53,7 +53,11 @@ function onLocale(v: unknown) {
       </span>
     </NuxtLink>
 
-    <div class="flex-1" />
+    <!-- Center pill tabs (Docs / Components / Templates / Theme Studio) -->
+    <div class="flex-1 hidden lg:flex justify-center">
+      <AppHeaderNav />
+    </div>
+    <div class="flex-1 lg:hidden" />
 
     <div class="flex items-center gap-1">
       <div class="hidden sm:block w-[88px] shrink-0">
@@ -83,6 +87,10 @@ function onLocale(v: unknown) {
           size="small"
           @update:model-value="onColorMode"
         />
+      </ClientOnly>
+
+      <ClientOnly>
+        <AppShowroomSettings />
       </ClientOnly>
     </div>
   </div>

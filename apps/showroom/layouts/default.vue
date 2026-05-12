@@ -1,12 +1,30 @@
 <script setup lang="ts">
-import { ref, provide, watch } from "vue";
+import { ref, computed, provide, watch } from "vue";
 import { Bars3Icon, XMarkIcon, MagnifyingGlassIcon, GlobeAltIcon } from "@heroicons/vue/24/outline";
-import { ModoProvider } from "mood-ui";
+import { ModoProvider, paletteFromHex, darkSurfaces } from "mood-ui";
 import { navManifest } from "~/utils/nav-manifest";
 import { createDocToc, DOC_TOC_KEY } from "~/composables/useDocToc";
+import { useDocsTheme } from "~/composables/useDocsTheme";
+import { tintedLightSurfaces, tintedDarkSurfaces } from "~/utils/tintedSurfaces";
 
 const route = useRoute();
-const { locale, setLocale } = useI18n();
+const { t, locale, setLocale } = useI18n();
+
+const { state: docsTheme } = useDocsTheme();
+const primaryPalette = computed(() => ({
+  primary: paletteFromHex(docsTheme.value.primaryHex),
+}));
+const lightSurfacesConfig = computed(() =>
+  docsTheme.value.baseIntensity > 0
+    ? tintedLightSurfaces(docsTheme.value.primaryHex, docsTheme.value.baseIntensity / 100)
+    : undefined,
+);
+const darkSurfaceConfig = computed(() => {
+  const preset = darkSurfaces[docsTheme.value.darkSurface];
+  if (docsTheme.value.baseIntensity === 0) return preset;
+  const tinted = tintedDarkSurfaces(docsTheme.value.primaryHex, docsTheme.value.baseIntensity / 100);
+  return { ...preset, ...tinted };
+});
 
 const mobileNavOpen = ref(false);
 const cmdkOpen = ref(false);
@@ -29,7 +47,14 @@ function toggleLocale() {
 </script>
 
 <template>
-  <ModoProvider>
+  <ModoProvider
+    :radius="docsTheme.radius"
+    :size="docsTheme.size"
+    :halo="docsTheme.halo"
+    :palettes="primaryPalette"
+    :surfaces="lightSurfacesConfig"
+    :dark-surfaces="darkSurfaceConfig"
+  >
     <div class="flex flex-col min-h-dvh bg-background text-foreground">
       <header class="sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-background/70 bg-background/85 border-b border-border">
         <AppHeader :show-burger="true" @burger="mobileNavOpen = true" @open-search="cmdkOpen = true" />
@@ -93,7 +118,7 @@ function toggleLocale() {
                   @click="cmdkOpen = true; mobileNavOpen = false"
                 >
                   <MagnifyingGlassIcon class="w-3.5 h-3.5 shrink-0" />
-                  <span class="text-[12px]">Search…</span>
+                  <span class="text-[12px]">{{ t("search.label") }}…</span>
                   <kbd class="ml-auto font-mono font-semibold px-1.5 py-0.5 rounded border border-border bg-background text-[10px]">⌘K</kbd>
                 </button>
                 <button
@@ -143,9 +168,15 @@ function toggleLocale() {
           </Transition>
 
           <!-- Main content -->
-          <main class="flex-1 min-w-0 py-8">
+          <main :key="route.path" class="flex-1 min-w-0 py-8">
             <slot />
           </main>
+
+          <!-- Right "On This Page" TOC — registered by ComponentDoc/DocPage
+               and inhabited by ComponentPreview anchors. Hidden below xl
+               because the docs sidebar already steals horizontal real
+               estate on smaller screens. -->
+          <DocToc :toc="toc" />
         </div>
       </div>
 

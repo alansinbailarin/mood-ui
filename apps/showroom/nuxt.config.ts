@@ -90,7 +90,12 @@ export default defineNuxtConfig({
     autoLastmod: true,
   },
 
+  // Global fade between pages. Mirrors the `<Transition mode="out-in">`
+  // the legacy DocsShell wrapped around its <main :key="activeId">. Forces
+  // a remount so onMounted hooks (TOC registration, scroll spy, etc.) run
+  // on every navigation.
   app: {
+    pageTransition: { name: "page", mode: "out-in" },
     head: {
       titleTemplate: "%s · mood-ui",
       htmlAttrs: { lang: "en" },
@@ -106,6 +111,17 @@ export default defineNuxtConfig({
         { property: "og:type", content: "website" },
       ],
       link: [{ rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }],
+      // Inline anti-FOUC script. Runs synchronously in <head> before the
+      // body parses, so the very first paint already has the right `.dark`
+      // class on <html>. Mirrors what the lib's `useColorMode` will set
+      // during hydration. Without this, the SSG-rendered HTML (light by
+      // default) flashes for ~200ms before Vue hydrates and toggles dark.
+      script: [
+        {
+          tagPosition: "head",
+          innerHTML: `(function(){try{var s=localStorage.getItem('modo-color-mode');var p=matchMedia('(prefers-color-scheme: dark)').matches;var d=s==='dark'||(s!=='light'&&p);if(d)document.documentElement.classList.add('dark');}catch(e){}})();`,
+        },
+      ],
     },
   },
 

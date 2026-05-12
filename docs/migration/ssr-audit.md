@@ -109,7 +109,7 @@ Guards presentes:
 En SSR el `resolved.value` es `'light'` por default (sin acceso a localStorage). Si el usuario tiene `dark` persistido, al hidratar la clase `dark` aparece de golpe → flash claro→oscuro.
 
 **Mitigación recomendada** (no obligatoria para SSG, pero buena UX):
-- Crear `apps/docs/plugins/color-mode-fouc.client.ts` con script inline en `<head>` que lee localStorage **antes** de la hidratación y aplica `class="dark"` síncrono en `<html>` (patrón anti-FOUC estándar de Next/Nuxt).
+- Crear `apps/showroom/plugins/color-mode-fouc.client.ts` con script inline en `<head>` que lee localStorage **antes** de la hidratación y aplica `class="dark"` síncrono en `<html>` (patrón anti-FOUC estándar de Next/Nuxt).
 
 ---
 
@@ -154,8 +154,8 @@ Esto es una **convención del showroom**, NO un requisito de la librería:
 1. **2 fixes menores** en la librería:
    - `packages/mood-ui/src/components/forms/DateRangeField.vue:183` — mover initial value a `onMounted`
    - `packages/mood-ui/src/components/forms/SearchInput.vue:256` — idem para `isMac`
-2. **Plugin anti-FOUC** en Nuxt: `apps/docs/plugins/color-mode-fouc.client.ts` con script inline en `<head>` (evita flash claro→oscuro al hidratar)
-3. **Convención `<ClientOnly>`** en `apps/docs/pages/` para los ~20 componentes interactivos listados arriba — codificarla en el script de migración de páginas (Fase 4)
-4. **Validación**: ejecutar `pnpm --filter docs dev` y `pnpm --filter docs generate`, revisar warnings de hydration mismatch en consola del navegador
+2. **Plugin anti-FOUC** en Nuxt: `apps/showroom/plugins/color-mode-fouc.client.ts` con script inline en `<head>` (evita flash claro→oscuro al hidratar)
+3. **Convención `<ClientOnly>`** en `apps/showroom/pages/` para los ~20 componentes interactivos listados arriba — codificarla en el script de migración de páginas (Fase 4)
+4. **Validación**: ejecutar `pnpm --filter showroom dev` y `pnpm --filter showroom generate`, revisar warnings de hydration mismatch en consola del navegador
 
 **Costo estimado**: ½ día (los fixes son <30 líneas total; el resto es convención al migrar páginas en Fase 4)

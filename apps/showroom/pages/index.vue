@@ -1,4 +1,6 @@
 <script setup lang="ts">
+definePageMeta({ layout: "landing" });
+
 import { navManifest, allEntries } from "~/utils/nav-manifest";
 import { ref, computed, onMounted, onUnmounted, watch } from "vue";
 import { Avatar, AvatarGroup, Badge, Button, Card, Stack, Switch, Tooltip, Typography } from "mood-ui";
