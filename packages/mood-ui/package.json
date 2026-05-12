@@ -1,0 +1,104 @@
+{
+  "name": "mood-ui",
+  "version": "0.7.1",
+  "description": "Vue 3 component library with full theming, dark mode, palettes, calendar, scheduler, table and AppShell.",
+  "type": "module",
+  "license": "MIT",
+  "author": "alansinbailarin",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alansinbailarin/mood-ui.git"
+  },
+  "homepage": "https://mood-ui.com",
+  "bugs": {
+    "url": "https://github.com/alansinbailarin/mood-ui/issues"
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "components",
+    "ui",
+    "ui-library",
+    "component-library",
+    "tailwindcss",
+    "tailwind",
+    "design-system",
+    "mood-ui",
+    "mood",
+    "dark-mode",
+    "theming",
+    "calendar",
+    "scheduler",
+    "datepicker",
+    "table",
+    "accessible",
+    "typescript",
+    "composables"
+  ],
+  "main": "./dist/mood-ui.cjs",
+  "module": "./dist/mood-ui.mjs",
+  "types": "./dist/types/index.d.ts",
+  "style": "./dist/mood-ui.css",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/mood-ui.mjs",
+      "require": "./dist/mood-ui.cjs"
+    },
+    "./style.css": "./dist/mood-ui.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -p tsconfig.lib.json --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "prepublishOnly": "pnpm run build"
+  },
+  "peerDependencies": {
+    "@heroicons/vue": "^2.0.0",
+    "gsap": "^3.0.0",
+    "vue": "^3.4.0"
+  },
+  "peerDependenciesMeta": {
+    "gsap": {
+      "optional": true
+    },
+    "@heroicons/vue": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@heroicons/vue": "^2.2.0",
+    "@tailwindcss/vite": "^4.2.4",
+    "@types/node": "^24.12.2",
+    "@vitejs/plugin-vue": "^6.0.6",
+    "@vitest/ui": "^4.1.5",
+    "@vue/test-utils": "^2.4.10",
+    "@vue/tsconfig": "^0.9.1",
+    "gsap": "^3.15.0",
+    "jsdom": "^29.1.1",
+    "tailwindcss": "^4.2.4",
+    "typescript": "~6.0.2",
+    "vite": "^8.0.10",
+    "vite-plugin-dts": "^5.0.0",
+    "vitest": "^4.1.5",
+    "vue": "^3.5.32",
+    "vue-i18n": "^11.4.2",
+    "vue-tsc": "^3.2.7"
+  }
+}
