@@ -158,6 +158,8 @@
       },
       "changelog": {
         "kicker": "Documentación",
+        "title": "Changelog",
+        "description": "Cada release de mood-ui listado de más reciente a más antiguo. Versionado con SemVer, con detalles de nuevos componentes, fixes y breaking changes.",
         "intro": "Cada release listado de más reciente a más antiguo. Seguimos SemVer.",
         "releases": {
           "v0.7.1": {

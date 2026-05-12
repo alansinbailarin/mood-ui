@@ -127,6 +127,27 @@ function nest(keyPath, value) {
   return out;
 }
 
+/**
+ * Like `nest`, but if the value already starts with the same nesting as
+ * `keyPath` (e.g. file at `pages/themeStudio.json` whose contents are
+ * `{ pages: { themeStudio: { … } } }`), return the value as-is to avoid
+ * doubling the prefix. Some legacy files were wrapped, others weren't —
+ * this normalises both shapes into the same merged tree.
+ */
+function smartNest(keyPath, value) {
+  let probe = value;
+  let matches = true;
+  for (const k of keyPath) {
+    if (probe && typeof probe === "object" && k in probe && Object.keys(probe).length === 1) {
+      probe = probe[k];
+    } else {
+      matches = false;
+      break;
+    }
+  }
+  return matches ? value : nest(keyPath, value);
+}
+
 function consolidateLocale(locale) {
   const srcDir = join(SRC_BASE, locale);
   const destDir = join(DEST_BASE, locale);
@@ -157,10 +178,13 @@ function consolidateLocale(locale) {
 
       const st = statSync(srcPath);
       if (st.isFile()) {
-        // Direct .json: nest under the path implied by `source`
+        // Direct .json: nest under the path implied by `source` — unless
+        // the file already wraps its own contents under the same path
+        // (themeStudio.json does this; welcome.json does not).
         const rel = source;
         const keyPath = keyPathFromRelative(rel);
-        merged = merge(merged, nest(keyPath, readJson(srcPath)));
+        const value = readJson(srcPath);
+        merged = merge(merged, smartNest(keyPath, value));
         count++;
         totalSource++;
       } else if (st.isDirectory()) {
@@ -168,7 +192,8 @@ function consolidateLocale(locale) {
         for (const filePath of walkJson(srcPath)) {
           const rel = relative(srcDir, filePath);
           const keyPath = keyPathFromRelative(rel);
-          merged = merge(merged, nest(keyPath, readJson(filePath)));
+          const value = readJson(filePath);
+          merged = merge(merged, smartNest(keyPath, value));
           count++;
           totalSource++;
         }

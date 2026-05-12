@@ -1,28 +1,26 @@
 {
   "pages": {
     "themeStudio": {
-      "pages": {
-        "themeStudio": {
-          "fabCustomize": "Personalizar",
-          "fabClose": "Cerrar",
-          "panelTitle": "Theme Studio",
-          "autoSaved": "Auto-guardado",
-          "resetAll": "Resetear todo",
-          "sectionAppearance": "Appearance",
-          "sectionPresets": "Presets",
-          "sectionColors": "Colors",
-          "sectionSurfaces": "Surfaces",
-          "lightTint": "Light tint",
-          "darkPreset": "Dark preset",
-          "darkPresetSuffix": "· cambia a oscuro",
-          "sectionSemantic": "Semantic",
-          "sectionShape": "Shape",
-          "sectionSize": "Size",
-          "sectionRing": "Ring",
-          "tooltipRandom": "Random",
-          "tooltipReset": "Reset"
-        }
-      }
+      "seoTitle": "Theme Studio",
+      "seoDescription": "Playground visual para construir, previsualizar y exportar un tema de mood-ui: color de marca, radius, surfaces, presets dark mode y ejemplos en vivo.",
+      "fabCustomize": "Personalizar",
+      "fabClose": "Cerrar",
+      "panelTitle": "Theme Studio",
+      "autoSaved": "Auto-guardado",
+      "resetAll": "Resetear todo",
+      "sectionAppearance": "Appearance",
+      "sectionPresets": "Presets",
+      "sectionColors": "Colors",
+      "sectionSurfaces": "Surfaces",
+      "lightTint": "Light tint",
+      "darkPreset": "Dark preset",
+      "darkPresetSuffix": "· cambia a oscuro",
+      "sectionSemantic": "Semantic",
+      "sectionShape": "Shape",
+      "sectionSize": "Size",
+      "sectionRing": "Ring",
+      "tooltipRandom": "Random",
+      "tooltipReset": "Reset"
     }
   }
 }
