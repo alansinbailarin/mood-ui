@@ -1,0 +1,402 @@
+{
+  "pages": {
+    "navigation": {
+      "breadcrumbs": {
+        "title": "Breadcrumbs",
+        "category": "Navigation",
+        "description": "Migas de pan accesibles con iconos por item, separadores intercambiables y colapsado opcional cuando el trail supera el máximo.",
+        "items": {
+          "home": "Inicio",
+          "products": "Productos",
+          "detail": "Detalle",
+          "projects": "Proyectos",
+          "modo": "Modo",
+          "breadcrumbs": "Breadcrumbs",
+          "documents": "Documentos",
+          "report": "Reporte",
+          "spaces": "Espacios",
+          "team": "Equipo",
+          "components": "Componentes",
+          "navigation": "Navegación"
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Trail simple con separador chevron por defecto. El último item es la página actual."
+          },
+          "icons": {
+            "title": "Con iconos",
+            "desc": "Cada item puede declarar un icono opcional. Útil para reforzar la jerarquía visual."
+          },
+          "homeIcon": {
+            "title": "Con icono Home",
+            "desc": "`show-home-icon` añade automáticamente un icono Home al primer item cuando éste no define el suyo."
+          },
+          "separators": {
+            "title": "Separadores",
+            "desc": "Cuatro separadores integrados (chevron, slash, dot, arrow) o uno propio vía `separator-text`."
+          },
+          "truncated": {
+            "title": "Truncado",
+            "desc": "Cuando el trail supera `max`, los items del medio colapsan en una elipsis interactiva."
+          }
+        },
+        "props": {
+          "items": "Trail de migas. Cada item acepta label, icon, to, href, disabled.",
+          "max": "Máximo de items visibles. Si se supera, colapsa el medio en `…`.",
+          "separator": "Separador visual entre items.",
+          "separatorText": "Texto literal que sustituye el separador (override).",
+          "size": "Tamaño tipográfico del trail.",
+          "showHomeIcon": "Muestra un icono Home en el primer item si éste no define `icon`.",
+          "ariaLabel": "Etiqueta accesible del nav."
+        },
+        "emits": {
+          "navigate": "Emitido al hacer click en un item con `to` (no en items con `href` ni en el actual)."
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaces de TypeScript para este componente."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "ariaLabel": "Proporciona un nombre accesible para la navegación de breadcrumbs",
+          "focusNative": "El foco es gestionado por los enlaces interactivos dentro del breadcrumb"
+        }
+      },
+      "dropdownMenu": {
+        "title": "DropdownMenu",
+        "category": "Navigation",
+        "description": "Menú flotante de acciones con headers, dividers, atajos de teclado, descripciones, items destructivos y enlaces externos.",
+        "trigger": {
+          "actions": "Acciones",
+          "more": "Más"
+        },
+        "items": {
+          "edit": "Editar",
+          "duplicate": "Duplicar",
+          "export": "Exportar",
+          "exportDesc": "Descargar como JSON",
+          "openTab": "Abrir en nueva pestaña",
+          "profile": "Mi perfil",
+          "preferences": "Preferencias",
+          "logout": "Cerrar sesión",
+          "delete": "Eliminar",
+          "userEmail": "modo\\@ejemplo.com",
+          "actionsHeader": "Acciones"
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Menú mínimo: una lista de items con label. El trigger por defecto usa el componente Button."
+          },
+          "icons": {
+            "title": "Con iconos y atajos",
+            "desc": "Cada item soporta `icon`, `shortcut` y `description` opcionales para enriquecer la lectura."
+          },
+          "dividers": {
+            "title": "Con headers y dividers",
+            "desc": "Agrupa items con entradas tipo `header` y separa secciones con `divider`."
+          },
+          "user": {
+            "title": "Menú de usuario",
+            "desc": "Patrón habitual: header con email, opciones y un divider antes de cerrar sesión."
+          },
+          "danger": {
+            "title": "Item destructivo",
+            "desc": "Marca un item como `danger` para teñirlo del color destructivo y reforzar acciones irreversibles."
+          }
+        },
+        "props": {
+          "items": "Lista heterogénea de items, headers y dividers.",
+          "triggerLabel": "Texto del trigger por defecto. Ignorado si usas el slot `#trigger`.",
+          "triggerIcon": "Icono opcional del trigger por defecto.",
+          "triggerVariant": "Variante del Button usado como trigger.",
+          "color": "Color del trigger por defecto.",
+          "size": "Tamaño del trigger y de los items del menú.",
+          "radius": "Radio aplicado a trigger y panel.",
+          "showChevron": "Muestra un chevron en el trigger por defecto.",
+          "placement": "Posición del panel respecto al trigger.",
+          "matchTriggerWidth": "Fuerza al panel a tener el mismo ancho que el trigger.",
+          "minWidth": "Ancho mínimo del panel (CSS length).",
+          "disabled": "Deshabilita el menú completo.",
+          "closeOnSelect": "Cierra el menú tras seleccionar un item no deshabilitado.",
+          "ariaLabel": "Etiqueta accesible aplicada al panel."
+        },
+        "emits": {
+          "updateOpen": "Emitido cuando el menú se abre o se cierra.",
+          "select": "Emitido al activar un item (click o teclado), no se dispara para headers/dividers."
+        },
+        "slots": {
+          "trigger": "Sustituye el trigger por defecto. Útil para envolver un Avatar u otro componente."
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaces de TypeScript para este componente."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "kbEnter": "Activa el item enfocado o abre el menú",
+          "kbEsc": "Cierra el menú y devuelve el foco al trigger",
+          "kbArrow": "Navega entre los items del menú",
+          "ariaExpanded": "Indica si el panel del menú está abierto",
+          "ariaLabel": "Proporciona un nombre accesible para el panel del menú",
+          "focusTrigger": "El foco vuelve al botón trigger cuando el menú se cierra",
+          "focusTrap": "El foco queda atrapado dentro del menú mientras está abierto"
+        }
+      },
+      "pagination": {
+        "title": "Pagination",
+        "category": "Navigation",
+        "description": "Paginador accesible con saltos a primera/última página, hermanos configurables y todos los tokens visuales del sistema.",
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Paginador con primera/última, prev/next y un hermano por defecto a cada lado."
+          },
+          "siblings": {
+            "title": "Con más hermanos",
+            "desc": "Aumenta `sibling-count` para mostrar más páginas alrededor de la actual."
+          },
+          "jump": {
+            "title": "Salto rápido",
+            "desc": "Combina el paginador con un NumberInput para saltar directamente a una página concreta."
+          },
+          "sizes": {
+            "title": "Tamaños",
+            "desc": "Tres tamaños responden a la jerarquía visual del entorno donde se inserte el paginador."
+          },
+          "compact": {
+            "title": "Compacto",
+            "desc": "Oculta los botones de primera/última cuando el espacio escasea o el contexto no los necesita."
+          }
+        },
+        "demo": {
+          "pagePh": "Pág.",
+          "go": "Ir"
+        },
+        "props": {
+          "modelValue": "Página actual (1-indexed). Usa v-model.",
+          "pageCount": "Número total de páginas (≥ 1).",
+          "siblingCount": "Páginas hermanas mostradas a cada lado de la actual.",
+          "boundaryCount": "Páginas pinned al inicio y final del rango.",
+          "showFirstLast": "Muestra los botones de primera y última página.",
+          "showPrevNext": "Muestra los botones de página anterior y siguiente.",
+          "color": "Color de la página activa.",
+          "size": "Tamaño de los botones del paginador.",
+          "radius": "Radio aplicado a los botones.",
+          "disabled": "Deshabilita todos los botones.",
+          "ariaLabel": "Etiqueta accesible del nav."
+        },
+        "emits": {
+          "updateModelValue": "Emitido al cambiar de página. Usado por v-model.",
+          "change": "Mismo payload que update:modelValue, útil para listeners externos."
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaces de TypeScript para este componente."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente botón de página",
+          "kbShiftTab": "Mueve el foco al botón de página anterior",
+          "kbEnter": "Activa el botón de página enfocado",
+          "ariaLabel": "Proporciona un nombre accesible para la navegación de paginación",
+          "ariaCurrent": "Indica la página actualmente activa",
+          "focusNative": "El foco se mueve entre botones de página usando Tab"
+        }
+      },
+      "stepper": {
+        "title": "Stepper",
+        "category": "Navigation",
+        "description": "Indicador de progreso por pasos. Útil para wizards, onboarding y checkouts. Soporta variantes numbered, dots y progress, en horizontal o vertical.",
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Tres pasos numerados; el `current` marca el activo y todos los anteriores quedan completados."
+          },
+          "descriptions": {
+            "title": "Con descripciones e iconos",
+            "desc": "Cada paso acepta `description` y un `icon` propio para reforzar el contexto."
+          },
+          "vertical": {
+            "title": "Vertical",
+            "desc": "Cambia `orientation` a vertical para flujos largos con descripciones extensas."
+          },
+          "error": {
+            "title": "Con error",
+            "desc": "Override el estado de un paso a `error` para señalar un problema sin bloquear el resto del flujo."
+          }
+        },
+        "demo": {
+          "prev": "← Anterior",
+          "next": "Siguiente →"
+        },
+        "playgroundSteps": {
+          "account": {
+            "label": "Cuenta",
+            "description": "Datos básicos"
+          },
+          "billing": {
+            "label": "Pago",
+            "description": "Tarjeta o PayPal"
+          },
+          "review": {
+            "label": "Revisar",
+            "description": "Confirma tu pedido"
+          }
+        },
+        "basicSteps": {
+          "cart": "Carrito",
+          "shipping": "Envío",
+          "payment": "Pago"
+        },
+        "detailedSteps": {
+          "account": {
+            "label": "Cuenta",
+            "description": "Email y contraseña"
+          },
+          "billing": {
+            "label": "Pago",
+            "description": "Método de pago"
+          },
+          "review": {
+            "label": "Revisar",
+            "description": "Confirma tu pedido"
+          }
+        },
+        "verticalSteps": {
+          "personal": {
+            "label": "Datos personales",
+            "description": "Nombre, email y teléfono"
+          },
+          "address": {
+            "label": "Dirección",
+            "description": "Datos de envío"
+          },
+          "payment": {
+            "label": "Pago",
+            "description": "Tarjeta o transferencia"
+          },
+          "confirmation": {
+            "label": "Confirmación",
+            "description": "Revisa antes de enviar"
+          }
+        },
+        "errorSteps": {
+          "data": "Datos",
+          "payment": "Pago",
+          "paymentDesc": "Tarjeta declinada",
+          "confirm": "Confirmar"
+        },
+        "props": {
+          "steps": "Pasos a renderizar en orden. Cada paso acepta id, label, description, icon, disabled y state.",
+          "current": "Índice 0-based del paso activo. Los anteriores se marcan como completados.",
+          "variant": "Estilo del indicador (número, punto o barra de progreso).",
+          "orientation": "Disposición del stepper.",
+          "color": "Color semántico de los pasos activo y completados.",
+          "size": "Tamaño del indicador y de los labels.",
+          "clickable": "Permite click en pasos completados; emite `step-click`."
+        },
+        "emits": {
+          "stepClick": "Emitido al hacer click en un paso cuando `clickable` es true."
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaces de TypeScript para este componente."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "ariaLabel": "Proporciona un nombre accesible para el stepper",
+          "focusNative": "Elemento no interactivo a menos que la prop clickable esté habilitada"
+        }
+      },
+      "tabs": {
+        "title": "Tabs",
+        "category": "Navigation",
+        "description": "Tabs accesibles con tres variantes (line, pill, segmented), iconos, badges y soporte para paneles vía slots `panel-{value}`.",
+        "examples": {
+          "variants": {
+            "title": "Variantes",
+            "desc": "Tres estilos visuales: línea inferior, pill rellena y control segmentado."
+          },
+          "icons": {
+            "title": "Con iconos",
+            "desc": "Cada item puede declarar un icono opcional que se renderiza a la izquierda del label."
+          },
+          "panels": {
+            "title": "Con paneles",
+            "desc": "Define un slot `panel-{value}` por cada tab para mostrar contenido sincronizado con la selección."
+          },
+          "controlled": {
+            "title": "Controlado",
+            "desc": "El estado activo vive en tu componente; lee y escribe vía v-model."
+          },
+          "badges": {
+            "title": "Con badges",
+            "desc": "Cada item soporta un `badge` numérico o de texto que se muestra a la derecha del label."
+          }
+        },
+        "playground": {
+          "overview": "Resumen",
+          "analytics": "Analítica",
+          "settings": "Ajustes"
+        },
+        "icons": {
+          "home": "Inicio",
+          "stats": "Estadísticas",
+          "settings": "Ajustes"
+        },
+        "vertical": {
+          "account": "Cuenta",
+          "security": "Seguridad",
+          "billing": "Facturación",
+          "panelAccount": "Datos de tu cuenta",
+          "panelSecurity": "Contraseña y 2FA",
+          "panelBilling": "Métodos de pago"
+        },
+        "badges": {
+          "inbox": "Bandeja",
+          "sent": "Enviados",
+          "drafts": "Borradores"
+        },
+        "controlled": "Tab activa:",
+        "props": {
+          "items": "Lista de tabs. Cada item acepta value, label, icon, badge, disabled, to.",
+          "modelValue": "Valor de la tab activa. Usa v-model.",
+          "variant": "Estilo visual del tablist.",
+          "color": "Color semántico aplicado a la tab activa.",
+          "size": "Tamaño y padding de cada tab.",
+          "radius": "Radio de las pills/segmented. Hereda de ModoProvider.",
+          "fullWidth": "Estira el tablist al 100% y reparte items por igual.",
+          "lazy": "Solo monta los paneles al activarlos por primera vez.",
+          "keepMounted": "Mantiene los paneles montados (ocultos) al cambiar de tab.",
+          "linkComponent": "Componente para items con `to`. Usa RouterLink para vue-router.",
+          "ariaLabel": "Etiqueta accesible del tablist."
+        },
+        "emits": {
+          "updateModelValue": "Emitido al cambiar de tab. Usado por v-model.",
+          "change": "Emitido tras un cambio de tab con el item completo."
+        },
+        "slots": {
+          "panelByValue": "Contenido del panel para cada item, identificado por su value.",
+          "panel": "Slot fallback aplicado a los paneles que no definen su propio slot."
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaces de TypeScript para este componente."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco hacia o fuera de la lista de tabs",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "kbArrow": "Navega entre tabs",
+          "kbEnter": "Activa el tab enfocado",
+          "ariaLabel": "Proporciona un nombre accesible para la lista de tabs",
+          "ariaSelected": "Indica el tab actualmente activo",
+          "focusNative": "El foco es gestionado por el tablist; las flechas navegan entre tabs"
+        }
+      }
+    }
+  }
+}

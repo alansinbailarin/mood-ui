@@ -1,0 +1,2151 @@
+{
+  "pages": {
+    "data-display": {
+      "accordion": {
+        "title": "Accordion",
+        "description": "Paneles expandibles para mostrar contenido jerárquico de forma compacta. Ideal para FAQs, configuraciones y filtros.",
+        "controls": {
+          "variant": "Variante",
+          "size": "Tamaño",
+          "radius": "Radio",
+          "icon": "Icono",
+          "multiple": "Múltiple"
+        },
+        "props": {
+          "items": "Lista de ítems a renderizar (cada uno con value, title y content).",
+          "modelValue": "Vínculo v-model. El tipo depende de multiple.",
+          "multiple": "Permite tener varios paneles abiertos a la vez.",
+          "variant": "Variante visual del contenedor.",
+          "size": "Escala de padding y tipografía. Hereda del ModoProvider.",
+          "radius": "Radio de borde (para separated y bordered).",
+          "iconPosition": "Lado donde se muestra el chevron."
+        },
+        "emits": {
+          "updateModelValue": "Emitido cuando cambia el conjunto de paneles abiertos.",
+          "change": "Alias de update:modelValue para uso sin v-model."
+        },
+        "slots": {
+          "itemValue": "Slot por item para renderizar contenido rico (HTML, formularios, listas)."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Tres paneles single-open con v-model."
+          },
+          "multiple": {
+            "title": "Multiple abiertos",
+            "desc": "Permite mantener varios paneles expandidos simultáneamente."
+          },
+          "variants": {
+            "title": "Variantes",
+            "desc": "separated (cards independientes), bordered (caja única) y flush (sin contenedor)."
+          },
+          "icons": {
+            "title": "Con iconos",
+            "desc": "Cada item puede declarar un icono opcional junto al título."
+          },
+          "sizes": {
+            "title": "Tamaños",
+            "desc": "Tres escalas de padding y tipografía."
+          }
+        },
+        "types": {
+          "title": "Accordion",
+          "desc": "Interfaces TypeScript de Accordion y AccordionItem. Soporta expansión single/multiple, variantes, tamaños e iconos personalizados."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente header del acordeón",
+          "kbShiftTab": "Mueve el foco al header anterior del acordeón",
+          "kbArrow": "Mueve el foco entre los headers del acordeón",
+          "kbEnter": "Expande o colapsa el panel del acordeón enfocado",
+          "kbEsc": "Colapsa el panel expandido cuando el foco está en el header",
+          "ariaRegion": "Usa role region para identificación del lector de pantalla",
+          "ariaExpanded": "Anuncia si el panel está expandido o colapsado",
+          "ariaControls": "Vincula el header al panel que controla",
+          "focusNative": "Los headers del acordeón son enfocables y activables por teclado"
+        }
+      },
+      "agendaView": {
+        "title": "AgendaView",
+        "description": "Lista cronológica de eventos por día. Ideal para secciones \"próximos eventos\", dashboards y agendas compactas.",
+        "controls": {
+          "days": "Días",
+          "format": "Formato",
+          "emptyDays": "Días vacíos",
+          "borders": "Bordes"
+        },
+        "props": {
+          "modelValue": "Fecha ancla a partir de la cual se calcula el rango.",
+          "events": "Lista de eventos a mostrar.",
+          "locale": "Locale BCP-47 para fechas y nombres de día.",
+          "color": "Color semántico aplicado a los acentos.",
+          "daysToShow": "Cantidad de días hacia adelante a mostrar.",
+          "daysBefore": "Días hacia atrás incluidos antes de la fecha ancla.",
+          "showEmptyDays": "Muestra los días sin eventos como filas vacías.",
+          "showMonthSeparator": "Inserta un separador al cambiar de mes.",
+          "showHeader": "Muestra la cabecera con navegación.",
+          "format": "Formato horario de los eventos.",
+          "emptyText": "Texto mostrado cuando no hay eventos en el rango.",
+          "highlightedDates": "Fechas resaltadas visualmente.",
+          "disabledDates": "Fechas deshabilitadas.",
+          "bordered": "Dibuja borde alrededor del contenedor.",
+          "loadMoreChunk": "Número de días añadidos al cargar más eventos."
+        },
+        "emits": {
+          "updateModelValue": "Emitido al cambiar el rango visible.",
+          "eventClick": "Click sobre un evento.",
+          "dayClick": "Click sobre la fila de un día.",
+          "createEvent": "Solicitud de creación de evento.",
+          "loadMore": "Solicitud de cargar más días al final del listado."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Lista de los próximos 7 días agrupada por día."
+          },
+          "extendedRange": {
+            "title": "Rango extendido",
+            "desc": "Aumenta days-to-show para mostrar más días por adelantado."
+          },
+          "emptyState": {
+            "title": "Estado vacío",
+            "desc": "Cuando no hay eventos, muestra un mensaje configurable."
+          },
+          "format12h": {
+            "title": "Formato 12 horas",
+            "desc": "Muestra los horarios de los eventos en formato AM/PM."
+          }
+        },
+        "types": {
+          "title": "AgendaView",
+          "desc": "Interfaz TypeScript de las props del componente AgendaView. Soporta modelValue, events, locale, color, radius, bordered, minDate, maxDate, daysToShow, daysBefore, showEmptyDays, showHeader, showMonthSeparator, format, emptyText, highlightedDates, disabledDates, disabledWeekdays y loadMoreChunk."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "ariaLabel": "Proporciona un nombre accesible para la vista de agenda",
+          "focusNative": "El foco es gestionado por la vista de agenda; usa Tab para navegar eventos y acciones"
+        }
+      },
+      "avatar": {
+        "title": "Avatar",
+        "description": "Avatar de usuario con imagen, iniciales fallback, indicador de estado y múltiples tamaños y formas.",
+        "controls": {
+          "mode": "Modo",
+          "size": "Tamaño",
+          "radius": "Radio",
+          "color": "Color",
+          "status": "Estado",
+          "bordered": "Borde"
+        },
+        "props": {
+          "src": "URL de la imagen del avatar. Si falla, hace fallback a initials o icono.",
+          "alt": "Texto alternativo para la imagen.",
+          "initials": "Iniciales mostradas cuando no hay imagen disponible.",
+          "size": "Tamaño del avatar.",
+          "radius": "Forma del avatar. full=círculo, none=cuadrado.",
+          "color": "Color de fondo cuando se muestran iniciales.",
+          "status": "Indicador de estado visible en la esquina inferior.",
+          "bordered": "Añade un borde alrededor del avatar.",
+          "ariaLabel": "Nombre accesible cuando se muestran iniciales o el icono fallback.",
+          "skeleton": "Muestra un placeholder de carga con la misma huella."
+        },
+        "examples": {
+          "image": {
+            "title": "Imagen",
+            "desc": "Carga la imagen desde una URL."
+          },
+          "initials": {
+            "title": "Iniciales",
+            "desc": "Fallback con iniciales y color semántico cuando no hay imagen."
+          },
+          "iconFallback": {
+            "title": "Icono fallback",
+            "desc": "Si no hay src ni initials, se muestra un icono genérico."
+          },
+          "sizes": {
+            "title": "Tamaños",
+            "desc": "Cinco escalas: xs, small, medium, large y xl."
+          },
+          "status": {
+            "title": "Indicador de estado",
+            "desc": "Punto en la esquina inferior derecha para señalar presencia."
+          }
+        },
+        "types": {
+          "title": "Avatar",
+          "desc": "Interfaz TypeScript de las props del componente Avatar. Soporta src, alt, initials, size, radius, status, bordered, color, ariaLabel y skeleton."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "ariaLabel": "Proporciona un nombre accesible para la imagen del avatar",
+          "ariaImg": "Usa role img para identificación del lector de pantalla",
+          "focusNative": "No interactivo por defecto; no captura el foco"
+        }
+      },
+      "avatarGroup": {
+        "title": "AvatarGroup",
+        "description": "Apila avatares solapados mostrando hasta N visibles y un contador con el resto. Ideal para listas de colaboradores, asignados o miembros.",
+        "controls": {
+          "size": "Tamaño",
+          "max": "Máximo",
+          "radius": "Radio",
+          "bordered": "Borde"
+        },
+        "props": {
+          "max": "Número máximo de avatares visibles. Los restantes se agrupan en un contador +N.",
+          "size": "Tamaño aplicado a todos los avatares hijos.",
+          "radius": "Forma compartida por todos los avatares del grupo.",
+          "bordered": "Borde alrededor de cada avatar para separarlos visualmente.",
+          "ariaLabel": "Nombre accesible para el grupo."
+        },
+        "slots": {
+          "default": "Lista de componentes Avatar. El grupo controla su tamaño y forma."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Tres avatares solapados sin límite."
+          },
+          "maxOverflow": {
+            "title": "Con max y overflow",
+            "desc": "Limita los visibles y muestra un contador +N con el resto."
+          },
+          "sizes": {
+            "title": "Tamaños",
+            "desc": "El size se aplica a todos los avatares hijos."
+          },
+          "mixed": {
+            "title": "Mixto",
+            "desc": "Combina imágenes, iniciales e icono fallback en el mismo grupo."
+          }
+        },
+        "types": {
+          "title": "AvatarGroup",
+          "desc": "Interfaz TypeScript de las props del componente AvatarGroup. Soporta max, size, radius, bordered y ariaLabel."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "ariaLabel": "Proporciona un nombre accesible que describe el grupo de avatares",
+          "focusNative": "Contenedor no interactivo; los avatares hijos no son enfocables"
+        }
+      },
+      "calendar": {
+        "title": "Calendar",
+        "description": "Calendario mensual para seleccionar una fecha. Soporta minDate, maxDate, fechas deshabilitadas, locale y variantes visuales.",
+        "controls": {
+          "variant": "Variante",
+          "color": "Color",
+          "radius": "Radio",
+          "outsideDays": "Días externos",
+          "header": "Cabecera"
+        },
+        "props": {
+          "modelValue": "Fecha seleccionada (v-model).",
+          "month": "Mes inicial mostrado (0-11). Por defecto el mes actual.",
+          "year": "Año inicial mostrado.",
+          "locale": "Locale BCP-47 para nombres de mes y días.",
+          "firstDayOfWeek": "Primer día de la semana (0 = domingo, 1 = lunes).",
+          "minDate": "Fecha mínima seleccionable.",
+          "maxDate": "Fecha máxima seleccionable.",
+          "disabledDates": "Fechas individuales a deshabilitar.",
+          "color": "Color semántico aplicado a la selección y al hover.",
+          "variant": "Variante visual del contenedor.",
+          "radius": "Radio de borde del calendario y de las celdas.",
+          "showOutsideDays": "Muestra días del mes anterior y siguiente que completan la grilla.",
+          "showHeader": "Muestra la cabecera con navegación de mes y año.",
+          "fixedWeeks": "Siempre muestra 6 semanas para mantener una altura constante."
+        },
+        "emits": {
+          "updateModelValue": "Emitido al seleccionar una fecha.",
+          "monthChange": "Emitido al cambiar el mes o año visible mediante navegación."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Calendario por defecto vinculado a una fecha mediante v-model."
+          },
+          "minMax": {
+            "title": "Fecha mín / máx",
+            "desc": "Limita el rango seleccionable usando min-date y max-date."
+          },
+          "dateRange": {
+            "title": "Con rango de fechas",
+            "desc": "Limita el rango seleccionable usando min-date y max-date."
+          },
+          "outline": {
+            "title": "Variante outline",
+            "desc": "Variante con borde visible y radio grande."
+          },
+          "locale": {
+            "title": "Locale personalizado",
+            "desc": "Cambia el locale y el primer día de la semana."
+          }
+        },
+        "types": {
+          "title": "Calendar",
+          "desc": "Interfaz TypeScript de las props del componente Calendar. Soporta modelValue, locale, firstDayOfWeek, minDate, maxDate, disabledDates, color, variant, radius, showOutsideDays, showHeader y fixedWeeks."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "ariaLabel": "Proporciona un nombre accesible para el calendario",
+          "focusNative": "El foco es gestionado por el calendario; usa Tab para navegar días y acciones"
+        }
+      },
+      "card": {
+        "title": "Card",
+        "description": "Contenedor estructural con tres variantes (elevated, outlined, filled), control de padding, radio y estado hover. Bloque base para métricas, listas, formularios y secciones.",
+        "controls": {
+          "variant": "Variante",
+          "padding": "Padding",
+          "radius": "Radio",
+          "hoverable": "Hoverable",
+          "clickable": "Clickable",
+          "divided": "Divided"
+        },
+        "playground": {
+          "title": "Card de ejemplo",
+          "body": "Ajusta los controles para ver los cambios en vivo."
+        },
+        "props": {
+          "variant": "Estilo visual del contenedor.",
+          "padding": "Padding interno aplicado a header, body y footer.",
+          "radius": "Radio de borde. Hereda del ModoProvider si se omite.",
+          "hoverable": "Aplica estado hover (sombra, borde) sin convertirlo en botón.",
+          "clickable": "Renderiza el card como button con foco accesible y cursor pointer.",
+          "divided": "Muestra una línea divisoria entre header / body / footer."
+        },
+        "slots": {
+          "default": "Contenido principal del card.",
+          "header": "Cabecera opcional encima del contenido.",
+          "image": "Slot sin padding para imágenes o medios edge-to-edge.",
+          "footer": "Footer opcional para acciones o metadatos."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Card simple con título y descripción."
+          },
+          "headerFooter": {
+            "title": "Con header y footer",
+            "desc": "Slots #header y #footer con divisor entre secciones."
+          },
+          "image": {
+            "title": "Con imagen",
+            "desc": "Slot #image edge-to-edge combinado con padding=none."
+          },
+          "hover": {
+            "title": "Hover effect",
+            "desc": "Activa hoverable para realzar el card al pasar el cursor."
+          },
+          "clickable": {
+            "title": "Clickeable",
+            "desc": "Renderiza el card como button accesible con foco visible."
+          }
+        },
+        "types": {
+          "title": "Card",
+          "desc": "Interfaz TypeScript de las props del componente Card. Soporta variant, padding, radius, hoverable, clickable y divided."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable dentro de la card",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior dentro de la card",
+          "ariaLabel": "Proporciona un nombre accesible para cards clickeables",
+          "focusNative": "El contenido interactivo dentro de la card es enfocable; la card misma no lo es a menos que clickable esté activado"
+        }
+      },
+      "code": {
+        "title": "Code",
+        "description": "Fragmentos de código inline para resaltar valores, props o errores en docs y mensajes.",
+        "controls": {
+          "variant": "Variante",
+          "color": "Color",
+          "size": "Tamaño",
+          "radius": "Radio"
+        },
+        "props": {
+          "size": "Tamaño del texto del fragmento.",
+          "variant": "Estilo visual del fondo / borde.",
+          "color": "Color semántico aplicado al fragmento.",
+          "radius": "Radio de borde. Hereda del ModoProvider si se omite."
+        },
+        "slots": {
+          "default": "Contenido del fragmento de código (texto plano o expresión corta)."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Snippet de código inline con estilos por defecto."
+          },
+          "variants": {
+            "title": "Variantes",
+            "desc": "subtle (filled), outline (border) y ghost (transparent)."
+          },
+          "colors": {
+            "title": "Colores semánticos",
+            "desc": "Cinco colores para diferenciar valores, errores o estados."
+          },
+          "sizes": {
+            "title": "Tamaños",
+            "desc": "Tres escalas que se alinean con el texto circundante."
+          },
+          "inline": {
+            "title": "En línea en texto",
+            "desc": "Alineado verticalmente, preservando la línea base."
+          }
+        },
+        "types": {
+          "title": "Code",
+          "desc": "Interfaz TypeScript de las props del componente Code. Soporta size, variant, color y radius."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "ariaLabel": "Proporciona un nombre accesible para el snippet de código",
+          "focusNative": "Elemento no interactivo; no participa en el orden de tabulación"
+        }
+      },
+      "dateRangePicker": {
+        "title": "DateRangePicker",
+        "description": "Selector inline de rango de fechas. Soporta uno o dos meses visibles, presets rápidos, restricciones de longitud mínima/máxima y fechas deshabilitadas.",
+        "controls": {
+          "months": "Meses",
+          "variant": "Variante",
+          "color": "Color",
+          "radius": "Radio",
+          "presets": "Presets"
+        },
+        "props": {
+          "modelValue": "Tupla con la fecha de inicio y fin del rango (v-model).",
+          "months": "Número de meses visibles simultáneamente.",
+          "showPresets": "Muestra el panel lateral con rangos predefinidos (hoy, esta semana, etc.).",
+          "presets": "Presets personalizados. Cada uno tiene label y una función range() que retorna la tupla.",
+          "color": "Color de acento para el rango seleccionado.",
+          "variant": "Estilo visual del panel.",
+          "radius": "Radio de borde del panel.",
+          "minDate": "Fecha mínima seleccionable.",
+          "maxDate": "Fecha máxima seleccionable.",
+          "minRange": "Mínimo de días que debe abarcar el rango.",
+          "maxRange": "Máximo de días que puede abarcar el rango.",
+          "disabledDates": "Fechas no seleccionables.",
+          "locale": "Locale para nombres de mes y día.",
+          "firstDayOfWeek": "Día de inicio de semana (0=Dom, 1=Lun)."
+        },
+        "examples": {
+          "twoMonths": {
+            "title": "Dos meses (por defecto)",
+            "desc": "Muestra dos calendarios lado a lado para seleccionar rangos largos cómodamente."
+          },
+          "oneMonth": {
+            "title": "Un mes",
+            "desc": "Modo compacto con un solo calendario, ideal para rangos cortos."
+          },
+          "presets": {
+            "title": "Con presets",
+            "desc": "show-presets añade un panel lateral con atajos (hoy, esta semana, este mes, últimos 30 días…)."
+          },
+          "color": {
+            "title": "Color primary",
+            "desc": "El color afecta el fondo del rango seleccionado y los días de inicio/fin."
+          },
+          "colorPrimary": {
+            "title": "Color primary",
+            "desc": "El color afecta el fondo del rango seleccionado y los días de inicio/fin."
+          },
+          "outline": {
+            "title": "Variante outline",
+            "desc": "Borde perimetral visible, útil en fondos neutrales."
+          }
+        },
+        "types": {
+          "title": "DateRangePicker",
+          "desc": "Interfaces TypeScript de DateRangePicker y RangePreset. Soporta modelValue, locale, firstDayOfWeek, minDate, maxDate, disabledDates, color, variant, radius, months, showPresets, presets, minRange y maxRange."
+        }
+      },
+      "dateTimePicker": {
+        "title": "DateTimePicker",
+        "description": "Selector inline de fecha y hora. Muestra un calendario mensual junto a columnas de tiempo deslizables. Soporta formatos 12/24h, segundos y step de minutos.",
+        "controls": {
+          "format": "Formato",
+          "variant": "Variante",
+          "color": "Color",
+          "step": "Paso",
+          "radius": "Radio",
+          "seconds": "Segundos"
+        },
+        "props": {
+          "modelValue": "Fecha y hora seleccionada (v-model).",
+          "format": "Formato de hora del selector de tiempo.",
+          "step": "Incremento en minutos para la columna de minutos.",
+          "showSeconds": "Muestra la columna de segundos.",
+          "color": "Color de acento para el día seleccionado.",
+          "variant": "Estilo visual del panel de calendario.",
+          "radius": "Radio de borde del panel.",
+          "minDate": "Fecha mínima seleccionable.",
+          "maxDate": "Fecha máxima seleccionable.",
+          "disabledDates": "Lista de fechas deshabilitadas.",
+          "minTime": "Hora mínima en formato HH:MM.",
+          "maxTime": "Hora máxima en formato HH:MM.",
+          "locale": "Locale para nombres de mes y día (ej. es-MX).",
+          "firstDayOfWeek": "Día de inicio de semana (0=Dom, 1=Lun)."
+        },
+        "examples": {
+          "basic24": {
+            "title": "24h (por defecto)",
+            "desc": "Modo 24 horas con columnas de hora y minutos."
+          },
+          "basic24h": {
+            "title": "24h (por defecto)",
+            "desc": "Modo 24 horas con columnas de hora y minutos."
+          },
+          "format12": {
+            "title": "Formato 12h",
+            "desc": "Añade la columna AM/PM para regiones que prefieren el reloj de 12 horas."
+          },
+          "format12h": {
+            "title": "Formato 12h",
+            "desc": "Añade la columna AM/PM para regiones que prefieren el reloj de 12 horas."
+          },
+          "seconds": {
+            "title": "12h con segundos",
+            "desc": "Activa show-seconds para mostrar la columna de segundos."
+          },
+          "seconds12h": {
+            "title": "12h con segundos",
+            "desc": "Activa show-seconds para mostrar la columna de segundos."
+          },
+          "step": {
+            "title": "Step 15 minutos",
+            "desc": "step=\"15\" agrupa los minutos en saltos de 15, ideal para agendas."
+          },
+          "step15": {
+            "title": "Step 15 minutos",
+            "desc": "step=\"15\" agrupa los minutos en saltos de 15, ideal para agendas."
+          },
+          "outline": {
+            "title": "Variante outline",
+            "desc": "Borde perimetral para fondos neutros o tarjetas."
+          }
+        },
+        "types": {
+          "title": "DateTimePicker",
+          "desc": "Interfaz TypeScript de las props del componente DateTimePicker. Soporta modelValue, locale, firstDayOfWeek, minDate, maxDate, disabledDates, color, variant, radius, format, step, showSeconds, minTime y maxTime."
+        }
+      },
+      "dayView": {
+        "title": "DayView",
+        "description": "Vista de un único día con grilla horaria. Ideal para agendas detalladas, bloques de tiempo y planificación operativa.",
+        "controls": {
+          "format": "Formato",
+          "allDayRow": "Fila all-day",
+          "borders": "Bordes",
+          "currentTime": "Hora actual"
+        },
+        "props": {
+          "modelValue": "Día visible (v-model).",
+          "events": "Eventos a renderizar en la grilla horaria.",
+          "locale": "Locale BCP-47 para encabezados y formatos.",
+          "color": "Color semántico aplicado a acentos.",
+          "format": "Formato horario de la columna de horas.",
+          "hourStart": "Hora inicial visible (0-23).",
+          "hourEnd": "Hora final visible (1-24).",
+          "slotMinutes": "Granularidad de los slots de tiempo.",
+          "slotHeight": "Altura en px de cada slot horario.",
+          "showAllDayRow": "Muestra la fila superior para eventos all-day.",
+          "showHeader": "Muestra la cabecera con navegación.",
+          "showCurrentTime": "Dibuja la línea de hora actual.",
+          "showNowPill": "Muestra una píldora con la hora actual.",
+          "businessHours": "Resalta el rango de horas laborales.",
+          "disabledTimeRanges": "Rangos horarios no seleccionables.",
+          "bordered": "Dibuja borde alrededor de la grilla.",
+          "draggableEvents": "Permite arrastrar eventos.",
+          "resizableEvents": "Permite redimensionar eventos.",
+          "allowRangeSelection": "Permite seleccionar un rango arrastrando sobre slots vacíos."
+        },
+        "emits": {
+          "updateModelValue": "Emitido al cambiar el día visible.",
+          "eventClick": "Click sobre un evento.",
+          "slotClick": "Click sobre un slot vacío.",
+          "createEvent": "Solicitud de creación de evento.",
+          "eventDrop": "Evento arrastrado a una nueva posición.",
+          "eventResize": "Evento redimensionado.",
+          "selectRange": "Rango seleccionado arrastrando."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Día por defecto sin eventos."
+          },
+          "events": {
+            "title": "Con eventos",
+            "desc": "Eventos timed renderizados en la grilla horaria."
+          },
+          "format12h": {
+            "title": "Formato 12 horas",
+            "desc": "Columna horaria en formato AM/PM."
+          },
+          "businessHours": {
+            "title": "Business hours",
+            "desc": "Resalta horario laboral y restringe el rango horario visible."
+          }
+        },
+        "types": {
+          "title": "DayView",
+          "desc": "Interfaz TypeScript de las props del componente DayView. Soporta modelValue, events, locale, color, radius, bordered, minDate, maxDate, businessHours, disabledTimeRanges, showHeader, showCurrentTime, format, slotMinutes, slotHeight, hourStart, hourEnd, showAllDayRow, draggableEvents, resizableEvents y allowRangeSelection."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "ariaLabel": "Proporciona un nombre accesible para la vista de día",
+          "focusNative": "El foco es gestionado por la vista de día; usa Tab para navegar eventos y acciones"
+        }
+      },
+      "kbd": {
+        "title": "Kbd",
+        "description": "Representación visual de teclas o atajos de teclado. Útil en docs, tooltips y command palettes.",
+        "controls": {
+          "variant": "Variante",
+          "size": "Tamaño",
+          "radius": "Radio"
+        },
+        "props": {
+          "size": "Tamaño de la tecla.",
+          "variant": "Estilo visual de la tecla.",
+          "radius": "Radio de borde. Hereda del ModoProvider si se omite."
+        },
+        "slots": {
+          "default": "Texto o glifo de la tecla (Enter, ⌘, ↑, etc.)."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Una sola tecla."
+          },
+          "combo": {
+            "title": "Combinación",
+            "desc": "Une varios componentes Kbd con un separador."
+          },
+          "variants": {
+            "title": "Variantes",
+            "desc": "Tres estilos visuales: subtle (default), outline y solid."
+          },
+          "sizes": {
+            "title": "Tamaños",
+            "desc": "Tres escalas para alinearse con el texto en distintos contextos."
+          },
+          "inline": {
+            "title": "En línea en texto",
+            "desc": "Alineado verticalmente con el texto circundante.",
+            "text": "Presiona {key} para abrir la búsqueda rápida."
+          }
+        },
+        "types": {
+          "title": "Kbd",
+          "desc": "Interfaz TypeScript de las props del componente Kbd. Soporta size, variant y radius."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "ariaLabel": "Proporciona un nombre accesible que describe el atajo de teclado",
+          "focusNative": "Elemento no interactivo; no participa en el orden de tabulación"
+        }
+      },
+      "monthView": {
+        "title": "MonthView",
+        "description": "Vista mensual tipo grilla para mostrar eventos por día. Soporta números de semana, semana iniciando en cualquier día y arrastre de eventos.",
+        "controls": {
+          "weekStart": "Inicio",
+          "sun": "Dom",
+          "mon": "Lun",
+          "weekNumbers": "Nº semana",
+          "fixedWeeks": "6 semanas fijas",
+          "outsideDays": "Días externos"
+        },
+        "props": {
+          "modelValue": "Fecha visible (v-model). Determina el mes mostrado.",
+          "events": "Lista de eventos a renderizar en cada celda.",
+          "locale": "Locale BCP-47 para nombres de mes y días.",
+          "firstDayOfWeek": "Primer día de la semana (0 = domingo, 1 = lunes).",
+          "color": "Color semántico de la selección y los acentos.",
+          "radius": "Radio de borde del contenedor.",
+          "maxEventsPerDay": "Máximo de eventos visibles por celda; el resto se agrupa en \"+N\".",
+          "showWeekNumbers": "Muestra una columna inicial con el número de semana ISO.",
+          "fixedWeeks": "Renderiza siempre 6 semanas para mantener altura constante.",
+          "showOutsideDays": "Muestra días del mes anterior y siguiente.",
+          "showHeader": "Muestra cabecera con navegación.",
+          "bordered": "Dibuja líneas divisorias entre celdas.",
+          "highlightWeekends": "Resalta visualmente sábado y domingo.",
+          "minDateMaxDate": "Limita el rango de fechas seleccionables.",
+          "disabledDates": "Fechas individuales deshabilitadas.",
+          "disabledDaysOfWeek": "Días de la semana deshabilitados (0-6).",
+          "draggableEvents": "Permite arrastrar eventos entre días."
+        },
+        "emits": {
+          "updateModelValue": "Emitido al seleccionar un día.",
+          "eventClick": "Emitido al hacer click sobre un evento.",
+          "dayClick": "Emitido al hacer click sobre una celda de día.",
+          "moreClick": "Emitido al hacer click sobre el indicador \"+N\".",
+          "createEvent": "Emitido al solicitar la creación de un evento.",
+          "eventDrop": "Emitido al soltar un evento arrastrado en otra fecha."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Vista mensual sin eventos vinculada a una fecha."
+          },
+          "events": {
+            "title": "Con eventos",
+            "desc": "Renderiza una colección de CalendarEvent distribuidos por día."
+          },
+          "weekNumbers": {
+            "title": "Con números de semana",
+            "desc": "Activa show-week-numbers para mostrar la numeración ISO."
+          },
+          "sundayStart": {
+            "title": "Semana iniciando en domingo",
+            "desc": "Configura first-day-of-week=0 para iniciar en domingo."
+          }
+        },
+        "types": {
+          "title": "MonthView",
+          "desc": "Interfaces TypeScript de MonthView y CalendarEvent. Soporta modelValue, events, locale, firstDayOfWeek, color, radius, maxEventsPerDay, showWeekNumbers, fixedWeeks, showOutsideDays, showHeader, bordered, highlightWeekends, minDate, maxDate, disabledDates, disabledDaysOfWeek y draggableEvents."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "ariaLabel": "Proporciona un nombre accesible para la vista de mes",
+          "focusNative": "El foco es gestionado por la vista de mes; usa Tab para navegar días y eventos"
+        }
+      },
+      "scheduler": {
+        "title": "Scheduler",
+        "description": "Vista tipo agenda con recursos en columnas (salas, personas, equipos). Cada recurso muestra sus eventos sobre una grilla horaria compartida.",
+        "controls": {
+          "format": "Formato",
+          "borders": "Bordes",
+          "allDayRow": "Fila all-day",
+          "resourceColor": "Color del recurso"
+        },
+        "props": {
+          "modelValue": "Día visible (v-model).",
+          "resources": "Filas del scheduler (salas, personas, equipos).",
+          "events": "Eventos asignados a recursos por `resourceId`.",
+          "locale": "Locale BCP-47 para fechas y horas.",
+          "color": "Color semántico aplicado a acentos.",
+          "format": "Formato horario de la columna de horas.",
+          "hourStart": "Hora inicial visible (0-23).",
+          "hourEnd": "Hora final visible (1-24).",
+          "slotMinutes": "Granularidad de los slots de tiempo.",
+          "slotHeight": "Altura en px de cada slot horario.",
+          "minResourceWidth": "Ancho mínimo de cada columna de recurso antes de hacer scroll horizontal.",
+          "showResourceHeader": "Muestra la cabecera por recurso.",
+          "resourceHeaderHeight": "Altura en px de la cabecera de recurso.",
+          "showAllDayRow": "Muestra la fila para eventos all-day.",
+          "showCurrentTime": "Dibuja la línea de hora actual.",
+          "businessHours": "Resalta el rango de horas laborales.",
+          "bordered": "Dibuja borde alrededor de la grilla.",
+          "useResourceColor": "Aplica el color del recurso a sus eventos cuando no tienen color propio.",
+          "draggableEvents": "Permite arrastrar eventos.",
+          "allowCrossResourceDrag": "Permite mover eventos entre recursos al arrastrarlos.",
+          "resizableEvents": "Permite redimensionar eventos."
+        },
+        "emits": {
+          "updateModelValue": "Emitido al cambiar el día visible.",
+          "eventClick": "Click sobre un evento.",
+          "slotClick": "Click sobre un slot vacío de un recurso.",
+          "createEvent": "Solicitud de creación de evento.",
+          "eventDrop": "Evento arrastrado a otra posición o recurso.",
+          "eventResize": "Evento redimensionado.",
+          "selectRange": "Rango seleccionado dentro de un recurso."
+        },
+        "examples": {
+          "basic": {
+            "title": "Sólo recursos",
+            "desc": "Scheduler vacío que muestra la grilla de recursos sin eventos."
+          },
+          "events": {
+            "title": "Con eventos",
+            "desc": "Eventos asignados a cada recurso por resourceId."
+          },
+          "format12h": {
+            "title": "Formato 12 horas",
+            "desc": "Cambia la columna horaria a formato AM/PM."
+          },
+          "businessHours": {
+            "title": "Business hours",
+            "desc": "Resalta el horario laboral y limita el rango horario."
+          }
+        },
+        "types": {
+          "title": "Scheduler",
+          "desc": "Interfaces TypeScript de Scheduler, SchedulerResource y SchedulerEvent. Soporta modelValue, resources, events, locale, color, radius, bordered, businessHours, disabledTimeRanges, showHeader, showCurrentTime, format, slotMinutes, slotHeight, minResourceWidth, showAllDayRow, draggableEvents, resizableEvents, allowCrossResourceDrag y useResourceColor."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "ariaLabel": "Proporciona un nombre accesible para el scheduler",
+          "focusNative": "El foco es gestionado por el scheduler; usa Tab para navegar recursos, eventos y acciones"
+        }
+      },
+      "stat": {
+        "title": "Stat",
+        "description": "Tarjeta KPI compacta para mostrar métricas con tendencia, icono y color semántico. Ideal para dashboards y resumenes.",
+        "controls": {
+          "variant": "Variante",
+          "color": "Color",
+          "size": "Tamaño",
+          "trend": "Tendencia",
+          "loading": "Cargando"
+        },
+        "props": {
+          "label": "Etiqueta corta de la métrica (\"Revenue\", \"Users\").",
+          "value": "Valor principal pre-formateado por el consumidor.",
+          "description": "Texto auxiliar mostrado debajo del valor.",
+          "icon": "Componente de icono opcional (heroicons u otro).",
+          "trend": "Metadatos de tendencia. Renderiza una flecha y el delta.",
+          "variant": "Estilo visual del card.",
+          "color": "Color semántico aplicado al icono y a la tendencia.",
+          "size": "Escala de tamaño. Hereda del ModoProvider si se omite.",
+          "loading": "Muestra un skeleton en el valor mientras se carga."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Label y valor principal sin extras."
+          },
+          "trend": {
+            "title": "Con trend",
+            "desc": "La prop trend muestra una flecha y el delta porcentual."
+          },
+          "icon": {
+            "title": "Con icono y color",
+            "desc": "Combina icono, color semántico y la variante outlined."
+          },
+          "sizes": {
+            "title": "Tamaños",
+            "desc": "Tres escalas para alinearse con la jerarquía de la página."
+          },
+          "grid": {
+            "title": "Grilla de métricas",
+            "desc": "Cuatro cards Stat en una grilla simulando un dashboard."
+          }
+        },
+        "types": {
+          "title": "Stat",
+          "desc": "Interfaz TypeScript de las props del componente Stat. Soporta label, value, description, icon, trend, variant, color, size y loading."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "ariaLabel": "Proporciona un nombre accesible para el valor del stat",
+          "focusNative": "Elemento no interactivo; no participa en el orden de tabulación"
+        }
+      },
+      "table": {
+        "title": "Table",
+        "description": "Tabla potente con sorting, paginación, selección, sticky header, filas expandibles y soporte de árbol. Las columnas se definen con key + accessor.",
+        "controls": {
+          "size": "Tamaño",
+          "density": "Densidad",
+          "bordered": "Bordered",
+          "select": "Select",
+          "striped": "Striped",
+          "hover": "Hover",
+          "stickyHeader": "Sticky header"
+        },
+        "props": {
+          "data": "Filas a renderizar.",
+          "columns": "Definición de columnas (key, header, accessor, sortable, align…).",
+          "rowKey": "Identificador único de fila usado por v-for y selección.",
+          "size": "Tamaño de fuente y altura base de las filas.",
+          "density": "Padding vertical aplicado a las celdas.",
+          "striped": "Aplica un fondo alterno a las filas pares.",
+          "hover": "Resalta la fila bajo el cursor.",
+          "bordered": "Configura los bordes internos de la tabla.",
+          "stickyHeader": "Mantiene la cabecera visible al hacer scroll vertical.",
+          "radius": "Redondea las esquinas externas del contenedor de la tabla.",
+          "overflow": "Controla cómo las celdas manejan el contenido que supera su ancho.",
+          "loading": "Muestra un estado de carga mientras se obtienen los datos.",
+          "loadingRows": "Número de filas skeleton mostradas cuando loading es true.",
+          "loadingMode": "Estrategia de renderizado del estado de carga: filas skeleton o spinner superpuesto.",
+          "emptyText": "Mensaje mostrado cuando data está vacía.",
+          "noResultsText": "Mensaje mostrado cuando los filtros no arrojan resultados.",
+          "ariaLabel": "Etiqueta accesible para el elemento tabla.",
+          "sort": "Estado de ordenación controlado: array de objetos \\{ key, direction \\}.",
+          "multiSort": "Permite ordenar por múltiples columnas simultáneamente.",
+          "sortClearable": "Si al hacer clic una tercera vez en una columna ordenada se borra su ordenación.",
+          "selectable": "Activa selección de filas. 'single' permite una fila; 'multi' permite varias.",
+          "selected": "Array controlado de keys de filas seleccionadas.",
+          "isRowSelectable": "Predicado para deshabilitar la selección en filas específicas.",
+          "filter": "Valores de filtro por columna controlados como mapa key → valor.",
+          "filterRow": "Muestra una fila de inputs de filtro debajo de la cabecera.",
+          "expandable": "Añade un toggle de expansión a cada fila para revelar contenido adicional.",
+          "expanded": "Array controlado de keys de filas expandidas.",
+          "isRowExpandable": "Predicado para ocultar el toggle de expansión en filas específicas.",
+          "pagination": "Estado de paginación controlado: \\{ page, pageSize, total \\}.",
+          "pageSizeOptions": "Opciones disponibles en el selector de page size.",
+          "serverSide": "Desactiva el sorting/filtrado cliente; lo delega al servidor mediante emits.",
+          "resizable": "Permite arrastrar el ancho de las columnas para redimensionarlas.",
+          "reorderable": "Permite arrastrar las columnas para reordenarlas.",
+          "columnsState": "Estado por columna controlado (ancho, orden, visibilidad).",
+          "state": "Snapshot serializable del estado completo de la tabla.",
+          "minColumnWidth": "Ancho mínimo de columna en píxeles al redimensionar.",
+          "virtual": "Activa el scroll virtual para datasets grandes.",
+          "rowHeight": "Altura fija de fila en píxeles requerida para el scroll virtual.",
+          "overscan": "Número de filas renderizadas fuera del área visible para el scroll virtual.",
+          "virtualHeight": "Altura del contenedor cuando virtual es true.",
+          "tree": "Activa el modo árbol: las filas hijas se leen de la propiedad childrenKey.",
+          "childrenKey": "Nombre de la propiedad que contiene las filas hijas en modo árbol.",
+          "treeExpanded": "Array controlado de keys de nodos árbol expandidos.",
+          "loadChildren": "Función async que carga hijos bajo demanda para una fila dada.",
+          "hasChildrenHint": "Predicado que indica que una fila puede tener hijos antes de que se carguen.",
+          "groupBy": "Agrupa filas por el key o función accessor dados.",
+          "groupExpanded": "Array controlado de keys de grupos expandidos.",
+          "stickyFirstColumn": "Fija la primera columna al hacer scroll horizontal.",
+          "toolbar": "Muestra la barra de herramientas integrada con búsqueda y controles de columna.",
+          "globalSearch": "Activa un input de búsqueda global en la barra de herramientas.",
+          "globalSearchScope": "Si la búsqueda global actúa sobre todas las columnas o sólo las filtrables.",
+          "globalSearchTerm": "Valor controlado del input de búsqueda global.",
+          "columnVisibility": "Añade un toggle de visibilidad de columnas a la barra de herramientas.",
+          "exportable": "Añade botones de exportación (CSV, JSON, portapapeles) a la barra de herramientas.",
+          "exportFileName": "Nombre base del archivo al exportar CSV o JSON."
+        },
+        "emits": {
+          "updateSort": "Emitido al cambiar el orden de las columnas. Payload: TableSortState.",
+          "updateSelected": "Emitido al cambiar la selección de filas. Payload: (string | number)[].",
+          "updateFilter": "Emitido al cambiar un filtro de columna. Payload: TableFilterState.",
+          "updateExpanded": "Emitido al expandir o contraer filas. Payload: (string | number)[].",
+          "updatePagination": "Emitido al cambiar de página o page size. Payload: TablePaginationState.",
+          "updateColumnsState": "Emitido al redimensionar o reordenar columnas. Payload: TableColumnState[].",
+          "updateTreeExpanded": "Emitido al expandir o contraer nodos árbol. Payload: (string | number)[].",
+          "updateGroupExpanded": "Emitido al expandir o contraer grupos. Payload: (string | number)[].",
+          "updateGlobalSearchTerm": "Emitido al cambiar el input de búsqueda global. Payload: string.",
+          "rowActivate": "Emitido al activar una fila mediante Enter o doble clic.",
+          "rowClick": "Emitido al hacer clic en una fila.",
+          "cellEdit": "Emitido al confirmar el valor de una celda editable. Payload: TableCellEditEvent.",
+          "cellEditCancel": "Emitido al cancelar la edición de una celda.",
+          "updateState": "Emitido con un snapshot completo del estado de la tabla."
+        },
+        "slots": {
+          "default": "Slot de reserva — actualmente sin uso, reservado para futuras extensiones.",
+          "caption": "Leyenda accesible de la tabla renderizada como elemento caption.",
+          "empty": "Contenido personalizado cuando data está vacía. Expone { message }.",
+          "noResults": "Contenido personalizado cuando los filtros no arrojan resultados. Expone \\{ message, clear \\}.",
+          "footer": "Contenido añadido debajo del cuerpo de la tabla.",
+          "toolbar": "Contenido personalizado de la barra de herramientas. Expone \\{ searchTerm, setSearchTerm, clearSearch \\}.",
+          "bulkActions": "Mostrado en la barra cuando hay filas seleccionadas. Expone \\{ selected, rows, count, clear \\}.",
+          "rowExpanded": "Contenido dentro de una fila expandida. Expone \\{ row, index \\}.",
+          "groupHeader": "Cabecera de grupo personalizada. Expone \\{ value, rows, count, expanded, toggle, aggregations \\}.",
+          "cellKey": "Renderer de celda personalizado para la columna con el key dado. Expone \\{ row, value, index \\}.",
+          "headerKey": "Renderer de cabecera personalizado para la columna con el key dado. Expone \\{ column \\}.",
+          "filterKey": "Input de filtro personalizado para la columna con el key dado. Expone \\{ column, value, setValue, clear \\}."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Configuración por defecto con cuatro columnas y tipografía estándar."
+          },
+          "striped": {
+            "title": "Striped + bordered",
+            "desc": "Filas alternadas y bordes completos para facilitar la lectura en tablas densas."
+          },
+          "sort": {
+            "title": "Con sorting",
+            "desc": "Marca cualquier columna como sortable para habilitar orden ascendente / descendente."
+          },
+          "compact": {
+            "title": "Densidad compacta",
+            "desc": "Reduce el padding vertical para mostrar más filas en menos espacio."
+          },
+          "stickyHeader": {
+            "title": "Sticky header",
+            "desc": "La cabecera permanece fija mientras se hace scroll dentro del contenedor."
+          },
+          "selection": {
+            "title": "Selección de filas",
+            "desc": "Activa la selección de una o varias filas con checkboxes. Enlaza :selected y escucha \\@update:selected."
+          },
+          "pagination": {
+            "title": "Paginación",
+            "desc": "Pasa un objeto de paginación con page, pageSize y total para dividir los datos en páginas."
+          },
+          "loading": {
+            "title": "Estado de carga",
+            "desc": "Establece :loading=\"true\" para mostrar filas skeleton mientras se obtienen los datos. Usa loading-rows para controlar cuántas aparecen."
+          },
+          "customCell": {
+            "title": "Slot de celda personalizada",
+            "desc": "Usa el slot #cell-{key} para renderizar cualquier contenido dentro de una columna. El slot expone \\{ row, value, index \\}."
+          }
+        },
+        "types": {
+          "title": "Interfaces TypeScript",
+          "desc": "Tipos principales exportados por Table: TableColumn, TableSortState, TableFilterState, TablePaginationState, TableCellEditEvent y TableColumnState."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable (cabecera sortable, checkbox o control de paginación)",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "kbEnter": "Activa una cabecera sortable (cicla asc → desc → ninguno) o confirma una celda editable",
+          "kbSpace": "Alterna la selección en el checkbox de la fila enfocada",
+          "ariaSort": "Se establece a 'ascending' o 'descending' en cabeceras activas; 'none' en columnas sortables sin ordenar",
+          "ariaLabel": "Proporciona un nombre accesible para el elemento tabla",
+          "ariaSelected": "Se establece a 'true' en las filas seleccionadas cuando selectable está activo",
+          "focusNative": "El foco es gestionado nativamente; usa Tab para navegar entre cabeceras, checkboxes y controles de paginación",
+          "focusTrap": "Las celdas editables atrapan el foco hasta que se confirma o cancela la edición"
+        }
+      },
+      "timeline": {
+        "title": "Timeline",
+        "description": "Línea de tiempo vertical para mostrar eventos en orden cronológico. Útil para historial, changelogs, tracking y feeds de actividad.",
+        "controls": {
+          "variant": "Variante",
+          "color": "Color",
+          "size": "Tamaño",
+          "side": "Lado"
+        },
+        "props": {
+          "items": "Eventos a renderizar en orden cronológico.",
+          "variant": "Estilo del marcador por defecto. Cada item puede sobreescribirlo.",
+          "color": "Color semántico por defecto del marcador.",
+          "size": "Escala visual del marcador y la tipografía.",
+          "side": "Lado donde se renderiza la línea de marcadores."
+        },
+        "slots": {
+          "itemId": "Contenido extra renderizado debajo del título y descripción del item con el id correspondiente."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Lista simple de eventos con título y timestamp."
+          },
+          "icons": {
+            "title": "Con iconos",
+            "desc": "Cada item define un componente icono y variant 'icon'."
+          },
+          "colors": {
+            "title": "Colores por evento",
+            "desc": "El color del marcador puede sobrescribirse por item para reflejar estados."
+          },
+          "description": {
+            "title": "Con descripción",
+            "desc": "Añade texto secundario debajo del título para dar contexto al evento."
+          },
+          "rightSide": {
+            "title": "Lado derecho",
+            "desc": "Rail invertido con side='right' — útil para layouts asimétricos."
+          }
+        },
+        "types": {
+          "title": "Timeline",
+          "desc": "Interfaces TypeScript de Timeline y TimelineItem. Soporta items, color, side, size, variant e icon overrides por item."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "ariaLabel": "Proporciona un nombre accesible que describe el contenido del timeline",
+          "focusNative": "Elemento no interactivo; no participa en el orden de tabulación"
+        }
+      },
+      "typography": {
+        "title": "Typography",
+        "description": "Sistema tipográfico con variantes semánticas (display, heading, title, body, caption…), tamaños y pesos. La prop as permite mapear a la etiqueta HTML adecuada para mantener la jerarquía accesible.",
+        "controls": {
+          "variant": "Variante",
+          "size": "Tamaño",
+          "weight": "Peso",
+          "align": "Alineación",
+          "color": "Color",
+          "truncate": "Truncar",
+          "italic": "Cursiva",
+          "underline": "Subrayado",
+          "strikethrough": "Tachado"
+        },
+        "props": {
+          "variant": "Estilo tipográfico semántico. Define el tag por defecto.",
+          "size": "Escala dentro del variant. Hereda del ModoProvider si se omite.",
+          "as": "Sobrescribe el tag HTML inferido por el variant.",
+          "weight": "Peso de la fuente.",
+          "align": "Alineación horizontal del texto.",
+          "color": "Color semántico aplicado al texto.",
+          "truncate": "Trunca con ellipsis a una sola línea.",
+          "italic": "Aplica estilo cursiva.",
+          "underline": "Subraya el texto.",
+          "strikethrough": "Tachado del texto."
+        },
+        "slots": {
+          "default": "Contenido textual a renderizar."
+        },
+        "examples": {
+          "variants": {
+            "title": "Variantes",
+            "desc": "Cada variant define una jerarquía visual y un tag HTML por defecto."
+          },
+          "sizes": {
+            "title": "Tamaños",
+            "desc": "Cada variant tiene tres escalas (small, medium, large)."
+          },
+          "weights": {
+            "title": "Pesos",
+            "desc": "Seis pesos disponibles desde light hasta extrabold."
+          },
+          "colors": {
+            "title": "Colores semánticos",
+            "desc": "Usa los colores del provider para mantener consistencia y accesibilidad."
+          },
+          "truncate": {
+            "title": "Truncate",
+            "desc": "Trunca el texto a una sola línea con ellipsis cuando excede el ancho."
+          }
+        },
+        "types": {
+          "title": "Typography",
+          "desc": "Interfaz TypeScript de las props del componente Typography. Soporta variant, size, as, weight, align, color, truncate, italic, underline y strikethrough."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "ariaHidden": "El texto decorativo puede ocultarse de los lectores de pantalla",
+          "focusNative": "El texto no es interactivo; no participa en el orden de tabulación"
+        }
+      },
+      "weekView": {
+        "title": "WeekView",
+        "description": "Vista semanal con grilla horaria. Soporta business hours, rangos deshabilitados, drag & drop y redimensionado de eventos.",
+        "controls": {
+          "format": "Formato",
+          "allDayRow": "Fila all-day",
+          "borders": "Bordes",
+          "currentTime": "Hora actual"
+        },
+        "props": {
+          "modelValue": "Fecha visible. La semana se calcula a partir de ella.",
+          "events": "Eventos a renderizar en la grilla horaria.",
+          "locale": "Locale BCP-47 para encabezados y formatos.",
+          "firstDayOfWeek": "Primer día de la semana.",
+          "color": "Color semántico aplicado a acentos.",
+          "format": "Formato horario de la columna de horas.",
+          "hourStart": "Hora inicial visible (0-23).",
+          "hourEnd": "Hora final visible (1-24).",
+          "slotMinutes": "Granularidad de los slots de tiempo.",
+          "slotHeight": "Altura en px de cada slot horario.",
+          "minDayWidth": "Ancho mínimo por columna de día antes de hacer scroll horizontal.",
+          "showAllDayRow": "Muestra la fila para eventos all-day.",
+          "showHeader": "Muestra la cabecera con navegación.",
+          "showCurrentTime": "Dibuja la línea de hora actual.",
+          "showNowPill": "Muestra una píldora con la hora actual sobre la columna del día.",
+          "businessHours": "Resalta el rango de horas laborales.",
+          "disabledTimeRanges": "Rangos horarios no seleccionables.",
+          "bordered": "Dibuja borde alrededor de la grilla.",
+          "draggableEvents": "Permite arrastrar eventos.",
+          "resizableEvents": "Permite redimensionar eventos.",
+          "allowRangeSelection": "Permite seleccionar un rango arrastrando sobre slots vacíos."
+        },
+        "emits": {
+          "updateModelValue": "Emitido al cambiar la semana visible.",
+          "eventClick": "Click sobre un evento.",
+          "dayClick": "Click sobre el encabezado de un día.",
+          "slotClick": "Click sobre un slot vacío.",
+          "createEvent": "Solicitud de creación de evento.",
+          "eventDrop": "Evento arrastrado a una nueva posición.",
+          "eventResize": "Evento redimensionado.",
+          "selectRange": "Rango seleccionado arrastrando."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Semana en formato 24 horas con eventos timed."
+          },
+          "allDay": {
+            "title": "Con fila all-day",
+            "desc": "La fila superior agrupa eventos all-day y multi-día."
+          },
+          "format12h": {
+            "title": "Formato 12 horas",
+            "desc": "Cambia el formato horario a AM/PM."
+          },
+          "businessHours": {
+            "title": "Business hours",
+            "desc": "Resalta horario laboral y limita el rango horario visible."
+          }
+        },
+        "types": {
+          "title": "WeekView",
+          "desc": "Interfaz TypeScript de las props del componente WeekView. Soporta modelValue, events, locale, firstDayOfWeek, color, radius, bordered, minDate, maxDate, businessHours, disabledTimeRanges, showHeader, showCurrentTime, format, slotMinutes, slotHeight, minDayWidth, showAllDayRow, draggableEvents, resizableEvents y allowRangeSelection."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "ariaLabel": "Proporciona un nombre accesible para la vista de semana",
+          "focusNative": "El foco es gestionado por la vista de semana; usa Tab para navegar eventos y acciones"
+        }
+      }
+    },
+    "dataDisplay": {
+      "accordion": {
+        "title": "Accordion",
+        "description": "Paneles expandibles para mostrar contenido jerárquico de forma compacta. Ideal para FAQs, configuraciones y filtros.",
+        "controls": {
+          "variant": "Variante",
+          "size": "Tamaño",
+          "radius": "Radio",
+          "icon": "Icono",
+          "multiple": "Múltiple"
+        },
+        "props": {
+          "items": "Lista de ítems a renderizar (cada uno con value, title y content).",
+          "modelValue": "Vínculo v-model. El tipo depende de multiple.",
+          "multiple": "Permite tener varios paneles abiertos a la vez.",
+          "variant": "Variante visual del contenedor.",
+          "size": "Escala de padding y tipografía. Hereda del ModoProvider.",
+          "radius": "Radio de borde (para separated y bordered).",
+          "iconPosition": "Lado donde se muestra el chevron."
+        },
+        "emits": {
+          "updateModelValue": "Emitido cuando cambia el conjunto de paneles abiertos.",
+          "change": "Alias de update:modelValue para uso sin v-model."
+        },
+        "slots": {
+          "itemValue": "Slot por item para renderizar contenido rico (HTML, formularios, listas)."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Tres paneles single-open con v-model."
+          },
+          "multiple": {
+            "title": "Multiple abiertos",
+            "desc": "Permite mantener varios paneles expandidos simultáneamente."
+          },
+          "variants": {
+            "title": "Variantes",
+            "desc": "separated (cards independientes), bordered (caja única) y flush (sin contenedor)."
+          },
+          "icons": {
+            "title": "Con iconos",
+            "desc": "Cada item puede declarar un icono opcional junto al título."
+          },
+          "sizes": {
+            "title": "Tamaños",
+            "desc": "Tres escalas de padding y tipografía."
+          }
+        }
+      },
+      "agendaView": {
+        "title": "AgendaView",
+        "description": "Lista cronológica de eventos por día. Ideal para secciones \"próximos eventos\", dashboards y agendas compactas.",
+        "controls": {
+          "days": "Días",
+          "format": "Formato",
+          "emptyDays": "Días vacíos",
+          "borders": "Bordes"
+        },
+        "props": {
+          "modelValue": "Fecha ancla a partir de la cual se calcula el rango.",
+          "events": "Lista de eventos a mostrar.",
+          "locale": "Locale BCP-47 para fechas y nombres de día.",
+          "color": "Color semántico aplicado a los acentos.",
+          "daysToShow": "Cantidad de días hacia adelante a mostrar.",
+          "daysBefore": "Días hacia atrás incluidos antes de la fecha ancla.",
+          "showEmptyDays": "Muestra los días sin eventos como filas vacías.",
+          "showMonthSeparator": "Inserta un separador al cambiar de mes.",
+          "showHeader": "Muestra la cabecera con navegación.",
+          "format": "Formato horario de los eventos.",
+          "emptyText": "Texto mostrado cuando no hay eventos en el rango.",
+          "highlightedDates": "Fechas resaltadas visualmente.",
+          "disabledDates": "Fechas deshabilitadas.",
+          "bordered": "Dibuja borde alrededor del contenedor.",
+          "loadMoreChunk": "Número de días añadidos al cargar más eventos."
+        },
+        "emits": {
+          "updateModelValue": "Emitido al cambiar el rango visible.",
+          "eventClick": "Click sobre un evento.",
+          "dayClick": "Click sobre la fila de un día.",
+          "createEvent": "Solicitud de creación de evento.",
+          "loadMore": "Solicitud de cargar más días al final del listado."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Lista de los próximos 7 días agrupada por día."
+          },
+          "extendedRange": {
+            "title": "Rango extendido",
+            "desc": "Aumenta days-to-show para mostrar más días por adelantado."
+          },
+          "emptyState": {
+            "title": "Estado vacío",
+            "desc": "Cuando no hay eventos, muestra un mensaje configurable."
+          },
+          "format12h": {
+            "title": "Formato 12 horas",
+            "desc": "Muestra los horarios de los eventos en formato AM/PM."
+          }
+        }
+      },
+      "avatar": {
+        "title": "Avatar",
+        "description": "Avatar de usuario con imagen, iniciales fallback, indicador de estado y múltiples tamaños y formas.",
+        "controls": {
+          "mode": "Modo",
+          "size": "Tamaño",
+          "radius": "Radio",
+          "color": "Color",
+          "status": "Estado",
+          "bordered": "Borde"
+        },
+        "props": {
+          "src": "URL de la imagen del avatar. Si falla, hace fallback a initials o icono.",
+          "alt": "Texto alternativo para la imagen.",
+          "initials": "Iniciales mostradas cuando no hay imagen disponible.",
+          "size": "Tamaño del avatar.",
+          "radius": "Forma del avatar. full=círculo, none=cuadrado.",
+          "color": "Color de fondo cuando se muestran iniciales.",
+          "status": "Indicador de estado visible en la esquina inferior.",
+          "bordered": "Añade un borde alrededor del avatar.",
+          "ariaLabel": "Nombre accesible cuando se muestran iniciales o el icono fallback.",
+          "skeleton": "Muestra un placeholder de carga con la misma huella."
+        },
+        "examples": {
+          "image": {
+            "title": "Imagen",
+            "desc": "Carga la imagen desde una URL."
+          },
+          "initials": {
+            "title": "Iniciales",
+            "desc": "Fallback con iniciales y color semántico cuando no hay imagen."
+          },
+          "iconFallback": {
+            "title": "Icono fallback",
+            "desc": "Si no hay src ni initials, se muestra un icono genérico."
+          },
+          "sizes": {
+            "title": "Tamaños",
+            "desc": "Cinco escalas: xs, small, medium, large y xl."
+          },
+          "status": {
+            "title": "Indicador de estado",
+            "desc": "Punto en la esquina inferior derecha para señalar presencia."
+          }
+        }
+      },
+      "avatarGroup": {
+        "title": "AvatarGroup",
+        "description": "Apila avatares solapados mostrando hasta N visibles y un contador con el resto. Ideal para listas de colaboradores, asignados o miembros.",
+        "controls": {
+          "size": "Tamaño",
+          "max": "Máximo",
+          "radius": "Radio",
+          "bordered": "Borde"
+        },
+        "props": {
+          "max": "Número máximo de avatares visibles. Los restantes se agrupan en un contador +N.",
+          "size": "Tamaño aplicado a todos los avatares hijos.",
+          "radius": "Forma compartida por todos los avatares del grupo.",
+          "bordered": "Borde alrededor de cada avatar para separarlos visualmente.",
+          "ariaLabel": "Nombre accesible para el grupo."
+        },
+        "slots": {
+          "default": "Lista de componentes Avatar. El grupo controla su tamaño y forma."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Tres avatares solapados sin límite."
+          },
+          "max": {
+            "title": "Con max y overflow",
+            "desc": "Limita los visibles y muestra un contador +N con el resto."
+          },
+          "sizes": {
+            "title": "Tamaños",
+            "desc": "El size se aplica a todos los avatares hijos."
+          },
+          "mixed": {
+            "title": "Mixto",
+            "desc": "Combina imágenes, iniciales e icono fallback en el mismo grupo."
+          }
+        }
+      },
+      "calendar": {
+        "title": "Calendar",
+        "description": "Calendario mensual para seleccionar una fecha. Soporta minDate, maxDate, fechas deshabilitadas, locale y variantes visuales.",
+        "controls": {
+          "variant": "Variante",
+          "color": "Color",
+          "radius": "Radio",
+          "outsideDays": "Días externos",
+          "header": "Cabecera"
+        },
+        "props": {
+          "modelValue": "Fecha seleccionada (v-model).",
+          "month": "Mes inicial mostrado (0-11). Por defecto el mes actual.",
+          "year": "Año inicial mostrado.",
+          "locale": "Locale BCP-47 para nombres de mes y días.",
+          "firstDayOfWeek": "Primer día de la semana (0 = domingo, 1 = lunes).",
+          "minDate": "Fecha mínima seleccionable.",
+          "maxDate": "Fecha máxima seleccionable.",
+          "disabledDates": "Fechas individuales a deshabilitar.",
+          "color": "Color semántico aplicado a la selección y al hover.",
+          "variant": "Variante visual del contenedor.",
+          "radius": "Radio de borde del calendario y de las celdas.",
+          "showOutsideDays": "Muestra días del mes anterior y siguiente que completan la grilla.",
+          "showHeader": "Muestra la cabecera con navegación de mes y año.",
+          "fixedWeeks": "Siempre muestra 6 semanas para mantener una altura constante."
+        },
+        "emits": {
+          "updateModelValue": "Emitido al seleccionar una fecha.",
+          "monthChange": "Emitido al cambiar el mes o año visible mediante navegación."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Calendario por defecto vinculado a una fecha mediante v-model."
+          },
+          "minMax": {
+            "title": "Con rango de fechas",
+            "desc": "Limita el rango seleccionable usando min-date y max-date."
+          },
+          "outline": {
+            "title": "Variante outline",
+            "desc": "Variante con borde visible y radio grande."
+          },
+          "locale": {
+            "title": "Locale personalizado",
+            "desc": "Cambia el locale y el primer día de la semana."
+          }
+        }
+      },
+      "card": {
+        "title": "Card",
+        "description": "Contenedor estructural con tres variantes (elevated, outlined, filled), control de padding, radio y estado hover. Bloque base para métricas, listas, formularios y secciones.",
+        "controls": {
+          "variant": "Variante",
+          "padding": "Padding",
+          "radius": "Radio",
+          "hoverable": "Hoverable",
+          "clickable": "Clickable",
+          "divided": "Divided"
+        },
+        "playground": {
+          "title": "Card de ejemplo",
+          "body": "Ajusta los controles para ver los cambios en vivo."
+        },
+        "props": {
+          "variant": "Estilo visual del contenedor.",
+          "padding": "Padding interno aplicado a header, body y footer.",
+          "radius": "Radio de borde. Hereda del ModoProvider si se omite.",
+          "hoverable": "Aplica estado hover (sombra, borde) sin convertirlo en botón.",
+          "clickable": "Renderiza el card como button con foco accesible y cursor pointer.",
+          "divided": "Muestra una línea divisoria entre header / body / footer."
+        },
+        "slots": {
+          "default": "Contenido principal del card.",
+          "header": "Cabecera opcional encima del contenido.",
+          "image": "Slot sin padding para imágenes o medios edge-to-edge.",
+          "footer": "Footer opcional para acciones o metadatos."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Card simple con título y descripción."
+          },
+          "headerFooter": {
+            "title": "Con header y footer",
+            "desc": "Slots #header y #footer con divisor entre secciones."
+          },
+          "image": {
+            "title": "Con imagen",
+            "desc": "Slot #image edge-to-edge combinado con padding=none."
+          },
+          "hover": {
+            "title": "Hover effect",
+            "desc": "Activa hoverable para realzar el card al pasar el cursor."
+          },
+          "clickable": {
+            "title": "Clickeable",
+            "desc": "Renderiza el card como button accesible con foco visible."
+          }
+        }
+      },
+      "code": {
+        "title": "Code",
+        "description": "Fragmentos de código inline para resaltar valores, props o errores en docs y mensajes.",
+        "controls": {
+          "variant": "Variante",
+          "color": "Color",
+          "size": "Tamaño",
+          "radius": "Radio"
+        },
+        "props": {
+          "size": "Tamaño del texto del fragmento.",
+          "variant": "Estilo visual del fondo / borde.",
+          "color": "Color semántico aplicado al fragmento.",
+          "radius": "Radio de borde. Hereda del ModoProvider si se omite."
+        },
+        "slots": {
+          "default": "Contenido del fragmento de código (texto plano o expresión corta)."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Fragmento de código inline con estilos por defecto."
+          },
+          "variants": {
+            "title": "Variantes",
+            "desc": "subtle (relleno), outline (borde) y ghost (transparente)."
+          },
+          "colors": {
+            "title": "Colores semánticos",
+            "desc": "Cinco colores para diferenciar valores, errores o estados."
+          },
+          "sizes": {
+            "title": "Tamaños",
+            "desc": "Tres escalas que se alinean con el texto que las rodea."
+          },
+          "inline": {
+            "title": "Inline en texto",
+            "desc": "Se alinea verticalmente y conserva la línea de base."
+          }
+        }
+      },
+      "dateRangePicker": {
+        "title": "DateRangePicker",
+        "description": "Selector inline de rango de fechas. Soporta uno o dos meses visibles, presets rápidos, restricciones de longitud mínima/máxima y fechas deshabilitadas.",
+        "controls": {
+          "months": "Meses",
+          "variant": "Variante",
+          "color": "Color",
+          "radius": "Radio",
+          "presets": "Presets"
+        },
+        "props": {
+          "modelValue": "Tupla con la fecha de inicio y fin del rango (v-model).",
+          "months": "Número de meses visibles simultáneamente.",
+          "showPresets": "Muestra el panel lateral con rangos predefinidos (hoy, esta semana, etc.).",
+          "presets": "Presets personalizados. Cada uno tiene label y una función range() que retorna la tupla.",
+          "color": "Color de acento para el rango seleccionado.",
+          "variant": "Estilo visual del panel.",
+          "radius": "Radio de borde del panel.",
+          "minDate": "Fecha mínima seleccionable.",
+          "maxDate": "Fecha máxima seleccionable.",
+          "minRange": "Mínimo de días que debe abarcar el rango.",
+          "maxRange": "Máximo de días que puede abarcar el rango.",
+          "disabledDates": "Fechas no seleccionables.",
+          "locale": "Locale para nombres de mes y día.",
+          "firstDayOfWeek": "Día de inicio de semana (0=Dom, 1=Lun)."
+        },
+        "examples": {
+          "twoMonths": {
+            "title": "Dos meses (por defecto)",
+            "desc": "Muestra dos calendarios lado a lado para seleccionar rangos largos cómodamente."
+          },
+          "oneMonth": {
+            "title": "Un mes",
+            "desc": "Modo compacto con un solo calendario, ideal para rangos cortos."
+          },
+          "presets": {
+            "title": "Con presets",
+            "desc": "show-presets añade un panel lateral con atajos (hoy, esta semana, este mes, últimos 30 días…)."
+          },
+          "colorPrimary": {
+            "title": "Color primary",
+            "desc": "El color afecta el fondo del rango seleccionado y los días de inicio/fin."
+          },
+          "outline": {
+            "title": "Variante outline",
+            "desc": "Borde perimetral visible, útil en fondos neutrales."
+          }
+        }
+      },
+      "dateTimePicker": {
+        "title": "DateTimePicker",
+        "description": "Selector inline de fecha y hora. Muestra un calendario mensual junto a columnas de tiempo deslizables. Soporta formatos 12/24h, segundos y step de minutos.",
+        "controls": {
+          "format": "Formato",
+          "variant": "Variante",
+          "color": "Color",
+          "step": "Paso",
+          "radius": "Radio",
+          "seconds": "Segundos"
+        },
+        "props": {
+          "modelValue": "Fecha y hora seleccionada (v-model).",
+          "format": "Formato de hora del selector de tiempo.",
+          "step": "Incremento en minutos para la columna de minutos.",
+          "showSeconds": "Muestra la columna de segundos.",
+          "color": "Color de acento para el día seleccionado.",
+          "variant": "Estilo visual del panel de calendario.",
+          "radius": "Radio de borde del panel.",
+          "minDate": "Fecha mínima seleccionable.",
+          "maxDate": "Fecha máxima seleccionable.",
+          "disabledDates": "Lista de fechas deshabilitadas.",
+          "minTime": "Hora mínima en formato HH:MM.",
+          "maxTime": "Hora máxima en formato HH:MM.",
+          "locale": "Locale para nombres de mes y día (ej. es-MX).",
+          "firstDayOfWeek": "Día de inicio de semana (0=Dom, 1=Lun)."
+        },
+        "examples": {
+          "basic24h": {
+            "title": "24h (por defecto)",
+            "desc": "Modo 24 horas con columnas de hora y minutos."
+          },
+          "format12h": {
+            "title": "Formato 12h",
+            "desc": "Añade la columna AM/PM para regiones que prefieren el reloj de 12 horas."
+          },
+          "seconds12h": {
+            "title": "12h con segundos",
+            "desc": "Activa show-seconds para mostrar la columna de segundos."
+          },
+          "step15": {
+            "title": "Step 15 minutos",
+            "desc": "step=\"15\" agrupa los minutos en saltos de 15, ideal para agendas."
+          },
+          "outline": {
+            "title": "Variante outline",
+            "desc": "Borde perimetral para fondos neutros o tarjetas."
+          }
+        }
+      },
+      "dayView": {
+        "title": "DayView",
+        "description": "Vista de un único día con grilla horaria. Ideal para agendas detalladas, bloques de tiempo y planificación operativa.",
+        "controls": {
+          "format": "Formato",
+          "allDayRow": "Fila all-day",
+          "borders": "Bordes",
+          "currentTime": "Hora actual"
+        },
+        "props": {
+          "modelValue": "Día visible (v-model).",
+          "events": "Eventos a renderizar en la grilla horaria.",
+          "locale": "Locale BCP-47 para encabezados y formatos.",
+          "color": "Color semántico aplicado a acentos.",
+          "format": "Formato horario de la columna de horas.",
+          "hourStart": "Hora inicial visible (0-23).",
+          "hourEnd": "Hora final visible (1-24).",
+          "slotMinutes": "Granularidad de los slots de tiempo.",
+          "slotHeight": "Altura en px de cada slot horario.",
+          "showAllDayRow": "Muestra la fila superior para eventos all-day.",
+          "showHeader": "Muestra la cabecera con navegación.",
+          "showCurrentTime": "Dibuja la línea de hora actual.",
+          "showNowPill": "Muestra una píldora con la hora actual.",
+          "businessHours": "Resalta el rango de horas laborales.",
+          "disabledTimeRanges": "Rangos horarios no seleccionables.",
+          "bordered": "Dibuja borde alrededor de la grilla.",
+          "draggableEvents": "Permite arrastrar eventos.",
+          "resizableEvents": "Permite redimensionar eventos.",
+          "allowRangeSelection": "Permite seleccionar un rango arrastrando sobre slots vacíos."
+        },
+        "emits": {
+          "updateModelValue": "Emitido al cambiar el día visible.",
+          "eventClick": "Click sobre un evento.",
+          "slotClick": "Click sobre un slot vacío.",
+          "createEvent": "Solicitud de creación de evento.",
+          "eventDrop": "Evento arrastrado a una nueva posición.",
+          "eventResize": "Evento redimensionado.",
+          "selectRange": "Rango seleccionado arrastrando."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Día por defecto sin eventos."
+          },
+          "events": {
+            "title": "Con eventos",
+            "desc": "Eventos timed renderizados en la grilla horaria."
+          },
+          "format12h": {
+            "title": "Formato 12 horas",
+            "desc": "Columna horaria en formato AM/PM."
+          },
+          "businessHours": {
+            "title": "Business hours",
+            "desc": "Resalta horario laboral y restringe el rango horario visible."
+          }
+        }
+      },
+      "kbd": {
+        "title": "Kbd",
+        "description": "Representación visual de teclas o atajos de teclado. Útil en docs, tooltips y command palettes.",
+        "controls": {
+          "variant": "Variante",
+          "size": "Tamaño",
+          "radius": "Radio"
+        },
+        "props": {
+          "size": "Tamaño de la tecla.",
+          "variant": "Estilo visual de la tecla.",
+          "radius": "Radio de borde. Hereda del ModoProvider si se omite."
+        },
+        "slots": {
+          "default": "Texto o glifo de la tecla (Enter, ⌘, ↑, etc.)."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Una sola tecla."
+          },
+          "combo": {
+            "title": "Combinación",
+            "desc": "Une varias Kbd con un separador."
+          },
+          "variants": {
+            "title": "Variantes",
+            "desc": "Tres estilos visuales: subtle (por defecto), outline y solid."
+          },
+          "sizes": {
+            "title": "Tamaños",
+            "desc": "Tres escalas para alinear con texto en distintos contextos."
+          },
+          "inline": {
+            "title": "Inline en texto",
+            "desc": "Se alinea verticalmente con el texto que lo rodea.",
+            "text": "Pulsa {key} para abrir la búsqueda rápida."
+          }
+        }
+      },
+      "monthView": {
+        "title": "MonthView",
+        "description": "Vista mensual tipo grilla para mostrar eventos por día. Soporta números de semana, semana iniciando en cualquier día y arrastre de eventos.",
+        "controls": {
+          "weekStart": "Inicio",
+          "sun": "Dom",
+          "mon": "Lun",
+          "weekNumbers": "Nº semana",
+          "fixedWeeks": "6 semanas fijas",
+          "outsideDays": "Días externos"
+        },
+        "props": {
+          "modelValue": "Fecha visible (v-model). Determina el mes mostrado.",
+          "events": "Lista de eventos a renderizar en cada celda.",
+          "locale": "Locale BCP-47 para nombres de mes y días.",
+          "firstDayOfWeek": "Primer día de la semana (0 = domingo, 1 = lunes).",
+          "color": "Color semántico de la selección y los acentos.",
+          "radius": "Radio de borde del contenedor.",
+          "maxEventsPerDay": "Máximo de eventos visibles por celda; el resto se agrupa en \"+N\".",
+          "showWeekNumbers": "Muestra una columna inicial con el número de semana ISO.",
+          "fixedWeeks": "Renderiza siempre 6 semanas para mantener altura constante.",
+          "showOutsideDays": "Muestra días del mes anterior y siguiente.",
+          "showHeader": "Muestra cabecera con navegación.",
+          "bordered": "Dibuja líneas divisorias entre celdas.",
+          "highlightWeekends": "Resalta visualmente sábado y domingo.",
+          "minDateMaxDate": "Limita el rango de fechas seleccionables.",
+          "disabledDates": "Fechas individuales deshabilitadas.",
+          "disabledDaysOfWeek": "Días de la semana deshabilitados (0-6).",
+          "draggableEvents": "Permite arrastrar eventos entre días."
+        },
+        "emits": {
+          "updateModelValue": "Emitido al seleccionar un día.",
+          "eventClick": "Emitido al hacer click sobre un evento.",
+          "dayClick": "Emitido al hacer click sobre una celda de día.",
+          "moreClick": "Emitido al hacer click sobre el indicador \"+N\".",
+          "createEvent": "Emitido al solicitar la creación de un evento.",
+          "eventDrop": "Emitido al soltar un evento arrastrado en otra fecha."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Vista mensual sin eventos vinculada a una fecha."
+          },
+          "events": {
+            "title": "Con eventos",
+            "desc": "Renderiza una colección de CalendarEvent distribuidos por día."
+          },
+          "weekNumbers": {
+            "title": "Con números de semana",
+            "desc": "Activa show-week-numbers para mostrar la numeración ISO."
+          },
+          "sundayStart": {
+            "title": "Semana iniciando en domingo",
+            "desc": "Configura first-day-of-week=0 para iniciar en domingo."
+          }
+        }
+      },
+      "scheduler": {
+        "title": "Scheduler",
+        "description": "Vista tipo agenda con recursos en columnas (salas, personas, equipos). Cada recurso muestra sus eventos sobre una grilla horaria compartida.",
+        "controls": {
+          "format": "Formato",
+          "borders": "Bordes",
+          "allDayRow": "Fila all-day",
+          "resourceColor": "Color del recurso"
+        },
+        "props": {
+          "modelValue": "Día visible (v-model).",
+          "resources": "Filas del scheduler (salas, personas, equipos).",
+          "events": "Eventos asignados a recursos por `resourceId`.",
+          "locale": "Locale BCP-47 para fechas y horas.",
+          "color": "Color semántico aplicado a acentos.",
+          "format": "Formato horario de la columna de horas.",
+          "hourStart": "Hora inicial visible (0-23).",
+          "hourEnd": "Hora final visible (1-24).",
+          "slotMinutes": "Granularidad de los slots de tiempo.",
+          "slotHeight": "Altura en px de cada slot horario.",
+          "minResourceWidth": "Ancho mínimo de cada columna de recurso antes de hacer scroll horizontal.",
+          "showResourceHeader": "Muestra la cabecera por recurso.",
+          "resourceHeaderHeight": "Altura en px de la cabecera de recurso.",
+          "showAllDayRow": "Muestra la fila para eventos all-day.",
+          "showCurrentTime": "Dibuja la línea de hora actual.",
+          "businessHours": "Resalta el rango de horas laborales.",
+          "bordered": "Dibuja borde alrededor de la grilla.",
+          "useResourceColor": "Aplica el color del recurso a sus eventos cuando no tienen color propio.",
+          "draggableEvents": "Permite arrastrar eventos.",
+          "allowCrossResourceDrag": "Permite mover eventos entre recursos al arrastrarlos.",
+          "resizableEvents": "Permite redimensionar eventos."
+        },
+        "emits": {
+          "updateModelValue": "Emitido al cambiar el día visible.",
+          "eventClick": "Click sobre un evento.",
+          "slotClick": "Click sobre un slot vacío de un recurso.",
+          "createEvent": "Solicitud de creación de evento.",
+          "eventDrop": "Evento arrastrado a otra posición o recurso.",
+          "eventResize": "Evento redimensionado.",
+          "selectRange": "Rango seleccionado dentro de un recurso."
+        },
+        "examples": {
+          "basic": {
+            "title": "Sólo recursos",
+            "desc": "Scheduler vacío que muestra la grilla de recursos sin eventos."
+          },
+          "events": {
+            "title": "Con eventos",
+            "desc": "Eventos asignados a cada recurso por resourceId."
+          },
+          "format12h": {
+            "title": "Formato 12 horas",
+            "desc": "Cambia la columna horaria a formato AM/PM."
+          },
+          "businessHours": {
+            "title": "Business hours",
+            "desc": "Resalta el horario laboral y limita el rango horario."
+          }
+        }
+      },
+      "stat": {
+        "title": "Stat",
+        "description": "Tarjeta KPI compacta para mostrar métricas con tendencia, icono y color semántico. Ideal para dashboards y resumenes.",
+        "controls": {
+          "variant": "Variante",
+          "color": "Color",
+          "size": "Tamaño",
+          "trend": "Tendencia",
+          "loading": "Cargando"
+        },
+        "props": {
+          "label": "Etiqueta corta de la métrica (\"Revenue\", \"Users\").",
+          "value": "Valor principal pre-formateado por el consumidor.",
+          "description": "Texto auxiliar mostrado debajo del valor.",
+          "icon": "Componente de icono opcional (heroicons u otro).",
+          "trend": "Metadatos de tendencia. Renderiza una flecha y el delta.",
+          "variant": "Estilo visual del card.",
+          "color": "Color semántico aplicado al icono y a la tendencia.",
+          "size": "Escala de tamaño. Hereda del ModoProvider si se omite.",
+          "loading": "Muestra un skeleton en el valor mientras se carga."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Etiqueta y valor principal sin extras."
+          },
+          "trend": {
+            "title": "Con tendencia",
+            "desc": "La prop trend muestra una flecha y el delta porcentual."
+          },
+          "icon": {
+            "title": "Con icono y color",
+            "desc": "Combina icono, color semántico y variante outlined."
+          },
+          "sizes": {
+            "title": "Tamaños",
+            "desc": "Tres escalas para alinear con la jerarquía de la página."
+          },
+          "grid": {
+            "title": "Grid de métricas",
+            "desc": "Cuatro Stat en un grid simulando un dashboard."
+          }
+        }
+      },
+      "table": {
+        "title": "Table",
+        "description": "Tabla potente con ordenamiento, paginación, selección, sticky header, filas expandibles, virtualización, acciones de toolbar y soporte de árbol. Las filas contienen los datos; las columnas describen cómo se renderiza cada campo.",
+        "controls": {
+          "size": "Tamaño",
+          "density": "Densidad",
+          "bordered": "Bordes",
+          "select": "Selección",
+          "striped": "Filas alternas",
+          "hover": "Hover",
+          "stickyHeader": "Sticky header"
+        },
+        "props": {
+          "data": "Array de objetos que la tabla renderiza como filas. Cada fila puede tener cualquier shape; usa rowKey para identificarla.",
+          "columns": "Definiciones de columnas. Cada columna normalmente incluye key, header, accessor opcional, type, alineación, metadata de orden/filtro y opciones de layout.",
+          "rowKey": "Identificador único de fila usado para keys de Vue, selección, expansión, árbol y otros estados por fila.",
+          "size": "Escala de tamaño del componente. Controla font size y altura base de fila.",
+          "density": "Densidad vertical aplicada a las celdas: compact, comfortable o spacious.",
+          "striped": "Aplica fondos alternos para mejorar la lectura.",
+          "hover": "Resalta la fila debajo del cursor.",
+          "bordered": "Controla bordes internos entre filas, columnas, ambos o ninguno.",
+          "stickyHeader": "Mantiene la cabecera visible mientras el cuerpo de la tabla hace scroll.",
+          "radius": "Sobrescribe el radius del wrapper. Si se omite, usa el radius activo de ModoProvider.",
+          "overflow": "Estrategia de overflow horizontal. Usa scroll para tablas anchas o truncate para layouts con ellipsis.",
+          "loading": "Muestra UI de carga en el cuerpo de la tabla.",
+          "loadingRows": "Número de filas skeleton renderizadas durante la carga.",
+          "loadingMode": "skeleton reemplaza filas; overlay conserva las filas visibles debajo de un overlay de carga.",
+          "emptyText": "Mensaje personalizado cuando no hay datos.",
+          "noResultsText": "Mensaje personalizado cuando filtros/búsqueda no producen resultados.",
+          "ariaLabel": "Label accesible enviado al elemento table nativo.",
+          "sort": "Estado de orden controlado. Úsalo con v-model:sort.",
+          "multiSort": "Permite ordenar por múltiples columnas con shift-click.",
+          "sortClearable": "Permite que el ciclo de orden vuelva a sin orden.",
+          "selectable": "Modo de selección: none, single o multi.",
+          "selected": "Keys de filas seleccionadas en modo controlado. Úsalo con v-model:selected.",
+          "isRowSelectable": "Predicado para desactivar selección en filas específicas.",
+          "filter": "Estado controlado de filtros por columna. Las keys coinciden con las keys de columnas.",
+          "filterRow": "Renderiza una fila de inputs de filtro debajo de la cabecera para columnas filtrables.",
+          "expandable": "Agrega controles de expansión y habilita el slot row-expanded.",
+          "expanded": "Keys de filas expandidas en modo controlado. Úsalo con v-model:expanded.",
+          "isRowExpandable": "Predicado para decidir si una fila muestra el control de expansión.",
+          "pagination": "Estado de paginación. Habilita el footer de paginación y puede controlarse con v-model:pagination.",
+          "pageSizeOptions": "Opciones de page size disponibles en el footer de paginación.",
+          "serverSide": "Desactiva filtro, orden y slicing local para que el parent cargue datos desde servidor.",
+          "resizable": "Activa resize de columnas con handles arrastrables.",
+          "reorderable": "Activa reordenamiento de columnas con drag-and-drop y shortcuts de teclado.",
+          "columnsState": "Estado controlado de columnas para width, orden y visibilidad. Úsalo con v-model:columnsState.",
+          "state": "Snapshot agregado del estado de la tabla para persistir sort, filtros, paginación, columnas, búsqueda y selección juntos.",
+          "minColumnWidth": "Ancho mínimo en pixeles al redimensionar columnas.",
+          "virtual": "Activa virtualización de filas para datasets grandes.",
+          "rowHeight": "Altura fija de fila usada por virtualización. Se infiere de size/density si se omite.",
+          "overscan": "Filas virtuales extra renderizadas fuera del viewport para scroll más suave.",
+          "virtualHeight": "Altura del viewport de scroll virtual.",
+          "tree": "Renderiza filas jerárquicas usando childrenKey.",
+          "childrenKey": "Nombre de la propiedad que contiene filas hijas para tablas tipo árbol.",
+          "treeExpanded": "Keys de filas de árbol expandidas en modo controlado. Úsalo con v-model:treeExpanded.",
+          "loadChildren": "Loader lazy para hijos de árbol.",
+          "hasChildrenHint": "Predicado usado con loadChildren para mostrar chevron antes de cargar hijos.",
+          "groupBy": "Agrupa filas por una key de campo o una función accessor.",
+          "groupExpanded": "Keys de grupos expandidos en modo controlado. Úsalo con v-model:groupExpanded.",
+          "stickyFirstColumn": "Fija la primera columna de datos, opcionalmente solo en mobile.",
+          "toolbar": "Renderiza la superficie de toolbar de la tabla.",
+          "globalSearch": "Agrega búsqueda global al toolbar.",
+          "globalSearchScope": "Controla si la búsqueda global revisa todas las columnas o solo columnas filtrables.",
+          "globalSearchTerm": "Término de búsqueda global en modo controlado. Úsalo con v-model:globalSearchTerm.",
+          "columnVisibility": "Agrega menú de visibilidad de columnas al toolbar.",
+          "exportable": "Agrega acciones de exportación CSV, JSON y/o copiar al clipboard.",
+          "exportFileName": "Nombre base usado para archivos descargados."
+        },
+        "emits": {
+          "updateSort": "Emitido cuando cambia el estado de orden.",
+          "updateSelected": "Emitido cuando cambia la selección de filas.",
+          "updateFilter": "Emitido cuando cambia el estado de filtros por columna.",
+          "updateExpanded": "Emitido cuando cambia el estado de expansión de filas.",
+          "updatePagination": "Emitido cuando cambia la página o el page size.",
+          "updateColumnsState": "Emitido cuando cambian widths, orden o visibilidad de columnas.",
+          "updateTreeExpanded": "Emitido cuando cambia el estado de expansión del árbol.",
+          "updateGroupExpanded": "Emitido cuando cambia el estado de expansión de grupos.",
+          "updateGlobalSearchTerm": "Emitido cuando cambia el input de búsqueda global.",
+          "rowActivate": "Emitido cuando una fila se activa desde teclado.",
+          "rowClick": "Emitido cuando una fila recibe click.",
+          "cellEdit": "Emitido cuando una celda editable confirma un nuevo valor.",
+          "cellEditCancel": "Emitido cuando se cancela la edición inline de una celda.",
+          "updateState": "Emitido con el snapshot agregado del estado de la tabla."
+        },
+        "slots": {
+          "default": "API declarativa de columnas usando hijos TableColumn.",
+          "caption": "Caption opcional para lectores de pantalla y contexto visible.",
+          "empty": "Estado vacío personalizado.",
+          "noResults": "Estado personalizado cuando filtros/búsqueda no producen resultados.",
+          "footer": "Footer personalizado debajo del cuerpo de la tabla.",
+          "toolbar": "Contenido personalizado del toolbar.",
+          "bulkActions": "Área de acciones masivas mostrada cuando hay filas seleccionadas.",
+          "rowExpanded": "Contenido de fila expandida.",
+          "groupHeader": "Contenido personalizado de cabecera de grupo.",
+          "cellKey": "Renderer personalizado para una columna específica, por ejemplo cell-status.",
+          "headerKey": "Renderer personalizado para la cabecera de una columna específica, por ejemplo header-status.",
+          "filterKey": "Renderer personalizado para el filtro de una columna específica, por ejemplo filter-status."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básica con rows y columns",
+            "desc": "Ejemplo completo que muestra cómo se forman las filas, cómo las columnas se conectan a campos de cada row y cómo row-key identifica cada fila."
+          },
+          "striped": {
+            "title": "Filas alternas + bordes",
+            "desc": "Filas alternas y bordes completos para mejorar la lectura en tablas densas."
+          },
+          "sort": {
+            "title": "Con orden",
+            "desc": "Marca cualquier columna como sortable para activar orden ascendente / descendente."
+          },
+          "compact": {
+            "title": "Densidad compacta",
+            "desc": "Reduce el padding vertical para mostrar más filas en menos espacio."
+          },
+          "stickyHeader": {
+            "title": "Sticky header",
+            "desc": "La cabecera permanece fija mientras se hace scroll dentro del contenedor."
+          }
+        }
+      },
+      "timeline": {
+        "title": "Timeline",
+        "description": "Lista vertical de eventos cronológicos con marcadores dot, icon u outline. Cada item soporta título, descripción, timestamp y color propio.",
+        "controls": {
+          "variant": "Variante",
+          "size": "Tamaño",
+          "color": "Color",
+          "side": "Lado"
+        },
+        "props": {
+          "items": "Eventos a renderizar en orden cronológico.",
+          "variant": "Estilo del marcador por defecto. Cada item puede sobreescribirlo.",
+          "color": "Color semántico por defecto del marcador.",
+          "size": "Escala visual del marcador y la tipografía.",
+          "side": "Lado donde se renderiza la línea de marcadores."
+        },
+        "slots": {
+          "itemId": "Contenido extra renderizado debajo del título y descripción del item con el id correspondiente."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Marcadores dot con título y timestamp."
+          },
+          "icons": {
+            "title": "Con iconos",
+            "desc": "Marcadores con icono para contexto visual más rico."
+          },
+          "colors": {
+            "title": "Colores por item",
+            "desc": "Cada evento puede sobreescribir el color del marcador de forma independiente."
+          },
+          "descriptions": {
+            "title": "Con descripciones",
+            "desc": "Añade texto secundario bajo el título de cada evento."
+          },
+          "right": {
+            "title": "Lado derecho",
+            "desc": "Mueve la línea de marcadores a la derecha del contenido."
+          }
+        }
+      },
+      "typography": {
+        "title": "Typography",
+        "description": "Sistema tipográfico con variantes semánticas (display, heading, title, body, caption…), tamaños y pesos. La prop as permite mapear al tag HTML correcto para mantener jerarquía accesible.",
+        "controls": {
+          "variant": "Variante",
+          "size": "Tamaño",
+          "weight": "Peso",
+          "align": "Alineación",
+          "color": "Color",
+          "truncate": "Truncar",
+          "italic": "Cursiva",
+          "underline": "Subrayado",
+          "strikethrough": "Tachado"
+        },
+        "props": {
+          "variant": "Estilo tipográfico semántico. Define el tag por defecto.",
+          "size": "Escala dentro del variant. Hereda del ModoProvider si se omite.",
+          "as": "Sobrescribe el tag HTML inferido por el variant.",
+          "weight": "Peso de la fuente.",
+          "align": "Alineación horizontal del texto.",
+          "color": "Color semántico aplicado al texto.",
+          "truncate": "Trunca con ellipsis a una sola línea.",
+          "italic": "Aplica estilo cursiva.",
+          "underline": "Subraya el texto.",
+          "strikethrough": "Tachado del texto."
+        },
+        "slots": {
+          "default": "Contenido textual a renderizar."
+        },
+        "examples": {
+          "variants": {
+            "title": "Variantes",
+            "desc": "Cada variante define una jerarquía visual y un tag HTML por defecto."
+          },
+          "sizes": {
+            "title": "Tamaños",
+            "desc": "Cada variante tiene tres escalas (small, medium, large)."
+          },
+          "weights": {
+            "title": "Pesos",
+            "desc": "Seis pesos disponibles de light a extrabold."
+          },
+          "colors": {
+            "title": "Colores semánticos",
+            "desc": "Usa los colores del provider para mantener consistencia y accesibilidad."
+          },
+          "truncate": {
+            "title": "Truncar",
+            "desc": "Trunca el texto a una sola línea con ellipsis cuando supera el ancho."
+          }
+        }
+      },
+      "weekView": {
+        "title": "WeekView",
+        "description": "Vista semanal con grilla horaria. Soporta horario laboral, rangos deshabilitados, drag & drop y redimensionado de eventos.",
+        "controls": {
+          "format": "Formato",
+          "allDayRow": "Fila todo el día",
+          "borders": "Bordes",
+          "currentTime": "Hora actual"
+        },
+        "props": {
+          "modelValue": "Fecha visible. La semana se calcula a partir de ella.",
+          "events": "Eventos a renderizar en la grilla horaria.",
+          "locale": "Locale BCP-47 para encabezados y formatos.",
+          "firstDayOfWeek": "Primer día de la semana.",
+          "color": "Color semántico aplicado a acentos.",
+          "format": "Formato horario de la columna de horas.",
+          "hourStart": "Hora inicial visible (0-23).",
+          "hourEnd": "Hora final visible (1-24).",
+          "slotMinutes": "Granularidad de los slots de tiempo.",
+          "slotHeight": "Altura en px de cada slot horario.",
+          "minDayWidth": "Ancho mínimo por columna de día antes de hacer scroll horizontal.",
+          "showAllDayRow": "Muestra la fila para eventos all-day.",
+          "showHeader": "Muestra la cabecera con navegación.",
+          "showCurrentTime": "Dibuja la línea de hora actual.",
+          "showNowPill": "Muestra una píldora con la hora actual sobre la columna del día.",
+          "businessHours": "Resalta el rango de horas laborales.",
+          "disabledTimeRanges": "Rangos horarios no seleccionables.",
+          "bordered": "Dibuja borde alrededor de la grilla.",
+          "draggableEvents": "Permite arrastrar eventos.",
+          "resizableEvents": "Permite redimensionar eventos.",
+          "allowRangeSelection": "Permite seleccionar un rango arrastrando sobre slots vacíos."
+        },
+        "emits": {
+          "updateModelValue": "Emitido al cambiar la semana visible.",
+          "eventClick": "Click sobre un evento.",
+          "dayClick": "Click sobre el encabezado de un día.",
+          "slotClick": "Click sobre un slot vacío.",
+          "createEvent": "Solicitud de creación de evento.",
+          "eventDrop": "Evento arrastrado a una nueva posición.",
+          "eventResize": "Evento redimensionado.",
+          "selectRange": "Rango seleccionado arrastrando."
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Semana en formato 24h con eventos con hora."
+          },
+          "allDay": {
+            "title": "Con fila todo el día",
+            "desc": "La fila superior agrupa eventos de todo el día y multiday."
+          },
+          "format12h": {
+            "title": "Formato 12h",
+            "desc": "Cambia el formato horario a AM/PM."
+          },
+          "businessHours": {
+            "title": "Horario laboral",
+            "desc": "Resalta el horario laboral y limita el rango de horas visible."
+          }
+        }
+      }
+    }
+  }
+}

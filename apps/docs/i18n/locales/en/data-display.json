@@ -1,0 +1,2151 @@
+{
+  "pages": {
+    "data-display": {
+      "accordion": {
+        "title": "Accordion",
+        "description": "Expandable panels for displaying hierarchical content compactly. Ideal for FAQs, settings and filters.",
+        "controls": {
+          "variant": "Variant",
+          "size": "Size",
+          "radius": "Radius",
+          "icon": "Icon",
+          "multiple": "Multiple"
+        },
+        "props": {
+          "items": "List of items to render (each with value, title and content).",
+          "modelValue": "v-model binding. Type depends on multiple.",
+          "multiple": "Allows multiple panels to be open at the same time.",
+          "variant": "Visual variant of the container.",
+          "size": "Padding and typography scale. Inherited from ModoProvider.",
+          "radius": "Border radius (for separated and bordered).",
+          "iconPosition": "Side where the chevron icon is shown."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the set of open panels changes.",
+          "change": "Alias of update:modelValue for use without v-model."
+        },
+        "slots": {
+          "itemValue": "Per-item slot for rendering rich content (HTML, forms, lists)."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Three single-open panels with v-model."
+          },
+          "multiple": {
+            "title": "Multiple open",
+            "desc": "Allows keeping multiple panels expanded simultaneously."
+          },
+          "variants": {
+            "title": "Variants",
+            "desc": "separated (independent cards), bordered (single box) and flush (no container)."
+          },
+          "icons": {
+            "title": "With icons",
+            "desc": "Each item can declare an optional icon next to its title."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three padding and typography scales."
+          }
+        },
+        "types": {
+          "title": "Accordion",
+          "desc": "TypeScript interfaces for Accordion and AccordionItem. Supports single/multiple expansion, variants, sizes and custom icons."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next accordion header",
+          "kbShiftTab": "Move focus to the previous accordion header",
+          "kbArrow": "Move focus between accordion headers",
+          "kbEnter": "Expand or collapse the focused accordion panel",
+          "kbEsc": "Collapses the expanded panel when focus is on the header",
+          "ariaRegion": "Uses role region for screen reader identification",
+          "ariaExpanded": "Announces whether the panel is expanded or collapsed",
+          "ariaControls": "Links the header to the panel it controls",
+          "focusNative": "Accordion headers are focusable and keyboard-activatable"
+        }
+      },
+      "agendaView": {
+        "title": "AgendaView",
+        "description": "Chronological list of events per day. Ideal for \"upcoming events\" sections, dashboards and compact agendas.",
+        "controls": {
+          "days": "Days",
+          "format": "Format",
+          "emptyDays": "Empty days",
+          "borders": "Borders"
+        },
+        "props": {
+          "modelValue": "Anchor date from which the range is calculated.",
+          "events": "List of events to display.",
+          "locale": "BCP-47 locale for dates and day names.",
+          "color": "Semantic color applied to accents.",
+          "daysToShow": "Number of days ahead to show.",
+          "daysBefore": "Days before the anchor date to include.",
+          "showEmptyDays": "Shows days without events as empty rows.",
+          "showMonthSeparator": "Inserts a separator when the month changes.",
+          "showHeader": "Shows the header with navigation.",
+          "format": "Time format for events.",
+          "emptyText": "Text shown when there are no events in the range.",
+          "highlightedDates": "Visually highlighted dates.",
+          "disabledDates": "Disabled dates.",
+          "bordered": "Draws a border around the container.",
+          "loadMoreChunk": "Number of days added when loading more events."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the visible range changes.",
+          "eventClick": "Click on an event.",
+          "dayClick": "Click on a day row.",
+          "createEvent": "Request to create an event.",
+          "loadMore": "Request to load more days at the end of the list."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "List of the next 7 days grouped by day."
+          },
+          "extendedRange": {
+            "title": "Extended range",
+            "desc": "Increase days-to-show to display more days ahead."
+          },
+          "emptyState": {
+            "title": "Empty state",
+            "desc": "When there are no events, shows a configurable message."
+          },
+          "format12h": {
+            "title": "12-hour format",
+            "desc": "Shows event times in AM/PM format."
+          }
+        },
+        "types": {
+          "title": "AgendaView",
+          "desc": "TypeScript interface for the AgendaView component props. Supports modelValue, events, locale, color, radius, bordered, minDate, maxDate, daysToShow, daysBefore, showEmptyDays, showHeader, showMonthSeparator, format, emptyText, highlightedDates, disabledDates, disabledWeekdays and loadMoreChunk."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name for the agenda view",
+          "focusNative": "Focus is managed by the agenda view; use Tab to navigate events and actions"
+        }
+      },
+      "avatar": {
+        "title": "Avatar",
+        "description": "User avatar with image, initials fallback, status indicator and multiple sizes and shapes.",
+        "controls": {
+          "mode": "Mode",
+          "size": "Size",
+          "radius": "Radius",
+          "color": "Color",
+          "status": "Status",
+          "bordered": "Bordered"
+        },
+        "props": {
+          "src": "URL of the avatar image. Falls back to initials or icon if it fails.",
+          "alt": "Alternative text for the image.",
+          "initials": "Initials shown when no image is available.",
+          "size": "Size of the avatar.",
+          "radius": "Shape of the avatar. full=circle, none=square.",
+          "color": "Background color when initials are shown.",
+          "status": "Status indicator visible at the bottom corner.",
+          "bordered": "Adds a border around the avatar.",
+          "ariaLabel": "Accessible name when initials or the fallback icon are shown.",
+          "skeleton": "Shows a loading placeholder with the same footprint."
+        },
+        "examples": {
+          "image": {
+            "title": "Image",
+            "desc": "Loads the image from a URL."
+          },
+          "initials": {
+            "title": "Initials",
+            "desc": "Fallback with initials and semantic color when there is no image."
+          },
+          "iconFallback": {
+            "title": "Icon fallback",
+            "desc": "If there is no src or initials, a generic icon is shown."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Five scales: xs, small, medium, large and xl."
+          },
+          "status": {
+            "title": "Status indicator",
+            "desc": "Dot at the bottom-right corner to signal presence."
+          }
+        },
+        "types": {
+          "title": "Avatar",
+          "desc": "TypeScript interface for the Avatar component props. Supports src, alt, initials, size, radius, status, bordered, color, ariaLabel and skeleton."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name for the avatar image",
+          "ariaImg": "Uses role img for screen reader identification",
+          "focusNative": "Non-interactive by default; does not capture focus"
+        }
+      },
+      "avatarGroup": {
+        "title": "AvatarGroup",
+        "description": "Stacks overlapping avatars showing up to N visible and a counter for the rest. Ideal for collaborator, assignee or member lists.",
+        "controls": {
+          "size": "Size",
+          "max": "Max",
+          "radius": "Radius",
+          "bordered": "Bordered"
+        },
+        "props": {
+          "max": "Maximum number of visible avatars. The rest are grouped in a +N counter.",
+          "size": "Size applied to all child avatars.",
+          "radius": "Shape shared by all avatars in the group.",
+          "bordered": "Border around each avatar to visually separate them.",
+          "ariaLabel": "Accessible name for the group."
+        },
+        "slots": {
+          "default": "List of Avatar components. The group controls their size and shape."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Three overlapping avatars without a limit."
+          },
+          "maxOverflow": {
+            "title": "With max and overflow",
+            "desc": "Limits visible avatars and shows a +N counter for the rest."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "The size is applied to all child avatars."
+          },
+          "mixed": {
+            "title": "Mixed",
+            "desc": "Combines images, initials and icon fallback in the same group."
+          }
+        },
+        "types": {
+          "title": "AvatarGroup",
+          "desc": "TypeScript interface for the AvatarGroup component props. Supports max, size, radius, bordered and ariaLabel."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name describing the group of avatars",
+          "focusNative": "Non-interactive container; child avatars are not focusable"
+        }
+      },
+      "calendar": {
+        "title": "Calendar",
+        "description": "Monthly calendar for selecting a date. Supports minDate, maxDate, disabled dates, locale and visual variants.",
+        "controls": {
+          "variant": "Variant",
+          "color": "Color",
+          "radius": "Radius",
+          "outsideDays": "Outside days",
+          "header": "Header"
+        },
+        "props": {
+          "modelValue": "Selected date (v-model).",
+          "month": "Initial month shown (0-11). Defaults to current month.",
+          "year": "Initial year shown.",
+          "locale": "BCP-47 locale for month and day names.",
+          "firstDayOfWeek": "First day of the week (0 = Sunday, 1 = Monday).",
+          "minDate": "Minimum selectable date.",
+          "maxDate": "Maximum selectable date.",
+          "disabledDates": "Individual dates to disable.",
+          "color": "Semantic color applied to the selection and hover.",
+          "variant": "Visual variant of the container.",
+          "radius": "Border radius for the calendar and cells.",
+          "showOutsideDays": "Shows days from the previous and next month that complete the grid.",
+          "showHeader": "Shows the header with month and year navigation.",
+          "fixedWeeks": "Always shows 6 weeks to maintain a constant height."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when a date is selected.",
+          "monthChange": "Emitted when the visible month or year changes via navigation."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Default calendar bound to a date via v-model."
+          },
+          "minMax": {
+            "title": "Min / Max date",
+            "desc": "Limits the selectable range using min-date and max-date."
+          },
+          "dateRange": {
+            "title": "With date range",
+            "desc": "Limits the selectable range using min-date and max-date."
+          },
+          "outline": {
+            "title": "Outline variant",
+            "desc": "Variant with a visible border and large radius."
+          },
+          "locale": {
+            "title": "Custom locale",
+            "desc": "Changes the locale and the first day of the week."
+          }
+        },
+        "types": {
+          "title": "Calendar",
+          "desc": "TypeScript interface for the Calendar component props. Supports modelValue, locale, firstDayOfWeek, minDate, maxDate, disabledDates, color, variant, radius, showOutsideDays, showHeader and fixedWeeks."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name for the calendar",
+          "focusNative": "Focus is managed by the calendar; use Tab to navigate days and actions"
+        }
+      },
+      "card": {
+        "title": "Card",
+        "description": "Structural container with three variants (elevated, outlined, filled), padding control, border radius and hover state. Base block for metrics, lists, forms and sections.",
+        "controls": {
+          "variant": "Variant",
+          "padding": "Padding",
+          "radius": "Radius",
+          "hoverable": "Hoverable",
+          "clickable": "Clickable",
+          "divided": "Divided"
+        },
+        "playground": {
+          "title": "Example card",
+          "body": "Adjust the controls to see live changes."
+        },
+        "props": {
+          "variant": "Visual style of the container.",
+          "padding": "Internal padding applied to header, body and footer.",
+          "radius": "Border radius. Inherited from ModoProvider if omitted.",
+          "hoverable": "Applies hover state (shadow, border) without converting it to a button.",
+          "clickable": "Renders the card as a button with accessible focus and pointer cursor.",
+          "divided": "Shows a dividing line between header / body / footer."
+        },
+        "slots": {
+          "default": "Main content of the card.",
+          "header": "Optional header above the content.",
+          "image": "Padding-free slot for edge-to-edge images or media.",
+          "footer": "Optional footer for actions or metadata."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Simple card with title and description."
+          },
+          "headerFooter": {
+            "title": "With header and footer",
+            "desc": "#header and #footer slots with a divider between sections."
+          },
+          "image": {
+            "title": "With image",
+            "desc": "Edge-to-edge #image slot combined with padding=none."
+          },
+          "hover": {
+            "title": "Hover effect",
+            "desc": "Enable hoverable to highlight the card on cursor hover."
+          },
+          "clickable": {
+            "title": "Clickable",
+            "desc": "Renders the card as an accessible button with visible focus."
+          }
+        },
+        "types": {
+          "title": "Card",
+          "desc": "TypeScript interface for the Card component props. Supports variant, padding, radius, hoverable, clickable and divided."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element inside the card",
+          "kbShiftTab": "Move focus to the previous focusable element inside the card",
+          "ariaLabel": "Provides an accessible name for clickable cards",
+          "focusNative": "Interactive content inside the card is focusable; the card itself is not unless clickable is set"
+        }
+      },
+      "code": {
+        "title": "Code",
+        "description": "Inline code snippets for highlighting values, props or errors in docs and messages.",
+        "controls": {
+          "variant": "Variant",
+          "color": "Color",
+          "size": "Size",
+          "radius": "Radius"
+        },
+        "props": {
+          "size": "Text size of the snippet.",
+          "variant": "Visual style of the background / border.",
+          "color": "Semantic color applied to the snippet.",
+          "radius": "Border radius. Inherited from ModoProvider if omitted."
+        },
+        "slots": {
+          "default": "Content of the code snippet (plain text or short expression)."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Inline code snippet with default styles."
+          },
+          "variants": {
+            "title": "Variants",
+            "desc": "subtle (filled), outline (border) and ghost (transparent)."
+          },
+          "colors": {
+            "title": "Semantic colors",
+            "desc": "Five colors to differentiate values, errors or states."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three scales that align with the surrounding text."
+          },
+          "inline": {
+            "title": "Inline in text",
+            "desc": "Vertically aligned, preserving the baseline."
+          }
+        },
+        "types": {
+          "title": "Code",
+          "desc": "TypeScript interface for the Code component props. Supports size, variant, color and radius."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name for the code snippet",
+          "focusNative": "Non-interactive element; does not participate in the tab order"
+        }
+      },
+      "dateRangePicker": {
+        "title": "DateRangePicker",
+        "description": "Inline date range selector. Supports one or two visible months, quick presets, min/max length restrictions and disabled dates.",
+        "controls": {
+          "months": "Months",
+          "variant": "Variant",
+          "color": "Color",
+          "radius": "Radius",
+          "presets": "Presets"
+        },
+        "props": {
+          "modelValue": "Tuple with the start and end dates of the range (v-model).",
+          "months": "Number of months visible simultaneously.",
+          "showPresets": "Shows the side panel with predefined ranges (today, this week, etc.).",
+          "presets": "Custom presets. Each has a label and a range() function that returns the tuple.",
+          "color": "Accent color for the selected range.",
+          "variant": "Visual style of the panel.",
+          "radius": "Border radius of the panel.",
+          "minDate": "Minimum selectable date.",
+          "maxDate": "Maximum selectable date.",
+          "minRange": "Minimum number of days the range must span.",
+          "maxRange": "Maximum number of days the range can span.",
+          "disabledDates": "Non-selectable dates.",
+          "locale": "Locale for month and day names.",
+          "firstDayOfWeek": "Week start day (0=Sun, 1=Mon)."
+        },
+        "examples": {
+          "twoMonths": {
+            "title": "Two months (default)",
+            "desc": "Shows two calendars side by side for comfortably selecting long ranges."
+          },
+          "oneMonth": {
+            "title": "One month",
+            "desc": "Compact mode with a single calendar, ideal for short ranges."
+          },
+          "presets": {
+            "title": "With presets",
+            "desc": "show-presets adds a side panel with shortcuts (today, this week, this month, last 30 days…)."
+          },
+          "color": {
+            "title": "Primary color",
+            "desc": "The color affects the background of the selected range and the start/end days."
+          },
+          "colorPrimary": {
+            "title": "Primary color",
+            "desc": "The color affects the background of the selected range and the start/end days."
+          },
+          "outline": {
+            "title": "Outline variant",
+            "desc": "Visible perimeter border, useful on neutral backgrounds."
+          }
+        },
+        "types": {
+          "title": "DateRangePicker",
+          "desc": "TypeScript interfaces for DateRangePicker and RangePreset. Supports modelValue, locale, firstDayOfWeek, minDate, maxDate, disabledDates, color, variant, radius, months, showPresets, presets, minRange and maxRange."
+        }
+      },
+      "dateTimePicker": {
+        "title": "DateTimePicker",
+        "description": "Inline date and time selector. Shows a monthly calendar alongside scrollable time columns. Supports 12/24h formats, seconds and minute step.",
+        "controls": {
+          "format": "Format",
+          "variant": "Variant",
+          "color": "Color",
+          "step": "Step",
+          "radius": "Radius",
+          "seconds": "Seconds"
+        },
+        "props": {
+          "modelValue": "Selected date and time (v-model).",
+          "format": "Time format of the time selector.",
+          "step": "Minute increment for the minutes column.",
+          "showSeconds": "Shows the seconds column.",
+          "color": "Accent color for the selected day.",
+          "variant": "Visual style of the calendar panel.",
+          "radius": "Border radius of the panel.",
+          "minDate": "Minimum selectable date.",
+          "maxDate": "Maximum selectable date.",
+          "disabledDates": "List of disabled dates.",
+          "minTime": "Minimum time in HH:MM format.",
+          "maxTime": "Maximum time in HH:MM format.",
+          "locale": "Locale for month and day names (e.g. en-US).",
+          "firstDayOfWeek": "Week start day (0=Sun, 1=Mon)."
+        },
+        "examples": {
+          "basic24": {
+            "title": "24h (default)",
+            "desc": "24-hour mode with hour and minute columns."
+          },
+          "basic24h": {
+            "title": "24h (default)",
+            "desc": "24-hour mode with hour and minute columns."
+          },
+          "format12": {
+            "title": "12h format",
+            "desc": "Adds the AM/PM column for regions that prefer the 12-hour clock."
+          },
+          "format12h": {
+            "title": "12h format",
+            "desc": "Adds the AM/PM column for regions that prefer the 12-hour clock."
+          },
+          "seconds": {
+            "title": "12h with seconds",
+            "desc": "Enable show-seconds to show the seconds column."
+          },
+          "seconds12h": {
+            "title": "12h with seconds",
+            "desc": "Enable show-seconds to show the seconds column."
+          },
+          "step": {
+            "title": "15-minute step",
+            "desc": "step=\"15\" groups minutes in 15-unit increments, ideal for schedules."
+          },
+          "step15": {
+            "title": "15-minute step",
+            "desc": "step=\"15\" groups minutes in 15-unit increments, ideal for schedules."
+          },
+          "outline": {
+            "title": "Outline variant",
+            "desc": "Perimeter border for neutral backgrounds or cards."
+          }
+        },
+        "types": {
+          "title": "DateTimePicker",
+          "desc": "TypeScript interface for the DateTimePicker component props. Supports modelValue, locale, firstDayOfWeek, minDate, maxDate, disabledDates, color, variant, radius, format, step, showSeconds, minTime and maxTime."
+        }
+      },
+      "dayView": {
+        "title": "DayView",
+        "description": "Single-day view with an hourly grid. Ideal for detailed agendas, time blocks and operational planning.",
+        "controls": {
+          "format": "Format",
+          "allDayRow": "All-day row",
+          "borders": "Borders",
+          "currentTime": "Current time"
+        },
+        "props": {
+          "modelValue": "Visible day (v-model).",
+          "events": "Events to render in the hourly grid.",
+          "locale": "BCP-47 locale for headers and formats.",
+          "color": "Semantic color applied to accents.",
+          "format": "Time format for the hour column.",
+          "hourStart": "First visible hour (0-23).",
+          "hourEnd": "Last visible hour (1-24).",
+          "slotMinutes": "Granularity of time slots.",
+          "slotHeight": "Height in px of each time slot.",
+          "showAllDayRow": "Shows the top row for all-day events.",
+          "showHeader": "Shows the header with navigation.",
+          "showCurrentTime": "Draws the current-time line.",
+          "showNowPill": "Shows a pill with the current time.",
+          "businessHours": "Highlights the business hours range.",
+          "disabledTimeRanges": "Non-selectable time ranges.",
+          "bordered": "Draws a border around the grid.",
+          "draggableEvents": "Allows dragging events.",
+          "resizableEvents": "Allows resizing events.",
+          "allowRangeSelection": "Allows selecting a range by dragging over empty slots."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the visible day changes.",
+          "eventClick": "Click on an event.",
+          "slotClick": "Click on an empty slot.",
+          "createEvent": "Request to create an event.",
+          "eventDrop": "Event dragged to a new position.",
+          "eventResize": "Event resized.",
+          "selectRange": "Range selected by dragging."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Default day with no events."
+          },
+          "events": {
+            "title": "With events",
+            "desc": "Timed events rendered in the hourly grid."
+          },
+          "format12h": {
+            "title": "12-hour format",
+            "desc": "Hour column in AM/PM format."
+          },
+          "businessHours": {
+            "title": "Business hours",
+            "desc": "Highlights business hours and restricts the visible time range."
+          }
+        },
+        "types": {
+          "title": "DayView",
+          "desc": "TypeScript interface for the DayView component props. Supports modelValue, events, locale, color, radius, bordered, minDate, maxDate, businessHours, disabledTimeRanges, showHeader, showCurrentTime, format, slotMinutes, slotHeight, hourStart, hourEnd, showAllDayRow, draggableEvents, resizableEvents and allowRangeSelection."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name for the day view",
+          "focusNative": "Focus is managed by the day view; use Tab to navigate events and actions"
+        }
+      },
+      "kbd": {
+        "title": "Kbd",
+        "description": "Visual representation of keyboard keys or shortcuts. Useful in docs, tooltips and command palettes.",
+        "controls": {
+          "variant": "Variant",
+          "size": "Size",
+          "radius": "Radius"
+        },
+        "props": {
+          "size": "Key size.",
+          "variant": "Visual style of the key.",
+          "radius": "Border radius. Inherited from ModoProvider if omitted."
+        },
+        "slots": {
+          "default": "Text or glyph of the key (Enter, ⌘, ↑, etc.)."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "A single key."
+          },
+          "combo": {
+            "title": "Combination",
+            "desc": "Join multiple Kbd components with a separator."
+          },
+          "variants": {
+            "title": "Variants",
+            "desc": "Three visual styles: subtle (default), outline and solid."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three scales to align with text in different contexts."
+          },
+          "inline": {
+            "title": "Inline in text",
+            "desc": "Vertically aligned with surrounding text.",
+            "text": "Press {key} to open quick search."
+          }
+        },
+        "types": {
+          "title": "Kbd",
+          "desc": "TypeScript interface for the Kbd component props. Supports size, variant and radius."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name describing the keyboard shortcut",
+          "focusNative": "Non-interactive element; does not participate in the tab order"
+        }
+      },
+      "monthView": {
+        "title": "MonthView",
+        "description": "Grid-style monthly view for displaying events per day. Supports week numbers, any first day of week and event drag-and-drop.",
+        "controls": {
+          "weekStart": "Start",
+          "sun": "Sun",
+          "mon": "Mon",
+          "weekNumbers": "Week No.",
+          "fixedWeeks": "6 fixed weeks",
+          "outsideDays": "Outside days"
+        },
+        "props": {
+          "modelValue": "Visible date (v-model). Determines the displayed month.",
+          "events": "List of events to render in each cell.",
+          "locale": "BCP-47 locale for month and day names.",
+          "firstDayOfWeek": "First day of the week (0 = Sunday, 1 = Monday).",
+          "color": "Semantic color for selection and accents.",
+          "radius": "Border radius of the container.",
+          "maxEventsPerDay": "Maximum visible events per cell; the rest are grouped as \"+N\".",
+          "showWeekNumbers": "Shows a leading column with the ISO week number.",
+          "fixedWeeks": "Always renders 6 weeks to maintain a constant height.",
+          "showOutsideDays": "Shows days from the previous and next months.",
+          "showHeader": "Shows the header with navigation.",
+          "bordered": "Draws dividing lines between cells.",
+          "highlightWeekends": "Visually highlights Saturday and Sunday.",
+          "minDateMaxDate": "Limits the range of selectable dates.",
+          "disabledDates": "Individual disabled dates.",
+          "disabledDaysOfWeek": "Disabled days of the week (0-6).",
+          "draggableEvents": "Allows dragging events between days."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when a day is selected.",
+          "eventClick": "Emitted when clicking on an event.",
+          "dayClick": "Emitted when clicking on a day cell.",
+          "moreClick": "Emitted when clicking the \"+N\" indicator.",
+          "createEvent": "Emitted when requesting event creation.",
+          "eventDrop": "Emitted when an event is dropped on another date."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Monthly view without events bound to a date."
+          },
+          "events": {
+            "title": "With events",
+            "desc": "Renders a collection of CalendarEvents distributed per day."
+          },
+          "weekNumbers": {
+            "title": "With week numbers",
+            "desc": "Enable show-week-numbers to display ISO numbering."
+          },
+          "sundayStart": {
+            "title": "Week starting on Sunday",
+            "desc": "Set first-day-of-week=0 to start on Sunday."
+          }
+        },
+        "types": {
+          "title": "MonthView",
+          "desc": "TypeScript interfaces for MonthView and CalendarEvent. Supports modelValue, events, locale, firstDayOfWeek, color, radius, maxEventsPerDay, showWeekNumbers, fixedWeeks, showOutsideDays, showHeader, bordered, highlightWeekends, minDate, maxDate, disabledDates, disabledDaysOfWeek and draggableEvents."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name for the month view",
+          "focusNative": "Focus is managed by the month view; use Tab to navigate days and events"
+        }
+      },
+      "scheduler": {
+        "title": "Scheduler",
+        "description": "Agenda-style view with resources as columns (rooms, people, teams). Each resource shows its events on a shared hourly grid.",
+        "controls": {
+          "format": "Format",
+          "borders": "Borders",
+          "allDayRow": "All-day row",
+          "resourceColor": "Resource color"
+        },
+        "props": {
+          "modelValue": "Visible day (v-model).",
+          "resources": "Scheduler rows (rooms, people, teams).",
+          "events": "Events assigned to resources via `resourceId`.",
+          "locale": "BCP-47 locale for dates and times.",
+          "color": "Semantic color applied to accents.",
+          "format": "Time format for the hour column.",
+          "hourStart": "First visible hour (0-23).",
+          "hourEnd": "Last visible hour (1-24).",
+          "slotMinutes": "Granularity of time slots.",
+          "slotHeight": "Height in px of each time slot.",
+          "minResourceWidth": "Minimum width of each resource column before horizontal scroll.",
+          "showResourceHeader": "Shows the per-resource header.",
+          "resourceHeaderHeight": "Height in px of the resource header.",
+          "showAllDayRow": "Shows the row for all-day events.",
+          "showCurrentTime": "Draws the current-time line.",
+          "businessHours": "Highlights the business hours range.",
+          "bordered": "Draws a border around the grid.",
+          "useResourceColor": "Applies the resource color to its events when they have no own color.",
+          "draggableEvents": "Allows dragging events.",
+          "allowCrossResourceDrag": "Allows moving events between resources by dragging.",
+          "resizableEvents": "Allows resizing events."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the visible day changes.",
+          "eventClick": "Click on an event.",
+          "slotClick": "Click on an empty slot of a resource.",
+          "createEvent": "Request to create an event.",
+          "eventDrop": "Event dragged to another position or resource.",
+          "eventResize": "Event resized.",
+          "selectRange": "Range selected within a resource."
+        },
+        "examples": {
+          "basic": {
+            "title": "Resources only",
+            "desc": "Empty scheduler showing the resource grid with no events."
+          },
+          "events": {
+            "title": "With events",
+            "desc": "Events assigned to each resource by resourceId."
+          },
+          "format12h": {
+            "title": "12-hour format",
+            "desc": "Switches the hour column to AM/PM format."
+          },
+          "businessHours": {
+            "title": "Business hours",
+            "desc": "Highlights business hours and limits the visible time range."
+          }
+        },
+        "types": {
+          "title": "Scheduler",
+          "desc": "TypeScript interfaces for Scheduler, SchedulerResource and SchedulerEvent. Supports modelValue, resources, events, locale, color, radius, bordered, businessHours, disabledTimeRanges, showHeader, showCurrentTime, format, slotMinutes, slotHeight, minResourceWidth, showAllDayRow, draggableEvents, resizableEvents, allowCrossResourceDrag and useResourceColor."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name for the scheduler",
+          "focusNative": "Focus is managed by the scheduler; use Tab to navigate resources, events and actions"
+        }
+      },
+      "stat": {
+        "title": "Stat",
+        "description": "Compact KPI card for displaying metrics with trend, icon and semantic color. Ideal for dashboards and summaries.",
+        "controls": {
+          "variant": "Variant",
+          "color": "Color",
+          "size": "Size",
+          "trend": "Trend",
+          "loading": "Loading"
+        },
+        "props": {
+          "label": "Short metric label (\"Revenue\", \"Users\").",
+          "value": "Main value pre-formatted by the consumer.",
+          "description": "Auxiliary text shown below the value.",
+          "icon": "Optional icon component (heroicons or other).",
+          "trend": "Trend metadata. Renders an arrow and the delta.",
+          "variant": "Visual style of the card.",
+          "color": "Semantic color applied to the icon and trend.",
+          "size": "Size scale. Inherited from ModoProvider if omitted.",
+          "loading": "Shows a skeleton on the value while loading."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Label and main value with no extras."
+          },
+          "trend": {
+            "title": "With trend",
+            "desc": "The trend prop shows an arrow and the percentage delta."
+          },
+          "icon": {
+            "title": "With icon and color",
+            "desc": "Combines icon, semantic color and the outlined variant."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three scales to align with the page hierarchy."
+          },
+          "grid": {
+            "title": "Metrics grid",
+            "desc": "Four Stat cards in a grid simulating a dashboard."
+          }
+        },
+        "types": {
+          "title": "Stat",
+          "desc": "TypeScript interface for the Stat component props. Supports label, value, description, icon, trend, variant, color, size and loading."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name for the stat value",
+          "focusNative": "Non-interactive element; does not participate in the tab order"
+        }
+      },
+      "table": {
+        "title": "Table",
+        "description": "Powerful table with sorting, pagination, selection, sticky header, expandable rows and tree support. Columns are defined with key + accessor.",
+        "controls": {
+          "size": "Size",
+          "density": "Density",
+          "bordered": "Bordered",
+          "select": "Select",
+          "striped": "Striped",
+          "hover": "Hover",
+          "stickyHeader": "Sticky header"
+        },
+        "props": {
+          "data": "Rows to render.",
+          "columns": "Column definitions (key, header, accessor, sortable, align…).",
+          "rowKey": "Unique row identifier used by v-for and selection.",
+          "size": "Font size and base row height.",
+          "density": "Vertical padding applied to cells.",
+          "striped": "Applies an alternating background to even rows.",
+          "hover": "Highlights the row under the cursor.",
+          "bordered": "Configures internal table borders.",
+          "stickyHeader": "Keeps the header visible while scrolling vertically.",
+          "radius": "Rounds the outer corners of the table container.",
+          "overflow": "Controls how cells handle content that exceeds their width.",
+          "loading": "Shows a loading state while data is being fetched.",
+          "loadingRows": "Number of skeleton rows shown when loading is true.",
+          "loadingMode": "Render strategy for the loading state: skeleton rows or an overlay spinner.",
+          "emptyText": "Message displayed when data is empty.",
+          "noResultsText": "Message displayed when filters yield no results.",
+          "ariaLabel": "Accessible label for the table element.",
+          "sort": "Controlled sort state: array of \\{ key, direction \\} objects.",
+          "multiSort": "Allows sorting by multiple columns simultaneously.",
+          "sortClearable": "Whether clicking a sorted column a third time clears its sort.",
+          "selectable": "Enables row selection. 'single' allows one row; 'multi' allows many.",
+          "selected": "Controlled array of selected row keys.",
+          "isRowSelectable": "Predicate to disable selection on specific rows.",
+          "filter": "Controlled per-column filter values as a key → value map.",
+          "filterRow": "Shows an inline filter input row below the header.",
+          "expandable": "Adds an expand toggle to each row to reveal additional content.",
+          "expanded": "Controlled array of expanded row keys.",
+          "isRowExpandable": "Predicate to hide the expand toggle on specific rows.",
+          "pagination": "Controlled pagination state: \\{ page, pageSize, total \\}.",
+          "pageSizeOptions": "Options available in the page-size selector.",
+          "serverSide": "Disables client-side sorting/filtering; delegates to the server via emits.",
+          "resizable": "Allows column widths to be dragged to resize.",
+          "reorderable": "Allows columns to be dragged to reorder.",
+          "columnsState": "Controlled per-column state (width, order, visibility).",
+          "state": "Full serializable snapshot of sort, filter, pagination and column state.",
+          "minColumnWidth": "Minimum column width in pixels when resizing.",
+          "virtual": "Enables virtual scrolling for large datasets.",
+          "rowHeight": "Fixed row height in pixels required for virtual scrolling.",
+          "overscan": "Number of rows rendered outside the visible area for virtual scrolling.",
+          "virtualHeight": "Container height used when virtual is true.",
+          "tree": "Enables tree mode: child rows are read from the childrenKey property.",
+          "childrenKey": "Property name that holds child rows in tree mode.",
+          "treeExpanded": "Controlled array of expanded tree node keys.",
+          "loadChildren": "Async function that loads children on demand for a given row.",
+          "hasChildrenHint": "Predicate that indicates a row may have children before they are loaded.",
+          "groupBy": "Groups rows by the given key or accessor function.",
+          "groupExpanded": "Controlled array of expanded group keys.",
+          "stickyFirstColumn": "Pins the first column while scrolling horizontally.",
+          "toolbar": "Shows the built-in toolbar with search and column controls.",
+          "globalSearch": "Enables a global search input in the toolbar.",
+          "globalSearchScope": "Whether global search runs on all columns or only filterable ones.",
+          "globalSearchTerm": "Controlled value of the global search input.",
+          "columnVisibility": "Adds a column visibility toggle to the toolbar.",
+          "exportable": "Adds export buttons (CSV, JSON, clipboard) to the toolbar.",
+          "exportFileName": "Base file name used when exporting CSV or JSON."
+        },
+        "emits": {
+          "updateSort": "Emitted when column sort order changes. Payload: TableSortState.",
+          "updateSelected": "Emitted when row selection changes. Payload: (string | number)[].",
+          "updateFilter": "Emitted when a column filter changes. Payload: TableFilterState.",
+          "updateExpanded": "Emitted when expandable rows are toggled. Payload: (string | number)[].",
+          "updatePagination": "Emitted when the page or page size changes. Payload: TablePaginationState.",
+          "updateColumnsState": "Emitted when columns are resized or reordered. Payload: TableColumnState[].",
+          "updateTreeExpanded": "Emitted when tree nodes are expanded or collapsed. Payload: (string | number)[].",
+          "updateGroupExpanded": "Emitted when groups are expanded or collapsed. Payload: (string | number)[].",
+          "updateGlobalSearchTerm": "Emitted when the global search input changes. Payload: string.",
+          "rowActivate": "Emitted when a row is activated via Enter or double-click.",
+          "rowClick": "Emitted when a row is clicked.",
+          "cellEdit": "Emitted when an editable cell value is committed. Payload: TableCellEditEvent.",
+          "cellEditCancel": "Emitted when an editable cell edit is cancelled.",
+          "updateState": "Emitted with a full snapshot of all table state."
+        },
+        "slots": {
+          "default": "Fallback slot — currently unused, reserved for future extensions.",
+          "caption": "Accessible table caption rendered as a caption element.",
+          "empty": "Custom content shown when data is empty. Exposes { message }.",
+          "noResults": "Custom content shown when filters yield no results. Exposes \\{ message, clear \\}.",
+          "footer": "Content appended below the table body.",
+          "toolbar": "Custom toolbar content. Exposes \\{ searchTerm, setSearchTerm, clearSearch \\}.",
+          "bulkActions": "Shown in the toolbar when rows are selected. Exposes \\{ selected, rows, count, clear \\}.",
+          "rowExpanded": "Content inside an expanded row. Exposes \\{ row, index \\}.",
+          "groupHeader": "Custom group header. Exposes \\{ value, rows, count, expanded, toggle, aggregations \\}.",
+          "cellKey": "Custom cell renderer for the column with the given key. Exposes \\{ row, value, index \\}.",
+          "headerKey": "Custom header renderer for the column with the given key. Exposes \\{ column \\}.",
+          "filterKey": "Custom filter input for the column with the given key. Exposes \\{ column, value, setValue, clear \\}."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Default configuration with four columns and standard typography."
+          },
+          "striped": {
+            "title": "Striped + bordered",
+            "desc": "Alternating rows and full borders for easier reading in dense tables."
+          },
+          "sort": {
+            "title": "With sorting",
+            "desc": "Mark any column as sortable to enable ascending / descending order."
+          },
+          "compact": {
+            "title": "Compact density",
+            "desc": "Reduces vertical padding to show more rows in less space."
+          },
+          "stickyHeader": {
+            "title": "Sticky header",
+            "desc": "The header stays fixed while scrolling inside the container."
+          },
+          "selection": {
+            "title": "Row selection",
+            "desc": "Enable single or multi-row selection with checkboxes. Bind :selected and listen to \\@update:selected."
+          },
+          "pagination": {
+            "title": "Pagination",
+            "desc": "Pass a pagination object with page, pageSize and total to split the data across pages."
+          },
+          "loading": {
+            "title": "Loading state",
+            "desc": "Set :loading=\"true\" to show skeleton rows while data is being fetched. Use loading-rows to control how many appear."
+          },
+          "customCell": {
+            "title": "Custom cell slot",
+            "desc": "Use the #cell-{key} slot to render any content inside a column. The slot exposes \\{ row, value, index \\}."
+          }
+        },
+        "types": {
+          "title": "TypeScript interfaces",
+          "desc": "Core types exported by Table: TableColumn, TableSortState, TableFilterState, TablePaginationState, TableCellEditEvent and TableColumnState."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element (sortable header, checkbox or pagination control)",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbEnter": "Activate a sortable header (cycle asc → desc → none) or confirm an editable cell",
+          "kbSpace": "Toggle selection on a focused row checkbox",
+          "ariaSort": "Set to 'ascending' or 'descending' on active sort headers; 'none' on sortable but unsorted columns",
+          "ariaLabel": "Provides an accessible name for the table element",
+          "ariaSelected": "Set to 'true' on selected rows when selectable is enabled",
+          "focusNative": "Focus is managed natively; use Tab to navigate between headers, checkboxes and pagination controls",
+          "focusTrap": "Editable cells trap focus until the edit is committed or cancelled"
+        }
+      },
+      "timeline": {
+        "title": "Timeline",
+        "description": "Vertical timeline for displaying events in chronological order. Useful for history, changelogs, tracking and activity feeds.",
+        "controls": {
+          "variant": "Variant",
+          "color": "Color",
+          "size": "Size",
+          "side": "Side"
+        },
+        "props": {
+          "items": "Events to render in chronological order.",
+          "variant": "Default marker style. Each item can override it.",
+          "color": "Default semantic color for the marker.",
+          "size": "Visual scale of the marker and typography.",
+          "side": "Side where the marker rail is rendered."
+        },
+        "slots": {
+          "itemId": "Extra content rendered below the title and description of the item with the corresponding id."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Simple list of events with title and timestamp."
+          },
+          "icons": {
+            "title": "With icons",
+            "desc": "Each item defines an icon component and variant 'icon'."
+          },
+          "colors": {
+            "title": "Per-event colors",
+            "desc": "The marker color can be overridden per item to reflect states."
+          },
+          "description": {
+            "title": "With description",
+            "desc": "Adds secondary text below the title to give context to the event."
+          },
+          "rightSide": {
+            "title": "Right side",
+            "desc": "Rail inverted with side='right' — useful for asymmetric layouts."
+          }
+        },
+        "types": {
+          "title": "Timeline",
+          "desc": "TypeScript interfaces for Timeline and TimelineItem. Supports items, color, side, size, variant and per-item icon overrides."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name describing the timeline content",
+          "focusNative": "Non-interactive element; does not participate in the tab order"
+        }
+      },
+      "typography": {
+        "title": "Typography",
+        "description": "Typographic system with semantic variants (display, heading, title, body, caption…), sizes and weights. The as prop lets you map to the appropriate HTML tag to maintain accessible hierarchy.",
+        "controls": {
+          "variant": "Variant",
+          "size": "Size",
+          "weight": "Weight",
+          "align": "Align",
+          "color": "Color",
+          "truncate": "Truncate",
+          "italic": "Italic",
+          "underline": "Underline",
+          "strikethrough": "Strikethrough"
+        },
+        "props": {
+          "variant": "Semantic typographic style. Defines the default tag.",
+          "size": "Scale within the variant. Inherited from ModoProvider if omitted.",
+          "as": "Overrides the HTML tag inferred by the variant.",
+          "weight": "Font weight.",
+          "align": "Horizontal text alignment.",
+          "color": "Semantic color applied to the text.",
+          "truncate": "Truncates with ellipsis to a single line.",
+          "italic": "Applies italic style.",
+          "underline": "Underlines the text.",
+          "strikethrough": "Strikes through the text."
+        },
+        "slots": {
+          "default": "Text content to render."
+        },
+        "examples": {
+          "variants": {
+            "title": "Variants",
+            "desc": "Each variant defines a visual hierarchy and a default HTML tag."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Each variant has three scales (small, medium, large)."
+          },
+          "weights": {
+            "title": "Weights",
+            "desc": "Six weights available from light to extrabold."
+          },
+          "colors": {
+            "title": "Semantic colors",
+            "desc": "Use provider colors to maintain consistency and accessibility."
+          },
+          "truncate": {
+            "title": "Truncate",
+            "desc": "Truncates the text to a single line with ellipsis when it exceeds the width."
+          }
+        },
+        "types": {
+          "title": "Typography",
+          "desc": "TypeScript interface for the Typography component props. Supports variant, size, as, weight, align, color, truncate, italic, underline and strikethrough."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaHidden": "Decorative text can be hidden from screen readers",
+          "focusNative": "Text is not interactive; does not participate in the tab order"
+        }
+      },
+      "weekView": {
+        "title": "WeekView",
+        "description": "Weekly view with an hourly grid. Supports business hours, disabled ranges, drag & drop and event resizing.",
+        "controls": {
+          "format": "Format",
+          "allDayRow": "All-day row",
+          "borders": "Borders",
+          "currentTime": "Current time"
+        },
+        "props": {
+          "modelValue": "Visible date. The week is calculated from it.",
+          "events": "Events to render in the hourly grid.",
+          "locale": "BCP-47 locale for headers and formats.",
+          "firstDayOfWeek": "First day of the week.",
+          "color": "Semantic color applied to accents.",
+          "format": "Time format for the hour column.",
+          "hourStart": "First visible hour (0-23).",
+          "hourEnd": "Last visible hour (1-24).",
+          "slotMinutes": "Granularity of time slots.",
+          "slotHeight": "Height in px of each time slot.",
+          "minDayWidth": "Minimum width per day column before horizontal scroll.",
+          "showAllDayRow": "Shows the row for all-day events.",
+          "showHeader": "Shows the header with navigation.",
+          "showCurrentTime": "Draws the current-time line.",
+          "showNowPill": "Shows a pill with the current time over the day column.",
+          "businessHours": "Highlights the business hours range.",
+          "disabledTimeRanges": "Non-selectable time ranges.",
+          "bordered": "Draws a border around the grid.",
+          "draggableEvents": "Allows dragging events.",
+          "resizableEvents": "Allows resizing events.",
+          "allowRangeSelection": "Allows selecting a range by dragging over empty slots."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the visible week changes.",
+          "eventClick": "Click on an event.",
+          "dayClick": "Click on a day header.",
+          "slotClick": "Click on an empty slot.",
+          "createEvent": "Request to create an event.",
+          "eventDrop": "Event dragged to a new position.",
+          "eventResize": "Event resized.",
+          "selectRange": "Range selected by dragging."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Week in 24-hour format with timed events."
+          },
+          "allDay": {
+            "title": "With all-day row",
+            "desc": "The top row groups all-day and multi-day events."
+          },
+          "format12h": {
+            "title": "12-hour format",
+            "desc": "Switches the time format to AM/PM."
+          },
+          "businessHours": {
+            "title": "Business hours",
+            "desc": "Highlights business hours and limits the visible time range."
+          }
+        },
+        "types": {
+          "title": "WeekView",
+          "desc": "TypeScript interface for the WeekView component props. Supports modelValue, events, locale, firstDayOfWeek, color, radius, bordered, minDate, maxDate, businessHours, disabledTimeRanges, showHeader, showCurrentTime, format, slotMinutes, slotHeight, minDayWidth, showAllDayRow, draggableEvents, resizableEvents and allowRangeSelection."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name for the week view",
+          "focusNative": "Focus is managed by the week view; use Tab to navigate events and actions"
+        }
+      }
+    },
+    "dataDisplay": {
+      "accordion": {
+        "title": "Accordion",
+        "description": "Expandable panels for displaying hierarchical content compactly. Ideal for FAQs, settings and filters.",
+        "controls": {
+          "variant": "Variant",
+          "size": "Size",
+          "radius": "Radius",
+          "icon": "Icon",
+          "multiple": "Multiple"
+        },
+        "props": {
+          "items": "List of items to render (each with value, title and content).",
+          "modelValue": "v-model binding. Type depends on multiple.",
+          "multiple": "Allows multiple panels to be open at the same time.",
+          "variant": "Visual variant of the container.",
+          "size": "Padding and typography scale. Inherited from ModoProvider.",
+          "radius": "Border radius (for separated and bordered).",
+          "iconPosition": "Side where the chevron icon is shown."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the set of open panels changes.",
+          "change": "Alias of update:modelValue for use without v-model."
+        },
+        "slots": {
+          "itemValue": "Per-item slot for rendering rich content (HTML, forms, lists)."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Three single-open panels with v-model."
+          },
+          "multiple": {
+            "title": "Multiple open",
+            "desc": "Allows keeping multiple panels expanded simultaneously."
+          },
+          "variants": {
+            "title": "Variants",
+            "desc": "separated (independent cards), bordered (single box) and flush (no container)."
+          },
+          "icons": {
+            "title": "With icons",
+            "desc": "Each item can declare an optional icon next to its title."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three padding and typography scales."
+          }
+        }
+      },
+      "agendaView": {
+        "title": "AgendaView",
+        "description": "Chronological list of events per day. Ideal for \"upcoming events\" sections, dashboards and compact agendas.",
+        "controls": {
+          "days": "Days",
+          "format": "Format",
+          "emptyDays": "Empty days",
+          "borders": "Borders"
+        },
+        "props": {
+          "modelValue": "Anchor date from which the range is calculated.",
+          "events": "List of events to display.",
+          "locale": "BCP-47 locale for dates and day names.",
+          "color": "Semantic color applied to accents.",
+          "daysToShow": "Number of days ahead to show.",
+          "daysBefore": "Days before the anchor date to include.",
+          "showEmptyDays": "Shows days without events as empty rows.",
+          "showMonthSeparator": "Inserts a separator when the month changes.",
+          "showHeader": "Shows the header with navigation.",
+          "format": "Time format for events.",
+          "emptyText": "Text shown when there are no events in the range.",
+          "highlightedDates": "Visually highlighted dates.",
+          "disabledDates": "Disabled dates.",
+          "bordered": "Draws a border around the container.",
+          "loadMoreChunk": "Number of days added when loading more events."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the visible range changes.",
+          "eventClick": "Click on an event.",
+          "dayClick": "Click on a day row.",
+          "createEvent": "Request to create an event.",
+          "loadMore": "Request to load more days at the end of the list."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "List of the next 7 days grouped by day."
+          },
+          "extendedRange": {
+            "title": "Extended range",
+            "desc": "Increase days-to-show to display more days ahead."
+          },
+          "emptyState": {
+            "title": "Empty state",
+            "desc": "When there are no events, shows a configurable message."
+          },
+          "format12h": {
+            "title": "12-hour format",
+            "desc": "Shows event times in AM/PM format."
+          }
+        }
+      },
+      "avatar": {
+        "title": "Avatar",
+        "description": "User avatar with image, initials fallback, status indicator and multiple sizes and shapes.",
+        "controls": {
+          "mode": "Mode",
+          "size": "Size",
+          "radius": "Radius",
+          "color": "Color",
+          "status": "Status",
+          "bordered": "Bordered"
+        },
+        "props": {
+          "src": "URL of the avatar image. Falls back to initials or icon if it fails.",
+          "alt": "Alternative text for the image.",
+          "initials": "Initials shown when no image is available.",
+          "size": "Size of the avatar.",
+          "radius": "Shape of the avatar. full=circle, none=square.",
+          "color": "Background color when initials are shown.",
+          "status": "Status indicator visible at the bottom corner.",
+          "bordered": "Adds a border around the avatar.",
+          "ariaLabel": "Accessible name when initials or the fallback icon are shown.",
+          "skeleton": "Shows a loading placeholder with the same footprint."
+        },
+        "examples": {
+          "image": {
+            "title": "Image",
+            "desc": "Loads the image from a URL."
+          },
+          "initials": {
+            "title": "Initials",
+            "desc": "Fallback with initials and semantic color when there is no image."
+          },
+          "iconFallback": {
+            "title": "Icon fallback",
+            "desc": "If there is no src or initials, a generic icon is shown."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Five scales: xs, small, medium, large and xl."
+          },
+          "status": {
+            "title": "Status indicator",
+            "desc": "Dot at the bottom-right corner to signal presence."
+          }
+        }
+      },
+      "avatarGroup": {
+        "title": "AvatarGroup",
+        "description": "Stacks overlapping avatars showing up to N visible and a counter for the rest. Ideal for collaborator, assignee or member lists.",
+        "controls": {
+          "size": "Size",
+          "max": "Max",
+          "radius": "Radius",
+          "bordered": "Bordered"
+        },
+        "props": {
+          "max": "Maximum number of visible avatars. The rest are grouped in a +N counter.",
+          "size": "Size applied to all child avatars.",
+          "radius": "Shape shared by all avatars in the group.",
+          "bordered": "Border around each avatar to visually separate them.",
+          "ariaLabel": "Accessible name for the group."
+        },
+        "slots": {
+          "default": "List of Avatar components. The group controls their size and shape."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Three overlapping avatars without a limit."
+          },
+          "max": {
+            "title": "With max and overflow",
+            "desc": "Limits visible avatars and shows a +N counter for the rest."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "The size is applied to all child avatars."
+          },
+          "mixed": {
+            "title": "Mixed",
+            "desc": "Combines images, initials and icon fallback in the same group."
+          }
+        }
+      },
+      "calendar": {
+        "title": "Calendar",
+        "description": "Monthly calendar for selecting a date. Supports minDate, maxDate, disabled dates, locale and visual variants.",
+        "controls": {
+          "variant": "Variant",
+          "color": "Color",
+          "radius": "Radius",
+          "outsideDays": "Outside days",
+          "header": "Header"
+        },
+        "props": {
+          "modelValue": "Selected date (v-model).",
+          "month": "Initial month shown (0-11). Defaults to current month.",
+          "year": "Initial year shown.",
+          "locale": "BCP-47 locale for month and day names.",
+          "firstDayOfWeek": "First day of the week (0 = Sunday, 1 = Monday).",
+          "minDate": "Minimum selectable date.",
+          "maxDate": "Maximum selectable date.",
+          "disabledDates": "Individual dates to disable.",
+          "color": "Semantic color applied to the selection and hover.",
+          "variant": "Visual variant of the container.",
+          "radius": "Border radius for the calendar and cells.",
+          "showOutsideDays": "Shows days from the previous and next month that complete the grid.",
+          "showHeader": "Shows the header with month and year navigation.",
+          "fixedWeeks": "Always shows 6 weeks to maintain a constant height."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when a date is selected.",
+          "monthChange": "Emitted when the visible month or year changes via navigation."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Default calendar bound to a date via v-model."
+          },
+          "minMax": {
+            "title": "With date range",
+            "desc": "Limits the selectable range using min-date and max-date."
+          },
+          "outline": {
+            "title": "Outline variant",
+            "desc": "Variant with a visible border and large radius."
+          },
+          "locale": {
+            "title": "Custom locale",
+            "desc": "Changes the locale and the first day of the week."
+          }
+        }
+      },
+      "card": {
+        "title": "Card",
+        "description": "Structural container with three variants (elevated, outlined, filled), padding control, border radius and hover state. Base block for metrics, lists, forms and sections.",
+        "controls": {
+          "variant": "Variant",
+          "padding": "Padding",
+          "radius": "Radius",
+          "hoverable": "Hoverable",
+          "clickable": "Clickable",
+          "divided": "Divided"
+        },
+        "playground": {
+          "title": "Example card",
+          "body": "Adjust the controls to see live changes."
+        },
+        "props": {
+          "variant": "Visual style of the container.",
+          "padding": "Internal padding applied to header, body and footer.",
+          "radius": "Border radius. Inherited from ModoProvider if omitted.",
+          "hoverable": "Applies hover state (shadow, border) without converting it to a button.",
+          "clickable": "Renders the card as a button with accessible focus and pointer cursor.",
+          "divided": "Shows a dividing line between header / body / footer."
+        },
+        "slots": {
+          "default": "Main content of the card.",
+          "header": "Optional header above the content.",
+          "image": "Padding-free slot for edge-to-edge images or media.",
+          "footer": "Optional footer for actions or metadata."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Simple card with title and description."
+          },
+          "headerFooter": {
+            "title": "With header and footer",
+            "desc": "#header and #footer slots with a divider between sections."
+          },
+          "image": {
+            "title": "With image",
+            "desc": "Edge-to-edge #image slot combined with padding=none."
+          },
+          "hover": {
+            "title": "Hover effect",
+            "desc": "Enable hoverable to highlight the card on cursor hover."
+          },
+          "clickable": {
+            "title": "Clickable",
+            "desc": "Renders the card as an accessible button with visible focus."
+          }
+        }
+      },
+      "code": {
+        "title": "Code",
+        "description": "Inline code snippets for highlighting values, props or errors in docs and messages.",
+        "controls": {
+          "variant": "Variant",
+          "color": "Color",
+          "size": "Size",
+          "radius": "Radius"
+        },
+        "props": {
+          "size": "Text size of the snippet.",
+          "variant": "Visual style of the background / border.",
+          "color": "Semantic color applied to the snippet.",
+          "radius": "Border radius. Inherited from ModoProvider if omitted."
+        },
+        "slots": {
+          "default": "Content of the code snippet (plain text or short expression)."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Inline code snippet with default styles."
+          },
+          "variants": {
+            "title": "Variants",
+            "desc": "subtle (filled), outline (border) and ghost (transparent)."
+          },
+          "colors": {
+            "title": "Semantic colors",
+            "desc": "Five colors to differentiate values, errors or states."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three scales that align with the surrounding text."
+          },
+          "inline": {
+            "title": "Inline in text",
+            "desc": "Vertically aligned, preserving the baseline."
+          }
+        }
+      },
+      "dateRangePicker": {
+        "title": "DateRangePicker",
+        "description": "Inline date range selector. Supports one or two visible months, quick presets, min/max length restrictions and disabled dates.",
+        "controls": {
+          "months": "Months",
+          "variant": "Variant",
+          "color": "Color",
+          "radius": "Radius",
+          "presets": "Presets"
+        },
+        "props": {
+          "modelValue": "Tuple with the start and end dates of the range (v-model).",
+          "months": "Number of months visible simultaneously.",
+          "showPresets": "Shows the side panel with predefined ranges (today, this week, etc.).",
+          "presets": "Custom presets. Each has a label and a range() function that returns the tuple.",
+          "color": "Accent color for the selected range.",
+          "variant": "Visual style of the panel.",
+          "radius": "Border radius of the panel.",
+          "minDate": "Minimum selectable date.",
+          "maxDate": "Maximum selectable date.",
+          "minRange": "Minimum number of days the range must span.",
+          "maxRange": "Maximum number of days the range can span.",
+          "disabledDates": "Non-selectable dates.",
+          "locale": "Locale for month and day names.",
+          "firstDayOfWeek": "Week start day (0=Sun, 1=Mon)."
+        },
+        "examples": {
+          "twoMonths": {
+            "title": "Two months (default)",
+            "desc": "Shows two calendars side by side for comfortably selecting long ranges."
+          },
+          "oneMonth": {
+            "title": "One month",
+            "desc": "Compact mode with a single calendar, ideal for short ranges."
+          },
+          "presets": {
+            "title": "With presets",
+            "desc": "show-presets adds a side panel with shortcuts (today, this week, this month, last 30 days…)."
+          },
+          "colorPrimary": {
+            "title": "Primary color",
+            "desc": "The color affects the background of the selected range and the start/end days."
+          },
+          "outline": {
+            "title": "Outline variant",
+            "desc": "Visible perimeter border, useful on neutral backgrounds."
+          }
+        }
+      },
+      "dateTimePicker": {
+        "title": "DateTimePicker",
+        "description": "Inline date and time selector. Shows a monthly calendar alongside scrollable time columns. Supports 12/24h formats, seconds and minute step.",
+        "controls": {
+          "format": "Format",
+          "variant": "Variant",
+          "color": "Color",
+          "step": "Step",
+          "radius": "Radius",
+          "seconds": "Seconds"
+        },
+        "props": {
+          "modelValue": "Selected date and time (v-model).",
+          "format": "Time format of the time selector.",
+          "step": "Minute increment for the minutes column.",
+          "showSeconds": "Shows the seconds column.",
+          "color": "Accent color for the selected day.",
+          "variant": "Visual style of the calendar panel.",
+          "radius": "Border radius of the panel.",
+          "minDate": "Minimum selectable date.",
+          "maxDate": "Maximum selectable date.",
+          "disabledDates": "List of disabled dates.",
+          "minTime": "Minimum time in HH:MM format.",
+          "maxTime": "Maximum time in HH:MM format.",
+          "locale": "Locale for month and day names (e.g. en-US).",
+          "firstDayOfWeek": "Week start day (0=Sun, 1=Mon)."
+        },
+        "examples": {
+          "basic24h": {
+            "title": "24h (default)",
+            "desc": "24-hour mode with hour and minute columns."
+          },
+          "format12h": {
+            "title": "12h format",
+            "desc": "Adds the AM/PM column for regions that prefer the 12-hour clock."
+          },
+          "seconds12h": {
+            "title": "12h with seconds",
+            "desc": "Enable show-seconds to show the seconds column."
+          },
+          "step15": {
+            "title": "15-minute step",
+            "desc": "step=\"15\" groups minutes in 15-unit increments, ideal for schedules."
+          },
+          "outline": {
+            "title": "Outline variant",
+            "desc": "Perimeter border for neutral backgrounds or cards."
+          }
+        }
+      },
+      "dayView": {
+        "title": "DayView",
+        "description": "Single-day view with an hourly grid. Ideal for detailed agendas, time blocks and operational planning.",
+        "controls": {
+          "format": "Format",
+          "allDayRow": "All-day row",
+          "borders": "Borders",
+          "currentTime": "Current time"
+        },
+        "props": {
+          "modelValue": "Visible day (v-model).",
+          "events": "Events to render in the hourly grid.",
+          "locale": "BCP-47 locale for headers and formats.",
+          "color": "Semantic color applied to accents.",
+          "format": "Time format for the hour column.",
+          "hourStart": "First visible hour (0-23).",
+          "hourEnd": "Last visible hour (1-24).",
+          "slotMinutes": "Granularity of time slots.",
+          "slotHeight": "Height in px of each time slot.",
+          "showAllDayRow": "Shows the top row for all-day events.",
+          "showHeader": "Shows the header with navigation.",
+          "showCurrentTime": "Draws the current-time line.",
+          "showNowPill": "Shows a pill with the current time.",
+          "businessHours": "Highlights the business hours range.",
+          "disabledTimeRanges": "Non-selectable time ranges.",
+          "bordered": "Draws a border around the grid.",
+          "draggableEvents": "Allows dragging events.",
+          "resizableEvents": "Allows resizing events.",
+          "allowRangeSelection": "Allows selecting a range by dragging over empty slots."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the visible day changes.",
+          "eventClick": "Click on an event.",
+          "slotClick": "Click on an empty slot.",
+          "createEvent": "Request to create an event.",
+          "eventDrop": "Event dragged to a new position.",
+          "eventResize": "Event resized.",
+          "selectRange": "Range selected by dragging."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Default day with no events."
+          },
+          "events": {
+            "title": "With events",
+            "desc": "Timed events rendered in the hourly grid."
+          },
+          "format12h": {
+            "title": "12-hour format",
+            "desc": "Hour column in AM/PM format."
+          },
+          "businessHours": {
+            "title": "Business hours",
+            "desc": "Highlights business hours and restricts the visible time range."
+          }
+        }
+      },
+      "kbd": {
+        "title": "Kbd",
+        "description": "Visual representation of keyboard keys or shortcuts. Useful in docs, tooltips and command palettes.",
+        "controls": {
+          "variant": "Variant",
+          "size": "Size",
+          "radius": "Radius"
+        },
+        "props": {
+          "size": "Key size.",
+          "variant": "Visual style of the key.",
+          "radius": "Border radius. Inherited from ModoProvider if omitted."
+        },
+        "slots": {
+          "default": "Text or glyph of the key (Enter, ⌘, ↑, etc.)."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "A single key."
+          },
+          "combo": {
+            "title": "Combination",
+            "desc": "Join multiple Kbd components with a separator."
+          },
+          "variants": {
+            "title": "Variants",
+            "desc": "Three visual styles: subtle (default), outline and solid."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three scales to align with text in different contexts."
+          },
+          "inline": {
+            "title": "Inline in text",
+            "desc": "Vertically aligned with surrounding text.",
+            "text": "Press {key} to open quick search."
+          }
+        }
+      },
+      "monthView": {
+        "title": "MonthView",
+        "description": "Grid-style monthly view for displaying events per day. Supports week numbers, any first day of week and event drag-and-drop.",
+        "controls": {
+          "weekStart": "Start",
+          "sun": "Sun",
+          "mon": "Mon",
+          "weekNumbers": "Week No.",
+          "fixedWeeks": "6 fixed weeks",
+          "outsideDays": "Outside days"
+        },
+        "props": {
+          "modelValue": "Visible date (v-model). Determines the displayed month.",
+          "events": "List of events to render in each cell.",
+          "locale": "BCP-47 locale for month and day names.",
+          "firstDayOfWeek": "First day of the week (0 = Sunday, 1 = Monday).",
+          "color": "Semantic color for selection and accents.",
+          "radius": "Border radius of the container.",
+          "maxEventsPerDay": "Maximum visible events per cell; the rest are grouped as \"+N\".",
+          "showWeekNumbers": "Shows a leading column with the ISO week number.",
+          "fixedWeeks": "Always renders 6 weeks to maintain a constant height.",
+          "showOutsideDays": "Shows days from the previous and next months.",
+          "showHeader": "Shows the header with navigation.",
+          "bordered": "Draws dividing lines between cells.",
+          "highlightWeekends": "Visually highlights Saturday and Sunday.",
+          "minDateMaxDate": "Limits the range of selectable dates.",
+          "disabledDates": "Individual disabled dates.",
+          "disabledDaysOfWeek": "Disabled days of the week (0-6).",
+          "draggableEvents": "Allows dragging events between days."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when a day is selected.",
+          "eventClick": "Emitted when clicking on an event.",
+          "dayClick": "Emitted when clicking on a day cell.",
+          "moreClick": "Emitted when clicking the \"+N\" indicator.",
+          "createEvent": "Emitted when requesting event creation.",
+          "eventDrop": "Emitted when an event is dropped on another date."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Monthly view without events bound to a date."
+          },
+          "events": {
+            "title": "With events",
+            "desc": "Renders a collection of CalendarEvents distributed per day."
+          },
+          "weekNumbers": {
+            "title": "With week numbers",
+            "desc": "Enable show-week-numbers to display ISO numbering."
+          },
+          "sundayStart": {
+            "title": "Week starting on Sunday",
+            "desc": "Set first-day-of-week=0 to start on Sunday."
+          }
+        }
+      },
+      "scheduler": {
+        "title": "Scheduler",
+        "description": "Agenda-style view with resources as columns (rooms, people, teams). Each resource shows its events on a shared hourly grid.",
+        "controls": {
+          "format": "Format",
+          "borders": "Borders",
+          "allDayRow": "All-day row",
+          "resourceColor": "Resource color"
+        },
+        "props": {
+          "modelValue": "Visible day (v-model).",
+          "resources": "Scheduler rows (rooms, people, teams).",
+          "events": "Events assigned to resources via `resourceId`.",
+          "locale": "BCP-47 locale for dates and times.",
+          "color": "Semantic color applied to accents.",
+          "format": "Time format for the hour column.",
+          "hourStart": "First visible hour (0-23).",
+          "hourEnd": "Last visible hour (1-24).",
+          "slotMinutes": "Granularity of time slots.",
+          "slotHeight": "Height in px of each time slot.",
+          "minResourceWidth": "Minimum width of each resource column before horizontal scroll.",
+          "showResourceHeader": "Shows the per-resource header.",
+          "resourceHeaderHeight": "Height in px of the resource header.",
+          "showAllDayRow": "Shows the row for all-day events.",
+          "showCurrentTime": "Draws the current-time line.",
+          "businessHours": "Highlights the business hours range.",
+          "bordered": "Draws a border around the grid.",
+          "useResourceColor": "Applies the resource color to its events when they have no own color.",
+          "draggableEvents": "Allows dragging events.",
+          "allowCrossResourceDrag": "Allows moving events between resources by dragging.",
+          "resizableEvents": "Allows resizing events."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the visible day changes.",
+          "eventClick": "Click on an event.",
+          "slotClick": "Click on an empty slot of a resource.",
+          "createEvent": "Request to create an event.",
+          "eventDrop": "Event dragged to another position or resource.",
+          "eventResize": "Event resized.",
+          "selectRange": "Range selected within a resource."
+        },
+        "examples": {
+          "basic": {
+            "title": "Resources only",
+            "desc": "Empty scheduler showing the resource grid with no events."
+          },
+          "events": {
+            "title": "With events",
+            "desc": "Events assigned to each resource by resourceId."
+          },
+          "format12h": {
+            "title": "12-hour format",
+            "desc": "Switches the hour column to AM/PM format."
+          },
+          "businessHours": {
+            "title": "Business hours",
+            "desc": "Highlights business hours and limits the visible time range."
+          }
+        }
+      },
+      "stat": {
+        "title": "Stat",
+        "description": "Compact KPI card for displaying metrics with trend, icon and semantic color. Ideal for dashboards and summaries.",
+        "controls": {
+          "variant": "Variant",
+          "color": "Color",
+          "size": "Size",
+          "trend": "Trend",
+          "loading": "Loading"
+        },
+        "props": {
+          "label": "Short metric label (\"Revenue\", \"Users\").",
+          "value": "Main value pre-formatted by the consumer.",
+          "description": "Auxiliary text shown below the value.",
+          "icon": "Optional icon component (heroicons or other).",
+          "trend": "Trend metadata. Renders an arrow and the delta.",
+          "variant": "Visual style of the card.",
+          "color": "Semantic color applied to the icon and trend.",
+          "size": "Size scale. Inherited from ModoProvider if omitted.",
+          "loading": "Shows a skeleton on the value while loading."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Label and main value with no extras."
+          },
+          "trend": {
+            "title": "With trend",
+            "desc": "The trend prop shows an arrow and the percentage delta."
+          },
+          "icon": {
+            "title": "With icon and color",
+            "desc": "Combines icon, semantic color and the outlined variant."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three scales to align with the page hierarchy."
+          },
+          "grid": {
+            "title": "Metrics grid",
+            "desc": "Four Stat cards in a grid simulating a dashboard."
+          }
+        }
+      },
+      "table": {
+        "title": "Table",
+        "description": "Powerful table with sorting, pagination, selection, sticky header, expandable rows, virtualization, toolbar actions and tree support. Rows provide the data; columns describe how each field is rendered.",
+        "controls": {
+          "size": "Size",
+          "density": "Density",
+          "bordered": "Bordered",
+          "select": "Select",
+          "striped": "Striped",
+          "hover": "Hover",
+          "stickyHeader": "Sticky header"
+        },
+        "props": {
+          "data": "Array of row objects rendered by the table. Each row can have any shape; use rowKey to identify it.",
+          "columns": "Column definitions. Each column usually has a key, header, optional accessor, type, alignment, sorting/filtering metadata and layout options.",
+          "rowKey": "Unique row identifier used for Vue keys, selection, expansion, tree state and other row-level state.",
+          "size": "Component size scale. Controls font size and base row height.",
+          "density": "Vertical density applied to cells: compact, comfortable or spacious.",
+          "striped": "Applies alternating row backgrounds for readability.",
+          "hover": "Highlights the row under the cursor.",
+          "bordered": "Controls internal borders between rows, columns, both or none.",
+          "stickyHeader": "Keeps the table header visible while the table body scrolls.",
+          "radius": "Overrides the wrapper radius. Falls back to the active ModoProvider radius when omitted.",
+          "overflow": "Horizontal overflow strategy. Use scroll for wide tables or truncate for ellipsis-based layouts.",
+          "loading": "Shows loading UI in the table body.",
+          "loadingRows": "Number of skeleton rows to render while loading.",
+          "loadingMode": "skeleton replaces rows; overlay keeps existing rows visible under a loading overlay.",
+          "emptyText": "Custom message shown when there is no data.",
+          "noResultsText": "Custom message shown when filters/search produce no results.",
+          "ariaLabel": "Accessible label forwarded to the native table element.",
+          "sort": "Controlled sort state. Bind with v-model:sort.",
+          "multiSort": "Allows shift-click multi-column sorting.",
+          "sortClearable": "Allows the sort cycle to clear back to no sort.",
+          "selectable": "Selection mode: none, single or multi.",
+          "selected": "Controlled selected row keys. Bind with v-model:selected.",
+          "isRowSelectable": "Predicate used to disable selection for specific rows.",
+          "filter": "Controlled column filter state. Keys match column keys.",
+          "filterRow": "Renders a filter input row under the header for filterable columns.",
+          "expandable": "Adds row expansion controls and enables the row-expanded slot.",
+          "expanded": "Controlled expanded row keys. Bind with v-model:expanded.",
+          "isRowExpandable": "Predicate used to decide if a row should show the expansion control.",
+          "pagination": "Pagination state. Enables the pagination footer and can be controlled with v-model:pagination.",
+          "pageSizeOptions": "Available page-size options shown in the pagination footer.",
+          "serverSide": "Disables local filtering, sorting and slicing so the parent can fetch server-side data.",
+          "resizable": "Enables column resizing with draggable handles.",
+          "reorderable": "Enables column reordering by drag-and-drop and keyboard shortcuts.",
+          "columnsState": "Controlled column state for width, order and visibility. Bind with v-model:columnsState.",
+          "state": "Aggregate table state snapshot for persisting sort, filters, pagination, columns, search and selection together.",
+          "minColumnWidth": "Minimum width in pixels when resizing columns.",
+          "virtual": "Enables row virtualization for large datasets.",
+          "rowHeight": "Fixed row height used by virtualization. Inferred from size/density when omitted.",
+          "overscan": "Extra virtual rows rendered outside the viewport for smoother scrolling.",
+          "virtualHeight": "Height of the virtual scroll viewport.",
+          "tree": "Renders hierarchical rows using childrenKey.",
+          "childrenKey": "Property name that contains child rows for tree tables.",
+          "treeExpanded": "Controlled expanded tree row keys. Bind with v-model:treeExpanded.",
+          "loadChildren": "Lazy loader for tree children.",
+          "hasChildrenHint": "Predicate used with loadChildren to show a chevron before children are loaded.",
+          "groupBy": "Groups rows by a field key or accessor function.",
+          "groupExpanded": "Controlled expanded group keys. Bind with v-model:groupExpanded.",
+          "stickyFirstColumn": "Pins the first data column, optionally only on mobile.",
+          "toolbar": "Renders the table toolbar surface.",
+          "globalSearch": "Adds global search to the toolbar.",
+          "globalSearchScope": "Controls whether global search scans all columns or only filterable columns.",
+          "globalSearchTerm": "Controlled global search term. Bind with v-model:globalSearchTerm.",
+          "columnVisibility": "Adds a column visibility menu to the toolbar.",
+          "exportable": "Adds CSV, JSON and/or clipboard export actions.",
+          "exportFileName": "Base filename used for downloaded exports."
+        },
+        "emits": {
+          "updateSort": "Emitted when sort state changes.",
+          "updateSelected": "Emitted when row selection changes.",
+          "updateFilter": "Emitted when column filter state changes.",
+          "updateExpanded": "Emitted when row expansion state changes.",
+          "updatePagination": "Emitted when page or page size changes.",
+          "updateColumnsState": "Emitted when column widths, order or visibility changes.",
+          "updateTreeExpanded": "Emitted when tree expansion state changes.",
+          "updateGroupExpanded": "Emitted when group expansion state changes.",
+          "updateGlobalSearchTerm": "Emitted when the global search input changes.",
+          "rowActivate": "Emitted when a row is activated from keyboard interaction.",
+          "rowClick": "Emitted when a row is clicked.",
+          "cellEdit": "Emitted when an inline editable cell commits a new value.",
+          "cellEditCancel": "Emitted when an inline cell edit is cancelled.",
+          "updateState": "Emitted with the aggregate table state snapshot."
+        },
+        "slots": {
+          "default": "Declarative column API using TableColumn children.",
+          "caption": "Optional table caption for screen readers and visible context.",
+          "empty": "Custom empty state.",
+          "noResults": "Custom no-results state after filters/search.",
+          "footer": "Custom footer below the table body.",
+          "toolbar": "Custom toolbar content.",
+          "bulkActions": "Bulk action area shown when rows are selected.",
+          "rowExpanded": "Expanded row content.",
+          "groupHeader": "Custom group header content.",
+          "cellKey": "Custom cell renderer for a specific column key, e.g. cell-status.",
+          "headerKey": "Custom header renderer for a specific column key, e.g. header-status.",
+          "filterKey": "Custom filter renderer for a specific column key, e.g. filter-status."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic with rows and columns",
+            "desc": "A complete example showing how rows are shaped, how columns map to row fields and how row-key identifies each row."
+          },
+          "striped": {
+            "title": "Striped + bordered",
+            "desc": "Alternating rows and full borders for easier reading in dense tables."
+          },
+          "sort": {
+            "title": "With sorting",
+            "desc": "Mark any column as sortable to enable ascending / descending order."
+          },
+          "compact": {
+            "title": "Compact density",
+            "desc": "Reduces vertical padding to show more rows in less space."
+          },
+          "stickyHeader": {
+            "title": "Sticky header",
+            "desc": "The header stays fixed while scrolling inside the container."
+          }
+        }
+      },
+      "timeline": {
+        "title": "Timeline",
+        "description": "Vertical list of chronological events with dot, icon or outline markers. Each item supports title, description, timestamp and a per-item color.",
+        "controls": {
+          "variant": "Variant",
+          "size": "Size",
+          "color": "Color",
+          "side": "Side"
+        },
+        "props": {
+          "items": "Events to render in chronological order.",
+          "variant": "Default marker style. Each item can override it.",
+          "color": "Default semantic color of the marker.",
+          "size": "Visual scale of the marker and typography.",
+          "side": "Side where the marker line is rendered."
+        },
+        "slots": {
+          "itemId": "Extra content rendered below the title and description of the item with the corresponding id."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Dot markers with title and timestamp."
+          },
+          "icons": {
+            "title": "With icons",
+            "desc": "Icon markers for richer visual context."
+          },
+          "colors": {
+            "title": "Per-item colors",
+            "desc": "Each event can override the marker color independently."
+          },
+          "descriptions": {
+            "title": "With descriptions",
+            "desc": "Add secondary text below each event title."
+          },
+          "right": {
+            "title": "Right side",
+            "desc": "Moves the marker line to the right of the content."
+          }
+        }
+      },
+      "typography": {
+        "title": "Typography",
+        "description": "Typographic system with semantic variants (display, heading, title, body, caption…), sizes and weights. The as prop lets you map to the appropriate HTML tag to maintain accessible hierarchy.",
+        "controls": {
+          "variant": "Variant",
+          "size": "Size",
+          "weight": "Weight",
+          "align": "Align",
+          "color": "Color",
+          "truncate": "Truncate",
+          "italic": "Italic",
+          "underline": "Underline",
+          "strikethrough": "Strikethrough"
+        },
+        "props": {
+          "variant": "Semantic typographic style. Defines the default tag.",
+          "size": "Scale within the variant. Inherited from ModoProvider if omitted.",
+          "as": "Overrides the HTML tag inferred by the variant.",
+          "weight": "Font weight.",
+          "align": "Horizontal text alignment.",
+          "color": "Semantic color applied to the text.",
+          "truncate": "Truncates with ellipsis to a single line.",
+          "italic": "Applies italic style.",
+          "underline": "Underlines the text.",
+          "strikethrough": "Strikes through the text."
+        },
+        "slots": {
+          "default": "Text content to render."
+        },
+        "examples": {
+          "variants": {
+            "title": "Variants",
+            "desc": "Each variant defines a visual hierarchy and a default HTML tag."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Each variant has three scales (small, medium, large)."
+          },
+          "weights": {
+            "title": "Weights",
+            "desc": "Six weights available from light to extrabold."
+          },
+          "colors": {
+            "title": "Semantic colors",
+            "desc": "Use provider colors to maintain consistency and accessibility."
+          },
+          "truncate": {
+            "title": "Truncate",
+            "desc": "Truncates the text to a single line with ellipsis when it exceeds the width."
+          }
+        }
+      },
+      "weekView": {
+        "title": "WeekView",
+        "description": "Weekly view with an hourly grid. Supports business hours, disabled ranges, drag & drop and event resizing.",
+        "controls": {
+          "format": "Format",
+          "allDayRow": "All-day row",
+          "borders": "Borders",
+          "currentTime": "Current time"
+        },
+        "props": {
+          "modelValue": "Visible date. The week is calculated from it.",
+          "events": "Events to render in the hourly grid.",
+          "locale": "BCP-47 locale for headers and formats.",
+          "firstDayOfWeek": "First day of the week.",
+          "color": "Semantic color applied to accents.",
+          "format": "Time format for the hour column.",
+          "hourStart": "First visible hour (0-23).",
+          "hourEnd": "Last visible hour (1-24).",
+          "slotMinutes": "Granularity of time slots.",
+          "slotHeight": "Height in px of each time slot.",
+          "minDayWidth": "Minimum width per day column before horizontal scroll.",
+          "showAllDayRow": "Shows the row for all-day events.",
+          "showHeader": "Shows the header with navigation.",
+          "showCurrentTime": "Draws the current-time line.",
+          "showNowPill": "Shows a pill with the current time over the day column.",
+          "businessHours": "Highlights the business hours range.",
+          "disabledTimeRanges": "Non-selectable time ranges.",
+          "bordered": "Draws a border around the grid.",
+          "draggableEvents": "Allows dragging events.",
+          "resizableEvents": "Allows resizing events.",
+          "allowRangeSelection": "Allows selecting a range by dragging over empty slots."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the visible week changes.",
+          "eventClick": "Click on an event.",
+          "dayClick": "Click on a day header.",
+          "slotClick": "Click on an empty slot.",
+          "createEvent": "Request to create an event.",
+          "eventDrop": "Event dragged to a new position.",
+          "eventResize": "Event resized.",
+          "selectRange": "Range selected by dragging."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Week in 24-hour format with timed events."
+          },
+          "allDay": {
+            "title": "With all-day row",
+            "desc": "The top row groups all-day and multi-day events."
+          },
+          "format12h": {
+            "title": "12-hour format",
+            "desc": "Switches the time format to AM/PM."
+          },
+          "businessHours": {
+            "title": "Business hours",
+            "desc": "Highlights business hours and limits the visible time range."
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,220 @@
+{
+  "pages": {
+    "composables": {
+      "useAutoScroll": {
+        "title": "useAutoScroll",
+        "description": "Auto-scroll helper for drag-and-drop interactions. When the pointer approaches the top or bottom edge of a scrollable container, it automatically scrolls at a speed proportional to the distance from the edge.",
+        "api": {
+          "handleAutoScroll": "Call with the pointer's `clientY` while dragging. Starts/stops auto-scroll based on proximity to container edges.",
+          "stopAutoScroll": "Immediately cancel any ongoing auto-scroll animation."
+        },
+        "playground": {
+          "instruction": "Move your pointer near the top or bottom edge of the box below while holding the mouse button to see auto-scroll."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for this composable."
+        }
+      },
+      "useCalendar": {
+        "title": "useCalendar",
+        "description": "Composable for building calendar UIs. Generates day grids, handles month/year navigation, supports date ranges, disabled dates, and locale-aware labels.",
+        "api": {
+          "monthLabel": "Localized full month name + year (e.g. 'May 2026').",
+          "weekDayLabels": "Array of 7 localized weekday names in the configured format.",
+          "calendarDays": "Array of 35 or 42 `CalendarDay` objects covering the visible grid.",
+          "navMonth": "Decrement / increment the visible month (rolls over year).",
+          "navYear": "Decrement / increment the visible year.",
+          "goToToday": "Jump to the current month and year. Returns today's date.",
+          "goToDate": "Jump to the month and year containing the given date.",
+          "isDateDisabled": "Check if a date falls outside min/max bounds or is in the disabled list."
+        },
+        "playground": {
+          "today": "Today"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic calendar",
+            "desc": "Bind a reactive date to `modelValue` and navigate months."
+          },
+          "range": {
+            "title": "With range and constraints",
+            "desc": "Use `rangeValue`, `minDate`, and `maxDate` to restrict selection.",
+            "body": "calendarDays exposes `inRange`, `isRangeStart`, and `isRangeEnd` for styling range selections."
+          }
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for this composable."
+        }
+      },
+      "useColorMode": {
+        "title": "useColorMode",
+        "description": "Reactive singleton for managing light / dark / system color mode. Persists the choice to localStorage, toggles the `.dark` class on the html element, and reacts to OS `prefers-color-scheme` changes.",
+        "props": {
+          "mode": "The raw chosen mode — `'light'`, `'dark'` or `'system'`. Writable: assigning a new value triggers persistence and class application.",
+          "resolved": "Always a concrete `'light'` or `'dark'`. When `mode` is `'system'`, it tracks the OS preference reactively.",
+          "isDark": "Convenience boolean. `true` when `resolved === 'dark'`.",
+          "set": "Programmatically change the mode and persist it to localStorage.",
+          "toggle": "Flip between light and dark. If currently `'system'`, it toggles relative to the resolved value."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic reading",
+            "desc": "Read `resolved` and `isDark` to adapt UI styling."
+          },
+          "toggle": {
+            "title": "Toggle button",
+            "desc": "Use `toggle()` to flip between light and dark with a single button."
+          },
+          "system": {
+            "title": "Follow OS preference",
+            "desc": "Set `mode` to `'system'` so the app mirrors the user's OS theme choice."
+          }
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for this composable."
+        }
+      },
+      "useConfirm": {
+        "title": "useConfirm",
+        "description": "Imperative confirmation dialogs that return a `Promise(boolean)`. Mount ConfirmDialog once near the root; any component can call `useConfirm().confirm()` to await the user's decision.",
+        "api": {
+          "confirm": "Open a confirmation dialog and return a promise that resolves `true` on confirm and `false` on cancel or dismiss. Calls are queued so only one dialog is visible at a time."
+        },
+        "input": {
+          "title": "Heading shown at the top of the dialog.",
+          "description": "Supporting copy under the title.",
+          "color": "Color of the confirm button.",
+          "confirmLabel": "Label for the confirm button.",
+          "cancelLabel": "Label for the cancel button.",
+          "hideCancel": "When `true`, removes the cancel button turning the dialog into an alert.",
+          "dismissable": "Allow closing via overlay click or Escape."
+        },
+        "playground": {
+          "cta": "Open confirm",
+          "title": "Confirm action",
+          "description": "Are you sure you want to proceed?",
+          "confirmLabel": "Confirm",
+          "cancelLabel": "Cancel",
+          "okLabel": "OK",
+          "result": "Result: {ok}"
+        },
+        "examples": {
+          "basic": {
+            "title": "Danger confirm",
+            "desc": "Destructive operations should use `color: 'danger'` and a clear description."
+          },
+          "alert": {
+            "title": "Alert dialog",
+            "desc": "Use `hideCancel: true` when you only need an acknowledgement, not a decision."
+          },
+          "chain": {
+            "title": "Chained confirms",
+            "desc": "Because `confirm()` returns a Promise, you can chain multiple steps and bail out early on cancel."
+          }
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for this composable."
+        }
+      },
+      "useLocale": {
+        "title": "useLocale",
+        "description": "Global reactive locale switcher. All callers share the same state, so changing the locale updates the entire application. Pass the reactive locale object directly to ModoProvider :locale.",
+        "api": {
+          "locale": "Reactive `ModoLocale` object — pass directly to ModoProvider :locale.",
+          "current": "Currently active locale key (`'en'` or `'es'`).",
+          "set": "Switch the active locale globally."
+        },
+        "playground": {
+          "note": "Changing the locale here updates all translated content in the showroom."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic switch",
+            "desc": "Read `current` and call `set(lang)` to switch."
+          },
+          "provider": {
+            "title": "With ModoProvider",
+            "desc": "Bind the reactive locale to ModoProvider so child components re-render with translated strings.",
+            "body": "The locale object is reactive. Pass it to ModoProvider and all descendants react to changes."
+          }
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for this composable."
+        }
+      },
+      "useModoConfig": {
+        "title": "useModoConfig",
+        "description": "Access the global ModoProvider configuration and helper functions that resolve component props against the global theme. Works inside ModoProvider; falls back to sensible defaults when used outside.",
+        "api": {
+          "config": "Returns the full `ModoConfig` object injected by ModoProvider. Returns `undefined` outside a provider.",
+          "resolvedColor": "Resolves a local `color` prop with fallback to global brand color. Semantic values ('primary', 'danger', etc.) always win; 'default' or undefined falls back.",
+          "resolvedRadius": "Resolves radius: local prop → global config → default ('medium').",
+          "resolvedSize": "Resolves size: local prop → global config → default ('medium').",
+          "resolvedTheme": "Resolves theme: local prop → global config → default ('zinc').",
+          "resolvedHalo": "Resolves halo: local prop → global config → default ('tinted').",
+          "modoLocale": "Returns the deep-merged locale object. Works outside ModoProvider too.",
+          "localeString": "Resolves a locale string getter + interpolates `{name}` placeholders."
+        },
+        "examples": {
+          "resolve": {
+            "title": "Resolving props",
+            "desc": "When a component prop is 'default' or undefined, use the global theme value."
+          },
+          "locale": {
+            "title": "Locale helpers",
+            "desc": "Access the merged locale and interpolate strings with placeholders.",
+            "body": "useModoLocale and useLocaleString work even outside a ModoProvider."
+          }
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for this composable."
+        }
+      },
+      "useToast": {
+        "title": "useToast",
+        "description": "Imperative API to push notifications onto a global toast queue. Mount ToastContainer once near the root; any component can call `useToast()` to fire toasts that appear in the container.",
+        "api": {
+          "push": "Push a toast with full control. Returns an id so you can `dismiss(id)` or re-push to update in place.",
+          "info": "Convenience wrapper — pushes with `color: 'info'`.",
+          "success": "Convenience wrapper — pushes with `color: 'success'`.",
+          "warning": "Convenience wrapper — pushes with `color: 'warning'`.",
+          "danger": "Convenience wrapper — pushes with `color: 'danger'`.",
+          "dismiss": "Remove a single toast by the id returned from `push()`.",
+          "dismissAll": "Clear every toast in the queue at once."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic colors",
+            "desc": "The four convenience wrappers cover most use cases."
+          },
+          "action": {
+            "title": "With action",
+            "desc": "Add an inline action button. The `close` callback dismisses the toast."
+          },
+          "pinned": {
+            "title": "Pinned toast",
+            "desc": "Set `duration: 0` to keep the toast visible until the user dismisses it."
+          },
+          "update": {
+            "title": "Update in place",
+            "desc": "Re-push with the same `id` to replace the toast without creating a new one — perfect for live progress."
+          },
+          "dismissAll": {
+            "title": "Dismiss all",
+            "desc": "Clear the entire queue programmatically."
+          }
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for this composable."
+        }
+      }
+    }
+  }
+}

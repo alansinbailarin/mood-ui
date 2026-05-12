@@ -1,0 +1,34 @@
+{
+  "pages": {
+    "utilities": {
+      "eventColors": {
+        "title": "eventColors",
+        "description": "Utility functions that map semantic color names to Tailwind CSS class strings for calendar event styling. Two opacity variants: `soft` for timed grids and `strong` for compact pills.",
+        "api": {
+          "eventColorClass": "Soft variant — translucent fills so grid lines stay visible. Best for WeekView, DayView, and Scheduler.",
+          "eventColorClassStrong": "Stronger variant — more opaque for readability in compact pills. Best for MonthView.",
+          "hexToRgba": "Convert a hex color to an rgba string with custom alpha. Useful for custom event colors."
+        },
+        "playground": {
+          "event": "Event"
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript type signatures for event color utilities."
+        },
+        "examples": {
+          "basic": {
+            "title": "Soft classes",
+            "desc": "Use `eventColorClass` in timed calendar views.",
+            "preview": "Primary event"
+          },
+          "hex": {
+            "title": "Custom hex color",
+            "desc": "Convert any hex color to rgba for custom calendar events.",
+            "preview": "Custom indigo event"
+          }
+        }
+      }
+    }
+  }
+}

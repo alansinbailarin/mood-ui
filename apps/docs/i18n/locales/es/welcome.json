@@ -1,0 +1,67 @@
+{
+  "pages": {
+    "welcome": {
+      "badge": "v0.7.1 · MIT · Open source",
+      "headline1": "La librería Vue 3",
+      "headline2": "más completa para shippear rápido.",
+      "lead": "{n}+ componentes accesibles, theming reactivo en vivo, dark mode con superficies personalizables y soporte i18n nativo. Tailwind CSS v4. TypeScript first. Sin lock‑in.",
+      "ctaExplore": "Explorar componentes",
+      "ctaGithub": "Ver en GitHub",
+      "trustLine": "developers ya construyendo con mood-ui",
+      "featuresKicker": "Por qué mood-ui",
+      "featuresTitle": "Todo lo que necesitas, nada de lo que estorba.",
+      "featuresSubtitle": "Pensado para diseñadores y developers que quieren shipping rápido sin sacrificar calidad ni accesibilidad.",
+      "installKicker": "Empezar en 60 segundos",
+      "installTitle": "Instalación",
+      "nextSteps": "Próximos pasos",
+      "nextStepsBody": "Configura el provider, explora componentes o personaliza el theming.",
+      "catalogKicker": "Catálogo",
+      "catalogTitle": "{n} componentes listos para usar",
+      "catalogSubtitle": "Forms, feedback, layout, navegación, calendario, tabla… todo con la misma API y los mismos design tokens.",
+      "clickToExplore": "Click para explorar",
+      "viewComponents": "Ver componentes",
+      "finalCtaTitle": "Empieza a construir hoy.",
+      "finalCtaBody": "Open source, MIT, sin lock-in. Solo Vue 3 + Tailwind v4 + tu propia creatividad.",
+      "seo": {
+        "title": "Mood UI — La librería de componentes para Vue y Nuxt más hermosa",
+        "description": "La librería open source de componentes para Vue y Nuxt más hermosa, con {n}+ componentes accesibles, Tailwind CSS v4, TypeScript, dark mode, accesibilidad WAI-ARIA e i18n nativo. MIT."
+      },
+      "stats": {
+        "composables": "Composables",
+        "bundle": "Bundle (gzip)"
+      },
+      "copy": {
+        "tooltip": "Copiar",
+        "copied": "Copiado!",
+        "ariaInstall": "Copiar comando de instalación",
+        "ariaUsage": "Copiar código de uso"
+      },
+      "features": {
+        "theming": {
+          "title": "Theming reactivo",
+          "text": "Cambia color, radius, tamaño, halo y modo claro/oscuro en vivo. Todos los componentes responden al instante."
+        },
+        "i18n": {
+          "title": "i18n integrado",
+          "text": "Español e inglés incluidos. Cambia idioma globalmente con useLocale().set(\"es\")."
+        },
+        "darkMode": {
+          "title": "Dark mode + surfaces",
+          "text": "6 presets de superficies oscuras (navy, zinc, charcoal…) o personaliza los 14 tokens semánticos."
+        },
+        "a11y": {
+          "title": "Accesibilidad WAI-ARIA",
+          "text": "Roles, focus rings, navegación por teclado y lectores de pantalla cubiertos por defecto."
+        },
+        "ts": {
+          "title": "Tree-shakeable · TS first",
+          "text": "Importa solo lo que usas. Tipos completos, autocompletado IntelliSense, ESM + CJS."
+        },
+        "tailwind": {
+          "title": "Tailwind v4 native",
+          "text": "CSS-vars, design tokens y \\@theme inline. Override desde tu tailwind.config - no hacks."
+        }
+      }
+    }
+  }
+}

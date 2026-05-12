@@ -1,0 +1,138 @@
+{
+  "pages": {
+    "templates": {
+      "auth": {
+        "titleLogin": "Welcome back",
+        "titleSignup": "Create your account",
+        "subtitleLogin": "Sign in to your mood-ui workspace.",
+        "subtitleSignup": "Start with a 14-day free trial.",
+        "tabLogin": "Sign in",
+        "tabSignup": "Create account",
+        "fieldName": "Name",
+        "fieldEmail": "Email",
+        "fieldPassword": "Password",
+        "passwordHint": "Minimum 8 characters.",
+        "remember": "Remember me",
+        "forgotPassword": "Forgot your password?",
+        "btnLogin": "Sign in",
+        "btnSignup": "Create account",
+        "orContinueWith": "or continue with",
+        "footerLogin": "Don't have an account? ",
+        "footerSignup": "Already have an account? ",
+        "footerLinkLogin": "Sign in",
+        "footerLinkSignup": "Create one"
+      },
+      "dashboard": {
+        "searchPlaceholder": "Search orders, users…",
+        "notificationsLabel": "Notifications",
+        "greeting": "Good afternoon, Alan",
+        "greetingSubtitle": "Here is a summary of your business.",
+        "statUsersDesc": "new: 312",
+        "recentOrders": "Recent orders",
+        "viewAll": "View all",
+        "colId": "ID",
+        "colClient": "Client",
+        "colPlan": "Plan",
+        "colStatus": "Status",
+        "colAmount": "Amount",
+        "activity": "Activity",
+        "activityDeploy": "New deploy to production",
+        "activityPayments": "12 payments processed",
+        "activityMigration": "DB migration completed",
+        "activityNewUser": "New user: lucia\\@…"
+      },
+      "index": {
+        "title": "Templates",
+        "subtitle": "Full screens ready to copy/paste — dashboards, auth, pricing and more.",
+        "open": "Open template",
+        "comingSoon": "Coming soon",
+        "items": {
+          "dashboard": {
+            "title": "Dashboard",
+            "desc": "Admin panel with KPIs, orders table and activity timeline."
+          },
+          "auth": {
+            "title": "Auth",
+            "desc": "Login, signup and recovery with dual layout and flexible branding."
+          },
+          "pricing": {
+            "title": "Pricing",
+            "desc": "Comparative plan table with badges, FAQ and highlighted CTA."
+          },
+          "settings": {
+            "title": "Settings",
+            "desc": "Settings page with grouped sections, tabs and accessible forms."
+          }
+        }
+      },
+      "pricing": {
+        "badge": "Pricing",
+        "title": "Pay only for what you need",
+        "subtitle": "Start free and scale when your product grows. No surprises, cancel anytime.",
+        "monthly": "Monthly",
+        "yearly": "Yearly",
+        "savings": "Save ~17%",
+        "mostPopular": "Most popular",
+        "perMonthYearly": "mo (yearly)",
+        "perMonth": "mo",
+        "footer": "All prices in USD. Taxes not included. Cancel anytime.",
+        "starterDesc": "For personal projects and prototypes.",
+        "starterF1": "Up to 3 projects",
+        "starterF2": "Basic components",
+        "starterF3": "Discord community",
+        "starterF4": "Monthly updates",
+        "starterCta": "Get started free",
+        "proDesc": "For small teams shipping real products.",
+        "proF1": "Unlimited projects",
+        "proF2": "All components",
+        "proF3": "Theme Studio",
+        "proF4": "Premium templates",
+        "proF5": "Email support",
+        "proCta": "Start 14-day free trial",
+        "teamDesc": "For companies that need SLA and onboarding.",
+        "teamF1": "Everything in Pro",
+        "teamF2": "SSO + audit log",
+        "teamF3": "Priority support",
+        "teamF4": "Guided onboarding",
+        "teamF5": "99.9% SLA",
+        "teamCta": "Talk to sales"
+      },
+      "settings": {
+        "workspaceLabel": "Settings",
+        "workspaceSubtitle": "mood-ui workspace",
+        "navAccount": "Account",
+        "navTeam": "Team",
+        "navBilling": "Billing",
+        "navNotif": "Notifications",
+        "navSecurity": "Security",
+        "navApiKeys": "API keys",
+        "accountTitle": "Account",
+        "accountSubtitle": "Your public profile information.",
+        "changePhoto": "Change photo",
+        "photoHint": "JPG/PNG, max 2 MB.",
+        "fieldFullName": "Full name",
+        "fieldEmail": "Email",
+        "emailHint": "We will send you a confirmation email if you change it.",
+        "fieldBio": "Bio",
+        "cancel": "Cancel",
+        "saveChanges": "Save changes",
+        "notifTitle": "Notifications",
+        "notifSubtitle": "Choose how you want to receive updates.",
+        "notifEmailLabel": "Email",
+        "notifEmailDesc": "Daily digest of your workspace activity.",
+        "notifPushLabel": "Push",
+        "notifPushDesc": "Real-time notifications in the browser.",
+        "notifMarketingLabel": "Marketing",
+        "notifMarketingDesc": "Monthly newsletter with news and tips.",
+        "billingTitle": "Billing",
+        "billingSubtitle": "Your current plan and payment method.",
+        "billingBannerTitle": "You are on the Pro plan",
+        "billingBannerDesc": "Renews on June 12. You can change plans at any time.",
+        "changeCard": "Change",
+        "defaultSectionSubtitle": "Demo section. Replace with your content.",
+        "comingSoon": "Coming soon",
+        "comingSoonDesc": "This is a placeholder. Combine the components you need for this section."
+      }
+    }
+  }
+}

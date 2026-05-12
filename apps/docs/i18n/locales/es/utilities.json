@@ -1,0 +1,34 @@
+{
+  "pages": {
+    "utilities": {
+      "eventColors": {
+        "title": "eventColors",
+        "description": "Funciones utilitarias que mapean nombres de color semánticos a strings de clases Tailwind CSS para estilizar eventos de calendario. Dos variantes de opacidad: `soft` para grillas temporizadas y `strong` para pills compactos.",
+        "api": {
+          "eventColorClass": "Variante soft — rellenos translúcidos para que las líneas de la grilla se mantengan visibles. Ideal para WeekView, DayView y Scheduler.",
+          "eventColorClassStrong": "Variante más fuerte — más opaca para legibilidad en pills compactos. Ideal para MonthView.",
+          "hexToRgba": "Convierte un color hex a string rgba con alpha personalizado. Útil para colores de eventos personalizados."
+        },
+        "playground": {
+          "event": "Evento"
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Firmas de tipos TypeScript para las utilidades de colores de eventos."
+        },
+        "examples": {
+          "basic": {
+            "title": "Clases soft",
+            "desc": "Usa `eventColorClass` en vistas de calendario temporizadas.",
+            "preview": "Evento primary"
+          },
+          "hex": {
+            "title": "Color hex personalizado",
+            "desc": "Convierte cualquier color hex a rgba para eventos de calendario personalizados.",
+            "preview": "Evento indigo personalizado"
+          }
+        }
+      }
+    }
+  }
+}

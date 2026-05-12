@@ -1,0 +1,2455 @@
+{
+  "pages": {
+    "forms": {
+      "avatarUpload": {
+        "category": "Forms",
+        "title": "AvatarUpload",
+        "description": "An all-in-one avatar manager: upload a photo, crop it to a circle, and optionally generate one with AI. The AI provider is always external — you supply the function; mood-ui only handles the UI and state.",
+        "examples": {
+          "basic": {
+            "title": "Basic upload",
+            "desc": "Drop or click to pick a file. The built-in circular cropper opens automatically before committing the image."
+          },
+          "noCrop": {
+            "title": "Without crop step",
+            "desc": "Set :crop=\"false\" to skip the cropper and use the resized image directly."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three sizes control the preview circle and icon scale."
+          },
+          "saveMode": {
+            "title": "Save mode — manual",
+            "desc": "With saveMode=\"manual\" a Save button appears once an image is ready. The onSave callback receives an AvatarSavePayload so you can upload to your backend and return the final URL."
+          },
+          "withAi": {
+            "title": "AI generation (mock)",
+            "desc": "Provide a :provider function that calls your own AI API and returns a URL. mood-ui never imports AI SDKs directly."
+          },
+          "lightbox": {
+            "title": "Lightbox preview",
+            "desc": "Add :lightbox=\"true\" to show an expand button on the avatar. Clicking it opens the image full-size in a modal — useful in profile cards, read-only views, and dashboards."
+          },
+          "profileCard": {
+            "title": "Profile card",
+            "desc": "Horizontal layout with the avatar on the left and user info on the right — a common pattern in dashboards and profile pages."
+          },
+          "settingsRow": {
+            "title": "Settings row",
+            "desc": "Compact horizontal row used in account settings: avatar alongside a short description and the upload controls below."
+          },
+          "inForm": {
+            "title": "Inside a form",
+            "desc": "Avatar centered at the top of a profile form, with name and bio fields below — a typical onboarding pattern."
+          },
+          "readonly": {
+            "title": "Read-only",
+            "desc": "Displays the avatar without any upload or action controls."
+          }
+        },
+        "controls": {
+          "size": "Size",
+          "crop": "Crop",
+          "disabled": "Disabled",
+          "readonly": "Readonly"
+        },
+        "props": {
+          "modelValue": "Current avatar URL (v-model).",
+          "lightbox": "Show an expand button on hover. Clicking it opens the image full-size in a modal.",
+          "promptSuggestions": "Quick-pick prompt chips shown above the text input. Selecting a chip sets the prompt; selecting it again clears it.",
+          "ai": "Enable AI generation UI. Requires a provider function.",
+          "provider": "Function called by mood-ui to generate an avatar. Receives \\{ prompt, image, variant \\} and an AbortSignal. Returns a Promise(string) (URL).",
+          "variant": "Initial selected style variant for AI generation.",
+          "name": "User name used as alt text and avatar initials fallback.",
+          "size": "Size of the preview circle and icons.",
+          "disabled": "Disables all interactions.",
+          "readonly": "Shows the avatar without controls.",
+          "crop": "Open the circular crop modal after file selection. Default: true.",
+          "maxSize": "Maximum file size in bytes. Default: 5 MB.",
+          "accept": "Allowed MIME types. Default: PNG, JPEG, WebP.",
+          "regenerate": "Show regenerate button after first AI generation.",
+          "promptPlaceholder": "Custom placeholder for the prompt input.",
+          "saveMode": "'auto' calls onSave immediately. 'manual' shows a Save button. 'none' emits update:modelValue with the blob URL directly.",
+          "onSave": "Async function that receives AvatarSavePayload and returns the final URL after uploading to your backend."
+        },
+        "emits": {
+          "updateModelValue": "Emitted with the final URL whenever the avatar changes.",
+          "generated": "Emitted with the URL returned by the provider after successful generation.",
+          "uploaded": "Emitted with the original File object after upload validation.",
+          "error": "Emitted with the Error on any failure (validation, generation, save).",
+          "loading": "Emitted with the loading boolean state.",
+          "change": "Emitted with the current URL or null whenever the preview changes.",
+          "remove": "Emitted when the avatar is removed.",
+          "save": "Emitted with AvatarSavePayload just before the onSave call.",
+          "saved": "Emitted with the final URL after onSave resolves.",
+          "saveError": "Emitted with the Error if onSave rejects."
+        },
+        "integration": {
+          "title": "AI provider integration",
+          "desc": "mood-ui never ships an AI SDK — you bring your own. The component calls the provider function you supply; that function can call any API you want. The cleanest approach is a backend endpoint that holds your API keys.",
+          "helperTitle": "createAvatarProvider helper",
+          "helperDesc": "The included helper turns a URL into a ready-to-use provider. By default it POSTs \\{ prompt, variant \\} and auto-detects common response shapes (OpenAI, Replicate, or plain \\{ url \\}).",
+          "backendNodeTitle": "Backend — Node.js / Express",
+          "backendNodeDesc": "Create a POST endpoint that calls your AI service and returns \\{ url \\}. mood-ui fetches that URL and converts it to a local blob.",
+          "backendVercelTitle": "Backend — Vercel / Next.js app router",
+          "uploadTitle": "Saving the processed image to your backend",
+          "uploadDesc": "When onSave is provided, mood-ui calls it with an AvatarSavePayload containing a 512×512 WebP Blob. Upload it to S3, Cloudinary, Supabase Storage, etc. and return the final CDN URL.",
+          "directTitle": "Direct AI API calls (development / testing only)",
+          "directDesc": "You can call an AI API directly from the browser during development. Never do this in production — API keys in the frontend are public. Use a .env variable and exclude it from production builds."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for AvatarUpload props, the provider function, and the save payload."
+        },
+        "a11y": {
+          "kbActivate": "Activate the upload control or confirm action in a dialog",
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbEsc": "Close the crop modal or AI panel, restore focus to the trigger",
+          "ariaRole": "Upload zone is exposed as a button so screen readers announce it as interactive",
+          "ariaLabel": "Provides an accessible name for the upload control when the user name is not set",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "alt": "The user name prop is used as alt text on the avatar image for screen readers",
+          "ariaLive": "Loading and error states are announced to screen readers via a polite live region",
+          "focusUpload": "The upload zone is focusable and participates in the tab order as a native button",
+          "focusCrop": "The crop modal traps focus while open; Tab cycles within the dialog",
+          "focusTrap": "Focus returns to the upload trigger when the crop modal or AI panel is closed",
+          "focusDisabled": "Excluded from the tab order when the disabled prop is true"
+        }
+      },
+      "button": {
+        "category": "Forms",
+        "title": "Button",
+        "description": "The primary action of any interface. Four variants, five semantic colors, four sizes, configurable icons, loading state and support for rendering as a link or any element.",
+        "controls": {
+          "variant": "Variant",
+          "color": "Color",
+          "size": "Size",
+          "radius": "Radius",
+          "loading": "Loading",
+          "disabled": "Disabled",
+          "gradient": "Gradient",
+          "skeleton": "Skeleton"
+        },
+        "examples": {
+          "variants": {
+            "title": "Variants",
+            "desc": "Four visual styles for different levels of action hierarchy in the interface."
+          },
+          "colors": {
+            "title": "Colors",
+            "desc": "Five semantic colors that map directly to the ModoProvider design token system."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Padding, font and height scale proportionally at each level."
+          },
+          "icons": {
+            "title": "With icons",
+            "desc": "Left, right or icon-only position. Use aria-label on icon-only buttons."
+          },
+          "states": {
+            "title": "States",
+            "desc": "Loading blocks clicks and shows spinner. Disabled prevents all interaction."
+          },
+          "gradient": {
+            "title": "Gradient",
+            "desc": "Gradient fill for a more premium visual look on supported colors."
+          },
+          "radius": {
+            "title": "Radius",
+            "desc": "Corner radius from sharp edges to fully rounded pills."
+          },
+          "link": {
+            "title": "As link",
+            "desc": "Render as an anchor tag while keeping button styling. Useful for navigation that looks like a CTA."
+          },
+          "skeleton": {
+            "title": "Skeleton",
+            "desc": "Show a skeleton placeholder with the same footprint while data or context is loading."
+          }
+        },
+        "props": {
+          "variant": "Visual variant. Normal is the solid button (default).",
+          "color": "Semantic color applied to the button.",
+          "size": "Controls padding, font size and height.",
+          "radius": "Corner radius. Overrides the active radius from ModoProvider when set.",
+          "label": "Button text. Equivalent to the default slot for plain content.",
+          "type": "HTML button type attribute. Use 'submit' inside forms.",
+          "loading": "Shows a spinner and blocks clicks while active.",
+          "loadingText": "Text shown alongside the spinner during loading state.",
+          "disabled": "Visually disables the button and prevents all interaction.",
+          "icon": "Icon component rendered next to the label (heroicons or any component).",
+          "iconPosition": "Side where the icon appears relative to the label.",
+          "fullWidth": "Button expands to fill 100% of available width.",
+          "gradient": "Apply a gradient background on supported colors.",
+          "skeleton": "Render a skeleton placeholder instead of the real button.",
+          "as": "Root element to render. Use \"a\" for links or a router-link component.",
+          "href": "Anchor href when as='a'.",
+          "target": "Anchor target when as='a' (e.g. '_blank').",
+          "rel": "Anchor rel when as='a' (e.g. 'noopener noreferrer').",
+          "ariaLabel": "Accessible label. Required for icon-only buttons without visible text."
+        },
+        "emits": {
+          "click": "Emitted on click when the button is not disabled or in loading state."
+        },
+        "slots": {
+          "default": "Custom button content. Replaces the label prop when HTML or inner components are needed."
+        },
+        "types": {
+          "title": "Button",
+          "desc": "TypeScript interface for the Button component props. All props are optional and have sensible defaults."
+        },
+        "a11y": {
+          "kbActivate": "Activate the button",
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaType": "Prevents accidental form submission when the button is inside a form element",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "ariaBusy": "Communicates loading state while the action is in progress",
+          "ariaLabel": "Provides an accessible name for icon-only buttons (no visible text)",
+          "focusNative": "Uses a native button element — participates in the tab order by default",
+          "focusDisabled": "Excluded from the tab order when the disabled prop is true",
+          "focusRing": "Focus ring is always visible; style is controlled by the focusHalo setting in ModoConfig"
+        }
+      },
+      "buttonGroup": {
+        "category": "Forms",
+        "title": "ButtonGroup",
+        "description": "Groups several buttons into a single visual unit sharing variant, color and size. Supports horizontal and vertical orientation.",
+        "controls": {
+          "variant": "Variant",
+          "color": "Color",
+          "size": "Size",
+          "gradient": "Gradient",
+          "disabled": "Disabled",
+          "fullWidth": "Full width"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Three grouped buttons sharing color and variant."
+          },
+          "mixed": {
+            "title": "Mixed colors",
+            "desc": "Each button can override the group color to highlight specific actions."
+          },
+          "fullWidth": {
+            "title": "Full width",
+            "desc": "The group expands to 100% and buttons share the width proportionally."
+          },
+          "vertical": {
+            "title": "Vertical",
+            "desc": "Stacks buttons in a column — useful for context menus or action lists."
+          },
+          "icons": {
+            "title": "With icons",
+            "desc": "Icon-only grouped buttons for compact toolbars."
+          }
+        },
+        "props": {
+          "orientation": "Axis along which the buttons are stacked.",
+          "variant": "Visual variant inherited by all buttons in the group.",
+          "color": "Semantic color applied to the buttons in the group.",
+          "size": "Size shared by all buttons in the group.",
+          "radius": "Border radius applied to the wrapper. Inner button corners collapse automatically.",
+          "disabled": "Disables all buttons in the group.",
+          "gradient": "Applies a subtle gradient compatible with the normal variant.",
+          "fullWidth": "Expands the group and all buttons to fill the available width."
+        },
+        "slots": {
+          "default": "List of Button components that belong to the group."
+        },
+        "types": {
+          "title": "ButtonGroup",
+          "desc": "TypeScript interface for the ButtonGroup component props. Props are inherited by child buttons unless they override them individually."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element within the group",
+          "kbShiftTab": "Move focus to the previous focusable element within the group",
+          "ariaGroup": "The wrapper is exposed as a group so screen readers recognize it as a related set of buttons",
+          "ariaLabel": "Provide an accessible name when the group lacks a visible text label",
+          "ariaDisabled": "When set on the group, aria-disabled is forwarded to each child button",
+          "focusNoTrap": "Focus moves freely between buttons; no focus trap is applied at the group level",
+          "focusDisabled": "All child buttons are excluded from the tab order when the disabled prop is true"
+        }
+      },
+      "checkbox": {
+        "title": "Checkbox",
+        "description": "Accessible checkbox with support for indeterminate state, description and all color and size variants.",
+        "controls": {
+          "color": "Color",
+          "size": "Size",
+          "indeterminate": "Indeterminate",
+          "loading": "Loading",
+          "disabled": "Disabled"
+        },
+        "playground": {
+          "label": "I accept the terms"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Controlled checkbox with v-model.",
+            "label1": "I accept the terms",
+            "label2": "Subscribe to the newsletter"
+          },
+          "description": {
+            "title": "With description",
+            "desc": "Secondary text below the label to clarify the purpose.",
+            "label": "Notifications",
+            "helpText": "Receive email alerts when there is activity."
+          },
+          "indeterminate": {
+            "title": "Indeterminate",
+            "desc": "Useful for representing partial selection in lists with \"select all\".",
+            "label": "Partial selection"
+          },
+          "colors": {
+            "title": "Colors",
+            "desc": "Semantic variants for the checked state."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three sizes to match form density."
+          },
+          "disabled": {
+            "title": "Disabled",
+            "desc": "Disabled state preserving the visual value.",
+            "checked": "Disabled checked",
+            "empty": "Disabled empty"
+          }
+        },
+        "props": {
+          "modelValue": "Checkbox value (v-model).",
+          "label": "Visible label to the right of the control.",
+          "description": "Secondary descriptive text below the label.",
+          "helperText": "Helper text below the control. Hidden when errorText is present.",
+          "errorText": "Error message that replaces helperText and applies an error state.",
+          "color": "Semantic color applied in the checked state.",
+          "size": "Size of the box and label.",
+          "radius": "Checkbox box radius.",
+          "indeterminate": "Tri-state: shows a dash instead of the checkmark.",
+          "disabled": "Disables the checkbox and prevents interaction.",
+          "readonly": "Blocks changes but keeps focus and active styles.",
+          "required": "Marks the field as required and shows an asterisk.",
+          "loading": "Loading state during async operations.",
+          "name": "HTML name attribute for form submission.",
+          "value": "HTML value attribute, useful inside a checkbox group.",
+          "id": "Input id. Auto-generated if omitted.",
+          "ariaLabel": "Accessible name when there is no visible label."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the value changes (syncs v-model).",
+          "change": "Emitted after each user-confirmed change."
+        },
+        "types": {
+          "title": "Checkbox",
+          "desc": "TypeScript interface for the Checkbox component props. Supports tri-state with indeterminate, validation helpers, and full theming."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbSpace": "Toggle checked / indeterminate state",
+          "ariaChecked": "Communicates checked, unchecked or indeterminate state",
+          "ariaInvalid": "Set to true when errorText is present",
+          "ariaDescribedBy": "Links helper or error text to the checkbox for screen reader context",
+          "ariaRequired": "Set to true when the required prop is active",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "ariaLabel": "Provides an accessible name when no visible label is present",
+          "focusNative": "Uses a native input[type=checkbox] — participates in the tab order by default",
+          "focusIndeterminate": "The indeterminate state is visually reflected and announced to screen readers"
+        }
+      },
+      "colorModeSwitch": {
+        "title": "ColorModeSwitch",
+        "description": "Three-state segmented selector for the color mode (light · system · dark) with a smooth animated sliding indicator. Supports a collapsed variant that expands on hover.",
+        "controls": {
+          "variant": "Variant",
+          "size": "Size",
+          "showLabels": "Show labels",
+          "disabled": "Disabled"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Bind the switch to the useColorMode composable to control the theme globally."
+          },
+          "collapsed": {
+            "title": "Collapsed variant",
+            "desc": "Shows only the active mode at rest. On hover it smoothly expands to reveal all three options."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three sizes available for different UI densities."
+          },
+          "withLabels": {
+            "title": "With text labels",
+            "desc": "Enable showLabels to display the mode name alongside the icon."
+          },
+          "disabled": {
+            "title": "Disabled",
+            "desc": "Disabled state that prevents selection."
+          }
+        },
+        "props": {
+          "modelValue": "Active mode (v-model). One of 'light' | 'system' | 'dark'.",
+          "variant": "Control appearance. 'default' always shows all three options; 'collapsed' shows only the active one and expands on hover.",
+          "ariaLabel": "Accessible name for the radiogroup. Defaults to 'Color mode'.",
+          "showLabels": "Shows text labels next to each icon.",
+          "size": "Control size.",
+          "disabled": "Disables the control and prevents selection."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when a mode is selected (syncs v-model)."
+        },
+        "a11y": {
+          "kbTab": "Move focus into or out of the color mode group",
+          "kbArrow": "Move selection between light / system / dark options",
+          "kbSpace": "Select the focused mode",
+          "ariaGroup": "The wrapper is exposed as a radiogroup for screen readers",
+          "ariaLabel": "Provides an accessible name for the radiogroup",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "focusGroup": "Arrow keys cycle between modes; Tab moves focus out of the group",
+          "focusCollapsed": "In collapsed variant, focus expands the control automatically"
+        }
+      },
+      "colorPicker": {
+        "category": "Forms",
+        "title": "ColorPicker",
+        "description": "Color selector with popover, configurable swatches, hex input and advanced HSV canvas for picking any color.",
+        "controls": {
+          "size": "Size",
+          "variant": "Variant",
+          "advanced": "Advanced",
+          "hex": "Hex",
+          "swatches": "Swatches",
+          "disabled": "Disabled"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Swatches only. Click any color to select it."
+          },
+          "advanced": {
+            "title": "Advanced picker",
+            "desc": "HSV canvas + hue slider to choose any color in the spectrum. The hex input allows entering exact values."
+          },
+          "swatches": {
+            "title": "Swatches + advanced picker",
+            "desc": "Combines a predefined palette with the full canvas for maximum flexibility."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three available sizes to match the density of your form."
+          },
+          "disabled": {
+            "title": "Disabled",
+            "desc": "Disabled state preserving the visible color."
+          }
+        },
+        "props": {
+          "modelValue": "Active hex color (v-model). E.g. \"#3b82f6\".",
+          "swatches": "Optional list of hex colors available as preset swatches in the panel.",
+          "showHex": "Shows the hex input below the swatches.",
+          "advanced": "Enables the HSV canvas + hue slider for picking any color.",
+          "disabled": "Disables the picker.",
+          "variant": "Visual variant of the trigger (same as Input/Select).",
+          "color": "Focus ring color.",
+          "size": "Trigger size.",
+          "radius": "Border radius of the trigger and the panel.",
+          "label": "Visible label above the trigger.",
+          "placement": "Position of the popover relative to the trigger.",
+          "ariaLabel": "Accessible name for the trigger when there is no visible label."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the selected color changes (syncs v-model).",
+          "change": "Emitted after a color is confirmed by the user."
+        },
+        "types": {
+          "title": "ColorPicker",
+          "desc": "TypeScript interface for the ColorPicker component props. Supports preset swatches, hex input, and advanced HSV canvas picking."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbEnter": "Open the color picker popover",
+          "kbEsc": "Close the color picker popover without selecting",
+          "kbArrow": "Navigate swatches or adjust hue/saturation in advanced mode",
+          "ariaExpanded": "Communicates whether the popover is open or closed",
+          "ariaInvalid": "Set to true when errorText is present",
+          "ariaDescribedBy": "Links helper or error text to the trigger for screen reader context",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "ariaLabel": "Provides an accessible name when no visible label is present",
+          "focusNative": "Uses a native button as trigger — participates in the tab order by default",
+          "focusTrap": "Focus is trapped inside the popover while it is open"
+        }
+      },
+      "combobox": {
+        "category": "Forms",
+        "title": "Combobox",
+        "description": "Autocomplete text input with static or async suggestions. Supports free values (combobox) or strict selection (autocomplete).",
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Static suggestions shown as the user types."
+          },
+          "freeSolo": {
+            "title": "Free solo (creatable)",
+            "desc": "Type a new value and press Enter. The dropdown stays open so you can see the option being added to the list. The \\@change handler detects unknown values and pushes them into the reactive options array."
+          },
+          "strict": {
+            "title": "Strict (autocomplete)",
+            "desc": "With free-solo set to false, only values present in options are accepted."
+          },
+          "async": {
+            "title": "Async search",
+            "desc": "Pass loadOptions to resolve options from a backend with debounce."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three sizes for different UI densities."
+          }
+        },
+        "props": {
+          "modelValue": "Current input text (v-model).",
+          "options": "Static options list. Ignored when loadOptions is defined.",
+          "loadOptions": "Async options source called on every query change.",
+          "debounce": "Delay in ms before calling loadOptions.",
+          "minChars": "Minimum characters before triggering the async search.",
+          "freeSolo": "Allows any text as value. If false, only valid options are accepted.",
+          "label": "Visible label above the field.",
+          "placeholder": "Input placeholder.",
+          "helperText": "Helper text below the field.",
+          "errorText": "Error message that replaces the helperText.",
+          "emptyText": "Text shown when there are no options to display.",
+          "loadingText": "Text shown while the async search is in progress.",
+          "variant": "Visual style of the input.",
+          "color": "Semantic color for focus and accent.",
+          "size": "Input height.",
+          "radius": "Border radius.",
+          "clearable": "Shows an X button to clear the value.",
+          "disabled": "Disables the control.",
+          "readonly": "Read-only mode.",
+          "required": "Marks the field as required.",
+          "loading": "Forced loading state (independent of loadOptions).",
+          "fullWidth": "Applies w-full to the root control.",
+          "iconLeft": "Icon on the left side of the input.",
+          "maxLength": "Maximum number of input characters.",
+          "name": "HTML name attribute for form submission.",
+          "ariaLabel": "Accessible name when there is no visible label."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the input value changes.",
+          "change": "Emitted after selecting an option or confirming text.",
+          "select": "Emitted when an option is chosen from the list."
+        },
+        "types": {
+          "title": "Combobox",
+          "desc": "TypeScript interface for the Combobox component props. Uses SelectOption for its options array. See the Select page for the option shape."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbType": "Filter the option list by typing",
+          "kbEnter": "Select the highlighted option",
+          "kbEsc": "Close the dropdown panel without selecting",
+          "kbArrow": "Navigate between filtered options",
+          "ariaExpanded": "Communicates whether the dropdown panel is open or closed",
+          "ariaInvalid": "Set to true when errorText is present",
+          "ariaDescribedBy": "Links helper or error text to the input for screen reader context",
+          "ariaRequired": "Set to true when the required prop is active",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "ariaLabel": "Provides an accessible name when no visible label is present",
+          "focusNative": "Uses a native input element — participates in the tab order by default",
+          "focusTrap": "Focus is trapped inside the dropdown panel while it is open"
+        }
+      },
+      "dateField": {
+        "category": "Forms",
+        "title": "DateField",
+        "description": "Date input with a calendar popover. Localizable, with minDate / maxDate and configurable display format.",
+        "controls": {
+          "size": "Size",
+          "variant": "Variant",
+          "clearable": "Clearable",
+          "disabled": "Disabled"
+        },
+        "playground": {
+          "label": "Date"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Field with label, calendar popover and medium display format by default."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Available in small, medium and large sharing the input proportions."
+          },
+          "minMax": {
+            "title": "Min and max",
+            "desc": "Restrict the selectable range using minDate and maxDate."
+          },
+          "clearable": {
+            "title": "Clearable",
+            "desc": "An ✕ button appears when a date is set to quickly clear the value."
+          },
+          "disabled": {
+            "title": "Disabled",
+            "desc": "The field dims, blocks the popover and preserves the visible value."
+          }
+        },
+        "props": {
+          "modelValue": "Selected date. Supports v-model.",
+          "label": "Visible label above the field.",
+          "placeholder": "Text shown when no date is selected.",
+          "size": "Input size.",
+          "variant": "Visual style of the wrapper.",
+          "displayFormat": "Intl format used to display the selected date.",
+          "minDate": "Minimum selectable date in the calendar.",
+          "maxDate": "Maximum selectable date in the calendar.",
+          "clearable": "Shows a clear button when a date is set.",
+          "disabled": "Disables the field and prevents opening the popover.",
+          "readonly": "Makes the field non-interactive while preserving the visible value.",
+          "required": "Marks the field as required for validation.",
+          "fullWidth": "The field occupies 100% of the available width."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the user selects or clears the date.",
+          "change": "Semantic alias of update:modelValue.",
+          "open": "Emitted when the calendar popover opens.",
+          "close": "Emitted when the popover closes.",
+          "clear": "Emitted when the clear button is pressed."
+        },
+        "types": {
+          "title": "DateField",
+          "desc": "TypeScript interface for the DateField component props. Supports date selection with calendar popover, min/max constraints, locale and display format."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbEnter": "Open the calendar popover",
+          "kbEsc": "Close the calendar popover without selecting",
+          "kbArrow": "Navigate days in the calendar grid",
+          "ariaExpanded": "Communicates whether the calendar popover is open or closed",
+          "ariaInvalid": "Set to true when errorText is present",
+          "ariaDescribedBy": "Links helper or error text to the trigger for screen reader context",
+          "ariaRequired": "Set to true when the required prop is active",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "ariaLabel": "Provides an accessible name when no visible label is present",
+          "focusNative": "Uses a native button as trigger — participates in the tab order by default",
+          "focusTrap": "Focus is trapped inside the calendar popover while it is open"
+        }
+      },
+      "dateRangeField": {
+        "category": "Forms",
+        "title": "DateRangeField",
+        "description": "Date range picker with a dual-calendar popover and preset shortcuts.",
+        "controls": {
+          "size": "Size",
+          "presets": "Presets",
+          "clearable": "Clearable",
+          "disabled": "Disabled"
+        },
+        "playground": {
+          "label": "Period"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Range picker with a dual-calendar popover and medium display format by default."
+          },
+          "presets": {
+            "title": "With presets",
+            "desc": "Enable show-presets to add quick shortcuts like today, this week or this month."
+          },
+          "minMax": {
+            "title": "Min and max",
+            "desc": "Restrict the selectable range using minDate and maxDate."
+          },
+          "disabled": {
+            "title": "Disabled",
+            "desc": "The field dims, blocks the popover and preserves the visible range."
+          }
+        },
+        "props": {
+          "modelValue": "Selected range [start, end]. Supports v-model.",
+          "label": "Visible label above the field.",
+          "placeholder": "Text shown when no range is selected.",
+          "size": "Input size.",
+          "months": "Number of months visible in the popover.",
+          "showPresets": "Shows a column with preset shortcuts (today, week, month…).",
+          "minDate": "Minimum selectable date in the calendar.",
+          "maxDate": "Maximum selectable date in the calendar.",
+          "minRange": "Minimum number of days between start and end.",
+          "maxRange": "Maximum number of days between start and end.",
+          "clearable": "Shows a button to clear the range.",
+          "disabled": "Disables the field.",
+          "readonly": "Makes the field non-interactive.",
+          "fullWidth": "Occupies 100% of the available width."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the range changes.",
+          "change": "Semantic alias of update:modelValue.",
+          "open": "Emitted when the popover opens.",
+          "close": "Emitted when the popover closes.",
+          "clear": "Emitted when the range is cleared."
+        },
+        "types": {
+          "title": "DateRangeField",
+          "desc": "TypeScript interface for the DateRangeField component props. Supports dual-calendar range picker with preset shortcuts, min/max constraints and configurable months.",
+          "label": "Human-readable label shown in the preset list.",
+          "value": "Tuple with the start and end Date of the range."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbEnter": "Open the range picker popover",
+          "kbEsc": "Close the popover without selecting",
+          "kbArrow": "Navigate days in the calendar grids",
+          "ariaExpanded": "Communicates whether the popover is open or closed",
+          "ariaInvalid": "Set to true when errorText is present",
+          "ariaDescribedBy": "Links helper or error text to the trigger for screen reader context",
+          "ariaRequired": "Set to true when the required prop is active",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "ariaLabel": "Provides an accessible name when no visible label is present",
+          "focusNative": "Uses a native button as trigger — participates in the tab order by default",
+          "focusTrap": "Focus is trapped inside the popover while it is open"
+        }
+      },
+      "dateTimeField": {
+        "category": "Forms",
+        "title": "DateTimeField",
+        "description": "Combined date and time input with a calendar popover and built-in time picker.",
+        "controls": {
+          "size": "Size",
+          "format": "Format",
+          "clearable": "Clearable",
+          "disabled": "Disabled"
+        },
+        "playground": {
+          "label": "Start"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Combined date and time picker using 24-hour format by default."
+          },
+          "format12h": {
+            "title": "12-hour format",
+            "desc": "Switch the time picker to AM/PM format with format='12h'."
+          },
+          "minMax": {
+            "title": "Min and max",
+            "desc": "Restrict the range using minDate and maxDate applied to both date and time."
+          },
+          "clearable": {
+            "title": "Clearable",
+            "desc": "An ✕ button is visible when a value is set to clear the selection."
+          },
+          "disabled": {
+            "title": "Disabled",
+            "desc": "The field dims and prevents opening the popover."
+          }
+        },
+        "props": {
+          "modelValue": "Selected date + time. Supports v-model.",
+          "label": "Visible label above the field.",
+          "placeholder": "Text shown when there is no value.",
+          "size": "Input size.",
+          "format": "Time picker format.",
+          "step": "Minute granularity in the time picker.",
+          "showSeconds": "Shows a seconds column in the time picker.",
+          "minDate": "Minimum selectable date and time.",
+          "maxDate": "Maximum selectable date and time.",
+          "clearable": "Shows a button to clear the value.",
+          "disabled": "Disables the field.",
+          "readonly": "Makes the field non-interactive.",
+          "required": "Marks the field as required.",
+          "fullWidth": "Occupies 100% of the available width."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the value changes.",
+          "change": "Semantic alias of update:modelValue.",
+          "open": "Emitted when the popover opens.",
+          "close": "Emitted when the popover closes.",
+          "clear": "Emitted when the value is cleared."
+        },
+        "types": {
+          "title": "DateTimeField",
+          "desc": "TypeScript interface for the DateTimeField component props. Supports combined date and time picker with calendar popover, time format, step control and min/max constraints."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbEnter": "Open the date-time popover",
+          "kbEsc": "Close the popover without selecting",
+          "kbArrow": "Navigate days, hours or minutes in the picker",
+          "ariaExpanded": "Communicates whether the popover is open or closed",
+          "ariaInvalid": "Set to true when errorText is present",
+          "ariaDescribedBy": "Links helper or error text to the trigger for screen reader context",
+          "ariaRequired": "Set to true when the required prop is active",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "ariaLabel": "Provides an accessible name when no visible label is present",
+          "focusNative": "Uses a native button as trigger — participates in the tab order by default",
+          "focusTrap": "Focus is trapped inside the popover while it is open"
+        }
+      },
+      "fileInput": {
+        "category": "Forms",
+        "title": "FileInput",
+        "description": "File selector with drag & drop support, validation, image previews and two visual variants (inline and prominent area).",
+        "controls": {
+          "variant": "Variant",
+          "color": "Color",
+          "size": "Size",
+          "multiple": "Multiple",
+          "dashed": "Dashed",
+          "disabled": "Disabled"
+        },
+        "playground": {
+          "label": "Attach your files"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Single-file selection with inline presentation."
+          },
+          "multiple": {
+            "title": "Multiple files",
+            "desc": "Enable multiple to allow selecting several files at once."
+          },
+          "accept": {
+            "title": "Images only",
+            "desc": "Restrict accepted types with the accept attribute."
+          },
+          "dropzone": {
+            "title": "Drag & drop",
+            "desc": "The 'area' variant shows a prominent dropzone with an optional dashed border."
+          },
+          "previews": {
+            "title": "With previews",
+            "desc": "Selected images automatically show a thumbnail."
+          }
+        },
+        "props": {
+          "modelValue": "List of selected files (v-model).",
+          "multiple": "Allows selecting multiple files.",
+          "accept": "Accepted file type filter (MIME types or extensions).",
+          "maxSize": "Maximum file size per file in bytes.",
+          "maxFiles": "Maximum number of files in multiple mode.",
+          "previews": "Shows thumbnails for selected images.",
+          "dropzone": "Enables drag & drop on the area.",
+          "dropzoneVariant": "Presentation style: compact row or prominent dropzone area.",
+          "dropzoneHeight": "Minimum height of the area when dropzoneVariant=\"area\".",
+          "dashed": "Applies a dashed border to the wrapper.",
+          "dropzoneLabel": "Main text of the dropzone area (dropzoneVariant=\"area\" only).",
+          "dropzoneHint": "Secondary text of the dropzone area (dropzoneVariant=\"area\" only).",
+          "clickToSelect": "Clicking anywhere on the area opens the native file picker.",
+          "label": "Visible label above the control.",
+          "placeholder": "Text shown when no files are selected.",
+          "helperText": "Helper text below the control.",
+          "errorText": "Error message that replaces the helperText.",
+          "variant": "Visual style of the wrapper.",
+          "color": "Semantic color for focus and accent.",
+          "size": "Overall control size.",
+          "disabled": "Disables the control.",
+          "readonly": "Read-only mode.",
+          "required": "Marks the field as required."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the file list changes (syncs v-model).",
+          "change": "Emitted after each confirmed change.",
+          "reject": "Emitted when a file is rejected due to type, size or count constraints."
+        },
+        "types": {
+          "title": "FileInputFile",
+          "desc": "Shape of each file managed by the component. Useful when providing external progress or error maps.",
+          "file": "The underlying File object.",
+          "id": "Stable identifier for the file.",
+          "name": "File name (human-readable).",
+          "size": "Size in bytes.",
+          "type": "MIME type string.",
+          "previewUrl": "Local object URL for image previews (created via URL.createObjectURL).",
+          "progress": "Upload progress 0–100 when provided externally.",
+          "error": "Validation or upload error message."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbEnter": "Open the native file picker",
+          "kbSpace": "Open the native file picker (when clickToSelect is true)",
+          "ariaInvalid": "Set to true when errorText is present",
+          "ariaDescribedBy": "Links helper or error text to the control for screen reader context",
+          "ariaRequired": "Set to true when the required prop is active",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "ariaLabel": "Provides an accessible name when no visible label is present",
+          "focusNative": "The file input is a native element — participates in the tab order by default",
+          "focusDropzone": "The dropzone area is focusable when clickToSelect is enabled"
+        }
+      },
+      "formField": {
+        "category": "Forms",
+        "title": "FormField",
+        "description": "Accessible wrapper that provides label, helper text, error state and id/aria linking for any form control.",
+        "controls": {
+          "layout": "Layout",
+          "required": "Required",
+          "disabled": "Disabled",
+          "error": "Error"
+        },
+        "playground": {
+          "label": "Email",
+          "helperText": "We will use this to confirm your account.",
+          "errorText": "This field is required",
+          "placeholder": "you\\@email.com"
+        },
+        "examples": {
+          "input": {
+            "title": "With Input",
+            "desc": "Wrapping a text field with label and helper text."
+          },
+          "select": {
+            "title": "With Select",
+            "desc": "FormField also works with any composed control."
+          },
+          "textarea": {
+            "title": "With Textarea",
+            "desc": "Use the hint prop to add auxiliary text to the right of the label."
+          },
+          "error": {
+            "title": "With error",
+            "desc": "errorText replaces the helperText and propagates the invalid state to the control."
+          },
+          "horizontal": {
+            "title": "Horizontal layout",
+            "desc": "orientation='horizontal' places the label on the left with a fixed width."
+          }
+        },
+        "props": {
+          "label": "Visible label text. Linked to the control via for/id.",
+          "helperText": "Helper text below the control. Hidden when errorText is present.",
+          "errorText": "Error message. Activates aria-invalid and danger color on the control.",
+          "required": "Shows the red asterisk and propagates required to the slot.",
+          "disabled": "Applies the disabled state and propagates it to the child control.",
+          "id": "id linked to the label. Auto-generated if omitted.",
+          "orientation": "Layout of the label relative to the control.",
+          "labelWidth": "Label width when orientation=\"horizontal\".",
+          "fullWidth": "Applies w-full to the outer wrapper.",
+          "hint": "Auxiliary text to the right of the label (e.g. \"Optional\").",
+          "as": "HTML tag of the root wrapper."
+        },
+        "slots": {
+          "default": "Form control. Receives \\{ id, describedBy, invalid, disabled, required, color \\} as slot props.",
+          "label": "Replaces the label content when custom HTML is needed.",
+          "helper": "Replaces the helperText with rich content."
+        },
+        "types": {
+          "title": "FormField & FormFieldSlotProps",
+          "desc": "FormField defines the wrapper props. FormFieldSlotProps are the bindings exposed by the default slot to wire aria/ids automatically onto the inner control."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaGroup": "The wrapper is exposed as a group for screen readers",
+          "ariaLabelledBy": "The label id is linked to the control so screen readers announce the label",
+          "ariaDescribedBy": "Helper or error text id is linked to the control for additional context",
+          "ariaInvalid": "Set to true when errorText is present, marking the field as invalid",
+          "ariaRequired": "Set to true when the required prop is active",
+          "focusLabel": "Clicking the label moves focus to the associated form control",
+          "focusError": "Error messages are programmatically linked to the control via aria-describedby"
+        }
+      },
+      "input": {
+        "title": "Input",
+        "description": "Text input with label, helper, error messages, icons, prefix/suffix and three visual variants.",
+        "controls": {
+          "variant": "Variant",
+          "color": "Color",
+          "size": "Size",
+          "clearable": "Clearable",
+          "loading": "Loading",
+          "disabled": "Disabled",
+          "readonly": "Readonly"
+        },
+        "playground": {
+          "label": "Email",
+          "placeholder": "you\\@email.com"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Input with label, placeholder and v-model.",
+            "label": "Email",
+            "ph": "you\\@email.com"
+          },
+          "variants": {
+            "title": "Variants",
+            "desc": "outline (default), filled and ghost."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three sizes for different UI densities."
+          },
+          "icons": {
+            "title": "Icons and affixes",
+            "desc": "iconLeft, iconRight and text prefix/suffix.",
+            "emailPh": "Email",
+            "searchPh": "Search"
+          },
+          "states": {
+            "title": "States",
+            "desc": "Disabled, readonly and error.",
+            "readonlyVal": "Read only",
+            "errorText": "Invalid email",
+            "errorLabel": "Email"
+          }
+        },
+        "props": {
+          "modelValue": "Input value (v-model).",
+          "label": "Visible label above the input.",
+          "placeholder": "Placeholder when empty.",
+          "helperText": "Helper text below the input. Hidden when errorText is present.",
+          "errorText": "Error message that marks the input as invalid.",
+          "type": "HTML input type.",
+          "variant": "Visual style of the field.",
+          "color": "Semantic color applied to the focus state.",
+          "size": "Controls padding and typography.",
+          "radius": "Corner radius. Inherits from ModoProvider when omitted.",
+          "halo": "Persistent halo (ring) style. Inherits from ModoProvider.",
+          "fullWidth": "Applies w-full to the field root.",
+          "disabled": "Disables the input.",
+          "readonly": "Read-only: keeps normal style but prevents editing.",
+          "required": "Marks the field as required and shows the indicator.",
+          "loading": "Shows a loader and locks the input during async operations.",
+          "clearable": "Shows an ✕ button to clear the value when there is content.",
+          "maxLength": "Maximum value length. Activates the counter if showCounter.",
+          "showCounter": "Shows the character counter (requires maxLength).",
+          "iconLeft": "Icon rendered inside the input on the left.",
+          "iconRight": "Icon rendered inside the input on the right.",
+          "prefix": "Fixed text on the left (e.g. \"$\", \"https://\").",
+          "suffix": "Fixed text on the right (e.g. \".com\", \"kg\").",
+          "name": "HTML name attribute for form submission.",
+          "id": "Input id. Auto-generated if omitted.",
+          "autocomplete": "HTML autocomplete attribute.",
+          "autofocus": "Auto-focus on mount.",
+          "ariaLabel": "Accessible name when there is no visible label."
+        },
+        "emits": {
+          "updateModelValue": "Emitted on every value change (syncs v-model).",
+          "change": "Emitted after a user-confirmed change.",
+          "focus": "Emitted when the input receives focus.",
+          "blur": "Emitted when the input loses focus.",
+          "clear": "Emitted when the clear button is clicked (clearable)."
+        },
+        "types": {
+          "title": "Input",
+          "desc": "TypeScript interface for the Input component props. Supports text-like HTML types with full theming and validation helpers."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbType": "Type text into the input",
+          "kbEnter": "Submit the form (when inside a form element)",
+          "ariaInvalid": "Set to true when errorText is present",
+          "ariaDescribedBy": "Links helper or error text to the input for screen reader context",
+          "ariaRequired": "Set to true when the required prop is active",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "ariaLabel": "Provides an accessible name when no visible label is present",
+          "focusNative": "Uses a native input element — participates in the tab order by default",
+          "focusClear": "The clear button is focusable and keyboard-activatable (Enter or Space)"
+        }
+      },
+      "multiSelect": {
+        "category": "Forms",
+        "title": "MultiSelect",
+        "description": "Multi-select with chips, search and bulk selection. Designed for medium-sized lists where users need to pick multiple options.",
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Multi-selection with removable chips."
+          },
+          "searchable": {
+            "title": "Searchable and select all",
+            "desc": "Combines search with a toggle to select or deselect all at once."
+          },
+          "maxChips": {
+            "title": "Collapsed chips",
+            "desc": "When many items are selected, max-visible-chips collapses the rest into a +N badge."
+          },
+          "maxSelected": {
+            "title": "Selection limit",
+            "desc": "max-selected prevents exceeding the specified number of options."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three sizes for different form contexts."
+          }
+        },
+        "props": {
+          "modelValue": "Array of selected values (v-model).",
+          "options": "List of available options.",
+          "label": "Visible label above the field.",
+          "placeholder": "Text shown when nothing is selected.",
+          "helperText": "Helper text below the field.",
+          "errorText": "Error message that replaces the helperText.",
+          "variant": "Visual style of the trigger.",
+          "color": "Semantic color for the control and the chips.",
+          "size": "Trigger height and chip size.",
+          "radius": "Border radius of the trigger and chips.",
+          "clearable": "Shows an X button to clear all selections.",
+          "searchable": "Activates the search input in the panel.",
+          "showSelectAll": "Shows a \"Select all\" button in the panel.",
+          "maxSelected": "Maximum number of selectable options.",
+          "maxVisibleChips": "Number of chips before collapsing to \"+N\".",
+          "disabled": "Disables the control.",
+          "readonly": "Read-only mode — blocks changes.",
+          "required": "Marks the field as required.",
+          "loading": "Shows a spinner instead of the chevron.",
+          "fullWidth": "Applies w-full to the root control.",
+          "iconLeft": "Icon rendered to the left of the trigger.",
+          "name": "Generates hidden inputs for form submission.",
+          "ariaLabel": "Accessible name when there is no visible label."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the selection array changes.",
+          "change": "Emitted after each confirmed change.",
+          "open": "Emitted when the panel opens.",
+          "close": "Emitted when the panel closes."
+        },
+        "types": {
+          "title": "MultiSelect",
+          "desc": "TypeScript interface for the MultiSelect component props. Uses SelectOption for its options array. See the Select page for the option shape."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbEnter": "Open the dropdown panel",
+          "kbEsc": "Close the dropdown panel",
+          "kbArrow": "Navigate between options; Space toggles selection",
+          "ariaExpanded": "Communicates whether the dropdown panel is open or closed",
+          "ariaInvalid": "Set to true when errorText is present",
+          "ariaDescribedBy": "Links helper or error text to the trigger for screen reader context",
+          "ariaRequired": "Set to true when the required prop is active",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "ariaLabel": "Provides an accessible name when no visible label is present",
+          "focusNative": "Uses a native button as trigger — participates in the tab order by default",
+          "focusTrap": "Focus is trapped inside the dropdown panel while it is open"
+        }
+      },
+      "numberInput": {
+        "category": "Forms",
+        "title": "NumberInput",
+        "description": "Numeric input with steppers, min/max, decimal precision, thousand separator and prefix/suffix.",
+        "controls": {
+          "variant": "Variant",
+          "color": "Color",
+          "size": "Size",
+          "steppers": "Steppers",
+          "stepperPos": "Position",
+          "disabled": "Disabled"
+        },
+        "playground": {
+          "label": "Quantity"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Numeric input with steppers on the right (default)."
+          },
+          "minMax": {
+            "title": "Min / max + step",
+            "desc": "Restrict the value range and the stepper increment."
+          },
+          "price": {
+            "title": "Price with prefix and separator",
+            "desc": "Combines decimal precision, decimal step, prefix/suffix and thousand-separator formatting."
+          },
+          "split": {
+            "title": "Split stepper",
+            "desc": "Minus on the left and plus on the right of the input."
+          },
+          "disabled": {
+            "title": "Disabled",
+            "desc": "Disabled state preserving the value."
+          }
+        },
+        "props": {
+          "modelValue": "Numeric value (v-model). null when the input is empty.",
+          "label": "Visible label above the input.",
+          "placeholder": "Placeholder when empty.",
+          "helperText": "Helper text. Hidden when errorText is present.",
+          "errorText": "Error message that marks the input as invalid.",
+          "variant": "Visual style.",
+          "color": "Semantic color applied to the focus state.",
+          "size": "Visual size.",
+          "radius": "Corner radius. Inherited from ModoProvider if omitted.",
+          "halo": "Persistent ring (halo) style.",
+          "fullWidth": "Applies w-full to the root.",
+          "disabled": "Disables the input.",
+          "readonly": "Read-only: hides steppers and blocks editing.",
+          "required": "Marks the field as required.",
+          "loading": "Loading state.",
+          "min": "Minimum allowed value.",
+          "max": "Maximum allowed value.",
+          "step": "Stepper and keyboard arrow increment.",
+          "precision": "Forced decimal places when formatting the display after blur.",
+          "steppers": "Shows the +/− buttons to increment/decrement.",
+          "stepperPosition": "Stepper placement: stacked on the right or split (− left, + right).",
+          "allowInvalid": "Allows out-of-range values while typing; clamps on blur.",
+          "thousandSeparator": "Formats the display with a thousand separator after blur.",
+          "prefix": "Fixed text on the left (e.g. \"$\").",
+          "suffix": "Fixed text on the right (e.g. \"%\", \"kg\").",
+          "iconLeft": "Icon rendered to the left of the input.",
+          "name": "HTML name attribute.",
+          "id": "Input id. Auto-generated if omitted.",
+          "autocomplete": "HTML autocomplete attribute.",
+          "autofocus": "Auto-focus on mount.",
+          "ariaLabel": "Accessible name when there is no visible label."
+        },
+        "emits": {
+          "updateModelValue": "Emitted on every value change (syncs v-model).",
+          "change": "Emitted after a change confirmed by the user.",
+          "focus": "Emitted when the input receives focus.",
+          "blur": "Emitted when the input loses focus."
+        },
+        "types": {
+          "title": "NumberInput",
+          "desc": "TypeScript interface for the NumberInput component props. Supports steppers, clamping, precision, and thousand separators."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbArrow": "Increment or decrement the value (when steppers are enabled)",
+          "kbType": "Type a numeric value directly",
+          "ariaInvalid": "Set to true when the value is out of range or errorText is present",
+          "ariaDescribedBy": "Links helper or error text to the input for screen reader context",
+          "ariaRequired": "Set to true when the required prop is active",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "ariaLabel": "Provides an accessible name when no visible label is present",
+          "focusNative": "Uses a native input element — participates in the tab order by default",
+          "focusSteppers": "Stepper buttons are focusable and keyboard-activatable (Enter or Space)"
+        }
+      },
+      "otpInput": {
+        "title": "OTPInput",
+        "description": "One-time password input with configurable digit slots, paste support, auto-advance and mask mode.",
+        "controls": {
+          "length": "Length",
+          "mask": "Mask",
+          "numeric": "Numeric only",
+          "separator": "Separator",
+          "disabled": "Disabled"
+        },
+        "playground": {
+          "label": "Verification code"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Six numeric slots. Auto-advances to the next slot on input and supports paste."
+          },
+          "separator": {
+            "title": "With separator",
+            "desc": "A dash is rendered after a given slot index, useful for 6-digit codes split as 3+3."
+          },
+          "mask": {
+            "title": "Masked",
+            "desc": "Set mask to hide the entered characters — useful for PIN entry."
+          },
+          "alphanumeric": {
+            "title": "Alphanumeric",
+            "desc": "Disable numeric-only mode to accept letters and numbers."
+          },
+          "states": {
+            "title": "States",
+            "desc": "Error, disabled and loading states.",
+            "errorLabel": "Error",
+            "errorText": "Invalid code. Please try again.",
+            "disabledLabel": "Disabled",
+            "loadingLabel": "Loading"
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three sizes to match form density."
+          }
+        },
+        "props": {
+          "modelValue": "The full OTP string (v-model).",
+          "length": "Number of input slots.",
+          "mask": "Mask slot values (show dots).",
+          "numeric": "Restrict input to digits only. Set to false for alphanumeric OTPs.",
+          "separator": "Slot index after which a separator dash is rendered.",
+          "label": "Visible label above the slots.",
+          "helperText": "Helper text (hidden when errorText is present).",
+          "errorText": "Error message. Marks the field as invalid when set.",
+          "color": "Semantic color applied to focus ring and accent states.",
+          "size": "Slot size.",
+          "radius": "Corner radius for each slot. Inherits from ModoProvider when omitted.",
+          "halo": "Persistent halo (ring) style.",
+          "fullWidth": "Applies w-full to the root element.",
+          "disabled": "Disables all slots.",
+          "readonly": "Read-only mode: shows values but prevents editing.",
+          "required": "Marks the group as required.",
+          "autofocus": "Auto-focus the first slot on mount.",
+          "loading": "Shows a loading spinner (implies disabled).",
+          "name": "HTML name attribute for the hidden native input (form submission).",
+          "id": "id prefix. Auto-generated if omitted.",
+          "ariaLabel": "Accessible name for the slot group when no visible label is provided.",
+          "invalid": "Forces the invalid state without rendering errorText.",
+          "ariaDescribedBy": "Extra IDs to concatenate into aria-describedby."
+        },
+        "emits": {
+          "updateModelValue": "Emitted on every slot change (syncs v-model).",
+          "change": "Emitted after each slot change.",
+          "complete": "Emitted once all slots are filled."
+        },
+        "types": {
+          "title": "OTPInput",
+          "desc": "TypeScript interface for the OTPInput component props."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbType": "Type a digit (or alphanumeric character) to fill the slot and advance",
+          "kbBackspace": "Clear the current slot or move back and clear the previous",
+          "kbArrow": "Navigate between slots with ArrowLeft / ArrowRight",
+          "kbHome": "Jump to the first slot",
+          "kbEnd": "Jump to the last slot",
+          "kbPaste": "Paste a full OTP code — characters are distributed across slots",
+          "ariaGroup": "Slots are wrapped in a role=group with an accessible label",
+          "ariaInvalid": "Set to true when errorText is present",
+          "ariaDescribedBy": "Links helper or error text to the group for screen reader context",
+          "ariaLabel": "Each slot has its own aria-label (e.g. \"Digit 1\")",
+          "focusNative": "Each slot is a native input — participates in the tab order by default",
+          "autocomplete": "The first slot uses autocomplete=one-time-code for SMS auto-fill"
+        }
+      },
+      "passwordInput": {
+        "title": "PasswordInput",
+        "description": "Password input with a visibility toggle and an optional heuristic strength meter.",
+        "controls": {
+          "variant": "Variant",
+          "color": "Color",
+          "size": "Size",
+          "toggle": "Toggle",
+          "strength": "Strength",
+          "disabled": "Disabled"
+        },
+        "playground": {
+          "label": "Password",
+          "placeholder": "Enter your password"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Visibility toggle enabled by default.",
+            "label": "Password",
+            "ph": "Enter your password"
+          },
+          "strength": {
+            "title": "With strength meter",
+            "desc": "strengthMeter computes a heuristic score (length + character classes) and displays it below the input.",
+            "label": "New password"
+          },
+          "noToggle": {
+            "title": "No visibility toggle",
+            "desc": "Useful when the app controls visibility itself or it does not apply.",
+            "ph": "No toggle"
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three sizes aligned with the rest of the inputs."
+          },
+          "disabled": {
+            "title": "Disabled",
+            "desc": "Disabled state preserving the value.",
+            "label": "Password"
+          },
+          "defaultVisible": {
+            "title": "Visible by default",
+            "desc": "Shows the password in plain text on mount. Useful for confirmation fields."
+          }
+        },
+        "props": {
+          "modelValue": "Input value (v-model).",
+          "label": "Visible label above the input.",
+          "placeholder": "Placeholder when empty.",
+          "helperText": "Helper text. Hidden when errorText is present.",
+          "errorText": "Error message that marks the input as invalid.",
+          "variant": "Visual style.",
+          "color": "Semantic color applied to the focus state.",
+          "size": "Visual size.",
+          "radius": "Corner radius. Inherits from ModoProvider when omitted.",
+          "halo": "Persistent halo (ring) style.",
+          "fullWidth": "Applies w-full to the root.",
+          "disabled": "Disables the input.",
+          "readonly": "Read-only.",
+          "required": "Marks the field as required.",
+          "loading": "Loading state.",
+          "maxLength": "Maximum length. Activates the counter if showCounter.",
+          "showCounter": "Shows the character counter.",
+          "toggleVisibility": "Shows the button to toggle password visibility.",
+          "defaultVisible": "Whether the content starts visible on mount.",
+          "strengthMeter": "Shows a heuristic strength bar below the input.",
+          "strengthLabels": "Custom labels for each strength level (i18n).",
+          "iconLeft": "Icon rendered inside the input on the left.",
+          "prefix": "Fixed text on the left of the input.",
+          "name": "HTML name attribute.",
+          "id": "Input id. Auto-generated if omitted.",
+          "autocomplete": "HTML autocomplete attribute.",
+          "autofocus": "Auto-focus on mount.",
+          "ariaLabel": "Accessible name when there is no visible label."
+        },
+        "emits": {
+          "updateModelValue": "Emitted on every value change (syncs v-model).",
+          "change": "Emitted after a user-confirmed change.",
+          "focus": "Emitted when the input receives focus.",
+          "blur": "Emitted when the input loses focus.",
+          "updateVisible": "Emitted when the password visibility is toggled.",
+          "strengthChange": "Emitted when the strength score changes (0–4)."
+        },
+        "types": {
+          "title": "PasswordInput",
+          "desc": "TypeScript interface for the PasswordInput component props. Includes PasswordStrengthScore and PasswordStrengthLabels for customizing the strength meter."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbType": "Type text into the password field",
+          "kbToggle": "Toggle password visibility",
+          "ariaInvalid": "Set to true when errorText is present",
+          "ariaDescribedBy": "Links helper, error or strength meter text to the input",
+          "ariaRequired": "Set to true when the required prop is active",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "ariaLabel": "Provides an accessible name when no visible label is present",
+          "ariaPressed": "The visibility toggle button exposes its on/off state",
+          "focusNative": "Uses a native input element — participates in the tab order by default",
+          "focusToggle": "The visibility toggle button is focusable and keyboard-activatable"
+        }
+      },
+      "phoneInput": {
+        "title": "PhoneInput",
+        "description": "International phone number field with a searchable country selector, configurable output format and full accessibility support.",
+        "controls": {
+          "variant": "Variant",
+          "color": "Color",
+          "size": "Size",
+          "format": "Format",
+          "disabled": "Disabled",
+          "readonly": "Readonly",
+          "loading": "Loading",
+          "required": "Required"
+        },
+        "playground": {
+          "label": "Phone number",
+          "placeholder": "555 123 4567"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Phone input with label. Country defaults to US. The number portion is bound via v-model.",
+            "label": "Phone"
+          },
+          "country": {
+            "title": "Controlled country",
+            "desc": "Use v-model:country to control the country externally and react to country changes.",
+            "label": "Phone",
+            "countryLabel": "Country"
+          },
+          "formats": {
+            "title": "Output formats",
+            "desc": "The format prop controls what update:modelValue emits. national returns what the user typed, international prepends +{dialCode}, and e164 strips non-digits then prepends +{dialCode}.",
+            "nationalLabel": "National",
+            "intlLabel": "International",
+            "e164Label": "E.164"
+          },
+          "states": {
+            "title": "States",
+            "desc": "Disabled, readonly and error states.",
+            "disabledLabel": "Disabled",
+            "readonlyLabel": "Readonly",
+            "errorLabel": "Error",
+            "errorText": "Invalid phone number"
+          },
+          "variants": {
+            "title": "Variants",
+            "desc": "outline (default), filled and ghost visual styles.",
+            "label": "Phone"
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three field sizes for different UI densities.",
+            "label": "Phone"
+          }
+        },
+        "props": {
+          "modelValue": "Phone number value. The format is controlled by the format prop.",
+          "country": "ISO 3166-1 alpha-2 code for the selected country (v-model:country).",
+          "defaultCountry": "Default country code shown on first render when country is not bound.",
+          "format": "Output format emitted via update:modelValue. national returns the raw typed value; international prepends +{dialCode}; e164 returns digits-only E.164.",
+          "label": "Visible label above the field.",
+          "placeholder": "Placeholder text for the number input.",
+          "helperText": "Helper text below the field. Hidden when errorText is present.",
+          "errorText": "Error message that marks the field as invalid.",
+          "variant": "Visual style of the field.",
+          "color": "Semantic color applied to the focus state.",
+          "size": "Controls height and typography.",
+          "radius": "Corner radius. Inherits from ModoProvider when omitted.",
+          "halo": "Persistent halo (ring) style. Inherits from ModoProvider.",
+          "fullWidth": "Applies w-full to the field root.",
+          "disabled": "Disables the entire field.",
+          "readonly": "Read-only: maintains normal styling but prevents editing.",
+          "required": "Marks the field as required and shows the visual indicator.",
+          "loading": "Shows a spinner and disables the field during async operations.",
+          "name": "HTML name attribute. Submitted as name-local (number part) and name (full formatted value).",
+          "id": "Input id. Auto-generated if omitted.",
+          "autocomplete": "HTML autocomplete. Defaults to tel-national.",
+          "autofocus": "Auto-focus on mount.",
+          "ariaLabel": "Accessible name when no visible label is provided.",
+          "invalid": "Forces invalid state without rendering errorText. Useful inside FormField.",
+          "ariaDescribedBy": "Additional IDs to concatenate into aria-describedby."
+        },
+        "emits": {
+          "updateModelValue": "Emitted on every input change. Value format is determined by the format prop.",
+          "updateCountry": "Emitted when the user selects a new country. Payload is the ISO 3166-1 alpha-2 code.",
+          "change": "Emitted after a user-confirmed change (blur/enter).",
+          "focus": "Emitted when the number input receives focus.",
+          "blur": "Emitted when the number input loses focus."
+        },
+        "types": {
+          "title": "PhoneInput & PhoneCountry",
+          "desc": "TypeScript interfaces for the PhoneInput component props and the internal country data shape."
+        },
+        "a11y": {
+          "kbTab": "Move focus between the country selector button, the number input and the next field",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbEnterSpace": "Open the country dropdown when the selector button is focused",
+          "kbArrowDown": "Move to the next country in the dropdown list",
+          "kbArrowUp": "Move to the previous country in the dropdown list",
+          "kbEnterSelect": "Select the highlighted country in the dropdown",
+          "kbEscape": "Close the country dropdown and return focus to the trigger button",
+          "kbType": "Type in the search box to filter countries by name, ISO code or dial code",
+          "ariaInvalid": "Set to true on the phone input when errorText is present",
+          "ariaDescribedBy": "Links helper or error text to the input for screen reader context",
+          "ariaRequired": "Set to true when the required prop is active",
+          "ariaExpanded": "Reflects open/closed state of the country dropdown on the trigger button",
+          "ariaHasPopup": "Set to listbox on the country selector trigger to announce the dropdown type",
+          "ariaLabel": "The country selector button always has an aria-label ('Select country' by default)",
+          "focusComposite": "The field is a composite: the country button and the tel input are separate focusable elements",
+          "focusDropdown": "On opening, focus moves to the search input inside the dropdown for immediate filtering"
+        }
+      },
+      "radio": {
+        "title": "Radio",
+        "description": "Individual radio button. For groups, prefer RadioGroup which manages roving tabindex and shares the name attribute automatically.",
+        "controls": {
+          "color": "Color",
+          "size": "Size",
+          "loading": "Loading",
+          "disabled": "Disabled"
+        },
+        "playground": {
+          "optionA": "Option A",
+          "optionB": "Option B",
+          "optionC": "Option C"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Three radios sharing the same v-model. Only one can be selected at a time.",
+            "optionA": "Option A",
+            "optionB": "Option B",
+            "optionC": "Option C"
+          },
+          "description": {
+            "title": "With description",
+            "desc": "Secondary text to add context to each option.",
+            "freeLabel": "Free",
+            "freeDesc": "For personal use with basic features.",
+            "proLabel": "Pro",
+            "proDesc": "For small teams with advanced features."
+          },
+          "colors": {
+            "title": "Colors",
+            "desc": "Semantic variants for the checked state."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three sizes to match the form density."
+          },
+          "disabled": {
+            "title": "Disabled",
+            "desc": "Disabled state preserving the visual value.",
+            "selectedLabel": "Selected disabled",
+            "notSelectedLabel": "Not selected disabled"
+          }
+        },
+        "props": {
+          "modelValue": "Selected value of the group (v-model). Compared against value to determine checked.",
+          "value": "Value emitted by this radio when selected.",
+          "label": "Visible label to the right of the control.",
+          "description": "Secondary descriptive text below the label.",
+          "color": "Semantic color applied in the checked state.",
+          "size": "Size of the control and the label.",
+          "disabled": "Disables the radio and prevents interaction.",
+          "required": "Marks the field as required.",
+          "loading": "Loading state during async operations.",
+          "name": "HTML name attribute. Inherited automatically when inside a RadioGroup.",
+          "id": "Input id. Auto-generated if omitted.",
+          "ariaLabel": "Accessible name when there is no visible label."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when this radio is selected (syncs v-model with its value).",
+          "change": "Emitted after each user-confirmed selection."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbSpace": "Select this radio (when focused)",
+          "kbArrow": "Move selection between radios in the same group",
+          "ariaChecked": "Communicates selected or unselected state",
+          "ariaInvalid": "Set to true when errorText is present",
+          "ariaDescribedBy": "Links helper or error text to the radio for screen reader context",
+          "ariaRequired": "Set to true when the required prop is active",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "ariaLabel": "Provides an accessible name when no visible label is present",
+          "focusNative": "Uses a native input[type=radio] — participates in the tab order by default",
+          "focusGroup": "Arrow keys cycle between radios sharing the same name attribute"
+        }
+      },
+      "radioGroup": {
+        "title": "RadioGroup",
+        "description": "Radio group with single selection, semantic fieldset/legend and full label, helper and error support.",
+        "controls": {
+          "color": "Color",
+          "size": "Size",
+          "layout": "Layout",
+          "loading": "Loading",
+          "disabled": "Disabled"
+        },
+        "playground": {
+          "label": "Plan"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Option list with single selection bound via v-model.",
+            "label": "Plan"
+          },
+          "described": {
+            "title": "With description",
+            "desc": "Each option can include secondary text to add context.",
+            "label": "Choose your plan"
+          },
+          "horizontal": {
+            "title": "Horizontal",
+            "desc": "Ideal for short options aligned in a single row.",
+            "label": "Favourite color"
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three sizes available for different UI densities."
+          },
+          "disabled": {
+            "title": "Disabled",
+            "desc": "Locks the entire group while keeping the selection visible.",
+            "label": "Disabled"
+          }
+        },
+        "props": {
+          "modelValue": "Selected value of the group (v-model).",
+          "options": "Options \\{ value, label, description?, disabled? \\} to render.",
+          "name": "Name attribute shared by all radios. Auto-generated if omitted.",
+          "label": "Group label (rendered as a legend element).",
+          "helperText": "Helper text below the group.",
+          "errorText": "Error message that replaces helperText.",
+          "orientation": "Layout direction of the radios within the group.",
+          "color": "Semantic color applied to all radios.",
+          "size": "Size applied to all radios.",
+          "disabled": "Disables the entire group.",
+          "required": "Marks the group as required.",
+          "loading": "Loading state.",
+          "ariaLabel": "Accessible name when there is no visible label."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the selected option changes (syncs v-model).",
+          "change": "Emitted after each user-confirmed selection."
+        },
+        "slots": {
+          "default": "Allows rendering Radios manually when per-option customisation is needed."
+        },
+        "types": {
+          "title": "RadioOption",
+          "desc": "Shape of each item in the options array.",
+          "value": "Unique identifier used for v-model comparison. Must be a string or number.",
+          "label": "Text rendered next to the radio control.",
+          "description": "Secondary text rendered below the label.",
+          "disabled": "When true, the option is visible but not selectable."
+        },
+        "a11y": {
+          "kbTab": "Move focus into or out of the radio group",
+          "kbArrow": "Move selection between radios within the group",
+          "kbSpace": "Select the focused radio",
+          "ariaGroup": "The wrapper is exposed as a radiogroup for screen readers",
+          "ariaLabelledBy": "The group label is linked so screen readers announce the group context",
+          "ariaInvalid": "Set to true when errorText is present",
+          "ariaDescribedBy": "Links helper or error text to the group for screen reader context",
+          "ariaRequired": "Set to true when the required prop is active",
+          "focusGroup": "Arrow keys cycle between radios; Tab moves focus out of the group",
+          "focusDisabled": "Disabled radios remain in the arrow cycle but cannot be selected"
+        }
+      },
+      "rangeSlider": {
+        "title": "RangeSlider",
+        "description": "Dual-thumb slider for selecting a numeric range. Supports marks, value formatting and the usual visual modes.",
+        "controls": {
+          "color": "Color",
+          "size": "Size",
+          "marks": "Marks",
+          "disabled": "Disabled",
+          "readonly": "Readonly"
+        },
+        "playground": {
+          "label": "Range"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Range selection with two thumbs and v-model as a tuple.",
+            "label": "Range"
+          },
+          "marks": {
+            "title": "With marks",
+            "desc": "Marks at regular intervals to guide selection.",
+            "label": "Age"
+          },
+          "formatted": {
+            "title": "Formatted values",
+            "desc": "formatValue lets you display units, prefixes or any custom format.",
+            "label": "Price"
+          },
+          "colors": {
+            "title": "Colors",
+            "desc": "Semantic variants aligned with the rest of the system."
+          },
+          "disabled": {
+            "title": "Disabled",
+            "desc": "Disabled state preserving the visible values.",
+            "label": "Disabled"
+          }
+        },
+        "props": {
+          "modelValue": "Tuple [from, to] with the range values (v-model).",
+          "min": "Minimum allowed value.",
+          "max": "Maximum allowed value.",
+          "step": "Increment between values.",
+          "minDistance": "Minimum distance between the two thumbs.",
+          "showValue": "Displays the current range next to the label.",
+          "formatValue": "Function to format the displayed values.",
+          "marks": "Discrete marks along the track.",
+          "orientation": "Slider orientation.",
+          "label": "Visible label above the control.",
+          "helperText": "Helper text below the control.",
+          "errorText": "Error message that replaces helperText.",
+          "color": "Semantic color of the filled segment and thumbs.",
+          "size": "Track and thumb size.",
+          "radius": "Track corner radius.",
+          "fullWidth": "Applies w-full to the wrapper.",
+          "disabled": "Disables the slider.",
+          "readonly": "Locks changes while keeping values visible.",
+          "required": "Marks the field as required."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the range changes (syncs v-model).",
+          "change": "Emitted when a drag or keyboard interaction ends."
+        },
+        "types": {
+          "title": "RangeSlider",
+          "desc": "TypeScript interface for the RangeSlider component props. Extends Slider with dual-thumb range selection and minimum distance constraint."
+        },
+        "a11y": {
+          "kbTab": "Move focus between the two thumbs",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbArrow": "Increment or decrement the focused thumb by one step",
+          "kbHome": "Jump the focused thumb to the minimum value",
+          "kbEnd": "Jump the focused thumb to the maximum value",
+          "ariaValueNow": "Each thumb announces its current numeric value",
+          "ariaValueMin": "Communicates the minimum allowed value",
+          "ariaValueMax": "Communicates the maximum allowed value",
+          "ariaInvalid": "Set to true when errorText is present",
+          "ariaDescribedBy": "Links helper or error text to the slider for screen reader context",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "ariaLabel": "Provides an accessible name when no visible label is present",
+          "focusThumbs": "Both thumbs are independently focusable and keyboard-operable"
+        }
+      },
+      "rating": {
+        "title": "Rating",
+        "description": "Star rating control. Supports half steps, read-only mode and all color and size variants.",
+        "controls": {
+          "max": "Max",
+          "color": "Color",
+          "size": "Size",
+          "half": "Half",
+          "readonly": "Readonly",
+          "disabled": "Disabled"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Five stars, warning color by default. Clicking the active value resets it."
+          },
+          "half": {
+            "title": "Half stars",
+            "desc": "Enable allow-half for ratings in 0.5 steps and show the numeric value."
+          },
+          "colors": {
+            "title": "Colors",
+            "desc": "Semantic variants for different contexts."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three sizes available."
+          },
+          "readonlyDisabled": {
+            "title": "Read-only and disabled",
+            "desc": "readonly preserves active styles; disabled adds opacity."
+          }
+        },
+        "props": {
+          "modelValue": "Current value (v-model).",
+          "max": "Total number of items (stars) rendered.",
+          "allowHalf": "Allows values in 0.5 steps.",
+          "readonly": "Read-only mode — no interaction accepted.",
+          "disabled": "Disables and reduces opacity.",
+          "clearable": "Re-clicking the active value resets it to 0.",
+          "color": "Semantic color of the filled stars.",
+          "size": "Star size.",
+          "showValue": "Displays the numeric value next to the rating.",
+          "ariaLabel": "Accessible name."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the value changes (syncs v-model).",
+          "change": "Emitted after each user-confirmed change."
+        },
+        "types": {
+          "title": "Rating",
+          "desc": "TypeScript interface for the Rating component props. Supports half-steps, clearable stars, and numeric value display."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbArrow": "Change the rating value by one step",
+          "kbEnter": "Confirm the current rating value",
+          "ariaLabel": "Provides an accessible name for the rating group",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "focusNative": "Each star is a focusable button — arrow keys navigate and change the value",
+          "focusReadonly": "Read-only mode preserves visual state and announces the current value without allowing edits"
+        }
+      },
+      "searchInput": {
+        "title": "SearchInput",
+        "description": "Search-optimised input: magnifier icon, automatic clear button, optional debounce and keyboard shortcut support.",
+        "controls": {
+          "variant": "Variant",
+          "color": "Color",
+          "size": "Size",
+          "shortcut": "Shortcut",
+          "loading": "Loading",
+          "disabled": "Disabled"
+        },
+        "playground": {
+          "placeholder": "Search components…"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Magnifier icon and automatic ✕ button when there is a value.",
+            "ph": "Search components…"
+          },
+          "debounce": {
+            "title": "With debounce",
+            "desc": "Emits the search event after the specified delay. Useful for API calls.",
+            "ph": "Search with 400ms debounce"
+          },
+          "shortcut": {
+            "title": "With shortcut",
+            "desc": "Shows a kbd hint on the right. The combination focuses the input globally.",
+            "ph": "Search"
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three sizes aligned with the rest of the inputs."
+          },
+          "loading": {
+            "title": "Loading",
+            "desc": "Shows a spinner instead of the clear button while searching.",
+            "ph": "Searching…"
+          }
+        },
+        "props": {
+          "modelValue": "Input value (v-model).",
+          "label": "Visible label above the input.",
+          "placeholder": "Placeholder when empty.",
+          "helperText": "Helper text. Hidden when errorText is present.",
+          "errorText": "Error message that marks the input as invalid.",
+          "variant": "Visual style.",
+          "color": "Semantic color applied to the focus state.",
+          "size": "Visual size.",
+          "radius": "Corner radius. Inherits from ModoProvider when omitted.",
+          "halo": "Persistent halo (ring) style.",
+          "fullWidth": "Applies w-full to the root.",
+          "disabled": "Disables the input.",
+          "readonly": "Read-only.",
+          "required": "Marks the field as required.",
+          "loading": "Shows a spinner instead of the clear button.",
+          "maxLength": "Maximum length. Activates the counter if showCounter.",
+          "showCounter": "Shows the character counter.",
+          "debounce": "Delay (ms) before emitting 'search' while typing. 0 = only emits on Enter.",
+          "shortcut": "Global keyboard shortcut that focuses the input. Shown as a kbd hint (e.g. 'cmd+k').",
+          "name": "HTML name attribute.",
+          "id": "Input id. Auto-generated if omitted.",
+          "autofocus": "Auto-focus on mount.",
+          "ariaLabel": "Accessible name when there is no visible label."
+        },
+        "emits": {
+          "updateModelValue": "Emitted on every value change (syncs v-model).",
+          "change": "Emitted after a user-confirmed change.",
+          "focus": "Emitted when the input receives focus.",
+          "blur": "Emitted when the input loses focus.",
+          "clear": "Emitted when the clear button is clicked.",
+          "search": "Emitted on Enter or after the debounce delay."
+        },
+        "types": {
+          "title": "SearchInput",
+          "desc": "TypeScript interface for the SearchInput component props. Includes debounce and global keyboard shortcut support."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbType": "Type the search query",
+          "kbEnter": "Trigger the search action",
+          "kbEsc": "Clear the current value when clearable",
+          "ariaSearch": "The input is exposed with role search for semantic context",
+          "ariaInvalid": "Set to true when errorText is present",
+          "ariaDescribedBy": "Links helper or error text to the input for screen reader context",
+          "ariaRequired": "Set to true when the required prop is active",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "ariaLabel": "Provides an accessible name when no visible label is present",
+          "focusNative": "Uses a native input element — participates in the tab order by default",
+          "focusShortcut": "Global keyboard shortcut (e.g. Cmd+K) moves focus directly to the search input"
+        }
+      },
+      "segmented": {
+        "title": "Segmented",
+        "description": "Single-value pill-group selector with a sliding indicator. Ideal for switching views or short filters.",
+        "controls": {
+          "color": "Color",
+          "size": "Size",
+          "fullWidth": "Full width",
+          "disabled": "Disabled"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Three segments with labels only."
+          },
+          "icons": {
+            "title": "With icons",
+            "desc": "Each segment can have an optional icon to the left of the label."
+          },
+          "colors": {
+            "title": "Colors",
+            "desc": "Semantic variants applied to the text and indicator of the active segment."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three heights for different UI densities."
+          },
+          "fullWidth": {
+            "title": "Full width",
+            "desc": "With full-width the track fills the container and segments share the width equally."
+          }
+        },
+        "props": {
+          "items": "Segment list \\{ value, label?, icon?, disabled?, ariaLabel? \\}.",
+          "modelValue": "Selected value (v-model).",
+          "color": "Semantic color applied to the active segment.",
+          "size": "Segment height and typography.",
+          "radius": "Corner radius of the track and segments.",
+          "fullWidth": "Stretches the control to fill the container; segments share the width.",
+          "disabled": "Disables the entire control.",
+          "ariaLabel": "Accessible name for the radiogroup."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the active segment changes (syncs v-model).",
+          "change": "Emitted after each user-confirmed selection."
+        },
+        "types": {
+          "title": "SegmentedItem",
+          "desc": "Shape of each segment in the items array. Import it to type your data before passing it to the component.",
+          "value": "Unique value emitted via update:modelValue when selected. Must be a string or number.",
+          "label": "Visible label. Optional when an icon is provided.",
+          "icon": "Optional leading icon rendered to the left of the label.",
+          "disabled": "When true, the segment is visible but not selectable.",
+          "ariaLabel": "Override the accessible name. Required when label is omitted."
+        },
+        "a11y": {
+          "kbTab": "Move focus into or out of the segmented control",
+          "kbArrow": "Move selection between segments",
+          "kbSpace": "Select the focused segment",
+          "ariaGroup": "The wrapper is exposed as a radiogroup for screen readers",
+          "ariaLabel": "Provides an accessible name for the radiogroup",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "focusGroup": "Arrow keys cycle between segments; Tab moves focus out of the group",
+          "focusDisabled": "Disabled segments remain visible but are skipped by keyboard navigation"
+        }
+      },
+      "select": {
+        "title": "Select",
+        "description": "Accessible single-value selector with a dropdown panel. Supports search, grouping, icons and the standard visual modes.",
+        "controls": {
+          "variant": "Variant",
+          "color": "Color",
+          "size": "Size",
+          "clearable": "Clearable",
+          "searchable": "Searchable",
+          "disabled": "Disabled"
+        },
+        "playground": {
+          "label": "Country"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Simple selector with static options and a placeholder.",
+            "label": "Country",
+            "placeholder": "Choose a country"
+          },
+          "searchable": {
+            "title": "Searchable",
+            "desc": "Enable searchable to show a search input inside the panel.",
+            "label": "Language",
+            "placeholder": "Search language…"
+          },
+          "grouped": {
+            "title": "Grouped options",
+            "desc": "Options sharing the same group property are rendered under a heading.",
+            "label": "Language"
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three sizes to match form density."
+          },
+          "states": {
+            "title": "States",
+            "desc": "Loading, disabled and error with inline feedback.",
+            "loadingLabel": "Loading",
+            "loadingPh": "Loading…",
+            "disabledLabel": "Disabled",
+            "disabledPh": "Not editable",
+            "errorLabel": "Error",
+            "errorText": "Select a country"
+          }
+        },
+        "props": {
+          "modelValue": "Selected value (v-model). null when nothing is selected.",
+          "options": "Option list \\{ value, label, description?, icon?, disabled?, group? \\}.",
+          "label": "Visible label above the field.",
+          "placeholder": "Text shown when there is no selected value.",
+          "helperText": "Helper text below the field.",
+          "errorText": "Error message that replaces helperText.",
+          "variant": "Visual style of the trigger.",
+          "color": "Semantic color for focus and accent.",
+          "size": "Trigger height and typography.",
+          "radius": "Corner radius of the trigger and panel.",
+          "clearable": "Shows an X button to clear the selection.",
+          "searchable": "Shows a search input inside the panel.",
+          "disabled": "Disables the control.",
+          "readonly": "Read-only mode — blocks changes.",
+          "required": "Marks the field as required.",
+          "loading": "Shows a spinner instead of the chevron.",
+          "fullWidth": "Applies w-full to the control root.",
+          "iconLeft": "Icon rendered to the left of the trigger.",
+          "panelWidth": "Calculates panel width from the trigger or its content.",
+          "name": "HTML name attribute for form submission.",
+          "id": "Control id. Auto-generated if omitted.",
+          "ariaLabel": "Accessible name when there is no visible label."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the value changes (syncs v-model).",
+          "change": "Emitted after each user-confirmed selection.",
+          "open": "Emitted when the panel opens.",
+          "close": "Emitted when the panel closes."
+        },
+        "types": {
+          "title": "SelectOption",
+          "desc": "Shape of each item in the options array. Import it when you want to type your data before passing it to the component.",
+          "value": "Unique identifier. Must be a string or number.",
+          "label": "Text shown in the trigger and in the dropdown item.",
+          "description": "Secondary text rendered below the label inside the dropdown item.",
+          "icon": "Optional icon rendered to the left of the label.",
+          "disabled": "When true, the item is visible but not selectable.",
+          "group": "Group name — items with the same group are visually grouped together."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbEnter": "Open the dropdown panel",
+          "kbEsc": "Close the dropdown panel",
+          "kbArrow": "Navigate between options inside the panel",
+          "ariaExpanded": "Communicates whether the dropdown panel is open or closed",
+          "ariaInvalid": "Set to true when errorText is present",
+          "ariaDescribedBy": "Links helper or error text to the trigger for screen reader context",
+          "ariaRequired": "Set to true when the required prop is active",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "ariaLabel": "Provides an accessible name when no visible label is present",
+          "focusNative": "Uses a native button as trigger — participates in the tab order by default",
+          "focusTrap": "Focus is trapped inside the dropdown panel while it is open"
+        }
+      },
+      "slider": {
+        "title": "Slider",
+        "description": "Single-value numeric slider with marks, value formatting, label and all the usual visual variants.",
+        "controls": {
+          "color": "Color",
+          "size": "Size",
+          "step": "Step",
+          "marks": "Marks",
+          "disabled": "Disabled",
+          "readonly": "Readonly"
+        },
+        "playground": {
+          "label": "Value"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Slider with visible value and label.",
+            "label": "Volume"
+          },
+          "marks": {
+            "title": "With marks",
+            "desc": "Enable marks to show reference points along the track.",
+            "label": "Quality"
+          },
+          "step": {
+            "title": "Custom step",
+            "desc": "Control the granularity of the slider with the step prop.",
+            "label": "Step of 5"
+          },
+          "colors": {
+            "title": "Colors",
+            "desc": "Semantic variants for different contexts."
+          },
+          "disabled": {
+            "title": "Disabled",
+            "desc": "Disabled state preserving the visible value.",
+            "label": "Disabled"
+          }
+        },
+        "props": {
+          "modelValue": "Current slider value (v-model).",
+          "min": "Minimum allowed value.",
+          "max": "Maximum allowed value.",
+          "step": "Increment between values.",
+          "showValue": "Displays the numeric value next to the label.",
+          "formatValue": "Function to format the displayed value.",
+          "marks": "Discrete marks. true = one per step.",
+          "orientation": "Slider orientation.",
+          "label": "Visible label above the control.",
+          "helperText": "Helper text below the control.",
+          "errorText": "Error message that replaces helperText.",
+          "color": "Semantic color of the fill and thumb.",
+          "size": "Track and thumb size.",
+          "radius": "Track corner radius.",
+          "fullWidth": "Applies w-full to the wrapper.",
+          "disabled": "Disables the slider.",
+          "readonly": "Locks changes while keeping the value visible.",
+          "required": "Marks the field as required."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the value changes (syncs v-model).",
+          "change": "Emitted when a drag or keyboard interaction ends."
+        },
+        "types": {
+          "title": "Slider",
+          "desc": "TypeScript interface for the Slider component props. Supports marks, custom formatting, vertical orientation, and value tooltips."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbArrow": "Increment or decrement the value by one step",
+          "kbHome": "Jump to the minimum value",
+          "kbEnd": "Jump to the maximum value",
+          "ariaValueNow": "The current numeric value is announced to screen readers",
+          "ariaValueMin": "Communicates the minimum allowed value",
+          "ariaValueMax": "Communicates the maximum allowed value",
+          "ariaInvalid": "Set to true when errorText is present",
+          "ariaDescribedBy": "Links helper or error text to the slider for screen reader context",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "ariaLabel": "Provides an accessible name when no visible label is present",
+          "focusThumb": "The thumb is focusable and keyboard-operable; arrow keys change the value"
+        }
+      },
+      "switch": {
+        "title": "Switch",
+        "description": "Semantically accessible on/off toggle. Supports left or right label position, description and all color and size variants.",
+        "controls": {
+          "color": "Color",
+          "size": "Size",
+          "label": "Label",
+          "loading": "Loading",
+          "disabled": "Disabled"
+        },
+        "playground": {
+          "label": "Notifications"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Binary toggle with v-model and a visible label.",
+            "pushLabel": "Push notifications",
+            "darkLabel": "Dark mode"
+          },
+          "description": {
+            "title": "With description",
+            "desc": "Secondary text below the label to add context.",
+            "label": "Marketing",
+            "description": "Receive product news and updates."
+          },
+          "labelLeft": {
+            "title": "Label on the left",
+            "desc": "Useful in settings rows with the control aligned to the right.",
+            "label": "Active"
+          },
+          "colors": {
+            "title": "Colors",
+            "desc": "Semantic variants for the on state."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three sizes available for different UI densities."
+          },
+          "disabled": {
+            "title": "Disabled",
+            "desc": "Disabled state preserving the visual value.",
+            "labelOn": "Disabled on",
+            "labelOff": "Disabled off"
+          }
+        },
+        "props": {
+          "modelValue": "Switch value (v-model). true = on.",
+          "label": "Visible label next to the control.",
+          "description": "Secondary descriptive text below the label.",
+          "helperText": "Helper text below the control. Hidden when errorText is present.",
+          "errorText": "Error message that replaces helperText and applies error state.",
+          "color": "Semantic color applied in the on state.",
+          "size": "Track and thumb size.",
+          "radius": "Track radius. The thumb remains circular.",
+          "labelPosition": "Position of the label relative to the control.",
+          "disabled": "Disables the switch and prevents interaction.",
+          "readonly": "Locks changes but keeps focus and active styles.",
+          "required": "Marks the field as required and shows an asterisk.",
+          "loading": "Loading state during async operations.",
+          "name": "HTML name attribute for form submission.",
+          "id": "Input id. Auto-generated if omitted.",
+          "ariaLabel": "Accessible name when there is no visible label."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the value changes (syncs v-model).",
+          "change": "Emitted after each user-confirmed change."
+        },
+        "types": {
+          "title": "Switch",
+          "desc": "TypeScript interface for the Switch component props. Includes label positioning and full semantic color support."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbSpace": "Toggle on / off",
+          "kbEnter": "Toggle on / off",
+          "ariaChecked": "Communicates on or off state to assistive technologies",
+          "ariaInvalid": "Set to true when errorText is present",
+          "ariaDescribedBy": "Links helper or error text to the switch for screen reader context",
+          "ariaRequired": "Set to true when the required prop is active",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "ariaLabel": "Provides an accessible name when no visible label is present",
+          "focusNative": "Uses a native button element — participates in the tab order by default"
+        }
+      },
+      "tagInput": {
+        "title": "TagInput",
+        "description": "Tag editor: the user types text, presses Enter (or a delimiter) and a chip is added. Supports validation, maximums and visual variants.",
+        "playground": {
+          "placeholder": "Add a tag and press Enter…"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Press Enter or comma to confirm. Duplicates are discarded by default.",
+            "ph": "Add a tag and press Enter…"
+          },
+          "max": {
+            "title": "Maximum tags",
+            "desc": "Limit the number of tags with the max prop.",
+            "ph": "Up to 3 tags"
+          },
+          "validator": {
+            "title": "Custom validator",
+            "desc": "Only tags that pass the validator are confirmed (here, valid emails).",
+            "ph": "Valid emails only"
+          },
+          "colors": {
+            "title": "Colors",
+            "desc": "Semantic variants for the chips."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three heights to match the form density."
+          }
+        },
+        "props": {
+          "modelValue": "Current array of tags (v-model).",
+          "placeholder": "Placeholder when there are no tags and the input is empty.",
+          "max": "Maximum number of tags. Beyond the limit the input is disabled.",
+          "unique": "Rejects duplicates (case-insensitive comparison).",
+          "validator": "Optional validator. Return false to reject the tag.",
+          "delimiters": "Characters that also confirm the current tag when typed.",
+          "color": "Semantic color of the chips.",
+          "variant": "Visual variant of the chips.",
+          "size": "Size of the input and chips.",
+          "radius": "Corner radius of the wrapper and chips.",
+          "disabled": "Disables interaction.",
+          "readonly": "Read-only mode — tags cannot be removed.",
+          "ariaLabel": "Accessible name for the input."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the tag list changes (v-model).",
+          "add": "Emitted when a new tag is added.",
+          "remove": "Emitted when a tag is removed, with its value and original index.",
+          "change": "Emitted after any change (add or remove)."
+        },
+        "types": {
+          "title": "TagInput",
+          "desc": "TypeScript interface for the TagInput component props. Supports custom validators, delimiters, duplicate prevention, and chip theming."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbType": "Type a tag name and press Enter or a delimiter to add it",
+          "kbBackspace": "Remove the last tag when the input is empty",
+          "ariaInvalid": "Set to true when errorText is present",
+          "ariaDescribedBy": "Links helper or error text to the input for screen reader context",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "ariaLabel": "Provides an accessible name when no visible label is present",
+          "focusNative": "Uses a native input element — participates in the tab order by default",
+          "focusChips": "Each tag chip has a remove button that is focusable and keyboard-activatable"
+        }
+      },
+      "textarea": {
+        "title": "Textarea",
+        "description": "Multi-line text area with autoresize, character counter, helper/error text and all the visual variants of Input.",
+        "controls": {
+          "variant": "Variant",
+          "color": "Color",
+          "size": "Size",
+          "autoresize": "Autoresize",
+          "clearable": "Clearable",
+          "disabled": "Disabled",
+          "readonly": "Readonly"
+        },
+        "playground": {
+          "label": "Comment",
+          "placeholder": "Write something…"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Simple textarea with label, placeholder and initial rows.",
+            "label": "Comment",
+            "placeholder": "Write something…"
+          },
+          "variants": {
+            "title": "Variants",
+            "desc": "outline (default), filled and ghost."
+          },
+          "autoresize": {
+            "title": "Autoresize + counter",
+            "desc": "Grows with content up to maxRows and shows a character counter.",
+            "label": "Bio",
+            "placeholder": "Tell us about yourself"
+          },
+          "error": {
+            "title": "Error",
+            "desc": "errorText marks the field as invalid and replaces helperText.",
+            "label": "Description",
+            "errorText": "Description is required"
+          },
+          "disabled": {
+            "title": "Disabled",
+            "desc": "Disabled state preserving the visual value.",
+            "value": "Not editable"
+          },
+          "resize": {
+            "title": "Resize",
+            "desc": "Control the browser's manual resize handle with none, vertical, horizontal or both."
+          }
+        },
+        "props": {
+          "modelValue": "Textarea value (v-model).",
+          "label": "Visible label above the textarea.",
+          "placeholder": "Placeholder when empty.",
+          "helperText": "Helper text below the textarea. Hidden when errorText is present.",
+          "errorText": "Error message that marks the textarea as invalid.",
+          "variant": "Visual style.",
+          "color": "Semantic color applied to the focus state.",
+          "size": "Controls padding and typography.",
+          "radius": "Corner radius. Inherits from ModoProvider when omitted.",
+          "halo": "Persistent halo (ring) style.",
+          "fullWidth": "Applies w-full to the root.",
+          "disabled": "Disables the textarea.",
+          "readonly": "Read-only.",
+          "required": "Marks the field as required.",
+          "loading": "Loading state (disables and shows loader).",
+          "clearable": "Shows an ✕ button to clear the value.",
+          "maxLength": "Maximum length. Activates the counter if showCounter.",
+          "showCounter": "Shows the character counter (requires maxLength).",
+          "rows": "Minimum number of visible rows.",
+          "autoresize": "Grows automatically with content up to maxRows.",
+          "maxRows": "Maximum rows when autoresize=true.",
+          "resize": "Browser manual resize direction.",
+          "name": "HTML name attribute.",
+          "id": "Textarea id. Auto-generated if omitted.",
+          "autofocus": "Auto-focus on mount.",
+          "ariaLabel": "Accessible name when there is no visible label."
+        },
+        "emits": {
+          "updateModelValue": "Emitted on every value change (syncs v-model).",
+          "change": "Emitted after a user-confirmed change.",
+          "focus": "Emitted when the textarea receives focus.",
+          "blur": "Emitted when the textarea loses focus.",
+          "clear": "Emitted when the clear button is clicked (clearable)."
+        },
+        "types": {
+          "title": "Textarea",
+          "desc": "TypeScript interface for the Textarea component props. Supports autoresize, manual resize control, and character counter."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbType": "Type text into the textarea",
+          "ariaInvalid": "Set to true when errorText is present",
+          "ariaDescribedBy": "Links helper or error text to the textarea for screen reader context",
+          "ariaRequired": "Set to true when the required prop is active",
+          "ariaDisabled": "Communicates disabled state to assistive technologies",
+          "ariaLabel": "Provides an accessible name when no visible label is present",
+          "focusNative": "Uses a native textarea element — participates in the tab order by default",
+          "focusResize": "Manual resize handle is a browser feature and does not interfere with keyboard navigation"
+        }
+      }
+    }
+  }
+}

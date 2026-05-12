@@ -1,0 +1,633 @@
+{
+  "pages": {
+    "layout": {
+      "appShell": {
+        "title": "AppShell",
+        "category": "Layout",
+        "description": "Application frame: topbar + sidebar + main content with automatic mobile drawer. Supports standard, rail (icon-only) and dual (rail + panel) variants.",
+        "menu": {
+          "home": "Home",
+          "inbox": "Inbox",
+          "team": "Team",
+          "reports": "Reports",
+          "settings": "Settings"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Topbar + sidebar + content — the most common layout."
+          },
+          "rail": {
+            "title": "Rail variant",
+            "desc": "Persistent icon-only rail, ideal for dense apps."
+          },
+          "collapsed": {
+            "title": "Collapsed sidebar",
+            "desc": "v-model:collapsed lets you fold the sidebar while keeping icons."
+          },
+          "noSidebar": {
+            "title": "No sidebar",
+            "desc": "Topbar-only layout — useful for landings or linear flows."
+          }
+        },
+        "content": {
+          "main": "Main shell content — this region is the default slot.",
+          "basic": "Main content",
+          "rail": "Icon-only rail",
+          "collapsed": "Folded sidebar",
+          "noSidebar": "No-sidebar layout (e.g. authenticated landing)",
+          "subtitleDemo": "Demo"
+        },
+        "props": {
+          "variant": "Shell structure.",
+          "appearance": "Visual framing: full-bleed or card.",
+          "sidebarPosition": "Sidebar side.",
+          "sidebarWidth": "Width of the expanded sidebar.",
+          "collapsedWidth": "Width of the collapsed sidebar (standard variant).",
+          "railWidth": "Rail width (rail / dual variants).",
+          "collapsed": "v-model — sidebar folded on desktop.",
+          "mobileOpen": "v-model — mobile drawer open.",
+          "breakpoint": "Breakpoint at which the sidebar becomes permanent.",
+          "stickyTopbar": "Makes the topbar sticky.",
+          "stickySidebar": "Makes the sidebar sticky on desktop.",
+          "divider": "Renders borders between regions.",
+          "mainPadding": "Padding around the main content.",
+          "radius": "Radius when appearance=\"contained\"."
+        },
+        "slots": {
+          "topbar": "Application topbar.",
+          "sidebar": "Sidebar in standard and dual variants (secondary panel).",
+          "sidebarHeader": "Sticky sidebar header.",
+          "sidebarFooter": "Sticky sidebar footer.",
+          "rail": "Icon-only rail (rail and dual variants).",
+          "railHeader": "Sticky rail header.",
+          "railFooter": "Sticky rail footer.",
+          "default": "Main application content.",
+          "footer": "Global shell footer."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for this component."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name for the application shell",
+          "focusNative": "Focus is managed by the shell; use Tab to navigate regions and interactive elements"
+        }
+      },
+      "canvas": {
+        "title": "Canvas",
+        "category": "Layout",
+        "description": "Surface with decorative pattern (dots, grid or lines). Useful for workspaces, drop zones or hero sections that hint at a workspace.",
+        "examples": {
+          "patterns": {
+            "title": "Patterns",
+            "desc": "dots (default), grid and lines."
+          },
+          "intensity": {
+            "title": "Intensity",
+            "desc": "Controls the pattern opacity over the surface."
+          },
+          "bordered": {
+            "title": "Bordered + cellSize",
+            "desc": "Combine a larger cellSize and border for wide workspace areas."
+          }
+        },
+        "props": {
+          "pattern": "Background visual pattern.",
+          "cellSize": "Pattern cell size in pixels.",
+          "intensity": "Alpha intensity of the pattern.",
+          "surface": "Surface token used for the base background.",
+          "radius": "Corner radius. Inherits from the ModoProvider.",
+          "bordered": "Adds a 1px border using the border token.",
+          "as": "Root tag to render."
+        },
+        "slots": {
+          "default": "Content rendered on top of the pattern."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for this component."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name for the canvas",
+          "focusNative": "Non-interactive element; does not participate in the tab order"
+        }
+      },
+      "container": {
+        "title": "Container",
+        "category": "Layout",
+        "description": "Centered wrapper with max-width and semantic padding to constrain content width at any breakpoint.",
+        "overviewSample": "Content limited to the max width",
+        "examples": {
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Each preset matches a common breakpoint for readable content."
+          },
+          "fluid": {
+            "title": "Fluid",
+            "desc": "Without a max-width, the container fills all available space."
+          },
+          "padding": {
+            "title": "Padding",
+            "desc": "Control inner spacing with system tokens."
+          }
+        },
+        "fluidSample": "Fills the full available width with generous padding.",
+        "paddingSamples": {
+          "none": "no padding",
+          "small": "small",
+          "large": "large"
+        },
+        "props": {
+          "maxWidth": "Maximum width of the container.",
+          "padding": "Horizontal and vertical padding applied to the container.",
+          "centered": "Centers the container horizontally with auto margins.",
+          "centerContent": "Centers inner content using flexbox.",
+          "height": "Height of the container.",
+          "as": "Root semantic tag to render."
+        },
+        "slots": {
+          "default": "Content wrapped by the container."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for this component."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name for the container",
+          "focusNative": "Non-interactive element; does not participate in the tab order"
+        }
+      },
+      "divider": {
+        "title": "Divider",
+        "category": "Layout",
+        "description": "Horizontal or vertical separator line, optionally with a centered label or icon.",
+        "examples": {
+          "orientations": {
+            "title": "Orientations",
+            "desc": "Horizontal by default; vertical when the host is flex/grid."
+          },
+          "label": {
+            "title": "With label and icon",
+            "desc": "Insert a centered label or icon (horizontal only)."
+          },
+          "variants": {
+            "title": "Line variants",
+            "desc": "Solid, dashed and dotted for different hierarchy levels."
+          },
+          "emphasis": {
+            "title": "Emphasis",
+            "desc": "Controls the line contrast against the background."
+          }
+        },
+        "labels": {
+          "or": "or",
+          "featured": "Featured",
+          "section": "Section"
+        },
+        "props": {
+          "orientation": "Separator orientation.",
+          "variant": "Line style.",
+          "emphasis": "Visual intensity of the divider.",
+          "spacing": "Margin perpendicular to the line.",
+          "label": "Inline label (horizontal orientation only).",
+          "icon": "Optional icon next to the label.",
+          "labelAlign": "Position of the label inside the divider.",
+          "decorative": "If decorative, it's ignored by assistive tech."
+        },
+        "slots": {
+          "default": "Inline content alternative to the label prop."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for this component."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name for the divider",
+          "focusNative": "Decorative separator; does not participate in the tab order"
+        }
+      },
+      "hstack": {
+        "title": "HStack",
+        "category": "Layout",
+        "description": "Stack shortcut with horizontal direction. Useful to line up items in a row with consistent spacing and alignment.",
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Distributes children horizontally with spacing."
+          },
+          "spacings": {
+            "title": "Spacings",
+            "desc": "System tokens: xsmall, small, medium, large."
+          },
+          "alignments": {
+            "title": "Alignments",
+            "desc": "Combine justify and align for different layouts."
+          },
+          "wrapping": {
+            "title": "Wrapping",
+            "desc": "Enable wrap so children break when there's no space."
+          }
+        },
+        "props": {
+          "spacing": "Horizontal gap between children.",
+          "align": "Vertical alignment (cross-axis).",
+          "justify": "Horizontal distribution (main-axis).",
+          "wrap": "Line-break behavior when there's no space.",
+          "divider": "Inserts a vertical Divider between each child.",
+          "fullWidth": "Takes full available width.",
+          "fullHeight": "Takes full available height.",
+          "as": "Root tag to render."
+        },
+        "slots": {
+          "default": "Children to stack horizontally."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for this component."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name for the horizontal stack",
+          "focusNative": "Non-interactive layout element; does not participate in the tab order"
+        }
+      },
+      "pageHeader": {
+        "title": "PageHeader",
+        "category": "Layout",
+        "description": "Page header with title, subtitle, optional back button, breadcrumbs, tabs and an actions area.",
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Title, subtitle and divider — the most common combination."
+          },
+          "breadcrumbs": {
+            "title": "With breadcrumbs",
+            "desc": "Use the breadcrumbs slot to show the navigation hierarchy."
+          },
+          "tabs": {
+            "title": "With tabs",
+            "desc": "Tabs align with the divider for a smooth visual transition."
+          },
+          "actions": {
+            "title": "With back & actions",
+            "desc": "Typical combo for detail or edit views."
+          }
+        },
+        "demo": {
+          "title": "Projects",
+          "subtitle": "Manage workspace projects",
+          "filters": "Filters",
+          "new": "New",
+          "edit": "Edit project",
+          "crumbs": "Workspace · Projects ·",
+          "crumbCurrent": "Edit",
+          "reports": "Reports",
+          "tabSummary": "Summary",
+          "tabDetail": "Detail",
+          "tabAudit": "Audit",
+          "detail": "Detail",
+          "back": "Back to list",
+          "cancel": "Cancel",
+          "save": "Save"
+        },
+        "props": {
+          "title": "Main page title.",
+          "subtitle": "Secondary text below the title.",
+          "backButton": "Shows a back button to the left of the title.",
+          "backIcon": "Back button icon. Defaults to chevron-left.",
+          "backAriaLabel": "Accessible name for the icon-only back button.",
+          "size": "Visual size of the title.",
+          "divider": "Renders a bottom border separating the header from content.",
+          "sticky": "Enables position: sticky at the top of scroll.",
+          "padding": "Padding around the header content.",
+          "as": "Root tag to render."
+        },
+        "emits": {
+          "back": "Emitted on back button click."
+        },
+        "slots": {
+          "breadcrumbs": "Breadcrumbs rendered above the title.",
+          "title": "Replaces the plain title with rich content.",
+          "subtitle": "Replaces the plain subtitle with rich content.",
+          "actions": "Actions on the right side of the header (buttons, menus).",
+          "hero": "Highlighted area (banner, metrics) below the main header.",
+          "tabs": "Tabs rendered below the header, aligned with the divider."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for this component."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name for the page header",
+          "focusNative": "Focus is managed by interactive elements inside the header (back button, actions)"
+        }
+      },
+      "popoverPanel": {
+        "title": "PopoverPanel",
+        "category": "Layout",
+        "description": "Internal primitive used by floating components (Select, MultiSelect, DropdownMenu, Tooltip, DateField, Combobox…). Renders a panel teleported to body while preserving the provider's theme and palette.",
+        "examples": {
+          "tooltip": {
+            "title": "Tooltip",
+            "desc": "Tooltip uses its own positioning system, similar to PopoverPanel."
+          },
+          "select": {
+            "title": "Select",
+            "desc": "The Select dropdown renders inside a PopoverPanel."
+          },
+          "dropdown": {
+            "title": "DropdownMenu",
+            "desc": "DropdownMenu wraps trigger + PopoverPanel + items."
+          },
+          "direct": {
+            "title": "Direct usage",
+            "desc": "Combine usePopover (open, panelStyle, panelRef) with PopoverPanel for cases not covered by high-level components."
+          }
+        },
+        "demo": {
+          "openPanel": "Open panel",
+          "customTitle": "Custom panel",
+          "customBody": "Free-form content inside the popover.",
+          "close": "Close",
+          "tooltipText": "I'm a popover anchored to the trigger",
+          "click": "Click me",
+          "actions": "Actions",
+          "edit": "Edit",
+          "duplicate": "Duplicate",
+          "delete": "Delete",
+          "directNote": "For common cases (menus, selects, tooltips) use the high-level components that already integrate"
+        },
+        "props": {
+          "open": "Controls panel visibility.",
+          "style": "Style (top/left/width/zIndex) computed by usePopover.",
+          "radius": "Corner radius. Inherits from the provider when not set.",
+          "role": "ARIA role applied to the panel.",
+          "labelledBy": "Id of the element that labels the panel."
+        },
+        "emits": {
+          "updatePanelRef": "Emitted when the root element changes. Required so usePopover can position it."
+        },
+        "slots": {
+          "default": "Floating panel content."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for this component."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element within the panel",
+          "kbShiftTab": "Move focus to the previous focusable element within the panel",
+          "ariaLabel": "Provides an accessible name for the popover panel",
+          "focusNative": "Focus is trapped inside the popover while open; use Escape to close"
+        }
+      },
+      "sidebar": {
+        "title": "Sidebar",
+        "category": "Layout",
+        "description": "Side navigation with sections, items, icons and badges. Supports collapsed mode (icon-only), nested items and different active styles.",
+        "menu": {
+          "home": "Home",
+          "inbox": "Inbox",
+          "team": "Team",
+          "reports": "Reports",
+          "settings": "Settings"
+        },
+        "sections": {
+          "main": "Main",
+          "config": "Configuration"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Flat list of items with controlled active state."
+          },
+          "collapsed": {
+            "title": "Collapsed (rail)",
+            "desc": "Icon-only mode with automatic tooltips on hover."
+          },
+          "sections": {
+            "title": "With sections",
+            "desc": "Group items under titles for better organization."
+          },
+          "footer": {
+            "title": "With footer",
+            "desc": "Footer slot for logout or profile buttons."
+          }
+        },
+        "logout": "Sign out",
+        "props": {
+          "sections": "Sections to render (each with title and items).",
+          "items": "Shortcut: flat item list rendered as an anonymous section.",
+          "activeId": "v-model for the active item.",
+          "collapsed": "Icon-only mode: hides labels, badges and sub-items.",
+          "size": "Visual size of rows.",
+          "radius": "Row hit-area radius.",
+          "color": "Active state color.",
+          "activeVariant": "How the active state is rendered.",
+          "barSide": "Accent bar side (only activeVariant=\"bar\").",
+          "padding": "Padding around the inner list.",
+          "dividers": "Renders borders between header / body / footer.",
+          "ariaLabel": "Aria-label of the root nav.",
+          "as": "Root tag to render."
+        },
+        "emits": {
+          "select": "Emitted when an item is activated.",
+          "updateActiveId": "v-model for the active item."
+        },
+        "slots": {
+          "header": "Content rendered above sections (logo, brand…).",
+          "footer": "Content rendered below sections (logout, profile…)."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for this component."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name for the sidebar navigation",
+          "focusNative": "Focus is managed by interactive items inside the sidebar"
+        }
+      },
+      "stack": {
+        "title": "Stack",
+        "category": "Layout",
+        "description": "Generic flex primitive to stack children in row or column with consistent spacing, alignment and wrap. HStack and VStack are shortcuts.",
+        "examples": {
+          "vertical": {
+            "title": "Vertical (default)",
+            "desc": "Stacks children in a column with system spacing."
+          },
+          "horizontal": {
+            "title": "Horizontal",
+            "desc": "Switch direction to row for a horizontal layout."
+          },
+          "divider": {
+            "title": "With divider",
+            "desc": "Inserts automatic separators between children."
+          },
+          "wrapping": {
+            "title": "Wrapping",
+            "desc": "Lets children jump to the next line when there's no space."
+          }
+        },
+        "sections": {
+          "start": "Start",
+          "center": "Center",
+          "end": "End"
+        },
+        "props": {
+          "direction": "Stack orientation.",
+          "spacing": "Gap between child elements.",
+          "align": "Cross-axis alignment (align-items).",
+          "justify": "Main-axis distribution (justify-content).",
+          "wrap": "Line-break behavior.",
+          "divider": "Inserts a Divider between each child.",
+          "fullWidth": "Makes the stack take full available width.",
+          "fullHeight": "Makes the stack take full available height.",
+          "as": "Root tag to render."
+        },
+        "slots": {
+          "default": "Children to stack."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for this component."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name for the stack",
+          "focusNative": "Non-interactive layout element; does not participate in the tab order"
+        }
+      },
+      "topbar": {
+        "title": "Topbar",
+        "category": "Layout",
+        "description": "Application top bar with logo, title, subtitle, nav, search, actions and user slots. Designed to be used inside AppShell or standalone.",
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Logo and title — the simplest version."
+          },
+          "search": {
+            "title": "With search",
+            "desc": "Centered SearchInput with a user Avatar."
+          },
+          "actions": {
+            "title": "Actions & user",
+            "desc": "Typical combo for an authenticated app."
+          },
+          "transparent": {
+            "title": "No divider",
+            "desc": "No bottom border — useful for integrating with a hero or canvas."
+          }
+        },
+        "demo": {
+          "subtitle": "Workspace #1",
+          "notifs": "Notifications",
+          "settings": "Settings",
+          "searchPh": "Search…",
+          "user": "Alan Pacheco"
+        },
+        "props": {
+          "title": "Visible title next to the logo.",
+          "subtitle": "Secondary text below the title.",
+          "size": "Visual height of the bar.",
+          "divider": "Renders a bottom border.",
+          "sticky": "Enables position: sticky with translucent background.",
+          "padding": "Horizontal padding of the bar.",
+          "menuToggle": "Shows a hamburger button on the left.",
+          "menuIcon": "Menu button icon (defaults to hamburger).",
+          "menuAriaLabel": "Accessible name for the icon-only menu button.",
+          "as": "Root tag to render."
+        },
+        "emits": {
+          "menuToggle": "Emitted when the menu button is clicked."
+        },
+        "slots": {
+          "logo": "Logo or brand at the start of the bar.",
+          "title": "Replaces the plain title with rich content.",
+          "subtitle": "Replaces the plain subtitle with rich content.",
+          "nav": "Main navigation (links, tabs).",
+          "search": "Search area in the center/right.",
+          "actions": "Quick actions (notifications, settings…).",
+          "user": "Avatar / user menu at the end."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for this component."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name for the top bar",
+          "focusNative": "Focus is managed by interactive elements inside the topbar (menu, actions, search)"
+        }
+      },
+      "vstack": {
+        "title": "VStack",
+        "category": "Layout",
+        "description": "Stack shortcut with vertical direction. Stacks children in a column with consistent spacing and alignment.",
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Stacks children vertically with system spacing."
+          },
+          "spacings": {
+            "title": "Spacings",
+            "desc": "Pick the vertical gap based on the desired density."
+          },
+          "alignments": {
+            "title": "Alignments",
+            "desc": "Controls horizontal alignment of content."
+          },
+          "divider": {
+            "title": "With divider",
+            "desc": "Inserts horizontal separators between each element."
+          }
+        },
+        "sections": {
+          "s1": "Section 1",
+          "s2": "Section 2",
+          "s3": "Section 3"
+        },
+        "props": {
+          "spacing": "Vertical gap between children.",
+          "align": "Horizontal alignment (cross-axis).",
+          "justify": "Vertical distribution (main-axis).",
+          "wrap": "Line-break behavior.",
+          "divider": "Inserts a horizontal Divider between each child.",
+          "fullWidth": "Takes full available width.",
+          "fullHeight": "Takes full available height.",
+          "as": "Root tag to render."
+        },
+        "slots": {
+          "default": "Children to stack vertically."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for this component."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name for the vertical stack",
+          "focusNative": "Non-interactive layout element; does not participate in the tab order"
+        }
+      }
+    }
+  }
+}

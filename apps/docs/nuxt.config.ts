@@ -31,9 +31,50 @@ export default defineNuxtConfig({
   css: ["mood-ui/style.css", "~/assets/docs.css"],
 
   i18n: {
+    // Each locale loads 13 grouped JSON files (common, doc, forms, feedback,
+    // data-display, layout, navigation, composables, utilities, templates,
+    // docs, welcome, theme-studio). vue-i18n deep-merges them under the same
+    // root, so keys like `pages.forms.button.title` keep working even though
+    // they now live in `forms.json` instead of `pages/forms/button.json`.
     locales: [
-      { code: "en", file: "en.json", iso: "en-US" },
-      { code: "es", file: "es.json", iso: "es-ES" },
+      {
+        code: "en",
+        iso: "en-US",
+        files: [
+          "en/common.json",
+          "en/doc.json",
+          "en/forms.json",
+          "en/feedback.json",
+          "en/data-display.json",
+          "en/layout.json",
+          "en/navigation.json",
+          "en/composables.json",
+          "en/utilities.json",
+          "en/templates.json",
+          "en/docs.json",
+          "en/welcome.json",
+          "en/theme-studio.json",
+        ],
+      },
+      {
+        code: "es",
+        iso: "es-ES",
+        files: [
+          "es/common.json",
+          "es/doc.json",
+          "es/forms.json",
+          "es/feedback.json",
+          "es/data-display.json",
+          "es/layout.json",
+          "es/navigation.json",
+          "es/composables.json",
+          "es/utilities.json",
+          "es/templates.json",
+          "es/docs.json",
+          "es/welcome.json",
+          "es/theme-studio.json",
+        ],
+      },
     ],
     defaultLocale: "en",
     lazy: true,

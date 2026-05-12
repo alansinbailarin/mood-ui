@@ -1,0 +1,885 @@
+{
+  "pages": {
+    "feedback": {
+      "badge": {
+        "title": "Badge",
+        "category": "Feedback",
+        "description": "Etiqueta inline para mostrar estado, conteos o categorías. Soporta variantes solid / subtle / outline, colores semánticos, tamaños, icono y modo dot.",
+        "examples": {
+          "variants": {
+            "title": "Variantes",
+            "desc": "Tres tratamientos visuales: solid para énfasis, subtle por defecto y outline para discreción."
+          },
+          "colors": {
+            "title": "Colores",
+            "desc": "Paleta semántica en variante subtle."
+          },
+          "icon": {
+            "title": "Con icono",
+            "desc": "Añade un icono a la izquierda del label para reforzar el significado."
+          },
+          "dot": {
+            "title": "Modo dot",
+            "desc": "Reemplaza el icono por un punto para indicar estado de presencia o disponibilidad."
+          }
+        },
+        "demo": {
+          "label": "Etiqueta",
+          "active": "Activo",
+          "featured": "Destacado",
+          "pro": "Pro",
+          "online": "Online",
+          "away": "Ausente",
+          "offline": "Offline"
+        },
+        "props": {
+          "label": "Texto del badge. Equivalente al slot default para contenido plano.",
+          "variant": "Estilo visual aplicado al badge.",
+          "color": "Color semántico aplicado al badge.",
+          "gradient": "Aplica un gradiente sutil (solo con variant solid).",
+          "size": "Tamaño del badge. Cascada desde ModoProvider si se omite.",
+          "radius": "Radio de las esquinas. Cascada desde ModoProvider.",
+          "icon": "Componente de icono renderizado a la izquierda del label.",
+          "removable": "Muestra un botón de cierre que emite el evento remove.",
+          "dot": "Reemplaza el icono por un pequeño punto coloreado.",
+          "removeAriaLabel": "Sobrescribe el aria-label del botón de remove."
+        },
+        "emits": {
+          "remove": "Emitido al hacer click en el botón de cierre cuando removable está activo."
+        },
+        "slots": {
+          "default": "Contenido personalizado del badge. Reemplaza la prop label cuando se necesita HTML o componentes internos."
+        },
+        "types": {
+          "title": "Badge",
+          "desc": "Interfaz TypeScript de las props del componente Badge. Soporta variantes solid, outline y subtle con colores semánticos, modo dot y botón de cierre removible."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "ariaLabel": "Proporciona un nombre accesible para el badge",
+          "focusNative": "No interactivo por defecto; los badges removibles usan un botón de cierre enfocable"
+        }
+      },
+      "banner": {
+        "title": "Banner",
+        "category": "Feedback",
+        "description": "Aviso prominente para comunicar estado a nivel de página o sección. Soporta colores semánticos, variantes, dismiss y posición sticky.",
+        "examples": {
+          "colors": {
+            "title": "Colores",
+            "desc": "Cuatro colores semánticos con sus iconos por defecto."
+          },
+          "variants": {
+            "title": "Variantes",
+            "desc": "Tres tratamientos visuales: filled, subtle (default) y outline."
+          },
+          "action": {
+            "title": "Con acción",
+            "desc": "Slot actions a la derecha para anclar un CTA."
+          },
+          "dismiss": {
+            "title": "Dismissable",
+            "desc": "Permite al usuario cerrar el banner. Emite el evento dismiss."
+          },
+          "icon": {
+            "title": "Con icono personalizado",
+            "desc": "Sustituye el icono por uno propio mediante la prop icon."
+          }
+        },
+        "demo": {
+          "infoTitle": "Información",
+          "infoDesc": "Tu cuenta se sincronizará en unos minutos.",
+          "successTitle": "Listo",
+          "successDesc": "Los cambios se guardaron correctamente.",
+          "warnTitle": "Atención",
+          "warnDesc": "Tu plan caduca en 5 días.",
+          "errTitle": "Error",
+          "errDesc": "No pudimos procesar el pago.",
+          "filledTitle": "Filled",
+          "filledDesc": "Estilo sólido.",
+          "subtleTitle": "Subtle",
+          "subtleDesc": "Estilo suave (default).",
+          "outlineTitle": "Outline",
+          "outlineDesc": "Estilo con borde.",
+          "renewTitle": "Plan próximo a vencer",
+          "renewDesc": "Renueva para no perder acceso a las funciones premium.",
+          "renewBtn": "Renovar",
+          "tipTitle": "Tip",
+          "tipDesc": "Puedes cerrar este aviso.",
+          "newTitle": "Nueva versión",
+          "newDesc": "La v2 trae soporte para temas y nuevos componentes.",
+          "showAgain": "Mostrar de nuevo"
+        },
+        "props": {
+          "color": "Color semántico del banner.",
+          "variant": "Estilo visual aplicado al banner.",
+          "title": "Título destacado del banner.",
+          "description": "Texto descriptivo. Se reemplaza por el slot default si se provee.",
+          "dismissable": "Muestra un botón de cierre que emite el evento dismiss.",
+          "dismissAnimation": "Animación usada al cerrar el banner.",
+          "icon": "Icono personalizado. Si se omite usa el icono por color.",
+          "showIcon": "Muestra u oculta el icono del banner.",
+          "position": "Posicionamiento del banner.",
+          "fullWidth": "Elimina el radius para anclar el banner de borde a borde.",
+          "radius": "Radio de las esquinas. Cascada desde ModoProvider."
+        },
+        "emits": {
+          "dismiss": "Emitido al cerrar el banner cuando dismissable está activo."
+        },
+        "slots": {
+          "default": "Contenido del cuerpo del banner. Reemplaza la prop description cuando se necesita HTML.",
+          "actions": "Acciones a la derecha del banner (típicamente botones)."
+        },
+        "types": {
+          "title": "Banner",
+          "desc": "Interfaz TypeScript de las props del componente Banner. Soporta colores semánticos, variantes filled/subtle/outline, animaciones de cierre y posicionamiento sticky."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "kbEnter": "Activa el botón de cierre cuando tiene foco",
+          "ariaAlert": "Usa role alert para anunciar el banner a los lectores de pantalla",
+          "ariaLive": "Anuncia los cambios de contenido del banner a las tecnologías asistivas",
+          "ariaLabel": "Proporciona un nombre accesible cuando no hay título visible",
+          "focusNative": "El contenido del banner está en el orden de tabulación normal",
+          "focusDismiss": "El botón de cierre es enfocable y activable por teclado"
+        }
+      },
+      "chip": {
+        "title": "Chip",
+        "description": "Indicador overlay (counter o dot) que se posiciona sobre otro elemento como un avatar o icono. También funciona como pill inline cuando no hay anchor.",
+        "controls": {
+          "variant": "Variante",
+          "color": "Color",
+          "size": "Tamaño",
+          "dot": "Dot"
+        },
+        "examples": {
+          "counter": {
+            "title": "Counter sobre icono",
+            "desc": "Contador overlay sobre un icono. Con max se trunca el valor a 99+."
+          },
+          "dot": {
+            "title": "Dot sobre avatar",
+            "desc": "Indicador de presencia sin contenido sobre un avatar."
+          },
+          "variants": {
+            "title": "Variantes",
+            "desc": "Tres tratamientos visuales para el chip overlay."
+          },
+          "inline": {
+            "title": "Inline (sin anchor)",
+            "desc": "Cuando no hay slot default, el chip se renderiza en flujo como pill."
+          }
+        },
+        "props": {
+          "content": "Contenido visible (número o string corto). Se ignora si dot está activo.",
+          "dot": "Renderiza un indicador pequeño sin contenido.",
+          "max": "Cap superior para contenido numérico (ej. 99 → \"99+\").",
+          "invisible": "Oculta el chip manteniéndolo en el árbol.",
+          "showZero": "Muestra el chip aun cuando content sea 0 (por defecto se oculta).",
+          "variant": "Estilo visual aplicado al chip.",
+          "color": "Color semántico aplicado al chip.",
+          "size": "Tamaño del chip. Cascada desde ModoProvider si se omite.",
+          "radius": "Radio de las esquinas. Cascada desde ModoProvider.",
+          "placement": "Esquina del anchor donde se posiciona el chip overlay.",
+          "icon": "Icono decorativo opcional (ignorado en modo dot).",
+          "ariaLabel": "Nombre accesible. Recomendado para chips numéricos o dot."
+        },
+        "slots": {
+          "default": "Anchor del chip overlay. Si se omite, el chip se renderiza inline como pill."
+        },
+        "types": {
+          "title": "Chip",
+          "desc": "Interfaz TypeScript de las props del componente Chip. Incluye el tipo union ChipPlacement para posicionamiento absoluto sobre anclas."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "ariaLabel": "Proporciona un nombre accesible para el contenido del chip",
+          "ariaHidden": "Los chips decorativos pueden ocultarse de los lectores de pantalla",
+          "focusNative": "No interactivo por defecto; los chips posicionados no capturan el foco"
+        }
+      },
+      "confirmDialog": {
+        "title": "ConfirmDialog",
+        "description": "Diálogo de confirmación imperativo. Monta una vez el host ConfirmDialog cerca del root y usa useConfirm().confirm(\\{...\\}) desde cualquier componente para obtener un Promise(boolean).",
+        "controls": {
+          "tone": "Tono",
+          "size": "Tamaño"
+        },
+        "playground": {
+          "title": "¿Continuar con la acción?",
+          "description": "Vista previa del componente con la configuración del playground.",
+          "confirmLabel": "Continuar",
+          "cancelLabel": "Cancelar",
+          "launch": "Lanzar confirm()",
+          "lastResult": "Última respuesta:",
+          "confirmed": "confirmado",
+          "cancelled": "cancelado"
+        },
+        "examples": {
+          "basic": {
+            "title": "Confirmación básica",
+            "desc": "Pasando solo un string se obtiene un yes/no minimalista.",
+            "cta": "Lanzar confirm"
+          },
+          "danger": {
+            "title": "Acción destructiva",
+            "desc": "Para borrados y operaciones irreversibles, usa color='danger' y un confirmLabel explícito.",
+            "cta": "Eliminar elemento"
+          },
+          "async": {
+            "title": "Async confirm",
+            "desc": "confirm() devuelve Promise(boolean): ideal para encadenar await + llamada a API.",
+            "cta": "Publicar"
+          },
+          "custom": {
+            "title": "Labels personalizados",
+            "desc": "Sobrescribe confirmLabel y cancelLabel para que el botón refleje exactamente la acción.",
+            "cta": "Cerrar sesión"
+          }
+        },
+        "props": {
+          "radius": "Radio por defecto para confirmaciones que no especifican uno."
+        },
+        "types": {
+          "title": "ConfirmDialog",
+          "desc": "Interfaces TypeScript del sistema de confirmación. Incluye ConfirmInput con ConfirmColor y las props de ConfirmDialog para diálogos de confirmación imperativos."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable dentro del dialog",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior dentro del dialog",
+          "kbEsc": "Cierra el dialog y resuelve con false",
+          "ariaDialog": "Se expone como dialog para los lectores de pantalla",
+          "ariaModal": "Comunica que el dialog bloquea el resto de la página",
+          "ariaLabelledBy": "Vincula el título del dialog para contexto del lector de pantalla",
+          "focusTrap": "El foco queda atrapado dentro del dialog mientras está abierto",
+          "focusReturn": "El foco vuelve al elemento trigger cuando el dialog se cierra"
+        }
+      },
+      "drawer": {
+        "title": "Drawer",
+        "description": "Panel deslizable desde cualquier lado del viewport. Útil para filtros, settings, detalles y bottom-sheets en mobile. Soporta foco atrapado y bloqueo de scroll.",
+        "controls": {
+          "side": "Lado",
+          "size": "Tamaño",
+          "dismissable": "Dismissable"
+        },
+        "playground": {
+          "open": "Abrir drawer",
+          "title": "Filtros",
+          "description": "Vista previa interactiva.",
+          "content": "Contenido del drawer."
+        },
+        "examples": {
+          "right": {
+            "title": "Lado derecho (default)",
+            "desc": "El placement por defecto. Ideal para detalles secundarios sin abandonar la vista actual.",
+            "cta": "Abrir drawer derecho",
+            "drawerTitle": "Filtros",
+            "drawerDesc": "Refina los resultados"
+          },
+          "left": {
+            "title": "Izquierdo",
+            "desc": "Patrón clásico de menú de navegación lateral.",
+            "cta": "Abrir menú",
+            "drawerTitle": "Menú",
+            "content": "Enlaces de navegación."
+          },
+          "sides": {
+            "title": "Superior y bottom-sheet",
+            "desc": "top funciona bien para notificaciones; bottom imita el comportamiento de bottom-sheet en móvil.",
+            "ctaTop": "Top",
+            "ctaBottom": "Bottom",
+            "topTitle": "Notificaciones",
+            "bottomTitle": "Compartir",
+            "bottomContent": "Opciones para compartir."
+          },
+          "form": {
+            "title": "Con contenido (form)",
+            "desc": "El drawer se adapta al contenido — útil para formularios secundarios y edición rápida.",
+            "cta": "Editar detalles",
+            "drawerTitle": "Detalles",
+            "drawerDesc": "Edición rápida del proyecto seleccionado.",
+            "namePlaceholder": "Nombre",
+            "notesPlaceholder": "Notas"
+          }
+        },
+        "props": {
+          "modelValue": "Visibilidad. Usa v-model.",
+          "side": "Lado desde el que entra el panel.",
+          "size": "Tamaño en el eje principal del panel.",
+          "radius": "Radio de las esquinas (el lado pegado al borde no se redondea).",
+          "title": "Título accesible — renderizado en header si no hay slot.",
+          "description": "Descripción opcional bajo el título.",
+          "closeOnOverlay": "Cierra al hacer click en el backdrop.",
+          "closeOnEscape": "Cierra al pulsar Escape.",
+          "showClose": "Muestra el botón de cerrar (X) en el header.",
+          "lockScroll": "Bloquea el scroll del body mientras está abierto.",
+          "color": "Color de acento aplicado a borde y ring.",
+          "overlay": "Estilo del backdrop.",
+          "innerBorder": "Borde interior sutil dentro del panel.",
+          "ariaLabel": "Etiqueta accesible cuando no hay title."
+        },
+        "emits": {
+          "updateModelValue": "Cambio del estado abierto/cerrado."
+        },
+        "slots": {
+          "default": "Cuerpo principal del drawer.",
+          "header": "Reemplaza el header generado por title/description.",
+          "footer": "Acciones al pie del drawer."
+        },
+        "types": {
+          "title": "Drawer",
+          "desc": "Interfaz TypeScript de las props del componente Drawer. Incluye los tipos unión DrawerSide, DrawerSize y DrawerOverlay para configuración de lado, tamaño y backdrop."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable dentro del drawer",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior dentro del drawer",
+          "kbEsc": "Cierra el drawer cuando closeOnEscape está activado",
+          "ariaDialog": "Se expone como dialog para los lectores de pantalla",
+          "ariaModal": "Comunica que el drawer bloquea el resto de la página",
+          "ariaLabelledBy": "Vincula el título del drawer al dialog para contexto del lector de pantalla",
+          "ariaDescribedBy": "Vincula la descripción al dialog para contexto adicional",
+          "focusTrap": "El foco queda atrapado dentro del drawer mientras está abierto",
+          "focusReturn": "El foco vuelve al elemento trigger cuando el drawer se cierra"
+        }
+      },
+      "emptyState": {
+        "title": "EmptyState",
+        "description": "Estado vacío para listas, búsquedas y secciones sin datos. Soporta icono, descripción, acciones y variantes visuales.",
+        "controls": {
+          "variant": "Variante",
+          "size": "Tamaño",
+          "centered": "Centrado"
+        },
+        "playground": {
+          "title": "Sin notificaciones",
+          "description": "Cuando recibas algo aparecerá aquí."
+        },
+        "examples": {
+          "action": {
+            "title": "Con acción",
+            "desc": "Slot actions para añadir un CTA debajo de la descripción.",
+            "emptyTitle": "Sin resultados",
+            "emptyDesc": "Intenta con otra búsqueda o limpia los filtros.",
+            "cta": "Limpiar filtros"
+          },
+          "variants": {
+            "title": "Variantes",
+            "desc": "Tres superficies: subtle (default), solid (con borde) y outline (borde discontinuo).",
+            "subtleDesc": "Sin borde.",
+            "solidDesc": "Con superficie.",
+            "outlineDesc": "Borde discontinuo."
+          },
+          "noResults": {
+            "title": "Sin resultados",
+            "desc": "Patrón típico para una búsqueda sin coincidencias.",
+            "emptyTitle": "Sin resultados",
+            "emptyDesc": "No encontramos nada que coincida con \"facturas 2025\". Prueba otros términos."
+          },
+          "error": {
+            "title": "Estado de error",
+            "desc": "Combina variant outline con un CTA para reintentar la operación.",
+            "emptyTitle": "Algo salió mal",
+            "emptyDesc": "Reintenta en unos segundos.",
+            "cta": "Reintentar"
+          }
+        },
+        "props": {
+          "title": "Encabezado principal del empty state.",
+          "description": "Texto secundario debajo del título.",
+          "icon": "Icono mostrado encima del título. Por defecto se usa InboxIcon.",
+          "size": "Tamaño visual del empty state.",
+          "variant": "Tratamiento visual del contenedor.",
+          "centered": "Centra horizontalmente el contenido.",
+          "radius": "Radio de las esquinas para variant solid u outline."
+        },
+        "slots": {
+          "actions": "Acciones debajo de la descripción (típicamente botones).",
+          "default": "Contenido extra renderizado al final del empty state."
+        },
+        "types": {
+          "title": "EmptyState",
+          "desc": "Interfaz TypeScript de las props del componente EmptyState. Incluye los tipos unión EmptyStateSize y EmptyStateVariant para tamaño y tratamiento visual."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "ariaRegion": "Usa role region para identificar el empty state como un landmark navegable",
+          "ariaLabel": "Proporciona un nombre accesible para la región del empty state",
+          "focusNative": "Las acciones dentro del empty state son enfocables; el contenedor mismo no lo es"
+        }
+      },
+      "loader": {
+        "title": "Loader",
+        "description": "Spinner circular para indicar progreso indeterminado. Pequeño, accesible y con color heredado por defecto para integrarse en botones, banners o cualquier contenedor.",
+        "controls": {
+          "variant": "Variante",
+          "size": "Tamaño",
+          "color": "Color"
+        },
+        "examples": {
+          "variants": {
+            "title": "Variantes",
+            "desc": "normal muestra solo el arco; outline añade un track sutil de fondo."
+          },
+          "sizes": {
+            "title": "Tamaños",
+            "desc": "Tres tamaños alineados con el resto del sistema (14, 18 y 22 px)."
+          },
+          "colors": {
+            "title": "Colores personalizados",
+            "desc": "La prop color acepta cualquier valor CSS — útil para aplicar tokens semánticos del proyecto."
+          },
+          "inline": {
+            "title": "Inline con texto",
+            "desc": "Combinado con texto, el spinner hereda el color del contenedor por defecto.",
+            "loading": "Cargando proyectos…"
+          }
+        },
+        "props": {
+          "variant": "Variante visual. outline pinta el track de fondo del anillo.",
+          "size": "Tamaño del spinner. Cascada desde ModoProvider.",
+          "color": "Color del trazo. Acepta cualquier valor CSS válido.",
+          "label": "Texto accesible visualmente oculto para lectores de pantalla."
+        },
+        "types": {
+          "title": "Loader",
+          "desc": "Interfaz TypeScript de las props del componente Loader. Spinner simple con variant, size, color y label accesible."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "ariaStatus": "Usa role status para anunciar el estado de carga a los lectores de pantalla",
+          "ariaLive": "Anuncia los cambios de estado de carga a las tecnologías asistivas",
+          "ariaLabel": "Proporciona un nombre accesible vía la prop label",
+          "focusNative": "Elemento no interactivo; no participa en el orden de tabulación"
+        }
+      },
+      "modal": {
+        "title": "Modal",
+        "description": "Diálogo modal centrado con foco atrapado, bloqueo de scroll y animación FLIP-style desde el botón que lo abrió. Soporta tamaños, header con título/descripción y slot footer.",
+        "controls": {
+          "size": "Tamaño",
+          "overlay": "Overlay",
+          "centered": "Centrado",
+          "closable": "Cerrable"
+        },
+        "playground": {
+          "open": "Abrir modal",
+          "title": "Confirmar acción",
+          "description": "Vista previa interactiva del modal.",
+          "body": "¿Quieres aplicar estos cambios?",
+          "cancel": "Cancelar",
+          "apply": "Aplicar"
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Disparado por un botón con v-model. Footer con acciones cancelar/confirmar.",
+            "cta": "Abrir modal",
+            "modalTitle": "Confirmar",
+            "modalDesc": "¿Quieres aplicar estos cambios?",
+            "body": "El cambio es reversible desde el historial.",
+            "cancel": "Cancelar",
+            "apply": "Aplicar"
+          },
+          "form": {
+            "title": "Con formulario",
+            "desc": "Útil para crear o editar entidades sin sacar al usuario del contexto actual.",
+            "cta": "Nuevo proyecto",
+            "modalTitle": "Nuevo proyecto",
+            "modalDesc": "Crea un nuevo proyecto para hacer seguimiento de tu trabajo.",
+            "namePh": "Nombre",
+            "descPh": "Descripción",
+            "cancel": "Cancelar",
+            "create": "Crear"
+          },
+          "locked": {
+            "title": "Sin overlay-close",
+            "desc": "Para acciones críticas, fuerza la decisión explícita deshabilitando el cierre por overlay y Escape.",
+            "cta": "Acción crítica",
+            "modalTitle": "Acción crítica",
+            "body": "Solo se cierra con el botón explícito.",
+            "confirm": "Entendido"
+          },
+          "full": {
+            "title": "Fullscreen",
+            "desc": "size='full' ocupa todo el viewport — ideal para vistas de detalle inmersivas.",
+            "cta": "Abrir fullscreen",
+            "modalTitle": "Vista completa",
+            "body": "Ocupa todo el viewport disponible."
+          },
+          "scroll": {
+            "title": "Contenido scrollable",
+            "desc": "El cuerpo del modal puede scrollear internamente sin bloquear el resto del layout.",
+            "cta": "Términos y condiciones",
+            "modalTitle": "Términos y condiciones",
+            "paragraph": "Párrafo {i} con texto largo para forzar scroll interno."
+          }
+        },
+        "props": {
+          "modelValue": "Visibilidad. Usa v-model.",
+          "size": "Tamaño del panel.",
+          "position": "Posición vertical del panel.",
+          "radius": "Radio de las esquinas. Cascada del provider.",
+          "title": "Título accesible — se renderiza en header si no hay slot.",
+          "description": "Descripción opcional bajo el título.",
+          "closeOnOverlay": "Cierra al hacer click en el backdrop.",
+          "closeOnEscape": "Cierra al pulsar Escape.",
+          "showClose": "Muestra el botón de cerrar (X) en la esquina.",
+          "lockScroll": "Bloquea el scroll del body mientras está abierto.",
+          "color": "Color de acento aplicado a borde y ring.",
+          "overlay": "Estilo del backdrop.",
+          "innerBorder": "Renderiza un borde interior sutil dentro del borde principal.",
+          "origin": "Elemento de origen para la animación FLIP-style.",
+          "ariaLabel": "Etiqueta accesible cuando no hay title."
+        },
+        "emits": {
+          "updateModelValue": "Cambio del estado abierto/cerrado."
+        },
+        "slots": {
+          "default": "Cuerpo principal del modal.",
+          "header": "Reemplaza el header generado a partir de title/description.",
+          "footer": "Acciones al pie del modal (botones de cancelar/confirmar)."
+        },
+        "types": {
+          "title": "Modal",
+          "desc": "Interfaz TypeScript de las props del componente Modal. Incluye los tipos union ModalSize, ModalPosition y ModalOverlay para configuración de tamaño, posición y backdrop."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable dentro del modal",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior dentro del modal",
+          "kbEsc": "Cierra el modal cuando closeOnEscape está activado",
+          "ariaDialog": "Se expone como dialog para los lectores de pantalla",
+          "ariaModal": "Comunica que el modal bloquea el resto de la página",
+          "ariaLabelledBy": "Vincula el título del modal al dialog para contexto del lector de pantalla",
+          "ariaDescribedBy": "Vincula la descripción al dialog para contexto adicional",
+          "focusTrap": "El foco queda atrapado dentro del modal mientras está abierto",
+          "focusReturn": "El foco vuelve al elemento trigger cuando el modal se cierra"
+        }
+      },
+      "progressBar": {
+        "title": "ProgressBar",
+        "description": "Barra de progreso lineal determinada o indeterminada. Soporta etiqueta, valor numérico, colores, tamaños y animación striped.",
+        "controls": {
+          "value": "Valor",
+          "color": "Color",
+          "size": "Tamaño",
+          "indeterminate": "Indeterminado",
+          "striped": "Striped",
+          "showValue": "Valor"
+        },
+        "examples": {
+          "label": {
+            "title": "Con label y valor",
+            "desc": "Combina label encima y showValue para mostrar el porcentaje numérico.",
+            "uploadLabel": "Subiendo archivo"
+          },
+          "indeterminate": {
+            "title": "Indeterminado",
+            "desc": "Omite la prop value para mostrar la animación deslizante."
+          },
+          "colors": {
+            "title": "Colores",
+            "desc": "Cinco colores semánticos para reflejar el estado del proceso."
+          },
+          "sizes": {
+            "title": "Tamaños",
+            "desc": "Tres grosores: small, medium (default) y large."
+          },
+          "striped": {
+            "title": "Striped",
+            "desc": "Activa stripes animadas para procesos en curso."
+          }
+        },
+        "props": {
+          "value": "Valor actual entre min y max. Omitir para modo indeterminado.",
+          "min": "Valor mínimo del rango.",
+          "max": "Valor máximo del rango.",
+          "color": "Color de la barra.",
+          "size": "Grosor de la barra.",
+          "radius": "Radio del track. Cascada desde ModoProvider.",
+          "showValue": "Muestra el porcentaje numérico junto a la barra.",
+          "label": "Etiqueta opcional renderizada encima de la barra.",
+          "ariaLabel": "Label accesible cuando se omite la prop label.",
+          "striped": "Activa la animación de stripes (útil para \"subiendo…\")."
+        },
+        "types": {
+          "title": "ProgressBar",
+          "desc": "Interfaz TypeScript de las props del componente ProgressBar. Incluye los tipos unión ProgressBarColor y ProgressBarSize con modos determinate e indeterminate."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "ariaProgress": "Usa role progressbar para identificación del lector de pantalla",
+          "ariaValueNow": "Anuncia el valor actual de progreso a los lectores de pantalla",
+          "ariaValueMin": "Comunica el valor mínimo (0 por defecto)",
+          "ariaValueMax": "Comunica el valor máximo (100 por defecto)",
+          "focusNative": "Elemento no interactivo; no participa en el orden de tabulación"
+        }
+      },
+      "skeleton": {
+        "title": "Skeleton",
+        "description": "Placeholder animado que reserva el espacio del contenido mientras carga. Soporta presets que replican el footprint exacto de los componentes reales para evitar layout shifts.",
+        "controls": {
+          "shape": "Forma",
+          "size": "Tamaño",
+          "animation": "Animación"
+        },
+        "examples": {
+          "text": {
+            "title": "Texto multi-línea",
+            "desc": "Usa shape='text' con lines para simular un párrafo. La última línea se acorta automáticamente."
+          },
+          "profile": {
+            "title": "Avatar + texto",
+            "desc": "Composición típica para listas de usuarios: círculo + dos líneas apiladas."
+          },
+          "card": {
+            "title": "Card placeholder",
+            "desc": "Reserva el footprint de una tarjeta con imagen, título y descripción."
+          },
+          "button": {
+            "title": "Button skeleton",
+            "desc": "El preset button respeta el alto por size para hacer match con el botón real."
+          }
+        },
+        "props": {
+          "shape": "Preset visual que define alto, ancho y radius por defecto. Mira la interface para todos los presets disponibles.",
+          "size": "Mapea al size del componente real para mantener pixel-parity.",
+          "radius": "Radio de las esquinas. circle / avatar siempre fuerzan full.",
+          "width": "Ancho explícito. Acepta cualquier longitud CSS.",
+          "height": "Alto explícito.",
+          "fullWidth": "Hace que width colapse a 100% del contenedor.",
+          "withLabel": "Renderiza una mini-barra de label encima de la forma.",
+          "lines": "Para shape=\"text\": número de líneas apiladas.",
+          "animation": "Animación de carga.",
+          "ariaLabel": "Etiqueta accesible (anuncia qué se está cargando)."
+        },
+        "types": {
+          "title": "Skeleton",
+          "desc": "Interfaz TypeScript de las props del componente Skeleton. Sistema extenso de presets de shape que imitan las siluetas de componentes reales para prevenir layout shifts."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "ariaHidden": "Oculto de los lectores de pantalla para evitar anunciar contenido placeholder",
+          "ariaBusy": "Marca la región padre como ocupada mientras los skeletons están visibles",
+          "focusNative": "Elemento no interactivo; no participa en el orden de tabulación"
+        }
+      },
+      "toast": {
+        "title": "ToastContainer",
+        "description": "Contenedor singleton donde aparecen los toasts disparados por el composable useToast(). Móntalo una vez cerca del root y dispara notificaciones desde cualquier componente.",
+        "controls": {
+          "placement": "Posición"
+        },
+        "playground": {
+          "launch": "Lanzar toast",
+          "dismissAll": "Limpiar todos"
+        },
+        "examples": {
+          "success": {
+            "title": "Success",
+            "desc": "Para confirmar acciones completadas correctamente."
+          },
+          "error": {
+            "title": "Error / danger",
+            "desc": "Para errores de red, validación fallida o cualquier estado bloqueante."
+          },
+          "info": {
+            "title": "Info pinned",
+            "desc": "Pasando duration: 0 el toast queda anclado hasta que el usuario lo cierre o llames dismiss().",
+            "cta": "info() (pinned)"
+          },
+          "warning": {
+            "title": "Warning con acción",
+            "desc": "Añade un botón de acción inline — útil para 'Deshacer', 'Revisar' o 'Reintentar'."
+          },
+          "dismissAll": {
+            "title": "Limpiar todos",
+            "desc": "Envía varios toasts a la vez y limpia toda la cola con dismissAll().",
+            "pushCta": "Lanzar 3 toasts"
+          }
+        },
+        "props": {
+          "placement": "Posición del stack en el viewport.",
+          "max": "Número máximo de toasts visibles; los más antiguos se evictan.",
+          "defaultDuration": "Duración por defecto en ms para toasts sin duration.",
+          "defaultVariant": "Variante por defecto aplicada a las llamadas push().",
+          "offset": "Distancia en px desde el borde del viewport.",
+          "reducedMotion": "Comportamiento de animación bajo prefers-reduced-motion."
+        },
+        "types": {
+          "title": "ToastContainer",
+          "desc": "Interfaces TypeScript del sistema de toast. Incluye ToastInput, ToastAction, ToastColor y ToastPlacement para configurar notificaciones efímeras."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco hacia el contenedor de toast cuando hay toasts presentes",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "kbEsc": "Descarta el toast enfocado",
+          "ariaStatus": "Usa role status para anunciar los mensajes de toast a los lectores de pantalla",
+          "ariaLive": "Anuncia los cambios de contenido del toast a las tecnologías asistivas",
+          "ariaAtomic": "Anuncia todo el contenido del toast como una unidad",
+          "focusNative": "Los toasts son enfocables para descarte por teclado",
+          "focusDismiss": "Cada toast tiene un botón de cierre enfocable y activable por teclado"
+        }
+      },
+      "toastItem": {
+        "title": "Toast",
+        "description": "Notificación efímera renderizada por el ToastContainer. No se instancia directamente: se dispara con los helpers info / success / warning / danger del composable useToast().",
+        "controls": {
+          "color": "Color",
+          "variant": "Variante"
+        },
+        "playground": {
+          "launch": "Lanzar toast",
+          "title": "Notificación",
+          "description": "Vista previa con la configuración del playground."
+        },
+        "examples": {
+          "colors": {
+            "title": "Colores semánticos",
+            "desc": "Cuatro helpers cubren los estados habituales: informativo, éxito, advertencia y error.",
+            "info": "Información",
+            "success": "Operación completada",
+            "warning": "Atención",
+            "danger": "Algo salió mal"
+          },
+          "action": {
+            "title": "Con acción",
+            "desc": "action añade un botón inline — patrón clásico para 'Deshacer' tras un borrado.",
+            "cta": "Mover a papelera",
+            "toastTitle": "Archivo movido",
+            "toastDesc": "Lo enviamos a la papelera.",
+            "undo": "Deshacer",
+            "restored": "Restaurado"
+          },
+          "icon": {
+            "title": "Icono personalizado",
+            "desc": "Pasa cualquier componente de icono (heroicons u otro) para sustituir el icono por defecto.",
+            "cta": "Mostrar logro",
+            "toastTitle": "Logro desbloqueado",
+            "toastDesc": "Has completado el tour del producto."
+          },
+          "pinned": {
+            "title": "Pinned (sin auto-close)",
+            "desc": "duration: 0 mantiene el toast hasta que el usuario lo cierre o llames dismiss().",
+            "cta": "Toast pinned",
+            "dismissAll": "Limpiar todos",
+            "toastTitle": "Conexión inestable",
+            "toastDesc": "Reintentando…"
+          }
+        },
+        "props": {
+          "title": "Título principal del toast.",
+          "description": "Texto de soporte bajo el título.",
+          "color": "Color semántico del toast.",
+          "variant": "Variante visual.",
+          "icon": "Icono leading personalizado. Por defecto se elige uno por color.",
+          "hideIcon": "Oculta el icono leading.",
+          "duration": "Auto-close en ms. Usa 0 para mantener el toast pinned.",
+          "action": "Botón de acción inline (ej. \"Deshacer\").",
+          "dismissable": "Muestra el botón de cerrar.",
+          "pauseOnHover": "Pausa el timer mientras el cursor está encima.",
+          "id": "ID estable. Si se reusa, el toast se actualiza in-place.",
+          "radius": "Radio override; por defecto cascadea del provider.",
+          "placement": "Override de posición para este toast."
+        },
+        "types": {
+          "title": "ToastInput",
+          "desc": "Interfaz TypeScript de un toast item. Define la forma pasada a useToast().push() incluyendo color, variant, duration, action y placement."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable dentro del toast",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior dentro del toast",
+          "kbEsc": "Descarta el toast cuando dismissable está activado",
+          "ariaStatus": "Usa role status para anunciar el mensaje del toast",
+          "ariaLive": "Anuncia los cambios de contenido del toast a las tecnologías asistivas",
+          "ariaAtomic": "Anuncia todo el contenido del toast como una unidad",
+          "focusNative": "El contenedor de toast es enfocable para descarte por teclado",
+          "focusDismiss": "El botón de cierre es enfocable y activable por teclado"
+        }
+      },
+      "tooltip": {
+        "title": "Tooltip",
+        "description": "Pista contextual mostrada al hacer hover o focus sobre un elemento. Soporta múltiples placements, colores semánticos, delays configurables y contenido enriquecido.",
+        "controls": {
+          "placement": "Posición",
+          "color": "Color",
+          "delay": "Delay",
+          "arrow": "Flecha",
+          "disabled": "Disabled"
+        },
+        "examples": {
+          "placements": {
+            "title": "Posiciones",
+            "desc": "Cuatro placements principales. Cada variante también admite -start y -end para alinear con un borde del trigger."
+          },
+          "rich": {
+            "title": "Contenido enriquecido",
+            "desc": "Usa el slot content para incluir markup, iconos o atajos de teclado dentro del panel.",
+            "heading": "Atajo de teclado",
+            "shortcut": "Pulsa Ctrl+K para abrir el buscador.",
+            "cta": "Ver atajo"
+          },
+          "icon": {
+            "title": "Sobre botón con icono",
+            "desc": "Imprescindible en botones icon-only para describir la acción a usuarios de lectores de pantalla.",
+            "tooltip": "Me gusta"
+          },
+          "delays": {
+            "title": "Delays",
+            "desc": "Ajusta el openDelay para evitar tooltips intrusivos al pasar el cursor de un botón a otro.",
+            "zero": "Sin delay",
+            "zeroBtn": "Inmediato",
+            "short": "Delay corto",
+            "long": "Delay largo"
+          }
+        },
+        "props": {
+          "content": "Texto del tooltip. Para markup, usa el slot content.",
+          "placement": "Posición respecto al trigger.",
+          "offset": "Distancia en px entre el trigger y el panel.",
+          "trigger": "Eventos que abren el tooltip.",
+          "openDelay": "Delay en ms antes de abrir.",
+          "closeDelay": "Delay en ms antes de cerrar.",
+          "arrow": "Muestra una flecha apuntando al trigger.",
+          "color": "Color del panel.",
+          "size": "Tamaño del panel y la tipografía.",
+          "radius": "Radio de las esquinas. Cascada desde ModoProvider.",
+          "disabled": "No abre nunca el tooltip.",
+          "open": "Control externo del estado abierto (v-model:open).",
+          "maxWidth": "Ancho máximo del panel en px.",
+          "wrapperClass": "Clases extra para el wrapper del trigger."
+        },
+        "emits": {
+          "updateOpen": "Cambio del estado abierto/cerrado del tooltip.",
+          "show": "Emitido cuando el panel se abre.",
+          "hide": "Emitido cuando el panel se cierra."
+        },
+        "slots": {
+          "default": "Elemento trigger sobre el que se muestra el tooltip.",
+          "content": "Contenido personalizado del panel. Reemplaza la prop content."
+        },
+        "types": {
+          "title": "Tooltip",
+          "desc": "Interfaz TypeScript de las props del componente Tooltip. Incluye los tipos unión TooltipPlacement y TooltipTrigger para posicionamiento y control de interacción."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al trigger; el tooltip se abre al enfocar",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "kbEsc": "Cierra el tooltip cuando está abierto",
+          "ariaTooltip": "El panel usa role tooltip para identificación del lector de pantalla",
+          "ariaDescribedBy": "Vincula el texto del tooltip al elemento trigger para contexto del lector de pantalla",
+          "focusNative": "El elemento trigger permanece enfocable; el tooltip se anuncia al enfocar",
+          "focusKeyboard": "Escape cierra el tooltip; el movimiento de foco lo mantiene abierto"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,402 @@
+{
+  "pages": {
+    "navigation": {
+      "breadcrumbs": {
+        "title": "Breadcrumbs",
+        "category": "Navigation",
+        "description": "Accessible breadcrumbs with per-item icons, swappable separators and optional collapsing when the trail exceeds the max.",
+        "items": {
+          "home": "Home",
+          "products": "Products",
+          "detail": "Detail",
+          "projects": "Projects",
+          "modo": "Modo",
+          "breadcrumbs": "Breadcrumbs",
+          "documents": "Documents",
+          "report": "Report",
+          "spaces": "Spaces",
+          "team": "Team",
+          "components": "Components",
+          "navigation": "Navigation"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Simple trail with the default chevron separator. The last item is the current page."
+          },
+          "icons": {
+            "title": "With icons",
+            "desc": "Each item can declare an optional icon. Useful to reinforce visual hierarchy."
+          },
+          "homeIcon": {
+            "title": "With Home icon",
+            "desc": "`show-home-icon` automatically adds a Home icon to the first item when it doesn't define its own."
+          },
+          "separators": {
+            "title": "Separators",
+            "desc": "Four built-in separators (chevron, slash, dot, arrow) or a custom one via `separator-text`."
+          },
+          "truncated": {
+            "title": "Truncated",
+            "desc": "When the trail exceeds `max`, middle items collapse into an interactive ellipsis."
+          }
+        },
+        "props": {
+          "items": "Breadcrumb trail. Each item accepts label, icon, to, href, disabled.",
+          "max": "Maximum visible items. When exceeded, middle items collapse into `…`.",
+          "separator": "Visual separator between items.",
+          "separatorText": "Literal text overriding the separator.",
+          "size": "Typographic size of the trail.",
+          "showHomeIcon": "Adds a Home icon to the first item if it doesn't define `icon`.",
+          "ariaLabel": "Accessible label for the nav."
+        },
+        "emits": {
+          "navigate": "Emitted when clicking an item with `to` (not items with `href` or the current one)."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for this component."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name for the breadcrumb navigation",
+          "focusNative": "Focus is managed by interactive links inside the breadcrumb trail"
+        }
+      },
+      "dropdownMenu": {
+        "title": "DropdownMenu",
+        "category": "Navigation",
+        "description": "Floating action menu with headers, dividers, keyboard shortcuts, descriptions, destructive items and external links.",
+        "trigger": {
+          "actions": "Actions",
+          "more": "More"
+        },
+        "items": {
+          "edit": "Edit",
+          "duplicate": "Duplicate",
+          "export": "Export",
+          "exportDesc": "Download as JSON",
+          "openTab": "Open in new tab",
+          "profile": "My profile",
+          "preferences": "Preferences",
+          "logout": "Sign out",
+          "delete": "Delete",
+          "userEmail": "modo\\@example.com",
+          "actionsHeader": "Actions"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Minimal menu: a list of items with labels. Default trigger uses the Button component."
+          },
+          "icons": {
+            "title": "With icons & shortcuts",
+            "desc": "Each item supports optional `icon`, `shortcut` and `description` to enrich the reading."
+          },
+          "dividers": {
+            "title": "With headers & dividers",
+            "desc": "Group items with `header` entries and separate sections with `divider`."
+          },
+          "user": {
+            "title": "User menu",
+            "desc": "Common pattern: header with email, options and a divider before sign out."
+          },
+          "danger": {
+            "title": "Destructive item",
+            "desc": "Mark an item as `danger` to tint it with the destructive color and emphasize irreversible actions."
+          }
+        },
+        "props": {
+          "items": "Heterogeneous list of items, headers and dividers.",
+          "triggerLabel": "Default trigger text. Ignored when using the `#trigger` slot.",
+          "triggerIcon": "Optional icon for the default trigger.",
+          "triggerVariant": "Button variant used as the trigger.",
+          "color": "Default trigger color.",
+          "size": "Size of the trigger and menu items.",
+          "radius": "Radius applied to trigger and panel.",
+          "showChevron": "Shows a chevron on the default trigger.",
+          "placement": "Panel position relative to the trigger.",
+          "matchTriggerWidth": "Forces the panel to match trigger width.",
+          "minWidth": "Panel minimum width (CSS length).",
+          "disabled": "Disables the entire menu.",
+          "closeOnSelect": "Closes the menu after selecting a non-disabled item.",
+          "ariaLabel": "Accessible label applied to the panel."
+        },
+        "emits": {
+          "updateOpen": "Emitted when the menu opens or closes.",
+          "select": "Emitted when an item is activated (click or keyboard); not fired for headers/dividers."
+        },
+        "slots": {
+          "trigger": "Replaces the default trigger. Useful for wrapping an Avatar or other component."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for this component."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbEnter": "Activate the focused menu item or open the menu",
+          "kbEsc": "Close the menu and return focus to the trigger",
+          "kbArrow": "Navigate between menu items",
+          "ariaExpanded": "Indicates whether the menu panel is open",
+          "ariaLabel": "Provides an accessible name for the menu panel",
+          "focusTrigger": "Focus returns to the trigger button when the menu closes",
+          "focusTrap": "Focus is trapped inside the menu while open"
+        }
+      },
+      "pagination": {
+        "title": "Pagination",
+        "category": "Navigation",
+        "description": "Accessible paginator with first/last jumps, configurable siblings and all the design system's visual tokens.",
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Paginator with first/last, prev/next and one sibling on each side by default."
+          },
+          "siblings": {
+            "title": "More siblings",
+            "desc": "Increase `sibling-count` to show more pages around the current one."
+          },
+          "jump": {
+            "title": "Quick jump",
+            "desc": "Combine the paginator with a NumberInput to jump directly to a specific page."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "Three sizes match the visual hierarchy of the surrounding context."
+          },
+          "compact": {
+            "title": "Compact",
+            "desc": "Hides first/last buttons when space is tight or the context doesn't need them."
+          }
+        },
+        "demo": {
+          "pagePh": "Pg.",
+          "go": "Go"
+        },
+        "props": {
+          "modelValue": "Current page (1-indexed). Use v-model.",
+          "pageCount": "Total page count (≥ 1).",
+          "siblingCount": "Sibling pages shown on each side of the current one.",
+          "boundaryCount": "Pages pinned at the start and end of the range.",
+          "showFirstLast": "Shows the first and last page buttons.",
+          "showPrevNext": "Shows the previous and next page buttons.",
+          "color": "Active page color.",
+          "size": "Paginator button size.",
+          "radius": "Radius applied to the buttons.",
+          "disabled": "Disables all buttons.",
+          "ariaLabel": "Accessible nav label."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the page changes. Used by v-model.",
+          "change": "Same payload as update:modelValue, useful for external listeners."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for this component."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next page button",
+          "kbShiftTab": "Move focus to the previous page button",
+          "kbEnter": "Activate the focused page button",
+          "ariaLabel": "Provides an accessible name for the pagination navigation",
+          "ariaCurrent": "Indicates the currently active page",
+          "focusNative": "Focus moves between page buttons using Tab"
+        }
+      },
+      "stepper": {
+        "title": "Stepper",
+        "category": "Navigation",
+        "description": "Step-by-step progress indicator. Useful for wizards, onboarding and checkouts. Supports numbered, dots and progress variants, horizontal or vertical.",
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Three numbered steps; `current` marks the active one and all previous ones are marked completed."
+          },
+          "descriptions": {
+            "title": "With descriptions & icons",
+            "desc": "Each step accepts a `description` and its own `icon` to reinforce context."
+          },
+          "vertical": {
+            "title": "Vertical",
+            "desc": "Switch `orientation` to vertical for long flows with extensive descriptions."
+          },
+          "error": {
+            "title": "With error",
+            "desc": "Override a step's state to `error` to flag a problem without blocking the rest of the flow."
+          }
+        },
+        "demo": {
+          "prev": "← Previous",
+          "next": "Next →"
+        },
+        "playgroundSteps": {
+          "account": {
+            "label": "Account",
+            "description": "Basic info"
+          },
+          "billing": {
+            "label": "Payment",
+            "description": "Card or PayPal"
+          },
+          "review": {
+            "label": "Review",
+            "description": "Confirm your order"
+          }
+        },
+        "basicSteps": {
+          "cart": "Cart",
+          "shipping": "Shipping",
+          "payment": "Payment"
+        },
+        "detailedSteps": {
+          "account": {
+            "label": "Account",
+            "description": "Email and password"
+          },
+          "billing": {
+            "label": "Payment",
+            "description": "Payment method"
+          },
+          "review": {
+            "label": "Review",
+            "description": "Confirm your order"
+          }
+        },
+        "verticalSteps": {
+          "personal": {
+            "label": "Personal info",
+            "description": "Name, email and phone"
+          },
+          "address": {
+            "label": "Address",
+            "description": "Shipping address"
+          },
+          "payment": {
+            "label": "Payment",
+            "description": "Card or transfer"
+          },
+          "confirmation": {
+            "label": "Confirmation",
+            "description": "Review before submitting"
+          }
+        },
+        "errorSteps": {
+          "data": "Info",
+          "payment": "Payment",
+          "paymentDesc": "Card declined",
+          "confirm": "Confirm"
+        },
+        "props": {
+          "steps": "Steps to render in order. Each step accepts id, label, description, icon, disabled and state.",
+          "current": "0-based index of the active step. Previous steps are marked completed.",
+          "variant": "Indicator style (number, dot or progress bar).",
+          "orientation": "Stepper layout.",
+          "color": "Semantic color for active and completed steps.",
+          "size": "Indicator and label size.",
+          "clickable": "Enables clicks on completed steps; emits `step-click`."
+        },
+        "emits": {
+          "stepClick": "Emitted when clicking a step with `clickable` enabled."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for this component."
+        },
+        "a11y": {
+          "kbTab": "Move focus to the next focusable element",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "ariaLabel": "Provides an accessible name for the stepper",
+          "focusNative": "Non-interactive element unless clickable prop is enabled"
+        }
+      },
+      "tabs": {
+        "title": "Tabs",
+        "category": "Navigation",
+        "description": "Accessible tabs with three variants (line, pill, segmented), icons, badges and support for panels via `panel-{value}` slots.",
+        "examples": {
+          "variants": {
+            "title": "Variants",
+            "desc": "Three visual styles: bottom line, filled pill and segmented control."
+          },
+          "icons": {
+            "title": "With icons",
+            "desc": "Each item can declare an optional icon that renders to the left of the label."
+          },
+          "panels": {
+            "title": "With panels",
+            "desc": "Define a `panel-{value}` slot per tab to show content synced with the selection."
+          },
+          "controlled": {
+            "title": "Controlled",
+            "desc": "Active state lives in your component; read and write through v-model."
+          },
+          "badges": {
+            "title": "With badges",
+            "desc": "Each item supports a numeric or text `badge` shown to the right of the label."
+          }
+        },
+        "playground": {
+          "overview": "Overview",
+          "analytics": "Analytics",
+          "settings": "Settings"
+        },
+        "icons": {
+          "home": "Home",
+          "stats": "Stats",
+          "settings": "Settings"
+        },
+        "vertical": {
+          "account": "Account",
+          "security": "Security",
+          "billing": "Billing",
+          "panelAccount": "Your account info",
+          "panelSecurity": "Password and 2FA",
+          "panelBilling": "Payment methods"
+        },
+        "badges": {
+          "inbox": "Inbox",
+          "sent": "Sent",
+          "drafts": "Drafts"
+        },
+        "controlled": "Active tab:",
+        "props": {
+          "items": "Tab list. Each item accepts value, label, icon, badge, disabled, to.",
+          "modelValue": "Value of the active tab. Use v-model.",
+          "variant": "Visual style of the tablist.",
+          "color": "Semantic color applied to the active tab.",
+          "size": "Size and padding of each tab.",
+          "radius": "Radius of pills/segmented. Inherits from ModoProvider.",
+          "fullWidth": "Stretches the tablist to 100% and distributes items evenly.",
+          "lazy": "Only mount panels the first time they're activated.",
+          "keepMounted": "Keeps panels mounted (hidden) when switching tabs.",
+          "linkComponent": "Component for items with `to`. Use RouterLink for vue-router.",
+          "ariaLabel": "Accessible label for the tablist."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the tab changes. Used by v-model.",
+          "change": "Emitted after a tab change with the complete item."
+        },
+        "slots": {
+          "panelByValue": "Panel content for each item, identified by its value.",
+          "panel": "Fallback slot applied to panels that don't define their own slot."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for this component."
+        },
+        "a11y": {
+          "kbTab": "Move focus into or out of the tab list",
+          "kbShiftTab": "Move focus to the previous focusable element",
+          "kbArrow": "Navigate between tabs",
+          "kbEnter": "Activate the focused tab",
+          "ariaLabel": "Provides an accessible name for the tab list",
+          "ariaSelected": "Indicates the currently active tab",
+          "focusNative": "Focus is managed by the tablist; arrow keys navigate between tabs"
+        }
+      }
+    }
+  }
+}

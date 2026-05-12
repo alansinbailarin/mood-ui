@@ -1,0 +1,220 @@
+{
+  "pages": {
+    "composables": {
+      "useAutoScroll": {
+        "title": "useAutoScroll",
+        "description": "Helper de auto-scroll para interacciones de drag-and-drop. Cuando el puntero se acerca al borde superior o inferior de un contenedor scrollable, desplaza automáticamente a una velocidad proporcional a la distancia del borde.",
+        "api": {
+          "handleAutoScroll": "Llámalo con el `clientY` del puntero mientras arrastras. Inicia/detiene el auto-scroll según la proximidad a los bordes del contenedor.",
+          "stopAutoScroll": "Cancela inmediatamente cualquier animación de auto-scroll en curso."
+        },
+        "playground": {
+          "instruction": "Mueve el puntero cerca del borde superior o inferior del cuadro de abajo mientras mantienes el botón del ratón para ver el auto-scroll."
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaces de TypeScript para este composable."
+        }
+      },
+      "useCalendar": {
+        "title": "useCalendar",
+        "description": "Composable para construir UIs de calendario. Genera grillas de días, maneja navegación de mes/año, soporta rangos de fechas, fechas deshabilitadas y etiquetas localizadas.",
+        "api": {
+          "monthLabel": "Nombre completo del mes localizado + año (ej. 'Mayo 2026').",
+          "weekDayLabels": "Array de 7 nombres de días localizados en el formato configurado.",
+          "calendarDays": "Array de 35 o 42 objetos `CalendarDay` cubriendo la grilla visible.",
+          "navMonth": "Decrementa / incrementa el mes visible (con rollover de año).",
+          "navYear": "Decrementa / incrementa el año visible.",
+          "goToToday": "Salta al mes y año actual. Devuelve la fecha de hoy.",
+          "goToDate": "Salta al mes y año que contienen la fecha dada.",
+          "isDateDisabled": "Verifica si una fecha está fuera de los límites min/max o está en la lista de deshabilitadas."
+        },
+        "playground": {
+          "today": "Hoy"
+        },
+        "examples": {
+          "basic": {
+            "title": "Calendario básico",
+            "desc": "Vincula una fecha reactiva a `modelValue` y navega meses."
+          },
+          "range": {
+            "title": "Con rango y restricciones",
+            "desc": "Usa `rangeValue`, `minDate` y `maxDate` para restringir la selección.",
+            "body": "calendarDays expone `inRange`, `isRangeStart` e `isRangeEnd` para estilizar selecciones de rango."
+          }
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaces de TypeScript para este composable."
+        }
+      },
+      "useColorMode": {
+        "title": "useColorMode",
+        "description": "Singleton reactivo para gestionar el modo de color light / dark / system. Persiste la elección en localStorage, alterna la clase `.dark` en the html element y reacciona a cambios de `prefers-color-scheme` del SO.",
+        "props": {
+          "mode": "El modo elegido — `'light'`, `'dark'` o `'system'`. Es escritible: asignar un nuevo valor dispara la persistencia y la aplicación de clases.",
+          "resolved": "Siempre un valor concreto `'light'` o `'dark'`. Cuando `mode` es `'system'`, sigue la preferencia del SO reactivamente.",
+          "isDark": "Booleano de conveniencia. `true` cuando `resolved === 'dark'`.",
+          "set": "Cambia el modo programáticamente y lo persiste en localStorage.",
+          "toggle": "Alterna entre light y dark. Si actualmente es `'system'`, alterna respecto al valor resuelto."
+        },
+        "examples": {
+          "basic": {
+            "title": "Lectura básica",
+            "desc": "Lee `resolved` e `isDark` para adaptar el estilo de la UI."
+          },
+          "toggle": {
+            "title": "Botón de alternancia",
+            "desc": "Usa `toggle()` para cambiar entre light y dark con un solo botón."
+          },
+          "system": {
+            "title": "Seguir preferencia del SO",
+            "desc": "Establece `mode` a `'system'` para que la app refleje la elección del SO del usuario."
+          }
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaces de TypeScript para este composable."
+        }
+      },
+      "useConfirm": {
+        "title": "useConfirm",
+        "description": "Diálogos de confirmación imperativos que devuelven una `Promise(boolean)`. Monta ConfirmDialog una vez cerca del root; cualquier componente puede llamar `useConfirm().confirm()` para esperar la decisión del usuario.",
+        "api": {
+          "confirm": "Abre un diálogo de confirmación y devuelve una promesa que resuelve `true` al confirmar y `false` al cancelar o cerrar. Las llamadas se encolan para que solo haya un diálogo visible a la vez."
+        },
+        "input": {
+          "title": "Título mostrado en la parte superior del diálogo.",
+          "description": "Texto de apoyo bajo el título.",
+          "color": "Color del botón de confirmar.",
+          "confirmLabel": "Etiqueta del botón de confirmar.",
+          "cancelLabel": "Etiqueta del botón de cancelar.",
+          "hideCancel": "Cuando es `true`, elimina el botón de cancelar convirtiendo el diálogo en una alerta.",
+          "dismissable": "Permite cerrar mediante click en el overlay o Escape."
+        },
+        "playground": {
+          "cta": "Abrir confirmar",
+          "title": "Confirmar acción",
+          "description": "¿Estás seguro de que quieres continuar?",
+          "confirmLabel": "Confirmar",
+          "cancelLabel": "Cancelar",
+          "okLabel": "OK",
+          "result": "Resultado: {ok}"
+        },
+        "examples": {
+          "basic": {
+            "title": "Confirmar peligro",
+            "desc": "Las operaciones destructivas deben usar `color: 'danger'` y una descripción clara."
+          },
+          "alert": {
+            "title": "Diálogo de alerta",
+            "desc": "Usa `hideCancel: true` cuando solo necesites un reconocimiento, no una decisión."
+          },
+          "chain": {
+            "title": "Confirmar encadenados",
+            "desc": "Como `confirm()` devuelve una Promise, puedes encadenar múltiples pasos y detenerte temprano al cancelar."
+          }
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaces de TypeScript para este composable."
+        }
+      },
+      "useLocale": {
+        "title": "useLocale",
+        "description": "Cambiador de locale reactivo global. Todos los llamadores comparten el mismo estado, así que cambiar el locale actualiza toda la aplicación. Pasa el objeto locale reactivo directamente a ModoProvider :locale.",
+        "api": {
+          "locale": "Objeto `ModoLocale` reactivo — pásalo directamente a ModoProvider :locale.",
+          "current": "Clave del locale activo (`'en'` o `'es'`).",
+          "set": "Cambia el locale activo globalmente."
+        },
+        "playground": {
+          "note": "Cambiar el locale aquí actualiza todo el contenido traducido del showroom."
+        },
+        "examples": {
+          "basic": {
+            "title": "Cambio básico",
+            "desc": "Lee `current` y llama `set(lang)` para cambiar."
+          },
+          "provider": {
+            "title": "Con ModoProvider",
+            "desc": "Vincula el locale reactivo a ModoProvider para que los componentes hijos se re-rendericen con strings traducidos.",
+            "body": "El objeto locale es reactivo. Pásalo a ModoProvider y todos los descendientes reaccionan a los cambios."
+          }
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaces de TypeScript para este composable."
+        }
+      },
+      "useModoConfig": {
+        "title": "useModoConfig",
+        "description": "Accede a la configuración global de ModoProvider y a funciones auxiliares que resuelven props de componentes contra el tema global. Funciona dentro de ModoProvider; usa valores por defecto sensatos cuando se usa fuera.",
+        "api": {
+          "config": "Devuelve el objeto `ModoConfig` completo inyectado por ModoProvider. Devuelve `undefined` fuera de un provider.",
+          "resolvedColor": "Resuelve un prop `color` local con fallback al color de marca global. Los valores semánticos ('primary', 'danger', etc.) siempre ganan; 'default' o undefined hacen fallback.",
+          "resolvedRadius": "Resuelve radio: prop local → config global → default ('medium').",
+          "resolvedSize": "Resuelve tamaño: prop local → config global → default ('medium').",
+          "resolvedTheme": "Resuelve tema: prop local → config global → default ('zinc').",
+          "resolvedHalo": "Resuelve halo: prop local → config global → default ('tinted').",
+          "modoLocale": "Devuelve el objeto locale fusionado. Funciona fuera de ModoProvider también.",
+          "localeString": "Resuelve un getter de string de locale e interpola placeholders `{name}`."
+        },
+        "examples": {
+          "resolve": {
+            "title": "Resolución de props",
+            "desc": "Cuando un prop de componente es 'default' o undefined, usa el valor del tema global."
+          },
+          "locale": {
+            "title": "Helpers de locale",
+            "desc": "Accede al locale fusionado e interpola strings con placeholders.",
+            "body": "useModoLocale y useLocaleString funcionan incluso fuera de un ModoProvider."
+          }
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaces de TypeScript para este composable."
+        }
+      },
+      "useToast": {
+        "title": "useToast",
+        "description": "API imperativa para enviar notificaciones a una cola global de toasts. Monta ToastContainer una vez cerca del root; cualquier componente puede llamar `useToast()` para disparar toasts que aparecen en el contenedor.",
+        "api": {
+          "push": "Envía un toast con control total. Devuelve un id para poder llamar `dismiss(id)` o reenviar para actualizar en su lugar.",
+          "info": "Wrapper de conveniencia — envía con `color: 'info'`.",
+          "success": "Wrapper de conveniencia — envía con `color: 'success'`.",
+          "warning": "Wrapper de conveniencia — envía con `color: 'warning'`.",
+          "danger": "Wrapper de conveniencia — envía con `color: 'danger'`.",
+          "dismiss": "Elimina un toast individual por el id devuelto por `push()`.",
+          "dismissAll": "Limpia toda la cola de toasts de una vez."
+        },
+        "examples": {
+          "basic": {
+            "title": "Colores básicos",
+            "desc": "Los cuatro wrappers de conveniencia cubren la mayoría de los casos de uso."
+          },
+          "action": {
+            "title": "Con acción",
+            "desc": "Añade un botón de acción inline. El callback `close` cierra el toast."
+          },
+          "pinned": {
+            "title": "Toast anclado",
+            "desc": "Usa `duration: 0` para mantener el toast visible hasta que el usuario lo cierre."
+          },
+          "update": {
+            "title": "Actualizar en su lugar",
+            "desc": "Reenvía con el mismo `id` para reemplazar el toast sin crear uno nuevo — ideal para progreso en vivo."
+          },
+          "dismissAll": {
+            "title": "Limpiar todos",
+            "desc": "Limpia toda la cola programáticamente."
+          }
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaces de TypeScript para este composable."
+        }
+      }
+    }
+  }
+}

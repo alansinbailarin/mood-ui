@@ -1,0 +1,373 @@
+{
+  "pages": {
+    "docs": {
+      "accessibility": {
+        "overline": "Documentation",
+        "title": "Accessibility",
+        "subtitle": "Mood UI components ship with ARIA semantics, keyboard navigation and visible focus management out of the box. Here is how we approach accessibility and what to expect.",
+        "disclaimerTitle": "Not a formal certification",
+        "disclaimerBody": "Mood UI is not officially audited or certified against WCAG 2.2 AA. Conformance is assessed on a best-effort basis. Accessibility in your application also depends on how you compose components — providing labels, preserving focus, and maintaining adequate contrast in your own color overrides.",
+        "targetTitle": "Target: WCAG 2.2 AA",
+        "targetDesc": "We design every component to meet WCAG 2.2 Level AA where applicable. This covers the four core POUR principles: Perceivable, Operable, Understandable and Robust.",
+        "principlesTitle": "What we ship",
+        "principles": {
+          "contrast": {
+            "title": "Color contrast",
+            "text": "Default color tokens meet the 4.5:1 ratio for normal text and 3:1 for large text and UI components. Custom palettes via paletteFromHex() follow the same rules."
+          },
+          "keyboard": {
+            "title": "Keyboard navigation",
+            "text": "Every interactive component works without a mouse. Tab, Space, Enter, Escape and arrow keys follow established WAI-ARIA patterns."
+          },
+          "focus": {
+            "title": "Focus management",
+            "text": "Focus is always visible. Modal, Drawer and ConfirmDialog implement a focus trap — focus stays inside the overlay and returns to the trigger on close."
+          },
+          "aria": {
+            "title": "ARIA semantics",
+            "text": "Native HTML is preferred. ARIA roles, states and properties (dialog, combobox, aria-live, aria-expanded…) are added only when necessary."
+          },
+          "motion": {
+            "title": "Reduced motion",
+            "text": "All transitions respect prefers-reduced-motion. When the user opts out, animations are replaced with instant state changes."
+          },
+          "labels": {
+            "title": "Accessible labels",
+            "text": "Icon-only buttons and close buttons expose aria-label. Use the label or aria-label prop to give screen readers meaningful text."
+          }
+        },
+        "wcagTitle": "WCAG 2.2 — the four principles",
+        "wcagDesc": "WCAG 2.2 is the W3C standard for web accessibility. Level AA is the widely accepted baseline for enterprise and public-sector software.",
+        "pour": {
+          "perceivable": {
+            "label": "Perceivable",
+            "text": "Information and UI must be presentable to users in ways they can perceive — text alternatives, sufficient contrast, adaptable content."
+          },
+          "operable": {
+            "label": "Operable",
+            "text": "UI components and navigation must be fully operable — keyboard accessible, no seizure triggers, enough time to interact, visible focus."
+          },
+          "understandable": {
+            "label": "Understandable",
+            "text": "Content and operation must be understandable — readable text, predictable behavior, helpful error messages."
+          },
+          "robust": {
+            "label": "Robust",
+            "text": "Content must be interpreted by current and future assistive technologies — valid semantics, name/role/value for all UI components."
+          }
+        },
+        "nextTitle": "Next steps",
+        "nextDesc": "Each component page includes an accessibility notes section with keyboard shortcuts, ARIA roles and focus behavior.",
+        "nextComponents": "Browse components",
+        "nextComponentsDesc": "Every component is documented with its a11y behavior.",
+        "nextComponentsCta": "Explore",
+        "nextWcag": "WCAG 2.2 official spec",
+        "nextWcagDesc": "Read the full W3C specification.",
+        "nextWcagCta": "Open W3C",
+        "kbTitle": "Keyboard reference",
+        "kbDesc": "Complete keyboard shortcut reference organized by component category.",
+        "kbColComponent": "Component",
+        "kbColKey": "Key",
+        "kbColAction": "Action",
+        "kbGroups": {
+          "controls": "Form controls",
+          "selection": "Dropdowns & selection",
+          "datetime": "Date, time & sliders",
+          "overlays": "Overlays & dialogs",
+          "navigation": "Navigation & disclosure",
+          "calendar": "Calendar"
+        },
+        "kbActions": {
+          "toggleChecked": "Toggle checked state",
+          "navigateGroup": "Navigate within radio group",
+          "toggleSwitch": "Toggle on / off",
+          "navigateSegmented": "Navigate between options",
+          "adjustRating": "Adjust star rating",
+          "addTag": "Add new tag",
+          "removeTag": "Remove last tag",
+          "openDropdown": "Open dropdown",
+          "navigateOptions": "Navigate options",
+          "selectOption": "Select focused option",
+          "closeDropdown": "Close dropdown",
+          "filterOptions": "Filter options by typing",
+          "nextSegment": "Move to next date segment",
+          "incrDecr": "Increment / decrement segment value",
+          "adjustSlider": "Adjust slider value",
+          "minMax": "Jump to minimum / maximum",
+          "closeOverlay": "Close overlay, restore focus to trigger",
+          "moveFocusTrapped": "Move focus (trapped inside overlay)",
+          "cancel": "Cancel and close",
+          "confirm": "Confirm action",
+          "cycleFocus": "Cycle between action buttons",
+          "navTabs": "Navigate to prev / next tab",
+          "firstLastTab": "Jump to first / last tab",
+          "navMenu": "Navigate menu items",
+          "selectItem": "Select item",
+          "closeMenu": "Close menu",
+          "togglePanel": "Expand or collapse panel",
+          "navDay": "Previous / next day",
+          "navWeek": "Previous / next week",
+          "navMonth": "Previous / next month",
+          "selectDate": "Select focused date"
+        },
+        "ariaTitle": "ARIA patterns",
+        "ariaDesc": "Role and attribute patterns used by Mood UI components to communicate semantics to assistive technologies.",
+        "ariaColPattern": "Pattern",
+        "ariaColComponents": "Components",
+        "ariaColDesc": "Purpose",
+        "ariaPatterns": {
+          "dialog": "Focus-trapped overlay dialog. Background is inert while open.",
+          "combobox": "Dropdown selector. Communicates expanded/collapsed state to screen readers.",
+          "listbox": "Keyboard-navigable list of selectable options.",
+          "radiogroup": "Grouped radio inputs with arrow-key navigation between them.",
+          "switch": "Binary toggle control that announces on/off state.",
+          "slider": "Numeric range control that announces current, minimum and maximum values.",
+          "tablist": "Tab strip with keyboard navigation and associated content panels.",
+          "live": "Polite live region for dynamic announcements to screen readers.",
+          "progressbar": "Progress indicator with numeric value, minimum and maximum.",
+          "tooltip": "Contextual description linked to the triggering element via aria-describedby."
+        },
+        "testTitle": "Testing guide",
+        "testDesc": "Recommended tools and a basic checklist to verify accessibility in your application.",
+        "testToolsTitle": "Recommended tools",
+        "toolType": {
+          "library": "Library",
+          "extension": "Extension",
+          "builtin": "Built-in",
+          "screenreader": "Screen reader"
+        },
+        "tools": {
+          "axe": "Open source JS engine. Integrate in Jest/Vitest to catch issues in CI/CD pipelines.",
+          "axeExt": "Chrome & Firefox extension. Run on-demand audits directly in the browser DevTools.",
+          "wave": "Visual overlay tool. Highlights errors, alerts and structure issues on the page in real time.",
+          "lighthouse": "Built into Chrome DevTools. Full accessibility audit alongside performance and SEO.",
+          "voiceover": "Native macOS/iOS screen reader. No install needed — press Cmd+F5 to start.",
+          "nvda": "Free open source Windows screen reader. Most widely used with Chrome and Firefox."
+        },
+        "testChecklistTitle": "Basic checklist",
+        "checklist": {
+          "item1": "All interactive elements are reachable and operable by keyboard alone.",
+          "item2": "Focus indicator is always visible — never hidden with outline: none.",
+          "item3": "No unintentional keyboard traps outside of modal overlays.",
+          "item4": "Text color contrast meets 4.5:1 (normal text) or 3:1 (large text and UI components).",
+          "item5": "Non-decorative images have a meaningful alt attribute.",
+          "item6": "Dynamic state changes (open, selected, error) are announced to screen readers.",
+          "item7": "Page remains fully usable at 200% browser zoom without horizontal scrolling.",
+          "item8": "Error messages are programmatically linked to their inputs via aria-describedby."
+        }
+      },
+      "changelog": {
+        "kicker": "Documentation",
+        "intro": "Every release listed newest first. We follow SemVer.",
+        "releases": {
+          "v0.7.1": {
+            "title": "Color mode hotfix",
+            "items": [
+              "useColorMode now reacts when the exposed mode ref is changed directly.",
+              "Direct assignments like mode.value = 'dark' now persist to localStorage and update the html .dark class.",
+              "System mode continues to react to OS color-scheme changes through the resolved mode watcher.",
+              "Removed the automatic GitHub Pages showroom deployment workflow."
+            ]
+          },
+          "v0.7.0": {
+            "title": "ColorModeSwitch + mobile UX + component fixes",
+            "items": [
+              "New public component: ColorModeSwitch with full docs page.",
+              "Tooltip fully refactored — better positioning, scoped theme, arrow & delay support.",
+              "Avatar icon fallback now respects the color prop.",
+              "DateRangeField auto-collapses to 1-month view on mobile.",
+              "Combobox: added touchstart support for mobile devices.",
+              "PopoverPanel: switched to overflow-y-auto so tall content scrolls correctly.",
+              "ToastContainer: CSS variable style now propagates to all zones.",
+              "CalendarMonthView: improved draggable event rendering.",
+              "Theme Studio customizer redesigned to match ShowroomSettings style.",
+              "Mobile header: section pill moved to right cluster next to color mode switch.",
+              "Mobile drawer now includes search and language switcher.",
+              "Fixed: mobile section sheet no longer shows Documentation as active when on Home.",
+              "i18n: extracted all remaining hardcoded strings from showroom pages (ES/EN)."
+            ]
+          },
+          "v0.6.0": {
+            "title": "Docs overhaul + full i18n",
+            "items": [
+              "ComponentDoc + ComponentPreview system with isolated ModoProvider.",
+              "Migrated ~50 component pages to ComponentDoc system.",
+              "Full ES/EN translations for all component pages.",
+              "TOC scroll-spy for navigation.",
+              "Reset button on ComponentPreview toolbar.",
+              "Unified design system across all doc pages."
+            ]
+          },
+          "v0.5.2": {
+            "title": "Showroom polish + a11y",
+            "items": [
+              "New surface-preset picker inside the settings popover.",
+              "Search palette now uses the native SearchInput component.",
+              "View transitions between routes (Chromium / Safari TP).",
+              "Lighter welcome headline with scroll-reveal animations.",
+              "\"Star on GitHub\" button in the header, translated ES/EN."
+            ]
+          },
+          "v0.5.0": {
+            "title": "Templates + theme studio",
+            "items": [
+              "Templates: Dashboard, Auth, Pricing and Settings.",
+              "Interactive Theme Studio with live preview.",
+              "New Scheduler component with drag & drop.",
+              "Support for 6 dark surface presets."
+            ]
+          },
+          "v0.4.0": {
+            "title": "Calendar suite + Table",
+            "items": [
+              "Calendar, MonthView, WeekView, DayView, AgendaView.",
+              "Table: virtualization, multi-sort, server-side, tree rows.",
+              "DateRangePicker and DateTimePicker."
+            ]
+          },
+          "v0.3.0": {
+            "title": "Dark surfaces + i18n",
+            "items": [
+              "Dark surface presets (navy, zinc, charcoal, midnight, forest).",
+              "Built-in i18n with ES/EN dicts.",
+              "useToast / useConfirm composables."
+            ]
+          },
+          "v0.1.0": {
+            "title": "First public release",
+            "items": [
+              "40+ base components.",
+              "ModoProvider with reactive theming.",
+              "Tailwind v4 + design tokens."
+            ]
+          }
+        },
+        "nextSteps": "Next steps",
+        "next": {
+          "introductionTitle": "Introduction",
+          "introductionDesc": "Fundamentals, architecture and why mood-ui.",
+          "themingTitle": "Theming",
+          "themingDesc": "Tokens, palettes, surfaces and dark mode."
+        }
+      },
+      "i18n": {
+        "overline": "Documentation",
+        "title": "i18n",
+        "subtitle": "mood-ui includes full internationalization support with Spanish and English built-in. Change language globally, override per component or create full locales for other languages.",
+        "presetTitle": "Using a locale preset",
+        "presetDesc": "The simplest way: import {code} and pass the preset you want to the provider.",
+        "dynamicTitle": "Dynamic switching with useLocale()",
+        "dynamicDesc": "{code} is a reactive singleton. Any call to {set} updates the language globally across the entire app.",
+        "dynamicTip": "Tip: The singleton is module-level, so {code} in any component returns the same state. You don't need Pinia or stores.",
+        "partialTitle": "Partial override",
+        "partialDesc": "{code} lets you override only the strings you need. The rest are inherited from the default (English).",
+        "customTitle": "Creating a full locale (another language)",
+        "customDesc": "Use {code} to combine your locale with the default. Ensures all strings have an English fallback.",
+        "namespacesTitle": "Available namespaces",
+        "namespacesDesc": "The {code} type is organized into namespaces, one per component or category:",
+        "nextSteps": "Next steps",
+        "themingCard": "Customize the theme",
+        "themingCardDesc": "Tokens, palettes, surfaces and dark mode presets.",
+        "introCard": "Back to Introduction",
+        "introCardDesc": "Fundamentals and architecture of mood-ui."
+      },
+      "installation": {
+        "overline": "Documentation",
+        "title": "Installation",
+        "subtitle": "Mood-UI is installed as a standard npm package. Compatible with Vue 3.5+ and Tailwind CSS v4.",
+        "step1Title": "Install the package",
+        "step1Alt": "Using yarn or pnpm?",
+        "step2Title": "Peer dependencies",
+        "step2Desc": "Make sure you have Vue 3.5+ and Tailwind CSS v4 installed:",
+        "step3Title": "Import the styles",
+        "step3Desc": "Import {code} after Tailwind. This registers the design tokens and all utilities used by the components.",
+        "step3Tip": "Tip: mood-ui uses {themeInline} to map its CSS vars to Tailwind tokens. You don't need to configure anything in {tailwindConfig}.",
+        "step4Title": "Wrap your app with ModoProvider",
+        "step4Desc": "{code} propagates theming, language and tokens to all descendants. Only one is needed per application (though you can nest them for local themes).",
+        "step5Title": "Use the components",
+        "step5Desc": "Import any component from the package root. Everything is tree-shakeable, so only what you actually use is included in your bundle.",
+        "nextSteps": "Next steps",
+        "themeCard": "Customize the theme",
+        "themeCardDesc": "Color, radius, surfaces, dark mode presets…",
+        "componentsCard": "Explore components",
+        "componentsCardDesc": "70+ ready-to-use components.",
+        "viewOnNpm": "View on npm",
+        "viewOnGithub": "GitHub"
+      },
+      "introduction": {
+        "kicker": "Documentation",
+        "title": "Mood-UI",
+        "intro": "A Vue 3 component library with {n}+ accessible pieces, reactive theming and dark mode with customizable surfaces. Built to ship fast without fighting your design system.",
+        "whyTitle": "Why mood-ui?",
+        "principles": {
+          "theming": {
+            "title": "Reactive theming",
+            "text": "Every token is a CSS var. Change color, radius, halo or density and every component reacts instantly — no remount."
+          },
+          "i18n": {
+            "title": "Built-in i18n",
+            "text": "Spanish and English dictionaries by default, with an API to extend or override any string."
+          },
+          "a11y": {
+            "title": "Accessible by default",
+            "text": "ARIA roles, visible focus rings, keyboard nav and verified contrast ratios — no extra work."
+          },
+          "treeShake": {
+            "title": "Tree-shakeable",
+            "text": "Import only what you use. Minimal initial bundle, modern ESM, full types."
+          },
+          "tailwind": {
+            "title": "Tailwind v4 native",
+            "text": "\\@theme inline + design tokens. Override from your own config without hacks."
+          },
+          "ts": {
+            "title": "TypeScript first",
+            "text": "Every prop, slot and event typed. IntelliSense that actually helps."
+          }
+        },
+        "orgTitle": "How is it organized?",
+        "orgIntro": "The docs are split into four big areas. Start with installation, take a tour through theming, then jump into the component catalog.",
+        "tiles": {
+          "installation": {
+            "desc": "npm, peer deps and 60-second setup.",
+            "cta": "Start"
+          },
+          "theming": {
+            "desc": "Tokens, palettes, surfaces and dark mode.",
+            "cta": "Customize"
+          },
+          "i18n": {
+            "desc": "Switch languages at runtime, extend dicts.",
+            "cta": "Translate"
+          },
+          "changelog": {
+            "desc": "What's new in every release.",
+            "cta": "See history"
+          }
+        }
+      },
+      "theming": {
+        "overline": "Documentation",
+        "title": "Theming",
+        "subtitle": "mood-ui uses a configuration cascade based on CSS custom properties + Tailwind v4 tokens. Customize via the provider, surfaces, generated palettes or by overriding CSS vars directly.",
+        "providerPropsTitle": "Provider props",
+        "providerPropsDesc": "{code} accepts props that propagate to all descendants. Any component can locally override with its own prop.",
+        "customPaletteTitle": "Custom palette from a HEX color",
+        "customPaletteDesc": "{code} generates a full 50→900 scale from a single color. Useful for brands with a single primary color.",
+        "surfacesTitle": "Surfaces (semantic tokens)",
+        "surfacesDesc": "Override all 14 semantic tokens directly. Ideal for custom themes.",
+        "availableTokens": "Available tokens",
+        "darkPresetsTitle": "Dark surfaces presets",
+        "darkPresetsDesc": "6 ready-to-use presets: {default}, {navy}, {zinc}, {charcoal}, {midnight}, {forest}.",
+        "cssOverrideTitle": "Override from CSS",
+        "cssOverrideDesc": "If you prefer to work 100% in CSS, override the custom properties in your global stylesheet. Works with {root}, {dark} or any selector.",
+        "cssOverrideTip": "Recommendation: If you have reactive logic (e.g. color change from a picker), use {palettes} or {surfaces} in the Provider. For static themes, CSS override is the simplest approach.",
+        "nextSteps": "Next steps",
+        "componentsCard": "Explore components",
+        "componentsCardDesc": "70+ components ready to use with reactive theming.",
+        "i18nCard": "Internationalization",
+        "i18nCardDesc": "ES and EN included. Extend for any language."
+      }
+    }
+  }
+}
