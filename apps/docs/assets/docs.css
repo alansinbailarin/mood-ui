@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+/* Dark mode trigger mirrors the library: `.dark` class on any ancestor
+ * or `data-modo-theme="dark"` on a scoped provider. Keep this consistent
+ * so docs pages and component demos pick up dark mode from the same root. */
+@custom-variant dark (&:where(.dark, .dark *, [data-modo-theme="dark"], [data-modo-theme="dark"] *));

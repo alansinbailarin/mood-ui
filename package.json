@@ -17,5 +17,12 @@
     "lint:lib": "pnpm --filter mood-ui run lint",
     "publish:lib": "pnpm --filter mood-ui publish"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "esbuild",
+      "vue-demi"
+    ]
+  }
 }

@@ -1,0 +1,6 @@
+{
+  "common": {
+    "appName": "mood-ui",
+    "tagline": "Vue 3 component library"
+  }
+}
