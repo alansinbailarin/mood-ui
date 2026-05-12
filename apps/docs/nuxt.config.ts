@@ -11,11 +11,10 @@ export default defineNuxtConfig({
   nitro: {
     preset: "vercel-static",
     prerender: {
-      // During Fase 4 the sidebar links to many routes that don't have a
-      // page yet. Tolerate 404s on those routes so the build keeps shipping
-      // what exists. Tighten back to `failOnError: true` once Fase 4 is
-      // complete.
-      failOnError: false,
+      // Fase 4 is complete — every sidebar link should resolve to a real
+      // page. Fail the build if the crawler finds a broken link so we
+      // never regress silently.
+      failOnError: true,
     },
   },
 
