@@ -98,8 +98,8 @@ function danger(input: Omit<ToastInput, 'color'> | string) {
  * composable; the container is the only consumer that mutates it (via 
  * `dismiss(id)`), and it does so through the public API. 
  */ 
-export function useToastQueue() { 
-    return store; 
+export function useToastQueue(): ToastStore {
+    return store;
 } 
  
 /** 

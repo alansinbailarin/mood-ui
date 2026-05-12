@@ -48,8 +48,8 @@ function resolveCurrent(value: boolean): void {
     store.queue.shift(); 
 } 
  
-export function useConfirmQueue() { 
-    return store; 
+export function useConfirmQueue(): ConfirmStore {
+    return store;
 } 
  
 export function useConfirm() { 
