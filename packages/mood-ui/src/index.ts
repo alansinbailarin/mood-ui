@@ -72,6 +72,16 @@ export { useToast, useToastQueue } from "./composables/useToast";
 export { useConfirm, useConfirmQueue } from "./composables/useConfirm";
 export { useLocale } from "./composables/useLocale";
 export {
+  useAutoScroll,
+  type UseAutoScrollInput,
+} from "./composables/useAutoScroll";
+export {
+  usePopover,
+  type UsePopoverOptions,
+  type PopoverPlacement,
+  type PopoverPosition,
+} from "./composables/usePopover";
+export {
   useCalendar,
   isSameDay,
   startOfDay,
@@ -81,6 +91,7 @@ export {
 export {
   eventColorClass,
   eventColorClassStrong,
+  hexToRgba,
   type EventColor,
 } from "./composables/eventColors";
 
