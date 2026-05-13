@@ -39,7 +39,6 @@ export const navManifest: NavCategory[] = [
       { id: "introduction", label: "Introduction", route: "/docs/introduction" },
       { id: "installation", label: "Installation", route: "/docs/installation" },
       { id: "nuxt-setup", label: "Nuxt setup", route: "/docs/nuxt-setup" },
-      { id: "seo", label: "SEO & indexing", route: "/docs/seo" },
       { id: "theming", label: "Theming", route: "/docs/theming" },
       { id: "i18n", label: "i18n", route: "/docs/i18n" },
       { id: "accessibility", label: "Accessibility", route: "/docs/accessibility" },

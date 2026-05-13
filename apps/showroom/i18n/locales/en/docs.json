@@ -163,6 +163,16 @@
         "description": "Every release of mood-ui listed newest first. SemVer-tracked, with highlights of new components, bug fixes and breaking changes.",
         "intro": "Every release listed newest first. We follow SemVer.",
         "releases": {
+          "v0.8.0": {
+            "title": "Nuxt 4 SSG showroom + overlay theme fixes",
+            "items": [
+              "New: ModoProvider now mirrors its CSS custom properties onto document.body so teleported overlays (Tooltip, Modal, PopoverPanel, DropdownMenu, Drawer) resolve --primary, --card, --popover and surface tokens against the active provider instead of the lib defaults.",
+              "New: usePopover, useAutoScroll, paletteFromHex (type) and hexToRgba are now re-exported from the package entry. Previously available via deep imports only.",
+              "Fix: PhoneInput input had p-0 + pl-2 on the same element; the longhand could win in some browsers, leaving the number flush against the country divider. Dropped p-0, bumped input padding to pl-3 pr-3.",
+              "Fix: DateRangeField and SearchInput stopped reading window.innerWidth and navigator.platform at module scope so SSR no longer produces a hydration mismatch.",
+              "Docs: completely new SSG showroom at mood-ui.com built on Nuxt 4, every component page indexable, plus a new /docs/nuxt-setup guide for consumers integrating mood-ui into a Nuxt 4 app."
+            ]
+          },
           "v0.7.1": {
             "title": "Color mode hotfix",
             "items": [
@@ -434,68 +444,6 @@
         "ssgServerSafeText": "Button, Input, Select, Card, Typography, Badge, Chip, Avatar, Stat, Banner, Loader, Skeleton, ProgressBar, Kbd, Code, Divider. Tabs, Accordion, Table (read-only), AppShell. Modal, Drawer, Tooltip, PopoverPanel, DropdownMenu in their default closed state — the portal mounts only on user interaction.",
         "ssgWhyMost": "Why most are SSR-safe",
         "ssgWhyMostText": "The lib uses Vue 3 SSR-safe patterns internally: setup() never reads window or document at top level; every DOM access lives inside onMounted hooks or event handlers. The compiled HTML is identical between server and first client paint."
-      },
-      "seo": {
-        "kicker": "Documentation",
-        "title": "SEO & indexing",
-        "subtitle": "Practical guide to make a Nuxt site that uses mood-ui rank well: meta tags, sitemap, structured data, social cards, and the common pitfalls that keep pages out of the index.",
-        "description": "Guide to indexing a Nuxt + mood-ui site: useSeoMeta, sitemap, robots.txt, JSON-LD structured data, OG images, and a 10-item readiness checklist.",
-        "tip": "Tip",
-        "pillars": {
-          "ssgTitle": "SSG over SPA",
-          "ssgText": "nuxt generate produces pre-rendered HTML for every route. Each page ships its own title, meta description and copy in the source, indexable without running JavaScript.",
-          "metaTitle": "Meta per page",
-          "metaText": "Every route needs a unique title and description. Generic shared headers kill long-tail traffic. useSeoMeta is the cleanest API.",
-          "ogTitle": "Open Graph & Twitter",
-          "ogText": "A good share card (image + title + description) lifts CTR on social. Open Graph also feeds preview links in Slack, Discord and iMessage.",
-          "structuredTitle": "Structured data",
-          "structuredText": "JSON-LD tells Google what a page IS (article, product, event, FAQ). Unlocks rich results — ratings, prices, dates, breadcrumbs directly in the SERP."
-        },
-        "step1Title": "Use SSG, not SPA",
-        "step1Desc": "A pure-SPA Nuxt build ships an almost-empty HTML shell that JavaScript paints later. Search bots are getting better at SPAs but still rank SSG sites higher because the content is in the initial HTML. mood-ui works in both modes — pick SSG if SEO matters. nuxt generate is the command; deploy the .output/public directory to any static host (Vercel, Netlify, Cloudflare Pages, S3).",
-        "step2Title": "useSeoMeta on every page",
-        "step2Desc": "Inside the script setup of each page, declare the meta. Reactive values are fine — Nuxt waits for them to resolve before serializing the HTML. Pair with useHead for the canonical link and the html lang attribute.",
-        "step3Title": "Sitemap.xml",
-        "step3Desc": "Auto-generated via {'@'}nuxtjs/sitemap. For dynamic routes (products, blog posts, profiles) fetch the slugs once at build time in a server route the module reads from.",
-        "step4Title": "robots.txt",
-        "step4Desc": "Ship one in public/ that allows crawling and points at the sitemap. Block /admin and /api so private surfaces never show up in results.",
-        "step5Title": "Structured data (JSON-LD)",
-        "step5Desc": "Schema.org JSON-LD is the most reliable way to unlock rich results. Add a script[type=\"application/ld+json\"] per page describing the entity. Article, Product, Organization and BreadcrumbList have the highest payoff.",
-        "step5Tip": "Validate your JSON-LD with the Rich Results Test or Schema Validator before deploying. A broken markup silently disables the rich result without an error in Search Console.",
-        "step6Title": "Social share cards",
-        "step6Desc": "A 1200x630 OG image is the single biggest win for share CTR. Generate them on-the-fly per page so they always match the current title and copy. Cache aggressively at the edge.",
-        "checklistTitle": "Pre-launch checklist",
-        "checklistIntro": "Run through this before pointing your domain at the new build. Each item maps to a Search Console signal — miss one and you leave indexing on the table.",
-        "checklist": {
-          "item1": "Every route returns a unique title and meta description in the initial HTML (curl the URL and grep).",
-          "item2": "rel=canonical points at the public production URL (https, with or without www — pick one and redirect the other).",
-          "item3": "html lang attribute reflects the active locale.",
-          "item4": "sitemap.xml is reachable at /sitemap.xml and lists every public route. Submitted in Search Console.",
-          "item5": "robots.txt is at /robots.txt with Sitemap: line.",
-          "item6": "Open Graph tags (og:title, og:description, og:image, og:url, og:type) on every shareable page.",
-          "item7": "Twitter Card tags (twitter:card=summary_large_image, twitter:title, etc.).",
-          "item8": "Structured data validates in Rich Results Test for at least the homepage and product / article pages.",
-          "item9": "Lighthouse SEO score 95+ on the homepage and a sample inner page.",
-          "item10": "Core Web Vitals (LCP, INP, CLS) in the green for both mobile and desktop in PageSpeed Insights."
-        },
-        "toolsTitle": "Tools",
-        "toolsIntro": "The essential set. Bookmark all of them.",
-        "tools": {
-          "gsc": "Authoritative source for indexing status. Submit the sitemap, monitor coverage and impressions.",
-          "lighthouse": "In-browser audit (in Chrome DevTools). SEO category catches most basics in 5 seconds.",
-          "schema": "Validates JSON-LD against schema.org. Use during development.",
-          "rich": "Google preview of how your structured data will render in the SERP. Use before deploying.",
-          "pagespeed": "Mobile + desktop Core Web Vitals + Lighthouse audit on the real Google infrastructure."
-        },
-        "pitfallsTitle": "Common SEO pitfalls",
-        "pitfalls": {
-          "clientOnlyTitle": "Wrapping content in ClientOnly",
-          "clientOnlyText": "A ClientOnly block renders empty in SSR. If your hero, FAQ, product list or any indexable content is inside one, Google sees nothing. Reserve ClientOnly for genuinely interactive widgets that have no static representation (drag canvases, live theme studios, etc.).",
-          "duplicateTitle": "Same title across pages",
-          "duplicateText": "A site-wide template like \"My App\" everywhere makes every page identical to Google. Use useSeoMeta per page and pair with a titleTemplate (\"%s | My App\") in app.head.",
-          "lazyTitle": "Lazy-loading the only content above the fold",
-          "lazyText": "Defer-loading images or sections that contain the H1 / body copy delays LCP and starves the crawler. Keep the first viewport static; lazy-load only stuff below the fold."
-        }
       }
     }
   }

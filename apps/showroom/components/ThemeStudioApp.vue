@@ -376,7 +376,7 @@ const chatThread = ref([
 const activityItems = [
   {
     id: 1,
-    title: "Deploy a producción · v0.7.1",
+    title: "Deploy a producción · v0.8.0",
     description: "142 tests passing",
     timestamp: "4 min",
     icon: RocketLaunchIcon,

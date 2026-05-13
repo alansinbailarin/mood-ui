@@ -163,6 +163,16 @@
         "description": "Cada release de mood-ui listado de más reciente a más antiguo. Versionado con SemVer, con detalles de nuevos componentes, fixes y breaking changes.",
         "intro": "Cada release listado de más reciente a más antiguo. Seguimos SemVer.",
         "releases": {
+          "v0.8.0": {
+            "title": "Showroom Nuxt 4 SSG + fixes de tema en overlays",
+            "items": [
+              "Nuevo: ModoProvider ahora replica sus CSS custom properties sobre document.body para que los overlays teleportados (Tooltip, Modal, PopoverPanel, DropdownMenu, Drawer) resuelvan --primary, --card, --popover y surface tokens contra el provider activo en lugar de los defaults de la lib.",
+              "Nuevo: usePopover, useAutoScroll, paletteFromHex (tipo) y hexToRgba ahora se re-exportan desde el entry del paquete. Antes solo accesibles por deep imports.",
+              "Fix: el input de PhoneInput tenía p-0 + pl-2 en el mismo elemento; el shorthand podía ganar en algunos navegadores, dejando el número pegado al divider del país. Quitado p-0, padding ajustado a pl-3 pr-3.",
+              "Fix: DateRangeField y SearchInput dejaron de leer window.innerWidth y navigator.platform en module scope para que SSR no produzca hydration mismatch.",
+              "Docs: showroom SSG nuevo en mood-ui.com con Nuxt 4, cada página de componente indexable, además de una nueva guía /docs/nuxt-setup para consumers que integran mood-ui en una app Nuxt 4."
+            ]
+          },
           "v0.7.1": {
             "title": "Hotfix de modo de color",
             "items": [
@@ -434,68 +444,6 @@
         "ssgServerSafeText": "Button, Input, Select, Card, Typography, Badge, Chip, Avatar, Stat, Banner, Loader, Skeleton, ProgressBar, Kbd, Code, Divider. Tabs, Accordion, Table (read-only), AppShell. Modal, Drawer, Tooltip, PopoverPanel, DropdownMenu en su estado cerrado default — el portal se monta solo al interactuar.",
         "ssgWhyMost": "Por qué casi todo es SSR-safe",
         "ssgWhyMostText": "La lib usa patrones SSR-safe de Vue 3 internamente: setup() nunca lee window ni document a nivel top; todo acceso al DOM vive dentro de hooks onMounted o event handlers. El HTML compilado es idéntico entre el servidor y el primer paint del cliente."
-      },
-      "seo": {
-        "kicker": "Documentación",
-        "title": "SEO e indexación",
-        "subtitle": "Guía práctica para que un sitio Nuxt con mood-ui ranke bien: meta tags, sitemap, structured data, social cards y los errores comunes que mantienen páginas fuera del índice.",
-        "description": "Guía para indexar un sitio Nuxt + mood-ui: useSeoMeta, sitemap, robots.txt, structured data JSON-LD, imágenes OG y checklist pre-lanzamiento de 10 puntos.",
-        "tip": "Tip",
-        "pillars": {
-          "ssgTitle": "SSG sobre SPA",
-          "ssgText": "nuxt generate produce HTML pre-renderizado para cada ruta. Cada página lleva su propio título, meta description y copy en el source, indexables sin ejecutar JavaScript.",
-          "metaTitle": "Meta por página",
-          "metaText": "Cada ruta necesita un título y descripción únicos. Los headers compartidos genéricos matan el long-tail traffic. useSeoMeta es la API más limpia.",
-          "ogTitle": "Open Graph y Twitter",
-          "ogText": "Una buena share card (imagen + título + descripción) sube el CTR en redes. Open Graph también alimenta los preview links en Slack, Discord e iMessage.",
-          "structuredTitle": "Structured data",
-          "structuredText": "JSON-LD le dice a Google QUÉ es la página (artículo, producto, evento, FAQ). Desbloquea rich results: ratings, precios, fechas, breadcrumbs directo en la SERP."
-        },
-        "step1Title": "Usa SSG, no SPA",
-        "step1Desc": "Un build Nuxt SPA puro envía un HTML casi vacío que JavaScript pinta después. Los bots de búsqueda han mejorado con SPAs pero aún rankean SSG sitios más alto porque el contenido está en el HTML inicial. mood-ui funciona en ambos modos — elige SSG si te importa el SEO. nuxt generate es el comando; despliega el directorio .output/public en cualquier host estático (Vercel, Netlify, Cloudflare Pages, S3).",
-        "step2Title": "useSeoMeta en cada página",
-        "step2Desc": "Dentro del script setup de cada página, declara los meta. Los valores reactivos están bien — Nuxt espera a que resuelvan antes de serializar el HTML. Combínalo con useHead para el canonical link y el atributo lang del html.",
-        "step3Title": "Sitemap.xml",
-        "step3Desc": "Auto-generado vía {'@'}nuxtjs/sitemap. Para rutas dinámicas (productos, posts de blog, perfiles) hacé fetch de los slugs una sola vez en build-time desde un server route que el módulo lee.",
-        "step4Title": "robots.txt",
-        "step4Desc": "Envía uno en public/ que permita crawling y apunte al sitemap. Bloquea /admin y /api para que esas superficies privadas nunca aparezcan en resultados.",
-        "step5Title": "Structured data (JSON-LD)",
-        "step5Desc": "JSON-LD de Schema.org es la forma más confiable de desbloquear rich results. Agrega un script[type=\"application/ld+json\"] por página describiendo la entidad. Article, Product, Organization y BreadcrumbList son los de mayor retorno.",
-        "step5Tip": "Valida tu JSON-LD con Rich Results Test o Schema Validator antes de deployar. Un markup roto desactiva silenciosamente el rich result sin un error en Search Console.",
-        "step6Title": "Social share cards",
-        "step6Desc": "Una imagen OG de 1200x630 es la mejora más grande para el CTR de share. Genéralas al vuelo por página para que siempre coincidan con el título y copy actual. Cachéalas agresivamente en edge.",
-        "checklistTitle": "Checklist pre-lanzamiento",
-        "checklistIntro": "Pasa por esta lista antes de apuntar tu dominio al nuevo build. Cada ítem corresponde a una señal de Search Console — si te saltas uno, dejas indexación sobre la mesa.",
-        "checklist": {
-          "item1": "Cada ruta devuelve un título y meta description único en el HTML inicial (curl la URL y grep).",
-          "item2": "rel=canonical apunta a la URL pública de producción (https, con o sin www — elige una y redirige la otra).",
-          "item3": "El atributo lang del html refleja el locale activo.",
-          "item4": "sitemap.xml está accesible en /sitemap.xml y lista cada ruta pública. Enviado en Search Console.",
-          "item5": "robots.txt está en /robots.txt con línea Sitemap:.",
-          "item6": "Open Graph tags (og:title, og:description, og:image, og:url, og:type) en cada página compartible.",
-          "item7": "Twitter Card tags (twitter:card=summary_large_image, twitter:title, etc.).",
-          "item8": "Structured data valida en Rich Results Test para al menos la home y páginas de producto / artículo.",
-          "item9": "Lighthouse SEO score 95+ en la home y una página interna de muestra.",
-          "item10": "Core Web Vitals (LCP, INP, CLS) en verde para mobile y desktop en PageSpeed Insights."
-        },
-        "toolsTitle": "Herramientas",
-        "toolsIntro": "El set esencial. Bookmarkéalas todas.",
-        "tools": {
-          "gsc": "Fuente oficial del estado de indexación. Envía el sitemap, monitorea coverage e impresiones.",
-          "lighthouse": "Audit en el browser (en Chrome DevTools). La categoría SEO atrapa lo básico en 5 segundos.",
-          "schema": "Valida JSON-LD contra schema.org. Úsalo durante desarrollo.",
-          "rich": "Preview de Google de cómo se va a renderizar tu structured data en la SERP. Úsalo antes de deployar.",
-          "pagespeed": "Core Web Vitals mobile + desktop + audit Lighthouse en la infraestructura real de Google."
-        },
-        "pitfallsTitle": "Errores SEO comunes",
-        "pitfalls": {
-          "clientOnlyTitle": "Envolver contenido en ClientOnly",
-          "clientOnlyText": "Un bloque ClientOnly renderiza vacío en SSR. Si tu hero, FAQ, lista de productos o cualquier contenido indexable vive dentro de uno, Google no ve nada. Reserva ClientOnly para widgets genuinamente interactivos sin representación estática (canvas con drag, theme studios en vivo, etc.).",
-          "duplicateTitle": "Mismo título en todas las páginas",
-          "duplicateText": "Un template global como \"Mi App\" en todos lados hace cada página idéntica para Google. Usa useSeoMeta por página y combínalo con un titleTemplate (\"%s | Mi App\") en app.head.",
-          "lazyTitle": "Lazy-loading del único contenido above the fold",
-          "lazyText": "Diferir la carga de imágenes o secciones que contienen el H1 / body copy retrasa LCP y mata al crawler. Mantén el primer viewport estático; lazy-load solo lo que está debajo del fold."
-        }
       }
     }
   }

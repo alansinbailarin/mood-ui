@@ -24,7 +24,6 @@ export const HASH_TO_ROUTE: Readonly<Record<string, string>> = Object.freeze({
   introduction: "/docs/introduction",
   installation: "/docs/installation",
   "nuxt-setup": "/docs/nuxt-setup",
-  seo: "/docs/seo",
   theming: "/docs/theming",
   i18n: "/docs/i18n",
   accessibility: "/docs/accessibility",
