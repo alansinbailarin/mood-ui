@@ -167,7 +167,7 @@
             "title": "npm package metadata fix",
             "items": [
               "Fix: README and LICENSE are now shipped inside the npm tarball. v0.8.0 declared them under files but they only lived at the monorepo root, so the published package landed without a Readme tab on npmjs.com.",
-              "Showroom: rephrased a changelog entry that contained the literal text 'typeof window'. Vite's SSR build replaces that token with the string 'undefined' as a text-level optimization, which leaked into a vue-i18n compiled message and broke the production build."
+              "Showroom: rephrased a changelog entry that contained a JS typeof-window check as a literal phrase. Vite's SSR build replaces that token with a string at the text level, which leaked into a compiled vue-i18n message and broke the production build."
             ]
           },
           "v0.8.0": {
