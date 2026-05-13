@@ -96,14 +96,17 @@
             </Tooltip>
 
             <!-- AI-generated badge -->
-            <div
+            <Badge
                 v-if="isAiGenerated && previewUrl"
-                class="absolute -bottom-1 -right-1 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20"
+                color="primary"
+                variant="subtle"
+                size="small"
+                :icon="SparklesIcon"
+                class="absolute -bottom-1 -right-1 shadow-sm"
                 :aria-label="loc.aiLabel"
             >
-                <component :is="SparklesIcon" class="w-3 h-3" aria-hidden="true" />
                 <span class="hidden sm:inline">{{ loc.aiLabel }}</span>
-            </div>
+            </Badge>
 
             <!-- Unsaved indicator -->
             <div
@@ -221,9 +224,13 @@
         <!-- AI Prompt area -->
         <div
             v-if="props.ai && hasProvider"
-            class="w-full max-w-[280px] flex flex-col gap-2"
+            class="w-full max-w-[320px] flex flex-col gap-3"
         >
-            <!-- Variant selector -->
+            <!-- Variant selector. 17 variants don't fit a single Segmented
+                 bar, so we keep the wrapping pill layout but match the
+                 lib's Button outline tokens (border-border / hover:bg-muted)
+                 and the primary-tinted "selected" state used everywhere
+                 else (Theme Studio, Settings, ToolbarPills). -->
             <div
                 role="radiogroup"
                 :aria-label="loc.variantLabel"
@@ -236,10 +243,12 @@
                     role="radio"
                     :aria-checked="currentVariant === v.value"
                     :class="[
-                        'px-2.5 py-1 rounded-full text-xs border transition-colors cursor-pointer',
+                        'inline-flex items-center h-7 px-3 rounded-full text-xs font-medium select-none',
+                        'transition-colors duration-fast ease-standard',
+                        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
                         currentVariant === v.value
-                            ? 'bg-primary/10 border-primary/50 text-primary font-medium'
-                            : 'border-border text-muted-foreground hover:border-primary/40 hover:bg-accent',
+                            ? 'bg-primary text-primary-foreground shadow-sm'
+                            : 'bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground',
                     ]"
                     @click="currentVariant = v.value"
                     @keydown.space.prevent="currentVariant = v.value"
@@ -248,7 +257,10 @@
                 </button>
             </div>
 
-            <!-- Prompt suggestions -->
+            <!-- Prompt suggestions. Quick one-click prompts: clicking one
+                 fills the input AND triggers generation, so the user can
+                 land on "anime portrait" in two clicks total. Toggling
+                 the same chip cancels the pending prompt without firing. -->
             <div
                 v-if="props.promptSuggestions?.length"
                 class="flex flex-wrap gap-1.5"
@@ -261,26 +273,28 @@
                     type="button"
                     :aria-pressed="prompt === s"
                     :class="[
-                        'px-2.5 py-1 rounded-full text-xs border transition-colors cursor-pointer',
+                        'inline-flex items-center h-7 px-3 rounded-full text-xs select-none',
+                        'transition-colors duration-fast ease-standard',
+                        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
                         prompt === s
-                            ? 'bg-secondary border-secondary-foreground/30 text-secondary-foreground font-medium'
-                            : 'border-border text-muted-foreground hover:border-foreground/30 hover:bg-accent',
+                            ? 'bg-primary/12 text-primary ring-1 ring-inset ring-primary/30'
+                            : 'border border-border text-muted-foreground hover:border-foreground/30 hover:text-foreground',
                     ]"
                     :disabled="props.disabled || isGenerating || isSaving || undefined"
-                    @click="prompt = prompt === s ? '' : s"
+                    @click="onSuggestionClick(s)"
                 >
                     {{ s }}
                 </button>
             </div>
 
             <!-- Prompt input -->
-            <div class="flex gap-2">
-                <input
+            <div class="flex items-center gap-2">
+                <Input
                     v-model="prompt"
-                    type="text"
+                    full-width
+                    size="small"
                     :placeholder="props.promptPlaceholder ?? loc.promptPlaceholder"
                     :disabled="props.disabled || isGenerating || isSaving"
-                    class="flex-1 min-w-0 px-3 py-1.5 text-sm rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50 transition-colors"
                     @keydown.enter.prevent="handleGenerate"
                 />
                 <Button
@@ -348,7 +362,9 @@ import {
     ArrowsPointingOutIcon,
 } from '@heroicons/vue/24/outline';
 import Avatar from '../data-display/avatar/Avatar.vue';
+import Badge from '../feedback/Badge.vue';
 import Button from './Button.vue';
+import Input from './Input.vue';
 import Skeleton from '../feedback/Skeleton.vue';
 import Tooltip from '../feedback/Tooltip.vue';
 import Modal from '../feedback/Modal.vue';
@@ -601,6 +617,18 @@ function handleCropCancel() {
 // -----------------------------------------------------------------
 // AI generation
 // -----------------------------------------------------------------
+// Suggestion chips fill the prompt input and immediately fire generation.
+// Two-click flow: pick variant (optional) → pick suggestion → image arrives.
+// Tapping the active suggestion again clears it without re-firing.
+function onSuggestionClick(s: string) {
+    if (prompt.value === s) {
+        prompt.value = '';
+        return;
+    }
+    prompt.value = s;
+    handleGenerate();
+}
+
 async function handleGenerate() {
     if (!hasProvider.value) return;
     errorMessage.value = '';

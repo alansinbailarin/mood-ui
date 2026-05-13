@@ -164,10 +164,14 @@
         "intro": "Every release listed newest first. We follow SemVer.",
         "releases": {
           "v0.8.0": {
-            "title": "Nuxt 4 SSG showroom + overlay theme fixes",
+            "title": "Nuxt 4 SSG showroom + overlay theming + AvatarUpload refresh",
             "items": [
               "New: ModoProvider now mirrors its CSS custom properties onto document.body so teleported overlays (Tooltip, Modal, PopoverPanel, DropdownMenu, Drawer) resolve --primary, --card, --popover and surface tokens against the active provider instead of the lib defaults.",
+              "New: useColorMode now accepts { darkClass } and a new configureColorMode() helper, so apps with their own dark-mode class (e.g. 'appdark') can opt out of the default '.dark' class on the html element.",
               "New: usePopover, useAutoScroll, paletteFromHex (type) and hexToRgba are now re-exported from the package entry. Previously available via deep imports only.",
+              "Improved: AvatarUpload now uses Input for the prompt field, Badge for the AI-generated marker, and aligns variant + suggestion chips with the library's tokens. Clicking a suggestion fires generation immediately for a one-click flow.",
+              "Fix: ColorModeSwitch buttons use :focus-visible for the focus ring so a click no longer leaves a visible focus indicator and the default browser outline no longer flashes when entering fullscreen.",
+              "Fix: DropdownMenu outline trigger and PhoneInput country trigger no longer change background on hover. Active and focus-visible states are preserved for click and keyboard a11y.",
               "Fix: PhoneInput input had p-0 + pl-2 on the same element; the longhand could win in some browsers, leaving the number flush against the country divider. Dropped p-0, bumped input padding to pl-3 pr-3.",
               "Fix: DateRangeField and SearchInput stopped reading window.innerWidth and navigator.platform at module scope so SSR no longer produces a hydration mismatch.",
               "Docs: completely new SSG showroom at mood-ui.com built on Nuxt 4, every component page indexable, plus a new /docs/nuxt-setup guide for consumers integrating mood-ui into a Nuxt 4 app."

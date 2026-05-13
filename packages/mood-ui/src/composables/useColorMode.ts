@@ -12,10 +12,30 @@ import { ref, computed, watch } from "vue";
  */
 export type ColorMode = "light" | "dark" | "system";
 
+export interface ColorModeOptions {
+  /**
+   * Class name added to `<html>` when the resolved mode is `'dark'`.
+   * Defaults to `'dark'` (the convention Tailwind v4 uses out of the box).
+   *
+   * Override it when your app's CSS already keys off a custom class
+   * — e.g. `useColorMode({ darkClass: 'appdark' })`. Calling this with
+   * a new value swaps the class on `<html>` immediately, so existing
+   * dark-mode rules keep firing.
+   *
+   * Note: mood-ui's own dark-mode CSS is compiled against `.dark`. If
+   * you need both your `appdark` selectors AND the lib's dark variants
+   * to work, configure Tailwind so `dark:` resolves to your custom
+   * selector, or keep both classes in sync via `darkClassExtras`.
+   */
+  darkClass?: string;
+}
+
 const STORAGE_KEY = "modo-color-mode";
+const DEFAULT_DARK_CLASS = "dark";
 
 const mode = ref<ColorMode>("system");
 const systemIsDark = ref(false);
+let darkClassName = DEFAULT_DARK_CLASS;
 
 const resolved = computed<"light" | "dark">(() => {
   if (mode.value === "system") return systemIsDark.value ? "dark" : "light";
@@ -24,8 +44,32 @@ const resolved = computed<"light" | "dark">(() => {
 
 const applyClass = () => {
   if (typeof document === "undefined") return;
-  document.documentElement.classList.toggle("dark", resolved.value === "dark");
+  document.documentElement.classList.toggle(
+    darkClassName,
+    resolved.value === "dark",
+  );
 };
+
+const setDarkClass = (name: string) => {
+  if (!name || name === darkClassName) return;
+  if (typeof document !== "undefined") {
+    // Strip the previous class regardless of the current resolved
+    // value so the old selector stops matching the moment the
+    // override is applied.
+    document.documentElement.classList.remove(darkClassName);
+  }
+  darkClassName = name;
+  applyClass();
+};
+
+/**
+ * Configure the color-mode singleton before any component reads from it.
+ * Call this once in your app entry (`main.ts` / Nuxt plugin) so the
+ * right class is on `<html>` before the first paint.
+ */
+export function configureColorMode(options: ColorModeOptions) {
+  if (options.darkClass) setDarkClass(options.darkClass);
+}
 
 const persistMode = (v: ColorMode) => {
   try {
@@ -70,8 +114,9 @@ const init = () => {
 // applied before the first component renders (anti-FOUC aid).
 if (typeof window !== "undefined") init();
 
-export function useColorMode() {
+export function useColorMode(options?: ColorModeOptions) {
   init();
+  if (options?.darkClass) setDarkClass(options.darkClass);
 
   const set = (v: ColorMode) => {
     mode.value = v;

@@ -164,10 +164,14 @@
         "intro": "Cada release listado de más reciente a más antiguo. Seguimos SemVer.",
         "releases": {
           "v0.8.0": {
-            "title": "Showroom Nuxt 4 SSG + fixes de tema en overlays",
+            "title": "Showroom Nuxt 4 SSG + theming de overlays + refresh de AvatarUpload",
             "items": [
               "Nuevo: ModoProvider ahora replica sus CSS custom properties sobre document.body para que los overlays teleportados (Tooltip, Modal, PopoverPanel, DropdownMenu, Drawer) resuelvan --primary, --card, --popover y surface tokens contra el provider activo en lugar de los defaults de la lib.",
+              "Nuevo: useColorMode acepta { darkClass } y se agregó un helper configureColorMode(), para que apps con su propia clase de dark mode (ej. 'appdark') puedan dejar de usar el default '.dark' sobre el elemento html.",
               "Nuevo: usePopover, useAutoScroll, paletteFromHex (tipo) y hexToRgba ahora se re-exportan desde el entry del paquete. Antes solo accesibles por deep imports.",
+              "Mejora: AvatarUpload ahora usa Input para el prompt, Badge para el marcador de AI-generated, y alinea los chips de variantes/sugerencias con los tokens de la librería. Click en una sugerencia dispara la generación inmediatamente (flujo de un solo click).",
+              "Fix: los botones de ColorModeSwitch usan :focus-visible para el ring, así un click ya no deja un focus indicator visible y el outline default del browser ya no aparece al entrar en fullscreen.",
+              "Fix: el trigger outline de DropdownMenu y el trigger del país de PhoneInput ya no cambian de fondo al hacer hover. Active y focus-visible se conservan para click y a11y por teclado.",
               "Fix: el input de PhoneInput tenía p-0 + pl-2 en el mismo elemento; el shorthand podía ganar en algunos navegadores, dejando el número pegado al divider del país. Quitado p-0, padding ajustado a pl-3 pr-3.",
               "Fix: DateRangeField y SearchInput dejaron de leer window.innerWidth y navigator.platform en module scope para que SSR no produzca hydration mismatch.",
               "Docs: showroom SSG nuevo en mood-ui.com con Nuxt 4, cada página de componente indexable, además de una nueva guía /docs/nuxt-setup para consumers que integran mood-ui en una app Nuxt 4."

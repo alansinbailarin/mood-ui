@@ -17,7 +17,7 @@
                     :class="[
                         triggerSurfaceClass,
                         triggerVariant === 'outline' && props.color !== 'danger'
-                            ? '!border-border !text-foreground hover:!bg-accent active:!bg-accent focus-visible:!ring-ring'
+                            ? '!border-border !text-foreground hover:!bg-card active:!bg-accent focus-visible:!ring-ring'
                             : '',
                     ]"
                     aria-haspopup="menu"
@@ -286,7 +286,7 @@ const effectiveItemColor = computed(() => props.color === 'default' ? 'default' 
 const triggerSurfaceClass = computed(() => {
     if (props.triggerVariant !== 'outline') return '';
     if (effectiveItemColor.value === 'danger') {
-        return 'bg-destructive/10 hover:!bg-destructive/14 active:!bg-destructive/18';
+        return 'bg-destructive/10 hover:!bg-destructive/10 active:!bg-destructive/18';
     }
     return 'bg-card';
 });

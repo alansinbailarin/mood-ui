@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
-import { AvatarUpload, Badge, Card, FormField, Input, PasswordInput, Typography, createAvatarProvider } from "mood-ui";
+import { AvatarUpload, Badge, Banner, Button, Card, FormField, Input, PasswordInput, Stack, Typography, createAvatarProvider } from "mood-ui";
+import { LockClosedIcon, SparklesIcon, KeyIcon, BeakerIcon } from "@heroicons/vue/24/outline";
 import { useI18n } from "vue-i18n";
 import ComponentDoc from "~/components/ComponentDoc.vue";
 import ComponentPreview from "~/components/ComponentPreview.vue";
@@ -24,7 +25,8 @@ import TbSep from "~/components/toolbar/TbSep.vue";
 import type { AvatarProvider, AvatarSavePayload } from "../../../interfaces/forms/AvatarUpload.interface";
 
 // Suppress unused import warnings — available for code examples
-void Badge; void createAvatarProvider;
+void Badge; void createAvatarProvider; void Button; void Stack;
+void LockClosedIcon; void SparklesIcon; void KeyIcon; void BeakerIcon;
 
 const { t } = useI18n();
 
@@ -168,7 +170,7 @@ const aiUrl = ref("");
 const lightboxUrl = ref("https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=512&q=80");
 const profileCardUrl = ref("");
 const settingsRowUrl = ref("");
-const inFormName = ref("Alan Pacheco");
+const inFormName = ref("Eduardo Aranda");
 const inFormBio = ref("");
 const inFormUrl = ref("");
 const readonlyUrl = ref("https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=256&q=80");
@@ -252,7 +254,7 @@ const provider = createAvatarProvider({ url: '/api/generate-avatar' });
     v-model="avatarUrl"
     :ai="true"
     :provider="provider"
-    name="Alan Pacheco"
+    name="Eduardo Aranda"
     :prompt-suggestions="['LinkedIn professional', 'Cartoon', 'Anime portrait', 'Pixel art']"
     prompt-placeholder="Or describe your own style…"
   />
@@ -262,14 +264,14 @@ const lightboxCode = `<AvatarUpload
   v-model="avatarUrl"
   :lightbox="true"
   :readonly="true"
-  name="Alan Pacheco"
+  name="Eduardo Aranda"
 />
 
 <!-- Also works in edit mode: -->
 <AvatarUpload
   v-model="avatarUrl"
   :lightbox="true"
-  name="Alan Pacheco"
+  name="Eduardo Aranda"
 />`;
 
 const profileCardCode = `<script setup lang="ts">
@@ -283,9 +285,9 @@ const avatarUrl = ref('');
   <!-- Horizontal profile card: avatar left, info right -->
   <Card class="max-w-sm">
     <div class="flex items-center gap-5">
-      <AvatarUpload v-model="avatarUrl" size="large" :lightbox="true" name="Alan Pacheco" />
+      <AvatarUpload v-model="avatarUrl" size="large" :lightbox="true" name="Eduardo Aranda" />
       <div class="flex flex-col gap-0.5">
-        <Typography variant="heading" size="small" weight="medium">Alan Pacheco</Typography>
+        <Typography variant="heading" size="small" weight="medium">Eduardo Aranda</Typography>
         <Typography variant="body" size="small" class="text-muted-foreground">Product Designer</Typography>
       </div>
     </div>
@@ -303,7 +305,7 @@ const avatarUrl = ref('');
   <!-- Settings row: avatar + description, common in account settings -->
   <Card class="max-w-md">
     <div class="flex items-center gap-4">
-      <AvatarUpload v-model="avatarUrl" :lightbox="true" name="Alan Pacheco" />
+      <AvatarUpload v-model="avatarUrl" :lightbox="true" name="Eduardo Aranda" />
       <div class="flex-1">
         <Typography variant="heading" size="small" weight="medium">Profile photo</Typography>
         <Typography variant="body" size="small" class="text-muted-foreground mt-0.5">
@@ -319,7 +321,7 @@ import { ref } from 'vue';
 import { AvatarUpload, FormField, Input, Card } from 'mood-ui';
 
 const avatarUrl = ref('');
-const name = ref('Alan Pacheco');
+const name = ref('Eduardo Aranda');
 const bio = ref('');
 <\/script>
 
@@ -328,10 +330,10 @@ const bio = ref('');
   <Card class="max-w-sm">
     <div class="flex flex-col gap-5">
       <div class="flex justify-center">
-        <AvatarUpload v-model="avatarUrl" :lightbox="true" name="Alan Pacheco" />
+        <AvatarUpload v-model="avatarUrl" :lightbox="true" name="Eduardo Aranda" />
       </div>
       <FormField label="Display name">
-        <Input v-model="name" placeholder="Alan Pacheco" full-width />
+        <Input v-model="name" placeholder="Eduardo Aranda" full-width />
       </FormField>
       <FormField label="Bio">
         <Input v-model="bio" placeholder="Product Designer at…" full-width />
@@ -344,7 +346,7 @@ const readonlyCode = `<AvatarUpload
   v-model="avatarUrl"
   :readonly="true"
   :lightbox="true"
-  name="Alan Pacheco"
+  name="Eduardo Aranda"
 />`;
 
 const typesCode = `export type AvatarVariant =
@@ -672,14 +674,41 @@ const emitsList = computed<EmitDoc[]>(() => [
         :title="t('pages.forms.avatarUpload.examples.withAi.title')"
         :description="t('pages.forms.avatarUpload.examples.withAi.desc')"
         :code="aiCode"
+        min-height="420px"
       >
-        <AvatarUpload
-          v-model="aiUrl"
-          :ai="true"
-          :provider="mockProvider"
-          name="Alan Pacheco"
-          prompt-placeholder="e.g. cyberpunk hacker with glowing eyes"
-        />
+        <Card variant="outlined" padding="large" class="w-full max-w-md">
+          <div class="flex items-start gap-3 mb-5">
+            <div class="size-10 rounded-xl bg-primary/10 text-primary grid place-items-center shrink-0">
+              <BeakerIcon class="size-5" />
+            </div>
+            <div class="flex flex-col gap-0.5 min-w-0">
+              <Typography variant="title" size="small" weight="semibold">
+                Try the AI flow (mock)
+              </Typography>
+              <Typography variant="body" size="small" color="muted" weight="light">
+                Tap a suggestion, type a prompt, or use the sparkles button. A
+                random portrait arrives in ~1.5 s — no API key needed.
+              </Typography>
+            </div>
+          </div>
+
+          <div class="flex flex-col items-center">
+            <AvatarUpload
+              v-model="aiUrl"
+              :ai="true"
+              :provider="mockProvider"
+              size="large"
+              name="Eduardo Aranda"
+              prompt-placeholder="e.g. cyberpunk hacker with glowing eyes"
+              :prompt-suggestions="[
+                'LinkedIn professional',
+                'Anime portrait',
+                'Cartoon',
+                'Pixel art',
+              ]"
+            />
+          </div>
+        </Card>
       </ComponentPreview>
 
       <!-- Lightbox -->
@@ -689,8 +718,8 @@ const emitsList = computed<EmitDoc[]>(() => [
         :code="lightboxCode"
       >
         <div class="flex items-center gap-6">
-          <AvatarUpload v-model="lightboxUrl" :lightbox="true" name="Alan Pacheco" />
-          <AvatarUpload v-model="lightboxUrl" :lightbox="true" :readonly="true" name="Alan Pacheco" />
+          <AvatarUpload v-model="lightboxUrl" :lightbox="true" name="Eduardo Aranda" />
+          <AvatarUpload v-model="lightboxUrl" :lightbox="true" :readonly="true" name="Eduardo Aranda" />
         </div>
       </ComponentPreview>
 
@@ -702,9 +731,9 @@ const emitsList = computed<EmitDoc[]>(() => [
       >
         <Card class="max-w-sm w-full">
           <div class="flex items-center gap-5">
-            <AvatarUpload v-model="profileCardUrl" size="large" :lightbox="true" name="Alan Pacheco" />
+            <AvatarUpload v-model="profileCardUrl" size="large" :lightbox="true" name="Eduardo Aranda" />
             <div class="flex flex-col gap-0.5">
-              <Typography variant="heading" size="small" weight="medium">Alan Pacheco</Typography>
+              <Typography variant="heading" size="small" weight="medium">Eduardo Aranda</Typography>
               <Typography variant="body" size="small" class="text-muted-foreground">Product Designer</Typography>
             </div>
           </div>
@@ -719,7 +748,7 @@ const emitsList = computed<EmitDoc[]>(() => [
       >
         <Card class="max-w-md w-full">
           <div class="flex items-center gap-4">
-            <AvatarUpload v-model="settingsRowUrl" :lightbox="true" name="Alan Pacheco" />
+            <AvatarUpload v-model="settingsRowUrl" :lightbox="true" name="Eduardo Aranda" />
             <div class="flex-1">
               <Typography variant="heading" size="small" weight="medium">Profile photo</Typography>
               <Typography variant="body" size="small" class="text-muted-foreground mt-0.5">
@@ -739,10 +768,10 @@ const emitsList = computed<EmitDoc[]>(() => [
         <Card class="max-w-sm w-full">
           <div class="flex flex-col gap-5">
             <div class="flex justify-center">
-              <AvatarUpload v-model="inFormUrl" :lightbox="true" name="Alan Pacheco" />
+              <AvatarUpload v-model="inFormUrl" :lightbox="true" name="Eduardo Aranda" />
             </div>
             <FormField label="Display name">
-              <Input v-model="inFormName" placeholder="Alan Pacheco" full-width />
+              <Input v-model="inFormName" placeholder="Eduardo Aranda" full-width />
             </FormField>
             <FormField label="Bio">
               <Input v-model="inFormBio" placeholder="Product Designer at…" full-width />
@@ -757,58 +786,91 @@ const emitsList = computed<EmitDoc[]>(() => [
         :description="t('pages.forms.avatarUpload.examples.readonly.desc')"
         :code="readonlyCode"
       >
-        <AvatarUpload v-model="readonlyUrl" :readonly="true" :lightbox="true" name="Alan Pacheco" />
+        <AvatarUpload v-model="readonlyUrl" :readonly="true" :lightbox="true" name="Eduardo Aranda" />
       </ComponentPreview>
 
       <!-- OpenAI live test -->
       <ComponentPreview
-        title="🧪 OpenAI live test"
+        title="OpenAI live test"
         description="Test real AI generation directly from your browser — no backend needed."
         :code="openaiDirectCode"
-        min-height="340px"
+        min-height="520px"
       >
-        <div class="flex flex-col items-center gap-3 w-full max-w-sm">
+        <Card variant="outlined" padding="large" class="w-full max-w-md">
+          <!-- Header -->
+          <div class="flex items-start gap-3 mb-5">
+            <div
+              class="relative size-10 rounded-xl bg-gradient-to-br from-primary to-primary/50 text-primary-foreground grid place-items-center shrink-0 shadow-sm"
+            >
+              <SparklesIcon class="size-5" />
+            </div>
+            <div class="flex flex-col gap-0.5 min-w-0 flex-1">
+              <div class="flex items-center gap-2">
+                <Typography variant="title" size="small" weight="semibold">
+                  OpenAI live test
+                </Typography>
+                <Badge color="warning" variant="subtle" size="small">DEV</Badge>
+              </div>
+              <Typography variant="body" size="small" color="muted" weight="light">
+                Bring your own key. We call OpenAI from this browser tab only.
+              </Typography>
+            </div>
+          </div>
 
-          <!-- Key input — always visible so the user can enter a new key after each generation -->
+          <!-- Key input -->
           <PasswordInput
             v-model="openaiKey"
             placeholder="sk-..."
             label="OpenAI API key"
+            :icon-left="KeyIcon"
             autocomplete="off"
             full-width
+            class="mb-3"
           />
 
           <!-- Trust note -->
-          <Badge color="success" variant="subtle" size="small" class="text-center">
-            🔒 Your key is only used for this request. It is never stored in
-            cookies, localStorage, or sent to any server other than api.openai.com.
-            It is erased from memory automatically after each generation.
-          </Badge>
-
-          <AvatarUpload
-            v-model="liveAvatarUrl"
-            :ai="true"
-            :provider="liveProvider"
-            :lightbox="true"
-            size="large"
-            name="Test user"
-            save-mode="none"
-            :prompt-suggestions="[
-              'LinkedIn professional',
-              'Realistic',
-              'Watercolor',
-              'Anime portrait',
-              'Pixel art',
-              'Cyberpunk',
-              'Fantasy',
-              'NFT',
-            ]"
+          <Banner
+            color="success"
+            variant="subtle"
+            :icon="LockClosedIcon"
+            description="Your key is used for this request only — never stored in cookies, localStorage, or sent anywhere except api.openai.com. It is erased from the input after each generation."
+            full-width
+            class="mb-5"
           />
 
-          <Typography v-if="!openaiKey && !liveProvider" variant="body" size="small" class="text-muted-foreground text-center">
-            Enter your key above to enable the generate button.
-          </Typography>
-        </div>
+          <!-- Status hint when no provider yet -->
+          <Banner
+            v-if="!openaiKey && !liveProvider"
+            color="info"
+            variant="subtle"
+            description="Enter your key above to enable the ✨ Generate button."
+            full-width
+            class="mb-5"
+          />
+
+          <!-- Avatar uploader -->
+          <div class="flex justify-center">
+            <AvatarUpload
+              v-model="liveAvatarUrl"
+              :ai="true"
+              :provider="liveProvider"
+              :lightbox="true"
+              size="large"
+              name="Test user"
+              save-mode="none"
+              :prompt-suggestions="[
+                'LinkedIn professional',
+                'Realistic',
+                'Watercolor',
+                'Anime portrait',
+                'Pixel art',
+                'Cyberpunk',
+                'Fantasy',
+                'NFT',
+              ]"
+            />
+          </div>
+        </Card>
       </ComponentPreview>
 
     </template>

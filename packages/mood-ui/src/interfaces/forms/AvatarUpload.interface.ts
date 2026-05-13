@@ -71,7 +71,7 @@ export interface AvatarUpload {
     variant?: AvatarVariant;
     /**
      * User's display name — used to derive initials for the fallback avatar.
-     * Example: "Alan Pacheco" → "AP".
+     * Example: "Eduardo Aranda" → "AP".
      */
     name?: string;
     size?: 'small' | 'medium' | 'large';

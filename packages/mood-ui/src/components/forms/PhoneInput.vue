@@ -36,9 +36,7 @@
           'flex items-center self-stretch shrink-0 select-none',
           'transition-colors duration-fast ease-standard',
           triggerPaddingClass,
-          isDisabled || readonly
-            ? 'cursor-not-allowed'
-            : 'cursor-pointer hover:bg-black/5 dark:hover:bg-white/8',
+          isDisabled || readonly ? 'cursor-not-allowed' : 'cursor-pointer',
         ]"
         @click="onTriggerClick"
         @keydown="onTriggerKeydown"

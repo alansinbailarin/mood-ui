@@ -99,7 +99,20 @@ const defaults: ThemeState = {
 const state = ref<ThemeState>({ ...defaults });
 try {
   const raw = localStorage.getItem(STORAGE_KEY);
-  if (raw) state.value = { ...defaults, ...JSON.parse(raw) };
+  if (raw) {
+    const parsed = JSON.parse(raw) as Partial<ThemeState>;
+    state.value = { ...defaults, ...parsed };
+    // The slider used to be `v-model="state.baseIntensity"` on a native
+    // `<input type="range">`, which silently coerces every emission to a
+    // string. Persisted runs from that era have `"0"` in storage, and
+    // `"0" === 0` is false — so `darkSurfaceComputed` would skip the
+    // early return and let `tintedDarkSurfaces` overwrite the user's
+    // chosen preset with neutral values. Normalize on read so the
+    // numeric `=== 0` check downstream stays meaningful.
+    if (typeof state.value.baseIntensity !== "number") {
+      state.value.baseIntensity = Number(state.value.baseIntensity) || 0;
+    }
+  }
 } catch {
   /* noop */
 }
@@ -1549,7 +1562,7 @@ function sendMessage() {
                   min="0"
                   max="100"
                   step="5"
-                  v-model="state.baseIntensity"
+                  v-model.number="state.baseIntensity"
                   aria-label="Base intensity"
                   class="w-full h-[3px] cursor-pointer bg-transparent appearance-none [&::-webkit-slider-runnable-track]:bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-[13px] [&::-webkit-slider-thumb]:h-[13px] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-[0_1px_4px_rgba(0,0,0,0.2),0_0_0_1px_rgba(0,0,0,0.07)] [&::-moz-range-track]:bg-transparent [&::-moz-range-thumb]:w-[13px] [&::-moz-range-thumb]:h-[13px] [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:shadow-[0_1px_4px_rgba(0,0,0,0.2)]"
                 />
