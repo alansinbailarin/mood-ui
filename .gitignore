@@ -41,3 +41,7 @@ COMPONENTS_ROADMAP.md
 RELEASE.md
 docs/migration/
 plan.md
+
+# Generated llms.txt files (rebuilt on each showroom build)
+apps/showroom/public/llms.txt
+apps/showroom/public/llms-full.txt

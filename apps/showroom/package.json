@@ -6,17 +6,18 @@
     "node": ">=20.9.0"
   },
   "scripts": {
-    "build": "nuxt build",
+    "build": "pnpm run llms && nuxt build",
     "dev": "nuxt dev",
-    "generate": "NODE_OPTIONS=\"--max-old-space-size=8192\" nuxt generate",
+    "generate": "pnpm run llms && NODE_OPTIONS=\"--max-old-space-size=8192\" nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "typecheck": "nuxt typecheck"
+    "typecheck": "nuxt typecheck",
+    "llms": "tsx scripts/generate-llms.ts"
   },
   "dependencies": {
-    "mood-ui": "workspace:*",
     "@heroicons/vue": "^2.2.0",
     "gsap": "^3.15.0",
+    "mood-ui": "workspace:*",
     "vue": "^3.5.32"
   },
   "devDependencies": {
@@ -27,6 +28,8 @@
     "nuxt": "^4.0.0",
     "shiki": "^1.29.2",
     "tailwindcss": "^4.2.4",
+    "ts-morph": "^28.0.0",
+    "tsx": "^4.21.0",
     "typescript": "~6.0.2",
     "vue-tsc": "^3.2.7"
   }
