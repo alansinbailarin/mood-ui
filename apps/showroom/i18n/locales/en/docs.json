@@ -441,7 +441,7 @@
         "nextNuxt": "Nuxt 4 docs",
         "nextNuxtDesc": "Official Nuxt documentation. Useful if you are new to the framework.",
         "ssgTableTitle": "Quick reference: when to use ClientOnly",
-        "ssgTableIntro": "Lib components opt into hydration guards already (onMounted, typeof window checks), so the SSR pass never touches the browser globals. The rule of thumb is simple: ClientOnly is needed only when there is nothing meaningful to render server-side.",
+        "ssgTableIntro": "Lib components opt into hydration guards already (onMounted hooks and runtime checks for browser globals), so the SSR pass never touches the browser globals. The rule of thumb is simple: ClientOnly is needed only when there is nothing meaningful to render server-side.",
         "ssgClientOnly": "Wrap in ClientOnly",
         "ssgClientOnlyText": "ToastContainer, ConfirmDialog (queue is empty in SSR; nothing to render). Theme Studio (mutates CSS vars live). Calendar / Scheduler demos that mount with events already laid out (drag handlers register on mount).",
         "ssgServerSafe": "SSR by default (no wrapper)",
