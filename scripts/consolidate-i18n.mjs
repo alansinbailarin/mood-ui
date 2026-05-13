@@ -73,7 +73,24 @@ const CATEGORY_MAP = {
   "theme-studio":  ["pages/themeStudio.json"],
 };
 
-const ROOT_FILES = ["common.json", "doc.json"];
+/**
+ * Files copied directly into the locale (no `pages.*` nesting).
+ *
+ * `common.json` is special: its keys merge at the locale root (so the
+ * legacy `t('home')`, `t('components')`, … shortcuts still work). Every
+ * other root-level file is wrapped under its filename as a namespace,
+ * matching the behaviour of the legacy showroom's i18n loader:
+ *
+ *   locales/en/doc.json → messages.en.doc.*
+ *
+ * Without the wrap, `t('doc.section.overview')` would resolve to a
+ * literal `doc.section.overview` string because the merge would put
+ * `section` at the root of the locale.
+ */
+const ROOT_FILES = [
+  { src: "common.json", wrap: false },
+  { src: "doc.json", wrap: true, key: "doc" },
+];
 
 function readJson(path) {
   return JSON.parse(readFileSync(path, "utf8"));
@@ -156,15 +173,17 @@ function consolidateLocale(locale) {
   let totalSource = 0;
   let totalGroups = 0;
 
-  // 1) Root files: copy verbatim (common.json, doc.json)
-  for (const name of ROOT_FILES) {
-    const src = join(srcDir, name);
+  // 1) Root files: common.json plain, doc.json wrapped under `doc.*`
+  for (const entry of ROOT_FILES) {
+    const src = join(srcDir, entry.src);
     if (!existsSync(src)) continue;
-    const dst = join(destDir, name);
-    writeFileSync(dst, JSON.stringify(readJson(src), null, 2) + "\n");
+    const dst = join(destDir, entry.src);
+    const raw = readJson(src);
+    const out = entry.wrap ? { [entry.key]: raw } : raw;
+    writeFileSync(dst, JSON.stringify(out, null, 2) + "\n");
     totalSource++;
     totalGroups++;
-    console.log(`  ${locale}/${name} ← ${name}`);
+    console.log(`  ${locale}/${entry.src} ← ${entry.src}${entry.wrap ? ` (wrapped under "${entry.key}.")` : ""}`);
   }
 
   // 2) Category-grouped files

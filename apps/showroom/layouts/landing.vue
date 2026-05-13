@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { ModoProvider, paletteFromHex, darkSurfaces } from "mood-ui";
+import { ModoProvider, paletteFromHex, darkSurfaces, useColorMode } from "mood-ui";
 import { useDocsTheme } from "~/composables/useDocsTheme";
+import { tintedLightSurfaces, tintedDarkSurfaces } from "~/utils/tintedSurfaces";
+
+const { resolved: resolvedColorMode } = useColorMode();
 
 /**
  * Full-bleed layout for the landing page. Same header as the docs shell
@@ -12,20 +15,34 @@ import { useDocsTheme } from "~/composables/useDocsTheme";
  */
 
 const { state } = useDocsTheme();
+
 const primaryPalette = computed(() => ({
   primary: paletteFromHex(state.value.primaryHex),
 }));
-const darkSurfaceConfig = computed(
-  () => darkSurfaces[state.value.darkSurface],
+
+const lightSurfacesConfig = computed(() =>
+  state.value.baseIntensity > 0
+    ? tintedLightSurfaces(state.value.primaryHex, state.value.baseIntensity / 100)
+    : undefined,
 );
+
+const darkSurfaceConfig = computed(() => {
+  const preset = darkSurfaces[state.value.darkSurface];
+  if (state.value.baseIntensity === 0) return preset;
+  const tinted = tintedDarkSurfaces(state.value.primaryHex, state.value.baseIntensity / 100);
+  return { ...preset, ...tinted };
+});
+
 </script>
 
 <template>
   <ModoProvider
+    :theme="resolvedColorMode"
     :radius="state.radius"
     :size="state.size"
     :halo="state.halo"
     :palettes="primaryPalette"
+    :surfaces="lightSurfacesConfig"
     :dark-surfaces="darkSurfaceConfig"
   >
     <div class="flex flex-col min-h-dvh bg-background text-foreground">

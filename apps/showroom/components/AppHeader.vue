@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { Bars3Icon, GlobeAltIcon } from "@heroicons/vue/24/outline";
+import {
+  Bars3Icon,
+  GlobeAltIcon,
+  SunIcon,
+  MoonIcon,
+  ComputerDesktopIcon,
+} from "@heroicons/vue/24/outline";
 import { ColorModeSwitch, Select, useColorMode } from "mood-ui";
 import type { ModoTheme } from "mood-ui";
 
@@ -59,6 +65,12 @@ function onLocale(v: unknown) {
     </div>
     <div class="flex-1 lg:hidden" />
 
+    <!-- Right cluster.
+         Each interactive control is wrapped in <ClientOnly> with a rich
+         fallback that mirrors the final visual shape, so the header looks
+         complete on first paint (no width/height collapse, no late-popping
+         elements) but the real interactive widgets hydrate without the
+         SSR/CSR mismatch we hit when removing ClientOnly entirely. -->
     <div class="flex items-center gap-1">
       <div class="hidden sm:block w-[88px] shrink-0">
         <ClientOnly>
@@ -72,9 +84,13 @@ function onLocale(v: unknown) {
             @update:model-value="onLocale"
           />
           <template #fallback>
-            <div class="flex items-center gap-1 h-9 px-3 rounded-full border border-border text-xs text-muted-foreground">
-              <GlobeAltIcon class="w-3.5 h-3.5" />
-              {{ locale.toUpperCase() }}
+            <div
+              class="flex items-center justify-between gap-1 h-8 px-3 rounded-full border border-border bg-background text-xs text-foreground/80"
+              aria-hidden="true"
+            >
+              <GlobeAltIcon class="w-3.5 h-3.5 shrink-0" />
+              <span class="font-medium">{{ locale.toUpperCase() }}</span>
+              <span class="text-muted-foreground/60">▾</span>
             </div>
           </template>
         </ClientOnly>
@@ -87,10 +103,33 @@ function onLocale(v: unknown) {
           size="small"
           @update:model-value="onColorMode"
         />
+        <template #fallback>
+          <button
+            type="button"
+            class="inline-flex items-center justify-center w-8 h-8 rounded-full transition-colors hover:bg-muted/60 text-muted-foreground"
+            aria-hidden="true"
+            tabindex="-1"
+          >
+            <SunIcon v-if="mode === 'light'" class="w-4 h-4" />
+            <MoonIcon v-else-if="mode === 'dark'" class="w-4 h-4" />
+            <ComputerDesktopIcon v-else class="w-4 h-4" />
+          </button>
+        </template>
       </ClientOnly>
 
       <ClientOnly>
         <AppShowroomSettings />
+        <template #fallback>
+          <span
+            class="inline-flex items-center justify-center w-8 h-8 rounded-full text-muted-foreground"
+            aria-hidden="true"
+          >
+            <!-- Swatch icon placeholder, same size as the real button -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.098 19.902a3.75 3.75 0 0 0 5.304 0l6.401-6.402M6.75 21A3.75 3.75 0 1 1 3 17.25 3.75 3.75 0 0 1 6.75 21Z" />
+            </svg>
+          </span>
+        </template>
       </ClientOnly>
     </div>
   </div>

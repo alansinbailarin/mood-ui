@@ -74,7 +74,18 @@ const indicatorStyle = ref<Record<string, string>>({ opacity: "0", left: "0", to
 let firstDone = false;
 
 function setTabRef(key: string, el: unknown) {
-  if (el) tabRefs.value[key] = el as HTMLElement;
+  // `el` is whatever the ref callback receives. For `<button>` and `<a>`
+  // it's the HTMLElement directly; for `<NuxtLink>` (a Vue component) it's
+  // the component instance, and we have to dig out the rendered element via
+  // `$el`. Without this unwrap the indicator math (offsetLeft/offsetWidth)
+  // silently fails and the sliding pill never appears — which is the bug
+  // that made the legacy header look "static" compared to main.
+  if (!el) return;
+  const node =
+    el instanceof HTMLElement
+      ? el
+      : ((el as { $el?: HTMLElement }).$el ?? null);
+  if (node instanceof HTMLElement) tabRefs.value[key] = node;
 }
 
 function measure(animated: boolean) {

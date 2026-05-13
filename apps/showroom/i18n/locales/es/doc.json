@@ -1,38 +1,40 @@
 {
-  "section": {
-    "overview": "Overview",
-    "examples": "Ejemplos",
-    "types": "TypeScript",
-    "api": "API Reference",
-    "props": "Props",
-    "emits": "Emits",
-    "slots": "Slots",
-    "a11y": "Accesibilidad"
-  },
-  "col": {
-    "prop": "Prop",
-    "type": "Tipo",
-    "default": "Default",
-    "description": "Descripción",
-    "event": "Evento",
-    "payload": "Payload",
-    "slot": "Slot",
-    "bindings": "Props"
-  },
-  "reset": "Resetear",
-  "preview": "Preview",
-  "code": "Código",
-  "onThisPage": "En esta página",
-  "prev": "Anterior",
-  "next": "Siguiente",
-  "a11y": {
-    "keyboard": "Teclado",
-    "aria": "ARIA",
-    "focus": "Foco",
-    "colKey": "Tecla",
-    "colAction": "Acción",
-    "colAttr": "Atributo",
-    "colValue": "Valor",
-    "colDesc": "Propósito"
+  "doc": {
+    "section": {
+      "overview": "Overview",
+      "examples": "Ejemplos",
+      "types": "TypeScript",
+      "api": "API Reference",
+      "props": "Props",
+      "emits": "Emits",
+      "slots": "Slots",
+      "a11y": "Accesibilidad"
+    },
+    "col": {
+      "prop": "Prop",
+      "type": "Tipo",
+      "default": "Default",
+      "description": "Descripción",
+      "event": "Evento",
+      "payload": "Payload",
+      "slot": "Slot",
+      "bindings": "Props"
+    },
+    "reset": "Resetear",
+    "preview": "Preview",
+    "code": "Código",
+    "onThisPage": "En esta página",
+    "prev": "Anterior",
+    "next": "Siguiente",
+    "a11y": {
+      "keyboard": "Teclado",
+      "aria": "ARIA",
+      "focus": "Foco",
+      "colKey": "Tecla",
+      "colAction": "Acción",
+      "colAttr": "Atributo",
+      "colValue": "Valor",
+      "colDesc": "Propósito"
+    }
   }
 }

@@ -87,9 +87,15 @@ function go(id: string) {
 </script>
 
 <template>
-  <nav class="hidden xl:flex xl:flex-col w-56 shrink-0">
+  <!-- Drop the whole TOC column when the active page didn't register any
+       items (Templates, ThemeStudio, dynamic content pages). Without the
+       v-if on <nav> the empty 14rem reserved column stole horizontal
+       space from the main content. -->
+  <nav
+    v-if="toc.items.value.length"
+    class="hidden xl:flex xl:flex-col w-56 shrink-0"
+  >
     <div
-      v-if="toc.items.value.length"
       class="sticky top-20 flex flex-col justify-between"
       style="height: calc(95dvh - 5rem)"
     >

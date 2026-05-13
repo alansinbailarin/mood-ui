@@ -16,7 +16,37 @@ import {
 import { vReveal } from "~/composables/useScrollReveal";
 import { DOC_TOC_KEY } from "~/composables/useDocToc";
 
-const { t, tm, locale } = useI18n();
+const { t, tm, rt, locale } = useI18n();
+
+// vue-i18n 11 pre-compiles every translation string at build time into a
+// VNode-like AST so {placeholder} interpolations are cheap at runtime.
+// `tm()` returns those raw ASTs; rendering one as `{{ ast }}` prints the
+// AST object as JSON (which is what was happening in changelog.vue — the
+// release titles and items were showing as `{ "type": 0, "start": 0, … }`).
+// `resolveMessage()` walks the structure, calling `rt()` on every leaf so
+// templates get plain strings back, the same as `t('key')` would return.
+function resolveMessage(v: unknown): unknown {
+  if (v === null || v === undefined) return v;
+  if (typeof v === "string") return v;
+  if (Array.isArray(v)) return v.map(resolveMessage);
+  if (typeof v === "object") {
+    // AST nodes have `type` + `body` properties; anything else is a plain
+    // object we should recurse into.
+    if ("type" in (v as object) && "body" in (v as object)) {
+      try {
+        return rt(v as never);
+      } catch {
+        return "";
+      }
+    }
+    const out: Record<string, unknown> = {};
+    for (const [k, val] of Object.entries(v as object)) {
+      out[k] = resolveMessage(val);
+    }
+    return out;
+  }
+  return v;
+}
 
 useSeoMeta({
   title: () => t("pages.docs.changelog.title"),
@@ -77,7 +107,7 @@ const tagColor = (tag: Release["tag"]) =>
 
 const releasesMap = computed(
   () =>
-    tm("pages.docs.changelog.releases") as Record<
+    resolveMessage(tm("pages.docs.changelog.releases")) as Record<
       string,
       { title: string; items: string[] }
     >,

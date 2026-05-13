@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, provide, watch } from "vue";
 import { Bars3Icon, XMarkIcon, MagnifyingGlassIcon, GlobeAltIcon } from "@heroicons/vue/24/outline";
-import { ModoProvider, paletteFromHex, darkSurfaces } from "mood-ui";
+import { ModoProvider, paletteFromHex, darkSurfaces, useColorMode } from "mood-ui";
 import { navManifest } from "~/utils/nav-manifest";
 import { createDocToc, DOC_TOC_KEY } from "~/composables/useDocToc";
 import { useDocsTheme } from "~/composables/useDocsTheme";
@@ -11,6 +11,16 @@ const route = useRoute();
 const { t, locale, setLocale } = useI18n();
 
 const { state: docsTheme } = useDocsTheme();
+
+// Always feed the resolved color mode ('light' | 'dark', never 'system')
+// to the provider so teleported overlays (PopoverPanel, Tooltip) read
+// the same value the user toggled to. Without this, the provider keeps
+// its default 'system' theme and `resolveColorMode` falls back to the
+// OS preference inside the overlay — so a user with OS=dark who
+// toggled the site to light sees the page light but every popover
+// `data-modo-theme="dark"`. That selector swaps the CSS vars locally
+// and the popover renders dark over a light page.
+const { resolved: resolvedColorMode } = useColorMode();
 const primaryPalette = computed(() => ({
   primary: paletteFromHex(docsTheme.value.primaryHex),
 }));
@@ -32,14 +42,26 @@ const cmdkOpen = ref(false);
 const toc = createDocToc();
 provide(DOC_TOC_KEY, toc);
 
-// Clear the per-page TOC whenever route changes so stale items don't leak.
+// Close the mobile drawer on every navigation.
 watch(
   () => route.path,
   () => {
-    toc.clear();
     mobileNavOpen.value = false;
   },
 );
+
+// Wipe the TOC right before the new page's components run their setup
+// hook (router lifecycle event happens before the new view mounts).
+// Without this guard, stale entries from the previous page leak into
+// pages that don't register their own (Templates, /docs/installation,
+// etc.). Doing the wipe via a route guard instead of a `watch` keeps
+// the timing deterministic: the new ComponentDoc's setup-time
+// `registerFixedSections()` always runs AFTER the wipe, so its
+// level-1 entries (Overview, Examples, API…) never get clobbered.
+const router = useRouter();
+router.beforeEach((_to, from) => {
+  if (from && from.path !== "/") toc.clear();
+});
 
 function toggleLocale() {
   setLocale(locale.value === "es" ? "en" : "es");
@@ -48,6 +70,7 @@ function toggleLocale() {
 
 <template>
   <ModoProvider
+    :theme="resolvedColorMode"
     :radius="docsTheme.radius"
     :size="docsTheme.size"
     :halo="docsTheme.halo"
@@ -133,7 +156,7 @@ function toggleLocale() {
 
               <nav class="flex-1 py-5 px-4 overflow-y-auto">
                 <div
-                  v-for="section in navManifest"
+                  v-for="section in navManifest.filter((c) => !c.hiddenInSidebar)"
                   :key="section.id"
                   class="mb-7"
                 >
@@ -167,8 +190,12 @@ function toggleLocale() {
             </aside>
           </Transition>
 
-          <!-- Main content -->
-          <main :key="route.path" class="flex-1 min-w-0 py-8">
+          <!-- Main content. Page-level fade is handled by Nuxt's global
+               `app.pageTransition` (configured in nuxt.config). Wrapping
+               the `<slot />` in a local `<Transition>` keyed on route.path
+               caused a visual "double-paint" — the new page would render
+               into the slot first, then fade out + fade back in. -->
+          <main class="flex-1 min-w-0 py-8">
             <slot />
           </main>
 

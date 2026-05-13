@@ -18,10 +18,10 @@ const { t } = useI18n();
 
 
 useSeoMeta({
-  title: () => t("pages.templates.templatesIndex.title"),
-  description: () => t("pages.templates.templatesIndex.description"),
-  ogTitle: () => `${t("pages.templates.templatesIndex.title")} · mood-ui`,
-  ogDescription: () => t("pages.templates.templatesIndex.description"),
+  title: () => t("pages.templates.index.title"),
+  description: () => t("pages.templates.index.subtitle"),
+  ogTitle: () => `${t("pages.templates.index.title")} · mood-ui`,
+  ogDescription: () => t("pages.templates.index.subtitle"),
 });
 interface Tpl {
   id: "dashboard" | "auth" | "pricing" | "settings";

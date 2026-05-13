@@ -90,14 +90,17 @@ export default defineNuxtConfig({
     autoLastmod: true,
   },
 
-  // Global fade between pages. Mirrors the `<Transition mode="out-in">`
-  // the legacy DocsShell wrapped around its <main :key="activeId">. Forces
-  // a remount so onMounted hooks (TOC registration, scroll spy, etc.) run
-  // on every navigation.
+  // Global fade between pages. We deliberately DROP `mode: "out-in"`
+  // here: that mode causes Vue to emit a transient null vnode between
+  // the leave of the old page and the enter of the new one, which
+  // `runtime-core` then chokes on with `Cannot read properties of null`
+  // for any page whose slot resolves to a `<ClientOnly>`-only shell
+  // (EmptyState, installation, etc). A plain crossfade is enough.
   app: {
-    pageTransition: { name: "page", mode: "out-in" },
+    pageTransition: { name: "docs-page", duration: 180 },
+
     head: {
-      titleTemplate: "%s · mood-ui",
+      titleTemplate: "%s · Mood-UI",
       htmlAttrs: { lang: "en" },
       meta: [
         { charset: "utf-8" },
@@ -110,7 +113,26 @@ export default defineNuxtConfig({
         { property: "og:site_name", content: "mood-ui" },
         { property: "og:type", content: "website" },
       ],
-      link: [{ rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }],
+      link: [
+        { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+        // Brand typography — the lib's style.css declares
+        // `--font-sans: "Poppins", ...` but doesn't ship the font file,
+        // so the showroom is responsible for loading it. JetBrains Mono
+        // covers the inline `<code>` and CodePreview blocks.
+        {
+          rel: "preconnect",
+          href: "https://fonts.googleapis.com",
+        },
+        {
+          rel: "preconnect",
+          href: "https://fonts.gstatic.com",
+          crossorigin: "",
+        },
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap",
+        },
+      ],
       // Inline anti-FOUC script. Runs synchronously in <head> before the
       // body parses, so the very first paint already has the right `.dark`
       // class on <html>. Mirrors what the lib's `useColorMode` will set

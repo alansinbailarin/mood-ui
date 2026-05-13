@@ -18,6 +18,12 @@ export interface NavCategory {
   id: string;
   title: string;
   entries: NavEntry[];
+  /**
+   * When true, this category is excluded from the left sidebar but
+   * still appears in the top header pill nav. Use for top-level
+   * shortcuts that already have a dedicated tab (e.g. Theme Studio).
+   */
+  hiddenInSidebar?: boolean;
 }
 
 export const navManifest: NavCategory[] = [
@@ -32,6 +38,8 @@ export const navManifest: NavCategory[] = [
     entries: [
       { id: "introduction", label: "Introduction", route: "/docs/introduction" },
       { id: "installation", label: "Installation", route: "/docs/installation" },
+      { id: "nuxt-setup", label: "Nuxt setup", route: "/docs/nuxt-setup" },
+      { id: "seo", label: "SEO & indexing", route: "/docs/seo" },
       { id: "theming", label: "Theming", route: "/docs/theming" },
       { id: "i18n", label: "i18n", route: "/docs/i18n" },
       { id: "accessibility", label: "Accessibility", route: "/docs/accessibility" },
@@ -46,6 +54,7 @@ export const navManifest: NavCategory[] = [
   {
     id: "theme-studio",
     title: "Theme Studio",
+    hiddenInSidebar: true,
     entries: [
       { id: "theme-studio", label: "Theme Studio", route: "/theme-studio", badge: "Beta" },
     ],

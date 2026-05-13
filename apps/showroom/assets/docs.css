@@ -1,18 +1,36 @@
 @import "tailwindcss";
 
+/* Make Tailwind v4 scan the library sources too. Without this, the
+ * showroom-side Tailwind only sees classes used in `apps/showroom/**`
+ * and never generates responsive utilities the library relies on
+ * (`sm:flex-row`, `sm:w-32`, `sm:max-w-none`, `sm:absolute`, …). The
+ * library does ship a pre-compiled `mood-ui.css` with those rules,
+ * but the showroom's own utility layer ends up overriding them in
+ * the cascade — so popovers like DateTimePicker rendered with
+ * `flex-col` only and the time panel never sat side-by-side with the
+ * calendar.
+ *
+ * Pointing `@source` at the lib's `src` tells Tailwind to harvest
+ * class names there and generate matching utilities at the right
+ * level of the cascade. */
+@source "../../../packages/mood-ui/src/**/*.{vue,ts,js}";
+
 /* Dark mode trigger mirrors the library: `.dark` class on any ancestor
  * or `data-modo-theme="dark"` on a scoped provider. Keep this consistent
  * so docs pages and component demos pick up dark mode from the same root. */
 @custom-variant dark (&:where(.dark, .dark *, [data-modo-theme="dark"], [data-modo-theme="dark"] *));
 
-/* Page transition — paired with app.pageTransition in nuxt.config.
- * Fades out the old page, fades in the new, identical timing to the
- * legacy DocsShell `<Transition mode="out-in">` wrapper. */
-.page-enter-active,
-.page-leave-active {
-  transition: opacity 200ms ease-out;
+/* Page transition — paired with the `<Transition name="docs-page">`
+ * inside `layouts/default.vue`. Mirrors the timing of the legacy
+ * DocsShell wrapper (200ms ease-out fade out, then fade in). The
+ * transition is scoped to the layout instead of being a global Nuxt
+ * `pageTransition` because the global hook tripped a runtime crash on
+ * pages whose slot resolved to `null` during the swap. */
+.docs-page-enter-active,
+.docs-page-leave-active {
+  transition: opacity 180ms ease-out;
 }
-.page-enter-from,
-.page-leave-to {
+.docs-page-enter-from,
+.docs-page-leave-to {
   opacity: 0;
 }

@@ -154,7 +154,8 @@
           "item6": "Dynamic state changes (open, selected, error) are announced to screen readers.",
           "item7": "Page remains fully usable at 200% browser zoom without horizontal scrolling.",
           "item8": "Error messages are programmatically linked to their inputs via aria-describedby."
-        }
+        },
+        "description": "Mood UI components ship with ARIA semantics, keyboard navigation and visible focus management out of the box. Here is how we approach accessibility and what to expect."
       },
       "changelog": {
         "kicker": "Documentation",
@@ -271,7 +272,8 @@
         "themingCard": "Customize the theme",
         "themingCardDesc": "Tokens, palettes, surfaces and dark mode presets.",
         "introCard": "Back to Introduction",
-        "introCardDesc": "Fundamentals and architecture of mood-ui."
+        "introCardDesc": "Fundamentals and architecture of mood-ui.",
+        "description": "mood-ui includes full internationalization support with Spanish and English built-in. Change language globally, override per component or create full locales for other languages."
       },
       "installation": {
         "overline": "Documentation",
@@ -294,7 +296,8 @@
         "componentsCard": "Explore components",
         "componentsCardDesc": "70+ ready-to-use components.",
         "viewOnNpm": "View on npm",
-        "viewOnGithub": "GitHub"
+        "viewOnGithub": "GitHub",
+        "description": "Mood-UI is installed as a standard npm package. Compatible with Vue 3.5+ and Tailwind CSS v4."
       },
       "introduction": {
         "kicker": "Documentation",
@@ -320,7 +323,7 @@
           },
           "tailwind": {
             "title": "Tailwind v4 native",
-            "text": "\\@theme inline + design tokens. Override from your own config without hacks."
+            "text": "{'@'}theme inline + design tokens. Override from your own config without hacks."
           },
           "ts": {
             "title": "TypeScript first",
@@ -368,7 +371,131 @@
         "componentsCard": "Explore components",
         "componentsCardDesc": "70+ components ready to use with reactive theming.",
         "i18nCard": "Internationalization",
-        "i18nCardDesc": "ES and EN included. Extend for any language."
+        "i18nCardDesc": "ES and EN included. Extend for any language.",
+        "description": "mood-ui uses a configuration cascade based on CSS custom properties + Tailwind v4 tokens. Customize via the provider, surfaces, generated palettes or by overriding CSS vars directly."
+      },
+      "nuxtSetup": {
+        "kicker": "Documentation",
+        "title": "Nuxt setup",
+        "subtitle": "Step-by-step guide for using mood-ui inside a Nuxt 4 application — from npm install to SSG production. Covers the gotchas around teleports, the color mode anti-FOUC and Tailwind v4 source scanning.",
+        "description": "Wire mood-ui into a Nuxt 4 app: app.vue provider, anti-FOUC inline script, theme state, Tailwind {'@'}source, and SSG-friendly demos with ClientOnly.",
+        "tip": "Tip",
+        "warning": "Heads up",
+        "features": {
+          "providerTitle": "Single provider at the root",
+          "providerText": "Wrap NuxtLayout + NuxtPage in one ModoProvider at the top of your component tree so every page and overlay reads the same theme tokens.",
+          "ssrTitle": "SSR-safe by default",
+          "ssrText": "Every component is server-renderable. Interactive demos that touch window or localStorage just need a ClientOnly wrapper so the static HTML stays indexable.",
+          "themeTitle": "Resolved theme, never \"system\"",
+          "themeText": "Always feed ModoProvider the resolved value (light or dark). Teleported overlays use this to decide whether to apply data-modo-theme=\"dark\" — pass \"system\" and they will fall back to the OS preference.",
+          "tailwindTitle": "Tailwind v4 friendly",
+          "tailwindText": "If your app uses its own Tailwind layer, point {'@'}source at the lib so responsive utilities like sm:flex-row resolve in your bundle at the right cascade level."
+        },
+        "step1Title": "Install the package",
+        "step1Desc": "mood-ui ships ESM, CJS and a pre-compiled CSS bundle. No peer dependencies to install separately; Vue 3.5+ is the only required peer.",
+        "step2Title": "Wire up app.vue",
+        "step2Desc": "The provider at the root gives every descendant — including layouts, pages and teleported overlays — the same theme, palette and surface tokens. The ToastContainer and ConfirmDialog are required globals: useToast() and useConfirm() push into a shared queue, and these components render it.",
+        "step2Tip": "Wrap ToastContainer and ConfirmDialog in ClientOnly. Their internal teleport targets are browser-only and an SSR pass would emit hydration warnings without it.",
+        "step3Title": "Configure nuxt.config.ts",
+        "step3Desc": "Load the lib stylesheet once and inject an anti-FOUC script in head so the .dark class lands before the first paint.",
+        "step3Warning": "The inline script must run BEFORE body. Use tagPosition: \"head\" — placing it as a runtime plugin (.client.ts) is too late: the SSG HTML repaints from light to dark on hydration.",
+        "step4Title": "Optional: persisted theme state",
+        "step4Desc": "For apps that let users tune the theme at runtime (color picker, radius selector, etc.), keep the state in useState + localStorage and feed it into ModoProvider props. Below is the pattern this showroom uses for its settings panel.",
+        "step5Title": "Tailwind v4 source scanning",
+        "step5Desc": "Only needed if your app uses its own Tailwind v4 layer. The lib ships a pre-compiled CSS, but if your bundle overrides shadow tokens or generates default utilities, point {'@'}source at the lib so responsive classes line up.",
+        "step6Title": "SSG-friendly demos",
+        "step6Desc": "Most lib components are SSR-safe out of the box — no wrapper needed. Only TWO situations require ClientOnly: the global overlay singletons (ToastContainer, ConfirmDialog), and showroom-style demos that render an overlay open by default. Normal app usage (Modal, Drawer, Tooltip in their default closed state, etc.) renders fine in SSR.",
+        "pitfallsTitle": "Common pitfalls",
+        "pitfallsIntro": "Reach for this list if something looks off after the basic setup.",
+        "pitfalls": {
+          "queueTitle": "useToast() or useConfirm() do nothing",
+          "queueText": "You forgot to mount ToastContainer and ConfirmDialog globally. The composables push into a shared queue but never render it themselves. Put both somewhere global — app.vue is the cleanest spot.",
+          "themeTitle": "Overlay shows the wrong theme",
+          "themeText": "A popover, modal or tooltip looks dark on a light page (or vice-versa). The fix is :theme=\"resolved\" from useColorMode on ModoProvider — never \"system\". Internally overlays call resolveColorMode which uses prefers-color-scheme when the prop is \"system\", which is unrelated to the user toggle.",
+          "providerTitle": "Provider too deep in the tree",
+          "providerText": "If ModoProvider is inside a layout but ToastContainer / ConfirmDialog sit outside it (e.g. directly in app.vue), the overlays do not see the provider context and fall back to defaults. Mount the provider in app.vue so the entire tree is wrapped.",
+          "fofTitle": "Flash from light to dark on first load",
+          "fofText": "The anti-FOUC inline script is missing or runs too late. Make sure tagPosition: \"head\" and that it ONLY touches document.documentElement.classList (not vue or any reactive state). It must complete before the body parses.",
+          "tailwindTitle": "Responsive classes do not work",
+          "tailwindText": "When your app has its own {'@'}import \"tailwindcss\", utility classes the lib uses (sm:flex-row, sm:w-32, etc.) may not appear in your bundle. Add {'@'}source pointing at node_modules/mood-ui/dist/**/*.js so Tailwind v4 harvests them at the right layer."
+        },
+        "nextTitle": "Where to next",
+        "nextTheming": "Theming",
+        "nextThemingDesc": "Customize palette, radius, halo and surfaces. Build your own dark mode preset.",
+        "nextComponents": "Browse components",
+        "nextComponentsDesc": "See every component with live demos, props and accessibility notes.",
+        "nextNuxt": "Nuxt 4 docs",
+        "nextNuxtDesc": "Official Nuxt documentation. Useful if you are new to the framework.",
+        "ssgTableTitle": "Quick reference: when to use ClientOnly",
+        "ssgTableIntro": "Lib components opt into hydration guards already (onMounted, typeof window checks), so the SSR pass never touches the browser globals. The rule of thumb is simple: ClientOnly is needed only when there is nothing meaningful to render server-side.",
+        "ssgClientOnly": "Wrap in ClientOnly",
+        "ssgClientOnlyText": "ToastContainer, ConfirmDialog (queue is empty in SSR; nothing to render). Theme Studio (mutates CSS vars live). Calendar / Scheduler demos that mount with events already laid out (drag handlers register on mount).",
+        "ssgServerSafe": "SSR by default (no wrapper)",
+        "ssgServerSafeText": "Button, Input, Select, Card, Typography, Badge, Chip, Avatar, Stat, Banner, Loader, Skeleton, ProgressBar, Kbd, Code, Divider. Tabs, Accordion, Table (read-only), AppShell. Modal, Drawer, Tooltip, PopoverPanel, DropdownMenu in their default closed state — the portal mounts only on user interaction.",
+        "ssgWhyMost": "Why most are SSR-safe",
+        "ssgWhyMostText": "The lib uses Vue 3 SSR-safe patterns internally: setup() never reads window or document at top level; every DOM access lives inside onMounted hooks or event handlers. The compiled HTML is identical between server and first client paint."
+      },
+      "seo": {
+        "kicker": "Documentation",
+        "title": "SEO & indexing",
+        "subtitle": "Practical guide to make a Nuxt site that uses mood-ui rank well: meta tags, sitemap, structured data, social cards, and the common pitfalls that keep pages out of the index.",
+        "description": "Guide to indexing a Nuxt + mood-ui site: useSeoMeta, sitemap, robots.txt, JSON-LD structured data, OG images, and a 10-item readiness checklist.",
+        "tip": "Tip",
+        "pillars": {
+          "ssgTitle": "SSG over SPA",
+          "ssgText": "nuxt generate produces pre-rendered HTML for every route. Each page ships its own title, meta description and copy in the source, indexable without running JavaScript.",
+          "metaTitle": "Meta per page",
+          "metaText": "Every route needs a unique title and description. Generic shared headers kill long-tail traffic. useSeoMeta is the cleanest API.",
+          "ogTitle": "Open Graph & Twitter",
+          "ogText": "A good share card (image + title + description) lifts CTR on social. Open Graph also feeds preview links in Slack, Discord and iMessage.",
+          "structuredTitle": "Structured data",
+          "structuredText": "JSON-LD tells Google what a page IS (article, product, event, FAQ). Unlocks rich results — ratings, prices, dates, breadcrumbs directly in the SERP."
+        },
+        "step1Title": "Use SSG, not SPA",
+        "step1Desc": "A pure-SPA Nuxt build ships an almost-empty HTML shell that JavaScript paints later. Search bots are getting better at SPAs but still rank SSG sites higher because the content is in the initial HTML. mood-ui works in both modes — pick SSG if SEO matters. nuxt generate is the command; deploy the .output/public directory to any static host (Vercel, Netlify, Cloudflare Pages, S3).",
+        "step2Title": "useSeoMeta on every page",
+        "step2Desc": "Inside the script setup of each page, declare the meta. Reactive values are fine — Nuxt waits for them to resolve before serializing the HTML. Pair with useHead for the canonical link and the html lang attribute.",
+        "step3Title": "Sitemap.xml",
+        "step3Desc": "Auto-generated via {'@'}nuxtjs/sitemap. For dynamic routes (products, blog posts, profiles) fetch the slugs once at build time in a server route the module reads from.",
+        "step4Title": "robots.txt",
+        "step4Desc": "Ship one in public/ that allows crawling and points at the sitemap. Block /admin and /api so private surfaces never show up in results.",
+        "step5Title": "Structured data (JSON-LD)",
+        "step5Desc": "Schema.org JSON-LD is the most reliable way to unlock rich results. Add a script[type=\"application/ld+json\"] per page describing the entity. Article, Product, Organization and BreadcrumbList have the highest payoff.",
+        "step5Tip": "Validate your JSON-LD with the Rich Results Test or Schema Validator before deploying. A broken markup silently disables the rich result without an error in Search Console.",
+        "step6Title": "Social share cards",
+        "step6Desc": "A 1200x630 OG image is the single biggest win for share CTR. Generate them on-the-fly per page so they always match the current title and copy. Cache aggressively at the edge.",
+        "checklistTitle": "Pre-launch checklist",
+        "checklistIntro": "Run through this before pointing your domain at the new build. Each item maps to a Search Console signal — miss one and you leave indexing on the table.",
+        "checklist": {
+          "item1": "Every route returns a unique title and meta description in the initial HTML (curl the URL and grep).",
+          "item2": "rel=canonical points at the public production URL (https, with or without www — pick one and redirect the other).",
+          "item3": "html lang attribute reflects the active locale.",
+          "item4": "sitemap.xml is reachable at /sitemap.xml and lists every public route. Submitted in Search Console.",
+          "item5": "robots.txt is at /robots.txt with Sitemap: line.",
+          "item6": "Open Graph tags (og:title, og:description, og:image, og:url, og:type) on every shareable page.",
+          "item7": "Twitter Card tags (twitter:card=summary_large_image, twitter:title, etc.).",
+          "item8": "Structured data validates in Rich Results Test for at least the homepage and product / article pages.",
+          "item9": "Lighthouse SEO score 95+ on the homepage and a sample inner page.",
+          "item10": "Core Web Vitals (LCP, INP, CLS) in the green for both mobile and desktop in PageSpeed Insights."
+        },
+        "toolsTitle": "Tools",
+        "toolsIntro": "The essential set. Bookmark all of them.",
+        "tools": {
+          "gsc": "Authoritative source for indexing status. Submit the sitemap, monitor coverage and impressions.",
+          "lighthouse": "In-browser audit (in Chrome DevTools). SEO category catches most basics in 5 seconds.",
+          "schema": "Validates JSON-LD against schema.org. Use during development.",
+          "rich": "Google preview of how your structured data will render in the SERP. Use before deploying.",
+          "pagespeed": "Mobile + desktop Core Web Vitals + Lighthouse audit on the real Google infrastructure."
+        },
+        "pitfallsTitle": "Common SEO pitfalls",
+        "pitfalls": {
+          "clientOnlyTitle": "Wrapping content in ClientOnly",
+          "clientOnlyText": "A ClientOnly block renders empty in SSR. If your hero, FAQ, product list or any indexable content is inside one, Google sees nothing. Reserve ClientOnly for genuinely interactive widgets that have no static representation (drag canvases, live theme studios, etc.).",
+          "duplicateTitle": "Same title across pages",
+          "duplicateText": "A site-wide template like \"My App\" everywhere makes every page identical to Google. Use useSeoMeta per page and pair with a titleTemplate (\"%s | My App\") in app.head.",
+          "lazyTitle": "Lazy-loading the only content above the fold",
+          "lazyText": "Defer-loading images or sections that contain the H1 / body copy delays LCP and starves the crawler. Keep the first viewport static; lazy-load only stuff below the fold."
+        }
       }
     }
   }
