@@ -37,7 +37,7 @@ const STORAGE_KEY = "mood-ui:docs-theme";
 const DEFAULTS: DocsThemeState = {
   radius: "medium",
   size: "medium",
-  halo: "tinted",
+  halo: "off",
   primaryHex: "#6366f1",
   baseIntensity: 0,
   darkSurface: "default",
