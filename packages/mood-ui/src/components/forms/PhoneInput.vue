@@ -90,7 +90,7 @@
         :aria-describedby="describedBy"
         :aria-required="required || undefined"
         :class="[
-          'modo-field-native flex-1 min-w-0 bg-transparent p-0',
+          'modo-field-native flex-1 min-w-0 bg-transparent',
           'text-foreground placeholder:text-muted-foreground',
           'disabled:cursor-not-allowed',
           inputTextClass,
@@ -532,7 +532,11 @@ const inputTextClass = computed(() => {
 });
 
 const inputPaddingClass = computed(() => {
-  return "pl-2";
+  // pr-3 leaves a comfortable gap on the right edge as well; the
+  // legacy showroom relied on the field-native default padding which
+  // we override here. Without pl-3 numbers visually butt up against
+  // the country trigger divider.
+  return "pl-3 pr-3";
 });
 
 // ── Event handlers ────────────────────────────────────────────────────────────

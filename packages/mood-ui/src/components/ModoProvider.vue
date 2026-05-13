@@ -9,7 +9,7 @@
 </template> 
  
 <script setup lang="ts"> 
-import { ref, computed, watch, provide, inject } from 'vue';
+import { ref, computed, watch, provide, inject, onBeforeUnmount } from 'vue';
 import { MODO_CONFIG, defaultModoConfig, type ModoAiConfig, type ModoColor, type ModoConfig, type ModoHalo, type ModoRadius, type ModoSize, type ModoTheme, type ModoSurfaces } from '../config/ModoConfig'; 
 import { MODO_LOCALE, defaultLocale, mergeLocale, type ModoLocale, type PartialLocale } from '../config/ModoLocale'; 
 import { mergePalettes, palettesToCssVars, semanticTokensFromPalettes, type ModoPalette } from '../config/palettes'; 
@@ -207,9 +207,62 @@ const cssVarStyle = computed(() => {
     return { ...legacy, ...derived, ...surfaceVars, ...darkSurfaceVars };
 }); 
  
-provide(MODO_CONFIG, config); 
- 
-// Locale cascade: 
+provide(MODO_CONFIG, config);
+
+// ── Body sync (overlays via Teleport) ────────────────────────────────
+// Global (non-scoped) providers also mirror the same CSS custom
+// properties onto `document.body`. Teleported overlays — Tooltip,
+// Modal, Drawer, PopoverPanel, DropdownMenu — render as body-level
+// siblings of this component's wrapper `<div class="contents">`. They
+// would otherwise resolve `var(--background)`, `var(--card)`,
+// `var(--popover)` etc. from the cascade rooted at `<html>` — which
+// is the right value when the active color mode matches the OS
+// preference but mismatches the moment the user toggles to the other
+// theme (the wrapper applies the new tokens to its descendants but
+// `<body>` keeps the original cascade). Copying onto `<body>` directly
+// keeps overlays in lock-step with the rest of the page.
+//
+// Scoped providers don't touch the body — by definition they should
+// only affect their own subtree.
+// Mirror the global provider's CSS custom properties onto `<body>` so
+// teleported overlays (Tooltip, Modal, PopoverPanel, DropdownMenu)
+// inherit the same `--primary`, `--background`, `--card` etc. as the
+// rest of the app. Without this they fall back to the lib's default
+// `:root` rules and look "off-theme" compared to a page that has any
+// surface override (tooltip ends up light, popover ends up dark, etc).
+//
+// Scoped providers deliberately skip this so they don't leak their
+// subtree's theme onto the global teleport target.
+const isBrowser = typeof document !== "undefined";
+if (isBrowser) {
+    let applied: string[] = [];
+    watch(
+        () => ({ scoped: props.scoped, vars: cssVarStyle.value }),
+        ({ scoped, vars }) => {
+            if (scoped) return;
+            const body = document.body;
+            if (!body) return;
+            for (const k of applied) {
+                if (!(k in vars)) body.style.removeProperty(k);
+            }
+            applied = [];
+            for (const [k, v] of Object.entries(vars)) {
+                if (typeof v === "string") {
+                    body.style.setProperty(k, v);
+                    applied.push(k);
+                }
+            }
+        },
+        { immediate: true, deep: true },
+    );
+    onBeforeUnmount(() => {
+        if (props.scoped) return;
+        for (const k of applied) document.body.style.removeProperty(k);
+        applied = [];
+    });
+}
+
+// Locale cascade:
 // defaultLocale ← parent locale ← local `locale` prop. 
 // Each level is deep-merged so consumers only override the keys they need. 
 const parentLocale = inject(MODO_LOCALE, undefined); 
