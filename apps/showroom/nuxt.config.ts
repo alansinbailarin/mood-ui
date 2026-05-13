@@ -141,14 +141,21 @@ export default defineNuxtConfig({
         },
       ],
       // Inline anti-FOUC script. Runs synchronously in <head> before the
-      // body parses, so the very first paint already has the right `.dark`
-      // class on <html>. Mirrors what the lib's `useColorMode` will set
-      // during hydration. Without this, the SSG-rendered HTML (light by
-      // default) flashes for ~200ms before Vue hydrates and toggles dark.
+      // body parses so the very first paint has both:
+      //   1) The right `.dark` class on <html>.
+      //   2) The user's previously-cached CSS custom properties applied
+      //      to `<html>` — primary palette, semantic tokens and surface
+      //      vars — so returning visitors don't flash through the lib's
+      //      indigo defaults on their way to whatever palette they
+      //      picked in the docs settings panel / Theme Studio.
+      // The cache is written by `composables/usePersistedThemeVars.ts`
+      // every time the docs theme changes. ModoProvider on the server
+      // emits `style=""` until it mounts, so the inline `<html>` styles
+      // we set here win the first paint.
       script: [
         {
           tagPosition: "head",
-          innerHTML: `(function(){try{var s=localStorage.getItem('modo-color-mode');var p=matchMedia('(prefers-color-scheme: dark)').matches;var d=s==='dark'||(s!=='light'&&p);if(d)document.documentElement.classList.add('dark');}catch(e){}})();`,
+          innerHTML: `(function(){try{var s=localStorage.getItem('modo-color-mode');var p=matchMedia('(prefers-color-scheme: dark)').matches;var d=s==='dark'||(s!=='light'&&p);if(d)document.documentElement.classList.add('dark');var raw=localStorage.getItem('mood-ui:cached-vars');if(!raw)return;var cache=JSON.parse(raw);var vars=cache&&cache[d?'dark':'light'];if(!vars)return;var r=document.documentElement;for(var k in vars){if(k.charAt(0)==='-'&&k.charAt(1)==='-')r.style.setProperty(k,vars[k]);}}catch(e){}})();`,
         },
       ],
     },

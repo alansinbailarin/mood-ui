@@ -1,20 +1,19 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import {
-  Bars3Icon,
-  GlobeAltIcon,
   SunIcon,
   MoonIcon,
   ComputerDesktopIcon,
+  ChevronDownIcon,
+  SwatchIcon,
 } from "@heroicons/vue/24/outline";
 import { ColorModeSwitch, Select, useColorMode } from "mood-ui";
 import type { ModoTheme } from "mood-ui";
 
-const props = defineProps<{
-  showBurger?: boolean;
-}>();
-
-const emit = defineEmits<{
-  burger: [];
+// Burger trigger lives in the layout (floating bottom-right). Duplicating
+// it in the header crowded the top row on phones without adding any
+// reachability — the floating button is already the easier target.
+defineEmits<{
   "open-search": [];
 }>();
 
@@ -38,16 +37,6 @@ function onLocale(v: unknown) {
 
 <template>
   <div class="max-w-9xl mx-auto flex items-center gap-2 px-3 sm:px-6 h-12 lg:h-16 lg:gap-3">
-    <button
-      v-if="props.showBurger"
-      type="button"
-      class="lg:hidden inline-flex items-center justify-center w-9 h-9 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
-      aria-label="Open menu"
-      @click="emit('burger')"
-    >
-      <Bars3Icon class="w-5 h-5" />
-    </button>
-
     <NuxtLink to="/" class="flex items-center gap-2 group shrink-0" aria-label="Home">
       <!-- Two logos toggled via Tailwind's dark variant. `logo_dark` is
            the dark/black artwork shown on light backgrounds; `logo_light`
@@ -82,7 +71,7 @@ function onLocale(v: unknown) {
          elements) but the real interactive widgets hydrate without the
          SSR/CSR mismatch we hit when removing ClientOnly entirely. -->
     <div class="flex items-center gap-1">
-      <div class="hidden sm:block w-[88px] shrink-0">
+      <div class="w-[76px] sm:w-[88px] shrink-0">
         <ClientOnly>
           <Select
             :model-value="locale"
@@ -94,13 +83,14 @@ function onLocale(v: unknown) {
             @update:model-value="onLocale"
           />
           <template #fallback>
+            <!-- Mirror the real Select (size=small, radius=full, full-width)
+                 so hydration doesn't change pill shape, height or padding. -->
             <div
-              class="flex items-center justify-between gap-1 h-8 px-3 rounded-full border border-border bg-background text-xs text-foreground/80"
+              class="flex items-center justify-between h-8 px-3 rounded-full border border-border bg-background text-xs font-medium text-foreground/85"
               aria-hidden="true"
             >
-              <GlobeAltIcon class="w-3.5 h-3.5 shrink-0" />
-              <span class="font-medium">{{ locale.toUpperCase() }}</span>
-              <span class="text-muted-foreground/60">▾</span>
+              <span>{{ locale.toUpperCase() }}</span>
+              <ChevronDownIcon class="w-3.5 h-3.5 shrink-0 text-muted-foreground/70" />
             </div>
           </template>
         </ClientOnly>
@@ -114,30 +104,33 @@ function onLocale(v: unknown) {
           @update:model-value="onColorMode"
         />
         <template #fallback>
-          <button
-            type="button"
-            class="inline-flex items-center justify-center w-8 h-8 rounded-full transition-colors hover:bg-muted/60 text-muted-foreground"
+          <!-- Mirror the collapsed ColorModeSwitch: a small pill that
+               shows only the active icon, with the same track tokens
+               (border + tinted background) so hydration doesn't pop
+               the size or background. -->
+          <span
+            class="inline-flex items-center justify-center w-8 h-8 rounded-full border border-border bg-muted/40 text-foreground"
             aria-hidden="true"
-            tabindex="-1"
           >
             <SunIcon v-if="mode === 'light'" class="w-4 h-4" />
             <MoonIcon v-else-if="mode === 'dark'" class="w-4 h-4" />
             <ComputerDesktopIcon v-else class="w-4 h-4" />
-          </button>
+          </span>
         </template>
       </ClientOnly>
 
       <ClientOnly>
         <AppShowroomSettings />
         <template #fallback>
+          <!-- Mirror the real settings trigger: round button with the
+               SwatchIcon colored by `var(--primary)`, which the inline
+               anti-FOUC script in nuxt.config has already pinned on the
+               root element from the user's cached theme. -->
           <span
-            class="inline-flex items-center justify-center w-8 h-8 rounded-full text-muted-foreground"
+            class="inline-flex items-center justify-center w-8 h-8 rounded-full"
             aria-hidden="true"
           >
-            <!-- Swatch icon placeholder, same size as the real button -->
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4.098 19.902a3.75 3.75 0 0 0 5.304 0l6.401-6.402M6.75 21A3.75 3.75 0 1 1 3 17.25 3.75 3.75 0 0 1 6.75 21Z" />
-            </svg>
+            <SwatchIcon class="w-5 h-5" style="color: var(--primary)" />
           </span>
         </template>
       </ClientOnly>

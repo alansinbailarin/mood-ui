@@ -9,7 +9,7 @@
 </template> 
  
 <script setup lang="ts"> 
-import { ref, computed, watch, provide, inject, onBeforeUnmount } from 'vue';
+import { ref, computed, watch, provide, inject, onBeforeUnmount, onMounted } from 'vue';
 import { MODO_CONFIG, defaultModoConfig, type ModoAiConfig, type ModoColor, type ModoConfig, type ModoHalo, type ModoRadius, type ModoSize, type ModoTheme, type ModoSurfaces } from '../config/ModoConfig'; 
 import { MODO_LOCALE, defaultLocale, mergeLocale, type ModoLocale, type PartialLocale } from '../config/ModoLocale'; 
 import { mergePalettes, palettesToCssVars, semanticTokensFromPalettes, type ModoPalette } from '../config/palettes'; 
@@ -189,7 +189,20 @@ const isDarkLocal = computed(() =>
         : isDark.value,
 );
 
+// Render-side anti-FOUC gate. On the server (and the matching first
+// hydration tick) we emit an empty style object, so the SSG HTML ships
+// `<div style="">` instead of baking the lib's default palette into the
+// markup. That lets consumers ship an inline anti-FOUC `<script>` that
+// writes the user's cached CSS vars onto `<html>` — the first paint
+// then honours those, and we fill in the rich inline style as soon as
+// the component mounts on the client. Skipping the gate during SSR
+// would inevitably flash the lib defaults until React/Vue hydrate and
+// recompute the user's stored theme.
+const isClientMounted = ref(false);
+onMounted(() => { isClientMounted.value = true; });
+
 const cssVarStyle = computed(() => {
+    if (!isClientMounted.value) return {};
     const legacy = palettesToCssVars(config.value.palettes);
     const derived = semanticTokensFromPalettes(
         config.value.palettes,
@@ -205,7 +218,7 @@ const cssVarStyle = computed(() => {
         ? surfacesToCssVars(config.value.darkSurfaces)
         : {};
     return { ...legacy, ...derived, ...surfaceVars, ...darkSurfaceVars };
-}); 
+});
  
 provide(MODO_CONFIG, config);
 

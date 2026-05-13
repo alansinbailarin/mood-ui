@@ -163,6 +163,17 @@
         "description": "Cada release de mood-ui listado de más reciente a más antiguo. Versionado con SemVer, con detalles de nuevos componentes, fixes y breaking changes.",
         "intro": "Cada release listado de más reciente a más antiguo. Seguimos SemVer.",
         "releases": {
+          "v0.8.2": {
+            "title": "Anti-FOUC + darkClass aditivo + fixes de ColorModeSwitch",
+            "items": [
+              "Fix: la opción darkClass de useColorMode ahora es ADITIVA en lugar de reemplazar. El lib siempre mantiene su clase 'dark' interna sobre el elemento raíz (su CSS compilado depende de ella). Cuando configurás darkClass como 'appdark', ambas clases 'appdark' y 'dark' se alternan — tu CSS de app y el CSS del lib funcionan en dark mode.",
+              "Fix: ModoProvider ya no emite sus CSS custom properties durante SSR — serializa un inline style vacío en el div wrapper y solo lo rellena cuando el componente se monta en el cliente. Esto deja la puerta abierta para que los consumers usen un script inline en el head que escriba el tema cacheado del usuario sobre el elemento raíz y gane el primer paint.",
+              "Fix: ColorModeSwitch suprime su outline de focus en ambas variantes (default y collapsed) vía una regla CSS dedicada. El click ya no deja indicador cuadrado ni puntos, y el browser ya no flashea el outline al entrar en fullscreen.",
+              "Showroom: se le pasa el mode crudo (no el theme resuelto) al ModoProvider del layout, así el indicador del ColorModeSwitch global se queda en el icono de system cuando el user lo elige, en lugar de saltar al sol o la luna. El watch(theme) → setColorMode del ModoProvider antes sobreescribía el mode con el valor resuelto.",
+              "Showroom: los CSS vars resueltos ahora se cachean en localStorage y se re-aplican al elemento raíz antes del primer paint, así los visitantes recurrentes ya no parpadean a través de los indigo defaults del lib en su camino al palette y surface preset que eligieron en el panel de settings.",
+              "Showroom: los fallbacks ClientOnly del header (locale select, color mode pill, settings swatch) ahora reflejan la forma hidratada exactamente, así los controles no saltan entre el primer paint y la hidratación."
+            ]
+          },
           "v0.8.1": {
             "title": "Fix de metadata del paquete en npm",
             "items": [

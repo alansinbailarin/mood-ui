@@ -14,28 +14,31 @@ export type ColorMode = "light" | "dark" | "system";
 
 export interface ColorModeOptions {
   /**
-   * Class name added to `<html>` when the resolved mode is `'dark'`.
-   * Defaults to `'dark'` (the convention Tailwind v4 uses out of the box).
+   * Additional class to toggle on `<html>` when the resolved mode is
+   * `'dark'`. The lib **always** toggles its own internal `'dark'`
+   * class as well — its compiled CSS (Tailwind v4 `dark:` variants)
+   * is keyed off `.dark` and cannot work without it. Use this option
+   * when your application's CSS keys off a different class, e.g.
+   * `useColorMode({ darkClass: 'appdark' })`. With that call, `<html>`
+   * will carry both `appdark` (for your rules) and `dark` (for the
+   * lib's rules) whenever the resolved mode is dark.
    *
-   * Override it when your app's CSS already keys off a custom class
-   * — e.g. `useColorMode({ darkClass: 'appdark' })`. Calling this with
-   * a new value swaps the class on `<html>` immediately, so existing
-   * dark-mode rules keep firing.
-   *
-   * Note: mood-ui's own dark-mode CSS is compiled against `.dark`. If
-   * you need both your `appdark` selectors AND the lib's dark variants
-   * to work, configure Tailwind so `dark:` resolves to your custom
-   * selector, or keep both classes in sync via `darkClassExtras`.
+   * Calling this with a new value swaps the previous extra class for
+   * the new one immediately; the lib's internal `dark` is never
+   * removed.
    */
   darkClass?: string;
 }
 
 const STORAGE_KEY = "modo-color-mode";
-const DEFAULT_DARK_CLASS = "dark";
+const LIB_DARK_CLASS = "dark";
 
 const mode = ref<ColorMode>("system");
 const systemIsDark = ref(false);
-let darkClassName = DEFAULT_DARK_CLASS;
+// Consumer-supplied class. Toggled alongside `LIB_DARK_CLASS` so the
+// app's own CSS (which keys off this class) and the lib's compiled
+// `.dark` selectors both fire in dark mode. Null when not configured.
+let extraDarkClass: string | null = null;
 
 const resolved = computed<"light" | "dark">(() => {
   if (mode.value === "system") return systemIsDark.value ? "dark" : "light";
@@ -44,21 +47,23 @@ const resolved = computed<"light" | "dark">(() => {
 
 const applyClass = () => {
   if (typeof document === "undefined") return;
-  document.documentElement.classList.toggle(
-    darkClassName,
-    resolved.value === "dark",
-  );
+  const isDark = resolved.value === "dark";
+  // Lib selector is always kept in sync — its compiled CSS depends on it.
+  document.documentElement.classList.toggle(LIB_DARK_CLASS, isDark);
+  // Consumer's extra class rides alongside.
+  if (extraDarkClass) {
+    document.documentElement.classList.toggle(extraDarkClass, isDark);
+  }
 };
 
 const setDarkClass = (name: string) => {
-  if (!name || name === darkClassName) return;
-  if (typeof document !== "undefined") {
-    // Strip the previous class regardless of the current resolved
-    // value so the old selector stops matching the moment the
-    // override is applied.
-    document.documentElement.classList.remove(darkClassName);
+  if (!name || name === extraDarkClass) return;
+  if (typeof document !== "undefined" && extraDarkClass) {
+    // Strip the previous extra class so the old selector stops
+    // matching the moment the override is swapped.
+    document.documentElement.classList.remove(extraDarkClass);
   }
-  darkClassName = name;
+  extraDarkClass = name;
   applyClass();
 };
 

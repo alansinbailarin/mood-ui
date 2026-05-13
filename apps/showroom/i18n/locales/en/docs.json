@@ -163,6 +163,17 @@
         "description": "Every release of mood-ui listed newest first. SemVer-tracked, with highlights of new components, bug fixes and breaking changes.",
         "intro": "Every release listed newest first. We follow SemVer.",
         "releases": {
+          "v0.8.2": {
+            "title": "Anti-FOUC + darkClass additive + ColorModeSwitch fixes",
+            "items": [
+              "Fix: useColorMode darkClass option is now ADDITIVE rather than replacing. The lib always keeps its internal 'dark' class on the root element (its compiled CSS depends on it). When you set darkClass to 'appdark', both 'appdark' and 'dark' are toggled — your app's CSS and the lib's CSS both fire in dark mode.",
+              "Fix: ModoProvider no longer emits its computed CSS custom properties during SSR — it serializes an empty inline style on the wrapper div and only fills it in once the component mounts on the client. That unblocks consumers from shipping an inline script in the document head that writes the user's cached theme to the root element and wins the first paint.",
+              "Fix: ColorModeSwitch suppresses its focus outline in both the default and collapsed variants via a dedicated CSS rule. Click no longer leaves a square or dotted indicator, and the browser no longer flashes the outline when entering fullscreen.",
+              "Showroom: feeding raw mode (not the resolved theme) to the layout's ModoProvider, so the global ColorModeSwitch indicator stays on the system icon when a user picks system instead of jumping to the sun or moon. ModoProvider's `watch(theme) → setColorMode` previously overwrote the mode back to the resolved value.",
+              "Showroom: the resolved CSS custom properties are now cached in localStorage and re-applied to the root element before the first paint, so returning visitors no longer flash through the lib's indigo defaults on their way to whatever palette and surface preset they picked in the docs settings panel.",
+              "Showroom: the header's ClientOnly fallbacks (locale select, color mode pill, settings swatch) now mirror the hydrated shape exactly so the controls don't pop between first paint and hydration."
+            ]
+          },
           "v0.8.1": {
             "title": "npm package metadata fix",
             "items": [

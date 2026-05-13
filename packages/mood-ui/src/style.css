@@ -418,14 +418,30 @@ body {
   color: color-mix(in oklab, var(--muted-foreground) 60%, var(--ring) 40%);
 }
 
-/* Native <input>/<textarea> reset — focus feedback lives on the wrapper, 
- * not on the native element. Prevents double rings and platform drift. */ 
-.modo-field-native, 
-.modo-field-native:focus, 
-.modo-field-native:focus-visible { 
-  outline: none !important; 
-  box-shadow: none !important; 
-} 
+/* Native <input>/<textarea> reset — focus feedback lives on the wrapper,
+ * not on the native element. Prevents double rings and platform drift. */
+.modo-field-native,
+.modo-field-native:focus,
+.modo-field-native:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* ColorModeSwitch options: the segmented control supplies its own
+ * sliding indicator as the focus affordance, so we suppress the
+ * browser default outline AND the global :where(...)/:focus-visible
+ * fallback at the source. Without this, Chromium re-paints the focus
+ * outline whenever the viewport state changes (entering / leaving
+ * fullscreen with F11) because :focus-visible heuristics flip back
+ * on for keyboard-style focus events.
+ */
+.modo-color-mode-option,
+.modo-color-mode-option:focus,
+.modo-color-mode-option:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border-radius: 9999px !important;
+}
 .modo-field-native { 
   border: 0 !important; 
 } 

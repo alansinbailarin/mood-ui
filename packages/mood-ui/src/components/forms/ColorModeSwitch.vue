@@ -228,7 +228,7 @@ const sz = {
           :aria-checked="modelValue === opt.value"
           :aria-label="opt.label"
           :disabled="disabled"
-          class="relative z-10 inline-flex items-center justify-center rounded-full text-muted-foreground transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background"
+          class="modo-color-mode-option relative z-10 inline-flex items-center justify-center rounded-full text-muted-foreground transition-colors duration-150"
           :class="[
             showLabels ? sz[size].lbl : sz[size].btn,
             modelValue === opt.value
@@ -254,7 +254,7 @@ const sz = {
         :aria-checked="modelValue === opt.value"
         :aria-label="opt.label"
         :disabled="disabled"
-        class="relative z-10 inline-flex items-center justify-center rounded-full text-muted-foreground transition-colors duration-150"
+        class="modo-color-mode-option relative z-10 inline-flex items-center justify-center rounded-full text-muted-foreground transition-colors duration-150"
         :class="[
           showLabels ? sz[size].lbl : sz[size].btn,
           modelValue === opt.value

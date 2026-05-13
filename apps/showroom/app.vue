@@ -12,7 +12,13 @@ import { useDocsTheme } from "~/composables/useDocsTheme";
 import { tintedLightSurfaces, tintedDarkSurfaces } from "~/utils/tintedSurfaces";
 import { resolveHash } from "~/utils/hash-redirects";
 
-const { resolved: resolvedColorMode } = useColorMode();
+// Pass the RAW mode (not the resolved theme) to this ModoProvider too.
+// ModoProvider's `watch(theme) → setColorMode` would otherwise overwrite
+// `mode` back to the resolved value whenever the user picks `system`
+// from a state where the OS preference disagrees — that's the bug that
+// made the ColorModeSwitch capsule jump to sun/moon instead of staying
+// on the system icon. See the long-form note in `layouts/default.vue`.
+const { mode: colorMode } = useColorMode();
 
 // The globals (`<ToastContainer>` / `<ConfirmDialog>`) live in their own
 // `<ModoProvider>` here in app.vue — outside the layouts. We feed them the
@@ -78,7 +84,7 @@ if (import.meta.client && window.location.hash) {
        even while the page itself is light. -->
   <ClientOnly>
     <ModoProvider
-      :theme="resolvedColorMode"
+      :theme="colorMode"
       :radius="docsTheme.radius"
       :size="docsTheme.size"
       :halo="docsTheme.halo"

@@ -2,9 +2,17 @@
 import { computed } from "vue";
 import { ModoProvider, paletteFromHex, darkSurfaces, useColorMode } from "mood-ui";
 import { useDocsTheme } from "~/composables/useDocsTheme";
+import { usePersistedThemeVars } from "~/composables/usePersistedThemeVars";
 import { tintedLightSurfaces, tintedDarkSurfaces } from "~/utils/tintedSurfaces";
 
-const { resolved: resolvedColorMode } = useColorMode();
+// Pass the raw mode (`'light' | 'dark' | 'system'`) — not the resolved
+// theme — to ModoProvider. See the long-form comment in default.vue:
+// feeding `resolved` would clobber `mode` back via ModoProvider's
+// `watch(theme) → setColorMode` and make the system option un-pickable.
+const { mode: colorMode } = useColorMode();
+
+// Anti-FOUC cache — see composable docstring.
+usePersistedThemeVars();
 
 /**
  * Full-bleed layout for the landing page. Same header as the docs shell
@@ -37,7 +45,7 @@ const darkSurfaceConfig = computed(() => {
 
 <template>
   <ModoProvider
-    :theme="resolvedColorMode"
+    :theme="colorMode"
     :radius="state.radius"
     :size="state.size"
     :halo="state.halo"
@@ -49,11 +57,13 @@ const darkSurfaceConfig = computed(() => {
       <header
         class="sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-background/70 bg-background/85 border-b border-border"
       >
-        <AppHeader :show-burger="false" />
+        <AppHeader />
       </header>
       <main class="flex-1">
         <slot />
       </main>
+
+      <AppMobileNav />
     </div>
   </ModoProvider>
 </template>
