@@ -30,9 +30,14 @@ function resolveMessage(v: unknown): unknown {
   if (typeof v === "string") return v;
   if (Array.isArray(v)) return v.map(resolveMessage);
   if (typeof v === "object") {
-    // AST nodes have `type` + `body` properties; anything else is a plain
-    // object we should recurse into.
-    if ("type" in (v as object) && "body" in (v as object)) {
+    // AST nodes carry `type`/`body` in dev and the minified `t`/`b` keys in
+    // production builds (vue-i18n's message compiler swaps to short keys to
+    // shave bytes off the runtime). Checking only the long form left every
+    // release rendered as raw JSON on mood-ui.com.
+    const o = v as Record<string, unknown>;
+    const isAstNode =
+      ("type" in o && "body" in o) || ("t" in o && "b" in o);
+    if (isAstNode) {
       try {
         return rt(v as never);
       } catch {
@@ -88,6 +93,7 @@ interface Release {
 }
 
 const releases: Release[] = [
+  { version: "v0.8.1", date: "2026-05-13", tag: "patch" },
   { version: "v0.8.0", date: "2026-05-12", tag: "minor" },
   { version: "v0.7.1", date: "2026-05-09", tag: "patch" },
   { version: "v0.7.0", date: "2026-05-08", tag: "minor" },

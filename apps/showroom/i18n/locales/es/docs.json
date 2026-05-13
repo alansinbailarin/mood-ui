@@ -163,6 +163,13 @@
         "description": "Cada release de mood-ui listado de más reciente a más antiguo. Versionado con SemVer, con detalles de nuevos componentes, fixes y breaking changes.",
         "intro": "Cada release listado de más reciente a más antiguo. Seguimos SemVer.",
         "releases": {
+          "v0.8.1": {
+            "title": "Fix de metadata del paquete en npm",
+            "items": [
+              "Fix: README y LICENSE ahora se incluyen en el tarball publicado a npm. v0.8.0 los declaraba en files pero solo existían en la raíz del monorepo, así que el paquete publicado quedó sin la pestaña Readme en npmjs.com.",
+              "Showroom: se reformuló una entrada del changelog que contenía el texto literal 'typeof window'. El SSR build de Vite reemplaza ese token con el string 'undefined' como optimización a nivel de texto, lo que filtró a un mensaje compilado de vue-i18n y rompió el build de producción."
+            ]
+          },
           "v0.8.0": {
             "title": "Showroom Nuxt 4 SSG + theming de overlays + refresh de AvatarUpload",
             "items": [
