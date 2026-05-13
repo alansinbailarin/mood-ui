@@ -49,10 +49,20 @@ function onLocale(v: unknown) {
     </button>
 
     <NuxtLink to="/" class="flex items-center gap-2 group shrink-0" aria-label="Home">
+      <!-- Two logos toggled via Tailwind's dark variant. `logo_dark` is
+           the dark/black artwork shown on light backgrounds; `logo_light`
+           is the inverted version shown when .dark is active. Using two
+           <img> tags (instead of swapping src reactively) avoids a flash
+           on color-mode toggle and keeps both files cached. -->
       <img
-        src="/icon-mood-ui.png"
+        src="/logo_dark.png"
         alt="mood-ui"
-        class="w-7 h-7 lg:w-8 lg:h-8 object-contain group-hover:scale-110 transition-transform"
+        class="block dark:hidden w-7 h-7 lg:w-8 lg:h-8 object-contain group-hover:scale-110 transition-transform"
+      />
+      <img
+        src="/logo_light.png"
+        alt="mood-ui"
+        class="hidden dark:block w-7 h-7 lg:w-8 lg:h-8 object-contain group-hover:scale-110 transition-transform"
       />
       <span class="hidden sm:inline text-lg tracking-tight">
         <span class="font-medium text-foreground">Mood</span><span class="font-bold ml-1 uppercase text-primary">UI</span>

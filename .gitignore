@@ -35,5 +35,9 @@ build_output.txt
 *.sln
 *.sw?
 
-# Project planning
-# plan.md
+# Project planning / personal workflow docs (not shared)
+MIGRATION_NUXT.md
+COMPONENTS_ROADMAP.md
+RELEASE.md
+docs/migration/
+plan.md
