@@ -51,18 +51,59 @@
     >
       <div
         data-modo-switcher-panel
-        class="modo-switcher-panel"
+        class="modo-switcher-panel overflow-y-auto"
         :style="{ maxHeight: panelMaxHeightStyle }"
       >
-        <!-- Items / search / footer slots come in later tasks -->
+        <div
+          v-if="panelTitle"
+          class="px-3 pt-3 pb-2 text-caption text-muted-foreground uppercase tracking-wider"
+        >
+          {{ panelTitle }}
+        </div>
+
+        <ul
+          role="listbox"
+          :id="listboxId"
+          class="flex flex-col py-1"
+        >
+          <li
+            v-for="(item, idx) in items"
+            :key="item.value"
+            role="option"
+            :id="`${listboxId}-opt-${idx}`"
+            :aria-selected="String(item.value === modelValue)"
+            :aria-current="item.value === modelValue ? 'true' : undefined"
+            :aria-disabled="item.disabled || undefined"
+            :data-active="item.value === modelValue || undefined"
+            :tabindex="-1"
+            class="modo-switcher-item flex items-center gap-3 px-3 py-2 cursor-pointer"
+            :class="[
+              item.value === modelValue ? 'bg-accent/40' : 'hover:bg-accent',
+              item.disabled ? 'opacity-50 cursor-not-allowed' : '',
+            ]"
+          >
+            <span class="flex flex-col min-w-0 flex-1">
+              <span class="truncate text-body font-medium">{{ item.title }}</span>
+              <span
+                v-if="item.subtitle"
+                class="truncate text-caption text-muted-foreground"
+              >{{ item.subtitle }}</span>
+            </span>
+            <CheckIcon
+              v-if="item.value === modelValue"
+              class="w-4 h-4 shrink-0"
+              aria-hidden="true"
+            />
+          </li>
+        </ul>
       </div>
     </PopoverPanel>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
-import { ChevronUpDownIcon, ChevronDownIcon } from "@heroicons/vue/24/outline";
+import { computed, ref, useId, watch } from "vue";
+import { ChevronUpDownIcon, ChevronDownIcon, CheckIcon } from "@heroicons/vue/24/outline";
 import PopoverPanel from "../layout/PopoverPanel.vue";
 import { usePopover } from "../../composables/usePopover";
 import {
@@ -93,6 +134,7 @@ const emit = defineEmits<SwitcherEmits>();
 
 const locale = useModoLocale();
 const resolvedRadius = useResolvedRadius(() => props.radius);
+const listboxId = useId();
 
 const resolvedPlaceholder = computed(
   () => props.placeholder ?? locale.value.switcher.placeholder,

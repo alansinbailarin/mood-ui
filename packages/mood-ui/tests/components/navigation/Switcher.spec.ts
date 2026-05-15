@@ -20,6 +20,57 @@ function pressKey(el: Element, key: string) {
   el.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
 }
 
+describe("Switcher (items)", () => {
+  it("renders one option per item with title and subtitle inside the panel", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "a" },
+    });
+    await wrapper.get("[data-modo-switcher-trigger]").trigger("click");
+    await nextTick();
+
+    const options = document.querySelectorAll('[role="option"]');
+    expect(options.length).toBe(3);
+    expect(options[0].textContent).toContain("Studio Office");
+    expect(options[0].textContent).toContain("05064005868");
+    expect(options[1].textContent).toContain("Sweet Home");
+    expect(options[2].textContent).toContain("Cake Shop");
+
+    wrapper.unmount();
+  });
+
+  it("marks the active option with aria-current and aria-selected", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "b" },
+    });
+    await wrapper.get("[data-modo-switcher-trigger]").trigger("click");
+    await nextTick();
+
+    const options = document.querySelectorAll('[role="option"]');
+    expect(options[1].getAttribute("aria-current")).toBe("true");
+    expect(options[1].getAttribute("aria-selected")).toBe("true");
+    expect(options[0].getAttribute("aria-current")).toBeNull();
+    expect(options[0].getAttribute("aria-selected")).toBe("false");
+
+    wrapper.unmount();
+  });
+
+  it("renders panelTitle when provided", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "a", panelTitle: "Switch profile" },
+    });
+    await wrapper.get("[data-modo-switcher-trigger]").trigger("click");
+    await nextTick();
+
+    const panel = document.querySelector("[data-modo-switcher-panel]")!;
+    expect(panel.textContent).toContain("Switch profile");
+
+    wrapper.unmount();
+  });
+});
+
 describe("Switcher (scaffold)", () => {
   it("renders trigger with placeholder when modelValue is null", () => {
     const wrapper = mount(Switcher, {
