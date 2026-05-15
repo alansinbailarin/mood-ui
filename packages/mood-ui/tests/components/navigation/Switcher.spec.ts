@@ -20,6 +20,30 @@ function pressKey(el: Element, key: string) {
   el.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
 }
 
+describe("Switcher (#trigger slot)", () => {
+  it("renders custom trigger when #trigger slot is provided and skips the default pill", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "b" },
+      slots: {
+        trigger: `<template #trigger="{ activeItem, isOpen, toggle }">
+                    <button data-testid="custom-trigger" @click="toggle">
+                      {{ activeItem?.title }} - {{ isOpen ? 'OPEN' : 'CLOSED' }}
+                    </button>
+                  </template>`,
+      },
+    });
+    expect(document.querySelector("[data-modo-switcher-trigger]")).toBeNull();
+    const custom = wrapper.get('[data-testid="custom-trigger"]');
+    expect(custom.text()).toContain("Sweet Home");
+    expect(custom.text()).toContain("CLOSED");
+    await custom.trigger("click");
+    await nextTick();
+    expect(document.querySelector("[data-modo-switcher-panel]")).not.toBeNull();
+    wrapper.unmount();
+  });
+});
+
 describe("Switcher (keyboard, searchable)", () => {
   it("on open with searchable, focus goes to the search input", async () => {
     const wrapper = mount(Switcher, {

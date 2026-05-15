@@ -1,5 +1,12 @@
 <template>
   <div class="modo-switcher inline-flex" :class="{ 'w-full': fullWidth }">
+    <span ref="triggerWrapEl" class="inline-flex" :class="{ 'w-full': fullWidth }">
+    <slot
+      name="trigger"
+      :activeItem="activeItem"
+      :isOpen="isOpen"
+      :toggle="onTriggerClick"
+    >
     <button
       ref="triggerEl"
       type="button"
@@ -55,6 +62,8 @@
         aria-hidden="true"
       />
     </button>
+    </slot>
+    </span>
 
     <PopoverPanel
       :open="isOpen"
@@ -293,9 +302,15 @@ const {
 });
 
 const triggerEl = ref<HTMLElement | null>(null);
-watch(triggerEl, (el) => {
-  triggerRef.value = el;
+const triggerWrapEl = ref<HTMLElement | null>(null);
+watch([triggerEl, triggerWrapEl], ([btn, wrap]) => {
+  triggerRef.value = (btn as HTMLElement | null) ?? (wrap as HTMLElement | null);
 });
+
+function focusTrigger() {
+  const el = triggerEl.value ?? triggerWrapEl.value;
+  el?.focus?.();
+}
 
 function onTriggerClick() {
   if (props.disabled) return;
@@ -375,10 +390,6 @@ function moveFocus(delta: 1 | -1) {
   }
   pos = (pos + delta + order.length) % order.length;
   focusOptionByIdx(order[pos]);
-}
-
-function focusTrigger() {
-  triggerEl.value?.focus?.();
 }
 
 function onListKeydown(e: KeyboardEvent) {
