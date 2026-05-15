@@ -20,6 +20,67 @@ function pressKey(el: Element, key: string) {
   el.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
 }
 
+describe("Switcher (loading & empty)", () => {
+  it("renders 3 Skeleton placeholders when loading=true", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "a", loading: true },
+    });
+    await wrapper.get("[data-modo-switcher-trigger]").trigger("click");
+    await nextTick();
+    expect(document.querySelectorAll("[data-modo-switcher-skeleton]").length).toBe(3);
+    expect(document.querySelectorAll('[role="option"]').length).toBe(0);
+    wrapper.unmount();
+  });
+
+  it("renders emptyText when items is empty", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items: [], modelValue: null, emptyText: "Nothing yet" },
+    });
+    await wrapper.get("[data-modo-switcher-trigger]").trigger("click");
+    await nextTick();
+    expect(document.querySelector("[data-modo-switcher-panel]")!.textContent).toContain("Nothing yet");
+    wrapper.unmount();
+  });
+
+  it("falls back to locale.empty when emptyText prop is omitted", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items: [], modelValue: null },
+    });
+    await wrapper.get("[data-modo-switcher-trigger]").trigger("click");
+    await nextTick();
+    expect(document.querySelector("[data-modo-switcher-panel]")!.textContent).toContain("No options.");
+    wrapper.unmount();
+  });
+
+  it("renders #empty slot override when items is empty", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items: [], modelValue: null },
+      slots: { empty: '<div data-testid="custom-empty">Custom empty</div>' },
+    });
+    await wrapper.get("[data-modo-switcher-trigger]").trigger("click");
+    await nextTick();
+    expect(document.querySelector('[data-testid="custom-empty"]')).not.toBeNull();
+    wrapper.unmount();
+  });
+
+  it("renders #loading slot override when loading=true", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "a", loading: true },
+      slots: { loading: '<div data-testid="custom-loading">Loading…</div>' },
+    });
+    await wrapper.get("[data-modo-switcher-trigger]").trigger("click");
+    await nextTick();
+    expect(document.querySelector('[data-testid="custom-loading"]')).not.toBeNull();
+    expect(document.querySelectorAll("[data-modo-switcher-skeleton]").length).toBe(0);
+    wrapper.unmount();
+  });
+});
+
 describe("Switcher (selection)", () => {
   it("emits update:modelValue and change on item click, closes the panel", async () => {
     const wrapper = mount(Switcher, {

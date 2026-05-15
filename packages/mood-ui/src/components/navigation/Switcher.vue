@@ -75,7 +75,30 @@
           {{ panelTitle }}
         </div>
 
+        <template v-if="loading">
+          <slot name="loading">
+            <div class="p-2 flex flex-col gap-1">
+              <div
+                v-for="i in 3"
+                :key="i"
+                data-modo-switcher-skeleton
+              >
+                <Skeleton height="44px" />
+              </div>
+            </div>
+          </slot>
+        </template>
+
+        <template v-else-if="items.length === 0">
+          <slot name="empty">
+            <div class="px-3 py-6 text-center text-muted-foreground text-body">
+              {{ resolvedEmptyText }}
+            </div>
+          </slot>
+        </template>
+
         <ul
+          v-else
           role="listbox"
           :id="listboxId"
           class="flex flex-col py-1"
@@ -136,6 +159,7 @@ import { computed, ref, useId, watch, watchEffect } from "vue";
 import { ChevronUpDownIcon, ChevronDownIcon, CheckIcon } from "@heroicons/vue/24/outline";
 import PopoverPanel from "../layout/PopoverPanel.vue";
 import Avatar from "../data-display/avatar/Avatar.vue";
+import Skeleton from "../feedback/Skeleton.vue";
 import { usePopover } from "../../composables/usePopover";
 import {
   useResolvedRadius,
@@ -173,6 +197,9 @@ const resolvedPlaceholder = computed(
 );
 const resolvedAriaLabel = computed(
   () => props.ariaLabel ?? locale.value.switcher.ariaLabel,
+);
+const resolvedEmptyText = computed(
+  () => props.emptyText ?? locale.value.switcher.empty,
 );
 
 const radiusClass = computed(() => {
