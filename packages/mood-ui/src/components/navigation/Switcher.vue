@@ -67,7 +67,7 @@
 
     <PopoverPanel
       :open="isOpen"
-      :style="panelStyle"
+      :style="mergedPanelStyle"
       :radius="resolvedRadius"
       role="dialog"
       :aria-label="resolvedAriaLabel"
@@ -231,6 +231,7 @@ const props = withDefaults(defineProps<SwitcherProps>(), {
   compactTrigger: false,
   fullWidth: false,
   panelWidth: "trigger",
+  panelMinWidth: "15rem",
   panelMaxHeight: 320,
   placement: "bottom-start",
   searchable: false,
@@ -294,6 +295,20 @@ const panelMaxHeightStyle = computed(() => {
   const v = props.panelMaxHeight;
   return typeof v === "number" ? `${v}px` : v;
 });
+
+const panelMinWidthStyle = computed(() => {
+  const v = props.panelMinWidth;
+  if (v == null) return undefined;
+  return typeof v === "number" ? `${v}px` : v;
+});
+
+// The popover composable sizes the panel to the trigger width when
+// `panelWidth='trigger'`. A narrow trigger (e.g. an avatar-only custom
+// trigger) would otherwise crush the panel — `minWidth` floors it.
+const mergedPanelStyle = computed(() => ({
+  ...panelStyle.value,
+  ...(panelMinWidthStyle.value ? { minWidth: panelMinWidthStyle.value } : {}),
+}));
 
 const activeItem = computed<SwitcherItem | null>(() => {
   if (props.modelValue == null) return null;
