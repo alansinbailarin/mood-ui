@@ -20,6 +20,70 @@ function pressKey(el: Element, key: string) {
   el.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
 }
 
+describe("Switcher (item visuals)", () => {
+  it("renders the item's icon component inside a tinted container when icon is set", async () => {
+    const itemsWithIcon: SwitcherItem[] = [
+      { value: "x", title: "Studio Office", icon: HouseStub },
+    ];
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items: itemsWithIcon, modelValue: "x" },
+    });
+    await wrapper.get("[data-modo-switcher-trigger]").trigger("click");
+    await nextTick();
+
+    const option = document.querySelector('[role="option"]')!;
+    expect(option.querySelector('[data-testid="house-icon"]')).not.toBeNull();
+    expect(option.querySelector("[data-modo-switcher-iconwrap]")).not.toBeNull();
+
+    wrapper.unmount();
+  });
+
+  it("renders <Avatar/> when item has avatar set", async () => {
+    const itemsWithAvatar: SwitcherItem[] = [
+      { value: "y", title: "Ryan Johnson", avatar: { src: "x.png", initials: "RJ" } },
+    ];
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items: itemsWithAvatar, modelValue: "y" },
+    });
+    await wrapper.get("[data-modo-switcher-trigger]").trigger("click");
+    await nextTick();
+
+    const option = document.querySelector('[role="option"]')!;
+    expect(option.querySelector("img")).not.toBeNull();
+
+    wrapper.unmount();
+  });
+
+  it("logs a dev warning when both icon and avatar are set, and prefers avatar", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const bothItems: SwitcherItem[] = [
+      {
+        value: "z",
+        title: "Mixed",
+        icon: HouseStub,
+        avatar: { initials: "MX" },
+      },
+    ];
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items: bothItems, modelValue: "z" },
+    });
+    await wrapper.get("[data-modo-switcher-trigger]").trigger("click");
+    await nextTick();
+
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining('[Switcher] item "z"'),
+    );
+    const option = document.querySelector('[role="option"]')!;
+    expect(option.querySelector('[data-testid="house-icon"]')).toBeNull();
+
+    warnSpy.mockRestore();
+    wrapper.unmount();
+  });
+});
+
 describe("Switcher (items)", () => {
   it("renders one option per item with title and subtitle inside the panel", async () => {
     const wrapper = mount(Switcher, {

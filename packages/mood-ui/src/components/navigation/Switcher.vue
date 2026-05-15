@@ -18,6 +18,20 @@
       ]"
       @click="onTriggerClick"
     >
+      <span v-if="activeItem?.avatar" class="shrink-0">
+        <Avatar
+          :src="activeItem.avatar.src"
+          :initials="activeItem.avatar.initials"
+          :name="activeItem.title"
+          size="small"
+        />
+      </span>
+      <span
+        v-else-if="activeItem?.icon"
+        class="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-md bg-accent/60 text-foreground"
+      >
+        <component :is="activeItem.icon" class="w-5 h-5" aria-hidden="true" />
+      </span>
       <span class="flex flex-col min-w-0 flex-1">
         <span class="truncate text-body font-medium">
           {{ activeItem ? activeItem.title : resolvedPlaceholder }}
@@ -82,6 +96,21 @@
               item.disabled ? 'opacity-50 cursor-not-allowed' : '',
             ]"
           >
+            <span v-if="item.avatar" class="shrink-0">
+              <Avatar
+                :src="item.avatar.src"
+                :initials="item.avatar.initials"
+                :name="item.title"
+                size="small"
+              />
+            </span>
+            <span
+              v-else-if="item.icon"
+              data-modo-switcher-iconwrap
+              class="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-md bg-accent/60 text-foreground"
+            >
+              <component :is="item.icon" class="w-5 h-5" aria-hidden="true" />
+            </span>
             <span class="flex flex-col min-w-0 flex-1">
               <span class="truncate text-body font-medium">{{ item.title }}</span>
               <span
@@ -102,9 +131,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, useId, watch } from "vue";
+import { computed, ref, useId, watch, watchEffect } from "vue";
 import { ChevronUpDownIcon, ChevronDownIcon, CheckIcon } from "@heroicons/vue/24/outline";
 import PopoverPanel from "../layout/PopoverPanel.vue";
+import Avatar from "../data-display/avatar/Avatar.vue";
 import { usePopover } from "../../composables/usePopover";
 import {
   useResolvedRadius,
@@ -114,6 +144,7 @@ import type {
   Switcher as SwitcherProps,
   SwitcherEmits,
   SwitcherItem,
+  SwitcherValue,
 } from "../../interfaces/navigation/Switcher.interface";
 
 const props = withDefaults(defineProps<SwitcherProps>(), {
@@ -186,6 +217,21 @@ watch(triggerEl, (el) => {
 function onTriggerClick() {
   if (props.disabled) return;
   toggle();
+}
+
+// Dev-only: warn once per offending item when both icon and avatar are set.
+if (import.meta.env?.DEV ?? true) {
+  const warned = new Set<SwitcherValue>();
+  watchEffect(() => {
+    for (const item of props.items) {
+      if (item.icon && item.avatar && !warned.has(item.value)) {
+        warned.add(item.value);
+        console.warn(
+          `[Switcher] item "${item.value}" declares both \`icon\` and \`avatar\`; \`avatar\` wins. Pick one.`,
+        );
+      }
+    }
+  });
 }
 
 defineExpose({ open, close, toggle });
