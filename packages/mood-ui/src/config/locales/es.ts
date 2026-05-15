@@ -175,4 +175,12 @@ export const es: ModoLocale = {
       invalid: "Valor no válido",
     },
   },
+  switcher: {
+    ariaLabel: "Cambiar contexto",
+    placeholder: "Selecciona…",
+    searchPlaceholder: "Buscar…",
+    empty: "Sin opciones.",
+    noResults: "Sin resultados.",
+    activeItemSr: "Actualmente seleccionado",
+  },
 };

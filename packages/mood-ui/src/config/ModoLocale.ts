@@ -242,6 +242,20 @@ export interface ModoLocale {
       invalid: string;
     };
   };
+  switcher: {
+    /** Default aria-label for the trigger when no `ariaLabel` prop is passed. */
+    ariaLabel: string;
+    /** Trigger primary text when no item matches `modelValue`. */
+    placeholder: string;
+    /** Search input placeholder when `searchable=true`. */
+    searchPlaceholder: string;
+    /** Shown inside the panel when `items.length === 0`. */
+    empty: string;
+    /** Shown inside the panel when the search query matches no items. */
+    noResults: string;
+    /** Visually hidden text appended to the active item for screen readers. */
+    activeItemSr: string;
+  };
 }
 
 /** Default locale (English). Serves as the non-breaking fallback. */
@@ -387,6 +401,14 @@ export const defaultLocale: ModoLocale = {
       commitHint: "Press Enter to save, Escape to cancel.",
       invalid: "Invalid value",
     },
+  },
+  switcher: {
+    ariaLabel: "Switch context",
+    placeholder: "Select…",
+    searchPlaceholder: "Search…",
+    empty: "No options.",
+    noResults: "No matches.",
+    activeItemSr: "Currently selected",
   },
 };
 
