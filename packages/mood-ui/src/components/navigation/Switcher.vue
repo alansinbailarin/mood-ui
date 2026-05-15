@@ -176,13 +176,31 @@
                 class="truncate text-caption text-muted-foreground"
               >{{ item.subtitle }}</span>
             </span>
-            <CheckIcon
-              v-if="item.value === modelValue"
-              class="w-4 h-4 shrink-0"
-              aria-hidden="true"
-            />
+            <slot
+              name="item-trailing"
+              :item="item"
+              :active="item.value === modelValue"
+              :close="close"
+            >
+              <CheckIcon
+                v-if="item.value === modelValue"
+                class="w-4 h-4 shrink-0"
+                aria-hidden="true"
+              />
+            </slot>
           </li>
         </ul>
+
+        <template v-if="$slots.footer">
+          <hr
+            data-modo-switcher-footer-sep
+            role="separator"
+            class="my-1 border-t border-border"
+          />
+          <div class="p-1">
+            <slot name="footer" :close="close" />
+          </div>
+        </template>
       </div>
     </PopoverPanel>
   </div>

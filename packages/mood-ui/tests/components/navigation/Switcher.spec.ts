@@ -20,6 +20,49 @@ function pressKey(el: Element, key: string) {
   el.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
 }
 
+describe("Switcher (slots)", () => {
+  it("renders #item-trailing for each item with item + active + close", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "a" },
+      slots: {
+        "item-trailing": `<template #item-trailing="{ item, active }">
+                            <span data-testid="trail" :data-active="String(active)">{{ item.value }}</span>
+                          </template>`,
+      },
+    });
+    await wrapper.get("[data-modo-switcher-trigger]").trigger("click");
+    await nextTick();
+    const trails = document.querySelectorAll('[data-testid="trail"]');
+    expect(trails.length).toBe(3);
+    expect(trails[0].textContent).toBe("a");
+    expect(trails[0].getAttribute("data-active")).toBe("true");
+    expect(trails[1].getAttribute("data-active")).toBe("false");
+    wrapper.unmount();
+  });
+
+  it("renders #footer below items with a separator and exposes close()", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "a" },
+      slots: {
+        footer: `<template #footer="{ close }">
+                   <button data-testid="footer-btn" @click="close()">Add</button>
+                 </template>`,
+      },
+    });
+    await wrapper.get("[data-modo-switcher-trigger]").trigger("click");
+    await nextTick();
+    const panel = document.querySelector("[data-modo-switcher-panel]")!;
+    expect(panel.querySelector("[data-modo-switcher-footer-sep]")).not.toBeNull();
+    const btn = document.querySelector('[data-testid="footer-btn"]') as HTMLElement;
+    btn.click();
+    await nextTick();
+    expect(document.querySelector("[data-modo-switcher-panel]")).toBeNull();
+    wrapper.unmount();
+  });
+});
+
 describe("Switcher (#trigger slot)", () => {
   it("renders custom trigger when #trigger slot is provided and skips the default pill", async () => {
     const wrapper = mount(Switcher, {
