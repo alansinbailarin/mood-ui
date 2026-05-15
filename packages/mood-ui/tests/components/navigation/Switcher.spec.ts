@@ -20,6 +20,123 @@ function pressKey(el: Element, key: string) {
   el.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
 }
 
+describe("Switcher (search)", () => {
+  it("renders a search input when searchable=true", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "a", searchable: true },
+    });
+    await wrapper.get("[data-modo-switcher-trigger]").trigger("click");
+    await nextTick();
+    expect(document.querySelector('[role="searchbox"]')).not.toBeNull();
+    wrapper.unmount();
+  });
+
+  it("filters items by title (case-insensitive contains) on input", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "a", searchable: true },
+    });
+    await wrapper.get("[data-modo-switcher-trigger]").trigger("click");
+    await nextTick();
+
+    const input = document.querySelector('[role="searchbox"]') as HTMLInputElement;
+    input.value = "sweet";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    await nextTick();
+
+    const options = document.querySelectorAll('[role="option"]');
+    expect(options.length).toBe(1);
+    expect(options[0].textContent).toContain("Sweet Home");
+
+    wrapper.unmount();
+  });
+
+  it("filters by subtitle as well by default", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "a", searchable: true },
+    });
+    await wrapper.get("[data-modo-switcher-trigger]").trigger("click");
+    await nextTick();
+
+    const input = document.querySelector('[role="searchbox"]') as HTMLInputElement;
+    input.value = "4220";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    await nextTick();
+
+    const options = document.querySelectorAll('[role="option"]');
+    expect(options.length).toBe(1);
+    expect(options[0].textContent).toContain("Cake Shop");
+
+    wrapper.unmount();
+  });
+
+  it("emits @search on every keystroke", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "a", searchable: true },
+    });
+    await wrapper.get("[data-modo-switcher-trigger]").trigger("click");
+    await nextTick();
+
+    const input = document.querySelector('[role="searchbox"]') as HTMLInputElement;
+    input.value = "ab";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    await nextTick();
+
+    expect(wrapper.emitted("search")?.[0]).toEqual(["ab"]);
+    wrapper.unmount();
+  });
+
+  it("shows noResultsText when filter returns no items", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: {
+        items,
+        modelValue: "a",
+        searchable: true,
+        noResultsText: "Nada",
+      },
+    });
+    await wrapper.get("[data-modo-switcher-trigger]").trigger("click");
+    await nextTick();
+
+    const input = document.querySelector('[role="searchbox"]') as HTMLInputElement;
+    input.value = "zzz_no_match";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    await nextTick();
+
+    const panel = document.querySelector("[data-modo-switcher-panel]")!;
+    expect(panel.textContent).toContain("Nada");
+    expect(document.querySelectorAll('[role="option"]').length).toBe(0);
+
+    wrapper.unmount();
+  });
+
+  it("clears the search query when the panel closes", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "a", searchable: true },
+    });
+    const trigger = wrapper.get("[data-modo-switcher-trigger]");
+    await trigger.trigger("click");
+    await nextTick();
+    const input = document.querySelector('[role="searchbox"]') as HTMLInputElement;
+    input.value = "sweet";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    await nextTick();
+    await trigger.trigger("click");
+    await nextTick();
+    await trigger.trigger("click");
+    await nextTick();
+    const reopened = document.querySelector('[role="searchbox"]') as HTMLInputElement;
+    expect(reopened.value).toBe("");
+    expect(document.querySelectorAll('[role="option"]').length).toBe(3);
+    wrapper.unmount();
+  });
+});
+
 describe("Switcher (loading & empty)", () => {
   it("renders 3 Skeleton placeholders when loading=true", async () => {
     const wrapper = mount(Switcher, {

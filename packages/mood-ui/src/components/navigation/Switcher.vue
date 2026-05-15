@@ -75,6 +75,18 @@
           {{ panelTitle }}
         </div>
 
+        <div v-if="searchable" class="px-2 pt-2 pb-1">
+          <input
+            ref="searchInputEl"
+            v-model="searchQuery"
+            role="searchbox"
+            type="text"
+            :placeholder="resolvedSearchPlaceholder"
+            :aria-controls="listboxId"
+            class="w-full px-2 py-1.5 text-body bg-background border border-border rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          />
+        </div>
+
         <template v-if="loading">
           <slot name="loading">
             <div class="p-2 flex flex-col gap-1">
@@ -97,6 +109,12 @@
           </slot>
         </template>
 
+        <template v-else-if="displayedItems.length === 0">
+          <div class="px-3 py-6 text-center text-muted-foreground text-body">
+            {{ resolvedNoResults }}
+          </div>
+        </template>
+
         <ul
           v-else
           role="listbox"
@@ -104,7 +122,7 @@
           class="flex flex-col py-1"
         >
           <li
-            v-for="(item, idx) in items"
+            v-for="(item, idx) in displayedItems"
             :key="item.value"
             role="option"
             :id="`${listboxId}-opt-${idx}`"
@@ -201,6 +219,32 @@ const resolvedAriaLabel = computed(
 const resolvedEmptyText = computed(
   () => props.emptyText ?? locale.value.switcher.empty,
 );
+const resolvedSearchPlaceholder = computed(
+  () => props.searchPlaceholder ?? locale.value.switcher.searchPlaceholder,
+);
+const resolvedNoResults = computed(
+  () => props.noResultsText ?? locale.value.switcher.noResults,
+);
+
+const searchQuery = ref("");
+const searchInputEl = ref<HTMLInputElement | null>(null);
+
+const displayedItems = computed<SwitcherItem[]>(() => {
+  if (!props.searchable) return props.items;
+  const q = searchQuery.value.trim().toLowerCase();
+  if (!q) return props.items;
+  const fields = props.searchFields ?? ["title", "subtitle"];
+  return props.items.filter((it) =>
+    fields.some((f) => {
+      const v = it[f];
+      return typeof v === "string" && v.toLowerCase().includes(q);
+    }),
+  );
+});
+
+watch(searchQuery, (q) => {
+  emit("search", q);
+});
 
 const radiusClass = computed(() => {
   switch (resolvedRadius.value) {
@@ -234,7 +278,10 @@ const {
   placement: () => props.placement,
   matchTriggerWidth: () => props.panelWidth === "trigger",
   onOpen: () => emit("open"),
-  onClose: () => emit("close"),
+  onClose: () => {
+    searchQuery.value = "";
+    emit("close");
+  },
 });
 
 const triggerEl = ref<HTMLElement | null>(null);
