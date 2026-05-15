@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { mount } from "@vue/test-utils";
+import { mount, flushPromises } from "@vue/test-utils";
 import { defineComponent, h, nextTick } from "vue";
 import Switcher from "../../../src/components/navigation/Switcher.vue";
 import type { SwitcherItem } from "../../../src/interfaces/navigation/Switcher.interface";
@@ -19,6 +19,115 @@ const HouseStub = defineComponent({
 function pressKey(el: Element, key: string) {
   el.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
 }
+
+describe("Switcher (keyboard, non-searchable)", () => {
+  it("opens the panel and focuses the active option on ArrowDown from trigger", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "b" },
+    });
+    const trigger = wrapper.get("[data-modo-switcher-trigger]").element;
+    pressKey(trigger, "ArrowDown");
+    await flushPromises();
+    const options = document.querySelectorAll('[role="option"]');
+    expect(document.activeElement).toBe(options[1]);
+    wrapper.unmount();
+  });
+
+  it("arrow keys move focus through options and skip disabled", async () => {
+    const its: SwitcherItem[] = [
+      { value: "a", title: "A" },
+      { value: "b", title: "B", disabled: true },
+      { value: "c", title: "C" },
+    ];
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items: its, modelValue: "a" },
+    });
+    const trigger = wrapper.get("[data-modo-switcher-trigger]").element;
+    pressKey(trigger, "ArrowDown");
+    await flushPromises();
+    const options = document.querySelectorAll('[role="option"]');
+    expect(document.activeElement).toBe(options[0]);
+
+    pressKey(options[0], "ArrowDown");
+    await flushPromises();
+    expect(document.activeElement).toBe(options[2]);
+    wrapper.unmount();
+  });
+
+  it("Home/End jump to first/last focusable", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "b" },
+    });
+    const trigger = wrapper.get("[data-modo-switcher-trigger]").element;
+    pressKey(trigger, "ArrowDown");
+    await flushPromises();
+    const options = document.querySelectorAll('[role="option"]');
+    pressKey(options[1], "End");
+    await flushPromises();
+    expect(document.activeElement).toBe(options[2]);
+    pressKey(options[2], "Home");
+    await flushPromises();
+    expect(document.activeElement).toBe(options[0]);
+    wrapper.unmount();
+  });
+
+  it("Enter on focused option selects it and closes the panel", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "a" },
+    });
+    const trigger = wrapper.get("[data-modo-switcher-trigger]").element;
+    pressKey(trigger, "ArrowDown");
+    await flushPromises();
+    const options = document.querySelectorAll('[role="option"]');
+    pressKey(options[0], "ArrowDown");
+    await flushPromises();
+    pressKey(document.activeElement!, "Enter");
+    await flushPromises();
+    expect(wrapper.emitted("update:modelValue")?.[0]).toEqual(["b"]);
+    expect(document.querySelector("[data-modo-switcher-panel]")).toBeNull();
+    wrapper.unmount();
+  });
+
+  it("Escape closes the panel and returns focus to the trigger", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "a" },
+    });
+    const triggerEl = wrapper.get("[data-modo-switcher-trigger]").element as HTMLElement;
+    pressKey(triggerEl, "ArrowDown");
+    await flushPromises();
+    const options = document.querySelectorAll('[role="option"]');
+    pressKey(options[0], "Escape");
+    await flushPromises();
+    expect(document.querySelector("[data-modo-switcher-panel]")).toBeNull();
+    expect(document.activeElement).toBe(triggerEl);
+    wrapper.unmount();
+  });
+
+  it("type-ahead: pressing a letter focuses the first option whose title starts with it", async () => {
+    const its: SwitcherItem[] = [
+      { value: "a", title: "Alpha" },
+      { value: "b", title: "Bravo" },
+      { value: "c", title: "Charlie" },
+    ];
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items: its, modelValue: "a" },
+    });
+    const trigger = wrapper.get("[data-modo-switcher-trigger]").element;
+    pressKey(trigger, "ArrowDown");
+    await flushPromises();
+    const options = document.querySelectorAll('[role="option"]');
+    pressKey(options[0], "c");
+    await flushPromises();
+    expect(document.activeElement).toBe(options[2]);
+    wrapper.unmount();
+  });
+});
 
 describe("Switcher (search)", () => {
   it("renders a search input when searchable=true", async () => {

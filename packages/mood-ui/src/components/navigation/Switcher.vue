@@ -17,6 +17,7 @@
         disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
       ]"
       @click="onTriggerClick"
+      @keydown="onTriggerKeydown"
     >
       <span v-if="activeItem?.avatar" class="shrink-0">
         <Avatar
@@ -120,10 +121,12 @@
           role="listbox"
           :id="listboxId"
           class="flex flex-col py-1"
+          @keydown="onListKeydown"
         >
           <li
             v-for="(item, idx) in displayedItems"
             :key="item.value"
+            :ref="(el) => setOptionRef(el as HTMLElement | null, idx)"
             role="option"
             :id="`${listboxId}-opt-${idx}`"
             :aria-selected="String(item.value === modelValue)"
@@ -173,7 +176,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, useId, watch, watchEffect } from "vue";
+import { computed, nextTick, ref, useId, watch, watchEffect } from "vue";
 import { ChevronUpDownIcon, ChevronDownIcon, CheckIcon } from "@heroicons/vue/24/outline";
 import PopoverPanel from "../layout/PopoverPanel.vue";
 import Avatar from "../data-display/avatar/Avatar.vue";
@@ -277,6 +280,7 @@ const {
 } = usePopover({
   placement: () => props.placement,
   matchTriggerWidth: () => props.panelWidth === "trigger",
+  closeOnEscape: false,
   onOpen: () => emit("open"),
   onClose: () => {
     searchQuery.value = "";
@@ -300,6 +304,119 @@ function selectItem(item: SwitcherItem) {
   emit("change", item.value, item);
   close();
 }
+
+function focusableIndices(): number[] {
+  return displayedItems.value
+    .map((it, i) => (it.disabled ? -1 : i))
+    .filter((i) => i !== -1);
+}
+
+const optionRefs = new Map<number, HTMLElement>();
+function setOptionRef(el: HTMLElement | null, idx: number) {
+  if (el) optionRefs.set(idx, el);
+  else optionRefs.delete(idx);
+}
+
+function focusOptionByIdx(idx: number) {
+  optionRefs.get(idx)?.focus();
+}
+
+async function openAndFocusActive() {
+  if (props.disabled) return;
+  if (!isOpen.value) open();
+  await nextTick();
+  if (props.searchable) {
+    searchInputEl.value?.focus();
+    return;
+  }
+  const order = focusableIndices();
+  if (!order.length) return;
+  const activeIdx = displayedItems.value.findIndex(
+    (it) => it.value === props.modelValue,
+  );
+  const usable =
+    activeIdx >= 0 && !displayedItems.value[activeIdx].disabled
+      ? activeIdx
+      : order[0];
+  focusOptionByIdx(usable);
+}
+
+function onTriggerKeydown(e: KeyboardEvent) {
+  if (["ArrowDown", "ArrowUp", "Enter", " "].includes(e.key)) {
+    e.preventDefault();
+    openAndFocusActive();
+  } else if (e.key === "Escape" && isOpen.value) {
+    e.preventDefault();
+    close();
+  }
+}
+
+function currentFocusedIdx(): number {
+  const el = document.activeElement as HTMLElement | null;
+  if (!el) return -1;
+  for (const [idx, node] of optionRefs.entries()) {
+    if (node === el) return idx;
+  }
+  return -1;
+}
+
+function moveFocus(delta: 1 | -1) {
+  const order = focusableIndices();
+  if (!order.length) return;
+  const cur = currentFocusedIdx();
+  let pos = order.indexOf(cur);
+  if (pos === -1) {
+    focusOptionByIdx(delta > 0 ? order[0] : order[order.length - 1]);
+    return;
+  }
+  pos = (pos + delta + order.length) % order.length;
+  focusOptionByIdx(order[pos]);
+}
+
+function focusTrigger() {
+  triggerEl.value?.focus?.();
+}
+
+function onListKeydown(e: KeyboardEvent) {
+  if (e.key === "ArrowDown") {
+    e.preventDefault();
+    moveFocus(1);
+  } else if (e.key === "ArrowUp") {
+    e.preventDefault();
+    moveFocus(-1);
+  } else if (e.key === "Home") {
+    e.preventDefault();
+    const order = focusableIndices();
+    if (order.length) focusOptionByIdx(order[0]);
+  } else if (e.key === "End") {
+    e.preventDefault();
+    const order = focusableIndices();
+    if (order.length) focusOptionByIdx(order[order.length - 1]);
+  } else if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    const idx = currentFocusedIdx();
+    if (idx >= 0) selectItem(displayedItems.value[idx]);
+  } else if (e.key === "Escape") {
+    e.preventDefault();
+    close();
+    focusTrigger();
+  } else if (
+    !props.searchable &&
+    e.key.length === 1 &&
+    /^[a-zA-Z0-9]$/.test(e.key)
+  ) {
+    const order = focusableIndices();
+    const letter = e.key.toLowerCase();
+    const match = order.find((i) =>
+      displayedItems.value[i].title.toLowerCase().startsWith(letter),
+    );
+    if (match !== undefined) focusOptionByIdx(match);
+  }
+}
+
+watch(isOpen, (open) => {
+  if (!open) focusTrigger();
+});
 
 // Dev-only: warn once per offending item when both icon and avatar are set.
 if (import.meta.env?.DEV ?? true) {
