@@ -312,6 +312,38 @@
           "focusNative": "Non-interactive element unless clickable prop is enabled"
         }
       },
+      "switcher": {
+        "title": "Switcher",
+        "category": "Navigation",
+        "description": "Context switcher — change between branches, profiles, workspaces, or any equivalent contexts the user owns. Domain-agnostic.",
+        "examples": {
+          "basicTitle": "Business branches",
+          "basicDesc": "Items with leading icons; one active; a footer action to add a new branch.",
+          "profileTitle": "Profile switch",
+          "profileDesc": "Items with avatars, per-item edit pencil via #item-trailing, panelTitle, and a grouped footer.",
+          "compactTitle": "Compact + custom trigger",
+          "compactDesc": "Two side-by-side variants: compactTrigger=true (hides subtitle) and a custom #trigger slot (avatar-only pill).",
+          "searchableTitle": "Searchable",
+          "searchableDesc": "Long list with local filtering by title + subtitle and a no-results state."
+        },
+        "labels": {
+          "addBranch": "Add consumer",
+          "switchProfile": "Switch profile",
+          "addProfile": "Add new",
+          "membership": "Membership",
+          "signOut": "Sign out",
+          "editAria": "Edit profile {name}"
+        },
+        "a11y": {
+          "kbArrow": "Open panel and move highlight between options",
+          "kbHomeEnd": "Jump to first/last option",
+          "kbEnter": "Select highlighted option",
+          "kbEsc": "Close panel and return focus to the trigger",
+          "kbTypeAhead": "When not searchable, alphanumeric keys focus the first option whose title starts with that letter",
+          "ariaCombobox": "Trigger acts as a combobox controlling a listbox",
+          "ariaActiveDesc": "When searchable, aria-activedescendant tracks the highlighted option"
+        }
+      },
       "tabs": {
         "title": "Tabs",
         "category": "Navigation",

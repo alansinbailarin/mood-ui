@@ -312,6 +312,38 @@
           "focusNative": "Elemento no interactivo a menos que la prop clickable esté habilitada"
         }
       },
+      "switcher": {
+        "title": "Switcher",
+        "category": "Navigation",
+        "description": "Selector de contexto — cambia entre sucursales, perfiles, espacios de trabajo o cualquier contexto equivalente del usuario. Agnóstico de dominio.",
+        "examples": {
+          "basicTitle": "Sucursales de negocio",
+          "basicDesc": "Items con iconos a la izquierda; uno activo; acción al pie para añadir.",
+          "profileTitle": "Cambio de perfil",
+          "profileDesc": "Items con avatares, lápiz de edición por item vía #item-trailing, panelTitle y footer agrupado.",
+          "compactTitle": "Compacto + trigger personalizado",
+          "compactDesc": "Dos variantes lado a lado: compactTrigger=true (oculta subtítulo) y slot #trigger (píldora solo con avatar).",
+          "searchableTitle": "Con búsqueda",
+          "searchableDesc": "Lista larga con filtrado local por título + subtítulo y estado sin resultados."
+        },
+        "labels": {
+          "addBranch": "Añadir consumidor",
+          "switchProfile": "Cambiar perfil",
+          "addProfile": "Añadir nuevo",
+          "membership": "Membresía",
+          "signOut": "Cerrar sesión",
+          "editAria": "Editar perfil {name}"
+        },
+        "a11y": {
+          "kbArrow": "Abre el panel y mueve la selección entre opciones",
+          "kbHomeEnd": "Salta a la primera/última opción",
+          "kbEnter": "Selecciona la opción resaltada",
+          "kbEsc": "Cierra el panel y devuelve el foco al trigger",
+          "kbTypeAhead": "Sin búsqueda, las teclas alfanuméricas enfocan la primera opción cuyo título empiece con esa letra",
+          "ariaCombobox": "El trigger actúa como combobox que controla un listbox",
+          "ariaActiveDesc": "Con búsqueda, aria-activedescendant rastrea la opción resaltada"
+        }
+      },
       "tabs": {
         "title": "Tabs",
         "category": "Navigation",
