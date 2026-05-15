@@ -20,6 +20,74 @@ function pressKey(el: Element, key: string) {
   el.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
 }
 
+describe("Switcher (selection)", () => {
+  it("emits update:modelValue and change on item click, closes the panel", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "a" },
+    });
+    await wrapper.get("[data-modo-switcher-trigger]").trigger("click");
+    await nextTick();
+
+    const second = document.querySelectorAll('[role="option"]')[1] as HTMLElement;
+    second.click();
+    await nextTick();
+
+    expect(wrapper.emitted("update:modelValue")?.[0]).toEqual(["b"]);
+    expect(wrapper.emitted("change")?.[0]).toEqual(["b", items[1]]);
+    expect(document.querySelector("[data-modo-switcher-panel]")).toBeNull();
+
+    wrapper.unmount();
+  });
+
+  it("emits open and close as the panel toggles", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "a" },
+    });
+    const trigger = wrapper.get("[data-modo-switcher-trigger]");
+    await trigger.trigger("click");
+    await nextTick();
+    expect(wrapper.emitted("open")?.length).toBe(1);
+    await trigger.trigger("click");
+    await nextTick();
+    expect(wrapper.emitted("close")?.length).toBe(1);
+    wrapper.unmount();
+  });
+
+  it("ignores clicks on disabled items", async () => {
+    const its: SwitcherItem[] = [
+      { value: "a", title: "A" },
+      { value: "b", title: "B", disabled: true },
+    ];
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items: its, modelValue: "a" },
+    });
+    await wrapper.get("[data-modo-switcher-trigger]").trigger("click");
+    await nextTick();
+
+    const disabled = document.querySelectorAll('[role="option"]')[1] as HTMLElement;
+    disabled.click();
+    await nextTick();
+
+    expect(wrapper.emitted("update:modelValue")).toBeUndefined();
+    expect(document.querySelector("[data-modo-switcher-panel]")).not.toBeNull();
+    wrapper.unmount();
+  });
+
+  it("when the entire switcher is disabled, click on trigger does nothing", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "a", disabled: true },
+    });
+    await wrapper.get("[data-modo-switcher-trigger]").trigger("click");
+    await nextTick();
+    expect(document.querySelector("[data-modo-switcher-panel]")).toBeNull();
+    wrapper.unmount();
+  });
+});
+
 describe("Switcher (item visuals)", () => {
   it("renders the item's icon component inside a tinted container when icon is set", async () => {
     const itemsWithIcon: SwitcherItem[] = [

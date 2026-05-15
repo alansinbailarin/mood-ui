@@ -95,6 +95,7 @@
               item.value === modelValue ? 'bg-accent/40' : 'hover:bg-accent',
               item.disabled ? 'opacity-50 cursor-not-allowed' : '',
             ]"
+            @click="selectItem(item)"
           >
             <span v-if="item.avatar" class="shrink-0">
               <Avatar
@@ -217,6 +218,13 @@ watch(triggerEl, (el) => {
 function onTriggerClick() {
   if (props.disabled) return;
   toggle();
+}
+
+function selectItem(item: SwitcherItem) {
+  if (item.disabled || props.disabled) return;
+  emit("update:modelValue", item.value);
+  emit("change", item.value, item);
+  close();
 }
 
 // Dev-only: warn once per offending item when both icon and avatar are set.
