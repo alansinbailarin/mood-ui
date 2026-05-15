@@ -174,6 +174,7 @@ export const navManifest: NavCategory[] = [
       { id: "dropdown-menu", label: "DropdownMenu", route: "/navigation/dropdown-menu", badge: "New" },
       { id: "pagination", label: "Pagination", route: "/navigation/pagination", badge: "New" },
       { id: "stepper", label: "Stepper", route: "/navigation/stepper", badge: "New" },
+      { id: "switcher", label: "Switcher", route: "/navigation/switcher", badge: "New" },
     ],
   },
   {
