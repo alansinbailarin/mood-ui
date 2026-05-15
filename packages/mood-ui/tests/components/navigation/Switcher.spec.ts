@@ -20,6 +20,70 @@ function pressKey(el: Element, key: string) {
   el.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
 }
 
+describe("Switcher (keyboard, searchable)", () => {
+  it("on open with searchable, focus goes to the search input", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "a", searchable: true },
+    });
+    const trigger = wrapper.get("[data-modo-switcher-trigger]").element;
+    pressKey(trigger, "ArrowDown");
+    await flushPromises();
+    const input = document.querySelector('[role="searchbox"]')!;
+    expect(document.activeElement).toBe(input);
+    wrapper.unmount();
+  });
+
+  it("ArrowDown on the search input moves aria-activedescendant through options", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "a", searchable: true },
+    });
+    const trigger = wrapper.get("[data-modo-switcher-trigger]").element;
+    pressKey(trigger, "ArrowDown");
+    await flushPromises();
+    const input = document.querySelector('[role="searchbox"]') as HTMLElement;
+    expect(input.getAttribute("aria-activedescendant")).toMatch(/-opt-0$/);
+    pressKey(input, "ArrowDown");
+    await flushPromises();
+    expect(input.getAttribute("aria-activedescendant")).toMatch(/-opt-1$/);
+    wrapper.unmount();
+  });
+
+  it("Enter on input selects the option pointed to by aria-activedescendant", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "a", searchable: true },
+    });
+    const trigger = wrapper.get("[data-modo-switcher-trigger]").element;
+    pressKey(trigger, "ArrowDown");
+    await flushPromises();
+    const input = document.querySelector('[role="searchbox"]') as HTMLElement;
+    pressKey(input, "ArrowDown");
+    await flushPromises();
+    pressKey(input, "Enter");
+    await flushPromises();
+    expect(wrapper.emitted("update:modelValue")?.[0]).toEqual(["b"]);
+    wrapper.unmount();
+  });
+
+  it("Escape closes the panel and returns focus to the trigger (searchable)", async () => {
+    const wrapper = mount(Switcher, {
+      attachTo: document.body,
+      props: { items, modelValue: "a", searchable: true },
+    });
+    const triggerEl = wrapper.get("[data-modo-switcher-trigger]").element as HTMLElement;
+    pressKey(triggerEl, "ArrowDown");
+    await flushPromises();
+    const input = document.querySelector('[role="searchbox"]') as HTMLElement;
+    pressKey(input, "Escape");
+    await flushPromises();
+    expect(document.querySelector("[data-modo-switcher-panel]")).toBeNull();
+    expect(document.activeElement).toBe(triggerEl);
+    wrapper.unmount();
+  });
+});
+
 describe("Switcher (keyboard, non-searchable)", () => {
   it("opens the panel and focuses the active option on ArrowDown from trigger", async () => {
     const wrapper = mount(Switcher, {

@@ -84,7 +84,9 @@
             type="text"
             :placeholder="resolvedSearchPlaceholder"
             :aria-controls="listboxId"
+            :aria-activedescendant="activeDescendantId"
             class="w-full px-2 py-1.5 text-body bg-background border border-border rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            @keydown="onSearchKeydown"
           />
         </div>
 
@@ -136,10 +138,12 @@
             :tabindex="-1"
             class="modo-switcher-item flex items-center gap-3 px-3 py-2 cursor-pointer"
             :class="[
-              item.value === modelValue ? 'bg-accent/40' : 'hover:bg-accent',
+              item.value === modelValue ? 'bg-accent/40' : '',
+              searchable && idx === highlightedIdx ? 'bg-accent' : 'hover:bg-accent',
               item.disabled ? 'opacity-50 cursor-not-allowed' : '',
             ]"
             @click="selectItem(item)"
+            @mouseenter="searchable ? (highlightedIdx = idx) : null"
           >
             <span v-if="item.avatar" class="shrink-0">
               <Avatar
@@ -417,6 +421,72 @@ function onListKeydown(e: KeyboardEvent) {
 watch(isOpen, (open) => {
   if (!open) focusTrigger();
 });
+
+const highlightedIdx = ref<number>(-1);
+
+const activeDescendantId = computed(() =>
+  highlightedIdx.value >= 0
+    ? `${listboxId}-opt-${highlightedIdx.value}`
+    : undefined,
+);
+
+watch(displayedItems, () => {
+  if (!props.searchable) return;
+  const order = focusableIndices();
+  highlightedIdx.value = order[0] ?? -1;
+});
+
+watch(isOpen, (open) => {
+  if (!open) {
+    highlightedIdx.value = -1;
+    return;
+  }
+  if (!props.searchable) return;
+  const idx = displayedItems.value.findIndex(
+    (it) => it.value === props.modelValue && !it.disabled,
+  );
+  const order = focusableIndices();
+  highlightedIdx.value = idx >= 0 ? idx : order[0] ?? -1;
+});
+
+function moveHighlight(delta: 1 | -1) {
+  const order = focusableIndices();
+  if (!order.length) return;
+  const cur = order.indexOf(highlightedIdx.value);
+  if (cur === -1) {
+    highlightedIdx.value = delta > 0 ? order[0] : order[order.length - 1];
+    return;
+  }
+  const next = (cur + delta + order.length) % order.length;
+  highlightedIdx.value = order[next];
+}
+
+function onSearchKeydown(e: KeyboardEvent) {
+  if (e.key === "ArrowDown") {
+    e.preventDefault();
+    moveHighlight(1);
+  } else if (e.key === "ArrowUp") {
+    e.preventDefault();
+    moveHighlight(-1);
+  } else if (e.key === "Home") {
+    e.preventDefault();
+    const order = focusableIndices();
+    if (order.length) highlightedIdx.value = order[0];
+  } else if (e.key === "End") {
+    e.preventDefault();
+    const order = focusableIndices();
+    if (order.length) highlightedIdx.value = order[order.length - 1];
+  } else if (e.key === "Enter") {
+    e.preventDefault();
+    if (highlightedIdx.value >= 0) {
+      selectItem(displayedItems.value[highlightedIdx.value]);
+    }
+  } else if (e.key === "Escape") {
+    e.preventDefault();
+    close();
+    focusTrigger();
+  }
+}
 
 // Dev-only: warn once per offending item when both icon and avatar are set.
 if (import.meta.env?.DEV ?? true) {
