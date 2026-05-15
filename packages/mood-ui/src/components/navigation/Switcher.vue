@@ -140,7 +140,7 @@
             :ref="(el) => setOptionRef(el as HTMLElement | null, idx)"
             role="option"
             :id="`${listboxId}-opt-${idx}`"
-            :aria-selected="String(item.value === modelValue)"
+            :aria-selected="item.value === modelValue"
             :aria-current="item.value === modelValue ? 'true' : undefined"
             :aria-disabled="item.disabled || undefined"
             :data-active="item.value === modelValue || undefined"

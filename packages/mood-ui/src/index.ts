@@ -179,6 +179,7 @@ export { default as Breadcrumbs } from "./components/navigation/Breadcrumbs.vue"
 export { default as DropdownMenu } from "./components/navigation/DropdownMenu.vue";
 export { default as Pagination } from "./components/navigation/Pagination.vue";
 export { default as Stepper } from "./components/navigation/Stepper.vue";
+export { default as Switcher } from "./components/navigation/Switcher.vue";
 
 /* ------------------------------------------------------------------ */
 /*  Data display                                                        */
@@ -274,6 +275,7 @@ export type * from "./interfaces/navigation/Breadcrumbs.interface";
 export type * from "./interfaces/navigation/DropdownMenu.interface";
 export type * from "./interfaces/navigation/Pagination.interface";
 export type * from "./interfaces/navigation/Stepper.interface";
+export type * from "./interfaces/navigation/Switcher.interface";
 
 export type * from "./interfaces/data-display/Card.interface";
 export type * from "./interfaces/data-display/Typography.interface";
