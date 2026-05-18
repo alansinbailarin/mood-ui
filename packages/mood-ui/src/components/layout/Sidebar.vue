@@ -1,10 +1,10 @@
 <template> 
-    <component 
-        :is="as" 
-        class="flex flex-col h-full min-h-0 bg-card text-foreground" 
-        :aria-label="ariaLabel ?? 'Sidebar'" 
-        role="navigation" 
-    > 
+    <component
+        :is="as"
+        class="relative flex flex-col h-full min-h-0 bg-card text-foreground"
+        :aria-label="ariaLabel ?? 'Sidebar'"
+        role="navigation"
+    >
         <!-- HEADER --> 
         <div 
             v-if="$slots.header" 
@@ -83,15 +83,36 @@
             ]" 
         > 
             <slot name="footer" :collapsed="collapsed" /> 
-        </div> 
-    </component> 
+        </div>
+
+        <!-- COLLAPSE TOGGLE -->
+        <button
+            v-if="showToggle"
+            type="button"
+            data-modo-sidebar-toggle
+            :aria-label="collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+            :class="[
+                'absolute top-[18px] z-10 size-6 rounded-full',
+                'border border-border bg-card shadow-sm',
+                'flex items-center justify-center',
+                'text-muted-foreground hover:text-foreground',
+                'transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                togglePositionClass,
+            ]"
+            @click="$emit('update:collapsed', !collapsed)"
+        >
+            <ChevronLeftIcon v-if="!collapsed" class="size-3.5" />
+            <ChevronRightIcon v-else class="size-3.5" />
+        </button>
+    </component>
 </template> 
  
 <script setup lang="ts"> 
 import { computed, useSlots } from 'vue'; 
 import type { Sidebar, SidebarItem, SidebarSection } from '../../interfaces/layout/Sidebar.interface'; 
 import { useResolvedColor, useResolvedRadius, useResolvedSize } from '../../composables/useModoConfig'; 
-import SidebarRow from './SidebarRow.vue'; 
+import SidebarRow from './SidebarRow.vue';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline';
  
 const props = withDefaults(defineProps<Sidebar>(), { 
     as: 'nav', 
@@ -99,14 +120,17 @@ const props = withDefaults(defineProps<Sidebar>(), {
     collapsed: false, 
     activeVariant: 'tonal', 
     barSide: 'start', 
-    padding: 'small', 
-    dividers: true, 
+    padding: 'small',
+    dividers: true,
+    showToggle: false,
+    toggleSide: 'end',
 }); 
  
-const emit = defineEmits<{ 
-    'update:activeId': [value: string | number | null]; 
-    select: [item: SidebarItem]; 
-}>(); 
+const emit = defineEmits<{
+    'update:activeId': [value: string | number | null];
+    'update:collapsed': [value: boolean];
+    select: [item: SidebarItem];
+}>();
  
 useSlots(); 
  
@@ -128,10 +152,14 @@ const paddingClass = computed(() => {
         case 'none': return ''; 
         case 'medium': return 'p-3'; 
         case 'large': return 'p-4'; 
-        default: return 'p-2'; 
-    } 
-}); 
- 
+        default: return 'p-2';
+    }
+});
+
+const togglePositionClass = computed(() =>
+    props.toggleSide === 'start' ? '-left-3' : '-right-3',
+);
+
 function onSelect(item: SidebarItem) { 
     if (item.disabled) return; 
     // Items with their own navigation target keep behaving as links. 
