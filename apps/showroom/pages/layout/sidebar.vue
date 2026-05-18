@@ -50,6 +50,7 @@ const a11yFocus = computed<string[]>(() => [
 ]);
 
 const pgCollapsed = useLocalStorage('docs:sidebar:collapsed', false);
+const pgShowToggle = useLocalStorage('docs:sidebar:showToggle', true);
 const pgVariant = ref<"tonal" | "solid" | "bar">("tonal");
 const pgColor = ref<"default" | "primary" | "danger" | "success" | "warning">(
   "primary",
@@ -57,6 +58,7 @@ const pgColor = ref<"default" | "primary" | "danger" | "success" | "warning">(
 
 function resetPlayground() {
   pgCollapsed.value = false;
+  pgShowToggle.value = true;
   pgVariant.value = "tonal";
   pgColor.value = "primary";
 }
@@ -130,11 +132,12 @@ const colorDots = [
 
 const overviewCode = computed(() => {
   const parts: string[] = [];
-  if (pgCollapsed.value) parts.push(':collapsed="collapsed"');
+  if (pgShowToggle.value) parts.push('show-toggle');
+  if (pgCollapsed.value) parts.push('v-model:collapsed="collapsed"');
   if (pgVariant.value !== "tonal")
     parts.push(`active-variant="${pgVariant.value}"`);
   if (pgColor.value !== "default") parts.push(`color="${pgColor.value}"`);
-  const attrs = parts.length ? " " + parts.join(" ") : "";
+  const attrs = parts.length ? "\n    " + parts.join("\n    ") : "";
   return `<script setup>
 import { useLocalStorage, Sidebar } from 'mood-ui';
 
@@ -144,9 +147,7 @@ const collapsed = useLocalStorage('app:sidebar:collapsed', false);
 <template>
   <Sidebar
     :items="items"
-    v-model:active-id="active"
-    show-toggle
-    v-model:collapsed="collapsed"${attrs}
+    v-model:active-id="active"${attrs}
   />
 </template>`;
 });
@@ -245,6 +246,27 @@ const sections = [
   </Sidebar>
 </template>`;
 
+const toggleCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { useLocalStorage, Sidebar } from 'mood-ui';
+import { HomeIcon } from '@heroicons/vue/24/outline';
+
+const active = ref('home');
+const collapsed = useLocalStorage('app:sidebar:collapsed', false);
+const items = [
+  { id: 'home', label: 'Home', icon: HomeIcon },
+];
+<\/script>
+
+<template>
+  <Sidebar
+    :items="items"
+    v-model:active-id="active"
+    show-toggle
+    v-model:collapsed="collapsed"
+  />
+</template>`;
+
 const propsList = computed<PropDoc[]>(() => [
   {
     name: "sections",
@@ -308,6 +330,18 @@ const propsList = computed<PropDoc[]>(() => [
     type: "boolean",
     default: "true",
     description: t("pages.layout.sidebar.props.dividers"),
+  },
+  {
+    name: "showToggle",
+    type: "boolean",
+    default: "false",
+    description: t("pages.layout.sidebar.props.showToggle"),
+  },
+  {
+    name: "toggleSide",
+    type: "'start' | 'end'",
+    default: "'end'",
+    description: t("pages.layout.sidebar.props.toggleSide"),
   },
   {
     name: "ariaLabel",
@@ -468,17 +502,31 @@ export interface Sidebar {
           >
             Collapsed
           </button>
+
+          <button
+            type="button"
+            class="px-2 py-1 rounded-md text-xs border transition-colors"
+            :class="
+              pgShowToggle
+                ? 'border-primary bg-primary/10 text-primary font-medium'
+                : 'border-border text-muted-foreground hover:bg-muted/60'
+            "
+            @click="pgShowToggle = !pgShowToggle"
+          >
+            Toggle Button
+          </button>
         </template>
 
         <div
-          class="border border-border rounded-md overflow-hidden bg-card transition-[width] duration-200"
+          class="border border-border rounded-md overflow-visible bg-card transition-[width] duration-200"
           :class="pgCollapsed ? 'w-16' : 'w-64'"
           style="height: 320px"
         >
           <Sidebar
             :sections="sectionsData"
             v-model:active-id="active"
-            :collapsed="pgCollapsed"
+            :show-toggle="pgShowToggle"
+            v-model:collapsed="pgCollapsed"
             :active-variant="pgVariant"
             :color="pgColor"
           />
@@ -551,6 +599,26 @@ export interface Sidebar {
               </button>
             </template>
           </Sidebar>
+        </div>
+      </ComponentPreview>
+
+      <ComponentPreview
+        :title="t('pages.layout.sidebar.examples.toggle.title')"
+        :description="t('pages.layout.sidebar.examples.toggle.desc')"
+        :code="toggleCode"
+      >
+        <div
+          class="border border-border rounded-md overflow-visible bg-card transition-[width] duration-200"
+          :class="pgCollapsed ? 'w-16' : 'w-64'"
+          style="height: 320px"
+        >
+          <Sidebar
+            :sections="sectionsData"
+            v-model:active-id="active"
+            show-toggle
+            v-model:collapsed="pgCollapsed"
+            color="primary"
+          />
         </div>
       </ComponentPreview>
     </template>

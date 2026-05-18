@@ -53,12 +53,14 @@ const a11yFocus = computed<string[]>(() => [
 const pgVariant = ref<"standard" | "rail" | "dual">("standard");
 const pgAppearance = ref<"flush" | "contained">("flush");
 const pgCollapsed = ref(false);
+const pgTopbarSpan = ref<'full' | 'content'>('full');
 const isCollapsed = ref(true);
 
 function resetPlayground() {
   pgVariant.value = "standard";
   pgAppearance.value = "flush";
   pgCollapsed.value = false;
+  pgTopbarSpan.value = 'full';
 }
 
 const active = ref<string | number>("home");
@@ -91,6 +93,7 @@ const overviewCode = computed(() => {
   if (pgAppearance.value !== "flush")
     parts.push(`appearance="${pgAppearance.value}"`);
   if (pgCollapsed.value) parts.push('v-model:collapsed="collapsed"');
+  if (pgTopbarSpan.value !== 'full') parts.push(`topbar-span="${pgTopbarSpan.value}"`);
   const attrs = parts.length ? " " + parts.join(" ") : "";
   return `<AppShell${attrs}>
     <template #topbar><Topbar title="App" divider /></template>
@@ -171,6 +174,22 @@ import { AppShell, Topbar } from 'mood-ui';
   <AppShell>
     <template #topbar><Topbar title="App" divider /></template>
     <div class="p-6">…</div>
+  </AppShell>
+</template>`;
+
+const topbarSpanCode = `<template>
+  <AppShell topbar-span="content" v-model:collapsed="isCollapsed" style="height: 400px">
+    <template #sidebar="{ collapsed, toggleCollapsed }">
+      <Sidebar
+        :items="items"
+        v-model:active-id="active"
+        :collapsed="collapsed"
+        show-toggle
+        @click.native="toggleCollapsed"
+      />
+    </template>
+    <template #topbar><Topbar title="App" divider /></template>
+    <div class="p-6">Main content</div>
   </AppShell>
 </template>`;
 
@@ -258,6 +277,12 @@ const propsList = computed<PropDoc[]>(() => [
     type: "'none' | 'small' | 'medium' | 'large' | 'full'",
     default: "provider",
     description: t("pages.layout.appShell.props.radius"),
+  },
+  {
+    name: "topbarSpan",
+    type: "'full' | 'content'",
+    default: "'full'",
+    description: t("pages.layout.appShell.props.topbarSpan"),
   },
 ]);
 
@@ -398,6 +423,31 @@ const typesCode = `export interface AppShell {
           >
             Collapsed
           </button>
+
+          <span class="w-px h-4 bg-border shrink-0" />
+
+          <div class="flex items-center gap-1.5">
+            <span
+              class="text-[10px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:inline"
+              >Layout</span
+            >
+            <div class="flex rounded-md border border-border overflow-hidden">
+              <button
+                v-for="s in ['full', 'content']"
+                :key="s"
+                type="button"
+                class="px-2 py-1 text-xs transition-colors capitalize"
+                :class="
+                  pgTopbarSpan === s
+                    ? 'bg-primary/10 text-primary font-medium'
+                    : 'text-muted-foreground hover:bg-muted/60'
+                "
+                @click="pgTopbarSpan = s as typeof pgTopbarSpan"
+              >
+                {{ s }}
+              </button>
+            </div>
+          </div>
         </template>
 
         <div
@@ -408,6 +458,7 @@ const typesCode = `export interface AppShell {
             :variant="pgVariant"
             :appearance="pgAppearance"
             :collapsed="pgCollapsed"
+            :topbar-span="pgTopbarSpan"
             breakpoint="md"
             class="h-full"
           >
@@ -565,6 +616,44 @@ const typesCode = `export interface AppShell {
             </template>
             <div class="p-6 text-sm">
               {{ t("pages.layout.appShell.content.noSidebar") }}
+            </div>
+          </AppShell>
+        </div>
+      </ComponentPreview>
+
+      <ComponentPreview
+        :title="t('pages.layout.appShell.examples.topbarSpan.title')"
+        :description="t('pages.layout.appShell.examples.topbarSpan.desc')"
+        :code="topbarSpanCode"
+      >
+        <div
+          class="w-full border border-border rounded-md overflow-hidden bg-card"
+          style="height: 320px"
+        >
+          <AppShell
+            topbar-span="content"
+            v-model:collapsed="isCollapsed"
+            breakpoint="md"
+            class="h-full"
+          >
+            <template #topbar>
+              <Topbar title="App" divider>
+                <template #logo
+                  ><div class="size-7 rounded bg-primary"
+                /></template>
+              </Topbar>
+            </template>
+            <template #sidebar="{ collapsed }">
+              <Sidebar
+                :items="items"
+                v-model:active-id="active"
+                :collapsed="collapsed"
+                show-toggle
+                color="primary"
+              />
+            </template>
+            <div class="p-6 text-sm">
+              {{ t("pages.layout.appShell.content.main") }}
             </div>
           </AppShell>
         </div>

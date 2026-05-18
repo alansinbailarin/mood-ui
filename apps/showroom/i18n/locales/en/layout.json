@@ -28,6 +28,10 @@
           "noSidebar": {
             "title": "No sidebar",
             "desc": "Topbar-only layout — useful for landings or linear flows."
+          },
+          "topbarSpan": {
+            "title": "Sidebar-first layout",
+            "desc": "Use topbar-span='content' for the Linear/Notion pattern where the sidebar extends full height and the topbar only covers the main content column."
           }
         },
         "content": {
@@ -52,7 +56,8 @@
           "stickySidebar": "Makes the sidebar sticky on desktop.",
           "divider": "Renders borders between regions.",
           "mainPadding": "Padding around the main content.",
-          "radius": "Radius when appearance=\"contained\"."
+          "radius": "Radius when appearance=\"contained\".",
+          "topbarSpan": "Controls how far the topbar spans. 'full' = topbar covers entire width (default). 'content' = sidebar extends full height, topbar only covers the main content column (Linear/Notion layout)."
         },
         "slots": {
           "topbar": "Application topbar.",
@@ -424,6 +429,10 @@
           "footer": {
             "title": "With footer",
             "desc": "Footer slot for logout or profile buttons."
+          },
+          "toggle": {
+            "title": "With toggle button",
+            "desc": "Add show-toggle to render a built-in collapse button. Use v-model:collapsed with useLocalStorage to persist the state."
           }
         },
         "logout": "Sign out",
@@ -439,6 +448,8 @@
           "barSide": "Accent bar side (only activeVariant=\"bar\").",
           "padding": "Padding around the inner list.",
           "dividers": "Renders borders between header / body / footer.",
+          "showToggle": "Renders a built-in circular chevron button at the sidebar edge that toggles collapsed. Positioned absolute, overflows the container by 12 px.",
+          "toggleSide": "Which edge the toggle button appears on. 'end' (default) for left-side sidebars, 'start' for right-side sidebars.",
           "ariaLabel": "Aria-label of the root nav.",
           "as": "Root tag to render."
         },

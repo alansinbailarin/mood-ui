@@ -28,6 +28,10 @@
           "noSidebar": {
             "title": "Sin sidebar",
             "desc": "Layout solo con topbar — útil para landings o flujos lineales."
+          },
+          "topbarSpan": {
+            "title": "Layout sidebar-first",
+            "desc": "Usa topbar-span='content' para el patrón Linear/Notion: el sidebar ocupa toda la altura y el topbar solo cubre la columna de contenido principal."
           }
         },
         "content": {
@@ -52,7 +56,8 @@
           "stickySidebar": "Hace sticky el sidebar en escritorio.",
           "divider": "Renderiza bordes entre regiones.",
           "mainPadding": "Padding alrededor del contenido principal.",
-          "radius": "Radio cuando appearance=\"contained\"."
+          "radius": "Radio cuando appearance=\"contained\".",
+          "topbarSpan": "Controla cuánto abarca el topbar. 'full' = cubre todo el ancho (predeterminado). 'content' = el sidebar ocupa toda la altura, el topbar solo cubre la columna principal (layout Linear/Notion)."
         },
         "slots": {
           "topbar": "Barra superior de la aplicación.",
@@ -424,6 +429,10 @@
           "footer": {
             "title": "Con footer",
             "desc": "Slot footer para botones de logout o perfil."
+          },
+          "toggle": {
+            "title": "Con botón de colapso",
+            "desc": "Agrega show-toggle para renderizar un botón de colapso integrado. Usa v-model:collapsed con useLocalStorage para persistir el estado."
           }
         },
         "logout": "Salir",
@@ -439,6 +448,8 @@
           "barSide": "Lado del accent bar (solo activeVariant=\"bar\").",
           "padding": "Padding alrededor de la lista interior.",
           "dividers": "Renderiza bordes entre header / body / footer.",
+          "showToggle": "Renderiza un botón circular con chevron en el borde del sidebar que alterna el estado collapsed. Posicionado absolute, desborda el contenedor 12 px.",
+          "toggleSide": "En qué borde aparece el botón. 'end' (predeterminado) para sidebars izquierdos, 'start' para sidebars derechos.",
           "ariaLabel": "Aria-label del nav raíz.",
           "as": "Etiqueta raíz a renderizar."
         },
