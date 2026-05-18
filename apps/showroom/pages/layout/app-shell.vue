@@ -185,7 +185,7 @@ const topbarSpanCode = `<template>
         v-model:active-id="active"
         :collapsed="collapsed"
         show-toggle
-        v-model:collapsed="isCollapsed"
+        @update:collapsed="toggleCollapsed"
       />
     </template>
     <template #topbar><Topbar title="App" divider /></template>
@@ -643,12 +643,13 @@ const typesCode = `export interface AppShell {
                 /></template>
               </Topbar>
             </template>
-            <template #sidebar="{ collapsed }">
+            <template #sidebar="{ collapsed, toggleCollapsed }">
               <Sidebar
                 :items="items"
                 v-model:active-id="active"
                 :collapsed="collapsed"
                 show-toggle
+                @update:collapsed="toggleCollapsed"
                 color="primary"
               />
             </template>
