@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { Sidebar, Typography } from "mood-ui";
+import { Sidebar, Typography, useLocalStorage } from "mood-ui";
 import { useI18n } from "vue-i18n";
 import ComponentDoc from "~/components/ComponentDoc.vue";
 import ComponentPreview from "~/components/ComponentPreview.vue";
@@ -49,7 +49,7 @@ const a11yFocus = computed<string[]>(() => [
   t("pages.layout.sidebar.a11y.focusNative"),
 ]);
 
-const pgCollapsed = ref(false);
+const pgCollapsed = useLocalStorage('docs:sidebar:collapsed', false);
 const pgVariant = ref<"tonal" | "solid" | "bar">("tonal");
 const pgColor = ref<"default" | "primary" | "danger" | "success" | "warning">(
   "primary",
@@ -130,15 +130,25 @@ const colorDots = [
 
 const overviewCode = computed(() => {
   const parts: string[] = [];
-  if (pgCollapsed.value) parts.push("collapsed");
+  if (pgCollapsed.value) parts.push(':collapsed="collapsed"');
   if (pgVariant.value !== "tonal")
     parts.push(`active-variant="${pgVariant.value}"`);
   if (pgColor.value !== "default") parts.push(`color="${pgColor.value}"`);
   const attrs = parts.length ? " " + parts.join(" ") : "";
-  return `<Sidebar
+  return `<script setup>
+import { useLocalStorage, Sidebar } from 'mood-ui';
+
+const collapsed = useLocalStorage('app:sidebar:collapsed', false);
+<\/script>
+
+<template>
+  <Sidebar
     :items="items"
-    v-model:active-id="active"${attrs}
-/>`;
+    v-model:active-id="active"
+    show-toggle
+    v-model:collapsed="collapsed"${attrs}
+  />
+</template>`;
 });
 
 const basicCode = `<script setup lang="ts">
