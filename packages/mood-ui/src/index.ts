@@ -73,6 +73,7 @@ export {
 export { useToast, useToastQueue } from "./composables/useToast";
 export { useConfirm, useConfirmQueue } from "./composables/useConfirm";
 export { useLocale } from "./composables/useLocale";
+export { useLocalStorage } from "./composables/useLocalStorage";
 export {
   useAutoScroll,
   type UseAutoScrollInput,

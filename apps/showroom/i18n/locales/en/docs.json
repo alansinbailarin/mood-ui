@@ -163,6 +163,19 @@
         "description": "Every release of mood-ui listed newest first. SemVer-tracked, with highlights of new components, bug fixes and breaking changes.",
         "intro": "Every release listed newest first. We follow SemVer.",
         "releases": {
+          "v0.9.0": {
+            "title": "Switcher component · AppShell sidebar-first layout · Sidebar toggle · useLocalStorage",
+            "items": [
+              "New: Switcher component — workspace/context switcher with search, keyboard navigation, v-model, loading skeletons, and #trigger/#item-trailing/#footer slots.",
+              "New: AppShell topbarSpan prop — 'content' mode places the topbar only above the main column so the sidebar spans full height (Linear / Notion style).",
+              "New: Sidebar showToggle prop — built-in circular collapse/expand button that straddles the sidebar border. toggleSide controls which edge it appears on.",
+              "New: useLocalStorage composable — SSR-safe reactive ref bound to localStorage, deep-watches objects and arrays automatically.",
+              "Fix: Sidebar toggle button vertical position corrected from top-[18px] to top-[16px] so its center aligns precisely with the default h-14 topbar.",
+              "Fix: AppShell sidebar wrapper changed from overflow-y-auto to overflow-visible to prevent the toggle button from being clipped.",
+              "Showroom: ModoProvider config snippet generator — copy your theme palette as a ready-to-paste code block.",
+              "Showroom: useLocalStorage documentation page with live demos for strings, objects, and sidebar state persistence."
+            ]
+          },
           "v0.8.2": {
             "title": "Anti-FOUC + darkClass additive + ColorModeSwitch fixes",
             "items": [

@@ -129,6 +129,7 @@ export const HASH_TO_ROUTE: Readonly<Record<string, string>> = Object.freeze({
   "use-modo-config": "/composables/use-modo-config",
   "use-calendar": "/composables/use-calendar",
   "use-auto-scroll": "/composables/use-auto-scroll",
+  "use-local-storage": "/composables/use-local-storage",
 
   // Utilities
   "event-colors": "/utilities/event-colors",

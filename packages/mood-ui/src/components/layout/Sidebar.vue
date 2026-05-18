@@ -92,7 +92,7 @@
             data-modo-sidebar-toggle
             :aria-label="collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
             :class="[
-                'absolute top-[18px] z-10 size-6 rounded-full',
+                'absolute top-[16px] z-10 size-6 rounded-full',
                 'border border-border bg-card shadow-sm',
                 'flex items-center justify-center',
                 'text-muted-foreground hover:text-foreground',

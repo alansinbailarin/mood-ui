@@ -188,6 +188,7 @@ export const navManifest: NavCategory[] = [
       { id: "use-modo-config", label: "useModoConfig", route: "/composables/use-modo-config" },
       { id: "use-calendar", label: "useCalendar", route: "/composables/use-calendar" },
       { id: "use-auto-scroll", label: "useAutoScroll", route: "/composables/use-auto-scroll" },
+      { id: "use-local-storage", label: "useLocalStorage", route: "/composables/use-local-storage" },
     ],
   },
   {

@@ -5,6 +5,8 @@ export default defineNuxtConfig({
   compatibilityDate: "2026-01-01",
   future: { compatibilityVersion: 4 },
 
+  devServer: { port: 3030 },
+
   // Static Site Generation — `nuxt generate` produces a fully pre-rendered
   // site that Vercel serves as plain HTML. Each component page becomes
   // independently indexable by search engines.
