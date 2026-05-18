@@ -66,6 +66,15 @@ export interface AppShell {
     /** Radius of the contained shell card. Ignored when `appearance="flush"`. */ 
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 
  
-    /** Accessible label for the mobile navigation drawer (dialog). */ 
-    drawerAriaLabel?: string; 
+    /** Accessible label for the mobile navigation drawer (dialog). */
+    drawerAriaLabel?: string;
+
+    /**
+     * Controls how far the topbar spans horizontally.
+     * - `'full'`    — topbar covers the entire shell width (default, current behaviour).
+     * - `'content'` — sidebar extends to full height; topbar only covers the main
+     *                 content column. Produces the Linear / Notion sidebar-first layout.
+     * @default 'full'
+     */
+    topbarSpan?: 'full' | 'content';
 }
