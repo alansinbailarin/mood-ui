@@ -1,6 +1,45 @@
 {
   "pages": {
     "composables": {
+      "useLocalStorage": {
+        "title": "useLocalStorage",
+        "description": "Reactive ref backed by localStorage. Reads the stored value on mount, writes back on every change (deep watch for objects/arrays), and is safe to call in SSR contexts.",
+        "api": {
+          "key": "localStorage key used to read and write the value.",
+          "defaultValue": "Fallback value used when the key is absent or the stored JSON cannot be parsed.",
+          "returns": "A reactive typed ref whose value is kept in sync with `localStorage[key]`."
+        },
+        "overview": {
+          "label": "Stored name",
+          "stored": "Stored",
+          "reset": "Reset"
+        },
+        "a11y": {
+          "ssr": "Storage access is wrapped in try/catch — safe in SSR and private-mode browsers."
+        },
+        "examples": {
+          "string": {
+            "title": "String value",
+            "desc": "Persists a string across page reloads. Reload the page to verify the value is restored.",
+            "label": "Username"
+          },
+          "object": {
+            "title": "Object value",
+            "desc": "Deep-watches objects and arrays — any nested mutation is persisted automatically. Reload to verify.",
+            "notifications": "Notifications",
+            "compact": "Compact mode",
+            "autoSave": "Auto-save"
+          },
+          "sidebar": {
+            "title": "Persisted sidebar state",
+            "desc": "A practical pattern: use useLocalStorage with show-toggle to persist the sidebar's collapsed state across page reloads."
+          }
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript signature for this composable."
+        }
+      },
       "useAutoScroll": {
         "title": "useAutoScroll",
         "description": "Auto-scroll helper for drag-and-drop interactions. When the pointer approaches the top or bottom edge of a scrollable container, it automatically scrolls at a speed proportional to the distance from the edge.",

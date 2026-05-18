@@ -1,6 +1,45 @@
 {
   "pages": {
     "composables": {
+      "useLocalStorage": {
+        "title": "useLocalStorage",
+        "description": "Ref reactivo respaldado por localStorage. Lee el valor almacenado al montar, escribe de vuelta en cada cambio (watch profundo para objetos/arrays) y es seguro de usar en contextos SSR.",
+        "api": {
+          "key": "Clave de localStorage usada para leer y escribir el valor.",
+          "defaultValue": "Valor de respaldo cuando la clave no existe o el JSON almacenado no puede parsearse.",
+          "returns": "Un ref reactivo tipado cuyo valor se mantiene sincronizado con `localStorage[key]`."
+        },
+        "overview": {
+          "label": "Nombre almacenado",
+          "stored": "Almacenado",
+          "reset": "Resetear"
+        },
+        "a11y": {
+          "ssr": "El acceso al storage está envuelto en try/catch — seguro en SSR y navegadores en modo privado."
+        },
+        "examples": {
+          "string": {
+            "title": "Valor string",
+            "desc": "Persiste un string entre recargas de página. Recarga para verificar que el valor se restaura.",
+            "label": "Nombre de usuario"
+          },
+          "object": {
+            "title": "Valor objeto",
+            "desc": "Observa objetos y arrays en profundidad — cualquier mutación anidada se persiste automáticamente. Recarga para verificar.",
+            "notifications": "Notificaciones",
+            "compact": "Modo compacto",
+            "autoSave": "Guardado automático"
+          },
+          "sidebar": {
+            "title": "Estado de sidebar persistido",
+            "desc": "Un patrón práctico: usa useLocalStorage con show-toggle para persistir el estado collapsed del sidebar entre recargas."
+          }
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Firma de TypeScript para este composable."
+        }
+      },
       "useAutoScroll": {
         "title": "useAutoScroll",
         "description": "Helper de auto-scroll para interacciones de drag-and-drop. Cuando el puntero se acerca al borde superior o inferior de un contenedor scrollable, desplaza automáticamente a una velocidad proporcional a la distancia del borde.",
