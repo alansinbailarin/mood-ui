@@ -15,165 +15,333 @@
                     : '', 
             ]" 
         > 
-            <!-- TOPBAR --> 
-            <header 
-                v-if="$slots.topbar" 
-                :class="[ 
-                    'w-full shrink-0 bg-background', 
-                    divider ? 'border-b border-border' : '', 
-                    stickyTopbar && !isContained 
-                        ? 'sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-background/85' 
-                        : '', 
-                ]" 
-            > 
-                <slot 
-                    name="topbar" 
-                    :collapsed="collapsedModel" 
-                    :mobile-open="mobileOpenModel" 
-                    :toggle-sidebar="toggleSidebar" 
-                    :toggle-collapsed="toggleCollapsed" 
-                    :open-mobile="openMobile" 
-                    :close-mobile="closeMobile" 
-                /> 
-            </header> 
- 
-            <!-- BODY: rail + sidebar + main --> 
-            <div 
-                :class="[ 
-                    'flex flex-1 min-h-0', 
-                    sidebarPosition === 'right' ? 'flex-row-reverse' : 'flex-row', 
-                ]" 
-            > 
-                <!-- RAIL (variants: rail, dual) --> 
-                <aside 
-                    v-if="hasRail" 
-                    :class="[ 
-                        'hidden shrink-0 bg-card flex-col', 
-                        desktopFlexClass, 
-                        railWidthClass, 
-                        railBorderClass, 
-                        stickySidebar ? desktopStickyClass : '', 
-                    ]" 
-                    :aria-label="'Primary navigation rail'" 
-                > 
-                    <div v-if="$slots['rail-header']" class="shrink-0"> 
-                        <slot name="rail-header" /> 
-                    </div> 
-                    <div class="flex-1 min-h-0 overflow-y-auto"> 
-                        <slot 
-                            name="rail" 
-                            :toggle-collapsed="toggleCollapsed" 
-                            :collapsed="collapsedModel" 
-                        /> 
-                    </div> 
-                    <div v-if="$slots['rail-footer']" class="shrink-0"> 
-                        <slot name="rail-footer" /> 
-                    </div> 
-                </aside> 
- 
-                <!-- SECONDARY PANEL (variant: dual) — collapsible by `collapsed` --> 
-                <aside 
-                    v-if="variant === 'dual' && $slots.sidebar && !collapsedModel" 
-                    :class="[ 
-                        'hidden shrink-0 bg-card flex-col transition-[width] duration-base ease-standard', 
-                        desktopFlexClass, 
-                        sidebarExpandedWidthClass, 
-                        sidebarBorderClass, 
-                        stickySidebar ? desktopStickyClass : '', 
-                    ]" 
-                    :aria-label="drawerAriaLabel ?? 'Secondary navigation'" 
-                > 
-                    <div v-if="$slots['sidebar-header']" class="shrink-0"> 
-                        <slot 
-                            name="sidebar-header" 
-                            :collapsed="false" 
-                            :toggle-collapsed="toggleCollapsed" 
-                            :is-mobile="false" 
-                            :close-mobile="closeMobile" 
-                        /> 
-                    </div> 
-                    <div class="flex-1 min-h-0 overflow-y-auto"> 
-                        <slot 
-                            name="sidebar" 
-                            :collapsed="false" 
-                            :toggle-collapsed="toggleCollapsed" 
-                            :is-mobile="false" 
-                            :close-mobile="closeMobile" 
-                        /> 
-                    </div> 
-                    <div v-if="$slots['sidebar-footer']" class="shrink-0"> 
-                        <slot 
-                            name="sidebar-footer" 
-                            :collapsed="false" 
-                            :toggle-collapsed="toggleCollapsed" 
-                            :is-mobile="false" 
-                            :close-mobile="closeMobile" 
-                        /> 
-                    </div> 
-                </aside> 
- 
-                <!-- STANDARD SIDEBAR (variant: standard) --> 
-                <aside 
-                    v-if="variant === 'standard' && $slots.sidebar" 
-                    :class="[ 
-                        'hidden shrink-0 bg-card flex-col transition-[width] duration-base ease-standard', 
-                        desktopFlexClass, 
-                        standardSidebarWidthClass, 
-                        sidebarBorderClass, 
-                        stickySidebar ? desktopStickyClass : '', 
-                    ]" 
-                    :aria-label="drawerAriaLabel ?? 'Sidebar navigation'" 
-                > 
-                    <div v-if="$slots['sidebar-header']" class="shrink-0"> 
-                        <slot 
-                            name="sidebar-header" 
-                            :collapsed="collapsedModel" 
-                            :toggle-collapsed="toggleCollapsed" 
-                            :is-mobile="false" 
-                            :close-mobile="closeMobile" 
-                        /> 
-                    </div> 
-                    <div class="flex-1 min-h-0 overflow-y-auto"> 
-                        <slot 
-                            name="sidebar" 
-                            :collapsed="collapsedModel" 
-                            :toggle-collapsed="toggleCollapsed" 
-                            :is-mobile="false" 
-                            :close-mobile="closeMobile" 
-                        /> 
-                    </div> 
-                    <div v-if="$slots['sidebar-footer']" class="shrink-0"> 
-                        <slot 
-                            name="sidebar-footer" 
-                            :collapsed="collapsedModel" 
-                            :toggle-collapsed="toggleCollapsed" 
-                            :is-mobile="false" 
-                            :close-mobile="closeMobile" 
-                        /> 
-                    </div> 
-                </aside> 
- 
-                <!-- MAIN --> 
-                <main 
-                    :class="[ 
-                        'flex-1 min-w-0 min-h-0 flex flex-col overflow-auto', 
-                        mainPaddingClass, 
-                    ]" 
-                > 
-                    <slot /> 
-                </main> 
-            </div> 
- 
-            <!-- FOOTER --> 
-            <footer 
-                v-if="$slots.footer" 
-                :class="[ 
-                    'w-full shrink-0 bg-background', 
-                    divider ? 'border-t border-border' : '', 
-                ]" 
-            > 
-                <slot name="footer" /> 
-            </footer> 
+            <!-- FULL SPAN MODE (default) -->
+            <template v-if="!isContentSpan">
+                <!-- TOPBAR -->
+                <header
+                    v-if="$slots.topbar"
+                    :class="[
+                        'w-full shrink-0 bg-background',
+                        divider ? 'border-b border-border' : '',
+                        stickyTopbar && !isContained
+                            ? 'sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-background/85'
+                            : '',
+                    ]"
+                >
+                    <slot
+                        name="topbar"
+                        :collapsed="collapsedModel"
+                        :mobile-open="mobileOpenModel"
+                        :toggle-sidebar="toggleSidebar"
+                        :toggle-collapsed="toggleCollapsed"
+                        :open-mobile="openMobile"
+                        :close-mobile="closeMobile"
+                    />
+                </header>
+
+                <!-- BODY: rail + sidebar + main -->
+                <div
+                    :class="[
+                        'flex flex-1 min-h-0',
+                        sidebarPosition === 'right' ? 'flex-row-reverse' : 'flex-row',
+                    ]"
+                >
+                    <!-- RAIL (variants: rail, dual) -->
+                    <aside
+                        v-if="hasRail"
+                        :class="[
+                            'hidden shrink-0 bg-card flex-col',
+                            desktopFlexClass,
+                            railWidthClass,
+                            railBorderClass,
+                            stickySidebar ? desktopStickyClass : '',
+                        ]"
+                        :aria-label="'Primary navigation rail'"
+                    >
+                        <div v-if="$slots['rail-header']" class="shrink-0">
+                            <slot name="rail-header" />
+                        </div>
+                        <div class="flex-1 min-h-0 overflow-y-auto">
+                            <slot
+                                name="rail"
+                                :toggle-collapsed="toggleCollapsed"
+                                :collapsed="collapsedModel"
+                            />
+                        </div>
+                        <div v-if="$slots['rail-footer']" class="shrink-0">
+                            <slot name="rail-footer" />
+                        </div>
+                    </aside>
+
+                    <!-- SECONDARY PANEL (variant: dual) -->
+                    <aside
+                        v-if="variant === 'dual' && $slots.sidebar && !collapsedModel"
+                        :class="[
+                            'hidden shrink-0 bg-card flex-col transition-[width] duration-base ease-standard',
+                            desktopFlexClass,
+                            sidebarExpandedWidthClass,
+                            sidebarBorderClass,
+                            stickySidebar ? desktopStickyClass : '',
+                        ]"
+                        :aria-label="drawerAriaLabel ?? 'Secondary navigation'"
+                    >
+                        <div v-if="$slots['sidebar-header']" class="shrink-0">
+                            <slot
+                                name="sidebar-header"
+                                :collapsed="false"
+                                :toggle-collapsed="toggleCollapsed"
+                                :is-mobile="false"
+                                :close-mobile="closeMobile"
+                            />
+                        </div>
+                        <div class="flex-1 min-h-0 overflow-y-auto">
+                            <slot
+                                name="sidebar"
+                                :collapsed="false"
+                                :toggle-collapsed="toggleCollapsed"
+                                :is-mobile="false"
+                                :close-mobile="closeMobile"
+                            />
+                        </div>
+                        <div v-if="$slots['sidebar-footer']" class="shrink-0">
+                            <slot
+                                name="sidebar-footer"
+                                :collapsed="false"
+                                :toggle-collapsed="toggleCollapsed"
+                                :is-mobile="false"
+                                :close-mobile="closeMobile"
+                            />
+                        </div>
+                    </aside>
+
+                    <!-- STANDARD SIDEBAR (variant: standard) -->
+                    <aside
+                        v-if="variant === 'standard' && $slots.sidebar"
+                        :class="[
+                            'hidden shrink-0 bg-card flex-col transition-[width] duration-base ease-standard',
+                            desktopFlexClass,
+                            standardSidebarWidthClass,
+                            sidebarBorderClass,
+                            stickySidebar ? desktopStickyClass : '',
+                        ]"
+                        :aria-label="drawerAriaLabel ?? 'Sidebar navigation'"
+                    >
+                        <div v-if="$slots['sidebar-header']" class="shrink-0">
+                            <slot
+                                name="sidebar-header"
+                                :collapsed="collapsedModel"
+                                :toggle-collapsed="toggleCollapsed"
+                                :is-mobile="false"
+                                :close-mobile="closeMobile"
+                            />
+                        </div>
+                        <div class="flex-1 min-h-0 overflow-y-auto">
+                            <slot
+                                name="sidebar"
+                                :collapsed="collapsedModel"
+                                :toggle-collapsed="toggleCollapsed"
+                                :is-mobile="false"
+                                :close-mobile="closeMobile"
+                            />
+                        </div>
+                        <div v-if="$slots['sidebar-footer']" class="shrink-0">
+                            <slot
+                                name="sidebar-footer"
+                                :collapsed="collapsedModel"
+                                :toggle-collapsed="toggleCollapsed"
+                                :is-mobile="false"
+                                :close-mobile="closeMobile"
+                            />
+                        </div>
+                    </aside>
+
+                    <!-- MAIN -->
+                    <main
+                        :class="[
+                            'flex-1 min-w-0 min-h-0 flex flex-col overflow-auto',
+                            mainPaddingClass,
+                        ]"
+                    >
+                        <slot />
+                    </main>
+                </div>
+
+                <!-- FOOTER -->
+                <footer
+                    v-if="$slots.footer"
+                    :class="[
+                        'w-full shrink-0 bg-background',
+                        divider ? 'border-t border-border' : '',
+                    ]"
+                >
+                    <slot name="footer" />
+                </footer>
+            </template>
+
+            <!-- CONTENT SPAN MODE: sidebar full height, topbar above main only -->
+            <template v-else>
+                <div
+                    :class="[
+                        'flex flex-1 min-h-0',
+                        sidebarPosition === 'right' ? 'flex-row-reverse' : 'flex-row',
+                    ]"
+                >
+                    <!-- RAIL (full height) -->
+                    <aside
+                        v-if="hasRail"
+                        :class="[
+                            'hidden shrink-0 bg-card flex-col',
+                            desktopFlexClass,
+                            railWidthClass,
+                            railBorderClass,
+                            stickySidebar ? desktopStickyClass : '',
+                        ]"
+                        :aria-label="'Primary navigation rail'"
+                    >
+                        <div v-if="$slots['rail-header']" class="shrink-0">
+                            <slot name="rail-header" />
+                        </div>
+                        <div class="flex-1 min-h-0 overflow-y-auto">
+                            <slot
+                                name="rail"
+                                :toggle-collapsed="toggleCollapsed"
+                                :collapsed="collapsedModel"
+                            />
+                        </div>
+                        <div v-if="$slots['rail-footer']" class="shrink-0">
+                            <slot name="rail-footer" />
+                        </div>
+                    </aside>
+
+                    <!-- STANDARD SIDEBAR (full height) -->
+                    <aside
+                        v-if="variant === 'standard' && $slots.sidebar"
+                        :class="[
+                            'hidden shrink-0 bg-card flex-col transition-[width] duration-base ease-standard',
+                            desktopFlexClass,
+                            standardSidebarWidthClass,
+                            sidebarBorderClass,
+                            stickySidebar ? desktopStickyClass : '',
+                        ]"
+                        :aria-label="drawerAriaLabel ?? 'Sidebar navigation'"
+                    >
+                        <div v-if="$slots['sidebar-header']" class="shrink-0">
+                            <slot
+                                name="sidebar-header"
+                                :collapsed="collapsedModel"
+                                :toggle-collapsed="toggleCollapsed"
+                                :is-mobile="false"
+                                :close-mobile="closeMobile"
+                            />
+                        </div>
+                        <div class="flex-1 min-h-0 overflow-y-auto">
+                            <slot
+                                name="sidebar"
+                                :collapsed="collapsedModel"
+                                :toggle-collapsed="toggleCollapsed"
+                                :is-mobile="false"
+                                :close-mobile="closeMobile"
+                            />
+                        </div>
+                        <div v-if="$slots['sidebar-footer']" class="shrink-0">
+                            <slot
+                                name="sidebar-footer"
+                                :collapsed="collapsedModel"
+                                :toggle-collapsed="toggleCollapsed"
+                                :is-mobile="false"
+                                :close-mobile="closeMobile"
+                            />
+                        </div>
+                    </aside>
+
+                    <!-- CONTENT COLUMN: topbar + main + footer -->
+                    <div class="flex flex-col flex-1 min-h-0">
+                        <!-- TOPBAR (only above content column) -->
+                        <header
+                            v-if="$slots.topbar"
+                            :class="[
+                                'w-full shrink-0 bg-background',
+                                divider ? 'border-b border-border' : '',
+                                stickyTopbar && !isContained
+                                    ? 'sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-background/85'
+                                    : '',
+                            ]"
+                        >
+                            <slot
+                                name="topbar"
+                                :collapsed="collapsedModel"
+                                :mobile-open="mobileOpenModel"
+                                :toggle-sidebar="toggleSidebar"
+                                :toggle-collapsed="toggleCollapsed"
+                                :open-mobile="openMobile"
+                                :close-mobile="closeMobile"
+                            />
+                        </header>
+
+                        <!-- SECONDARY PANEL (variant: dual, content span) -->
+                        <aside
+                            v-if="variant === 'dual' && $slots.sidebar && !collapsedModel"
+                            :class="[
+                                'hidden shrink-0 bg-card flex-col transition-[width] duration-base ease-standard',
+                                desktopFlexClass,
+                                sidebarExpandedWidthClass,
+                                sidebarBorderClass,
+                                stickySidebar ? desktopStickyClass : '',
+                            ]"
+                            :aria-label="drawerAriaLabel ?? 'Secondary navigation'"
+                        >
+                            <div v-if="$slots['sidebar-header']" class="shrink-0">
+                                <slot
+                                    name="sidebar-header"
+                                    :collapsed="false"
+                                    :toggle-collapsed="toggleCollapsed"
+                                    :is-mobile="false"
+                                    :close-mobile="closeMobile"
+                                />
+                            </div>
+                            <div class="flex-1 min-h-0 overflow-y-auto">
+                                <slot
+                                    name="sidebar"
+                                    :collapsed="false"
+                                    :toggle-collapsed="toggleCollapsed"
+                                    :is-mobile="false"
+                                    :close-mobile="closeMobile"
+                                />
+                            </div>
+                            <div v-if="$slots['sidebar-footer']" class="shrink-0">
+                                <slot
+                                    name="sidebar-footer"
+                                    :collapsed="false"
+                                    :toggle-collapsed="toggleCollapsed"
+                                    :is-mobile="false"
+                                    :close-mobile="closeMobile"
+                                />
+                            </div>
+                        </aside>
+
+                        <!-- MAIN (direct child of content column) -->
+                        <main
+                            :class="[
+                                'flex-1 min-w-0 min-h-0 flex flex-col overflow-auto',
+                                mainPaddingClass,
+                            ]"
+                        >
+                            <slot />
+                        </main>
+
+                        <!-- FOOTER (scoped to content column) -->
+                        <footer
+                            v-if="$slots.footer"
+                            :class="[
+                                'w-full shrink-0 bg-background',
+                                divider ? 'border-t border-border' : '',
+                            ]"
+                        >
+                            <slot name="footer" />
+                        </footer>
+                    </div>
+                </div>
+            </template>
         </div> 
  
         <!-- MOBILE DRAWER --> 
@@ -288,6 +456,7 @@ const props = withDefaults(defineProps<AppShell>(), {
     divider: true, 
     mainPadding: 'none', 
     radius: 'large', 
+    topbarSpan: 'full', 
 }); 
  
 const emit = defineEmits<{ 
@@ -326,6 +495,7 @@ function toggleSidebar() {
  
 // --- Appearance / framing ---------------------------------------------------- 
 const isContained = computed(() => props.appearance === 'contained'); 
+const isContentSpan = computed(() => props.topbarSpan === 'content'); 
  
 const radiusClass = computed(() => { 
     switch (props.radius) { 
