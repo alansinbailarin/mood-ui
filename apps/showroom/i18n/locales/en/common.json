@@ -47,6 +47,8 @@
     "surface": "Surface (dark)",
     "surfaceHelp": "Dark-mode surface preset",
     "reset": "Reset",
+    "copyConfig": "Copy config",
+    "copied": "Copied!",
     "light": "Light",
     "dark": "Dark",
     "system": "System"

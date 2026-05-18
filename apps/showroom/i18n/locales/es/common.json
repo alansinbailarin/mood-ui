@@ -47,6 +47,8 @@
     "surface": "Surface (oscuro)",
     "surfaceHelp": "Preset de superficies para el modo oscuro",
     "reset": "Restablecer",
+    "copyConfig": "Copiar config",
+    "copied": "¡Copiado!",
     "light": "Claro",
     "dark": "Oscuro",
     "system": "Sistema"
