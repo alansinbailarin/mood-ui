@@ -1,6 +1,12 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { SwatchIcon, ArrowPathIcon } from "@heroicons/vue/24/outline";
+import { computed, ref, onBeforeUnmount } from "vue";
+import {
+  SwatchIcon,
+  ArrowPathIcon,
+  ClipboardDocumentIcon,
+  CheckIcon,
+} from "@heroicons/vue/24/outline";
+import { buildModoProviderSnippet } from "~/utils/configSnippet";
 import { useI18n } from "vue-i18n";
 import { Tooltip, PopoverPanel, usePopover } from "mood-ui";
 import type { ModoRadius, ModoSize } from "mood-ui";
@@ -37,6 +43,24 @@ const { triggerRef, panelRef, isOpen, panelStyle, toggle } = usePopover({
   placement: "bottom-end",
   offset: 10,
 });
+
+const copied = ref(false);
+let copyTimer: ReturnType<typeof setTimeout> | undefined;
+
+async function copyConfig() {
+  try {
+    await navigator.clipboard.writeText(buildModoProviderSnippet(state.value));
+    copied.value = true;
+    clearTimeout(copyTimer);
+    copyTimer = setTimeout(() => {
+      copied.value = false;
+    }, 2000);
+  } catch {
+    /* clipboard unavailable / permission denied — no-op */
+  }
+}
+
+onBeforeUnmount(() => clearTimeout(copyTimer));
 
 interface Swatch {
   name: string;
@@ -445,12 +469,22 @@ const activePrimary = computed(() =>
       <div
         class="flex items-center justify-between px-3 py-2 border-t border-border/40 shrink-0"
       >
-        <div
-          class="flex items-center gap-1.5 text-[8px] text-muted-foreground/60"
+        <button
+          type="button"
+          class="flex items-center gap-1 text-[8px] font-semibold transition-colors"
+          :class="
+            copied
+              ? 'text-success'
+              : 'text-muted-foreground/70 hover:text-foreground'
+          "
+          @click="copyConfig"
         >
-          <span class="size-[5px] rounded-full bg-success animate-pulse" />
-          {{ t("labels.livePreview") }}
-        </div>
+          <component
+            :is="copied ? CheckIcon : ClipboardDocumentIcon"
+            class="w-[11px] h-[11px]"
+          />
+          {{ copied ? t("settings.copied") : t("settings.copyConfig") }}
+        </button>
         <button
           type="button"
           class="text-[8px] font-semibold text-muted-foreground/50 hover:text-foreground transition-colors"
