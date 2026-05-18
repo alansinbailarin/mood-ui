@@ -185,7 +185,7 @@ const topbarSpanCode = `<template>
         v-model:active-id="active"
         :collapsed="collapsed"
         show-toggle
-        @click.native="toggleCollapsed"
+        v-model:collapsed="isCollapsed"
       />
     </template>
     <template #topbar><Topbar title="App" divider /></template>
