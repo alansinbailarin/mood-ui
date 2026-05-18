@@ -95,9 +95,24 @@ export interface Sidebar {
     /** Padding around the inner list. */ 
     padding?: 'none' | 'small' | 'medium' | 'large'; 
  
-    /** 
-     * Render dividing borders between header / body / footer regions. 
-     * @default true 
-     */ 
-    dividers?: boolean; 
+    /**
+     * Render dividing borders between header / body / footer regions.
+     * @default true
+     */
+    dividers?: boolean;
+
+    /**
+     * Render a built-in circular chevron button that toggles `collapsed`.
+     * The button is positioned `absolute` and overflows the sidebar edge by 12 px.
+     * Requires the sidebar container to NOT have `overflow: hidden`.
+     * @default false
+     */
+    showToggle?: boolean;
+
+    /**
+     * Which edge the toggle button appears on.
+     * Use `'end'` (default) for a left-side sidebar, `'start'` for a right-side sidebar.
+     * @default 'end'
+     */
+    toggleSide?: 'start' | 'end';
 }
