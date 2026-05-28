@@ -1,7 +1,7 @@
 {
   "pages": {
     "welcome": {
-      "badge": "v0.9.0 · MIT · Open source",
+      "badge": "v0.9.1 · MIT · Open source",
       "headline1": "La librería Vue 3",
       "headline2": "más completa para shippear rápido.",
       "lead": "{n}+ componentes accesibles, theming reactivo en vivo, dark mode con superficies personalizables y soporte i18n nativo. Tailwind CSS v4. TypeScript first. Sin lock‑in.",

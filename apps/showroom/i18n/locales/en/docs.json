@@ -163,6 +163,12 @@
         "description": "Every release of mood-ui listed newest first. SemVer-tracked, with highlights of new components, bug fixes and breaking changes.",
         "intro": "Every release listed newest first. We follow SemVer.",
         "releases": {
+          "v0.9.1": {
+            "title": "Button icon+text padding fix",
+            "items": [
+              "Fix: Button component now correctly applies text-button padding (px-5 py-1.5) when an icon and slot text are both present. Previously, if the button text was passed via the default slot (rather than the label prop), the icon-only padding (p-2) was applied instead, making the button narrower and taller than expected."
+            ]
+          },
           "v0.9.0": {
             "title": "Switcher component · AppShell sidebar-first layout · Sidebar toggle · useLocalStorage",
             "items": [
