@@ -163,6 +163,12 @@
         "description": "Every release of mood-ui listed newest first. SemVer-tracked, with highlights of new components, bug fixes and breaking changes.",
         "intro": "Every release listed newest first. We follow SemVer.",
         "releases": {
+          "v0.9.2": {
+            "title": "Primary subtle token dark mode fix",
+            "items": [
+              "Fix: --primary-subtle in dark mode now uses a translucent color-mix (16% of primary) instead of the solid p[900] palette tone. This makes ghost and subtle button states visually consistent with their hover (20%) and active (25%) counterparts — the rest state is now lighter than hover, as expected."
+            ]
+          },
           "v0.9.1": {
             "title": "Button icon+text padding fix",
             "items": [

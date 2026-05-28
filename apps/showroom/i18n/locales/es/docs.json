@@ -163,6 +163,12 @@
         "description": "Cada release de mood-ui listado de más reciente a más antiguo. Versionado con SemVer, con detalles de nuevos componentes, fixes y breaking changes.",
         "intro": "Cada release listado de más reciente a más antiguo. Seguimos SemVer.",
         "releases": {
+          "v0.9.2": {
+            "title": "Fix del token primary-subtle en dark mode",
+            "items": [
+              "Fix: --primary-subtle en dark mode ahora usa color-mix translúcido (16% del primary) en lugar del tono sólido p[900] de la paleta. Esto hace que los estados ghost y subtle sean visualmente consistentes con hover (20%) y active (25%) — el reposo ahora es más suave que el hover, como debe ser."
+            ]
+          },
           "v0.9.1": {
             "title": "Fix de padding en botones con icono + texto",
             "items": [
