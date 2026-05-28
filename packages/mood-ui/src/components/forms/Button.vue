@@ -269,7 +269,7 @@ const colorClasses = computed(() => {
 });
 
 const sizeClasses = computed(() => {
-  if (!props.label && props.icon) {
+  if (!props.label && !slots.default && !!props.icon) {
     switch (size.value) {
       case "xs":
         return "text-xs p-1";
