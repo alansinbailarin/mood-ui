@@ -153,7 +153,7 @@ export function semanticTokensFromPalettes(
     return { 
         '--primary': mkLD(p[600], p[400]), 
         '--primary-foreground': `light-dark(${pickForegroundOklchStr(p[600])}, ${pickForegroundOklchStr(p[400])})`, 
-        '--primary-subtle': mkLD(p[100], p[900]), 
+        '--primary-subtle': `light-dark(${toOklchString(p[100])}, color-mix(in oklab, ${toOklchString(p[400])} 16%, transparent))`, 
         '--primary-hover': mkLD(p[700], p[300]), 
         '--primary-active': mkLD(p[800], p[200]), 
     }; 
