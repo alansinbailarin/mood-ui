@@ -751,6 +751,10 @@
           "disabled": {
             "title": "Disabled",
             "desc": "The field dims and prevents opening the popover."
+          },
+          "timeOnly": {
+            "title": "Time only",
+            "desc": "Set timeOnly to hide the calendar and show just the time picker. v-model is still Date | null — the date part is set to today when the user picks a time."
           }
         },
         "props": {
@@ -764,6 +768,7 @@
           "minDate": "Minimum selectable date and time.",
           "maxDate": "Maximum selectable date and time.",
           "clearable": "Shows a button to clear the value.",
+          "timeOnly": "Hides the calendar and shows only the time picker columns.",
           "disabled": "Disables the field.",
           "readonly": "Makes the field non-interactive.",
           "required": "Marks the field as required.",

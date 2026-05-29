@@ -751,6 +751,10 @@
           "disabled": {
             "title": "Disabled",
             "desc": "El campo se atenúa y bloquea la apertura del popover."
+          },
+          "timeOnly": {
+            "title": "Solo hora",
+            "desc": "Activa timeOnly para ocultar el calendario y mostrar solo el selector de hora. El v-model sigue siendo Date | null — la parte de fecha se establece a hoy cuando el usuario elige una hora."
           }
         },
         "props": {
@@ -764,6 +768,7 @@
           "minDate": "Fecha y hora mínima seleccionable.",
           "maxDate": "Fecha y hora máxima seleccionable.",
           "clearable": "Muestra un botón para limpiar el valor.",
+          "timeOnly": "Oculta el calendario y muestra solo las columnas del selector de hora.",
           "disabled": "Deshabilita el campo.",
           "readonly": "Hace el campo no interactivo.",
           "required": "Marca el campo como obligatorio.",

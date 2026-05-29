@@ -106,6 +106,7 @@ const dValue = ref<Date | null>(new Date());
 const d12h = ref<Date | null>(new Date());
 const dConstrained = ref<Date | null>(null);
 const dClearable = ref<Date | null>(new Date());
+const dTimeOnly = ref<Date | null>(null);
 const today = new Date();
 const maxDate = new Date(Date.now() + 7 * 86400000);
 
@@ -172,6 +173,17 @@ const value = ref<Date | null>(new Date());
   <DateTimeField :model-value="value" label="Start" disabled class="w-80" />
 </template>`;
 
+const timeOnlyCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { DateTimeField } from 'mood-ui';
+
+const value = ref<Date | null>(null);
+<\/script>
+
+<template>
+  <DateTimeField v-model="value" label="Start time" timeOnly class="w-52" />
+</template>`;
+
 const typesCode = `export interface DateTimeField {
   modelValue?: Date | null;
   dateFormat?: DateDisplayFormat;
@@ -202,6 +214,7 @@ const typesCode = `export interface DateTimeField {
   required?: boolean;
   loading?: boolean;
   clearable?: boolean;
+  timeOnly?: boolean;
   iconLeft?: Component;
   id?: string;
   name?: string;
@@ -267,6 +280,12 @@ const propsList = computed<PropDoc[]>(() => [
     type: "boolean",
     default: "false",
     description: t("pages.forms.dateTimeField.props.clearable"),
+  },
+  {
+    name: "timeOnly",
+    type: "boolean",
+    default: "false",
+    description: t("pages.forms.dateTimeField.props.timeOnly"),
   },
   {
     name: "disabled",
@@ -495,6 +514,19 @@ const emitsList = computed<EmitDoc[]>(() => [
           label="Inicio"
           disabled
           class="w-80"
+        />
+      </ComponentPreview>
+
+      <ComponentPreview
+        :title="t('pages.forms.dateTimeField.examples.timeOnly.title')"
+        :description="t('pages.forms.dateTimeField.examples.timeOnly.desc')"
+        :code="timeOnlyCode"
+      >
+        <DateTimeField
+          v-model="dTimeOnly"
+          label="Start time"
+          timeOnly
+          class="w-52"
         />
       </ComponentPreview>
     </template>
