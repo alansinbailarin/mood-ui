@@ -45,8 +45,10 @@ export interface DateTimeField {
     readonly?: boolean; 
     required?: boolean; 
     loading?: boolean; 
-    clearable?: boolean; 
- 
+    clearable?: boolean;
+    /** When true, hides the calendar and shows only the time picker. @default false */
+    timeOnly?: boolean;
+
     iconLeft?: Component; 
  
     id?: string; 

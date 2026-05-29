@@ -12,5 +12,7 @@ export interface DateTimePicker {
     step?: number; 
     showSeconds?: boolean; 
     minTime?: string; 
-    maxTime?: string; 
+    maxTime?: string;
+    /** When true, hides the calendar panel and shows only the time columns. @default false */
+    timeOnly?: boolean;
 }
