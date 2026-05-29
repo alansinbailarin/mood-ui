@@ -1,12 +1,14 @@
 <template>
   <div
     :class="[
-      'relative inline-flex flex-col sm:flex-row items-stretch bg-card w-fit max-w-65 sm:max-w-none self-start',
+      'relative inline-flex flex-col items-stretch bg-card w-fit self-start',
+      !timeOnly ? 'sm:flex-row max-w-65 sm:max-w-none' : '',
       variant === 'outline' ? 'border border-border' : '',
       containerRadiusClass,
     ]"
   >
     <Calendar
+      v-if="!timeOnly"
       v-model="dateOnly"
       :locale="locale"
       :first-day-of-week="firstDayOfWeek"
@@ -18,9 +20,12 @@
       :radius="radius"
     />
 
-    <div :class="['relative shrink-0', timePanelWidthClass]">
+    <div :class="['relative', timeOnly ? '' : ['shrink-0', timePanelWidthClass]]">
       <div
-        class="flex flex-col border-t border-border sm:border-t-0 sm:border-l sm:absolute sm:inset-0 h-52 sm:h-auto"
+        :class="[
+          'flex flex-col h-52',
+          !timeOnly && 'border-t border-border sm:border-t-0 sm:border-l sm:absolute sm:inset-0 sm:h-auto',
+        ]"
       >
         <div class="px-3 py-3 border-b border-border text-center shrink-0">
           <span class="text-sm font-semibold text-foreground">{{
@@ -108,6 +113,7 @@ const props = withDefaults(defineProps<DateTimePicker>(), {
   format: "24h",
   step: 5,
   showSeconds: false,
+  timeOnly: false,
 });
 
 const resolvedColor = useResolvedColor(() => props.color);
