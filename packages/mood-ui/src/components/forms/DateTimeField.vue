@@ -44,11 +44,11 @@
             > 
                 {{ displayText }} 
             </span> 
-            <span 
-                v-else 
-                :class="['flex-1 min-w-0 truncate text-muted-foreground', inputTextClasses]" 
-            > 
-                {{ placeholder }} 
+            <span
+                v-else
+                :class="['flex-1 min-w-0 truncate text-muted-foreground', inputTextClasses]"
+            >
+                {{ resolvedPlaceholder }}
             </span> 
  
             <Loader 
@@ -98,8 +98,9 @@
                     :format="format" 
                     :step="step" 
                     :show-seconds="showSeconds" 
-                    :min-time="minTime" 
-                    :max-time="maxTime" 
+                    :min-time="minTime"
+                    :max-time="maxTime"
+                    :time-only="timeOnly"
                     :color="stateColor === 'default' ? 'default' : (stateColor as 'primary' | 'danger' | 'success' | 'warning')" 
                     variant="filled" 
                     :radius="radius" 
@@ -135,24 +136,24 @@ import { useModoLocale, useResolvedSize } from '../../composables/useModoConfig'
  
 const loc = useModoLocale(); 
  
-const props = withDefaults(defineProps<DateTimeField>(), { 
-    modelValue: null, 
-    dateFormat: 'medium', 
-    timeFormat: 'short', 
-    separator: ' · ', 
-    format: '24h', 
-    step: 5, 
-    showSeconds: false, 
-    variant: 'outline', 
-    color: 'default', 
-    disabled: false, 
-    readonly: false, 
-    required: false, 
-    loading: false, 
-    fullWidth: false, 
-    clearable: false, 
-    placeholder: 'Select date and time…', 
-    autofocus: false, 
+const props = withDefaults(defineProps<DateTimeField>(), {
+    modelValue: null,
+    dateFormat: 'medium',
+    timeFormat: 'short',
+    separator: ' · ',
+    format: '24h',
+    step: 5,
+    showSeconds: false,
+    variant: 'outline',
+    color: 'default',
+    disabled: false,
+    readonly: false,
+    required: false,
+    loading: false,
+    fullWidth: false,
+    clearable: false,
+    timeOnly: false,
+    autofocus: false,
 }); 
  
 const resolvedSize = useResolvedSize(() => props.size); 
@@ -179,7 +180,11 @@ const { wrapperVariantClasses, radiusClasses } = useFieldClasses({
 
 const affordanceIconClass = computed(() => FIELD_AFFORDANCE_ICON_BY_COLOR[stateColor.value] ?? 'text-muted-foreground');
 const affordanceActionClass = computed(() => FIELD_AFFORDANCE_ACTION_BY_COLOR[stateColor.value] ?? 'text-muted-foreground hover:text-foreground');
- 
+
+const resolvedPlaceholder = computed(() =>
+    props.placeholder ?? (props.timeOnly ? 'Select time…' : 'Select date and time…')
+);
+
 const triggerEl = ref<HTMLButtonElement | null>(null); 
  
 const { 
@@ -227,43 +232,45 @@ function clear() {
  
 /* ---------- Formatting ---------- */ 
  
-const displayText = computed(() => { 
-    if (!props.modelValue) return ''; 
-    const locale = props.locale ?? undefined; 
- 
-    const datePart = (() => { 
-        const f = props.dateFormat; 
-        if (typeof f === 'function') return f(props.modelValue!); 
-        switch (f) { 
-            case 'short': 
-                return new Intl.DateTimeFormat(locale, { dateStyle: 'short' }).format(props.modelValue!); 
-            case 'long': 
-                return new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(props.modelValue!); 
-            case 'iso': { 
-                const y = props.modelValue!.getFullYear(); 
-                const m = String(props.modelValue!.getMonth() + 1).padStart(2, '0'); 
-                const d = String(props.modelValue!.getDate()).padStart(2, '0'); 
-                return `${y}-${m}-${d}`; 
-            } 
-            case 'medium': 
-            default: 
-                return new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(props.modelValue!); 
-        } 
-    })(); 
- 
-    const timePart = (() => { 
-        const f = props.timeFormat; 
-        if (typeof f === 'function') return f(props.modelValue!); 
-        const opts: Intl.DateTimeFormatOptions = { 
-            hour: '2-digit', 
-            minute: '2-digit', 
-            hour12: props.format === '12h', 
-        }; 
-        if (f === 'medium' || props.showSeconds) opts.second = '2-digit'; 
-        return new Intl.DateTimeFormat(locale, opts).format(props.modelValue!); 
-    })(); 
- 
-    return `${datePart}${props.separator}${timePart}`; 
+const displayText = computed(() => {
+    if (!props.modelValue) return '';
+    const locale = props.locale ?? undefined;
+
+    const timePart = (() => {
+        const f = props.timeFormat;
+        if (typeof f === 'function') return f(props.modelValue!);
+        const opts: Intl.DateTimeFormatOptions = {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: props.format === '12h',
+        };
+        if (f === 'medium' || props.showSeconds) opts.second = '2-digit';
+        return new Intl.DateTimeFormat(locale, opts).format(props.modelValue!);
+    })();
+
+    if (props.timeOnly) return timePart;
+
+    const datePart = (() => {
+        const f = props.dateFormat;
+        if (typeof f === 'function') return f(props.modelValue!);
+        switch (f) {
+            case 'short':
+                return new Intl.DateTimeFormat(locale, { dateStyle: 'short' }).format(props.modelValue!);
+            case 'long':
+                return new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(props.modelValue!);
+            case 'iso': {
+                const y = props.modelValue!.getFullYear();
+                const m = String(props.modelValue!.getMonth() + 1).padStart(2, '0');
+                const d = String(props.modelValue!.getDate()).padStart(2, '0');
+                return `${y}-${m}-${d}`;
+            }
+            case 'medium':
+            default:
+                return new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(props.modelValue!);
+        }
+    })();
+
+    return `${datePart}${props.separator}${timePart}`;
 }); 
  
 /* ---------- Size maps ---------- */ 
