@@ -20,11 +20,11 @@
       :radius="radius"
     />
 
-    <div :class="['relative', timeOnly ? '' : ['shrink-0', timePanelWidthClass]]">
+    <div :class="['relative shrink-0', timePanelWidthClass]">
       <div
         :class="[
           'flex flex-col h-52',
-          !timeOnly && 'border-t border-border sm:border-t-0 sm:border-l sm:absolute sm:inset-0 sm:h-auto',
+          !timeOnly ? 'border-t border-border sm:border-t-0 sm:border-l sm:absolute sm:inset-0 sm:h-auto' : '',
         ]"
       >
         <div class="px-3 py-3 border-b border-border text-center shrink-0">
