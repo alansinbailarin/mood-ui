@@ -163,6 +163,13 @@
         "description": "Cada release de mood-ui listado de más reciente a más antiguo. Versionado con SemVer, con detalles de nuevos componentes, fixes y breaking changes.",
         "intro": "Cada release listado de más reciente a más antiguo. Seguimos SemVer.",
         "releases": {
+          "v0.9.3": {
+            "title": "Modo timeOnly en DateTimeField",
+            "items": [
+              "Nuevo: prop timeOnly en DateTimeField — oculta el calendario y muestra solo las columnas del selector de hora. El v-model sigue siendo Date | null; la parte de fecha usa hoy como base cuando el usuario elige una hora.",
+              "Nuevo: prop timeOnly en DateTimePicker — mismo comportamiento para el picker standalone."
+            ]
+          },
           "v0.9.2": {
             "title": "Fix del token primary-subtle en dark mode",
             "items": [

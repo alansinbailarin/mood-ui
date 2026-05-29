@@ -163,6 +163,13 @@
         "description": "Every release of mood-ui listed newest first. SemVer-tracked, with highlights of new components, bug fixes and breaking changes.",
         "intro": "Every release listed newest first. We follow SemVer.",
         "releases": {
+          "v0.9.3": {
+            "title": "DateTimeField timeOnly mode",
+            "items": [
+              "New: timeOnly prop on DateTimeField — hides the calendar and shows only the time picker columns. v-model stays Date | null; the date part defaults to today when the user picks a time.",
+              "New: timeOnly prop on DateTimePicker — same behavior for the standalone picker component."
+            ]
+          },
           "v0.9.2": {
             "title": "Primary subtle token dark mode fix",
             "items": [
