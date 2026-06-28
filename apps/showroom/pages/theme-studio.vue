@@ -14,8 +14,6 @@ useSeoMeta({
   ogTitle: () => `${t("pages.themeStudio.seoTitle")} · mood-ui`,
   ogDescription: () => t("pages.themeStudio.seoDescription"),
 });
-
-
 </script>
 
 <template>

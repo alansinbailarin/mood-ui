@@ -31,6 +31,7 @@ useSeoMeta({
   ogTitle: () => `${t("pages.docs.nuxtSetup.title")} · mood-ui`,
   ogDescription: () => t("pages.docs.nuxtSetup.description"),
 });
+
 const toc = inject(DOC_TOC_KEY, null);
 function registerToc() {
   if (!toc) return;
