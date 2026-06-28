@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ["@nuxtjs/i18n", "@nuxtjs/seo"],
+  modules: ["@nuxtjs/i18n", "@nuxt/fonts", "@nuxtjs/seo"],
 
   // Tailwind v4 is integrated via the official Vite plugin. The lib already
   // ships its own compiled `mood-ui.css`, but the docs site has its own
@@ -95,6 +95,30 @@ export default defineNuxtConfig({
     autoLastmod: true,
     // SSG: bake the sitemap at build time, no server runtime needed.
     zeroRuntime: true,
+  },
+
+  // v6: fonts are resolved via @nuxt/fonts (below), not ogImage.fonts.
+  // v6: site-wide default component is OgImage/Default.{renderer}.vue —
+  // defaults.component is removed. Width/height still live in defaults.
+  ogImage: {
+    // SSG: render every image at build time, no serverless runtime.
+    zeroRuntime: true,
+    defaults: {
+      width: 1200,
+      height: 630,
+    },
+  },
+
+  // @nuxt/fonts resolves Poppins at build time so nuxt-og-image v6 can embed
+  // it in the OG card without a network call at render time. We deliberately
+  // omit `global: true` — that would inject a site-wide @font-face, but the
+  // page CSS already loads Poppins via the Google Fonts <link> in app.head,
+  // so a global injection would load the font twice. @nuxt/fonts still
+  // provides the family to the OG renderer regardless of the flag.
+  fonts: {
+    families: [
+      { name: "Poppins", weights: [600, 800] },
+    ],
   },
 
   // The umbrella enables nuxt-link-checker with failOnError by default,
