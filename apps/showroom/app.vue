@@ -69,12 +69,10 @@ if (import.meta.client && window.location.hash) {
 }
 
 // ── SEO / OG ──────────────────────────────────────────────────────────────────
-// Piece 3: default twitter card for every page.
+// Default Twitter card for every page. `<html lang>` is owned by nuxt-seo-utils
+// (derived from `site` config → "en-US"), so we deliberately don't set it here —
+// setting it to the bare i18n locale code ("en") would only contradict that.
 useSeoMeta({ twitterCard: "summary_large_image" });
-
-// Piece 4: reactive <html lang> driven by the active i18n locale.
-const { locale } = useI18n();
-useHead({ htmlAttrs: { lang: locale } });
 
 // Piece 2: wire per-page category into the site-wide OG image.
 // nuxt-og-image v6 lazily injects title/description from useSeoMeta / useHead
