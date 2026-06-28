@@ -117,20 +117,35 @@ useSeoMeta({
   twitterDescription: () => seoDescription.value,
 });
 
-// SoftwareApplication, declared through nuxt-schema-org so it merges into the
-// site's unified @graph (linked to the Organization/WebSite) rather than
-// floating as a standalone JSON-LD blob.
-useSchemaOrg([
-  defineSoftwareApp({
-    name: "Mood UI",
-    description: seoDescription.value,
-    applicationCategory: "DeveloperApplication",
-    operatingSystem: "Web",
-    offers: { price: 0, priceCurrency: "USD" },
-    license: "https://opensource.org/licenses/MIT",
-    programmingLanguage: ["Vue 3", "TypeScript"],
-  }),
-]);
+defineOgImage("Default", {
+  description: seoDescription.value,
+});
+
+// SoftwareApplication as a plain JSON-LD script. We deliberately do NOT use
+// nuxt-schema-org's useSchemaOrg here: it registers a reactive head entry that
+// nuxt-og-image's SEO extractor walks with toValue() and overflows the stack on.
+// A static script tag is valid structured data and sidesteps that entirely.
+// The Organization + WebSite/SearchAction identity still comes from the module
+// (configured in nuxt.config) and links the site together.
+useHead({
+  script: [
+    {
+      type: "application/ld+json",
+      innerHTML: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        name: "Mood UI",
+        applicationCategory: "DeveloperApplication",
+        operatingSystem: "Web",
+        description: seoDescription.value,
+        offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+        license: "https://opensource.org/licenses/MIT",
+        programmingLanguage: ["Vue 3", "TypeScript"],
+        url: "https://mood-ui.com/",
+      }),
+    },
+  ],
+});
 
 const stats = computed(() => [
   { label: t("components"), value: String(totalComponents) },

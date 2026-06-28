@@ -30,6 +30,16 @@ const props = defineProps<{
   slotsList?: SlotDoc[];
 }>();
 
+// Branded OG image for every component/composable doc page. The page's real
+// title/description/category are passed explicitly, so we don't depend on
+// nuxt-og-image's head auto-extraction (which is broken for the Nuxt 4 / unhead
+// v2 head format) — that dependency is what previously forced a library patch.
+defineOgImage("Default", {
+  title: props.title,
+  description: props.description,
+  category: props.category,
+});
+
 const { t, locale } = useI18n();
 const copied = ref(false);
 

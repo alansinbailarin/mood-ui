@@ -59,6 +59,12 @@ useSeoMeta({
   ogTitle: () => `${t("pages.docs.changelog.title")} · mood-ui`,
   ogDescription: () => t("pages.docs.changelog.description"),
 });
+
+defineOgImage("Default", {
+  title: t("pages.docs.changelog.title"),
+  description: t("pages.docs.changelog.description"),
+  category: "Docs",
+});
 const _router = useRouter();
 function go(idOrPath: string) {
   if (idOrPath.startsWith("/")) return _router.push(idOrPath);

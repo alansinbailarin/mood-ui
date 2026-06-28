@@ -23,6 +23,11 @@ useSeoMeta({
   ogTitle: () => `${t("pages.templates.index.title")} · mood-ui`,
   ogDescription: () => t("pages.templates.index.subtitle"),
 });
+
+defineOgImage("Default", {
+  title: t("pages.templates.index.title"),
+  description: t("pages.templates.index.subtitle"),
+});
 interface Tpl {
   id: "dashboard" | "auth" | "pricing" | "settings";
   icon: unknown;

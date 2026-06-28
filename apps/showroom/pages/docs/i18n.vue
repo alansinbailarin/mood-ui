@@ -119,6 +119,12 @@ useSeoMeta({
   ogTitle: () => `${t("pages.docs.i18n.title")} · mood-ui`,
   ogDescription: () => t("pages.docs.i18n.description"),
 });
+
+defineOgImage("Default", {
+  title: t("pages.docs.i18n.title"),
+  description: t("pages.docs.i18n.description"),
+  category: "Docs",
+});
 const toc = inject(DOC_TOC_KEY, null);
 
 function registerToc() {

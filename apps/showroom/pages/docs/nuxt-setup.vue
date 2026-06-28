@@ -32,6 +32,12 @@ useSeoMeta({
   ogDescription: () => t("pages.docs.nuxtSetup.description"),
 });
 
+defineOgImage("Default", {
+  title: t("pages.docs.nuxtSetup.title"),
+  description: t("pages.docs.nuxtSetup.description"),
+  category: "Docs",
+});
+
 const toc = inject(DOC_TOC_KEY, null);
 function registerToc() {
   if (!toc) return;

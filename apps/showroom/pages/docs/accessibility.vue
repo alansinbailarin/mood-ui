@@ -38,6 +38,12 @@ useSeoMeta({
   ogTitle: () => `${t("pages.docs.accessibility.title")} · mood-ui`,
   ogDescription: () => t("pages.docs.accessibility.description"),
 });
+
+defineOgImage("Default", {
+  title: t("pages.docs.accessibility.title"),
+  description: t("pages.docs.accessibility.description"),
+  category: "Docs",
+});
 const toc = inject(DOC_TOC_KEY, null);
 
 function registerToc() {

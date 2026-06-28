@@ -110,12 +110,6 @@ export default defineNuxtConfig({
     }),
   },
 
-  // NOTE: nuxt-og-image@6.7.0 is patched (patches/nuxt-og-image@6.7.0.patch).
-  // Its `extractHeadSeoProps` doesn't read the unhead-v2 / Nuxt 4 head format
-  // (a `meta` array instead of `_flatMeta`), so each page's title/description
-  // weren't injected into the OG card. Remove the patch when a version that
-  // fixes this upstream is available (check on any `@nuxtjs/seo` bump).
-  //
   // v6: fonts are resolved via @nuxt/fonts (below), not ogImage.fonts.
   // v6: site-wide default component is OgImage/Default.{renderer}.vue —
   // defaults.component is removed. Width/height still live in defaults.

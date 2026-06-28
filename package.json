@@ -23,9 +23,6 @@
       "@parcel/watcher",
       "esbuild",
       "vue-demi"
-    ],
-    "patchedDependencies": {
-      "nuxt-og-image@6.7.0": "patches/nuxt-og-image@6.7.0.patch"
-    }
+    ]
   }
 }

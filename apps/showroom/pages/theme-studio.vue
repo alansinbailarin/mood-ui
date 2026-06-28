@@ -14,6 +14,11 @@ useSeoMeta({
   ogTitle: () => `${t("pages.themeStudio.seoTitle")} · mood-ui`,
   ogDescription: () => t("pages.themeStudio.seoDescription"),
 });
+
+defineOgImage("Default", {
+  title: t("pages.themeStudio.seoTitle"),
+  description: t("pages.themeStudio.seoDescription"),
+});
 </script>
 
 <template>

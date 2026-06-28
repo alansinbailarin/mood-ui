@@ -74,28 +74,18 @@ if (import.meta.client && window.location.hash) {
 // setting it to the bare i18n locale code ("en") would only contradict that.
 useSeoMeta({ twitterCard: "summary_large_image" });
 
-// Piece 2: wire per-page category into the site-wide OG image.
-// nuxt-og-image v6 lazily injects title/description from useSeoMeta / useHead
-// after all component setups complete, so we only supply the category prop here;
-// the page-level `useSeoMeta({ ogTitle, ogDescription })` calls continue to
-// populate title and description inside the rendered card automatically.
-// route.path is already resolved when this runs, and each route prerenders
-// fresh during `nuxt generate`, so a plain call is enough — no computed needed.
-const route = useRoute();
-defineOgImage("OgImageDefaultTakumi", { category: ogCategory(route.path) });
-
-// BreadcrumbList structured data, derived from the route, for breadcrumb-rich
-// search results across every section page. Skipped on the home page, where a
-// single "Home" crumb adds nothing. We resolve the items to plain POJOs — the
-// raw useBreadcrumbItems() ref is reactive/non-POJO and would both break head
-// serialization and send the OG-image prop extractor into infinite recursion.
-if (route.path !== "/") {
-  const crumbs = useBreadcrumbItems().value.map((item) => ({
-    name: String(item.label ?? ""),
-    item: typeof item.to === "string" ? item.to : undefined,
-  }));
-  useSchemaOrg([defineBreadcrumb({ itemListElement: crumbs })]);
-}
+// OG images are declared per page — ComponentDoc.vue covers the 86 component /
+// composable docs, and the standalone pages (docs/*, index, templates,
+// theme-studio) call defineOgImage explicitly. Each card gets the page's real
+// title/description that way, with no dependency on the library's head
+// extraction — which is why no nuxt-og-image patch is needed.
+// NOTE: a route-derived BreadcrumbList lived here, but @nuxtjs/seo's
+// useBreadcrumbItems() registers head state that nuxt-og-image's SEO extractor
+// walks with toValue() and overflows the stack on (dev-only, but noisy). The
+// high-value schema — Organization, WebSite + SearchAction, and the home
+// SoftwareApplication — is unaffected and stays. Breadcrumbs can be re-added
+// later from a plain route split if we want that rich result without the
+// upstream interaction.
 </script>
 
 <template>
