@@ -1,4 +1,5 @@
 import tailwindcss from "@tailwindcss/vite";
+import { defineOrganization } from "nuxt-schema-org/schema";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -95,6 +96,18 @@ export default defineNuxtConfig({
     autoLastmod: true,
     // SSG: bake the sitemap at build time, no server runtime needed.
     zeroRuntime: true,
+  },
+
+  // Schema.org identity — anchors the auto WebSite/WebPage graph to a real
+  // Organization so Google can attribute pages, show sitelinks and build a
+  // knowledge panel. The logo uses the dark mark (visible on white SERPs).
+  schemaOrg: {
+    identity: defineOrganization({
+      name: "Mood UI",
+      url: "https://mood-ui.com",
+      logo: "https://mood-ui.com/logo_dark.png",
+      sameAs: ["https://github.com/alansinbailarin/mood-ui"],
+    }),
   },
 
   // NOTE: nuxt-og-image@6.7.0 is patched (patches/nuxt-og-image@6.7.0.patch).

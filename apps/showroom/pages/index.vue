@@ -117,27 +117,20 @@ useSeoMeta({
   twitterDescription: () => seoDescription.value,
 });
 
-useHead({
-  script: [
-    {
-      type: "application/ld+json",
-      innerHTML: computed(() =>
-        JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "SoftwareApplication",
-          name: "Mood UI",
-          applicationCategory: "DeveloperApplication",
-          operatingSystem: "Web",
-          description: seoDescription.value,
-          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-          license: "https://opensource.org/licenses/MIT",
-          programmingLanguage: ["Vue 3", "TypeScript"],
-          url: "https://mood-ui.com/",
-        }),
-      ),
-    },
-  ],
-});
+// SoftwareApplication, declared through nuxt-schema-org so it merges into the
+// site's unified @graph (linked to the Organization/WebSite) rather than
+// floating as a standalone JSON-LD blob.
+useSchemaOrg([
+  defineSoftwareApp({
+    name: "Mood UI",
+    description: seoDescription.value,
+    applicationCategory: "DeveloperApplication",
+    operatingSystem: "Web",
+    offers: { price: 0, priceCurrency: "USD" },
+    license: "https://opensource.org/licenses/MIT",
+    programmingLanguage: ["Vue 3", "TypeScript"],
+  }),
+]);
 
 const stats = computed(() => [
   { label: t("components"), value: String(totalComponents) },

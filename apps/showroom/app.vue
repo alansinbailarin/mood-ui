@@ -83,6 +83,19 @@ useSeoMeta({ twitterCard: "summary_large_image" });
 // fresh during `nuxt generate`, so a plain call is enough — no computed needed.
 const route = useRoute();
 defineOgImage("OgImageDefaultTakumi", { category: ogCategory(route.path) });
+
+// BreadcrumbList structured data, derived from the route, for breadcrumb-rich
+// search results across every section page. Skipped on the home page, where a
+// single "Home" crumb adds nothing. We resolve the items to plain POJOs — the
+// raw useBreadcrumbItems() ref is reactive/non-POJO and would both break head
+// serialization and send the OG-image prop extractor into infinite recursion.
+if (route.path !== "/") {
+  const crumbs = useBreadcrumbItems().value.map((item) => ({
+    name: String(item.label ?? ""),
+    item: typeof item.to === "string" ? item.to : undefined,
+  }));
+  useSchemaOrg([defineBreadcrumb({ itemListElement: crumbs })]);
+}
 </script>
 
 <template>
