@@ -12,6 +12,7 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "typecheck": "nuxt typecheck",
+    "test": "vitest run",
     "llms": "tsx scripts/generate-llms.ts"
   },
   "dependencies": {
@@ -33,6 +34,7 @@
     "ts-morph": "^28.0.0",
     "tsx": "^4.21.0",
     "typescript": "~6.0.2",
+    "vitest": "^4.1.6",
     "vue-tsc": "^3.2.7"
   }
 }
