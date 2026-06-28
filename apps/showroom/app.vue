@@ -81,8 +81,10 @@ useHead({ htmlAttrs: { lang: locale } });
 // after all component setups complete, so we only supply the category prop here;
 // the page-level `useSeoMeta({ ogTitle, ogDescription })` calls continue to
 // populate title and description inside the rendered card automatically.
+// route.path is already resolved when this runs, and each route prerenders
+// fresh during `nuxt generate`, so a plain call is enough — no computed needed.
 const route = useRoute();
-defineOgImage("OgImageDefaultTakumi", { category: computed(() => ogCategory(route.path)) });
+defineOgImage("OgImageDefaultTakumi", { category: ogCategory(route.path) });
 </script>
 
 <template>
