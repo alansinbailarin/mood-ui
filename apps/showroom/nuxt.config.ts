@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ["@nuxtjs/i18n", "@nuxtjs/sitemap"],
+  modules: ["@nuxtjs/i18n", "@nuxtjs/seo"],
 
   // Tailwind v4 is integrated via the official Vite plugin. The lib already
   // ships its own compiled `mood-ui.css`, but the docs site has its own
@@ -40,7 +40,7 @@ export default defineNuxtConfig({
     locales: [
       {
         code: "en",
-        iso: "en-US",
+        language: "en-US",
         files: [
           "en/common.json",
           "en/doc.json",
@@ -59,7 +59,7 @@ export default defineNuxtConfig({
       },
       {
         code: "es",
-        iso: "es-ES",
+        language: "es-ES",
         files: [
           "es/common.json",
           "es/doc.json",
@@ -86,10 +86,21 @@ export default defineNuxtConfig({
   site: {
     url: "https://mood-ui.com",
     name: "mood-ui",
+    description:
+      "Vue 3 component library — TypeScript, Tailwind CSS v4, dark mode, accessible.",
+    defaultLocale: "en",
   },
 
   sitemap: {
     autoLastmod: true,
+    // SSG: bake the sitemap at build time, no server runtime needed.
+    zeroRuntime: true,
+  },
+
+  // The umbrella enables nuxt-link-checker with failOnError by default,
+  // which would block `generate`. Out of scope for A1 — revisit later.
+  linkChecker: {
+    enabled: false,
   },
 
   // Global fade between pages. We deliberately DROP `mode: "out-in"`
