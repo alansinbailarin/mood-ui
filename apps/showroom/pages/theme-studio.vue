@@ -15,9 +15,7 @@ useSeoMeta({
   ogDescription: () => t("pages.themeStudio.seoDescription"),
 });
 
-useHead({
-  link: [{ rel: "canonical", href: "https://mood-ui.com/theme-studio" }],
-});
+
 </script>
 
 <template>

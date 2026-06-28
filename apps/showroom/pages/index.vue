@@ -37,7 +37,7 @@ function go(idOrPath: string) {
   const _e = allEntries.find((e) => e.id === idOrPath);
   if (_e) _router.push(_e.route);
 }
-const { t, locale } = useI18n();
+const { t } = useI18n();
 
 
 const cardStyles = [
@@ -118,8 +118,6 @@ useSeoMeta({
 });
 
 useHead({
-  link: [{ rel: "canonical", href: "https://mood-ui.com/" }],
-  htmlAttrs: { lang: locale },
   script: [
     {
       type: "application/ld+json",

@@ -23,10 +23,6 @@ useSeoMeta({
   ogDescription: () => t("pages.forms.button.description"),
 });
 
-useHead({
-  link: [{ rel: "canonical", href: "https://mood-ui.com/forms/button" }],
-});
-
 // ── A11y data ─────────────────────────────────────────────────────────────────
 const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
   { keys: ["Space", "Enter"], action: t("pages.forms.button.a11y.kbActivate") },
