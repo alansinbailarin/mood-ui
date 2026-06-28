@@ -1,0 +1,54 @@
+--- a/dist/runtime/app/utils.js
++++ b/dist/runtime/app/utils.js
+@@ -28,17 +28,47 @@
+       const input = toValue(entry.input);
+       if (!input || typeof input !== "object")
+         continue;
++      // Legacy unhead format: useSeoMeta stores { title, _flatMeta: { description, ogDescription, ... } }
+       const flatMeta = input._flatMeta;
+-      if (!flatMeta || typeof flatMeta !== "object")
++      if (flatMeta && typeof flatMeta === "object") {
++        if ("title" in input) {
++          const t = toValue(input.title);
++          if (typeof t === "string")
++            result.title = t;
++        }
++        const desc = toValue(flatMeta.description) || toValue(flatMeta.ogDescription);
++        if (typeof desc === "string")
++          result.description = desc;
+         continue;
++      }
++      // New unhead v2 / Nuxt 4 format: useSeoMeta stores { title: fn, meta: [...] }
++      // The _flatMeta key may be absent when the FlatMetaPlugin has already run
++      // or when the Nuxt 4 head composable takes a different normalisation path.
++      // Always overwrite so that later (higher-priority, page-level) entries win.
+       if ("title" in input) {
+         const t = toValue(input.title);
+         if (typeof t === "string")
+           result.title = t;
+       }
+-      const desc = toValue(flatMeta.description) || toValue(flatMeta.ogDescription);
+-      if (typeof desc === "string")
+-        result.description = desc;
++      // Scan the meta array for description / og:description
++      if ("meta" in input) {
++        const metaArr = toValue(input.meta);
++        if (Array.isArray(metaArr)) {
++          for (const m of metaArr) {
++            const meta = toValue(m);
++            if (!meta || typeof meta !== "object")
++              continue;
++            const name = meta.name || meta.property;
++            if (name === "description" || name === "og:description") {
++              const desc = toValue(meta.content);
++              if (typeof desc === "string" && desc) {
++                result.description = desc;
++                break;
++              }
++            }
++          }
++        }
++      }
+     }
+   } catch (e) {
+     if (import.meta.dev)

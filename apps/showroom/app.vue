@@ -11,6 +11,7 @@ import {
 import { useDocsTheme } from "~/composables/useDocsTheme";
 import { tintedLightSurfaces, tintedDarkSurfaces } from "~/utils/tintedSurfaces";
 import { resolveHash } from "~/utils/hash-redirects";
+import { ogCategory } from "~/utils/ogCategory";
 
 // Pass the RAW mode (not the resolved theme) to this ModoProvider too.
 // ModoProvider's `watch(theme) → setColorMode` would otherwise overwrite
@@ -66,6 +67,22 @@ if (import.meta.client && window.location.hash) {
     }
   }
 }
+
+// ── SEO / OG ──────────────────────────────────────────────────────────────────
+// Piece 3: default twitter card for every page.
+useSeoMeta({ twitterCard: "summary_large_image" });
+
+// Piece 4: reactive <html lang> driven by the active i18n locale.
+const { locale } = useI18n();
+useHead({ htmlAttrs: { lang: locale } });
+
+// Piece 2: wire per-page category into the site-wide OG image.
+// nuxt-og-image v6 lazily injects title/description from useSeoMeta / useHead
+// after all component setups complete, so we only supply the category prop here;
+// the page-level `useSeoMeta({ ogTitle, ogDescription })` calls continue to
+// populate title and description inside the rendered card automatically.
+const route = useRoute();
+defineOgImage("OgImageDefaultTakumi", { category: computed(() => ogCategory(route.path)) });
 </script>
 
 <template>

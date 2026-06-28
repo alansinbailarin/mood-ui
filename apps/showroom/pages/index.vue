@@ -113,7 +113,6 @@ useSeoMeta({
   ogDescription: () => seoDescription.value,
   ogType: "website",
   ogUrl: "https://mood-ui.com/",
-  ogImage: "https://mood-ui.com/og-image.png",
   twitterCard: "summary_large_image",
   twitterTitle: () => seoTitle.value,
   twitterDescription: () => seoDescription.value,

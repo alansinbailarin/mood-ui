@@ -138,17 +138,9 @@ export default defineNuxtConfig({
 
     head: {
       titleTemplate: "%s · Mood-UI",
-      htmlAttrs: { lang: "en" },
       meta: [
         { charset: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
-        {
-          name: "description",
-          content:
-            "Vue 3 component library — TypeScript, Tailwind CSS v4, dark mode, accessible.",
-        },
-        { property: "og:site_name", content: "mood-ui" },
-        { property: "og:type", content: "website" },
       ],
       link: [
         // The favicon.svg got dropped from public/ when the brand assets
