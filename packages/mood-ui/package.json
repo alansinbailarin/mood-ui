@@ -1,6 +1,6 @@
 {
   "name": "mood-ui",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "Vue 3 component library with full theming, dark mode, palettes, calendar, scheduler, table and AppShell.",
   "type": "module",
   "license": "MIT",
@@ -35,8 +35,8 @@
     "typescript",
     "composables"
   ],
-  "main": "./dist/mood-ui.cjs",
-  "module": "./dist/mood-ui.mjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
   "types": "./dist/types/index.d.ts",
   "style": "./dist/mood-ui.css",
   "sideEffects": [
@@ -45,8 +45,8 @@
   "exports": {
     ".": {
       "types": "./dist/types/index.d.ts",
-      "import": "./dist/mood-ui.mjs",
-      "require": "./dist/mood-ui.cjs"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
     },
     "./style.css": "./dist/mood-ui.css",
     "./package.json": "./package.json"

@@ -34,13 +34,18 @@
 ```bash
 npm install mood-ui
 
-# Required peer dependencies:
+# Required peer dependency:
 npm install vue@^3.4
 
-# Optional peers (only needed for specific components):
-npm install @heroicons/vue@^2   # icons in Sidebar / Topbar / DropdownMenu
-npm install gsap@^3             # animations in Toast / Drawer
+# Optional peers — install only the ones you actually use. mood-ui is
+# tree-shakeable, so importing a component never pulls a peer it doesn't need.
+npm install @heroicons/vue@^2   # icons — many components (forms, Table, Calendar, navigation…)
+npm install gsap@^3             # animations — Toast, Drawer, Modal, Banner, Calendar & Scheduler
 ```
+
+> If you hit `Cannot find package '@heroicons/vue'` or `'gsap'`, a component you
+> imported uses it — install the named package. You only need the peers for the
+> components you actually use.
 
 ## Setup
 

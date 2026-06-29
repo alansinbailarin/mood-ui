@@ -1259,11 +1259,14 @@ function cellTitle(c: any, row: TRow, index: number): string | undefined {
     return text || undefined; 
 } 
  
-function alignTextClass(align: string): string { 
-    if (align === 'right') return 'block text-right'; 
-    if (align === 'center') return 'block text-center'; 
-    return 'block text-left'; 
-} 
+function alignTextClass(align: string): string {
+    // `w-full` is required: the cell value sits inside an `inline-flex` wrapper,
+    // so without an explicit width the span shrinks to its content and
+    // `text-center` / `text-right` have no room to take effect.
+    if (align === 'right') return 'block w-full text-right';
+    if (align === 'center') return 'block w-full text-center';
+    return 'block w-full text-left';
+}
  
 /* ---------------- Editable cells (Phase 4a) ---------------- 
  * Only one cell can be in edit mode at a time. The editor is a plain 
