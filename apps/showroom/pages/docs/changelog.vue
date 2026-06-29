@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { allEntries } from "~/utils/nav-manifest";
 import { computed, inject, onMounted, watch } from "vue";
 import { Badge, Card, Stack, Typography } from "mood-ui";
 import { useI18n } from "vue-i18n";
@@ -65,12 +64,7 @@ defineOgImage("Default", {
   description: t("pages.docs.changelog.description"),
   category: "Docs",
 });
-const _router = useRouter();
-function go(idOrPath: string) {
-  if (idOrPath.startsWith("/")) return _router.push(idOrPath);
-  const _e = allEntries.find((e) => e.id === idOrPath);
-  if (_e) _router.push(_e.route);
-}
+const go = useEntryNav();
 const toc = inject(DOC_TOC_KEY, null);
 
 function registerToc() {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 definePageMeta({ layout: "landing" });
 
-import { navManifest, allEntries } from "~/utils/nav-manifest";
+import { navManifest } from "~/utils/nav-manifest";
 import { ref, computed, onMounted, onUnmounted, watch } from "vue";
 import { Avatar, AvatarGroup, Badge, Button, Card, Stack, Switch, Tooltip, Typography } from "mood-ui";
 import {
@@ -31,12 +31,7 @@ import { CheckBadgeIcon } from "@heroicons/vue/24/solid";
 
 import { useI18n } from "vue-i18n";
 import { vReveal, vRevealChildren } from "~/composables/useScrollReveal";
-const _router = useRouter();
-function go(idOrPath: string) {
-  if (idOrPath.startsWith("/")) return _router.push(idOrPath);
-  const _e = allEntries.find((e) => e.id === idOrPath);
-  if (_e) _router.push(_e.route);
-}
+const go = useEntryNav();
 const { t } = useI18n();
 
 

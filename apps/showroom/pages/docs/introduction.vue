@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { navManifest, allEntries } from "~/utils/nav-manifest";
+import { navManifest } from "~/utils/nav-manifest";
 import { computed, inject, onMounted, watch } from "vue";
 import { Card, Stack, Typography } from "mood-ui";
 import { useI18n } from "vue-i18n";
@@ -18,12 +18,7 @@ import {
 import { vReveal, vRevealChildren } from "~/composables/useScrollReveal";
 import { DOC_TOC_KEY } from "~/composables/useDocToc";
 
-const _router = useRouter();
-function go(idOrPath: string) {
-  if (idOrPath.startsWith("/")) return _router.push(idOrPath);
-  const _e = allEntries.find((e) => e.id === idOrPath);
-  if (_e) _router.push(_e.route);
-}
+const go = useEntryNav();
 const { t, locale } = useI18n();
 
 

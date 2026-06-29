@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { allEntries } from "~/utils/nav-manifest";
 import { inject, onMounted, watch } from "vue";
 import { Badge, Banner, Card, Stack, Typography } from "mood-ui";
 import { useI18n } from "vue-i18n";
@@ -104,12 +103,7 @@ const namespaces = [
   "table",
 ];
 
-const _router = useRouter();
-function go(idOrPath: string) {
-  if (idOrPath.startsWith("/")) return _router.push(idOrPath);
-  const _e = allEntries.find((e) => e.id === idOrPath);
-  if (_e) _router.push(_e.route);
-}
+const go = useEntryNav();
 const { t, locale } = useI18n();
 
 

@@ -15,14 +15,7 @@ import { useI18n } from "vue-i18n";
 import CodePreview from "~/components/CodePreview.vue";
 import { vReveal } from "~/composables/useScrollReveal";
 import { DOC_TOC_KEY } from "~/composables/useDocToc";
-import { allEntries } from "~/utils/nav-manifest";
-
-const _router = useRouter();
-function go(idOrPath: string) {
-  if (idOrPath.startsWith("/")) return _router.push(idOrPath);
-  const _e = allEntries.find((e) => e.id === idOrPath);
-  if (_e) _router.push(_e.route);
-}
+const go = useEntryNav();
 const { t, locale } = useI18n();
 
 useSeoMeta({
