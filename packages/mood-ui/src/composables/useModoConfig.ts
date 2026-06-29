@@ -1,6 +1,7 @@
-import { computed, inject, type ComputedRef } from 'vue'; 
-import { MODO_CONFIG, defaultModoConfig, type ModoColor, type ModoRadius, type ModoSize, type ModoTheme, type ModoHalo } from '../config/ModoConfig'; 
-import { MODO_LOCALE, defaultLocale, interpolate, type ModoLocale } from '../config/ModoLocale'; 
+import { computed, inject, type ComputedRef } from 'vue';
+import { MODO_CONFIG, defaultModoConfig, type ModoColor, type ModoRadius, type ModoSize, type ModoTheme, type ModoHalo } from '../config/ModoConfig';
+import { MODO_LOCALE, defaultLocale, interpolate, type ModoLocale } from '../config/ModoLocale';
+import { SIZE_TOKENS, normalizeSize, type SizeTokenSet } from '../config/sizes';
  
 export function useModoConfig() { 
     return inject(MODO_CONFIG, undefined); 
@@ -32,11 +33,24 @@ export function useResolvedRadius(localGetter: () => ModoRadius | undefined): Co
  * wider scale (xs/xl) only call this when the resolved size is one of the 
  * canonical three; otherwise they keep their own value. 
  */ 
-export function useResolvedSize(localGetter: () => ModoSize | undefined): ComputedRef<ModoSize> { 
-    const cfg = useModoConfig(); 
-    return computed(() => localGetter() ?? cfg?.value.size ?? defaultModoConfig.size); 
-} 
- 
+export function useResolvedSize(localGetter: () => ModoSize | undefined): ComputedRef<ModoSize> {
+    const cfg = useModoConfig();
+    return computed(() => localGetter() ?? cfg?.value.size ?? defaultModoConfig.size);
+}
+
+/**
+ * Resolves a component's size to its full token set (heights, icon, text,
+ * padding…). Local prop wins, then provider, then default — same precedence as
+ * useResolvedSize — and legacy `xs`/`xl` are normalised onto the scale.
+ */
+export function useSizeTokens(localGetter: () => ModoSize | undefined): ComputedRef<SizeTokenSet> {
+    const cfg = useModoConfig();
+    return computed(() => {
+        const s = localGetter() ?? cfg?.value.size ?? defaultModoConfig.size;
+        return SIZE_TOKENS[normalizeSize(s)];
+    });
+}
+
 export function useResolvedTheme(localGetter?: () => ModoTheme | undefined): ComputedRef<ModoTheme> { 
     const cfg = useModoConfig(); 
     return computed(() => localGetter?.() ?? cfg?.value.theme ?? defaultModoConfig.theme); 

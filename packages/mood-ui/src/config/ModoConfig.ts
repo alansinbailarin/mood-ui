@@ -33,7 +33,7 @@ export type ModoRadius = 'none' | 'small' | 'medium' | 'large' | 'full';
  * larger scale (e.g. Avatar's `xs`/`xl`) keep their own values; this only 
  * cascades the canonical `small` | `medium` | `large` triplet. 
  */ 
-export type ModoSize = 'small' | 'medium' | 'large'; 
+export type ModoSize = 'xsmall' | 'small' | 'medium' | 'large';
 export type ModoTheme = 'light' | 'dark' | 'system'; 
 /** 
  * Estilo del halo (ring persistente) en campos de formulario. 

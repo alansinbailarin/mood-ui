@@ -58,11 +58,13 @@ export {
   useResolvedColor,
   useResolvedRadius,
   useResolvedSize,
+  useSizeTokens,
   useResolvedTheme,
   useResolvedHalo,
   useModoLocale,
   useLocaleString,
 } from "./composables/useModoConfig";
+export { SIZE_TOKENS, normalizeSize, type SizeTokenSet } from "./config/sizes";
 export {
   useColorMode,
   configureColorMode,
