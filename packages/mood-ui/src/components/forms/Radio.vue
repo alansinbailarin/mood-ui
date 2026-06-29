@@ -59,7 +59,7 @@
  
 <script setup lang="ts"> 
 import { computed, inject, useId } from 'vue'; 
-import { useResolvedColor, useResolvedSize } from '../../composables/useModoConfig'; 
+import { useResolvedColor, useSizeTokens } from '../../composables/useModoConfig'; 
 import type { Radio as RadioProps } from '../../interfaces/forms/Radio.interface'; 
 import { RADIO_GROUP_KEY } from '../../interfaces/forms/RadioGroup.context'; 
  
@@ -83,9 +83,8 @@ const fieldId = computed(() => props.id ?? `modo-radio-${autoId}`);
 const resolvedName = computed(() => props.name ?? group?.name.value ?? fieldId.value); 
  
 const localColor = useResolvedColor(() => props.color); 
-const resolvedSize = useResolvedSize(() => props.size); 
+const sz = useSizeTokens(() => group?.size.value ?? props.size);
 const stateColor = computed(() => group?.color.value ?? localColor.value); 
-const sizeResolved = computed(() => group?.size.value ?? resolvedSize.value); 
  
 const groupDisabled = computed(() => !!group?.disabled.value); 
 const isDisabled = computed(() => !!props.disabled || !!props.loading || groupDisabled.value); 
@@ -112,30 +111,25 @@ function onChange() {
 } 
  
 /* ---------- Sizes ---------- */ 
-const boxSizeClasses = computed(() => { 
-    switch (sizeResolved.value) { 
-        case 'small': return 'w-4 h-4'; 
-        case 'large': return 'w-6 h-6'; 
-        case 'medium': 
-        default: return 'w-5 h-5'; 
-    } 
-}); 
-const innerSizeClasses = computed(() => { 
-    switch (sizeResolved.value) { 
-        case 'small': return 'w-1.5 h-1.5'; 
-        case 'large': return 'w-2.5 h-2.5'; 
-        case 'medium': 
-        default: return 'w-2 h-2'; 
-    } 
-}); 
-const labelSizeClasses = computed(() => { 
-    switch (sizeResolved.value) { 
-        case 'small': return 'text-caption'; 
-        case 'large': return 'text-body-lg'; 
-        case 'medium': 
-        default: return 'text-body'; 
-    } 
-}); 
+const boxSizeClasses = computed(() => sz.value.box);
+const innerSizeClasses = computed(() => {
+    switch (sz.value.box) {
+        case 'h-4 w-4':           return 'w-1.5 h-1.5';  // xsmall
+        case 'h-[18px] w-[18px]': return 'w-2 h-2';      // small
+        case 'h-6 w-6':           return 'w-2.5 h-2.5';  // large
+        case 'h-5 w-5':                                    // medium (default)
+        default:                   return 'w-2 h-2';
+    }
+});
+const labelSizeClasses = computed(() => {
+    switch (sz.value.box) {
+        case 'h-4 w-4':           return 'text-caption';  // xsmall
+        case 'h-[18px] w-[18px]': return 'text-caption';  // small
+        case 'h-6 w-6':           return 'text-body-lg';  // large
+        case 'h-5 w-5':                                    // medium (default)
+        default:                   return 'text-body';
+    }
+});
  
 /* ---------- State colors ---------- */ 
 const CHECKED_COLOR: Record<string, string> = { 

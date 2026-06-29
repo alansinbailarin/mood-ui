@@ -100,7 +100,7 @@
 import { computed, ref, watch, onMounted } from 'vue'; 
 import { CheckIcon, MinusIcon } from '@heroicons/vue/24/outline'; 
 import { useFieldState } from '../../composables/useField'; 
-import { useResolvedSize } from '../../composables/useModoConfig'; 
+import { useSizeTokens } from '../../composables/useModoConfig'; 
 import type { Checkbox as CheckboxProps } from '../../interfaces/forms/Checkbox.interface'; 
 import Typography from '../data-display/Typography.vue'; 
  
@@ -115,7 +115,7 @@ const props = withDefaults(defineProps<CheckboxProps & { fullWidth?: boolean }>(
     fullWidth: false, 
 }); 
  
-const resolvedSize = useResolvedSize(() => props.size); 
+const sz = useSizeTokens(() => props.size); 
  
 const emit = defineEmits<{ 
     (e: 'update:modelValue', value: boolean): void; 
@@ -160,30 +160,25 @@ function onKeydown(e: KeyboardEvent) {
 } 
  
 /* ---------- Size maps ---------- */ 
-const boxSizeClasses = computed(() => { 
-    switch (resolvedSize.value) { 
-        case 'small': return 'w-4 h-4'; 
-        case 'large': return 'w-6 h-6'; 
-        case 'medium': 
-        default: return 'w-5 h-5'; 
-    } 
-}); 
-const iconSizeClasses = computed(() => { 
-    switch (resolvedSize.value) { 
-        case 'small': return 'w-3 h-3'; 
-        case 'large': return 'w-4 h-4'; 
-        case 'medium': 
-        default: return 'w-3.5 h-3.5'; 
-    } 
-}); 
-const labelSizeClasses = computed(() => { 
-    switch (resolvedSize.value) { 
-        case 'small': return 'text-caption'; 
-        case 'large': return 'text-body-lg'; 
-        case 'medium': 
-        default: return 'text-body'; 
-    } 
-}); 
+const boxSizeClasses = computed(() => sz.value.box);
+const iconSizeClasses = computed(() => {
+    switch (sz.value.box) {
+        case 'h-4 w-4':           return 'w-3 h-3';       // xsmall
+        case 'h-[18px] w-[18px]': return 'w-3.5 h-3.5'; // small
+        case 'h-6 w-6':           return 'w-4 h-4';       // large
+        case 'h-5 w-5':                                    // medium (default)
+        default:                   return 'w-3.5 h-3.5';
+    }
+});
+const labelSizeClasses = computed(() => {
+    switch (sz.value.box) {
+        case 'h-4 w-4':           return 'text-caption';  // xsmall
+        case 'h-[18px] w-[18px]': return 'text-caption';  // small
+        case 'h-6 w-6':           return 'text-body-lg';  // large
+        case 'h-5 w-5':                                    // medium (default)
+        default:                   return 'text-body';
+    }
+});
  
 /* ---------- Radius ---------- */ 
 const boxRadiusClasses = computed(() => { 

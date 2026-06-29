@@ -55,7 +55,7 @@ import { computed, ref } from 'vue';
 import { StarIcon as StarSolidIcon } from '@heroicons/vue/24/solid';
 import { StarIcon as StarOutlineIcon } from '@heroicons/vue/24/outline';
 import type { Rating } from '../../interfaces/forms/Rating.interface';
-import { useResolvedColor, useResolvedSize } from '../../composables/useModoConfig';
+import { useResolvedColor, useSizeTokens } from '../../composables/useModoConfig';
 
 const props = withDefaults(defineProps<Rating>(), {
     modelValue: 0,
@@ -73,7 +73,7 @@ const emit = defineEmits<{
     'change': [v: number];
 }>();
 
-const resolvedSize = useResolvedSize(() => props.size);
+const sz = useSizeTokens(() => props.size);
 const resolvedColor = useResolvedColor(() => props.color);
 const hoverValue = ref<number | null>(null);
 
@@ -127,21 +127,15 @@ function formatValue(v: number): string {
     return Number.isInteger(v) ? String(v) : v.toFixed(1);
 }
 
-const sizeClasses = computed(() => {
-    switch (resolvedSize.value) {
-        case 'small':  return 'w-4 h-4';
-        case 'large':  return 'w-7 h-7';
-        case 'medium':
-        default:       return 'w-5 h-5';
-    }
-});
+const sizeClasses = computed(() => sz.value.box);
 
 const valueSizeClass = computed(() => {
-    switch (resolvedSize.value) {
-        case 'small':  return 'text-xs';
-        case 'large':  return 'text-base';
-        case 'medium':
-        default:       return 'text-sm';
+    switch (sz.value.box) {
+        case 'h-4 w-4':           return 'text-xs';   // xsmall
+        case 'h-[18px] w-[18px]': return 'text-xs';   // small
+        case 'h-6 w-6':           return 'text-base';  // large
+        case 'h-5 w-5':                                 // medium (default)
+        default:                   return 'text-sm';
     }
 });
 

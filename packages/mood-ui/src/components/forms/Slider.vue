@@ -140,6 +140,7 @@ import {
   useModoLocale,
   useResolvedRadius,
   useResolvedSize,
+  useSizeTokens,
 } from "../../composables/useModoConfig";
 
 const loc = useModoLocale();
@@ -160,6 +161,7 @@ const props = withDefaults(defineProps<Slider>(), {
   fullWidth: true,
 });
 
+const sz = useSizeTokens(() => props.size);
 const resolvedSize = useResolvedSize(() => props.size);
 // Slider track defaults to a pill (full). Thumb is always round regardless
 // of this prop — a non-circular thumb is no longer recognisable.
@@ -353,13 +355,12 @@ const trackThicknessClass = computed(() => {
 });
 
 const thumbSizeClass = computed(() => {
-  switch (resolvedSize.value) {
-    case "small":
-      return "w-3.5 h-3.5";
-    case "large":
-      return "w-6 h-6";
-    default:
-      return "w-5 h-5";
+  switch (sz.value.box) {
+    case 'h-4 w-4':           return 'w-4 h-4';        // xsmall
+    case 'h-[18px] w-[18px]': return 'w-[18px] h-[18px]'; // small
+    case 'h-6 w-6':           return 'w-6 h-6';        // large
+    case 'h-5 w-5':                                      // medium (default)
+    default:                   return 'w-5 h-5';
   }
 });
 

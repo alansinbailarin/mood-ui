@@ -92,7 +92,7 @@
 <script setup lang="ts"> 
 import { computed, ref } from 'vue'; 
 import { useFieldState } from '../../composables/useField'; 
-import { useResolvedRadius, useResolvedSize } from '../../composables/useModoConfig'; 
+import { useResolvedRadius, useSizeTokens } from '../../composables/useModoConfig'; 
 import type { Switch as SwitchProps } from '../../interfaces/forms/Switch.interface'; 
 import Typography from '../data-display/Typography.vue'; 
  
@@ -107,7 +107,7 @@ const props = withDefaults(defineProps<SwitchProps & { fullWidth?: boolean }>(),
     fullWidth: false, 
 }); 
  
-const resolvedSize = useResolvedSize(() => props.size); 
+const sz = useSizeTokens(() => props.size);
 // Track radius (default pill). Thumb stays circular regardless. 
 const resolvedRadius = useResolvedRadius(() => props.radius ?? 'full'); 
 const trackRadiusClass = computed(() => { 
@@ -151,39 +151,43 @@ function onChange(e: Event) {
 } 
  
 /* ---------- Sizes ---------- */ 
-const trackSizeClasses = computed(() => { 
-    switch (resolvedSize.value) { 
-        case 'small': return 'w-8 h-5 p-0.5'; 
-        case 'large': return 'w-14 h-8 p-0.5'; 
-        case 'medium': 
-        default: return 'w-10 h-6 p-0.5'; 
-    } 
-}); 
-const thumbSizeClasses = computed(() => { 
-    switch (resolvedSize.value) { 
-        case 'small': return 'w-4 h-4'; 
-        case 'large': return 'w-7 h-7'; 
-        case 'medium': 
-        default: return 'w-5 h-5'; 
-    } 
-}); 
-const thumbTransformClasses = computed(() => { 
-    if (!isChecked.value) return 'translate-x-0'; 
-    switch (resolvedSize.value) { 
-        case 'small': return 'translate-x-3'; 
-        case 'large': return 'translate-x-6'; 
-        case 'medium': 
-        default: return 'translate-x-4'; 
-    } 
-}); 
-const labelSizeClasses = computed(() => { 
-    switch (resolvedSize.value) { 
-        case 'small': return 'text-caption'; 
-        case 'large': return 'text-body-lg'; 
-        case 'medium': 
-        default: return 'text-body'; 
-    } 
-}); 
+const trackSizeClasses = computed(() => {
+    switch (sz.value.box) {
+        case 'h-4 w-4':           return 'h-4 w-7 p-0.5';        // xsmall
+        case 'h-[18px] w-[18px]': return 'h-[18px] w-8 p-0.5';  // small
+        case 'h-6 w-6':           return 'h-6 w-11 p-0.5';       // large
+        case 'h-5 w-5':                                            // medium (default)
+        default:                   return 'h-5 w-9 p-0.5';
+    }
+});
+const thumbSizeClasses = computed(() => {
+    switch (sz.value.box) {
+        case 'h-4 w-4':           return 'w-3 h-3';         // xsmall
+        case 'h-[18px] w-[18px]': return 'w-3.5 h-3.5';    // small
+        case 'h-6 w-6':           return 'w-5 h-5';         // large
+        case 'h-5 w-5':                                       // medium (default)
+        default:                   return 'w-4 h-4';
+    }
+});
+const thumbTransformClasses = computed(() => {
+    if (!isChecked.value) return 'translate-x-0';
+    switch (sz.value.box) {
+        case 'h-4 w-4':           return 'translate-x-3';    // xsmall: 28-12-4=12px
+        case 'h-[18px] w-[18px]': return 'translate-x-3.5'; // small:  32-14-4=14px
+        case 'h-6 w-6':           return 'translate-x-5';    // large:  44-20-4=20px
+        case 'h-5 w-5':                                        // medium (default)
+        default:                   return 'translate-x-4';    // medium: 36-16-4=16px
+    }
+});
+const labelSizeClasses = computed(() => {
+    switch (sz.value.box) {
+        case 'h-4 w-4':           return 'text-caption';  // xsmall
+        case 'h-[18px] w-[18px]': return 'text-caption';  // small
+        case 'h-6 w-6':           return 'text-body-lg';  // large
+        case 'h-5 w-5':                                    // medium (default)
+        default:                   return 'text-body';
+    }
+});
  
 /* ---------- State colors ---------- */ 
 const CHECKED_BG_BY_COLOR: Record<string, string> = { 
