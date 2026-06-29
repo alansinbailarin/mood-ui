@@ -86,7 +86,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import type { TagInput } from '../../interfaces/forms/TagInput.interface';
-import { useResolvedColor, useResolvedSize } from '../../composables/useModoConfig';
+import { useResolvedColor, useSizeTokens } from '../../composables/useModoConfig';
 import { useFieldState, useFieldClasses } from '../../composables/useField';
 
 const props = withDefaults(defineProps<TagInput>(), {
@@ -120,7 +120,7 @@ const { wrapperVariantClasses, radiusClasses } = useFieldClasses({
 });
 
 /* ── Chip color (separate from field state color) ── */
-const resolvedSize = useResolvedSize(() => props.size);
+const sz = useSizeTokens(() => props.size);
 const resolvedColor = useResolvedColor(() => props.color);
 
 /* ── Input state ── */
@@ -185,29 +185,24 @@ function onPaste(e: ClipboardEvent) {
 
 /* ── Size classes ── */
 const paddingClasses = computed(() => {
-    switch (resolvedSize.value) {
-        case 'small':  return 'p-1.5 min-h-[2rem]';
-        case 'large':  return 'p-2.5 min-h-[3rem]';
-        case 'medium':
-        default:       return 'p-2 min-h-[2.5rem]';
-    }
+    const minH = sz.value.control.replace('h-', 'min-h-');
+    const pad = sz.value.control === 'h-12' ? 'p-2.5' : sz.value.control === 'h-8' ? 'p-1.5' : 'p-2';
+    return `${pad} ${minH}`;
 });
 
 const inputSizeClasses = computed(() => {
-    switch (resolvedSize.value) {
-        case 'small':  return 'text-xs h-5';
-        case 'large':  return 'text-base h-7';
-        case 'medium':
-        default:       return 'text-sm h-6';
+    switch (sz.value.control) {
+        case 'h-8':  return 'text-xs h-5';
+        case 'h-12': return 'text-base h-7';
+        default:     return 'text-sm h-6';
     }
 });
 
 const chipSizeClasses = computed(() => {
-    switch (resolvedSize.value) {
-        case 'small':  return 'h-5 px-2 text-[11px]';
-        case 'large':  return 'h-7 px-3 text-sm';
-        case 'medium':
-        default:       return 'h-6 px-2.5 text-xs';
+    switch (sz.value.control) {
+        case 'h-8':  return 'h-5 px-2 text-[11px]';
+        case 'h-12': return 'h-7 px-3 text-sm';
+        default:     return 'h-6 px-2.5 text-xs';
     }
 });
 

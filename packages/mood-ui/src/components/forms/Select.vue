@@ -251,8 +251,8 @@ import Typography from '../data-display/Typography.vue';
 import Loader from '../feedback/Loader.vue'; 
 import Button from './Button.vue'; 
 import { ChevronDownIcon, XMarkIcon, CheckIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline'; 
-import { useModoLocale, useResolvedSize } from '../../composables/useModoConfig'; 
- 
+import { useModoLocale, useSizeTokens } from '../../composables/useModoConfig';
+
 const loc = useModoLocale(); 
  
 const emit = defineEmits<{ 
@@ -280,7 +280,7 @@ const props = withDefaults(defineProps<Select>(), {
     panelWidth: 'trigger', 
 }); 
  
-const resolvedSize = useResolvedSize(() => props.size); 
+const sz = useSizeTokens(() => props.size); 
  
 const { 
     fieldId, 
@@ -593,31 +593,11 @@ watch(filteredOptions, (list) => {
     } 
 }); 
  
-/* ---------- Classes ---------- */ 
- 
-const wrapperSizeClasses = computed(() => { 
-    switch (resolvedSize.value) { 
-        case 'small': return 'h-8 px-2.5'; 
-        case 'large': return 'h-12 px-4'; 
-        default: return 'h-10 px-3'; 
-    } 
-}); 
- 
-const inputTextClasses = computed(() => { 
-    switch (resolvedSize.value) { 
-        case 'small': return 'text-caption'; 
-        case 'large': return 'text-body-lg'; 
-        default: return 'text-body'; 
-    } 
-}); 
- 
-const iconSizeClasses = computed(() => { 
-    switch (resolvedSize.value) { 
-        case 'small': return 'w-4 h-4'; 
-        case 'large': return 'w-5 h-5'; 
-        default: return 'w-4 h-4'; 
-    } 
-}); 
+/* ---------- Classes ---------- */
+
+const wrapperSizeClasses = computed(() => `${sz.value.control} ${sz.value.padX}`);
+const inputTextClasses = computed(() => sz.value.text);
+const iconSizeClasses = computed(() => sz.value.icon); 
  
 defineExpose({ 
     open: openPopover, 

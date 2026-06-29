@@ -65,7 +65,7 @@
       <!-- Loading spinner -->
       <Loader
         v-if="loading"
-        :size="resolvedSize === 'large' ? 'medium' : 'small'"
+        :size="sz.value.control === 'h-12' ? 'medium' : 'small'"
         class="ml-1 text-muted-foreground shrink-0"
       />
     </div>
@@ -100,7 +100,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, nextTick, onMounted } from "vue";
 import {
-  useResolvedSize,
+  useSizeTokens,
   useResolvedRadius,
   useModoLocale,
 } from "../../composables/useModoConfig";
@@ -139,7 +139,7 @@ const resolvedLength = computed(() =>
 const { stateColor, hasError, isDisabled, errorId, helperId, describedBy } =
   useFieldState(props, { componentName: "OTPInput", idPrefix: "modo-otp" });
 
-const resolvedSize = useResolvedSize(() => props.size);
+const sz = useSizeTokens(() => props.size);
 const radius = useResolvedRadius(() => props.radius);
 
 const { wrapperVariantClasses, radiusClasses } = useFieldClasses({
@@ -271,27 +271,8 @@ function onPaste(e: ClipboardEvent, startIndex: number) {
 }
 
 // ── Slot size / text classes ──────────────────────────────────────────────────
-const slotSizeClasses = computed(() => {
-  switch (resolvedSize.value) {
-    case "small":
-      return "w-8 h-8";
-    case "large":
-      return "w-12 h-12";
-    default:
-      return "w-10 h-10";
-  }
-});
-
-const slotTextClasses = computed(() => {
-  switch (resolvedSize.value) {
-    case "small":
-      return "text-caption";
-    case "large":
-      return "text-body-lg";
-    default:
-      return "text-body";
-  }
-});
+const slotSizeClasses = computed(() => `${sz.value.control} aspect-square`);
+const slotTextClasses = computed(() => sz.value.text);
 
 // ── Public API ────────────────────────────────────────────────────────────────
 defineExpose({
