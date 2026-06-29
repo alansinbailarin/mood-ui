@@ -17,13 +17,6 @@ import type {
 
 const { t } = useI18n();
 
-
-useSeoMeta({
-  title: () => t("pages.dataDisplay.dayView.title"),
-  description: () => t("pages.dataDisplay.dayView.description"),
-  ogTitle: () => `${t("pages.dataDisplay.dayView.title")} · mood-ui`,
-  ogDescription: () => t("pages.dataDisplay.dayView.description"),
-});
 // ── A11y data ─────────────────────────────────────────────────────────────────
 const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
   { keys: ["Tab"], action: t("pages.data-display.dayView.a11y.kbTab") },

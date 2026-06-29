@@ -20,13 +20,6 @@ import type {
 
 const { t } = useI18n();
 
-
-useSeoMeta({
-  title: () => t("pages.dataDisplay.scheduler.title"),
-  description: () => t("pages.dataDisplay.scheduler.description"),
-  ogTitle: () => `${t("pages.dataDisplay.scheduler.title")} · mood-ui`,
-  ogDescription: () => t("pages.dataDisplay.scheduler.description"),
-});
 // ── A11y data ─────────────────────────────────────────────────────────────────
 const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
   { keys: ["Tab"], action: t("pages.data-display.scheduler.a11y.kbTab") },

@@ -569,6 +569,12 @@
         "category": "Forms",
         "title": "DateField",
         "description": "Date input with a calendar popover. Localizable, with minDate / maxDate and configurable display format.",
+        "seo": {
+          "metaTitle": "Vue Date Picker — Calendar Date Field",
+          "metaDescription": "Free, open-source Vue date picker: date field with a calendar popover, localizable formatting and minDate/maxDate limits. A Nuxt date picker with zero license cost.",
+          "h1": "Vue Date Picker Component",
+          "intro": "mood-ui's DateField is a free, open-source date picker for Vue 3 and Nuxt — a date input with a calendar popover, localizable display format and minDate/maxDate limits."
+        },
         "controls": {
           "size": "Size",
           "variant": "Variant",
@@ -722,6 +728,12 @@
         "category": "Forms",
         "title": "DateTimeField",
         "description": "Combined date and time input with a calendar popover and built-in time picker.",
+        "seo": {
+          "metaTitle": "Vue Datetime Picker — Date & Time Field",
+          "metaDescription": "Free, open-source Vue datetime picker: combined date and time field with a calendar popover and built-in time picker for Vue 3 and Nuxt. Zero license cost.",
+          "h1": "Vue Datetime Picker Component",
+          "intro": "mood-ui's DateTimeField is a free, open-source datetime picker for Vue 3 and Nuxt — a combined date and time field with a calendar popover and a built-in time picker."
+        },
         "controls": {
           "size": "Size",
           "format": "Format",

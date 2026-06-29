@@ -1236,6 +1236,12 @@
       "agendaView": {
         "title": "AgendaView",
         "description": "Lista cronológica de eventos por día. Ideal para secciones \"próximos eventos\", dashboards y agendas compactas.",
+        "seo": {
+          "metaTitle": "Vue Agenda View — Lista de Eventos",
+          "metaDescription": "Componente Vue agenda view libre y open-source: lista cronológica de eventos por día para secciones de próximos eventos, dashboards y agendas compactas en Vue 3 y Nuxt.",
+          "h1": "Componente Vue Agenda View",
+          "intro": "El AgendaView de mood-ui es una agenda en lista libre y open-source para Vue 3 y Nuxt: una lista cronológica de eventos por día, ideal para secciones de próximos eventos, dashboards y agendas compactas."
+        },
         "controls": {
           "days": "Días",
           "format": "Formato",
@@ -1372,6 +1378,12 @@
       "calendar": {
         "title": "Calendar",
         "description": "Calendario mensual para seleccionar una fecha. Soporta minDate, maxDate, fechas deshabilitadas, locale y variantes visuales.",
+        "seo": {
+          "metaTitle": "Componente Vue Calendar — Selección de Fecha",
+          "metaDescription": "Componente Vue Calendar libre y open-source: selección de fecha en grilla mensual, minDate/maxDate, fechas deshabilitadas, locale y variantes visuales. Una alternativa a FullCalendar para Vue 3.",
+          "h1": "Componente Vue Calendar",
+          "intro": "El Calendar de mood-ui es un componente de calendario libre y open-source para Vue 3 y Nuxt: selección de fecha mensual con minDate/maxDate, fechas deshabilitadas, soporte de locale y variantes visuales. Una alternativa sin coste a FullCalendar."
+        },
         "controls": {
           "variant": "Variante",
           "color": "Color",
@@ -1613,6 +1625,12 @@
       "dayView": {
         "title": "DayView",
         "description": "Vista de un único día con grilla horaria. Ideal para agendas detalladas, bloques de tiempo y planificación operativa.",
+        "seo": {
+          "metaTitle": "Vue Day View — Agenda Diaria",
+          "metaDescription": "Componente Vue day view libre y open-source: grilla horaria de un único día para agendas detalladas, bloques de tiempo y planificación operativa en Vue 3 y Nuxt.",
+          "h1": "Componente Vue Day View",
+          "intro": "El DayView de mood-ui es un calendario de un único día libre y open-source para Vue 3 y Nuxt: una grilla horaria pensada para agendas detalladas, bloques de tiempo y planificación operativa."
+        },
         "controls": {
           "format": "Formato",
           "allDayRow": "Fila all-day",
@@ -1711,6 +1729,12 @@
       "monthView": {
         "title": "MonthView",
         "description": "Vista mensual tipo grilla para mostrar eventos por día. Soporta números de semana, semana iniciando en cualquier día y arrastre de eventos.",
+        "seo": {
+          "metaTitle": "Vue Month View — Calendario Mensual de Eventos",
+          "metaDescription": "Componente Vue month view libre y open-source: calendario mensual tipo grilla de eventos con números de semana, primer día de semana configurable y arrastre de eventos para Vue 3 y Nuxt.",
+          "h1": "Componente Vue Month View",
+          "intro": "El MonthView de mood-ui es un month view libre y open-source para Vue 3 y Nuxt: un calendario mensual tipo grilla que muestra eventos por día, con números de semana, cualquier primer día de semana y arrastre de eventos."
+        },
         "controls": {
           "weekStart": "Inicio",
           "sun": "Dom",
@@ -1768,6 +1792,12 @@
       "scheduler": {
         "title": "Scheduler",
         "description": "Vista tipo agenda con recursos en columnas (salas, personas, equipos). Cada recurso muestra sus eventos sobre una grilla horaria compartida.",
+        "seo": {
+          "metaTitle": "Componente Vue Scheduler — Agenda de Recursos",
+          "metaDescription": "Vue Scheduler libre y open-source para Vue 3: recursos en columnas, eventos con drag-and-drop, horario laboral y formato 12/24h. Una alternativa a FullCalendar sin coste de licencia.",
+          "h1": "Componente Vue Scheduler",
+          "intro": "El Scheduler de mood-ui es un planificador de recursos libre y open-source para Vue 3 y Nuxt: eventos distribuidos en columnas de recursos sobre una grilla horaria compartida, drag-and-drop entre recursos y horario laboral. Una alternativa sin coste a FullCalendar."
+        },
         "controls": {
           "format": "Formato",
           "borders": "Bordes",
@@ -1872,6 +1902,12 @@
       "table": {
         "title": "Table",
         "description": "Tabla potente con ordenamiento, paginación, selección, sticky header, filas expandibles, virtualización, acciones de toolbar y soporte de árbol. Las filas contienen los datos; las columnas describen cómo se renderiza cada campo.",
+        "seo": {
+          "metaTitle": "Componente Vue Data Table — Orden y Paginado",
+          "metaDescription": "Vue Data Table libre y open-source: ordenamiento, paginación, selección de filas, sticky header, virtualización y filas en árbol. Una alternativa a AG Grid sin coste de licencia.",
+          "h1": "Componente Vue Data Table",
+          "intro": "El Table de mood-ui es una data table libre y open-source para Vue 3 y Nuxt: ordenamiento, paginación, selección de filas, sticky header, virtualización, acciones de toolbar y soporte de árbol. Una alternativa sin coste a AG Grid."
+        },
         "controls": {
           "size": "Tamaño",
           "density": "Densidad",
@@ -2088,6 +2124,12 @@
       "weekView": {
         "title": "WeekView",
         "description": "Vista semanal con grilla horaria. Soporta horario laboral, rangos deshabilitados, drag & drop y redimensionado de eventos.",
+        "seo": {
+          "metaTitle": "Vue Week View — Calendario Semanal",
+          "metaDescription": "Componente Vue week view libre y open-source: calendario semanal con grilla horaria, horario laboral, rangos deshabilitados, drag & drop y redimensionado de eventos para Vue 3 y Nuxt.",
+          "h1": "Componente Vue Week View",
+          "intro": "El WeekView de mood-ui es un calendario semanal libre y open-source para Vue 3 y Nuxt: una grilla horaria con horario laboral, rangos deshabilitados, drag-and-drop y redimensionado de eventos."
+        },
         "controls": {
           "format": "Formato",
           "allDayRow": "Fila todo el día",

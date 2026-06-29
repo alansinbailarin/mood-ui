@@ -1236,6 +1236,12 @@
       "agendaView": {
         "title": "AgendaView",
         "description": "Chronological list of events per day. Ideal for \"upcoming events\" sections, dashboards and compact agendas.",
+        "seo": {
+          "metaTitle": "Vue Agenda View — Event List Calendar",
+          "metaDescription": "Free, open-source Vue agenda view component: chronological list of events per day for upcoming-events sections, dashboards and compact agendas in Vue 3 and Nuxt.",
+          "h1": "Vue Agenda View Component",
+          "intro": "mood-ui's AgendaView is a free, open-source agenda list calendar for Vue 3 and Nuxt — a chronological list of events per day, ideal for upcoming-events sections, dashboards and compact agendas."
+        },
         "controls": {
           "days": "Days",
           "format": "Format",
@@ -1372,6 +1378,12 @@
       "calendar": {
         "title": "Calendar",
         "description": "Monthly calendar for selecting a date. Supports minDate, maxDate, disabled dates, locale and visual variants.",
+        "seo": {
+          "metaTitle": "Vue Calendar Component — Date Selection",
+          "metaDescription": "Free, open-source Vue Calendar component: month grid date selection, minDate/maxDate, disabled dates, locale and visual variants. A FullCalendar alternative for Vue 3.",
+          "h1": "Vue Calendar Component",
+          "intro": "mood-ui's Calendar is a free, open-source calendar component for Vue 3 and Nuxt — monthly date selection with minDate/maxDate, disabled dates, locale support and visual variants. A zero-cost alternative to FullCalendar."
+        },
         "controls": {
           "variant": "Variant",
           "color": "Color",
@@ -1613,6 +1625,12 @@
       "dayView": {
         "title": "DayView",
         "description": "Single-day view with an hourly grid. Ideal for detailed agendas, time blocks and operational planning.",
+        "seo": {
+          "metaTitle": "Vue Day View — Daily Calendar Schedule",
+          "metaDescription": "Free, open-source Vue day view component: single-day hourly grid for detailed agendas, time blocks and operational planning in Vue 3 and Nuxt.",
+          "h1": "Vue Day View Component",
+          "intro": "mood-ui's DayView is a free, open-source single-day calendar for Vue 3 and Nuxt — an hourly grid built for detailed agendas, time blocks and operational planning."
+        },
         "controls": {
           "format": "Format",
           "allDayRow": "All-day row",
@@ -1711,6 +1729,12 @@
       "monthView": {
         "title": "MonthView",
         "description": "Grid-style monthly view for displaying events per day. Supports week numbers, any first day of week and event drag-and-drop.",
+        "seo": {
+          "metaTitle": "Vue Month View — Event Calendar Grid",
+          "metaDescription": "Free, open-source Vue month view component: grid-style monthly event calendar with week numbers, configurable first day of week and event drag-and-drop for Vue 3 and Nuxt.",
+          "h1": "Vue Month View Component",
+          "intro": "mood-ui's MonthView is a free, open-source month view for Vue 3 and Nuxt — a grid-style monthly calendar showing events per day with week numbers, any first day of week and event drag-and-drop."
+        },
         "controls": {
           "weekStart": "Start",
           "sun": "Sun",
@@ -1768,6 +1792,12 @@
       "scheduler": {
         "title": "Scheduler",
         "description": "Agenda-style view with resources as columns (rooms, people, teams). Each resource shows its events on a shared hourly grid.",
+        "seo": {
+          "metaTitle": "Vue Scheduler Component — Resource Scheduling",
+          "metaDescription": "Free, open-source Vue 3 scheduler: resource columns, drag-and-drop events, business hours, 12/24h. A FullCalendar alternative with zero license cost.",
+          "h1": "Vue Scheduler Component",
+          "intro": "mood-ui's Scheduler is a free, open-source resource scheduler for Vue 3 and Nuxt — events laid out across resource columns on a shared hourly grid, cross-resource drag-and-drop and business hours. A zero-cost alternative to FullCalendar."
+        },
         "controls": {
           "format": "Format",
           "borders": "Borders",
@@ -1872,6 +1902,12 @@
       "table": {
         "title": "Table",
         "description": "Powerful table with sorting, pagination, selection, sticky header, expandable rows, virtualization, toolbar actions and tree support. Rows provide the data; columns describe how each field is rendered.",
+        "seo": {
+          "metaTitle": "Vue Data Table Component — Sort & Paginate",
+          "metaDescription": "Free, open-source Vue Data Table: sorting, pagination, row selection, sticky header, virtualization and tree rows. A zero-cost AG Grid alternative for Vue 3.",
+          "h1": "Vue Data Table Component",
+          "intro": "mood-ui's Table is a free, open-source data table for Vue 3 and Nuxt — sorting, pagination, row selection, sticky header, virtualization, toolbar actions and tree support. A zero-cost alternative to AG Grid."
+        },
         "controls": {
           "size": "Size",
           "density": "Density",
@@ -2088,6 +2124,12 @@
       "weekView": {
         "title": "WeekView",
         "description": "Weekly view with an hourly grid. Supports business hours, disabled ranges, drag & drop and event resizing.",
+        "seo": {
+          "metaTitle": "Vue Week View — Weekly Calendar Grid",
+          "metaDescription": "Free, open-source Vue week view component: weekly calendar with hourly grid, business hours, disabled ranges, drag & drop and event resizing for Vue 3 and Nuxt.",
+          "h1": "Vue Week View Component",
+          "intro": "mood-ui's WeekView is a free, open-source weekly calendar for Vue 3 and Nuxt — an hourly grid with business hours, disabled ranges, drag-and-drop and event resizing."
+        },
         "controls": {
           "format": "Format",
           "allDayRow": "All-day row",

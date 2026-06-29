@@ -569,6 +569,12 @@
         "category": "Forms",
         "title": "DateField",
         "description": "Input de fecha con popover de calendario. Localizable, con minDate / maxDate y formato configurable.",
+        "seo": {
+          "metaTitle": "Vue Date Picker — Campo de Fecha",
+          "metaDescription": "Vue date picker libre y open-source: campo de fecha con popover de calendario, formato localizable y límites minDate/maxDate. Un Nuxt date picker sin coste de licencia.",
+          "h1": "Componente Vue Date Picker",
+          "intro": "El DateField de mood-ui es un date picker libre y open-source para Vue 3 y Nuxt: un input de fecha con popover de calendario, formato de visualización localizable y límites minDate/maxDate."
+        },
         "controls": {
           "size": "Tamaño",
           "variant": "Variante",
@@ -722,6 +728,12 @@
         "category": "Forms",
         "title": "DateTimeField",
         "description": "Input combinado de fecha y hora con popover de calendario + selector de hora interno.",
+        "seo": {
+          "metaTitle": "Vue Datetime Picker — Campo de Fecha y Hora",
+          "metaDescription": "Vue datetime picker libre y open-source: campo combinado de fecha y hora con popover de calendario y selector de hora interno para Vue 3 y Nuxt. Sin coste de licencia.",
+          "h1": "Componente Vue Datetime Picker",
+          "intro": "El DateTimeField de mood-ui es un datetime picker libre y open-source para Vue 3 y Nuxt: un campo combinado de fecha y hora con popover de calendario y un selector de hora interno."
+        },
         "controls": {
           "size": "Tamaño",
           "format": "Formato",
