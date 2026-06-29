@@ -62,6 +62,9 @@ importers:
       typescript:
         specifier: ~6.0.2
         version: 6.0.3
+      vitest:
+        specifier: ^4.1.5
+        version: 4.1.6(@types/node@24.12.4)(@vitest/ui@4.1.6)(jsdom@29.1.1)(vite@8.0.12(@types/node@24.12.4)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.47.1)(tsx@4.21.0)(yaml@2.9.0))
       vue-tsc:
         specifier: ^3.2.7
         version: 3.2.8(typescript@6.0.3)
