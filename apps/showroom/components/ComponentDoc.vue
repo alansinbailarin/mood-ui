@@ -50,6 +50,11 @@ const router = useRouter();
 const localePath = useLocalePath();
 const route = useRoute();
 
+// Centralized on-page SEO. Returns the keyword H1/intro/links when this route
+// has a keyword-map entry; otherwise nulls and ComponentDoc falls back to the
+// plain title/description props (so non-mapped pages are unchanged).
+const pageSeo = usePageSeo(route.path);
+
 const COMPONENT_CATS = new Set<string>(COMPONENT_CATEGORY_IDS);
 const allEntries = navManifest
   .filter((c) => COMPONENT_CATS.has(c.id))
@@ -156,9 +161,35 @@ onMounted(() => {
   <article class="flex-1 min-w-0 flex flex-col gap-12 pb-12">
     <!-- Header -->
     <header class="flex flex-col gap-4">
+      <!-- Breadcrumbs (visible + BreadcrumbList schema registered in usePageSeo) -->
+      <nav
+        v-if="pageSeo.breadcrumbs.length"
+        aria-label="Breadcrumb"
+        class="text-sm text-muted-foreground"
+      >
+        <ol class="flex flex-wrap items-center gap-1">
+          <li
+            v-for="(b, i) in pageSeo.breadcrumbs"
+            :key="b.route"
+            class="flex items-center gap-1"
+          >
+            <NuxtLinkLocale
+              v-if="i < pageSeo.breadcrumbs.length - 1"
+              :to="b.route"
+              class="hover:text-foreground"
+              >{{ b.label }}</NuxtLinkLocale
+            >
+            <span v-else aria-current="page">{{ b.label }}</span>
+            <span v-if="i < pageSeo.breadcrumbs.length - 1" aria-hidden="true"
+              >/</span
+            >
+          </li>
+        </ol>
+      </nav>
       <Typography variant="overline" size="medium" color="muted">
         {{ category }}
       </Typography>
+      <!-- Single keyword H1 (falls back to the short title when no map entry) -->
       <Typography
         variant="display"
         size="medium"
@@ -166,10 +197,21 @@ onMounted(() => {
         weight="medium"
         class="tracking-tight leading-[1.05]"
       >
-        {{ title }}
+        {{ pageSeo.h1 ?? title }}
       </Typography>
       <Typography variant="body" size="medium" color="muted" weight="light">
         {{ description }}
+      </Typography>
+      <!-- SEO intro paragraph: keyword + free/open-source/Vue 3 framing -->
+      <Typography
+        v-if="pageSeo.intro"
+        variant="body"
+        size="medium"
+        color="muted"
+        weight="light"
+        class="max-w-2xl"
+      >
+        {{ pageSeo.intro }}
       </Typography>
       <button
         type="button"
@@ -436,6 +478,30 @@ onMounted(() => {
           </table>
         </div>
       </div>
+    </section>
+
+    <!-- Related components (internal linking + keyword anchors) -->
+    <section
+      v-if="pageSeo.related.length"
+      class="border-t border-border pt-6"
+    >
+      <Typography
+        variant="overline"
+        size="medium"
+        color="muted"
+        as="h2"
+        class="uppercase tracking-wide"
+        >{{ t("doc.relatedComponents") }}</Typography
+      >
+      <ul class="mt-3 flex flex-wrap gap-2">
+        <li v-for="r in pageSeo.related" :key="r.route">
+          <NuxtLinkLocale
+            :to="r.route"
+            class="rounded-lg border border-border px-3 py-1.5 text-sm hover:bg-muted/40 transition-colors"
+            >{{ r.label }}</NuxtLinkLocale
+          >
+        </li>
+      </ul>
     </section>
 
     <!-- ── Page footer: prev/next + npm + issue ─────────────────── -->

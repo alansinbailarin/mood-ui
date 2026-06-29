@@ -22,7 +22,11 @@ export const COMPONENT_SEO: Record<string, ComponentSeo> = {
     i18nKey: "pages.dataDisplay.table",
     schemaType: "SoftwareSourceCode",
     keywords: ["Vue Data Table", "Vue table component", "AG Grid alternative Vue"],
-    related: ["/data-display/table-pagination", "/forms/pagination", "/data-display/avatar"],
+    // NOTE: the original plan listed "/data-display/table-pagination" and
+    // "/forms/pagination" — neither page exists (the build crawler 404s on
+    // them). Pagination actually lives at /navigation/pagination; the other
+    // two are real data-display siblings.
+    related: ["/navigation/pagination", "/data-display/avatar", "/data-display/typography"],
   },
   "/calendar/scheduler": {
     route: "/calendar/scheduler",
