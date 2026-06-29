@@ -18,6 +18,11 @@ export default defineNuxtConfig({
       // page. Fail the build if the crawler finds a broken link so we
       // never regress silently.
       failOnError: true,
+      // Crawl from these seeds. "/es" seeds the Spanish tree; once the
+      // localized sidebar links (NuxtLinkLocale) are in place, crawling /es
+      // discovers every /es/* page the same way "/" discovers the EN ones.
+      crawlLinks: true,
+      routes: ["/", "/es"],
     },
   },
 
@@ -81,7 +86,14 @@ export default defineNuxtConfig({
     defaultLocale: "en",
     lazy: true,
     langDir: "locales/",
-    strategy: "no_prefix",
+    // English stays unprefixed at "/"; Spanish is served under "/es". This is
+    // what makes the (already complete) Spanish content separately indexable.
+    strategy: "prefix_except_default",
+    // Absolute base for hreflang / canonical alternates.
+    baseUrl: "https://mood-ui.com",
+    // No automatic browser-language redirect (SEO-safe, simplest on static host);
+    // users opt into Spanish via the existing switcher.
+    detectBrowserLanguage: false,
   },
 
   site: {

@@ -11,7 +11,6 @@ import {
 import { useDocsTheme } from "~/composables/useDocsTheme";
 import { tintedLightSurfaces, tintedDarkSurfaces } from "~/utils/tintedSurfaces";
 import { resolveHash } from "~/utils/hash-redirects";
-import { ogCategory } from "~/utils/ogCategory";
 
 // Pass the RAW mode (not the resolved theme) to this ModoProvider too.
 // ModoProvider's `watch(theme) → setColorMode` would otherwise overwrite
