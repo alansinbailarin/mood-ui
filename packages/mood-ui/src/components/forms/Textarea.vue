@@ -9,15 +9,16 @@
             <span v-if="required" aria-hidden="true" class="text-destructive ml-0.5">*</span> 
         </label> 
  
-        <div 
-            :class="[ 
-                'modo-field-wrapper flex items-start gap-2', 
-                wrapperVariantClasses, 
-                wrapperPaddingClasses, 
-                radiusClasses, 
-                fullWidth ? 'w-full' : '', 
-                isDisabled ? 'opacity-60 cursor-not-allowed' : '', 
-            ]" 
+        <div
+            :class="[
+                'modo-field-wrapper flex items-start gap-2',
+                wrapperVariantClasses,
+                wrapperPaddingClasses,
+                wrapperMinHeightClass,
+                radiusClasses,
+                fullWidth ? 'w-full' : '',
+                isDisabled ? 'opacity-60 cursor-not-allowed' : '',
+            ]"
         > 
             <textarea 
                 :id="fieldId" 
@@ -118,7 +119,7 @@ import Loader from '../feedback/Loader.vue';
 import Button from './Button.vue'; 
 import { XMarkIcon } from '@heroicons/vue/24/outline'; 
 import Typography from '../data-display/Typography.vue'; 
-import { useModoLocale, useResolvedSize } from '../../composables/useModoConfig'; 
+import { useModoLocale, useResolvedSize, useSizeTokens } from '../../composables/useModoConfig';
  
 const loc = useModoLocale(); 
  
@@ -147,8 +148,9 @@ const props = withDefaults(defineProps<Textarea>(), {
     resize: 'vertical', 
 }); 
  
-const resolvedSize = useResolvedSize(() => props.size); 
- 
+const resolvedSize = useResolvedSize(() => props.size);
+const sz = useSizeTokens(() => props.size);
+
 const textareaRef = ref<HTMLTextAreaElement | null>(null); 
  
 const { 
@@ -176,21 +178,19 @@ const { wrapperVariantClasses, radiusClasses } = useFieldClasses({
     halo: () => props.halo, 
 }); 
  
-const wrapperPaddingClasses = computed(() => { 
-    switch (resolvedSize.value) { 
-        case 'small': return 'px-2.5 py-1.5'; 
-        case 'large': return 'px-4 py-3'; 
-        default: return 'px-3 py-2'; 
-    } 
-}); 
- 
-const textareaTextClasses = computed(() => { 
-    switch (resolvedSize.value) { 
-        case 'small': return 'text-caption leading-relaxed'; 
-        case 'large': return 'text-body-lg leading-relaxed'; 
-        default: return 'text-body leading-relaxed'; 
-    } 
-}); 
+/** Horizontal padding from tokens; vertical padding stays size-stepped. */
+const wrapperPaddingClasses = computed(() => {
+    const pyByControl: Record<string, string> = {
+        'h-8': 'py-1', 'h-9': 'py-1.5', 'h-10': 'py-2', 'h-12': 'py-3',
+    };
+    const py = pyByControl[sz.value.control] ?? 'py-2';
+    return `${sz.value.padX} ${py}`;
+});
+
+/** Min-height mirrors the control scale (h-8/h-9/h-10/h-12 → min-h-8/9/10/12). */
+const wrapperMinHeightClass = computed(() => sz.value.control.replace('h-', 'min-h-'));
+
+const textareaTextClasses = computed(() => `${sz.value.text} leading-relaxed`); 
  
 const resizeClass = computed(() => { 
     if (props.autoresize) return 'resize-none'; 

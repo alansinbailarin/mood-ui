@@ -144,7 +144,7 @@
 <script setup lang="ts">
 import { computed, ref, watch, onBeforeUnmount } from 'vue';
 import type { ColorPicker } from '../../interfaces/forms/ColorPicker.interface';
-import { useResolvedSize } from '../../composables/useModoConfig';
+import { useResolvedSize, useSizeTokens } from '../../composables/useModoConfig';
 import { useFieldState, useFieldClasses } from '../../composables/useField';
 import { usePopover } from '../../composables/usePopover';
 import PopoverPanel from '../layout/PopoverPanel.vue';
@@ -173,6 +173,7 @@ const emit = defineEmits<{
 }>();
 
 const resolvedSize = useResolvedSize(() => props.size);
+const sz = useSizeTokens(() => props.size);
 
 // Use the exact same field state system as Select/Input
 const { radius, stateColor, hasError, isDisabled } = useFieldState(
@@ -367,40 +368,13 @@ function isValidHex(v: string): boolean {
 }
 
 // ── Size classes (same scale as Select) ─────────────────────────────────────
-const wrapperSizeClasses = computed(() => {
-    switch (resolvedSize.value) {
-        case 'small':  return 'h-8 px-2.5';
-        case 'large':  return 'h-12 px-4';
-        case 'medium':
-        default:       return 'h-10 px-3';
-    }
-});
+const wrapperSizeClasses = computed(() => `${sz.value.control} ${sz.value.padX}`);
 
-const inputTextClasses = computed(() => {
-    switch (resolvedSize.value) {
-        case 'small': return 'text-caption';
-        case 'large': return 'text-body-lg';
-        default:      return 'text-body';
-    }
-});
+const inputTextClasses = computed(() => sz.value.text);
 
-const swatchSizeClasses = computed(() => {
-    switch (resolvedSize.value) {
-        case 'small':  return 'w-4 h-4';
-        case 'large':  return 'w-6 h-6';
-        case 'medium':
-        default:       return 'w-5 h-5';
-    }
-});
+const swatchSizeClasses = computed(() => sz.value.box);
 
-const iconSizeClasses = computed(() => {
-    switch (resolvedSize.value) {
-        case 'small':  return 'w-3.5 h-3.5';
-        case 'large':  return 'w-5 h-5';
-        case 'medium':
-        default:       return 'w-4 h-4';
-    }
-});
+const iconSizeClasses = computed(() => sz.value.icon);
 
 defineExpose({ open: openPopover, close: closePopover, toggle: togglePopover });
 </script>

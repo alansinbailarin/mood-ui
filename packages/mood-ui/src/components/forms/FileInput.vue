@@ -206,7 +206,7 @@ import type {
     FileInputRejection, 
 } from '../../interfaces/forms/FileInput.interface'; 
 import { useFieldState, useFieldClasses } from '../../composables/useField'; 
-import { useModoLocale, useResolvedSize } from '../../composables/useModoConfig'; 
+import { useModoLocale, useResolvedSize, useSizeTokens } from '../../composables/useModoConfig';
 import { interpolate } from '../../config/ModoLocale'; 
 import { ArrowUpTrayIcon, XMarkIcon, PhotoIcon, DocumentIcon } from '@heroicons/vue/24/outline'; 
 import Button from './Button.vue'; 
@@ -233,8 +233,9 @@ const props = withDefaults(defineProps<FileInput>(), {
     autofocus: false, 
 }); 
  
-const resolvedSize = useResolvedSize(() => props.size); 
- 
+const resolvedSize = useResolvedSize(() => props.size);
+const sz = useSizeTokens(() => props.size);
+
 const emit = defineEmits<{ 
     'update:modelValue': [files: File[] | null]; 
     change: [files: File[] | null]; 
@@ -518,21 +519,9 @@ const browseLabel = computed(() =>
         : (files.value.length ? loc.value.fileInput.replace : loc.value.fileInput.browse), 
 ); 
  
-/* ---------- Size maps ---------- */ 
-const wrapperSizeClasses = computed(() => { 
-    switch (resolvedSize.value) { 
-        case 'small': return 'px-2.5 py-2'; 
-        case 'large': return 'px-4 py-3.5'; 
-        default: return 'px-3 py-2.5'; 
-    } 
-}); 
-const iconSizeClasses = computed(() => { 
-    switch (resolvedSize.value) { 
-        case 'small': return 'w-5 h-5'; 
-        case 'large': return 'w-7 h-7'; 
-        default: return 'w-6 h-6'; 
-    } 
-}); 
+/* ---------- Size maps ---------- */
+const wrapperSizeClasses = computed(() => `${sz.value.control} ${sz.value.padX}`);
+const iconSizeClasses = computed(() => sz.value.icon); 
  
 /* ---------- Area variant ---------- */ 
 const isAreaVariant = computed(() => props.dropzoneVariant === 'area'); 

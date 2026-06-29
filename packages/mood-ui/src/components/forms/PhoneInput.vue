@@ -247,6 +247,7 @@ import {
 import { usePopover } from "../../composables/usePopover";
 import {
   useResolvedSize,
+  useSizeTokens,
   useModoLocale,
 } from "../../composables/useModoConfig";
 import PopoverPanel from "../layout/PopoverPanel.vue";
@@ -284,6 +285,7 @@ const props = withDefaults(defineProps<PhoneInput>(), {
 });
 
 const resolvedSize = useResolvedSize(() => props.size);
+const sz = useSizeTokens(() => props.size);
 
 // ── Refs ──────────────────────────────────────────────────────────────────────
 const inputRef = ref<HTMLInputElement | null>(null);
@@ -464,14 +466,9 @@ const affordanceActionClass = computed(
 
 // ── Size classes ──────────────────────────────────────────────────────────────
 const wrapperHeightClass = computed(() => {
-  switch (resolvedSize.value) {
-    case "small":
-      return "h-8 pr-2.5";
-    case "large":
-      return "h-12 pr-4";
-    default:
-      return "h-10 pr-3";
-  }
+  // sz.value.padX is e.g. "px-2.5" — convert to pr-* for the wrapper right edge
+  const pr = sz.value.padX.replace("px-", "pr-");
+  return `${sz.value.control} ${pr}`;
 });
 
 const triggerPaddingClass = computed(() => {
@@ -518,16 +515,7 @@ const chevronSizeClass = computed(() => {
   }
 });
 
-const inputTextClass = computed(() => {
-  switch (resolvedSize.value) {
-    case "small":
-      return "text-caption";
-    case "large":
-      return "text-body-lg";
-    default:
-      return "text-body";
-  }
-});
+const inputTextClass = computed(() => sz.value.text);
 
 const inputPaddingClass = computed(() => {
   // pr-3 leaves a comfortable gap on the right edge as well; the

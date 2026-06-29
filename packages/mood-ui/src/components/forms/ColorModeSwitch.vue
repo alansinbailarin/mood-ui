@@ -6,6 +6,7 @@ import {
   ComputerDesktopIcon,
 } from "@heroicons/vue/24/outline";
 import type { ModoTheme } from "../../config/ModoConfig";
+import { useSizeTokens } from "../../composables/useModoConfig";
 
 const props = withDefaults(
   defineProps<{
@@ -157,27 +158,31 @@ watch(
 );
 watch(isExpanded, () => nextTick(() => measure(false)));
 
+const sizeTokens = useSizeTokens(() => props.size as any);
+
+// btn height/width and icon derive from the central size tokens so this
+// component shares the same control scale as all other form controls.
 const sz = {
   small: {
     track: "p-0.5",
     gap: "gap-0.5",
-    btn: "w-7 h-7",
-    icon: "w-3.5 h-3.5",
-    lbl: "text-xs px-2 h-7",
+    btn: "w-9 h-9",
+    icon: "w-4 h-4",
+    lbl: "text-xs px-2 h-9",
   },
   medium: {
     track: "p-0.5",
     gap: "gap-0.5",
-    btn: "w-8 h-8",
-    icon: "w-4 h-4",
-    lbl: "text-sm px-2.5 h-8",
+    btn: "w-10 h-10",
+    icon: "w-[18px] h-[18px]",
+    lbl: "text-sm px-2.5 h-10",
   },
   large: {
     track: "p-1",
     gap: "gap-1",
-    btn: "w-10 h-10",
+    btn: "w-12 h-12",
     icon: "w-5 h-5",
-    lbl: "text-sm px-3 h-10",
+    lbl: "text-sm px-3 h-12",
   },
 };
 </script>
