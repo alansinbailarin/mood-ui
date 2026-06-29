@@ -55,7 +55,7 @@ const sidebarSections = computed(() =>
             </div>
             <ul class="flex flex-col gap-0.5">
               <li v-for="item in section.entries" :key="item.id">
-                <NuxtLink
+                <NuxtLinkLocale
                   :to="item.route"
                   class="docs-sidebar-link group relative inline-flex items-center gap-2 py-1 text-sm transition-colors"
                   :class="
@@ -79,7 +79,7 @@ const sidebarSections = computed(() =>
                   >
                     {{ item.badge }}
                   </span>
-                </NuxtLink>
+                </NuxtLinkLocale>
               </li>
             </ul>
           </div>

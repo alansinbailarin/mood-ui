@@ -37,7 +37,7 @@ function onLocale(v: unknown) {
 
 <template>
   <div class="max-w-9xl mx-auto flex items-center gap-2 px-3 sm:px-6 h-12 lg:h-16 lg:gap-3">
-    <NuxtLink to="/" class="flex items-center gap-2 group shrink-0" aria-label="Home">
+    <NuxtLinkLocale to="/" class="flex items-center gap-2 group shrink-0" aria-label="Home">
       <!-- Two logos toggled via Tailwind's dark variant. `logo_dark` is
            the dark/black artwork shown on light backgrounds; `logo_light`
            is the inverted version shown when .dark is active. Using two
@@ -56,7 +56,7 @@ function onLocale(v: unknown) {
       <span class="hidden sm:inline text-lg tracking-tight">
         <span class="font-medium text-foreground">Mood</span><span class="font-bold ml-1 uppercase text-primary">UI</span>
       </span>
-    </NuxtLink>
+    </NuxtLinkLocale>
 
     <!-- Center pill tabs (Docs / Components / Templates / Theme Studio) -->
     <div class="flex-1 hidden lg:flex justify-center">

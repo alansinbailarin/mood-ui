@@ -139,7 +139,7 @@ const mobileSections = computed(() =>
           </div>
           <ul class="flex flex-col gap-0.5">
             <li v-for="item in section.entries" :key="item.id">
-              <NuxtLink
+              <NuxtLinkLocale
                 :to="item.route"
                 class="inline-flex items-center gap-2 py-1.5 text-sm transition-colors"
                 :class="
@@ -156,7 +156,7 @@ const mobileSections = computed(() =>
                 >
                   {{ item.badge }}
                 </span>
-              </NuxtLink>
+              </NuxtLinkLocale>
             </li>
           </ul>
         </div>

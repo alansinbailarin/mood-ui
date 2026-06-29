@@ -145,7 +145,7 @@ watch([activeTabKey, () => tabs.value.length], () => {
       class="absolute pointer-events-none rounded-full bg-card shadow-sm border border-border/60"
       :style="indicatorStyle"
     />
-    <NuxtLink
+    <NuxtLinkLocale
       v-for="tab in tabs"
       :key="tab.key"
       :ref="(el: unknown) => setTabRef(tab.key, el)"
@@ -160,6 +160,6 @@ watch([activeTabKey, () => tabs.value.length], () => {
       "
     >
       {{ tab.label }}
-    </NuxtLink>
+    </NuxtLinkLocale>
   </div>
 </template>
