@@ -47,6 +47,12 @@ npm install gsap@^3             # animations — Toast, Drawer, Modal, Banner, C
 > imported uses it — install the named package. You only need the peers for the
 > components you actually use.
 
+> **v0.10.0 — consistent sizes.** Every component now shares one size scale, so a
+> medium Button, Input and Avatar are the same height (control height
+> 32/36/40/48 px for `xsmall`/`small`/`medium`/`large`). **Migration:** the
+> previous `small` is now **`xsmall`**, and **`small`** is a new in-between size.
+> If you relied on the old `small` height, switch those usages to `xsmall`.
+
 ## Setup
 
 Import the stylesheet once at your app entry:
