@@ -106,9 +106,9 @@
 </template> 
  
 <script setup lang="ts"> 
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'; 
-import type { Tabs as TabsProps, TabItem, TabsEmits } from '../../interfaces/navigation/Tabs.interface'; 
-import { useResolvedColor, useResolvedRadius, useResolvedSize } from '../../composables/useModoConfig'; 
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import type { Tabs as TabsProps, TabItem, TabsEmits } from '../../interfaces/navigation/Tabs.interface';
+import { useResolvedColor, useResolvedRadius, useResolvedSize, useSizeTokens } from '../../composables/useModoConfig'; 
  
 const props = withDefaults(defineProps<TabsProps>(), { 
     variant: 'line', 
@@ -120,9 +120,10 @@ const props = withDefaults(defineProps<TabsProps>(), {
  
 const emit = defineEmits<TabsEmits>(); 
  
-const resolvedColor = useResolvedColor(() => props.color); 
-const resolvedRadius = useResolvedRadius(() => props.radius); 
-const resolvedSize = useResolvedSize(() => props.size); 
+const resolvedColor = useResolvedColor(() => props.color);
+const resolvedRadius = useResolvedRadius(() => props.radius);
+const resolvedSize = useResolvedSize(() => props.size);
+const sz = useSizeTokens(() => props.size); 
  
 // Stable id for ARIA wiring. 
 let _id = 0; 
@@ -342,32 +343,10 @@ function resolveItemTag(item: TabItem) {
     return 'button'; 
 } 
  
-// --- Class maps --------------------------------------------------------- 
-const sizeClasses = computed(() => { 
-    if (isSegmented.value) { 
-        switch (resolvedSize.value) { 
-            case 'small': return 'h-7 px-3 text-caption'; 
-            case 'large': return 'h-10 px-4 text-body-lg'; 
-            case 'medium': 
-            default: return 'h-8 px-3.5 text-body'; 
-        } 
-    } 
-    switch (resolvedSize.value) { 
-        case 'small': return 'h-8 px-3 text-caption'; 
-        case 'large': return 'h-12 px-5 text-body-lg'; 
-        case 'medium': 
-        default: return 'h-10 px-4 text-body'; 
-    } 
-}); 
- 
-const iconSizeClass = computed(() => { 
-    switch (resolvedSize.value) { 
-        case 'small': return 'w-3.5 h-3.5'; 
-        case 'large': return 'w-5 h-5'; 
-        case 'medium': 
-        default: return 'w-4 h-4'; 
-    } 
-}); 
+// --- Class maps ---------------------------------------------------------
+const sizeClasses = computed(() => `${sz.value.control} ${sz.value.padX} ${sz.value.text}`);
+
+const iconSizeClass = computed(() => sz.value.icon); 
  
 const itemRadiusClasses = computed(() => { 
     if (isLine.value) return 'rounded-none'; 

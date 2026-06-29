@@ -25,13 +25,13 @@
             :src="src" 
             :alt="accessibleName" 
             @error="imgError = true" 
-            :class="['object-cover', sizeClasses, shapeClasses, bordered ? borderClasses : '']" 
+            :class="['object-cover', squareSize, shapeClasses, bordered ? borderClasses : '']" 
         /> 
  
         <span 
             v-else-if="initials" 
             aria-hidden="true" 
-            :class="['inline-flex items-center justify-center font-medium uppercase', sizeClasses, shapeClasses, initialsBgClasses, bordered ? borderClasses : '', initialsFontClasses]" 
+            :class="['inline-flex items-center justify-center font-medium uppercase', squareSize, shapeClasses, initialsBgClasses, bordered ? borderClasses : '', initialsFontClasses]" 
         > 
             {{ initials }} 
         </span> 
@@ -39,7 +39,7 @@
         <span
             v-else
             aria-hidden="true"
-            :class="['inline-flex items-center justify-center', iconFallbackColorClasses, sizeClasses, shapeClasses, bordered ? borderClasses : '']"
+            :class="['inline-flex items-center justify-center', iconFallbackColorClasses, squareSize, shapeClasses, bordered ? borderClasses : '']"
         > 
             <svg :class="iconFallbackClasses" fill="currentColor" viewBox="0 0 24 24"> 
                 <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v1.2c0 .66.54 1.2 1.2 1.2h16.8c.66 0 1.2-.54 1.2-1.2v-1.2c0-3.2-6.4-4.8-9.6-4.8z" /> 
@@ -56,9 +56,9 @@
 </template> 
  
 <script setup lang="ts"> 
-import { ref, computed, inject } from 'vue'; 
-import type { Avatar } from '../../../interfaces/data-display/avatar/Avatar.interface'; 
-import { useResolvedColor, useResolvedRadius } from '../../../composables/useModoConfig'; 
+import { ref, computed, inject } from 'vue';
+import type { Avatar } from '../../../interfaces/data-display/avatar/Avatar.interface';
+import { useResolvedColor, useResolvedRadius, useSizeTokens } from '../../../composables/useModoConfig'; 
 import Skeleton from '../../feedback/Skeleton.vue'; 
  
 const groupProps = inject<{ 
@@ -81,24 +81,23 @@ const imgError = ref(false);
 // Used for <img alt> AND as the ARIA label when we render initials / fallback. 
 const accessibleName = computed(() => props.ariaLabel || props.alt || props.initials || 'Avatar'); 
  
-const size = computed(() => (groupProps.size?.value as Avatar['size']) ?? props.size); 
-const bordered = computed(() => groupProps.bordered?.value ?? props.bordered); 
-const color = useResolvedColor(() => props.color); 
-const resolvedRadius = useResolvedRadius(() => (groupProps.radius?.value as Avatar['radius']) ?? props.radius); 
+const size = computed(() => (groupProps.size?.value as Avatar['size']) ?? props.size);
+const bordered = computed(() => groupProps.bordered?.value ?? props.bordered);
+const color = useResolvedColor(() => props.color);
+const resolvedRadius = useResolvedRadius(() => (groupProps.radius?.value as Avatar['radius']) ?? props.radius);
+const sz = useSizeTokens(() => size.value as Avatar['size']); 
  
 /* ---------------- Skeleton placeholder ---------------- 
  * Mirrors the avatar's pixel footprint. We compute an explicit CSS length 
  * per Avatar `size` (since Skeleton only ships 3 sizes natively) and pick a 
  * radius override that matches the avatar's visual shape. 
  */ 
-const skeletonDimension = computed(() => { 
-    switch (size.value) { 
-        case 'xs': return '1.5rem'; 
-        case 'small': return '2rem'; 
-        case 'large': return '3.5rem'; 
-        case 'xl': return '5rem'; 
-        default: return '2.5rem'; 
-    } 
+const skeletonDimension = computed(() => {
+    if (size.value === 'xl') return '5rem';
+    // Mirror the token-driven square size: xsmall=2rem, small=2.25rem, medium=2.5rem, large=3rem.
+    const h = sz.value.control; // e.g. "h-8", "h-9", "h-10", "h-12"
+    const n = parseFloat(h.replace('h-', ''));
+    return `${n * 0.25}rem`;
 }); 
 // Skeleton's own `size` prop is used only as a hint (e.g. track thickness) 
 // — for avatar the explicit width/height wins. Map to the nearest bucket. 
@@ -111,14 +110,10 @@ const skeletonBaseSize = computed<'small' | 'medium' | 'large'>(() => {
 // radius so the skeleton matches the real avatar's corner shape. 
 const skeletonRadiusOverride = computed<Avatar['radius'] | undefined>(() => resolvedRadius.value); 
  
-const sizeClasses = computed(() => { 
-    switch (size.value) { 
-        case 'xs': return 'w-6 h-6'; 
-        case 'small': return 'w-8 h-8'; 
-        case 'large': return 'w-14 h-14'; 
-        case 'xl': return 'w-20 h-20'; 
-        default: return 'w-10 h-10'; 
-    } 
+const squareSize = computed(() => {
+    // xl is an Avatar-only extra size not in the standard token scale.
+    if (size.value === 'xl') return 'w-20 h-20';
+    return `${sz.value.control} ${sz.value.control.replace('h-', 'w-')}`;
 }); 
  
 const shapeClasses = computed(() => { 

@@ -54,7 +54,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import type { Segmented, SegmentedItem } from '../../interfaces/forms/Segmented.interface';
-import { useResolvedColor, useResolvedRadius, useResolvedSize } from '../../composables/useModoConfig';
+import { useResolvedColor, useResolvedRadius, useResolvedSize, useSizeTokens } from '../../composables/useModoConfig';
 
 const props = withDefaults(defineProps<Segmented>(), {
     color: 'primary',
@@ -70,6 +70,7 @@ const emit = defineEmits<{
 const resolvedSize = useResolvedSize(() => props.size);
 const resolvedRadius = useResolvedRadius(() => props.radius);
 const resolvedColor = useResolvedColor(() => props.color);
+const sz = useSizeTokens(() => props.size);
 
 // ── DOM refs ──────────────────────────────────────────────────────────────
 const trackEl = ref<HTMLElement | null>(null);
@@ -184,23 +185,9 @@ function moveFocus(current: SegmentedItem, dir: 1 | -1) {
 }
 
 // ── Class maps ────────────────────────────────────────────────────────────
-const sizeClasses = computed(() => {
-    switch (resolvedSize.value) {
-        case 'small':  return 'h-7 px-2.5 text-xs';
-        case 'large':  return 'h-10 px-4 text-base';
-        case 'medium':
-        default:       return 'h-8 px-3 text-sm';
-    }
-});
+const sizeClasses = computed(() => `${sz.value.control} ${sz.value.padX} ${sz.value.text}`);
 
-const iconSizeClasses = computed(() => {
-    switch (resolvedSize.value) {
-        case 'small':  return 'w-3.5 h-3.5';
-        case 'large':  return 'w-5 h-5';
-        case 'medium':
-        default:       return 'w-4 h-4';
-    }
-});
+const iconSizeClasses = computed(() => sz.value.icon);
 
 const radiusClasses = computed(() => {
     switch (resolvedRadius.value) {
