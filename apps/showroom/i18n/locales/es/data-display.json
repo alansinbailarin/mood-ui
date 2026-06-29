@@ -1187,6 +1187,12 @@
       "accordion": {
         "title": "Accordion",
         "description": "Paneles expandibles para mostrar contenido jerárquico de forma compacta. Ideal para FAQs, configuraciones y filtros.",
+        "seo": {
+          "metaTitle": "Vue Accordion — Paneles Colapsables",
+          "metaDescription": "Vue Accordion gratuito y open-source para Vue 3 y Nuxt: paneles expandibles para mostrar contenido jerárquico de forma compacta, ideal para FAQs, settings y filtros.",
+          "h1": "Vue Accordion Component",
+          "intro": "El Accordion de mood-ui es un componente Vue Accordion gratuito y de código abierto para Vue 3 y Nuxt — paneles colapsables expandibles para mostrar contenido jerárquico de forma compacta, ideal para FAQs, configuraciones y filtros."
+        },
         "controls": {
           "variant": "Variante",
           "size": "Tamaño",
@@ -1294,6 +1300,12 @@
       "avatar": {
         "title": "Avatar",
         "description": "Avatar de usuario con imagen, iniciales fallback, indicador de estado y múltiples tamaños y formas.",
+        "seo": {
+          "metaTitle": "Vue Avatar Component — Avatar de Usuario",
+          "metaDescription": "Vue Avatar gratuito y open-source para Vue 3 y Nuxt: avatar de usuario con imagen, iniciales fallback, indicador de estado y múltiples tamaños y formas. Sin coste.",
+          "h1": "Vue Avatar Component",
+          "intro": "El Avatar de mood-ui es un componente Vue Avatar gratuito y de código abierto para Vue 3 y Nuxt — un avatar de usuario con imagen, iniciales fallback, indicador de estado y múltiples tamaños y formas."
+        },
         "controls": {
           "mode": "Modo",
           "size": "Tamaño",
@@ -1340,6 +1352,12 @@
       "avatarGroup": {
         "title": "AvatarGroup",
         "description": "Apila avatares solapados mostrando hasta N visibles y un contador con el resto. Ideal para listas de colaboradores, asignados o miembros.",
+        "seo": {
+          "metaTitle": "Vue Avatar Group — Avatares Apilados",
+          "metaDescription": "Vue Avatar Group gratuito y open-source para Vue 3 y Nuxt: apila avatares solapados mostrando hasta N visibles y un contador, ideal para listas de colaboradores y miembros.",
+          "h1": "Vue Avatar Group Component",
+          "intro": "El AvatarGroup de mood-ui es un avatar group Vue 3 gratuito y de código abierto — apila avatares solapados mostrando hasta N visibles y un contador con el resto, ideal para listas de colaboradores, asignados o miembros."
+        },
         "controls": {
           "size": "Tamaño",
           "max": "Máximo",
@@ -1433,6 +1451,12 @@
       "card": {
         "title": "Card",
         "description": "Contenedor estructural con tres variantes (elevated, outlined, filled), control de padding, radio y estado hover. Bloque base para métricas, listas, formularios y secciones.",
+        "seo": {
+          "metaTitle": "Vue Card Component — Tarjeta de Contenido",
+          "metaDescription": "Vue Card gratuito y open-source para Vue 3 y Nuxt: contenedor estructural con variantes elevated, outlined y filled, control de padding, radio de borde y estado hover.",
+          "h1": "Vue Card Component",
+          "intro": "El Card de mood-ui es un componente Vue Card gratuito y de código abierto para Vue 3 y Nuxt — un contenedor estructural con tres variantes (elevated, outlined, filled), control de padding, radio y estado hover, el bloque base para métricas, listas, formularios y secciones."
+        },
         "controls": {
           "variant": "Variante",
           "padding": "Padding",
@@ -1485,6 +1509,12 @@
       "code": {
         "title": "Code",
         "description": "Fragmentos de código inline para resaltar valores, props o errores en docs y mensajes.",
+        "seo": {
+          "metaTitle": "Vue Code — Fragmento de Código Inline",
+          "metaDescription": "Vue Code gratuito y open-source para Vue 3 y Nuxt: fragmentos de código inline para resaltar valores, props o errores en docs y mensajes. Sin coste de licencia.",
+          "h1": "Vue Code Component",
+          "intro": "El Code de mood-ui es un componente Vue Code inline gratuito y de código abierto para Vue 3 y Nuxt — para resaltar valores, props o errores inline en docs y mensajes."
+        },
         "controls": {
           "variant": "Variante",
           "color": "Color",
@@ -1689,6 +1719,12 @@
       "kbd": {
         "title": "Kbd",
         "description": "Representación visual de teclas o atajos de teclado. Útil en docs, tooltips y command palettes.",
+        "seo": {
+          "metaTitle": "Vue Kbd — Componente de Tecla",
+          "metaDescription": "Vue Kbd gratuito y open-source para Vue 3 y Nuxt: representación visual de teclas o atajos de teclado, útil en docs, tooltips y command palettes. Sin coste de licencia.",
+          "h1": "Vue Kbd Component",
+          "intro": "El Kbd de mood-ui es un componente de tecla Vue 3 gratuito y de código abierto — una representación visual de teclas o atajos de teclado, útil en docs, tooltips y command palettes."
+        },
         "controls": {
           "variant": "Variante",
           "size": "Tamaño",
@@ -1858,6 +1894,12 @@
       "stat": {
         "title": "Stat",
         "description": "Tarjeta KPI compacta para mostrar métricas con tendencia, icono y color semántico. Ideal para dashboards y resumenes.",
+        "seo": {
+          "metaTitle": "Vue Stat — Tarjeta KPI",
+          "metaDescription": "Vue Stat gratuito y open-source para Vue 3 y Nuxt: tarjeta KPI compacta para métricas con tendencia, icono y color semántico, ideal para dashboards y resúmenes. Sin coste.",
+          "h1": "Vue Stat Component",
+          "intro": "El Stat de mood-ui es una tarjeta KPI Vue 3 gratuita y de código abierto — una tarjeta de métricas compacta con tendencia, icono y color semántico, ideal para dashboards y resúmenes."
+        },
         "controls": {
           "variant": "Variante",
           "color": "Color",
@@ -2030,6 +2072,12 @@
       "timeline": {
         "title": "Timeline",
         "description": "Lista vertical de eventos cronológicos con marcadores dot, icon u outline. Cada item soporta título, descripción, timestamp y color propio.",
+        "seo": {
+          "metaTitle": "Vue Timeline Component — Feed de Actividad",
+          "metaDescription": "Vue Timeline gratuito y open-source para Vue 3 y Nuxt: lista vertical de eventos cronológicos con marcadores dot, icon u outline, cada uno con título, descripción y timestamp.",
+          "h1": "Vue Timeline Component",
+          "intro": "El Timeline de mood-ui es un componente Vue Timeline gratuito y de código abierto para Vue 3 y Nuxt — una lista vertical de eventos cronológicos con marcadores dot, icon u outline, cada item con título, descripción, timestamp y color propio."
+        },
         "controls": {
           "variant": "Variante",
           "size": "Tamaño",
@@ -2072,6 +2120,12 @@
       "typography": {
         "title": "Typography",
         "description": "Sistema tipográfico con variantes semánticas (display, heading, title, body, caption…), tamaños y pesos. La prop as permite mapear al tag HTML correcto para mantener jerarquía accesible.",
+        "seo": {
+          "metaTitle": "Vue Typography — Sistema de Texto",
+          "metaDescription": "Vue Typography gratuito y open-source para Vue 3 y Nuxt: sistema tipográfico con variantes semánticas, tamaños y pesos, más una prop as para mapear al tag HTML correcto.",
+          "h1": "Vue Typography Component",
+          "intro": "El Typography de mood-ui es un componente Vue Typography gratuito y de código abierto para Vue 3 y Nuxt — un sistema tipográfico con variantes semánticas (display, heading, title, body, caption), tamaños y pesos, más una prop as para mapear al tag HTML correcto y mantener una jerarquía accesible."
+        },
         "controls": {
           "variant": "Variante",
           "size": "Tamaño",

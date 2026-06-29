@@ -26,12 +26,6 @@ import {
 
 const { t } = useI18n();
 
-useSeoMeta({
-  title: () => t("pages.navigation.switcher.title"),
-  description: () => t("pages.navigation.switcher.description"),
-  ogTitle: () => `${t("pages.navigation.switcher.title")} · mood-ui`,
-  ogDescription: () => t("pages.navigation.switcher.description"),
-});
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 const branches = computed<SwitcherItem[]>(() => [

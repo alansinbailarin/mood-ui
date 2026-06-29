@@ -20,12 +20,6 @@ import type { PropDoc, SlotDoc } from "~/types/component-doc";
 const { t } = useI18n();
 
 
-useSeoMeta({
-  title: () => t("pages.layout.canvas.title"),
-  description: () => t("pages.layout.canvas.description"),
-  ogTitle: () => `${t("pages.layout.canvas.title")} · mood-ui`,
-  ogDescription: () => t("pages.layout.canvas.description"),
-});
 // ── A11y data ─────────────────────────────────────────────────────────────────
 const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
   { keys: ["Tab"], action: t("pages.layout.canvas.a11y.kbTab") },

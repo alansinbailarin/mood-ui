@@ -19,12 +19,6 @@ import TbPills from "~/components/toolbar/TbPills.vue";
 const { t } = useI18n();
 
 
-useSeoMeta({
-  title: () => t("pages.feedback.toast.title"),
-  description: () => t("pages.feedback.toast.description"),
-  ogTitle: () => `${t("pages.feedback.toast.title")} · mood-ui`,
-  ogDescription: () => t("pages.feedback.toast.description"),
-});
 // ── A11y data ─────────────────────────────────────────────────────────────────
 const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
   { keys: ["Tab"], action: t("pages.feedback.toast.a11y.kbTab") },

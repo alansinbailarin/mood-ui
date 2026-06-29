@@ -5,6 +5,12 @@
         "title": "AppShell",
         "category": "Layout",
         "description": "Frame de aplicación: topbar + sidebar + contenido principal con drawer móvil automático. Soporta variantes standard, rail (icon-only) y dual (rail + panel).",
+        "seo": {
+          "metaTitle": "Vue App Shell — Layout de Dashboard",
+          "metaDescription": "Vue App Shell gratuito y open-source para Vue 3 y Nuxt: frame de topbar, sidebar y contenido principal con drawer móvil automático y variantes standard, rail y dual.",
+          "h1": "Vue App Shell Component",
+          "intro": "El AppShell de mood-ui es un layout de dashboard Vue 3 gratuito y de código abierto — un frame de topbar, sidebar y contenido principal con drawer móvil automático y variantes standard, rail (icon-only) y dual (rail + panel)."
+        },
         "menu": {
           "home": "Inicio",
           "inbox": "Inbox",
@@ -85,6 +91,12 @@
         "title": "Canvas",
         "category": "Layout",
         "description": "Superficie con patrón decorativo (puntos, grid o líneas). Útil para áreas de trabajo, drop zones o hero sections que insinúan un workspace.",
+        "seo": {
+          "metaTitle": "Vue Canvas — Fondo con Patrón",
+          "metaDescription": "Vue Canvas gratuito y open-source para Vue 3 y Nuxt: superficie con patrón decorativo de puntos, grid o líneas, útil para áreas de trabajo, drop zones y hero sections.",
+          "h1": "Vue Canvas Component",
+          "intro": "El Canvas de mood-ui es una superficie de fondo con patrón Vue 3 gratuita y de código abierto — un patrón decorativo de puntos, grid o líneas, útil para áreas de trabajo, drop zones o hero sections que insinúan un workspace."
+        },
         "examples": {
           "patterns": {
             "title": "Patrones",
@@ -126,6 +138,12 @@
         "title": "Container",
         "category": "Layout",
         "description": "Wrapper centrado con ancho máximo y padding semántico para limitar el ancho del contenido en cualquier breakpoint.",
+        "seo": {
+          "metaTitle": "Vue Container — Wrapper de Ancho",
+          "metaDescription": "Vue Container gratuito y open-source para Vue 3 y Nuxt: wrapper centrado con ancho máximo y padding semántico para limitar el ancho del contenido en cualquier breakpoint.",
+          "h1": "Vue Container Component",
+          "intro": "El Container de mood-ui es un container de layout Vue 3 gratuito y de código abierto — un wrapper centrado con ancho máximo y padding semántico para limitar el ancho del contenido en cualquier breakpoint."
+        },
         "overviewSample": "Contenido limitado al ancho máximo",
         "examples": {
           "sizes": {
@@ -173,6 +191,12 @@
         "title": "Divider",
         "category": "Layout",
         "description": "Línea separadora horizontal o vertical, opcionalmente con label o icono central.",
+        "seo": {
+          "metaTitle": "Vue Divider — Línea Separadora",
+          "metaDescription": "Vue Divider gratuito y open-source para Vue 3 y Nuxt: línea separadora horizontal o vertical, opcionalmente con label o icono central. Sin coste de licencia.",
+          "h1": "Vue Divider Component",
+          "intro": "El Divider de mood-ui es un componente Vue Divider gratuito y de código abierto para Vue 3 y Nuxt — una línea separadora horizontal o vertical, opcionalmente con label o icono central."
+        },
         "examples": {
           "orientations": {
             "title": "Orientaciones",
@@ -224,6 +248,12 @@
         "title": "HStack",
         "category": "Layout",
         "description": "Atajo de Stack con dirección horizontal. Útil para alinear ítems en fila con spacing y align consistentes.",
+        "seo": {
+          "metaTitle": "Vue HStack — Fila Flex Horizontal",
+          "metaDescription": "Vue HStack gratuito y open-source para Vue 3 y Nuxt: atajo de Stack con dirección horizontal para alinear ítems en fila con spacing y alineación consistentes.",
+          "h1": "Vue HStack Component",
+          "intro": "El HStack de mood-ui es un stack horizontal Vue 3 gratuito y de código abierto — un atajo de Stack con dirección horizontal para alinear ítems en fila con spacing y alineación consistentes."
+        },
         "examples": {
           "basic": {
             "title": "Básico",
@@ -270,6 +300,12 @@
         "title": "PageHeader",
         "category": "Layout",
         "description": "Cabecera de página con título, subtítulo, botón back opcional, breadcrumbs, tabs y zona de acciones.",
+        "seo": {
+          "metaTitle": "Vue Page Header — Barra de Título",
+          "metaDescription": "Vue Page Header gratuito y open-source para Vue 3 y Nuxt: cabecera de página con título, subtítulo, botón back opcional, breadcrumbs, tabs y zona de acciones.",
+          "h1": "Vue Page Header Component",
+          "intro": "El PageHeader de mood-ui es una cabecera de página Vue 3 gratuita y de código abierto — título, subtítulo, botón back opcional, breadcrumbs, tabs y zona de acciones en un solo componente."
+        },
         "examples": {
           "basic": {
             "title": "Básico",
@@ -343,6 +379,12 @@
         "title": "PopoverPanel",
         "category": "Layout",
         "description": "Primitiva interna usada por componentes flotantes (Select, MultiSelect, DropdownMenu, Tooltip, DateField, Combobox…). Renderiza un panel teleportado al body con tema y palette del provider preservados.",
+        "seo": {
+          "metaTitle": "Vue Popover Panel — Panel Flotante",
+          "metaDescription": "Vue Popover Panel gratuito y open-source para Vue 3 y Nuxt: primitiva de panel flotante detrás de Select, DropdownMenu y Tooltip, teleportada al body con el tema preservado.",
+          "h1": "Vue Popover Panel Component",
+          "intro": "El PopoverPanel de mood-ui es un panel flotante Vue 3 gratuito y de código abierto — la primitiva interna usada por Select, MultiSelect, DropdownMenu, Tooltip y más, teleportada al body preservando el tema y la palette del provider."
+        },
         "examples": {
           "tooltip": {
             "title": "Tooltip",
@@ -402,6 +444,12 @@
         "title": "Sidebar",
         "category": "Layout",
         "description": "Navegación lateral con secciones, items, iconos y badges. Soporta modo colapsado (solo iconos), items anidados y diferentes estilos de activo.",
+        "seo": {
+          "metaTitle": "Vue Sidebar — Navegación Lateral",
+          "metaDescription": "Vue Sidebar gratuito y open-source para Vue 3 y Nuxt: navegación lateral con secciones, items, iconos y badges, modo colapsado solo iconos e items anidados. Sin coste.",
+          "h1": "Vue Sidebar Component",
+          "intro": "El Sidebar de mood-ui es una navegación lateral Vue 3 gratuita y de código abierto — secciones, items, iconos y badges con modo colapsado (solo iconos), items anidados y diferentes estilos de activo."
+        },
         "menu": {
           "home": "Inicio",
           "inbox": "Inbox",
@@ -476,6 +524,12 @@
         "title": "Stack",
         "category": "Layout",
         "description": "Primitiva flex genérica para apilar hijos en fila o columna con spacing, alineación y wrap consistentes. HStack y VStack son atajos.",
+        "seo": {
+          "metaTitle": "Vue Stack — Primitiva Flex de Layout",
+          "metaDescription": "Vue Stack gratuito y open-source para Vue 3 y Nuxt: primitiva flex genérica para apilar hijos en fila o columna con spacing, alineación y wrap consistentes.",
+          "h1": "Vue Stack Component",
+          "intro": "El Stack de mood-ui es una primitiva de layout Vue 3 gratuita y de código abierto — un contenedor flex genérico que apila hijos en fila o columna con spacing, alineación y wrap consistentes; HStack y VStack son atajos."
+        },
         "examples": {
           "vertical": {
             "title": "Vertical (default)",
@@ -528,6 +582,12 @@
         "title": "Topbar",
         "category": "Layout",
         "description": "Barra superior de aplicación con slots logo, title, subtitle, nav, search, actions y user. Diseñada para usarse dentro de AppShell o de forma standalone.",
+        "seo": {
+          "metaTitle": "Vue Topbar Component — Navbar de App",
+          "metaDescription": "Vue Topbar gratuito y open-source para Vue 3 y Nuxt: barra superior con slots logo, title, subtitle, nav, search, actions y user, para usar en AppShell o standalone.",
+          "h1": "Vue Topbar Component",
+          "intro": "El Topbar de mood-ui es una barra superior de aplicación Vue 3 gratuita y de código abierto — con slots logo, title, subtitle, nav, search, actions y user, diseñada para usarse dentro de AppShell o de forma standalone."
+        },
         "examples": {
           "basic": {
             "title": "Básico",
@@ -592,6 +652,12 @@
         "title": "VStack",
         "category": "Layout",
         "description": "Atajo de Stack con dirección vertical. Apila hijos en columna con spacing y align consistentes.",
+        "seo": {
+          "metaTitle": "Vue VStack — Columna Flex Vertical",
+          "metaDescription": "Vue VStack gratuito y open-source para Vue 3 y Nuxt: atajo de Stack con dirección vertical para apilar hijos en columna con spacing y alineación consistentes.",
+          "h1": "Vue VStack Component",
+          "intro": "El VStack de mood-ui es un stack vertical Vue 3 gratuito y de código abierto — un atajo de Stack con dirección vertical que apila hijos en columna con spacing y alineación consistentes."
+        },
         "examples": {
           "basic": {
             "title": "Básico",

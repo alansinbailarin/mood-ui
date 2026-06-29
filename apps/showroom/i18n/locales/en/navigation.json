@@ -5,6 +5,12 @@
         "title": "Breadcrumbs",
         "category": "Navigation",
         "description": "Accessible breadcrumbs with per-item icons, swappable separators and optional collapsing when the trail exceeds the max.",
+        "seo": {
+          "metaTitle": "Vue Breadcrumbs — Trail Navigation",
+          "metaDescription": "Free, open-source Vue Breadcrumbs for Vue 3 and Nuxt: accessible breadcrumbs with per-item icons, swappable separators and optional collapsing when long.",
+          "h1": "Vue Breadcrumbs Component",
+          "intro": "mood-ui's Breadcrumbs is a free, open-source Vue 3 breadcrumbs component — accessible breadcrumb navigation with per-item icons, swappable separators and optional collapsing when the trail exceeds the max."
+        },
         "items": {
           "home": "Home",
           "products": "Products",
@@ -68,6 +74,12 @@
         "title": "DropdownMenu",
         "category": "Navigation",
         "description": "Floating action menu with headers, dividers, keyboard shortcuts, descriptions, destructive items and external links.",
+        "seo": {
+          "metaTitle": "Vue Dropdown Menu — Action Menu",
+          "metaDescription": "Free, open-source Vue Dropdown Menu for Vue 3 and Nuxt: a floating action menu with headers, dividers, keyboard shortcuts, descriptions, destructive items and links.",
+          "h1": "Vue Dropdown Menu Component",
+          "intro": "mood-ui's DropdownMenu is a free, open-source Vue 3 dropdown menu — a floating action menu with headers, dividers, keyboard shortcuts, descriptions, destructive items and external links."
+        },
         "trigger": {
           "actions": "Actions",
           "more": "More"
@@ -150,6 +162,12 @@
         "title": "Pagination",
         "category": "Navigation",
         "description": "Accessible paginator with first/last jumps, configurable siblings and all the design system's visual tokens.",
+        "seo": {
+          "metaTitle": "Vue Pagination Component — Paginator",
+          "metaDescription": "Free, open-source Vue Pagination for Vue 3 and Nuxt: an accessible paginator with first and last jumps, configurable siblings and the full design-system token set.",
+          "h1": "Vue Pagination Component",
+          "intro": "mood-ui's Pagination is a free, open-source Vue 3 paginator — accessible pagination with first/last jumps, configurable siblings and all of the design system's visual tokens."
+        },
         "examples": {
           "basic": {
             "title": "Basic",
@@ -210,6 +228,12 @@
         "title": "Stepper",
         "category": "Navigation",
         "description": "Step-by-step progress indicator. Useful for wizards, onboarding and checkouts. Supports numbered, dots and progress variants, horizontal or vertical.",
+        "seo": {
+          "metaTitle": "Vue Stepper Component — Wizard Steps",
+          "metaDescription": "Free, open-source Vue Stepper for Vue 3 and Nuxt: a step-by-step progress indicator for wizards, onboarding and checkouts with numbered, dots and progress variants.",
+          "h1": "Vue Stepper Component",
+          "intro": "mood-ui's Stepper is a free, open-source Vue 3 stepper component — a step-by-step progress indicator for wizards, onboarding and checkouts, with numbered, dots and progress variants in horizontal or vertical layout."
+        },
         "examples": {
           "basic": {
             "title": "Basic",
@@ -316,6 +340,12 @@
         "title": "Switcher",
         "category": "Navigation",
         "description": "Context switcher — change between branches, profiles, workspaces, or any equivalent contexts the user owns. Domain-agnostic.",
+        "seo": {
+          "metaTitle": "Vue Switcher — Context Switcher",
+          "metaDescription": "Free, open-source Vue Switcher for Vue 3 and Nuxt: a domain-agnostic context switcher to change between branches, profiles, workspaces or any contexts the user owns.",
+          "h1": "Vue Switcher Component",
+          "intro": "mood-ui's Switcher is a free, open-source Vue 3 context switcher — change between branches, profiles, workspaces or any equivalent contexts the user owns, fully domain-agnostic."
+        },
         "examples": {
           "basicTitle": "Business branches",
           "basicDesc": "Items with leading icons; one active; a footer action to add a new branch.",
@@ -348,6 +378,12 @@
         "title": "Tabs",
         "category": "Navigation",
         "description": "Accessible tabs with three variants (line, pill, segmented), icons, badges and support for panels via `panel-{value}` slots.",
+        "seo": {
+          "metaTitle": "Vue Tabs Component — Tab Panels",
+          "metaDescription": "Free, open-source Vue Tabs for Vue 3 and Nuxt: accessible tabs with line, pill and segmented variants, icons, badges and panels via panel-{value} slots. Zero cost.",
+          "h1": "Vue Tabs Component",
+          "intro": "mood-ui's Tabs is a free, open-source Vue 3 tabs component — accessible tabs with three variants (line, pill, segmented), icons, badges and support for panels via panel-{value} slots."
+        },
         "examples": {
           "variants": {
             "title": "Variants",

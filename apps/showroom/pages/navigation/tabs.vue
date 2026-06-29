@@ -27,12 +27,6 @@ import type { PropDoc, EmitDoc, SlotDoc } from "~/types/component-doc";
 const { t } = useI18n();
 
 
-useSeoMeta({
-  title: () => t("pages.navigation.tabs.title"),
-  description: () => t("pages.navigation.tabs.description"),
-  ogTitle: () => `${t("pages.navigation.tabs.title")} · mood-ui`,
-  ogDescription: () => t("pages.navigation.tabs.description"),
-});
 // ── A11y data ─────────────────────────────────────────────────────────────────
 const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
   { keys: ["Tab"], action: t("pages.navigation.tabs.a11y.kbTab") },

@@ -21,12 +21,6 @@ import TbSep from "~/components/toolbar/TbSep.vue";
 const { t } = useI18n();
 
 
-useSeoMeta({
-  title: () => t("pages.feedback.progressBar.title"),
-  description: () => t("pages.feedback.progressBar.description"),
-  ogTitle: () => `${t("pages.feedback.progressBar.title")} · mood-ui`,
-  ogDescription: () => t("pages.feedback.progressBar.description"),
-});
 // ── A11y data ─────────────────────────────────────────────────────────────────
 const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
   { keys: ["Tab"], action: t("pages.feedback.progressBar.a11y.kbTab") },

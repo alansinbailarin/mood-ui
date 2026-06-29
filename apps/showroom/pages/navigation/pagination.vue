@@ -23,12 +23,6 @@ import type {
 const { t } = useI18n();
 
 
-useSeoMeta({
-  title: () => t("pages.navigation.pagination.title"),
-  description: () => t("pages.navigation.pagination.description"),
-  ogTitle: () => `${t("pages.navigation.pagination.title")} · mood-ui`,
-  ogDescription: () => t("pages.navigation.pagination.description"),
-});
 // ── A11y data ─────────────────────────────────────────────────────────────────
 const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
   { keys: ["Tab"], action: t("pages.navigation.pagination.a11y.kbTab") },

@@ -5,6 +5,12 @@
         "title": "Badge",
         "category": "Feedback",
         "description": "Etiqueta inline para mostrar estado, conteos o categorías. Soporta variantes solid / subtle / outline, colores semánticos, tamaños, icono y modo dot.",
+        "seo": {
+          "metaTitle": "Vue Badge Component — Etiquetas de Estado",
+          "metaDescription": "Vue Badge gratuito y open-source para Vue 3 y Nuxt: etiqueta inline para estado, conteos o categorías con variantes solid, subtle y outline, colores semánticos y modo dot.",
+          "h1": "Vue Badge Component",
+          "intro": "El Badge de mood-ui es un componente Vue Badge gratuito y de código abierto para Vue 3 y Nuxt — una etiqueta inline para estado, conteos o categorías con variantes solid, subtle y outline, colores semánticos, tamaños y modo dot."
+        },
         "examples": {
           "variants": {
             "title": "Variantes",
@@ -65,6 +71,12 @@
         "title": "Banner",
         "category": "Feedback",
         "description": "Aviso prominente para comunicar estado a nivel de página o sección. Soporta colores semánticos, variantes, dismiss y posición sticky.",
+        "seo": {
+          "metaTitle": "Vue Banner Component — Barra de Aviso",
+          "metaDescription": "Vue Banner gratuito y open-source para Vue 3 y Nuxt: aviso prominente de página o sección con colores semánticos, variantes, dismiss y posición sticky. Sin coste de licencia.",
+          "h1": "Vue Banner Component",
+          "intro": "El Banner de mood-ui es un componente Vue Banner gratuito y de código abierto para Vue 3 y Nuxt — un aviso prominente a nivel de página o sección con colores semánticos, variantes, dismiss y posición sticky."
+        },
         "examples": {
           "colors": {
             "title": "Colores",
@@ -149,6 +161,12 @@
       "chip": {
         "title": "Chip",
         "description": "Indicador overlay (counter o dot) que se posiciona sobre otro elemento como un avatar o icono. También funciona como pill inline cuando no hay anchor.",
+        "seo": {
+          "metaTitle": "Vue Chip Component — Counter y Dot",
+          "metaDescription": "Vue Chip gratuito y open-source para Vue 3 y Nuxt: indicador overlay (counter o dot) sobre un avatar o icono, y pill inline cuando no hay anchor. Sin coste de licencia.",
+          "h1": "Vue Chip Component",
+          "intro": "El Chip de mood-ui es un componente Vue Chip gratuito y de código abierto para Vue 3 y Nuxt — un indicador overlay (counter o dot) que se posiciona sobre otro elemento como un avatar o icono, y funciona como pill inline cuando no hay anchor."
+        },
         "controls": {
           "variant": "Variante",
           "color": "Color",
@@ -205,6 +223,12 @@
       "confirmDialog": {
         "title": "ConfirmDialog",
         "description": "Diálogo de confirmación imperativo. Monta una vez el host ConfirmDialog cerca del root y usa useConfirm().confirm(\\{...\\}) desde cualquier componente para obtener un Promise(boolean).",
+        "seo": {
+          "metaTitle": "Vue Confirm Dialog — Promise useConfirm",
+          "metaDescription": "Vue Confirm Dialog gratuito y open-source para Vue 3 y Nuxt: monta el host una vez y llama useConfirm().confirm() desde cualquier sitio para obtener un Promise(boolean).",
+          "h1": "Vue Confirm Dialog Component",
+          "intro": "El ConfirmDialog de mood-ui es un diálogo de confirmación Vue 3 gratuito y de código abierto — monta el host una vez cerca del root y llama useConfirm().confirm() desde cualquier componente para obtener un Promise(boolean)."
+        },
         "controls": {
           "tone": "Tono",
           "size": "Tamaño"
@@ -262,6 +286,12 @@
       "drawer": {
         "title": "Drawer",
         "description": "Panel deslizable desde cualquier lado del viewport. Útil para filtros, settings, detalles y bottom-sheets en mobile. Soporta foco atrapado y bloqueo de scroll.",
+        "seo": {
+          "metaTitle": "Vue Drawer Component — Panel Deslizable",
+          "metaDescription": "Vue Drawer gratuito y open-source para Vue 3 y Nuxt: panel que se desliza desde cualquier lado con foco atrapado y bloqueo de scroll. Ideal para filtros y bottom sheets.",
+          "h1": "Vue Drawer Component",
+          "intro": "El Drawer de mood-ui es un panel deslizable Vue 3 gratuito y de código abierto — entra desde cualquier lado del viewport con foco atrapado y bloqueo de scroll, ideal para filtros, settings, detalles y bottom-sheets en mobile."
+        },
         "controls": {
           "side": "Lado",
           "size": "Tamaño",
@@ -350,6 +380,12 @@
       "emptyState": {
         "title": "EmptyState",
         "description": "Estado vacío para listas, búsquedas y secciones sin datos. Soporta icono, descripción, acciones y variantes visuales.",
+        "seo": {
+          "metaTitle": "Vue Empty State — Placeholder Sin Datos",
+          "metaDescription": "Vue Empty State gratuito y open-source para Vue 3 y Nuxt: estado vacío para listas, búsquedas y secciones sin datos con icono, descripción, acciones y variantes visuales.",
+          "h1": "Vue Empty State Component",
+          "intro": "El EmptyState de mood-ui es un componente Vue Empty State gratuito y de código abierto para Vue 3 y Nuxt — un estado vacío para listas, búsquedas y secciones sin datos, con icono, descripción, acciones y variantes visuales."
+        },
         "controls": {
           "variant": "Variante",
           "size": "Tamaño",
@@ -416,6 +452,12 @@
       "loader": {
         "title": "Loader",
         "description": "Spinner circular para indicar progreso indeterminado. Pequeño, accesible y con color heredado por defecto para integrarse en botones, banners o cualquier contenedor.",
+        "seo": {
+          "metaTitle": "Vue Loader Component — Spinner",
+          "metaDescription": "Vue Loader gratuito y open-source para Vue 3 y Nuxt: spinner circular pequeño y accesible para progreso indeterminado que hereda color y encaja en botones o banners.",
+          "h1": "Vue Loader Component",
+          "intro": "El Loader de mood-ui es un componente Vue Loader gratuito y de código abierto para Vue 3 y Nuxt — un spinner circular pequeño y accesible para progreso indeterminado que hereda color por defecto y encaja en botones, banners o cualquier contenedor."
+        },
         "controls": {
           "variant": "Variante",
           "size": "Tamaño",
@@ -462,6 +504,12 @@
       "modal": {
         "title": "Modal",
         "description": "Diálogo modal centrado con foco atrapado, bloqueo de scroll y animación FLIP-style desde el botón que lo abrió. Soporta tamaños, header con título/descripción y slot footer.",
+        "seo": {
+          "metaTitle": "Vue Modal Component — Diálogo Popup",
+          "metaDescription": "Vue Modal gratuito y open-source para Vue 3 y Nuxt: diálogo centrado con foco atrapado, bloqueo de scroll, animación FLIP, tamaños y slot footer. Sin coste de licencia.",
+          "h1": "Vue Modal Component",
+          "intro": "El Modal de mood-ui es un componente Vue Modal gratuito y de código abierto para Vue 3 y Nuxt — un diálogo centrado con foco atrapado, bloqueo de scroll, animación FLIP desde el botón que lo abre, tamaños y slot footer."
+        },
         "controls": {
           "size": "Tamaño",
           "overlay": "Overlay",
@@ -565,6 +613,12 @@
       "progressBar": {
         "title": "ProgressBar",
         "description": "Barra de progreso lineal determinada o indeterminada. Soporta etiqueta, valor numérico, colores, tamaños y animación striped.",
+        "seo": {
+          "metaTitle": "Vue Progress Bar — Progreso Lineal",
+          "metaDescription": "Vue Progress Bar gratuito y open-source para Vue 3 y Nuxt: barra lineal determinada o indeterminada con etiqueta, valor numérico, colores, tamaños y animación striped.",
+          "h1": "Vue Progress Bar Component",
+          "intro": "El ProgressBar de mood-ui es una barra de progreso Vue 3 gratuita y de código abierto — progreso lineal determinado o indeterminado con etiqueta, valor numérico, colores, tamaños y animación striped."
+        },
         "controls": {
           "value": "Valor",
           "color": "Color",
@@ -625,6 +679,12 @@
       "skeleton": {
         "title": "Skeleton",
         "description": "Placeholder animado que reserva el espacio del contenido mientras carga. Soporta presets que replican el footprint exacto de los componentes reales para evitar layout shifts.",
+        "seo": {
+          "metaTitle": "Vue Skeleton Loader — Placeholder",
+          "metaDescription": "Vue Skeleton loader gratuito y open-source para Vue 3 y Nuxt: placeholder animado que reserva el espacio del contenido mientras carga, con presets que evitan layout shifts.",
+          "h1": "Vue Skeleton Component",
+          "intro": "El Skeleton de mood-ui es un skeleton loader Vue 3 gratuito y de código abierto — un placeholder animado que reserva el espacio del contenido mientras carga, con presets que replican el footprint de los componentes reales para evitar layout shifts."
+        },
         "controls": {
           "shape": "Forma",
           "size": "Tamaño",
@@ -675,6 +735,12 @@
       "toast": {
         "title": "ToastContainer",
         "description": "Contenedor singleton donde aparecen los toasts disparados por el composable useToast(). Móntalo una vez cerca del root y dispara notificaciones desde cualquier componente.",
+        "seo": {
+          "metaTitle": "Vue Toast Component — Notificaciones",
+          "metaDescription": "Vue Toast container gratuito y open-source para Vue 3 y Nuxt: móntalo una vez cerca del root y dispara notificaciones desde cualquier componente con useToast(). Sin coste.",
+          "h1": "Vue Toast Component",
+          "intro": "El ToastContainer de mood-ui es un componente de notificaciones Vue 3 gratuito y de código abierto — el contenedor singleton donde aparecen los toasts disparados por el composable useToast(), montado una vez cerca del root."
+        },
         "controls": {
           "placement": "Posición"
         },
@@ -732,6 +798,12 @@
       "toastItem": {
         "title": "Toast",
         "description": "Notificación efímera renderizada por el ToastContainer. No se instancia directamente: se dispara con los helpers info / success / warning / danger del composable useToast().",
+        "seo": {
+          "metaTitle": "Vue Toast — Notificación Snackbar",
+          "metaDescription": "Vue Toast gratuito y open-source para Vue 3 y Nuxt: notificación efímera renderizada por ToastContainer y disparada con los helpers info, success, warning y danger de useToast().",
+          "h1": "Vue Toast Component",
+          "intro": "El Toast de mood-ui es una notificación snackbar Vue 3 gratuita y de código abierto — un toast efímero renderizado por el ToastContainer y disparado con los helpers info, success, warning y danger del composable useToast()."
+        },
         "controls": {
           "color": "Color",
           "variant": "Variante"
@@ -808,6 +880,12 @@
       "tooltip": {
         "title": "Tooltip",
         "description": "Pista contextual mostrada al hacer hover o focus sobre un elemento. Soporta múltiples placements, colores semánticos, delays configurables y contenido enriquecido.",
+        "seo": {
+          "metaTitle": "Vue Tooltip Component — Pistas en Hover",
+          "metaDescription": "Vue Tooltip gratuito y open-source para Vue 3 y Nuxt: pista contextual al hacer hover o focus con múltiples placements, colores semánticos, delays configurables y contenido rico.",
+          "h1": "Vue Tooltip Component",
+          "intro": "El Tooltip de mood-ui es un componente Vue Tooltip gratuito y de código abierto para Vue 3 y Nuxt — una pista contextual al hacer hover o focus, con múltiples placements, colores semánticos, delays configurables y contenido enriquecido."
+        },
         "controls": {
           "placement": "Posición",
           "color": "Color",

@@ -5,6 +5,12 @@
         "title": "AppShell",
         "category": "Layout",
         "description": "Application frame: topbar + sidebar + main content with automatic mobile drawer. Supports standard, rail (icon-only) and dual (rail + panel) variants.",
+        "seo": {
+          "metaTitle": "Vue App Shell — Dashboard Layout",
+          "metaDescription": "Free, open-source Vue App Shell for Vue 3 and Nuxt: a topbar, sidebar and main content frame with an automatic mobile drawer and standard, rail and dual variants.",
+          "h1": "Vue App Shell Component",
+          "intro": "mood-ui's AppShell is a free, open-source Vue 3 dashboard layout — a topbar plus sidebar plus main content frame with an automatic mobile drawer and standard, rail (icon-only) and dual (rail + panel) variants."
+        },
         "menu": {
           "home": "Home",
           "inbox": "Inbox",
@@ -85,6 +91,12 @@
         "title": "Canvas",
         "category": "Layout",
         "description": "Surface with decorative pattern (dots, grid or lines). Useful for workspaces, drop zones or hero sections that hint at a workspace.",
+        "seo": {
+          "metaTitle": "Vue Canvas — Pattern Background",
+          "metaDescription": "Free, open-source Vue Canvas for Vue 3 and Nuxt: a surface with a decorative dots, grid or lines pattern, useful for workspaces, drop zones and hero sections.",
+          "h1": "Vue Canvas Component",
+          "intro": "mood-ui's Canvas is a free, open-source Vue 3 pattern background surface — a decorative dots, grid or lines pattern, useful for workspaces, drop zones or hero sections that hint at a workspace."
+        },
         "examples": {
           "patterns": {
             "title": "Patterns",
@@ -126,6 +138,12 @@
         "title": "Container",
         "category": "Layout",
         "description": "Centered wrapper with max-width and semantic padding to constrain content width at any breakpoint.",
+        "seo": {
+          "metaTitle": "Vue Container — Max-width Wrapper",
+          "metaDescription": "Free, open-source Vue Container for Vue 3 and Nuxt: a centered wrapper with max-width and semantic padding to constrain content width at any breakpoint. Zero cost.",
+          "h1": "Vue Container Component",
+          "intro": "mood-ui's Container is a free, open-source Vue 3 layout container — a centered wrapper with max-width and semantic padding to constrain content width at any breakpoint."
+        },
         "overviewSample": "Content limited to the max width",
         "examples": {
           "sizes": {
@@ -173,6 +191,12 @@
         "title": "Divider",
         "category": "Layout",
         "description": "Horizontal or vertical separator line, optionally with a centered label or icon.",
+        "seo": {
+          "metaTitle": "Vue Divider — Separator Line",
+          "metaDescription": "Free, open-source Vue Divider for Vue 3 and Nuxt: a horizontal or vertical separator line, optionally with a centered label or icon. Zero license cost.",
+          "h1": "Vue Divider Component",
+          "intro": "mood-ui's Divider is a free, open-source Vue 3 divider component — a horizontal or vertical separator line, optionally with a centered label or icon."
+        },
         "examples": {
           "orientations": {
             "title": "Orientations",
@@ -224,6 +248,12 @@
         "title": "HStack",
         "category": "Layout",
         "description": "Stack shortcut with horizontal direction. Useful to line up items in a row with consistent spacing and alignment.",
+        "seo": {
+          "metaTitle": "Vue HStack — Horizontal Flex Row",
+          "metaDescription": "Free, open-source Vue HStack for Vue 3 and Nuxt: a Stack shortcut with horizontal direction to line up items in a row with consistent spacing and alignment.",
+          "h1": "Vue HStack Component",
+          "intro": "mood-ui's HStack is a free, open-source Vue 3 horizontal stack — a Stack shortcut with horizontal direction to line up items in a row with consistent spacing and alignment."
+        },
         "examples": {
           "basic": {
             "title": "Basic",
@@ -270,6 +300,12 @@
         "title": "PageHeader",
         "category": "Layout",
         "description": "Page header with title, subtitle, optional back button, breadcrumbs, tabs and an actions area.",
+        "seo": {
+          "metaTitle": "Vue Page Header — Page Title Bar",
+          "metaDescription": "Free, open-source Vue Page Header for Vue 3 and Nuxt: a page header with title, subtitle, an optional back button, breadcrumbs, tabs and an actions area. Zero cost.",
+          "h1": "Vue Page Header Component",
+          "intro": "mood-ui's PageHeader is a free, open-source Vue 3 page header — title, subtitle, an optional back button, breadcrumbs, tabs and an actions area, all in one component."
+        },
         "examples": {
           "basic": {
             "title": "Basic",
@@ -343,6 +379,12 @@
         "title": "PopoverPanel",
         "category": "Layout",
         "description": "Internal primitive used by floating components (Select, MultiSelect, DropdownMenu, Tooltip, DateField, Combobox…). Renders a panel teleported to body while preserving the provider's theme and palette.",
+        "seo": {
+          "metaTitle": "Vue Popover Panel — Floating Panel",
+          "metaDescription": "Free, open-source Vue Popover Panel for Vue 3 and Nuxt: the floating panel primitive behind Select, DropdownMenu and Tooltip, teleported to body.",
+          "h1": "Vue Popover Panel Component",
+          "intro": "mood-ui's PopoverPanel is a free, open-source Vue 3 floating panel — the internal primitive used by Select, MultiSelect, DropdownMenu, Tooltip and more, teleported to body while preserving the provider's theme and palette."
+        },
         "examples": {
           "tooltip": {
             "title": "Tooltip",
@@ -402,6 +444,12 @@
         "title": "Sidebar",
         "category": "Layout",
         "description": "Side navigation with sections, items, icons and badges. Supports collapsed mode (icon-only), nested items and different active styles.",
+        "seo": {
+          "metaTitle": "Vue Sidebar — Side Navigation",
+          "metaDescription": "Free, open-source Vue Sidebar for Vue 3 and Nuxt: side navigation with sections, items, icons and badges, a collapsed icon-only mode and nested items. Zero cost.",
+          "h1": "Vue Sidebar Component",
+          "intro": "mood-ui's Sidebar is a free, open-source Vue 3 sidebar navigation — sections, items, icons and badges with a collapsed icon-only mode, nested items and different active styles."
+        },
         "menu": {
           "home": "Home",
           "inbox": "Inbox",
@@ -476,6 +524,12 @@
         "title": "Stack",
         "category": "Layout",
         "description": "Generic flex primitive to stack children in row or column with consistent spacing, alignment and wrap. HStack and VStack are shortcuts.",
+        "seo": {
+          "metaTitle": "Vue Stack — Flex Layout Primitive",
+          "metaDescription": "Free, open-source Vue Stack for Vue 3 and Nuxt: a generic flex primitive to stack children in a row or column with consistent spacing, alignment and wrap.",
+          "h1": "Vue Stack Component",
+          "intro": "mood-ui's Stack is a free, open-source Vue 3 layout primitive — a generic flex container that stacks children in a row or column with consistent spacing, alignment and wrap; HStack and VStack are shortcuts."
+        },
         "examples": {
           "vertical": {
             "title": "Vertical (default)",
@@ -528,6 +582,12 @@
         "title": "Topbar",
         "category": "Layout",
         "description": "Application top bar with logo, title, subtitle, nav, search, actions and user slots. Designed to be used inside AppShell or standalone.",
+        "seo": {
+          "metaTitle": "Vue Topbar Component — App Navbar",
+          "metaDescription": "Free, open-source Vue Topbar for Vue 3 and Nuxt: an app top bar with logo, title, nav, search, actions and user slots, for use in AppShell or standalone.",
+          "h1": "Vue Topbar Component",
+          "intro": "mood-ui's Topbar is a free, open-source Vue 3 app top bar — logo, title, subtitle, nav, search, actions and user slots, designed to be used inside AppShell or standalone."
+        },
         "examples": {
           "basic": {
             "title": "Basic",
@@ -592,6 +652,12 @@
         "title": "VStack",
         "category": "Layout",
         "description": "Stack shortcut with vertical direction. Stacks children in a column with consistent spacing and alignment.",
+        "seo": {
+          "metaTitle": "Vue VStack — Vertical Flex Column",
+          "metaDescription": "Free, open-source Vue VStack for Vue 3 and Nuxt: a Stack shortcut with vertical direction to stack children in a column with consistent spacing and alignment.",
+          "h1": "Vue VStack Component",
+          "intro": "mood-ui's VStack is a free, open-source Vue 3 vertical stack — a Stack shortcut with vertical direction that stacks children in a column with consistent spacing and alignment."
+        },
         "examples": {
           "basic": {
             "title": "Basic",

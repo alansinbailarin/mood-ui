@@ -1187,6 +1187,12 @@
       "accordion": {
         "title": "Accordion",
         "description": "Expandable panels for displaying hierarchical content compactly. Ideal for FAQs, settings and filters.",
+        "seo": {
+          "metaTitle": "Vue Accordion — Collapse Panels",
+          "metaDescription": "Free, open-source Vue Accordion for Vue 3 and Nuxt: expandable panels for displaying hierarchical content compactly, ideal for FAQs, settings and filters.",
+          "h1": "Vue Accordion Component",
+          "intro": "mood-ui's Accordion is a free, open-source Vue 3 accordion component — expandable collapse panels for displaying hierarchical content compactly, ideal for FAQs, settings and filters."
+        },
         "controls": {
           "variant": "Variant",
           "size": "Size",
@@ -1294,6 +1300,12 @@
       "avatar": {
         "title": "Avatar",
         "description": "User avatar with image, initials fallback, status indicator and multiple sizes and shapes.",
+        "seo": {
+          "metaTitle": "Vue Avatar Component — User Avatar",
+          "metaDescription": "Free, open-source Vue Avatar for Vue 3 and Nuxt: a user avatar with image, initials fallback, a status indicator and multiple sizes and shapes. Zero license cost.",
+          "h1": "Vue Avatar Component",
+          "intro": "mood-ui's Avatar is a free, open-source Vue 3 avatar component — a user avatar with image, initials fallback, status indicator and multiple sizes and shapes."
+        },
         "controls": {
           "mode": "Mode",
           "size": "Size",
@@ -1340,6 +1352,12 @@
       "avatarGroup": {
         "title": "AvatarGroup",
         "description": "Stacks overlapping avatars showing up to N visible and a counter for the rest. Ideal for collaborator, assignee or member lists.",
+        "seo": {
+          "metaTitle": "Vue Avatar Group — Stacked Avatars",
+          "metaDescription": "Free, open-source Vue Avatar Group for Vue 3 and Nuxt: stacks overlapping avatars showing up to N visible plus a counter, ideal for collaborator and member lists.",
+          "h1": "Vue Avatar Group Component",
+          "intro": "mood-ui's AvatarGroup is a free, open-source Vue 3 avatar group — it stacks overlapping avatars showing up to N visible and a counter for the rest, ideal for collaborator, assignee or member lists."
+        },
         "controls": {
           "size": "Size",
           "max": "Max",
@@ -1433,6 +1451,12 @@
       "card": {
         "title": "Card",
         "description": "Structural container with three variants (elevated, outlined, filled), padding control, border radius and hover state. Base block for metrics, lists, forms and sections.",
+        "seo": {
+          "metaTitle": "Vue Card Component — Content Card",
+          "metaDescription": "Free, open-source Vue Card for Vue 3 and Nuxt: a structural container with elevated, outlined and filled variants, padding control, border radius and hover state.",
+          "h1": "Vue Card Component",
+          "intro": "mood-ui's Card is a free, open-source Vue 3 card component — a structural container with three variants (elevated, outlined, filled), padding control, border radius and hover state, the base block for metrics, lists, forms and sections."
+        },
         "controls": {
           "variant": "Variant",
           "padding": "Padding",
@@ -1485,6 +1509,12 @@
       "code": {
         "title": "Code",
         "description": "Inline code snippets for highlighting values, props or errors in docs and messages.",
+        "seo": {
+          "metaTitle": "Vue Code — Inline Code Snippet",
+          "metaDescription": "Free, open-source Vue Code for Vue 3 and Nuxt: inline code snippets for highlighting values, props or errors in docs and messages. Zero license cost.",
+          "h1": "Vue Code Component",
+          "intro": "mood-ui's Code is a free, open-source Vue 3 inline code component — for highlighting values, props or errors inline in docs and messages."
+        },
         "controls": {
           "variant": "Variant",
           "color": "Color",
@@ -1689,6 +1719,12 @@
       "kbd": {
         "title": "Kbd",
         "description": "Visual representation of keyboard keys or shortcuts. Useful in docs, tooltips and command palettes.",
+        "seo": {
+          "metaTitle": "Vue Kbd — Keyboard Key Component",
+          "metaDescription": "Free, open-source Vue Kbd for Vue 3 and Nuxt: a visual representation of keyboard keys or shortcuts, useful in docs, tooltips and command palettes. Zero cost.",
+          "h1": "Vue Kbd Component",
+          "intro": "mood-ui's Kbd is a free, open-source Vue 3 keyboard key component — a visual representation of keys or shortcuts, useful in docs, tooltips and command palettes."
+        },
         "controls": {
           "variant": "Variant",
           "size": "Size",
@@ -1858,6 +1894,12 @@
       "stat": {
         "title": "Stat",
         "description": "Compact KPI card for displaying metrics with trend, icon and semantic color. Ideal for dashboards and summaries.",
+        "seo": {
+          "metaTitle": "Vue Stat — KPI Metric Card",
+          "metaDescription": "Free, open-source Vue Stat for Vue 3 and Nuxt: a compact KPI card for metrics with trend, icon and semantic color, ideal for dashboards and summaries. Zero cost.",
+          "h1": "Vue Stat Component",
+          "intro": "mood-ui's Stat is a free, open-source Vue 3 KPI card — a compact metric card with trend, icon and semantic color, ideal for dashboards and summaries."
+        },
         "controls": {
           "variant": "Variant",
           "color": "Color",
@@ -2030,6 +2072,12 @@
       "timeline": {
         "title": "Timeline",
         "description": "Vertical list of chronological events with dot, icon or outline markers. Each item supports title, description, timestamp and a per-item color.",
+        "seo": {
+          "metaTitle": "Vue Timeline Component — Activity Feed",
+          "metaDescription": "Free, open-source Vue Timeline for Vue 3 and Nuxt: a vertical list of chronological events with dot, icon or outline markers, title, description and time.",
+          "h1": "Vue Timeline Component",
+          "intro": "mood-ui's Timeline is a free, open-source Vue 3 timeline component — a vertical list of chronological events with dot, icon or outline markers, each item supporting a title, description, timestamp and per-item color."
+        },
         "controls": {
           "variant": "Variant",
           "size": "Size",
@@ -2072,6 +2120,12 @@
       "typography": {
         "title": "Typography",
         "description": "Typographic system with semantic variants (display, heading, title, body, caption…), sizes and weights. The as prop lets you map to the appropriate HTML tag to maintain accessible hierarchy.",
+        "seo": {
+          "metaTitle": "Vue Typography — Text Styles System",
+          "metaDescription": "Free, open-source Vue Typography for Vue 3 and Nuxt: a typographic system with semantic variants, sizes and weights, plus an as prop to map to the right HTML tag.",
+          "h1": "Vue Typography Component",
+          "intro": "mood-ui's Typography is a free, open-source Vue 3 typography component — a typographic system with semantic variants (display, heading, title, body, caption), sizes and weights, plus an as prop to map to the right HTML tag for accessible hierarchy."
+        },
         "controls": {
           "variant": "Variant",
           "size": "Size",
