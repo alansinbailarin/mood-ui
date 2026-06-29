@@ -18,6 +18,7 @@ const open = computed({
 });
 
 const router = useRouter();
+const localePath = useLocalePath();
 const query = ref("");
 const activeIndex = ref(0);
 const inputEl = ref<HTMLInputElement | null>(null);
@@ -77,7 +78,7 @@ function run(idx: number) {
   // to start before Nuxt unmounts the source route. Without this the
   // Modal's leave animation gets cancelled mid-flight and the new page
   // flashes underneath the still-fading overlay.
-  nextTick(() => router.push(it.route));
+  nextTick(() => router.push(localePath(it.route)));
 }
 
 // All keyboard navigation hangs off the search input. Earlier this lived

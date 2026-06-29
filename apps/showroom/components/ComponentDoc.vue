@@ -47,6 +47,7 @@ const copied = ref(false);
 // Nuxt-native equivalent of the legacy `useShowroomRouter` so the
 // component nav arrows can navigate between adjacent component pages.
 const router = useRouter();
+const localePath = useLocalePath();
 const route = useRoute();
 
 const COMPONENT_CATS = new Set<string>(COMPONENT_CATEGORY_IDS);
@@ -66,7 +67,7 @@ const nextEntry = computed(() =>
     : null,
 );
 function go(routePath: string) {
-  router.push(routePath);
+  router.push(localePath(routePath));
 }
 
 function copyImport() {

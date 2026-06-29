@@ -54,6 +54,7 @@ const darkSurfaceConfig = computed(() => {
  * component, doc or composable id.
  */
 const router = useRouter();
+const localePath = useLocalePath();
 
 if (import.meta.client && window.location.hash) {
   const target = resolveHash(window.location.hash);
@@ -62,7 +63,7 @@ if (import.meta.client && window.location.hash) {
     // Only redirect if we're on `/` — preserve in-page anchors on
     // component pages (the user landed on /forms/button#api intentionally).
     if (stripped === "/" || stripped === "") {
-      router.replace(target);
+      router.replace(localePath(target));
     }
   }
 }
