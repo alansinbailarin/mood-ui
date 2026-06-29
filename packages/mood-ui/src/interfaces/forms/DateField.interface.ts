@@ -1,5 +1,6 @@
-import type { Component } from 'vue'; 
- 
+import type { Component } from 'vue';
+import type { ModoSize } from '../../config/ModoConfig';
+
 /** Formato de display del valor en el input. */ 
 export type DateDisplayFormat = 
     | 'short'    // 4/23/2026 
@@ -28,9 +29,9 @@ export interface DateField {
  
     variant?: 'outline' | 'filled' | 'ghost'; 
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
-    size?: 'small' | 'medium' | 'large'; 
-    radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 
-    /** Estilo del halo persistente. Hereda del ModoProvider si se omite. */ 
+    size?: ModoSize;
+    radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
+    /** Estilo del halo persistente. Hereda del ModoProvider si se omite. */
     halo?: 'tinted' | 'neutral' | 'off'; 
  
     fullWidth?: boolean; 

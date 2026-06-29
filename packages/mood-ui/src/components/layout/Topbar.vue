@@ -167,9 +167,9 @@ const paddingClasses = computed(() => {
 }); 
  
 // Match the bar size for the menu toggle so it lines up vertically. 
-const buttonSize = computed<'small' | 'medium' | 'large'>(() => 
-    resolvedSize.value === 'large' ? 'medium' : 'small', 
-); 
+const buttonSize = computed<'small' | 'medium'>(() =>
+    resolvedSize.value === 'large' ? 'medium' : 'small',
+);
  
 const stickyClasses = computed(() => 
     props.sticky 

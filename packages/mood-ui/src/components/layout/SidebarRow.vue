@@ -107,7 +107,7 @@
 <script setup lang="ts"> 
 import { computed, ref } from 'vue'; 
 import type { SidebarItem } from '../../interfaces/layout/Sidebar.interface'; 
-import type { ModoColor, ModoRadius } from '../../config/ModoConfig'; 
+import type { ModoColor, ModoRadius, ModoSize } from '../../config/ModoConfig'; 
 import Tooltip from '../feedback/Tooltip.vue'; 
 import RowContent from './SidebarRowContent.vue'; 
  
@@ -116,7 +116,7 @@ interface Props {
     depth: number; 
     collapsed: boolean; 
     activeId: string | number | null; 
-    size: 'small' | 'medium' | 'large'; 
+    size: ModoSize; 
     radius: ModoRadius; 
     color: ModoColor; 
     activeVariant: 'tonal' | 'solid' | 'bar'; 

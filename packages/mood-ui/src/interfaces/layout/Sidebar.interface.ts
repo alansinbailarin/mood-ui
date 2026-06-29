@@ -1,4 +1,5 @@
 import type { Component } from 'vue'; 
+import type { ModoSize } from '../../config/ModoConfig';
  
 /** 
  * A single navigation item. 
@@ -67,7 +68,7 @@ export interface Sidebar {
     collapsed?: boolean; 
  
     /** Visual size of the rows. */ 
-    size?: 'small' | 'medium' | 'large'; 
+    size?: ModoSize; 
  
     /** Radius of the row hit-area. */ 
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 

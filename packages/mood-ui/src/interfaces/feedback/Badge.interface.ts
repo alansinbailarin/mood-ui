@@ -1,11 +1,12 @@
 import type { Component } from 'vue'; 
  
+import type { ModoSize } from '../../config/ModoConfig';
 export interface Badge { 
     label?: string; 
     variant?: 'solid' | 'outline' | 'subtle'; 
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
     gradient?: boolean; 
-    size?: 'small' | 'medium' | 'large'; 
+    size?: ModoSize; 
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 
     icon?: Component; 
     removable?: boolean; 

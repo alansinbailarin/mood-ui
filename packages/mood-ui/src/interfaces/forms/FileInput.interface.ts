@@ -1,5 +1,6 @@
-import type { Component } from 'vue'; 
- 
+import type { Component } from 'vue';
+import type { ModoSize } from '../../config/ModoConfig';
+
 export interface FileInputFile { 
     file: File; 
     id: string; 
@@ -81,8 +82,8 @@ export interface FileInput {
      */ 
     dropzoneVariant?: 'inline' | 'area'; 
  
-    /** Altura mínima del área cuando `dropzoneVariant='area'`. @default 'medium' */ 
-    dropzoneHeight?: 'small' | 'medium' | 'large'; 
+    /** Altura mínima del área cuando `dropzoneVariant='area'`. @default 'medium' */
+    dropzoneHeight?: ModoSize; 
  
     /** 
      * Usa borde punteado en el área. Ideal para hacer evidente la 
@@ -113,9 +114,9 @@ export interface FileInput {
  
     variant?: 'outline' | 'filled' | 'ghost'; 
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
-    size?: 'small' | 'medium' | 'large'; 
-    radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 
-    /** Estilo del halo persistente. Hereda del ModoProvider si se omite. */ 
+    size?: ModoSize;
+    radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
+    /** Estilo del halo persistente. Hereda del ModoProvider si se omite. */
     halo?: 'tinted' | 'neutral' | 'off'; 
  
     fullWidth?: boolean; 

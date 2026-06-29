@@ -1,3 +1,4 @@
+import type { ModoSize } from '../../config/ModoConfig';
 /** 
  * Linear progress indicator. Supports determinate (with `value`) and 
  * indeterminate (omit `value`) modes. 
@@ -5,7 +6,7 @@
  
 export type ProgressBarColor = 'default' | 'primary' | 'success' | 'warning' | 'danger'; 
  
-export type ProgressBarSize = 'small' | 'medium' | 'large'; 
+export type ProgressBarSize = ModoSize; 
  
 export interface ProgressBar { 
     /** 

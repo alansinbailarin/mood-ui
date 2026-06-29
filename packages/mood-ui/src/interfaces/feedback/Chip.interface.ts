@@ -1,5 +1,6 @@
 import type { Component } from 'vue'; 
  
+import type { ModoSize } from '../../config/ModoConfig';
 export type ChipPlacement = 
     | 'top-left' 
     | 'top-right' 
@@ -23,7 +24,7 @@ export interface Chip {
     /** Familia semántica. */ 
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
     /** Tamaño. */ 
-    size?: 'small' | 'medium' | 'large'; 
+    size?: ModoSize; 
     /** Radio de esquinas. */ 
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 
  

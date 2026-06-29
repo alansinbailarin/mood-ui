@@ -1,5 +1,6 @@
-import type { Component } from 'vue'; 
- 
+import type { Component } from 'vue';
+import type { ModoSize } from '../../config/ModoConfig';
+
 export interface Input { 
     /** v-model */ 
     modelValue?: string | number | null; 
@@ -20,8 +21,8 @@ export interface Input {
     variant?: 'outline' | 'filled' | 'ghost'; 
     /** Familia semántica para el estado de foco/acento. */ 
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
-    /** Tamaño. */ 
-    size?: 'small' | 'medium' | 'large'; 
+    /** Tamaño. */
+    size?: ModoSize; 
     /** Radio de esquinas. */ 
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 
     /** 

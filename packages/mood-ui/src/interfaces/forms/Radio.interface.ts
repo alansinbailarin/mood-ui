@@ -1,3 +1,5 @@
+import type { ModoSize } from '../../config/ModoConfig';
+
 export interface RadioOption { 
     value: string | number; 
     label: string; 
@@ -19,8 +21,8 @@ export interface Radio {
  
     /** Familia semántica para el estado checked. */ 
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
-    /** Tamaño. */ 
-    size?: 'small' | 'medium' | 'large'; 
+    /** Tamaño. */
+    size?: ModoSize; 
  
     disabled?: boolean; 
     required?: boolean; 
@@ -57,8 +59,8 @@ export interface RadioGroup {
  
     /** Familia semántica aplicada a todos los radios. */ 
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
-    /** Tamaño aplicado a todos los radios. */ 
-    size?: 'small' | 'medium' | 'large'; 
+    /** Tamaño aplicado a todos los radios. */
+    size?: ModoSize; 
  
     disabled?: boolean; 
     required?: boolean; 

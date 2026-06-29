@@ -5,8 +5,8 @@ import {
   MoonIcon,
   ComputerDesktopIcon,
 } from "@heroicons/vue/24/outline";
-import type { ModoTheme } from "../../config/ModoConfig";
-import { useSizeTokens } from "../../composables/useModoConfig";
+import type { ModoTheme, ModoSize } from "../../config/ModoConfig";
+import { useSizeTokens, useResolvedSize } from "../../composables/useModoConfig";
 
 const props = withDefaults(
   defineProps<{
@@ -16,7 +16,7 @@ const props = withDefaults(
     /** Show text labels next to each icon. */
     showLabels?: boolean;
     /** Size variant. */
-    size?: "small" | "medium" | "large";
+    size?: ModoSize;
     /** Disabled state — prevents selection changes. */
     disabled?: boolean;
     /**
@@ -158,11 +158,19 @@ watch(
 );
 watch(isExpanded, () => nextTick(() => measure(false)));
 
-const sizeTokens = useSizeTokens(() => props.size as any);
+const sizeTokens = useSizeTokens(() => props.size);
+const resolvedSize = useResolvedSize(() => props.size);
 
 // btn height/width and icon derive from the central size tokens so this
 // component shares the same control scale as all other form controls.
 const sz = {
+  xsmall: {
+    track: "p-0.5",
+    gap: "gap-0.5",
+    btn: "w-8 h-8",
+    icon: "w-3.5 h-3.5",
+    lbl: "text-xs px-1.5 h-8",
+  },
   small: {
     track: "p-0.5",
     gap: "gap-0.5",
@@ -195,8 +203,8 @@ const sz = {
     :aria-disabled="disabled || undefined"
     class="relative inline-flex items-center rounded-full border border-border bg-muted/40"
     :class="[
-      sz[size].track,
-      variant === 'collapsed' ? 'gap-0' : sz[size].gap,
+      sz[resolvedSize].track,
+      variant === 'collapsed' ? 'gap-0' : sz[resolvedSize].gap,
       disabled ? 'opacity-50 cursor-not-allowed' : '',
     ]"
     @transitionend.self.stop="onTransitionEnd"
@@ -235,7 +243,7 @@ const sz = {
           :disabled="disabled"
           class="modo-color-mode-option relative z-10 inline-flex items-center justify-center rounded-full text-muted-foreground transition-colors duration-150"
           :class="[
-            showLabels ? sz[size].lbl : sz[size].btn,
+            showLabels ? sz[resolvedSize].lbl : sz[resolvedSize].btn,
             modelValue === opt.value
               ? 'text-foreground'
               : 'hover:text-foreground',
@@ -243,7 +251,7 @@ const sz = {
           ]"
           @click="pick(opt.value)"
         >
-          <component :is="opt.icon" :class="sz[size].icon" />
+          <component :is="opt.icon" :class="sz[resolvedSize].icon" />
           <span v-if="showLabels" class="ml-1 select-none">{{
             opt.label
           }}</span>
@@ -261,7 +269,7 @@ const sz = {
         :disabled="disabled"
         class="modo-color-mode-option relative z-10 inline-flex items-center justify-center rounded-full text-muted-foreground transition-colors duration-150"
         :class="[
-          showLabels ? sz[size].lbl : sz[size].btn,
+          showLabels ? sz[resolvedSize].lbl : sz[resolvedSize].btn,
           modelValue === opt.value
             ? 'text-foreground'
             : 'hover:text-foreground',
@@ -269,7 +277,7 @@ const sz = {
         ]"
         @click="pick(opt.value)"
       >
-        <component :is="opt.icon" :class="sz[size].icon" />
+        <component :is="opt.icon" :class="sz[resolvedSize].icon" />
         <span v-if="showLabels" class="ml-1 select-none">{{ opt.label }}</span>
       </button>
     </template>

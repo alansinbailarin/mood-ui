@@ -1,6 +1,7 @@
-import type { Component } from 'vue'; 
- 
-export interface Button { 
+import type { Component } from 'vue';
+import type { ModoSize } from '../../config/ModoConfig';
+
+export interface Button {
     label?: string; 
     type?: 'button' | 'submit' | 'reset'; 
     disabled?: boolean; 
@@ -9,7 +10,7 @@ export interface Button {
     variant?: 'normal' | 'outline' | 'ghost' | 'text'; 
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
     gradient?: boolean; 
-    size?: 'xs' | 'small' | 'medium' | 'large'; 
+    size?: ModoSize | 'xs';
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 
     fullWidth?: boolean; 
     icon?: Component; 

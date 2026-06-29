@@ -1,4 +1,5 @@
 import type { VNode } from 'vue'; 
+import type { ModoSize } from '../../../config/ModoConfig';
  
 /** 
  * Logical type of a column. Used for two purposes only: 
@@ -357,7 +358,7 @@ export interface Table<TRow = any> {
      * Sizing scale. Drives row height + cell padding + font size. 
      * @default 'medium' 
      */ 
-    size?: 'small' | 'medium' | 'large'; 
+    size?: ModoSize; 
  
     /** Alternating row background. @default false */ 
     striped?: boolean; 

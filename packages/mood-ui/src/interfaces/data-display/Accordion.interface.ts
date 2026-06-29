@@ -1,4 +1,5 @@
 import type { Component } from 'vue';
+import type { ModoSize } from '../../config/ModoConfig';
 
 export interface AccordionItem {
     /** Unique value. Used in `modelValue` to identify open items. */
@@ -27,7 +28,7 @@ export interface Accordion {
     /** Visual variant. */
     variant?: 'separated' | 'bordered' | 'flush';
     /** Size scale. Inherits from `ModoProvider` if omitted. */
-    size?: 'small' | 'medium' | 'large';
+    size?: ModoSize;
     /** Corner radius (only for `separated` and `bordered`). */
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
     /** Position of the chevron icon. */

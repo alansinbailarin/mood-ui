@@ -1,3 +1,5 @@
+import type { ModoSize } from '../../config/ModoConfig';
+
 export interface Textarea { 
     /** v-model */ 
     modelValue?: string | null; 
@@ -15,8 +17,8 @@ export interface Textarea {
     variant?: 'outline' | 'filled' | 'ghost'; 
     /** Familia semántica para el estado de foco/acento. */ 
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
-    /** Tamaño (afecta padding y tipografía). */ 
-    size?: 'small' | 'medium' | 'large'; 
+    /** Tamaño (afecta padding y tipografía). */
+    size?: ModoSize; 
     /** Radio de esquinas. */ 
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 
     /** Estilo del halo persistente. Hereda del ModoProvider si se omite. */ 

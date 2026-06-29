@@ -1,5 +1,6 @@
 import type { Component } from 'vue'; 
  
+import type { ModoSize } from '../../config/ModoConfig';
 /** 
  * Single item descriptor for `<Tabs :items="..." />`. 
  * 
@@ -43,7 +44,7 @@ export interface Tabs {
     /** Semantic color family (active state). */ 
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
     /** Tab height / padding scale. */ 
-    size?: 'small' | 'medium' | 'large'; 
+    size?: ModoSize; 
     /** 
      * Corner radius for `pill` and `segmented` variants. Inherits from 
      * `ModoProvider` if omitted. Ignored for `line` (no fill). 

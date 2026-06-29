@@ -1,10 +1,11 @@
 import type { Component } from 'vue'; 
+import type { ModoSize } from '../../config/ModoConfig';
  
 /** 
  * Visual size of the empty state. Larger sizes are appropriate when the 
  * empty state takes the full page; smaller sizes fit inside cards/panels. 
  */ 
-export type EmptyStateSize = 'small' | 'medium' | 'large'; 
+export type EmptyStateSize = ModoSize; 
  
 /** 
  * Visual treatment. 

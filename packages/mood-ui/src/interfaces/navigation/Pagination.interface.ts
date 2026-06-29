@@ -1,3 +1,4 @@
+import type { ModoSize } from '../../config/ModoConfig';
 export interface Pagination { 
     /** Current page (1-based). v-model. */ 
     modelValue: number; 
@@ -22,7 +23,7 @@ export interface Pagination {
     /** Color for the active page button (Action/Content set per §12.2). @default 'primary' */ 
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
     /** Size — cascades from `ModoProvider`. */ 
-    size?: 'small' | 'medium' | 'large'; 
+    size?: ModoSize; 
     /** Radius for buttons. Cascades from `ModoProvider`. */ 
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 
     /** Disables the whole pagination. */ 

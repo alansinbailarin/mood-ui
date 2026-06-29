@@ -1,3 +1,5 @@
+import type { ModoSize } from '../../config/ModoConfig';
+
 export interface Switch { 
     /** v-model (boolean). */ 
     modelValue?: boolean; 
@@ -13,8 +15,8 @@ export interface Switch {
  
     /** Familia semántica para el estado "on". */ 
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
-    /** Tamaño. */ 
-    size?: 'small' | 'medium' | 'large'; 
+    /** Tamaño. */
+    size?: ModoSize; 
     /** Track radius. Cascades from `ModoProvider`. @default 'full' (pill) */ 
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 
  

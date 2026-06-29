@@ -1,3 +1,5 @@
+import type { ModoSize } from '../../config/ModoConfig';
+
 export interface Rating {
     /** Current value (v-model). */
     modelValue?: number;
@@ -14,7 +16,7 @@ export interface Rating {
     /** Semantic color family. */
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning';
     /** Size scale. Inherits from `ModoProvider` if omitted. */
-    size?: 'small' | 'medium' | 'large';
+    size?: ModoSize;
     /** Show numeric value next to the rating. */
     showValue?: boolean;
     /** Optional accessible name. */

@@ -1,3 +1,4 @@
+import type { ModoSize } from '../../config/ModoConfig';
 export type TooltipPlacement = 
     | 'top' | 'top-start' | 'top-end' 
     | 'bottom' | 'bottom-start' | 'bottom-end' 
@@ -32,7 +33,7 @@ export interface Tooltip {
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning' | 'inverted'; 
  
     /** Tamaño. @default 'medium' */ 
-    size?: 'small' | 'medium' | 'large'; 
+    size?: ModoSize; 
  
     /** Radius. @default 'medium' */ 
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 

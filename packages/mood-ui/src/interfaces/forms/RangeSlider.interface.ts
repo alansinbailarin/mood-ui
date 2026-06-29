@@ -1,3 +1,5 @@
+import type { ModoSize } from '../../config/ModoConfig';
+
 export interface RangeSlider { 
     /** Valor [from, to]. v-model. */ 
     modelValue?: [number, number]; 
@@ -21,7 +23,7 @@ export interface RangeSlider {
     errorText?: string; 
  
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
-    size?: 'small' | 'medium' | 'large'; 
+    size?: ModoSize; 
     /** Track radius. Cascades from `ModoProvider`. @default 'full' (pill) */ 
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 
  

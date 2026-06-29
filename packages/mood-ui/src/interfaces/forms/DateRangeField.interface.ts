@@ -1,5 +1,6 @@
-import type { Component } from 'vue'; 
-import type { DateDisplayFormat } from './DateField.interface'; 
+import type { Component } from 'vue';
+import type { ModoSize } from '../../config/ModoConfig';
+import type { DateDisplayFormat } from './DateField.interface';
 import type { RangePreset } from '../data-display/date-picker/DateRangePicker.interface'; 
  
 export type { RangePreset }; 
@@ -29,7 +30,7 @@ export interface DateRangeField {
  
     variant?: 'outline' | 'filled' | 'ghost'; 
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
-    size?: 'small' | 'medium' | 'large'; 
+    size?: ModoSize;
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 
     /** Estilo del halo persistente. Hereda del ModoProvider si se omite. */ 
     halo?: 'tinted' | 'neutral' | 'off'; 

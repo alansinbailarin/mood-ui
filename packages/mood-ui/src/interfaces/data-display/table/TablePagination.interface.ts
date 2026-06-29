@@ -1,4 +1,5 @@
 import type { TablePaginationState } from './Table.interface'; 
+import type { ModoSize } from '../../../config/ModoConfig';
  
 /** 
  * `<TablePagination>` props. The component renders a self-contained 
@@ -33,7 +34,7 @@ export interface TablePagination {
     disabled?: boolean; 
  
     /** Sizing scale, mirrors `<Table>`. @default 'medium' */ 
-    size?: 'small' | 'medium' | 'large'; 
+    size?: ModoSize; 
  
     /** Forwarded to the wrapping `<nav>` for screen readers. */ 
     ariaLabel?: string; 

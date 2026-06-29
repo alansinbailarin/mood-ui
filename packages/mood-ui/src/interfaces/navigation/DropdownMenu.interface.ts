@@ -1,5 +1,6 @@
 import type { Component } from 'vue'; 
  
+import type { ModoSize } from '../../config/ModoConfig';
 /** Single actionable item in a `DropdownMenu`. */ 
 export interface DropdownMenuItem { 
     /** Stable id; defaults to the index when omitted. Useful for `select` payload. */ 
@@ -52,7 +53,7 @@ export interface DropdownMenu {
     /** Trigger color (Action/Content set per §12.2). @default 'default' */ 
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
     /** Size — cascades from `ModoProvider`. */ 
-    size?: 'small' | 'medium' | 'large'; 
+    size?: ModoSize; 
     /** Radius for both trigger and panel. Cascades from `ModoProvider`. */ 
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 
     /** Show a chevron after the trigger label. @default true */ 

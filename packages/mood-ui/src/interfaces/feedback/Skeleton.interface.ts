@@ -1,3 +1,4 @@
+import type { ModoSize } from '../../config/ModoConfig';
 /** 
  * Skeleton — low-attention placeholder shown while content is loading. 
  * 
@@ -79,7 +80,7 @@ export interface Skeleton {
      * 
      * @default 'medium' 
      */ 
-    size?: 'small' | 'medium' | 'large'; 
+    size?: ModoSize; 
  
     /** 
      * Corner radius. 

@@ -1,4 +1,4 @@
-import type { ModoRadius } from '../../config/ModoConfig';
+import type { ModoRadius, ModoSize } from '../../config/ModoConfig';
 
 export type AvatarVariant =
     | 'default'
@@ -74,7 +74,7 @@ export interface AvatarUpload {
      * Example: "Eduardo Aranda" → "AP".
      */
     name?: string;
-    size?: 'small' | 'medium' | 'large';
+    size?: ModoSize;
     radius?: ModoRadius;
     disabled?: boolean;
     readonly?: boolean;

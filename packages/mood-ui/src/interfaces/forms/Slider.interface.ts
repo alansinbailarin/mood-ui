@@ -1,3 +1,5 @@
+import type { ModoSize } from '../../config/ModoConfig';
+
 export interface Slider { 
     /** Valor actual. v-model. */ 
     modelValue?: number; 
@@ -26,7 +28,7 @@ export interface Slider {
     errorText?: string; 
  
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
-    size?: 'small' | 'medium' | 'large'; 
+    size?: ModoSize; 
     /** Track radius. Cascades from `ModoProvider`. @default 'full' (pill) */ 
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 
  

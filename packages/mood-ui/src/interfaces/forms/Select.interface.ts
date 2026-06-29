@@ -1,5 +1,6 @@
-import type { Component } from 'vue'; 
- 
+import type { Component } from 'vue';
+import type { ModoSize } from '../../config/ModoConfig';
+
 export type SelectValue = string | number; 
  
 export interface SelectOption { 
@@ -35,29 +36,29 @@ export interface Select {
     variant?: 'outline' | 'filled' | 'ghost'; 
     /** Familia semántica para foco/acento. */ 
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
-    /** Tamaño. */ 
-    size?: 'small' | 'medium' | 'large'; 
-    /** Radio de esquinas. */ 
-    radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 
-    /** Estilo del halo persistente. Hereda del ModoProvider si se omite. */ 
-    halo?: 'tinted' | 'neutral' | 'off'; 
- 
-    /** Aplica w-full al root. */ 
-    fullWidth?: boolean; 
- 
-    /** Deshabilitado. */ 
-    disabled?: boolean; 
-    /** Solo lectura. */ 
-    readonly?: boolean; 
-    /** Requerido. */ 
-    required?: boolean; 
-    /** Estado cargando (muestra spinner en lugar del chevron). */ 
-    loading?: boolean; 
- 
-    /** Muestra botón X para limpiar el valor seleccionado. */ 
-    clearable?: boolean; 
- 
-    /** Muestra un input de búsqueda dentro del panel. */ 
+    /** Tamaño. */
+    size?: ModoSize;
+    /** Radio de esquinas. */
+    radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
+    /** Estilo del halo persistente. Hereda del ModoProvider si se omite. */
+    halo?: 'tinted' | 'neutral' | 'off';
+
+    /** Aplica w-full al root. */
+    fullWidth?: boolean;
+
+    /** Deshabilitado. */
+    disabled?: boolean;
+    /** Solo lectura. */
+    readonly?: boolean;
+    /** Requerido. */
+    required?: boolean;
+    /** Estado cargando (muestra spinner en lugar del chevron). */
+    loading?: boolean;
+
+    /** Muestra botón X para limpiar el valor seleccionado. */
+    clearable?: boolean;
+
+    /** Muestra un input de búsqueda dentro del panel. */
     searchable?: boolean; 
     /** Placeholder del input de búsqueda. @default 'Search…' */ 
     searchPlaceholder?: string; 
@@ -111,25 +112,25 @@ export interface MultiSelect {
  
     /** Estilo visual. */ 
     variant?: 'outline' | 'filled' | 'ghost'; 
-    /** Familia semántica para foco/acento. */ 
-    color?: 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
-    /** Tamaño. */ 
-    size?: 'small' | 'medium' | 'large'; 
-    /** Radio de esquinas. */ 
-    radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 
-    /** Estilo del halo persistente. Hereda del ModoProvider si se omite. */ 
-    halo?: 'tinted' | 'neutral' | 'off'; 
- 
-    /** Aplica w-full al root. */ 
-    fullWidth?: boolean; 
- 
-    /** Deshabilitado. */ 
-    disabled?: boolean; 
-    /** Solo lectura. */ 
-    readonly?: boolean; 
-    /** Requerido. */ 
-    required?: boolean; 
-    /** Estado cargando. */ 
+    /** Familia semántica para foco/acento. */
+    color?: 'default' | 'primary' | 'danger' | 'success' | 'warning';
+    /** Tamaño. */
+    size?: ModoSize;
+    /** Radio de esquinas. */
+    radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
+    /** Estilo del halo persistente. Hereda del ModoProvider si se omite. */
+    halo?: 'tinted' | 'neutral' | 'off';
+
+    /** Aplica w-full al root. */
+    fullWidth?: boolean;
+
+    /** Deshabilitado. */
+    disabled?: boolean;
+    /** Solo lectura. */
+    readonly?: boolean;
+    /** Requerido. */
+    required?: boolean;
+    /** Estado cargando. */
     loading?: boolean; 
  
     /** Muestra botón X para limpiar todas las selecciones. */ 

@@ -1,5 +1,6 @@
-import type { Component } from 'vue'; 
- 
+import type { Component } from 'vue';
+import type { ModoSize } from '../../config/ModoConfig';
+
 export interface NumberInput { 
     /** v-model (number o null cuando el input está vacío). */ 
     modelValue?: number | null; 
@@ -17,8 +18,8 @@ export interface NumberInput {
     variant?: 'outline' | 'filled' | 'ghost'; 
     /** Familia semántica para foco/acento. */ 
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
-    /** Tamaño. */ 
-    size?: 'small' | 'medium' | 'large'; 
+    /** Tamaño. */
+    size?: ModoSize; 
     /** Radio de esquinas. */ 
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 
     /** Estilo del halo persistente. Hereda del ModoProvider si se omite. */ 

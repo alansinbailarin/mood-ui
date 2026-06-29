@@ -1,4 +1,5 @@
 import type { Component } from 'vue';
+import type { ModoSize } from '../../config/ModoConfig';
 
 export interface TimelineItem {
     /** Unique identifier. */
@@ -25,7 +26,7 @@ export interface Timeline {
     /** Side of the marker rail. */
     side?: 'left' | 'right';
     /** Size scale. Inherits from `ModoProvider` if omitted. */
-    size?: 'small' | 'medium' | 'large';
+    size?: ModoSize;
     /** Default marker variant for items that don't override. */
     variant?: 'dot' | 'icon' | 'outline';
 }

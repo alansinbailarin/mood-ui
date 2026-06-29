@@ -55,20 +55,20 @@ interface ShapePreset {
  
 const SHAPE_PRESETS: Record<Shape, ShapePreset> = { 
     text: { 
-        height: { small: '0.75rem', medium: '0.875rem', large: '1rem' }, 
-        defaultWidth: { small: '100%', medium: '100%', large: '100%' }, 
+        height: { xsmall: '0.75rem', small: '0.75rem', medium: '0.875rem', large: '1rem' }, 
+        defaultWidth: { xsmall: '100%', small: '100%', medium: '100%', large: '100%' }, 
     }, 
     title: { 
-        height: { small: '1.25rem', medium: '1.5rem', large: '1.875rem' }, 
-        defaultWidth: { small: '55%', medium: '60%', large: '65%' }, 
+        height: { xsmall: '1.25rem', small: '1.25rem', medium: '1.5rem', large: '1.875rem' }, 
+        defaultWidth: { xsmall: '55%', small: '55%', medium: '60%', large: '65%' }, 
     }, 
     rect: { 
-        height: { small: '3rem', medium: '4rem', large: '6rem' }, 
-        defaultWidth: { small: '100%', medium: '100%', large: '100%' }, 
+        height: { xsmall: '3rem', small: '3rem', medium: '4rem', large: '6rem' }, 
+        defaultWidth: { xsmall: '100%', small: '100%', medium: '100%', large: '100%' }, 
     }, 
     circle: { 
-        height: { small: '1.5rem', medium: '2rem', large: '2.5rem' }, 
-        defaultWidth: { small: '1.5rem', medium: '2rem', large: '2.5rem' }, 
+        height: { xsmall: '1.5rem', small: '1.5rem', medium: '2rem', large: '2.5rem' }, 
+        defaultWidth: { xsmall: '1.5rem', small: '1.5rem', medium: '2rem', large: '2.5rem' }, 
         square: true, 
     }, 
     // Matches `Avatar` sizes exactly (small=2rem/32, medium=2.5rem/40, large=3rem/48). 
@@ -76,15 +76,15 @@ const SHAPE_PRESETS: Record<Shape, ShapePreset> = {
     // `Avatar` follows the same cascade unless `shape='circle'` overrides 
     // (which we do not have here — use `radius: 'full'` for a round avatar). 
     avatar: { 
-        height: { small: '2rem', medium: '2.5rem', large: '3rem' }, 
-        defaultWidth: { small: '2rem', medium: '2.5rem', large: '3rem' }, 
+        height: { xsmall: '2rem', small: '2rem', medium: '2.5rem', large: '3rem' }, 
+        defaultWidth: { xsmall: '2rem', small: '2rem', medium: '2.5rem', large: '3rem' }, 
         square: true, 
     }, 
     // Matches `Button` heights exactly. Radius respects the prop/provider 
     // (no longer forced to full — Fase 1 bugfix). 
     button: { 
-        height: { small: '2rem', medium: '2.5rem', large: '3rem' }, 
-        defaultWidth: { small: '5rem', medium: '6rem', large: '8rem' }, 
+        height: { xsmall: '2rem', small: '2rem', medium: '2.5rem', large: '3rem' }, 
+        defaultWidth: { xsmall: '5rem', small: '5rem', medium: '6rem', large: '8rem' }, 
     }, 
  
     /* --- Fase 2: form-field shapes --- 
@@ -93,51 +93,51 @@ const SHAPE_PRESETS: Record<Shape, ShapePreset> = {
      * We still expose separate shape names so the markup reads 1:1 with the 
      * real component (`<Skeleton shape="passwordInput" />`). 
      */ 
-    input:           { height: { small: '2rem', medium: '2.5rem', large: '3rem' }, defaultWidth: { small: '14rem', medium: '16rem', large: '20rem' } }, 
-    select:          { height: { small: '2rem', medium: '2.5rem', large: '3rem' }, defaultWidth: { small: '14rem', medium: '16rem', large: '20rem' } }, 
-    multiSelect:     { height: { small: '2rem', medium: '2.5rem', large: '3rem' }, defaultWidth: { small: '14rem', medium: '16rem', large: '20rem' } }, 
-    combobox:        { height: { small: '2rem', medium: '2.5rem', large: '3rem' }, defaultWidth: { small: '14rem', medium: '16rem', large: '20rem' } }, 
-    numberInput:     { height: { small: '2rem', medium: '2.5rem', large: '3rem' }, defaultWidth: { small: '14rem', medium: '16rem', large: '20rem' } }, 
-    searchInput:     { height: { small: '2rem', medium: '2.5rem', large: '3rem' }, defaultWidth: { small: '14rem', medium: '16rem', large: '20rem' } }, 
-    passwordInput:   { height: { small: '2rem', medium: '2.5rem', large: '3rem' }, defaultWidth: { small: '14rem', medium: '16rem', large: '20rem' } }, 
-    fileInput:       { height: { small: '2rem', medium: '2.5rem', large: '3rem' }, defaultWidth: { small: '14rem', medium: '16rem', large: '20rem' } }, 
-    dateField:       { height: { small: '2rem', medium: '2.5rem', large: '3rem' }, defaultWidth: { small: '14rem', medium: '16rem', large: '20rem' } }, 
-    dateTimeField:   { height: { small: '2rem', medium: '2.5rem', large: '3rem' }, defaultWidth: { small: '14rem', medium: '16rem', large: '20rem' } }, 
-    dateRangeField:  { height: { small: '2rem', medium: '2.5rem', large: '3rem' }, defaultWidth: { small: '14rem', medium: '16rem', large: '20rem' } }, 
+    input:           { height: { xsmall: '2rem', small: '2rem', medium: '2.5rem', large: '3rem' }, defaultWidth: { xsmall: '14rem', small: '14rem', medium: '16rem', large: '20rem' } }, 
+    select:          { height: { xsmall: '2rem', small: '2rem', medium: '2.5rem', large: '3rem' }, defaultWidth: { xsmall: '14rem', small: '14rem', medium: '16rem', large: '20rem' } }, 
+    multiSelect:     { height: { xsmall: '2rem', small: '2rem', medium: '2.5rem', large: '3rem' }, defaultWidth: { xsmall: '14rem', small: '14rem', medium: '16rem', large: '20rem' } }, 
+    combobox:        { height: { xsmall: '2rem', small: '2rem', medium: '2.5rem', large: '3rem' }, defaultWidth: { xsmall: '14rem', small: '14rem', medium: '16rem', large: '20rem' } }, 
+    numberInput:     { height: { xsmall: '2rem', small: '2rem', medium: '2.5rem', large: '3rem' }, defaultWidth: { xsmall: '14rem', small: '14rem', medium: '16rem', large: '20rem' } }, 
+    searchInput:     { height: { xsmall: '2rem', small: '2rem', medium: '2.5rem', large: '3rem' }, defaultWidth: { xsmall: '14rem', small: '14rem', medium: '16rem', large: '20rem' } }, 
+    passwordInput:   { height: { xsmall: '2rem', small: '2rem', medium: '2.5rem', large: '3rem' }, defaultWidth: { xsmall: '14rem', small: '14rem', medium: '16rem', large: '20rem' } }, 
+    fileInput:       { height: { xsmall: '2rem', small: '2rem', medium: '2.5rem', large: '3rem' }, defaultWidth: { xsmall: '14rem', small: '14rem', medium: '16rem', large: '20rem' } }, 
+    dateField:       { height: { xsmall: '2rem', small: '2rem', medium: '2.5rem', large: '3rem' }, defaultWidth: { xsmall: '14rem', small: '14rem', medium: '16rem', large: '20rem' } }, 
+    dateTimeField:   { height: { xsmall: '2rem', small: '2rem', medium: '2.5rem', large: '3rem' }, defaultWidth: { xsmall: '14rem', small: '14rem', medium: '16rem', large: '20rem' } }, 
+    dateRangeField:  { height: { xsmall: '2rem', small: '2rem', medium: '2.5rem', large: '3rem' }, defaultWidth: { xsmall: '14rem', small: '14rem', medium: '16rem', large: '20rem' } }, 
  
     // Multi-line area — approx. 3 rows of content per size. 
     textarea: { 
-        height: { small: '5rem', medium: '6.5rem', large: '8rem' }, 
-        defaultWidth: { small: '14rem', medium: '16rem', large: '20rem' }, 
+        height: { xsmall: '5rem', small: '5rem', medium: '6.5rem', large: '8rem' }, 
+        defaultWidth: { xsmall: '14rem', small: '14rem', medium: '16rem', large: '20rem' }, 
     }, 
  
     // File drop-zone — matches FileInput `min-h-[120/180/240]` per size. 
     fileInputArea: { 
-        height: { small: '7.5rem', medium: '11.25rem', large: '15rem' }, 
-        defaultWidth: { small: '100%', medium: '100%', large: '100%' }, 
+        height: { xsmall: '7.5rem', small: '7.5rem', medium: '11.25rem', large: '15rem' }, 
+        defaultWidth: { xsmall: '100%', small: '100%', medium: '100%', large: '100%' }, 
     }, 
  
     /* --- Fase 3: selection + range controls --- */ 
  
     // Matches `Checkbox` box (w-4/5/6). Labels sit inline on the right. 
     checkbox: { 
-        height: { small: '1rem', medium: '1.25rem', large: '1.5rem' }, 
-        defaultWidth: { small: '1rem', medium: '1.25rem', large: '1.5rem' }, 
+        height: { xsmall: '1rem', small: '1rem', medium: '1.25rem', large: '1.5rem' }, 
+        defaultWidth: { xsmall: '1rem', small: '1rem', medium: '1.25rem', large: '1.5rem' }, 
         square: true, 
         labelSide: 'right', 
     }, 
     // Matches `Radio` (same footprint as checkbox, but always full radius). 
     radio: { 
-        height: { small: '1rem', medium: '1.25rem', large: '1.5rem' }, 
-        defaultWidth: { small: '1rem', medium: '1.25rem', large: '1.5rem' }, 
+        height: { xsmall: '1rem', small: '1rem', medium: '1.25rem', large: '1.5rem' }, 
+        defaultWidth: { xsmall: '1rem', small: '1rem', medium: '1.25rem', large: '1.5rem' }, 
         forceFull: true, 
         square: true, 
         labelSide: 'right', 
     }, 
     // Matches `Switch` track (32×20 / 40×24 / 56×32 px). 
     switch: { 
-        height: { small: '1.25rem', medium: '1.5rem', large: '2rem' }, 
-        defaultWidth: { small: '2rem', medium: '2.5rem', large: '3.5rem' }, 
+        height: { xsmall: '1.25rem', small: '1.25rem', medium: '1.5rem', large: '2rem' }, 
+        defaultWidth: { xsmall: '2rem', small: '2rem', medium: '2.5rem', large: '3.5rem' }, 
         forceFull: true, 
         labelSide: 'right', 
     }, 
@@ -145,13 +145,13 @@ const SHAPE_PRESETS: Record<Shape, ShapePreset> = {
     // Heights refer to the *overall* box (thumb is what dictates it); the 
     // inner track is drawn thinner via the template. 
     slider: { 
-        height: { small: '1rem', medium: '1.25rem', large: '1.5rem' }, 
-        defaultWidth: { small: '10rem', medium: '14rem', large: '18rem' }, 
+        height: { xsmall: '1rem', small: '1rem', medium: '1.25rem', large: '1.5rem' }, 
+        defaultWidth: { xsmall: '10rem', small: '10rem', medium: '14rem', large: '18rem' }, 
         render: 'slider', 
     }, 
     rangeSlider: { 
-        height: { small: '1rem', medium: '1.25rem', large: '1.5rem' }, 
-        defaultWidth: { small: '10rem', medium: '14rem', large: '18rem' }, 
+        height: { xsmall: '1rem', small: '1rem', medium: '1.25rem', large: '1.5rem' }, 
+        defaultWidth: { xsmall: '10rem', small: '10rem', medium: '14rem', large: '18rem' }, 
         render: 'rangeSlider', 
     }, 
  
@@ -162,42 +162,42 @@ const SHAPE_PRESETS: Record<Shape, ShapePreset> = {
     // configured; if the user sets `radius: 'small'` globally, both the 
     // real Chip and this skeleton must follow). Hence no `forceFull`. 
     chip: { 
-        height: { small: '1.25rem', medium: '1.5rem', large: '1.75rem' }, 
-        defaultWidth: { small: '3.5rem', medium: '4.5rem', large: '5.5rem' }, 
+        height: { xsmall: '1.25rem', small: '1.25rem', medium: '1.5rem', large: '1.75rem' }, 
+        defaultWidth: { xsmall: '3.5rem', small: '3.5rem', medium: '4.5rem', large: '5.5rem' }, 
     }, 
     // Matches `Badge` — same cascade rules as Chip. 
     badge: { 
-        height: { small: '1rem', medium: '1.25rem', large: '1.5rem' }, 
-        defaultWidth: { small: '2rem', medium: '2.5rem', large: '3rem' }, 
+        height: { xsmall: '1rem', small: '1rem', medium: '1.25rem', large: '1.5rem' }, 
+        defaultWidth: { xsmall: '2rem', small: '2rem', medium: '2.5rem', large: '3rem' }, 
     }, 
     // Matches `Banner` base: gap-3 + px-4 py-3 + text-sm ≈ 48 px tall. 
     // Spans the container by default. 
     banner: { 
-        height: { small: '2.5rem', medium: '3rem', large: '3.5rem' }, 
-        defaultWidth: { small: '100%', medium: '100%', large: '100%' }, 
+        height: { xsmall: '2.5rem', small: '2.5rem', medium: '3rem', large: '3.5rem' }, 
+        defaultWidth: { xsmall: '100%', small: '100%', medium: '100%', large: '100%' }, 
     }, 
     // Generic card — respects radius. Used for bulk list/grid placeholders. 
     card: { 
-        height: { small: '8rem', medium: '12rem', large: '16rem' }, 
-        defaultWidth: { small: '100%', medium: '100%', large: '100%' }, 
+        height: { xsmall: '8rem', small: '8rem', medium: '12rem', large: '16rem' }, 
+        defaultWidth: { xsmall: '100%', small: '100%', medium: '100%', large: '100%' }, 
     }, 
  
     // Composites — the box is a flex container; children are drawn in the 
     // template. Width/height act as the *outer* bounds; inner sizing is 
     // driven by `size`. 
     profileRow: { 
-        height: { small: '2rem', medium: '2.5rem', large: '3rem' }, 
-        defaultWidth: { small: '14rem', medium: '18rem', large: '22rem' }, 
+        height: { xsmall: '2rem', small: '2rem', medium: '2.5rem', large: '3rem' }, 
+        defaultWidth: { xsmall: '14rem', small: '14rem', medium: '18rem', large: '22rem' }, 
         render: 'profileRow', 
     }, 
     mediaCard: { 
-        height: { small: '12rem', medium: '15rem', large: '18rem' }, 
-        defaultWidth: { small: '12rem', medium: '16rem', large: '20rem' }, 
+        height: { xsmall: '12rem', small: '12rem', medium: '15rem', large: '18rem' }, 
+        defaultWidth: { xsmall: '12rem', small: '12rem', medium: '16rem', large: '20rem' }, 
         render: 'mediaCard', 
     }, 
     listRow: { 
-        height: { small: '2rem', medium: '2.5rem', large: '3rem' }, 
-        defaultWidth: { small: '16rem', medium: '20rem', large: '24rem' }, 
+        height: { xsmall: '2rem', small: '2rem', medium: '2.5rem', large: '3rem' }, 
+        defaultWidth: { xsmall: '16rem', small: '16rem', medium: '20rem', large: '24rem' }, 
         render: 'listRow', 
     }, 
 }; 

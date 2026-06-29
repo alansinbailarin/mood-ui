@@ -1,4 +1,6 @@
-export interface Checkbox { 
+import type { ModoSize } from '../../config/ModoConfig';
+
+export interface Checkbox {
     /** v-model (boolean). Cuando `indeterminate` es true, el valor no cambia visualmente. */ 
     modelValue?: boolean; 
  
@@ -14,7 +16,7 @@ export interface Checkbox {
     /** Familia semántica para el estado checked. */ 
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
     /** Tamaño. */ 
-    size?: 'small' | 'medium' | 'large'; 
+    size?: ModoSize;
     /** Radio del cuadro. */ 
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 
  

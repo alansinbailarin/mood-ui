@@ -1,4 +1,5 @@
 import type { Component } from 'vue';
+import type { ModoSize } from '../../config/ModoConfig';
 
 export interface SegmentedItem {
     /** Unique value emitted via `update:modelValue`. */
@@ -21,7 +22,7 @@ export interface Segmented {
     /** Semantic color family for the active segment. */
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning';
     /** Size scale. Inherits from `ModoProvider` if omitted. */
-    size?: 'small' | 'medium' | 'large';
+    size?: ModoSize;
     /** Corner radius. Inherits from `ModoProvider` if omitted. */
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
     /** Stretch the control to fill its container. */

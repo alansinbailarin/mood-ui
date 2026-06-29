@@ -1,3 +1,5 @@
+import type { ModoSize } from '../../config/ModoConfig';
+
 export interface PhoneInput {
     /**
      * v-model — the phone number value.
@@ -42,7 +44,7 @@ export interface PhoneInput {
     /** Semantic color applied to focus and accent states. */
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning';
     /** Field size. */
-    size?: 'small' | 'medium' | 'large';
+    size?: ModoSize;
     /** Corner radius. Inherits from ModoProvider when omitted. */
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
     /**

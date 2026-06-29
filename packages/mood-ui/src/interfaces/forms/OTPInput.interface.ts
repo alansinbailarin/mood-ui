@@ -1,3 +1,5 @@
+import type { ModoSize } from '../../config/ModoConfig';
+
 export interface OTPInput {
   /** The full OTP string value (v-model). */
   modelValue?: string;
@@ -36,7 +38,7 @@ export interface OTPInput {
   /** Semantic color applied to focus ring and accent states. */
   color?: "default" | "primary" | "danger" | "success" | "warning";
   /** Slot size. */
-  size?: "small" | "medium" | "large";
+  size?: ModoSize;
   /** Corner radius for each slot. Inherits from ModoProvider when omitted. */
   radius?: "none" | "small" | "medium" | "large" | "full";
   /**

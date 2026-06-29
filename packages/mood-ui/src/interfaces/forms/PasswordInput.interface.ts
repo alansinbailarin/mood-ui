@@ -1,4 +1,5 @@
-import type { Component } from 'vue'; 
+import type { Component } from 'vue';
+import type { ModoSize } from '../../config/ModoConfig';
  
 /** Score heurístico expuesto por `PasswordInput` (0 = vacío · 4 = strong). */ 
 export type PasswordStrengthScore = 0 | 1 | 2 | 3 | 4; 
@@ -27,8 +28,8 @@ export interface PasswordInput {
     variant?: 'outline' | 'filled' | 'ghost'; 
     /** Familia semántica para el estado de foco/acento. */ 
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
-    /** Tamaño. */ 
-    size?: 'small' | 'medium' | 'large'; 
+    /** Tamaño. */
+    size?: ModoSize; 
     /** Radio de esquinas. */ 
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 
     /** Estilo del halo persistente. Hereda del ModoProvider si se omite. */ 

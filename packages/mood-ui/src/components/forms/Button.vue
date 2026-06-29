@@ -59,6 +59,7 @@
 <script setup lang="ts">
 import { computed, inject, useSlots } from "vue";
 import type { Button } from "../../interfaces/forms/Button.interface";
+import type { ModoSize } from "../../config/ModoConfig";
 import {
   useResolvedColor,
   useResolvedHalo,
@@ -115,17 +116,16 @@ const size = computed<Button["size"]>(
     "medium",
 );
 const sz = useSizeTokens(
-  () =>
-    (groupProps.size as Button["size"]) ??
-    props.size ??
-    cfg?.value.size ??
-    "medium",
+  () => {
+    const s = (groupProps.size as Button["size"]) ?? props.size ?? cfg?.value.size ?? "medium";
+    // normalizeSize handles the legacy 'xs' alias — cast to satisfy useSizeTokens signature
+    return s === "xs" ? "small" : s as ModoSize;
+  },
 );
-// Loader/Skeleton don't have an 'xs' size — collapse it to 'small' when
-// forwarding so the visual footprint of `<Button size="xs" loading>` and
-// `<Button size="xs" skeleton>` stays compact but renders cleanly.
-const forwardSize = computed<"small" | "medium" | "large">(() =>
-  size.value === "xs" ? "small" : (size.value as "small" | "medium" | "large"),
+// Loader/Skeleton don't have an 'xs'/'xsmall' size — collapse to 'small' when
+// forwarding so the visual footprint of `<Button size="xs" loading>` stays compact.
+const forwardSize = computed<"xsmall" | "small" | "medium" | "large">(() =>
+  size.value === "xs" ? "small" : (size.value as "xsmall" | "small" | "medium" | "large"),
 );
 const isDisabled = computed(() => groupProps.disabled ?? props.disabled);
 const gradient = computed(() => groupProps.gradient ?? props.gradient);

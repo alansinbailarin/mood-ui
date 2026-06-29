@@ -1,4 +1,5 @@
 import type { Component } from 'vue'; 
+import type { ModoSize } from '../../config/ModoConfig';
  
 export interface PageHeader { 
     /** Visible title text. Use the `title` slot if you need rich content. */ 
@@ -12,7 +13,7 @@ export interface PageHeader {
     /** Accessible name for the (icon-only) back button. */ 
     backAriaLabel?: string; 
     /** Visual size of the title. Default `'medium'`. */ 
-    size?: 'small' | 'medium' | 'large'; 
+    size?: ModoSize; 
     /** Render a bottom border separating the header from page content. */ 
     divider?: boolean; 
     /** Make the header `position: sticky` to the top with a translucent background. */ 

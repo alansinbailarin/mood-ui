@@ -1,5 +1,6 @@
-import type { Component } from 'vue'; 
-import type { SelectOption } from './Select.interface'; 
+import type { Component } from 'vue';
+import type { SelectOption } from './Select.interface';
+import type { ModoSize } from '../../config/ModoConfig'; 
  
 export type { SelectOption }; 
  
@@ -43,7 +44,7 @@ export interface Combobox {
     /** Estilo visual. */ 
     variant?: 'outline' | 'filled' | 'ghost'; 
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
-    size?: 'small' | 'medium' | 'large'; 
+    size?: ModoSize; 
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 
     /** Estilo del halo persistente. Hereda del ModoProvider si se omite. */ 
     halo?: 'tinted' | 'neutral' | 'off'; 

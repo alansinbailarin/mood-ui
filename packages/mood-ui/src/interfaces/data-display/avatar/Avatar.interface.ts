@@ -1,8 +1,10 @@
+import type { ModoSize } from '../../../config/ModoConfig';
+
 export interface Avatar { 
     src?: string; 
     alt?: string; 
     initials?: string; 
-    size?: 'xs' | 'small' | 'medium' | 'large' | 'xl'; 
+    size?: ModoSize | 'xl'; 
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 
     status?: 'online' | 'offline' | 'away' | 'busy'; 
     bordered?: boolean; 

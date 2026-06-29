@@ -1,5 +1,6 @@
 import type { Component } from 'vue'; 
  
+import type { ModoSize } from '../../config/ModoConfig';
 /** 
  * One node in the breadcrumb trail. Either provide `to` (router-style 
  * link string) or `href` (regular anchor); leave both undefined for the 
@@ -32,7 +33,7 @@ export interface Breadcrumbs {
     /** Custom separator string (overrides `separator`). */ 
     separatorText?: string; 
     /** Visual size. @default 'medium' */ 
-    size?: 'small' | 'medium' | 'large'; 
+    size?: ModoSize; 
     /** Show a Home icon on the first item when it has no own icon. @default false */ 
     showHomeIcon?: boolean; 
     /** Accessible label for the nav landmark. @default 'Breadcrumb' */ 

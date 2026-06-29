@@ -1,3 +1,5 @@
+import type { ModoSize } from '../../config/ModoConfig';
+
 export interface ColorPicker {
     /** Selected color in hex (v-model). */
     modelValue?: string;
@@ -14,7 +16,7 @@ export interface ColorPicker {
     /** Semantic color for focus ring — same as Input/Select. */
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning';
     /** Size scale. Inherits from `ModoProvider` if omitted. */
-    size?: 'small' | 'medium' | 'large';
+    size?: ModoSize;
     /** Corner radius. Inherits from `ModoProvider` if omitted. */
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
     /** Optional accessible name for the trigger button. */

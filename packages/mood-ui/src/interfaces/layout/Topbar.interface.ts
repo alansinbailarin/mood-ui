@@ -1,4 +1,5 @@
 import type { Component } from 'vue'; 
+import type { ModoSize } from '../../config/ModoConfig';
  
 /** 
  * Topbar (L04 · layout) — application top bar with logo, navigation, 
@@ -11,7 +12,7 @@ export interface Topbar {
     /** Secondary text under the title. Use the `subtitle` slot for rich content. */ 
     subtitle?: string; 
     /** Visual height of the bar. Default `'medium'`. */ 
-    size?: 'small' | 'medium' | 'large'; 
+    size?: ModoSize; 
     /** Render a bottom border separating the bar from page content. */ 
     divider?: boolean; 
     /** Make the bar `position: sticky` to the top with a translucent background. */ 

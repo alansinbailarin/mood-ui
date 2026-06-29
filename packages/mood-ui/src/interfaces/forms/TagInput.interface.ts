@@ -1,3 +1,5 @@
+import type { ModoSize } from '../../config/ModoConfig';
+
 export interface TagInput {
     /** Current array of tags (v-model). */
     modelValue?: string[];
@@ -22,7 +24,7 @@ export interface TagInput {
     /** Visual variant for the field wrapper. Matches Input/Select/Combobox. */
     fieldVariant?: 'outline' | 'filled' | 'ghost';
     /** Size scale. Inherits from `ModoProvider` if omitted. */
-    size?: 'small' | 'medium' | 'large';
+    size?: ModoSize;
     /** Corner radius. Inherits from `ModoProvider` if omitted. */
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
     /** Halo style. Inherits from `ModoProvider` if omitted. */

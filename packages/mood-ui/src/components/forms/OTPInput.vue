@@ -65,7 +65,7 @@
       <!-- Loading spinner -->
       <Loader
         v-if="loading"
-        :size="sz.value.control === 'h-12' ? 'medium' : 'small'"
+        :size="sz.control === 'h-12' ? 'medium' : 'small'"
         class="ml-1 text-muted-foreground shrink-0"
       />
     </div>

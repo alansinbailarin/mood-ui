@@ -1,3 +1,5 @@
+import type { ModoSize } from '../../config/ModoConfig';
+
 export interface ColorModeSwitch {
     /** Color mode value (v-model). One of 'light' | 'system' | 'dark'. */
     modelValue: 'light' | 'system' | 'dark';
@@ -17,7 +19,7 @@ export interface ColorModeSwitch {
     showLabels?: boolean;
 
     /** Size variant. @default 'medium' */
-    size?: 'small' | 'medium' | 'large';
+    size?: ModoSize;
 
     /** Disabled state — prevents selection changes. @default false */
     disabled?: boolean;

@@ -1,4 +1,5 @@
 import type { Component } from 'vue';
+import type { ModoSize } from '../../config/ModoConfig';
 
 export interface Stat {
     /** Short label (e.g. "Revenue"). */
@@ -23,7 +24,7 @@ export interface Stat {
     /** Semantic color family for the icon and trend. */
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning';
     /** Size scale. Inherits from `ModoProvider` if omitted. */
-    size?: 'small' | 'medium' | 'large';
+    size?: ModoSize;
     /** Show a decorative loading skeleton instead of the value. */
     loading?: boolean;
 }

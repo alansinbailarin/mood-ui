@@ -1,6 +1,7 @@
+import type { ModoSize } from '../../config/ModoConfig';
 export interface Code {
     /** Size scale. Inherits from `ModoProvider` if omitted. */
-    size?: 'small' | 'medium' | 'large';
+    size?: ModoSize;
     /** Visual variant. */
     variant?: 'subtle' | 'outline' | 'ghost';
     /** Semantic color family. */

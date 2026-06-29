@@ -71,15 +71,15 @@ provide('avatarGroup', {
     grouped: true, 
 }); 
  
-const overlapClasses = computed(() => { 
-    switch (props.size) { 
-        case 'xs': return '-space-x-1.5'; 
-        case 'small': return '-space-x-2'; 
-        case 'large': return '-space-x-3.5'; 
-        case 'xl': return '-space-x-5'; 
-        default: return '-space-x-2.5'; 
-    } 
-}); 
+const overlapClasses = computed(() => {
+    switch (props.size) {
+        case 'xsmall': return '-space-x-1.5';
+        case 'small': return '-space-x-2';
+        case 'large': return '-space-x-3.5';
+        case 'xl': return '-space-x-5';
+        default: return '-space-x-2.5';
+    }
+});
  
 const shapeClasses = computed(() => { 
     switch (resolvedRadius.value) { 
@@ -91,23 +91,23 @@ const shapeClasses = computed(() => {
     } 
 }); 
  
-const counterSizeClasses = computed(() => { 
-    switch (props.size) { 
-        case 'xs': return 'w-6 h-6'; 
-        case 'small': return 'w-8 h-8'; 
-        case 'large': return 'w-14 h-14'; 
-        case 'xl': return 'w-20 h-20'; 
-        default: return 'w-10 h-10'; 
-    } 
-}); 
- 
-const counterFontClasses = computed(() => { 
-    switch (props.size) { 
-        case 'xs': return 'text-[10px]'; 
-        case 'small': return 'text-xs'; 
-        case 'large': return 'text-lg'; 
-        case 'xl': return 'text-2xl'; 
-        default: return 'text-sm'; 
-    } 
-}); 
+const counterSizeClasses = computed(() => {
+    switch (props.size) {
+        case 'xsmall': return 'w-6 h-6';
+        case 'small': return 'w-8 h-8';
+        case 'large': return 'w-14 h-14';
+        case 'xl': return 'w-20 h-20';
+        default: return 'w-10 h-10';
+    }
+});
+
+const counterFontClasses = computed(() => {
+    switch (props.size) {
+        case 'xsmall': return 'text-[10px]';
+        case 'small': return 'text-xs';
+        case 'large': return 'text-lg';
+        case 'xl': return 'text-2xl';
+        default: return 'text-sm';
+    }
+});
 </script>

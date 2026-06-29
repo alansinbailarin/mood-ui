@@ -121,7 +121,7 @@ const titleVariant = computed<'heading' | 'display'>(() =>
     resolvedSize.value === 'large' ? 'display' : 'heading', 
 ); 
  
-const titleSize = computed<'small' | 'medium' | 'large'>(() => { 
+const titleSize = computed<'small' | 'medium'>(() => {
     if (resolvedSize.value === 'large') return 'small';   // display/small ≈ text-4xl 
     if (resolvedSize.value === 'small') return 'small';   // heading/small  ≈ text-xl 
     return 'medium';                              // heading/medium ≈ text-2xl 

@@ -58,6 +58,7 @@
 <script setup lang="ts"> 
 import { ref, computed, inject } from 'vue';
 import type { Avatar } from '../../../interfaces/data-display/avatar/Avatar.interface';
+import type { ModoSize } from '../../../config/ModoConfig';
 import { useResolvedColor, useResolvedRadius, useSizeTokens } from '../../../composables/useModoConfig'; 
 import Skeleton from '../../feedback/Skeleton.vue'; 
  
@@ -85,7 +86,8 @@ const size = computed(() => (groupProps.size?.value as Avatar['size']) ?? props.
 const bordered = computed(() => groupProps.bordered?.value ?? props.bordered);
 const color = useResolvedColor(() => props.color);
 const resolvedRadius = useResolvedRadius(() => (groupProps.radius?.value as Avatar['radius']) ?? props.radius);
-const sz = useSizeTokens(() => size.value as Avatar['size']); 
+// 'xl' is Avatar-only — normalizeSize maps it to 'large'; cast to ModoSize for useSizeTokens.
+const sz = useSizeTokens(() => (size.value === 'xl' ? 'large' : size.value) as ModoSize | undefined);
  
 /* ---------------- Skeleton placeholder ---------------- 
  * Mirrors the avatar's pixel footprint. We compute an explicit CSS length 
@@ -101,11 +103,11 @@ const skeletonDimension = computed(() => {
 }); 
 // Skeleton's own `size` prop is used only as a hint (e.g. track thickness) 
 // — for avatar the explicit width/height wins. Map to the nearest bucket. 
-const skeletonBaseSize = computed<'small' | 'medium' | 'large'>(() => { 
-    if (size.value === 'xs' || size.value === 'small') return 'small'; 
-    if (size.value === 'large' || size.value === 'xl') return 'large'; 
-    return 'medium'; 
-}); 
+const skeletonBaseSize = computed<'small' | 'medium' | 'large'>(() => {
+    if (size.value === 'xsmall' || size.value === 'small') return 'small';
+    if (size.value === 'large' || size.value === 'xl') return 'large';
+    return 'medium';
+});
 // `shape="avatar"` already forces full radius. Pass through the resolved 
 // radius so the skeleton matches the real avatar's corner shape. 
 const skeletonRadiusOverride = computed<Avatar['radius'] | undefined>(() => resolvedRadius.value); 
@@ -138,15 +140,15 @@ const initialsBgClasses = computed(() => {
     } 
 }); 
  
-const initialsFontClasses = computed(() => { 
-    switch (size.value) { 
-        case 'xs': return 'text-[10px]'; 
-        case 'small': return 'text-xs'; 
-        case 'large': return 'text-lg'; 
-        case 'xl': return 'text-2xl'; 
-        default: return 'text-sm'; 
-    } 
-}); 
+const initialsFontClasses = computed(() => {
+    switch (size.value) {
+        case 'xsmall': return 'text-[10px]';
+        case 'small': return 'text-xs';
+        case 'large': return 'text-lg';
+        case 'xl': return 'text-2xl';
+        default: return 'text-sm';
+    }
+});
  
 const iconFallbackColorClasses = computed(() => {
     switch (color.value) {
@@ -158,25 +160,25 @@ const iconFallbackColorClasses = computed(() => {
     }
 });
 
-const iconFallbackClasses = computed(() => { 
-    switch (size.value) { 
-        case 'xs': return 'w-3.5 h-3.5'; 
-        case 'small': return 'w-4 h-4'; 
-        case 'large': return 'w-7 h-7'; 
-        case 'xl': return 'w-10 h-10'; 
-        default: return 'w-5 h-5'; 
-    } 
-}); 
- 
-const statusSizeClasses = computed(() => { 
-    switch (size.value) { 
-        case 'xs': return 'w-1.5 h-1.5'; 
-        case 'small': return 'w-2 h-2'; 
-        case 'large': return 'w-3.5 h-3.5'; 
-        case 'xl': return 'w-4 h-4'; 
-        default: return 'w-2.5 h-2.5'; 
-    } 
-}); 
+const iconFallbackClasses = computed(() => {
+    switch (size.value) {
+        case 'xsmall': return 'w-3.5 h-3.5';
+        case 'small': return 'w-4 h-4';
+        case 'large': return 'w-7 h-7';
+        case 'xl': return 'w-10 h-10';
+        default: return 'w-5 h-5';
+    }
+});
+
+const statusSizeClasses = computed(() => {
+    switch (size.value) {
+        case 'xsmall': return 'w-1.5 h-1.5';
+        case 'small': return 'w-2 h-2';
+        case 'large': return 'w-3.5 h-3.5';
+        case 'xl': return 'w-4 h-4';
+        default: return 'w-2.5 h-2.5';
+    }
+});
  
 const statusColorClasses = computed(() => { 
     switch (props.status) { 

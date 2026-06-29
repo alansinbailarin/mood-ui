@@ -1,5 +1,6 @@
 import type { Component } from 'vue';
 
+import type { ModoSize } from '../../config/ModoConfig';
 export interface StepperStep {
     /** Unique identifier. */
     id: string | number;
@@ -27,7 +28,7 @@ export interface Stepper {
     /** Semantic color family for active/completed states. */
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning';
     /** Size scale. Inherits from `ModoProvider` if omitted. */
-    size?: 'small' | 'medium' | 'large';
+    size?: ModoSize;
     /** Allow clicking on completed steps to emit `step-click`. */
     clickable?: boolean;
 }
