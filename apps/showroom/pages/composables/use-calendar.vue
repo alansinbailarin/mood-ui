@@ -12,13 +12,6 @@ import type { PropDoc } from "~/types/component-doc";
 
 const { t } = useI18n();
 
-
-useSeoMeta({
-  title: () => t("pages.composables.useCalendar.title"),
-  description: () => t("pages.composables.useCalendar.description"),
-  ogTitle: () => `${t("pages.composables.useCalendar.title")} · mood-ui`,
-  ogDescription: () => t("pages.composables.useCalendar.description"),
-});
 const selectedDate = ref<Date | null>(new Date());
 const currentMonth = ref<number | undefined>(new Date().getMonth());
 const pgYear = ref<number | undefined>(new Date().getFullYear());

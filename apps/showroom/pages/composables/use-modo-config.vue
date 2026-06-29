@@ -12,13 +12,6 @@ import type { PropDoc } from "~/types/component-doc";
 
 const { t } = useI18n();
 
-
-useSeoMeta({
-  title: () => t("pages.composables.useModoConfig.title"),
-  description: () => t("pages.composables.useModoConfig.description"),
-  ogTitle: () => `${t("pages.composables.useModoConfig.title")} · mood-ui`,
-  ogDescription: () => t("pages.composables.useModoConfig.description"),
-});
 const cfg = useModoConfig();
 const demoColor = ref<string | undefined>(undefined);
 const resolved = useResolvedColor(() => demoColor.value as any);

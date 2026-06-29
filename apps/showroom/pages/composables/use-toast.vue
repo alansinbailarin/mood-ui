@@ -13,12 +13,6 @@ import TbPills from "~/components/toolbar/TbPills.vue";
 
 const { t } = useI18n();
 
-useSeoMeta({
-  title: () => t("pages.composables.useToast.title"),
-  description: () => t("pages.composables.useToast.description"),
-  ogTitle: () => `${t("pages.composables.useToast.title")} · mood-ui`,
-  ogDescription: () => t("pages.composables.useToast.description"),
-});
 const toast = useToast();
 
 const pgPlacement = ref<

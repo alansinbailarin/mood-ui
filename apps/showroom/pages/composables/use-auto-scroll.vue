@@ -11,13 +11,6 @@ import type { PropDoc } from "~/types/component-doc";
 
 const { t } = useI18n();
 
-
-useSeoMeta({
-  title: () => t("pages.composables.useAutoScroll.title"),
-  description: () => t("pages.composables.useAutoScroll.description"),
-  ogTitle: () => `${t("pages.composables.useAutoScroll.title")} · mood-ui`,
-  ogDescription: () => t("pages.composables.useAutoScroll.description"),
-});
 const scrollEl = ref<HTMLElement | null>(null);
 const { handleAutoScroll, stopAutoScroll } = useAutoScroll({
   scrollRef: scrollEl,

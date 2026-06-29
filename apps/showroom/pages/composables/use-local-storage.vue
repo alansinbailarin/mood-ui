@@ -18,13 +18,6 @@ import {
 
 const { t } = useI18n();
 
-useSeoMeta({
-  title: () => t("pages.composables.useLocalStorage.title"),
-  description: () => t("pages.composables.useLocalStorage.description"),
-  ogTitle: () => `${t("pages.composables.useLocalStorage.title")} · mood-ui`,
-  ogDescription: () => t("pages.composables.useLocalStorage.description"),
-});
-
 // ── Live demo state ─────────────────────────────────────────────────────────
 const name       = useLocalStorage("docs:demo-name", "mood-ui");
 const prefs      = useLocalStorage("docs:demo-prefs", { notifications: true, compact: false, autoSave: true });

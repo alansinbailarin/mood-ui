@@ -554,6 +554,67 @@ export const COMPONENT_SEO: Record<string, ComponentSeo> = {
     keywords: ["Vue Kbd", "Vue keyboard key component", "Vue shortcut key"],
     related: ["/data-display/code", "/data-display/typography", "/navigation/dropdown-menu"],
   },
+
+  // ── Composables ───────────────────────────────────────────────────────────
+  // APIs, not components → schemaType "TechArticle" (routed through
+  // defineArticle in usePageSeo). related links cross-reference sibling
+  // composables and the component each one pairs with.
+  "/composables/use-auto-scroll": {
+    route: "/composables/use-auto-scroll",
+    i18nKey: "pages.composables.useAutoScroll",
+    schemaType: "TechArticle",
+    keywords: ["useAutoScroll Vue", "Vue drag scroll composable"],
+    related: ["/composables/use-calendar", "/composables/use-local-storage"],
+  },
+  "/composables/use-calendar": {
+    route: "/composables/use-calendar",
+    i18nKey: "pages.composables.useCalendar",
+    schemaType: "TechArticle",
+    keywords: ["useCalendar Vue", "Vue calendar composable"],
+    related: ["/calendar", "/forms/date-field", "/composables/use-locale"],
+  },
+  "/composables/use-color-mode": {
+    route: "/composables/use-color-mode",
+    i18nKey: "pages.composables.useColorMode",
+    schemaType: "TechArticle",
+    keywords: ["useColorMode Vue", "Vue dark mode composable"],
+    related: ["/forms/color-mode-switch", "/composables/use-modo-config", "/composables/use-locale"],
+  },
+  "/composables/use-confirm": {
+    route: "/composables/use-confirm",
+    i18nKey: "pages.composables.useConfirm",
+    schemaType: "TechArticle",
+    keywords: ["useConfirm Vue", "Vue confirm dialog composable"],
+    related: ["/feedback/confirm-dialog", "/composables/use-toast", "/feedback/modal"],
+  },
+  "/composables/use-local-storage": {
+    route: "/composables/use-local-storage",
+    i18nKey: "pages.composables.useLocalStorage",
+    schemaType: "TechArticle",
+    keywords: ["useLocalStorage Vue", "Vue localStorage composable"],
+    related: ["/composables/use-color-mode", "/composables/use-locale", "/composables/use-modo-config"],
+  },
+  "/composables/use-locale": {
+    route: "/composables/use-locale",
+    i18nKey: "pages.composables.useLocale",
+    schemaType: "TechArticle",
+    keywords: ["useLocale Vue", "Vue locale switcher composable"],
+    related: ["/composables/use-modo-config", "/composables/use-color-mode", "/composables/use-local-storage"],
+  },
+  "/composables/use-modo-config": {
+    route: "/composables/use-modo-config",
+    i18nKey: "pages.composables.useModoConfig",
+    schemaType: "TechArticle",
+    keywords: ["useModoConfig", "Vue theme config composable"],
+    related: ["/composables/use-color-mode", "/composables/use-locale", "/composables/use-calendar"],
+  },
+  "/composables/use-toast": {
+    route: "/composables/use-toast",
+    i18nKey: "pages.composables.useToast",
+    schemaType: "TechArticle",
+    keywords: ["useToast Vue", "Vue toast composable"],
+    related: ["/feedback/toast", "/composables/use-confirm", "/feedback/banner"],
+  },
 };
 
 /** Strip a leading locale prefix (e.g. "/es/forms/x" → "/forms/x"). */

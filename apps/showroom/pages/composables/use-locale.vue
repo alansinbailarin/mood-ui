@@ -12,12 +12,6 @@ import type { PropDoc } from "~/types/component-doc";
 
 const { t } = useI18n();
 
-useSeoMeta({
-  title: () => t("pages.composables.useLocale.title"),
-  description: () => t("pages.composables.useLocale.description"),
-  ogTitle: () => `${t("pages.composables.useLocale.title")} · mood-ui`,
-  ogDescription: () => t("pages.composables.useLocale.description"),
-});
 const { current, set } = useLocale();
 
 const localGreeting = computed(() =>

@@ -4,6 +4,12 @@
       "useLocalStorage": {
         "title": "useLocalStorage",
         "description": "Ref reactivo respaldado por localStorage. Lee el valor almacenado al montar, escribe de vuelta en cada cambio (watch profundo para objetos/arrays) y es seguro de usar en contextos SSR.",
+        "seo": {
+          "metaTitle": "useLocalStorage — Composable Vue",
+          "metaDescription": "useLocalStorage es un composable Vue 3 que devuelve un ref reactivo respaldado por localStorage: lee al montar, escribe en cada cambio, watch profundo, seguro en SSR.",
+          "h1": "useLocalStorage",
+          "intro": "useLocalStorage es un composable Vue 3 / Nuxt gratuito que devuelve un ref reactivo respaldado por localStorage — lee el valor al montar y lo escribe de vuelta en cada cambio, con watch profundo para objetos y comportamiento seguro en SSR."
+        },
         "api": {
           "key": "Clave de localStorage usada para leer y escribir el valor.",
           "defaultValue": "Valor de respaldo cuando la clave no existe o el JSON almacenado no puede parsearse.",
@@ -43,6 +49,12 @@
       "useAutoScroll": {
         "title": "useAutoScroll",
         "description": "Helper de auto-scroll para interacciones de drag-and-drop. Cuando el puntero se acerca al borde superior o inferior de un contenedor scrollable, desplaza automáticamente a una velocidad proporcional a la distancia del borde.",
+        "seo": {
+          "metaTitle": "useAutoScroll — Composable Vue",
+          "metaDescription": "useAutoScroll es un composable Vue 3 para drag-and-drop: cuando el puntero se acerca al borde de un contenedor scrollable, desplaza según la distancia.",
+          "h1": "useAutoScroll",
+          "intro": "useAutoScroll es un composable Vue 3 / Nuxt gratuito que añade auto-scroll de bordes a interacciones de drag-and-drop — cuando el puntero se acerca al borde superior o inferior de un contenedor scrollable, desplaza automáticamente más rápido cuanto más cerca está."
+        },
         "api": {
           "handleAutoScroll": "Llámalo con el `clientY` del puntero mientras arrastras. Inicia/detiene el auto-scroll según la proximidad a los bordes del contenedor.",
           "stopAutoScroll": "Cancela inmediatamente cualquier animación de auto-scroll en curso."
@@ -58,6 +70,12 @@
       "useCalendar": {
         "title": "useCalendar",
         "description": "Composable para construir UIs de calendario. Genera grillas de días, maneja navegación de mes/año, soporta rangos de fechas, fechas deshabilitadas y etiquetas localizadas.",
+        "seo": {
+          "metaTitle": "useCalendar — Composable Vue",
+          "metaDescription": "useCalendar es un composable Vue 3 para calendarios: genera grillas de días, navega entre meses y años y soporta rangos, fechas deshabilitadas y etiquetas localizadas.",
+          "h1": "useCalendar",
+          "intro": "useCalendar es un composable Vue 3 / Nuxt gratuito para construir UIs de calendario — genera grillas de días, maneja la navegación de mes y año, y soporta rangos de fechas, fechas deshabilitadas y etiquetas localizadas."
+        },
         "api": {
           "monthLabel": "Nombre completo del mes localizado + año (ej. 'Mayo 2026').",
           "weekDayLabels": "Array de 7 nombres de días localizados en el formato configurado.",
@@ -90,6 +108,12 @@
       "useColorMode": {
         "title": "useColorMode",
         "description": "Singleton reactivo para gestionar el modo de color light / dark / system. Persiste la elección en localStorage, alterna la clase `.dark` en the html element y reacciona a cambios de `prefers-color-scheme` del SO.",
+        "seo": {
+          "metaTitle": "useColorMode — Composable Vue",
+          "metaDescription": "useColorMode es un composable Vue 3 para modo de color light, dark y system: persiste en localStorage, alterna la clase .dark y reacciona a prefers-color-scheme.",
+          "h1": "useColorMode",
+          "intro": "useColorMode es un composable Vue 3 / Nuxt gratuito para gestionar el modo de color light, dark y system — un singleton reactivo que persiste la elección en localStorage, alterna la clase .dark y reacciona a los cambios de prefers-color-scheme del SO."
+        },
         "props": {
           "mode": "El modo elegido — `'light'`, `'dark'` o `'system'`. Es escritible: asignar un nuevo valor dispara la persistencia y la aplicación de clases.",
           "resolved": "Siempre un valor concreto `'light'` o `'dark'`. Cuando `mode` es `'system'`, sigue la preferencia del SO reactivamente.",
@@ -119,6 +143,12 @@
       "useConfirm": {
         "title": "useConfirm",
         "description": "Diálogos de confirmación imperativos que devuelven una `Promise(boolean)`. Monta ConfirmDialog una vez cerca del root; cualquier componente puede llamar `useConfirm().confirm()` para esperar la decisión del usuario.",
+        "seo": {
+          "metaTitle": "useConfirm — Composable Vue",
+          "metaDescription": "useConfirm es un composable Vue 3 para diálogos de confirmación imperativos que devuelven una Promise. Monta ConfirmDialog una vez y espera la decisión del usuario.",
+          "h1": "useConfirm",
+          "intro": "useConfirm es un composable Vue 3 / Nuxt gratuito para diálogos de confirmación imperativos que resuelven a una Promise booleana — monta ConfirmDialog una vez cerca del root y cualquier componente puede esperar la decisión del usuario."
+        },
         "api": {
           "confirm": "Abre un diálogo de confirmación y devuelve una promesa que resuelve `true` al confirmar y `false` al cancelar o cerrar. Las llamadas se encolan para que solo haya un diálogo visible a la vez."
         },
@@ -162,6 +192,12 @@
       "useLocale": {
         "title": "useLocale",
         "description": "Cambiador de locale reactivo global. Todos los llamadores comparten el mismo estado, así que cambiar el locale actualiza toda la aplicación. Pasa el objeto locale reactivo directamente a ModoProvider :locale.",
+        "seo": {
+          "metaTitle": "useLocale — Composable Vue",
+          "metaDescription": "useLocale es un composable Vue 3: un cambiador de locale reactivo global donde todos comparten estado, así que cambiarlo actualiza toda la app. Pásalo a ModoProvider.",
+          "h1": "useLocale",
+          "intro": "useLocale es un composable Vue 3 / Nuxt gratuito para cambiar de locale globalmente — todos los llamadores comparten el mismo estado reactivo, así que cambiar el locale actualiza toda la app, y el objeto se pasa directo a la prop :locale de ModoProvider."
+        },
         "api": {
           "locale": "Objeto `ModoLocale` reactivo — pásalo directamente a ModoProvider :locale.",
           "current": "Clave del locale activo (`'en'` o `'es'`).",
@@ -189,6 +225,12 @@
       "useModoConfig": {
         "title": "useModoConfig",
         "description": "Accede a la configuración global de ModoProvider y a funciones auxiliares que resuelven props de componentes contra el tema global. Funciona dentro de ModoProvider; usa valores por defecto sensatos cuando se usa fuera.",
+        "seo": {
+          "metaTitle": "useModoConfig — Composable Vue",
+          "metaDescription": "useModoConfig es un composable Vue 3 que expone la config global de ModoProvider y los helpers que resuelven props de componentes contra el tema activo.",
+          "h1": "useModoConfig",
+          "intro": "useModoConfig es un composable Vue 3 / Nuxt gratuito para leer la configuración global de ModoProvider y las funciones auxiliares que resuelven props de componentes contra el tema activo — y usa valores por defecto sensatos cuando se usa fuera del provider."
+        },
         "api": {
           "config": "Devuelve el objeto `ModoConfig` completo inyectado por ModoProvider. Devuelve `undefined` fuera de un provider.",
           "resolvedColor": "Resuelve un prop `color` local con fallback al color de marca global. Los valores semánticos ('primary', 'danger', etc.) siempre ganan; 'default' o undefined hacen fallback.",
@@ -218,6 +260,12 @@
       "useToast": {
         "title": "useToast",
         "description": "API imperativa para enviar notificaciones a una cola global de toasts. Monta ToastContainer una vez cerca del root; cualquier componente puede llamar `useToast()` para disparar toasts que aparecen en el contenedor.",
+        "seo": {
+          "metaTitle": "useToast — Composable Vue",
+          "metaDescription": "useToast es un composable Vue 3: una API imperativa para enviar notificaciones a una cola global de toasts. Monta ToastContainer una vez y dispara toasts donde sea.",
+          "h1": "useToast",
+          "intro": "useToast es un composable Vue 3 / Nuxt gratuito que devuelve una API imperativa para enviar notificaciones a una cola global de toasts — monta ToastContainer una vez cerca del root y cualquier componente puede disparar toasts que aparecen en el contenedor."
+        },
         "api": {
           "push": "Envía un toast con control total. Devuelve un id para poder llamar `dismiss(id)` o reenviar para actualizar en su lugar.",
           "info": "Wrapper de conveniencia — envía con `color: 'info'`.",

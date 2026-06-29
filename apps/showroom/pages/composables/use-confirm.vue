@@ -13,12 +13,6 @@ import TbPills from "~/components/toolbar/TbPills.vue";
 
 const { t } = useI18n();
 
-useSeoMeta({
-  title: () => t("pages.composables.useConfirm.title"),
-  description: () => t("pages.composables.useConfirm.description"),
-  ogTitle: () => `${t("pages.composables.useConfirm.title")} · mood-ui`,
-  ogDescription: () => t("pages.composables.useConfirm.description"),
-});
 const confirm = useConfirm();
 
 const pgColor = ref<"primary" | "danger" | "warning">("primary");

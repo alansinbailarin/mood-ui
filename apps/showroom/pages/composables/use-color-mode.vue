@@ -13,12 +13,6 @@ import TbPills from "~/components/toolbar/TbPills.vue";
 
 const { t } = useI18n();
 
-useSeoMeta({
-  title: () => t("pages.composables.useColorMode.title"),
-  description: () => t("pages.composables.useColorMode.description"),
-  ogTitle: () => `${t("pages.composables.useColorMode.title")} · mood-ui`,
-  ogDescription: () => t("pages.composables.useColorMode.description"),
-});
 const { mode, resolved, isDark, set, toggle } = useColorMode();
 
 const pgMode = ref<"light" | "dark" | "system">(mode.value);
