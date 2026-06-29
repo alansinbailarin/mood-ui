@@ -50,7 +50,7 @@ const pgVariant = ref<"solid" | "subtle" | "outline">("subtle");
 const pgColor = ref<"default" | "primary" | "success" | "warning" | "danger">(
   "primary",
 );
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgDot = ref(false);
 const pgRemovable = ref(false);
 const pgGradient = ref(false);
@@ -247,6 +247,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           <TbPills
             label="Size"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

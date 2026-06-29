@@ -70,7 +70,7 @@ const a11yFocus = computed<string[]>(() => [
 const pgPlacement = ref<
   "bottom-start" | "bottom-end" | "top-start" | "top-end"
 >("bottom-start");
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgTriggerVariant = ref<"normal" | "outline" | "ghost" | "text">(
   "outline",
 );
@@ -466,6 +466,7 @@ export interface DropdownMenu {
           <TbPills
             label="Size"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

@@ -45,7 +45,7 @@ const a11yFocus = computed<string[]>(() => [
   t("pages.layout.pageHeader.a11y.focusNative"),
 ]);
 
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgWithActions = ref(true);
 const pgDivider = ref(true);
 const pgBackButton = ref(false);
@@ -243,6 +243,7 @@ const typesCode = `export interface PageHeader {
           <TbPills
             label="Size"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

@@ -64,7 +64,7 @@ const { mode } = useColorMode();
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgVariant = ref<"default" | "collapsed">("default");
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgShowLabels = ref(false);
 const pgDisabled = ref(false);
 
@@ -221,6 +221,7 @@ const emitsList = computed<EmitDoc[]>(() => [
           <TbPills
             label="Size"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

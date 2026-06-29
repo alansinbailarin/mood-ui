@@ -77,7 +77,7 @@ const pgChecked = ref(true);
 const pgColor = ref<"default" | "primary" | "success" | "warning" | "danger">(
   "primary",
 );
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgLabelPos = ref<"left" | "right">("right");
 const pgDisabled = ref(false);
 const pgLoading = ref(false);
@@ -331,6 +331,7 @@ const emitsList = computed<EmitDoc[]>(() => [
           <TbPills
             label="Size"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

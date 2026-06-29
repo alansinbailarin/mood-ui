@@ -54,7 +54,7 @@ const a11yFocus = computed<string[]>(() => [
 
 const pgOrientation = ref<"horizontal" | "vertical">("horizontal");
 const pgVariant = ref<"numbered" | "dots" | "progress">("numbered");
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgCurrent = ref(1);
 const pgColor = ref<"default" | "primary" | "success" | "warning" | "danger">(
   "primary",
@@ -345,6 +345,7 @@ const emitsList = computed<EmitDoc[]>(() => [
           <TbPills
             label="Size"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

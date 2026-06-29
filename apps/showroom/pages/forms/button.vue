@@ -64,7 +64,7 @@ const pgVariant = ref<"normal" | "outline" | "ghost" | "text">("normal");
 const pgColor = ref<"default" | "primary" | "danger" | "success" | "warning">(
   "primary",
 );
-const pgSize = ref<"xs" | "small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgRadius = ref<"none" | "small" | "medium" | "large" | "full">("medium");
 const pgLoading = ref(false);
 const pgDisabled = ref(false);
@@ -394,7 +394,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           <TbPills
             label="Size"
             :options="[
-              { value: 'xs' },
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

@@ -74,7 +74,7 @@ const pgVariant = ref<"outline" | "filled" | "ghost">("outline");
 const pgColor = ref<"default" | "primary" | "success" | "warning" | "danger">(
   "primary",
 );
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgSteppers = ref(true);
 const pgStepperPosition = ref<"right" | "split">("right");
 const pgDisabled = ref(false);
@@ -444,6 +444,7 @@ const emitsList = computed<EmitDoc[]>(() => [
           <TbPills
             label="Size"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

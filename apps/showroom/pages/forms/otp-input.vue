@@ -77,7 +77,7 @@ const pgLength = ref("6");
 const pgColor = ref<"default" | "primary" | "success" | "warning" | "danger">(
   "default",
 );
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgMask = ref(false);
 const pgDisabled = ref(false);
 
@@ -392,6 +392,7 @@ const emitsList = computed<EmitDoc[]>(() => [
           <TbPills
             label="Size"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

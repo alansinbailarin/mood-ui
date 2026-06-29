@@ -62,7 +62,7 @@ const pgVariant = ref<"line" | "pill" | "segmented">("line");
 const pgColor = ref<"default" | "primary" | "danger" | "success" | "warning">(
   "primary",
 );
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgActive = ref<string | number>("overview");
 const pgFullWidth = ref(false);
 
@@ -378,6 +378,7 @@ export interface Tabs {
           <TbPills
             label="Size"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

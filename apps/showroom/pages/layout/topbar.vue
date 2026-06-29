@@ -48,7 +48,7 @@ const a11yFocus = computed<string[]>(() => [
   t("pages.layout.topbar.a11y.focusNative"),
 ]);
 
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgDivider = ref(true);
 const pgMenuToggle = ref(false);
 
@@ -231,6 +231,7 @@ const typesCode = `export interface Topbar {
           <TbPills
             label="Size"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

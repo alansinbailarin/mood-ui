@@ -49,7 +49,7 @@ const a11yFocus = computed<string[]>(() => [
 ]);
 
 const pgSeparator = ref<"chevron" | "slash" | "dot" | "arrow">("chevron");
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgShowHomeIcon = ref(false);
 
 function resetPlayground() {
@@ -292,6 +292,7 @@ export interface Breadcrumbs {
           <TbPills
             label="Size"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

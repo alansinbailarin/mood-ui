@@ -56,7 +56,7 @@ const a11yFocus = computed<string[]>(() => [
   t("pages.navigation.pagination.a11y.focusNative"),
 ]);
 
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgTotal = ref<number>(50);
 const pgSiblings = ref<number>(1);
 const pgPage = ref(1);
@@ -288,6 +288,7 @@ const typesCode = `export interface Pagination {
           <TbPills
             label="Size"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },
