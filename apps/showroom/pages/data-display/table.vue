@@ -239,7 +239,7 @@ const pgStriped = ref(false);
 const pgHover = ref(true);
 const pgBordered = ref<"none" | "rows" | "cols" | "all">("rows");
 const pgStickyHeader = ref(false);
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgDensity = ref<"compact" | "comfortable" | "spacious">("comfortable");
 const pgSelectable = ref<"none" | "single" | "multi">("none");
 
@@ -1012,6 +1012,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           <TbPills
             :label="t('pages.data-display.table.controls.size')"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

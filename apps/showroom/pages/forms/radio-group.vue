@@ -104,7 +104,7 @@ const pgValue = ref<string | number | null>("pro");
 const pgColor = ref<"default" | "primary" | "success" | "warning" | "danger">(
   "primary",
 );
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgOrientation = ref<"vertical" | "horizontal">("vertical");
 const pgDisabled = ref(false);
 const pgLoading = ref(false);
@@ -386,6 +386,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           <TbPills
             :label="t('pages.forms.radioGroup.controls.size')"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

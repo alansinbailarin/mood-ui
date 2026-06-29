@@ -59,7 +59,7 @@ const pgMax = ref("5");
 const pgColor = ref<"default" | "primary" | "success" | "warning" | "danger">(
   "warning",
 );
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgAllowHalf = ref(false);
 const pgReadonly = ref(false);
 const pgDisabled = ref(false);
@@ -276,6 +276,7 @@ const emitsList = computed<EmitDoc[]>(() => [
           <TbPills
             :label="t('pages.forms.rating.controls.size')"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

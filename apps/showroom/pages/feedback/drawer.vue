@@ -67,7 +67,7 @@ const a11yFocus = computed<string[]>(() => [
 ]);
 
 type Side = "left" | "right" | "top" | "bottom";
-type Size = "small" | "medium" | "large" | "full";
+type Size = "xsmall" | "small" | "medium" | "large" | "full";
 
 const pgSide = ref<Side>("right");
 const pgSize = ref<Size>("medium");
@@ -369,6 +369,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           <TbPills
             :label="t('pages.feedback.drawer.controls.size')"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

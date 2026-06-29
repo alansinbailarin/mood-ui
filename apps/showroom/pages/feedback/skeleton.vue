@@ -50,7 +50,7 @@ const a11yFocus = computed<string[]>(() => [
 ]);
 
 type Shape = "text" | "circle" | "rect";
-type Size = "small" | "medium" | "large";
+type Size = "xsmall" | "small" | "medium" | "large";
 
 const pgShape = ref<Shape>("rect");
 const pgSize = ref<Size>("medium");
@@ -225,6 +225,7 @@ const slotsList: SlotDoc[] = [];
           <TbPills
             :label="t('pages.feedback.skeleton.controls.size')"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

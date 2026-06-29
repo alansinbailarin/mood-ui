@@ -62,7 +62,7 @@ const a11yFocus = computed<string[]>(() => [
 ]);
 
 type Tone = "default" | "primary" | "danger";
-type Size = "small" | "medium" | "large";
+type Size = "xsmall" | "small" | "medium" | "large";
 
 const { confirm } = useConfirm();
 const toast = useToast();
@@ -263,6 +263,7 @@ const slotsList: SlotDoc[] = [];
           <TbPills
             :label="t('pages.feedback.confirmDialog.controls.size')"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

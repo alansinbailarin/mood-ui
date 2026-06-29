@@ -55,7 +55,7 @@ const a11yFocus = computed<string[]>(() => [
 ]);
 
 type Variant = "normal" | "outline";
-type Size = "small" | "medium" | "large";
+type Size = "xsmall" | "small" | "medium" | "large";
 
 const pgVariant = ref<Variant>("normal");
 const pgSize = ref<Size>("medium");
@@ -188,6 +188,7 @@ const slotsList: SlotDoc[] = [];
           <TbPills
             :label="t('pages.feedback.loader.controls.size')"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

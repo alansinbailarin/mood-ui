@@ -85,7 +85,7 @@ const pgVariant = ref<"outline" | "filled" | "ghost">("outline");
 const pgColor = ref<"default" | "primary" | "success" | "warning" | "danger">(
   "primary",
 );
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgToggleVisibility = ref(true);
 const pgStrengthMeter = ref(false);
 const pgDisabled = ref(false);
@@ -451,6 +451,7 @@ const emitsList = computed<EmitDoc[]>(() => [
           <TbPills
             :label="t('pages.forms.passwordInput.controls.size')"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

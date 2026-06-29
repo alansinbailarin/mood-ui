@@ -75,7 +75,7 @@ const pgValueStr = computed({
 const pgColor = ref<"default" | "primary" | "success" | "warning" | "danger">(
   "primary",
 );
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgIndeterminate = ref(false);
 const pgStriped = ref(false);
 const pgShowValue = ref(false);
@@ -288,6 +288,7 @@ const emitsList: EmitDoc[] = [];
           <TbPills
             :label="t('pages.feedback.progressBar.controls.size')"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

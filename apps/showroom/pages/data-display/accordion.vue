@@ -128,7 +128,7 @@ const iconItems = [
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgVariant = ref<"separated" | "bordered" | "flush">("separated");
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgMultiple = ref(false);
 const pgSingle = ref<string | number | null>("what");
 const pgMulti = ref<(string | number)[]>(["what"]);
@@ -325,6 +325,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           <TbPills
             :label="t('pages.data-display.accordion.controls.size')"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

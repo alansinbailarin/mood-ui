@@ -66,7 +66,7 @@ const a11yFocus = computed<string[]>(() => [
   t("pages.feedback.modal.a11y.focusReturn"),
 ]);
 
-type Size = "small" | "medium" | "large" | "xlarge";
+type Size = "xsmall" | "small" | "medium" | "large" | "xlarge";
 
 const pgSize = ref<Size>("medium");
 const pgOverlay = ref<"blur" | "dim" | "solid" | "transparent">("blur");
@@ -378,6 +378,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           <TbPills
             :label="t('pages.feedback.modal.controls.size')"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

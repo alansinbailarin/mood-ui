@@ -53,7 +53,7 @@ const a11yFocus = computed<string[]>(() => [
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgVariant = ref<"plain" | "outlined" | "filled">("outlined");
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgColor = ref<"default" | "primary" | "success" | "warning" | "danger">(
   "primary",
 );
@@ -264,6 +264,7 @@ const propsList = computed<PropDoc[]>(() => [
           <TbPills
             :label="t('pages.data-display.stat.controls.size')"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

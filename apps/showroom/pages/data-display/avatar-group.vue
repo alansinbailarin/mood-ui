@@ -49,7 +49,7 @@ const a11yFocus = computed<string[]>(() => [
 ]);
 
 // ── Overview playground state ─────────────────────────────────────────────────
-const pgSize = ref<"xs" | "small" | "medium" | "large" | "xl">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large" | "xl">("medium");
 const pgMax = ref<3 | 4 | 5 | 6>(4);
 const pgBordered = ref(true);
 const pgRadius = ref<"none" | "small" | "medium" | "large" | "full">("full");
@@ -208,7 +208,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           <TbPills
             :label="t('controls.size')"
             :options="[
-              { value: 'xs' },
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

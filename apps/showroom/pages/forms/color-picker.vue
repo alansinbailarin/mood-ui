@@ -84,7 +84,7 @@ const brandSwatches = [
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgValue = ref("#6366f1");
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgVariant = ref<"outline" | "filled">("outline");
 const pgAdvanced = ref(true);
 const pgShowHex = ref(true);
@@ -305,6 +305,7 @@ const emitsList = computed<EmitDoc[]>(() => [
           <TbPills
             :label="t('pages.forms.colorPicker.controls.size')"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

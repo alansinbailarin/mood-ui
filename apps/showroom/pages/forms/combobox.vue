@@ -87,7 +87,7 @@ const pgValue = ref<string | null>("Vue");
 const pgColor = ref<"default" | "primary" | "success" | "warning" | "danger">(
   "primary",
 );
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgFreeSolo = ref(true);
 const pgClearable = ref(true);
 const pgDisabled = ref(false);
@@ -527,7 +527,7 @@ const emitsList = computed<EmitDoc[]>(() => [
             >
             <div class="flex rounded-md border border-border overflow-hidden">
               <button
-                v-for="s in ['small', 'medium', 'large']"
+                v-for="s in ['xsmall', 'small', 'medium', 'large']"
                 :key="s"
                 type="button"
                 class="px-2 py-1 text-xs transition-colors capitalize"

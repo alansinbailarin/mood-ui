@@ -77,7 +77,7 @@ const pgChecked = ref(true);
 const pgColor = ref<"default" | "primary" | "success" | "warning" | "danger">(
   "primary",
 );
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgIndeterminate = ref(false);
 const pgDisabled = ref(false);
 const pgLoading = ref(false);
@@ -339,6 +339,7 @@ const emitsList = computed<EmitDoc[]>(() => [
           <TbPills
             :label="t('pages.forms.checkbox.controls.size')"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

@@ -55,7 +55,7 @@ const a11yFocus = computed<string[]>(() => [
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgVariant = ref<"dot" | "icon" | "outline">("dot");
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgColor = ref<"default" | "primary" | "success" | "warning" | "danger">(
   "primary",
 );
@@ -346,6 +346,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           <TbPills
             :label="t('controls.size')"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

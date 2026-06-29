@@ -72,7 +72,7 @@ const pgVariant = ref<"inline" | "area">("inline");
 const pgColor = ref<"default" | "primary" | "success" | "warning" | "danger">(
   "default",
 );
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgMultiple = ref(false);
 const pgDashed = ref(false);
 const pgDisabled = ref(false);
@@ -425,6 +425,7 @@ const emitsList = computed<EmitDoc[]>(() => [
           <TbPills
             :label="t('pages.forms.fileInput.controls.size')"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

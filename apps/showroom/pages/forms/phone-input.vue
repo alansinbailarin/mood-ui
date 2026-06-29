@@ -79,7 +79,7 @@ const pgValue = ref("");
 const pgCountry = ref("US");
 const pgVariant = ref<"outline" | "filled" | "ghost">("outline");
 const pgColor = ref<"default" | "primary" | "success" | "warning" | "danger">("default");
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgDisabled = ref(false);
 const pgReadonly = ref(false);
 const pgLoading = ref(false);
@@ -441,7 +441,7 @@ const emitsList = computed<EmitDoc[]>(() => [
           <TbSep />
           <TbPills
             :label="t('pages.forms.phoneInput.controls.size')"
-            :options="[{ value: 'small' }, { value: 'medium' }, { value: 'large' }]"
+            :options="[{ value: 'xsmall' }, { value: 'small' }, { value: 'medium' }, { value: 'large' }]"
             v-model="pgSize"
           />
           <TbSep />

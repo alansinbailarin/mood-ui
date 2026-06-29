@@ -136,7 +136,7 @@ const a11yFocus = computed<string[]>(() => [
 ]);
 
 // ── Overview playground state ─────────────────────────────────────────────────
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgCrop = ref(true);
 const pgDisabled = ref(false);
 const pgReadonly = ref(false);
@@ -603,7 +603,7 @@ const emitsList = computed<EmitDoc[]>(() => [
         <template #controls>
           <TbPills
             :label="t('pages.forms.avatarUpload.controls.size')"
-            :options="[{ value: 'small' }, { value: 'medium' }, { value: 'large' }]"
+            :options="[{ value: 'xsmall' }, { value: 'small' }, { value: 'medium' }, { value: 'large' }]"
             v-model="pgSize"
           />
           <TbSep />

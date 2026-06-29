@@ -91,7 +91,7 @@ const pgValue = ref<(string | number)[]>(["apple", "banana"]);
 const pgColor = ref<"default" | "primary" | "success" | "warning" | "danger">(
   "primary",
 );
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgMaxChips = ref<2 | 4 | 99>(99);
 const pgDisabled = ref(false);
 
@@ -506,7 +506,7 @@ const emitsList = computed<EmitDoc[]>(() => [
             >
             <div class="flex rounded-md border border-border overflow-hidden">
               <button
-                v-for="s in ['small', 'medium', 'large']"
+                v-for="s in ['xsmall', 'small', 'medium', 'large']"
                 :key="s"
                 type="button"
                 class="px-2 py-1 text-xs transition-colors capitalize"

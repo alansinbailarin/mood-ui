@@ -51,7 +51,7 @@ const a11yFocus = computed<string[]>(() => [
 const pgVariant = ref<
   "display" | "heading" | "title" | "subtitle" | "body" | "caption" | "overline"
 >("heading");
-const pgSize = ref<"small" | "medium" | "large">("large");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("large");
 const pgWeight = ref<
   "light" | "normal" | "medium" | "semibold" | "bold" | "extrabold"
 >("semibold");
@@ -281,6 +281,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           <TbPills
             :label="t('controls.size')"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

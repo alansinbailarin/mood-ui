@@ -61,7 +61,7 @@ const pgVariant = ref<"solid" | "subtle" | "outline">("solid");
 const pgColor = ref<"default" | "primary" | "success" | "warning" | "danger">(
   "danger",
 );
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgDot = ref(false);
 
 function resetPlayground() {
@@ -283,6 +283,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           <TbPills
             :label="t('pages.feedback.chip.controls.size')"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

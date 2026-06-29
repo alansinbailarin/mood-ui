@@ -60,7 +60,7 @@ const a11yFocus = computed<string[]>(() => [
 ]);
 
 // ── Overview playground state ─────────────────────────────────────────────────
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgVariant = ref<"subtle" | "solid" | "outline">("subtle");
 const pgCentered = ref(true);
 
@@ -240,6 +240,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           <TbPills
             :label="t('pages.feedback.emptyState.controls.size')"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

@@ -45,7 +45,7 @@ const a11yFocus = computed<string[]>(() => [
 
 // ── Overview playground state ─────────────────────────────────────────────────
 const pgVariant = ref<"subtle" | "outline" | "solid">("subtle");
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgRadius = ref<"none" | "small" | "medium" | "large" | "full">("medium");
 
 function resetPlayground() {
@@ -175,6 +175,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           <TbPills
             :label="t('pages.data-display.kbd.controls.size')"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },

@@ -63,7 +63,7 @@ const pgVariant = ref<"normal" | "outline" | "ghost" | "text">("normal");
 const pgColor = ref<"default" | "primary" | "success" | "warning" | "danger">(
   "primary",
 );
-const pgSize = ref<"small" | "medium" | "large">("medium");
+const pgSize = ref<"xsmall" | "small" | "medium" | "large">("medium");
 const pgGradient = ref(false);
 const pgDisabled = ref(false);
 const pgFullWidth = ref(false);
@@ -274,6 +274,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           <TbPills
             :label="t('pages.forms.buttonGroup.controls.size')"
             :options="[
+              { value: 'xsmall' },
               { value: 'small' },
               { value: 'medium' },
               { value: 'large' },
