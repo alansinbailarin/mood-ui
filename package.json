@@ -23,6 +23,9 @@
       "@parcel/watcher",
       "esbuild",
       "vue-demi"
-    ]
+    ],
+    "overrides": {
+      "h3": "1.15.11"
+    }
   }
 }
