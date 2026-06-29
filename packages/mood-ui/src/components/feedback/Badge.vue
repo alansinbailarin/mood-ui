@@ -20,7 +20,7 @@
 <script setup lang="ts"> 
 import { computed } from 'vue'; 
 import type { Badge } from '../../interfaces/feedback/Badge.interface'; 
-import { useResolvedColor, useResolvedRadius, useModoLocale, useResolvedSize } from '../../composables/useModoConfig'; 
+import { useResolvedColor, useResolvedRadius, useModoLocale, useResolvedSize, useSizeTokens } from '../../composables/useModoConfig'; 
  
 const loc = useModoLocale(); 
  
@@ -36,7 +36,8 @@ const props = withDefaults(defineProps<Badge>(), {
     dot: false, 
 }); 
  
-const resolvedSize = useResolvedSize(() => props.size); 
+const resolvedSize = useResolvedSize(() => props.size);
+const sz = useSizeTokens(() => props.size); 
  
 const color = useResolvedColor(() => props.color); 
 const radius = useResolvedRadius(() => props.radius); 
@@ -85,12 +86,13 @@ const variantClasses = computed(() => {
     return map[color.value]?.[props.variant] ?? map.default.subtle; 
 }); 
  
-const sizeClasses = computed(() => { 
-    switch (resolvedSize.value) { 
-        case 'small': return 'text-[10px] px-2 py-0.5'; 
-        case 'large': return 'text-sm px-3 py-1'; 
-        default: return 'text-xs px-2.5 py-0.5'; 
-    } 
+const sizeClasses = computed(() => {
+    const h = sz.value.label;
+    switch (resolvedSize.value) {
+        case 'small': return `${h} ${sz.value.text} px-2`;
+        case 'large': return `${h} ${sz.value.text} px-3`;
+        default: return `${h} ${sz.value.text} px-2.5`;
+    }
 }); 
  
 const radiusClasses = computed(() => { 

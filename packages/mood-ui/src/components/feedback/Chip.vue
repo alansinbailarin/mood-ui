@@ -35,7 +35,7 @@
 <script setup lang="ts"> 
 import { computed, useSlots } from 'vue'; 
 import type { Chip } from '../../interfaces/feedback/Chip.interface'; 
-import { useResolvedColor, useResolvedRadius, useResolvedSize } from '../../composables/useModoConfig'; 
+import { useResolvedColor, useResolvedRadius, useResolvedSize, useSizeTokens } from '../../composables/useModoConfig'; 
  
 const props = withDefaults(defineProps<Chip>(), { 
     variant: 'solid', 
@@ -47,7 +47,8 @@ const props = withDefaults(defineProps<Chip>(), {
     placement: 'top-right', 
 }); 
  
-const resolvedSize = useResolvedSize(() => props.size); 
+const resolvedSize = useResolvedSize(() => props.size);
+const sz = useSizeTokens(() => props.size); 
  
 const slots = useSlots(); 
 const color = useResolvedColor(() => props.color); 
@@ -108,11 +109,12 @@ const sizeClasses = computed(() => {
             default: return 'w-2.5 h-2.5'; 
         } 
     } 
-    switch (resolvedSize.value) { 
-        case 'small': return 'min-w-[16px] h-4 text-[10px] px-1'; 
-        case 'large': return 'min-w-[24px] h-6 text-body px-2'; 
-        default: return 'min-w-[20px] h-5 text-caption px-1.5'; 
-    } 
+    const h = sz.value.label;
+    switch (resolvedSize.value) {
+        case 'small': return `min-w-[16px] ${h} ${sz.value.text} px-1`;
+        case 'large': return `min-w-[24px] ${h} ${sz.value.text} px-2`;
+        default: return `min-w-[20px] ${h} ${sz.value.text} px-1.5`;
+    }
 }); 
  
 const radiusClasses = computed(() => { 

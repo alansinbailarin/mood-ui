@@ -14,21 +14,23 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { Kbd } from '../../interfaces/data-display/Kbd.interface';
-import { useResolvedRadius, useResolvedSize } from '../../composables/useModoConfig';
+import { useResolvedRadius, useResolvedSize, useSizeTokens } from '../../composables/useModoConfig';
 
 const props = withDefaults(defineProps<Kbd>(), {
     variant: 'subtle',
 });
 
 const resolvedSize = useResolvedSize(() => props.size);
+const sz = useSizeTokens(() => props.size);
 const resolvedRadius = useResolvedRadius(() => props.radius);
 
 const sizeClasses = computed(() => {
+    const h = sz.value.label;
     switch (resolvedSize.value) {
-        case 'small':  return 'text-[10px] px-1 py-0.5 min-w-[1.25rem] h-4';
-        case 'large':  return 'text-sm px-2 py-1 min-w-[1.75rem] h-7';
+        case 'small':  return `${sz.value.text} px-1 min-w-[1.25rem] ${h}`;
+        case 'large':  return `${sz.value.text} px-2 min-w-[1.75rem] ${h}`;
         case 'medium':
-        default:       return 'text-xs px-1.5 py-0.5 min-w-[1.5rem] h-5';
+        default:       return `${sz.value.text} px-1.5 min-w-[1.5rem] ${h}`;
     }
 });
 

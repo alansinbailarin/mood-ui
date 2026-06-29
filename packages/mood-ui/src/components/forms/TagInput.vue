@@ -199,10 +199,12 @@ const inputSizeClasses = computed(() => {
 });
 
 const chipSizeClasses = computed(() => {
+    const h = sz.value.label;
+    const t = sz.value.text;
     switch (sz.value.control) {
-        case 'h-8':  return 'h-5 px-2 text-[11px]';
-        case 'h-12': return 'h-7 px-3 text-sm';
-        default:     return 'h-6 px-2.5 text-xs';
+        case 'h-8':  return `${h} px-2 ${t}`;
+        case 'h-12': return `${h} px-3 ${t}`;
+        default:     return `${h} px-2.5 ${t}`;
     }
 });
 
