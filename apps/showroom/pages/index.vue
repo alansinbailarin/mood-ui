@@ -101,13 +101,16 @@ const seoDescription = computed(() =>
   t("pages.welcome.seo.description", { n: totalComponents }),
 );
 
+const localePath = useLocalePath();
+const homeUrl = computed(() => `https://mood-ui.com${localePath("/")}`);
+
 useSeoMeta({
   title: () => seoTitle.value,
   description: () => seoDescription.value,
   ogTitle: () => seoTitle.value,
   ogDescription: () => seoDescription.value,
   ogType: "website",
-  ogUrl: "https://mood-ui.com/",
+  ogUrl: () => homeUrl.value,
   twitterTitle: () => seoTitle.value,
   twitterDescription: () => seoDescription.value,
 });
@@ -136,7 +139,7 @@ useHead({
         offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
         license: "https://opensource.org/licenses/MIT",
         programmingLanguage: ["Vue 3", "TypeScript"],
-        url: "https://mood-ui.com/",
+        url: homeUrl.value,
       }),
     },
   ],
