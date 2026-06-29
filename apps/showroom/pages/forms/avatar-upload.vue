@@ -30,13 +30,6 @@ void LockClosedIcon; void SparklesIcon; void KeyIcon; void BeakerIcon;
 
 const { t } = useI18n();
 
-
-useSeoMeta({
-  title: () => t("pages.forms.avatarUpload.title"),
-  description: () => t("pages.forms.avatarUpload.description"),
-  ogTitle: () => `${t("pages.forms.avatarUpload.title")} · mood-ui`,
-  ogDescription: () => t("pages.forms.avatarUpload.description"),
-});
 // ── OpenAI live playground ────────────────────────────────────────────────────
 const openaiKey = ref("");
 const liveAvatarUrl = ref("");

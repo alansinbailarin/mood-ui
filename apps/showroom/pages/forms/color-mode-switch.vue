@@ -19,13 +19,6 @@ import type { ModoTheme } from "../../../config/ModoConfig";
 
 const { t } = useI18n();
 
-
-useSeoMeta({
-  title: () => t("pages.forms.colorModeSwitch.title"),
-  description: () => t("pages.forms.colorModeSwitch.description"),
-  ogTitle: () => `${t("pages.forms.colorModeSwitch.title")} · mood-ui`,
-  ogDescription: () => t("pages.forms.colorModeSwitch.description"),
-});
 // ── A11y data ─────────────────────────────────────────────────────────────────
 const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
   { keys: ["Tab"], action: t("pages.forms.colorModeSwitch.a11y.kbTab") },

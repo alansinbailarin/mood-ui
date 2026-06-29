@@ -5,6 +5,12 @@
         "category": "Forms",
         "title": "AvatarUpload",
         "description": "An all-in-one avatar manager: upload a photo, crop it to a circle, and optionally generate one with AI. The AI provider is always external — you supply the function; mood-ui only handles the UI and state.",
+        "seo": {
+          "metaTitle": "Vue Avatar Upload — Crop & Upload",
+          "metaDescription": "Free, open-source Vue avatar upload for Vue 3 and Nuxt: upload a photo, crop it to a circle and optionally generate one with an external AI provider.",
+          "h1": "Vue Avatar Upload Component",
+          "intro": "mood-ui's AvatarUpload is a free, open-source Vue 3 avatar upload component — upload a photo, crop it to a circle and optionally generate one with an external AI provider you supply, while mood-ui handles the UI and state."
+        },
         "examples": {
           "basic": {
             "title": "Basic upload",
@@ -121,6 +127,12 @@
         "category": "Forms",
         "title": "Button",
         "description": "The primary action of any interface. Four variants, five semantic colors, four sizes, configurable icons, loading state and support for rendering as a link or any element.",
+        "seo": {
+          "metaTitle": "Vue Button Component — Variants & Icons",
+          "metaDescription": "Free, open-source Vue button for Vue 3 and Nuxt: four variants, five semantic colors, configurable icons, a loading state and link rendering. Zero license cost.",
+          "h1": "Vue Button Component",
+          "intro": "mood-ui's Button is a free, open-source Vue 3 button component for the primary action of any interface — four variants, five semantic colors, configurable icons, a loading state and support for rendering as a link."
+        },
         "controls": {
           "variant": "Variant",
           "color": "Color",
@@ -217,6 +229,12 @@
         "category": "Forms",
         "title": "ButtonGroup",
         "description": "Groups several buttons into a single visual unit sharing variant, color and size. Supports horizontal and vertical orientation.",
+        "seo": {
+          "metaTitle": "Vue Button Group Component",
+          "metaDescription": "Free, open-source Vue button group for Vue 3 and Nuxt: groups several buttons into one visual unit sharing variant, color and size, horizontal or vertical.",
+          "h1": "Vue Button Group Component",
+          "intro": "mood-ui's ButtonGroup is a free, open-source Vue 3 button group component — it groups several buttons into a single visual unit sharing variant, color and size, with horizontal or vertical orientation."
+        },
         "controls": {
           "variant": "Variant",
           "color": "Color",
@@ -277,6 +295,12 @@
       "checkbox": {
         "title": "Checkbox",
         "description": "Accessible checkbox with support for indeterminate state, description and all color and size variants.",
+        "seo": {
+          "metaTitle": "Vue Checkbox — Indeterminate State",
+          "metaDescription": "Free, open-source Vue checkbox for Vue 3 and Nuxt: accessible checkbox with indeterminate state, description text and all color and size variants.",
+          "h1": "Vue Checkbox Component",
+          "intro": "mood-ui's Checkbox is a free, open-source Vue 3 checkbox component — an accessible checkbox with indeterminate state support, description text and all color and size variants."
+        },
         "controls": {
           "color": "Color",
           "size": "Size",
@@ -364,6 +388,12 @@
       "colorModeSwitch": {
         "title": "ColorModeSwitch",
         "description": "Three-state segmented selector for the color mode (light · system · dark) with a smooth animated sliding indicator. Supports a collapsed variant that expands on hover.",
+        "seo": {
+          "metaTitle": "Vue Dark Mode Toggle — Theme Switch",
+          "metaDescription": "Free, open-source Vue dark mode toggle for Vue 3 and Nuxt: three-state color-mode selector (light, system, dark) with an animated sliding indicator.",
+          "h1": "Vue Color Mode Switch Component",
+          "intro": "mood-ui's ColorModeSwitch is a free, open-source Vue 3 dark mode toggle component — a three-state color-mode selector (light, system, dark) with an animated sliding indicator and a collapsed variant that expands on hover."
+        },
         "controls": {
           "variant": "Variant",
           "size": "Size",
@@ -418,6 +448,12 @@
         "category": "Forms",
         "title": "ColorPicker",
         "description": "Color selector with popover, configurable swatches, hex input and advanced HSV canvas for picking any color.",
+        "seo": {
+          "metaTitle": "Vue Color Picker — Hex & HSV",
+          "metaDescription": "Free, open-source Vue color picker for Vue 3 and Nuxt: color selector with a popover, configurable swatches, hex input and an advanced HSV canvas.",
+          "h1": "Vue Color Picker Component",
+          "intro": "mood-ui's ColorPicker is a free, open-source Vue 3 color picker component — a color selector with a popover, configurable swatches, a hex input and an advanced HSV canvas for picking any color."
+        },
         "controls": {
           "size": "Size",
           "variant": "Variant",
@@ -489,6 +525,12 @@
         "category": "Forms",
         "title": "Combobox",
         "description": "Autocomplete text input with static or async suggestions. Supports free values (combobox) or strict selection (autocomplete).",
+        "seo": {
+          "metaTitle": "Vue Combobox — Autocomplete Input",
+          "metaDescription": "Free, open-source Vue combobox for Vue 3 and Nuxt: autocomplete text input with static or async suggestions and free values or strict selection.",
+          "h1": "Vue Combobox Component",
+          "intro": "mood-ui's Combobox is a free, open-source Vue 3 combobox component — an autocomplete text input with static or async suggestions, supporting free values or strict selection."
+        },
         "examples": {
           "basic": {
             "title": "Basic usage",
@@ -652,6 +694,12 @@
         "category": "Forms",
         "title": "DateRangeField",
         "description": "Date range picker with a dual-calendar popover and preset shortcuts.",
+        "seo": {
+          "metaTitle": "Vue Date Range Picker — Dual Calendar",
+          "metaDescription": "Free, open-source Vue date range picker for Vue 3 and Nuxt: date range field with a dual-calendar popover and preset shortcuts. Zero license cost.",
+          "h1": "Vue Date Range Picker Component",
+          "intro": "mood-ui's DateRangeField is a free, open-source Vue 3 date range picker component — a date range field with a dual-calendar popover and preset shortcuts."
+        },
         "controls": {
           "size": "Size",
           "presets": "Presets",
@@ -817,6 +865,12 @@
         "category": "Forms",
         "title": "FileInput",
         "description": "File selector with drag & drop support, validation, image previews and two visual variants (inline and prominent area).",
+        "seo": {
+          "metaTitle": "Vue File Upload — Drag & Drop",
+          "metaDescription": "Free, open-source Vue file upload for Vue 3 and Nuxt: file selector with drag & drop, validation, image previews and inline or prominent variants.",
+          "h1": "Vue File Upload Component",
+          "intro": "mood-ui's FileInput is a free, open-source Vue 3 file upload component — a file selector with drag & drop, validation, image previews and two visual variants (inline and prominent area)."
+        },
         "controls": {
           "variant": "Variant",
           "color": "Color",
@@ -910,6 +964,12 @@
         "category": "Forms",
         "title": "FormField",
         "description": "Accessible wrapper that provides label, helper text, error state and id/aria linking for any form control.",
+        "seo": {
+          "metaTitle": "Vue Form Field — Label & Error",
+          "metaDescription": "Free, open-source Vue form field for Vue 3 and Nuxt: accessible wrapper providing label, helper text, error state and id/aria linking for any control.",
+          "h1": "Vue Form Field Component",
+          "intro": "mood-ui's FormField is a free, open-source Vue 3 form field component — an accessible wrapper that provides a label, helper text, error state and id/aria linking for any form control."
+        },
         "controls": {
           "layout": "Layout",
           "required": "Required",
@@ -981,6 +1041,12 @@
       "input": {
         "title": "Input",
         "description": "Text input with label, helper, error messages, icons, prefix/suffix and three visual variants.",
+        "seo": {
+          "metaTitle": "Vue Input Component — Text Field",
+          "metaDescription": "Free, open-source Vue text input for Vue 3 and Nuxt: label, helper and error messages, icons, prefix/suffix and three visual variants. Zero license cost.",
+          "h1": "Vue Input Component",
+          "intro": "mood-ui's Input is a free, open-source Vue 3 text input component — a form input with label, helper and error messages, icons, prefix/suffix slots and three visual variants."
+        },
         "controls": {
           "variant": "Variant",
           "color": "Color",
@@ -1082,6 +1148,12 @@
         "category": "Forms",
         "title": "MultiSelect",
         "description": "Multi-select with chips, search and bulk selection. Designed for medium-sized lists where users need to pick multiple options.",
+        "seo": {
+          "metaTitle": "Vue Multi Select — Chips & Search",
+          "metaDescription": "Free, open-source Vue multiselect for Vue 3 and Nuxt: multi-select with chips, search and bulk selection, built for medium-sized lists with multiple options.",
+          "h1": "Vue Multi Select Component",
+          "intro": "mood-ui's MultiSelect is a free, open-source Vue 3 multiselect component — a multi-select with chips, search and bulk selection, designed for medium-sized lists where users pick multiple options."
+        },
         "examples": {
           "basic": {
             "title": "Basic usage",
@@ -1159,6 +1231,12 @@
         "category": "Forms",
         "title": "NumberInput",
         "description": "Numeric input with steppers, min/max, decimal precision, thousand separator and prefix/suffix.",
+        "seo": {
+          "metaTitle": "Vue Number Input — Numeric Stepper",
+          "metaDescription": "Free, open-source Vue number input for Vue 3 and Nuxt: numeric input with steppers, min/max, decimal precision, thousand separator and prefix/suffix.",
+          "h1": "Vue Number Input Component",
+          "intro": "mood-ui's NumberInput is a free, open-source Vue 3 number input component — a numeric input with steppers, min/max limits, decimal precision, a thousand separator and prefix/suffix slots."
+        },
         "controls": {
           "variant": "Variant",
           "color": "Color",
@@ -1252,6 +1330,12 @@
       "otpInput": {
         "title": "OTPInput",
         "description": "One-time password input with configurable digit slots, paste support, auto-advance and mask mode.",
+        "seo": {
+          "metaTitle": "Vue OTP Input — Verification Code",
+          "metaDescription": "Free, open-source Vue OTP input for Vue 3 and Nuxt: one-time password input with configurable digit slots, paste support, auto-advance and a mask mode.",
+          "h1": "Vue OTP Input Component",
+          "intro": "mood-ui's OTPInput is a free, open-source Vue 3 OTP input component — a one-time password and verification code input with configurable digit slots, paste support, auto-advance and a mask mode."
+        },
         "controls": {
           "length": "Length",
           "mask": "Mask",
@@ -1346,6 +1430,12 @@
       "passwordInput": {
         "title": "PasswordInput",
         "description": "Password input with a visibility toggle and an optional heuristic strength meter.",
+        "seo": {
+          "metaTitle": "Vue Password Input — Strength Meter",
+          "metaDescription": "Free, open-source Vue password input for Vue 3 and Nuxt: a password field with a visibility toggle and an optional heuristic strength meter. Zero license cost.",
+          "h1": "Vue Password Input Component",
+          "intro": "mood-ui's PasswordInput is a free, open-source Vue 3 password field component — a password input with a visibility toggle and an optional heuristic strength meter."
+        },
         "controls": {
           "variant": "Variant",
           "color": "Color",
@@ -1449,6 +1539,12 @@
       "phoneInput": {
         "title": "PhoneInput",
         "description": "International phone number field with a searchable country selector, configurable output format and full accessibility support.",
+        "seo": {
+          "metaTitle": "Vue Phone Number Input Component",
+          "metaDescription": "Free, open-source Vue phone number input for Vue 3 and Nuxt: international phone field with a searchable country selector and configurable output format.",
+          "h1": "Vue Phone Number Input Component",
+          "intro": "mood-ui's PhoneInput is a free, open-source Vue 3 phone number input component — an international phone field with a searchable country selector, configurable output format and full accessibility support."
+        },
         "controls": {
           "variant": "Variant",
           "color": "Color",
@@ -1561,6 +1657,12 @@
       "radio": {
         "title": "Radio",
         "description": "Individual radio button. For groups, prefer RadioGroup which manages roving tabindex and shares the name attribute automatically.",
+        "seo": {
+          "metaTitle": "Vue Radio Button Component",
+          "metaDescription": "Free, open-source Vue radio button for Vue 3 and Nuxt: individual radio input with all color and size variants. For groups, pair it with RadioGroup.",
+          "h1": "Vue Radio Component",
+          "intro": "mood-ui's Radio is a free, open-source Vue 3 radio button component — an individual radio input you pair with RadioGroup for managed roving tabindex and a shared name attribute."
+        },
         "controls": {
           "color": "Color",
           "size": "Size",
@@ -1639,6 +1741,12 @@
       "radioGroup": {
         "title": "RadioGroup",
         "description": "Radio group with single selection, semantic fieldset/legend and full label, helper and error support.",
+        "seo": {
+          "metaTitle": "Vue Radio Group Component",
+          "metaDescription": "Free, open-source Vue radio group for Vue 3 and Nuxt: single-selection group with semantic fieldset/legend and full label, helper and error support.",
+          "h1": "Vue Radio Group Component",
+          "intro": "mood-ui's RadioGroup is a free, open-source Vue 3 radio group component — a single-selection group with semantic fieldset/legend markup and full label, helper and error support."
+        },
         "controls": {
           "color": "Color",
           "size": "Size",
@@ -1721,6 +1829,12 @@
       "rangeSlider": {
         "title": "RangeSlider",
         "description": "Dual-thumb slider for selecting a numeric range. Supports marks, value formatting and the usual visual modes.",
+        "seo": {
+          "metaTitle": "Vue Range Slider — Dual Thumb",
+          "metaDescription": "Free, open-source Vue range slider for Vue 3 and Nuxt: dual-thumb slider for selecting a numeric range, with marks, value formatting and visual modes.",
+          "h1": "Vue Range Slider Component",
+          "intro": "mood-ui's RangeSlider is a free, open-source Vue 3 range slider component — a dual-thumb slider for selecting a numeric range, with marks, value formatting and the usual visual modes."
+        },
         "controls": {
           "color": "Color",
           "size": "Size",
@@ -1805,6 +1919,12 @@
       "rating": {
         "title": "Rating",
         "description": "Star rating control. Supports half steps, read-only mode and all color and size variants.",
+        "seo": {
+          "metaTitle": "Vue Star Rating Component",
+          "metaDescription": "Free, open-source Vue star rating for Vue 3 and Nuxt: star rating control with half steps, a read-only mode and all color and size variants. Zero cost.",
+          "h1": "Vue Rating Component",
+          "intro": "mood-ui's Rating is a free, open-source Vue 3 star rating component — a rating control with half steps, a read-only mode and all color and size variants."
+        },
         "controls": {
           "max": "Max",
           "color": "Color",
@@ -1869,6 +1989,12 @@
       "searchInput": {
         "title": "SearchInput",
         "description": "Search-optimised input: magnifier icon, automatic clear button, optional debounce and keyboard shortcut support.",
+        "seo": {
+          "metaTitle": "Vue Search Input — Search Bar",
+          "metaDescription": "Free, open-source Vue search input for Vue 3 and Nuxt: search field with magnifier icon, automatic clear button, optional debounce and keyboard shortcuts.",
+          "h1": "Vue Search Input Component",
+          "intro": "mood-ui's SearchInput is a free, open-source Vue 3 search input component — a search-optimised field with a magnifier icon, automatic clear button, optional debounce and keyboard shortcut support."
+        },
         "controls": {
           "variant": "Variant",
           "color": "Color",
@@ -1962,6 +2088,12 @@
       "segmented": {
         "title": "Segmented",
         "description": "Single-value pill-group selector with a sliding indicator. Ideal for switching views or short filters.",
+        "seo": {
+          "metaTitle": "Vue Segmented Control Component",
+          "metaDescription": "Free, open-source Vue segmented control for Vue 3 and Nuxt: single-value pill-group selector with a sliding indicator for switching views or filters.",
+          "h1": "Vue Segmented Control Component",
+          "intro": "mood-ui's Segmented is a free, open-source Vue 3 segmented control component — a single-value pill-group selector with a sliding indicator, ideal for switching views or short filters."
+        },
         "controls": {
           "color": "Color",
           "size": "Size",
@@ -2027,6 +2159,12 @@
       "select": {
         "title": "Select",
         "description": "Accessible single-value selector with a dropdown panel. Supports search, grouping, icons and the standard visual modes.",
+        "seo": {
+          "metaTitle": "Vue Select Component — Dropdown",
+          "metaDescription": "Free, open-source Vue select for Vue 3 and Nuxt: accessible single-value dropdown with search, option grouping and icons. A select dropdown with zero license cost.",
+          "h1": "Vue Select Component",
+          "intro": "mood-ui's Select is a free, open-source Vue 3 select dropdown component — an accessible single-value selector with a dropdown panel, search, option grouping and icons."
+        },
         "controls": {
           "variant": "Variant",
           "color": "Color",
@@ -2130,6 +2268,12 @@
       "slider": {
         "title": "Slider",
         "description": "Single-value numeric slider with marks, value formatting, label and all the usual visual variants.",
+        "seo": {
+          "metaTitle": "Vue Slider Component — Range Input",
+          "metaDescription": "Free, open-source Vue slider for Vue 3 and Nuxt: single-value numeric slider with marks, value formatting, a label and the usual visual variants.",
+          "h1": "Vue Slider Component",
+          "intro": "mood-ui's Slider is a free, open-source Vue 3 slider component — a single-value numeric range input with marks, value formatting, a label and all the usual visual variants."
+        },
         "controls": {
           "color": "Color",
           "size": "Size",
@@ -2214,6 +2358,12 @@
       "switch": {
         "title": "Switch",
         "description": "Semantically accessible on/off toggle. Supports left or right label position, description and all color and size variants.",
+        "seo": {
+          "metaTitle": "Vue Switch — On/Off Toggle",
+          "metaDescription": "Free, open-source Vue toggle switch for Vue 3 and Nuxt: accessible on/off toggle with left or right label, description and all color and size variants.",
+          "h1": "Vue Switch Component",
+          "intro": "mood-ui's Switch is a free, open-source Vue 3 toggle switch component — a semantically accessible on/off toggle with left or right label position, description and all color and size variants."
+        },
         "controls": {
           "color": "Color",
           "size": "Size",
@@ -2300,6 +2450,12 @@
       "tagInput": {
         "title": "TagInput",
         "description": "Tag editor: the user types text, presses Enter (or a delimiter) and a chip is added. Supports validation, maximums and visual variants.",
+        "seo": {
+          "metaTitle": "Vue Tag Input — Tags Field",
+          "metaDescription": "Free, open-source Vue tag input for Vue 3 and Nuxt: tag editor where users type and press Enter to add a chip, with validation, maximums and variants.",
+          "h1": "Vue Tag Input Component",
+          "intro": "mood-ui's TagInput is a free, open-source Vue 3 tag input component — a tag editor where users type, press Enter or a delimiter to add a chip, with validation, maximums and visual variants."
+        },
         "playground": {
           "placeholder": "Add a tag and press Enter…"
         },
@@ -2369,6 +2525,12 @@
       "textarea": {
         "title": "Textarea",
         "description": "Multi-line text area with autoresize, character counter, helper/error text and all the visual variants of Input.",
+        "seo": {
+          "metaTitle": "Vue Textarea Component — Autoresize",
+          "metaDescription": "Free, open-source Vue textarea for Vue 3 and Nuxt: multi-line text area with autoresize, a character counter, helper/error text and Input's visual variants.",
+          "h1": "Vue Textarea Component",
+          "intro": "mood-ui's Textarea is a free, open-source Vue 3 textarea component — a multi-line text area with autoresize, a character counter, helper/error text and the same visual variants as Input."
+        },
         "controls": {
           "variant": "Variant",
           "color": "Color",

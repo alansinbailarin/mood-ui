@@ -22,13 +22,6 @@ import type {
 
 const { t } = useI18n();
 
-
-useSeoMeta({
-  title: () => t("pages.forms.buttonGroup.title"),
-  description: () => t("pages.forms.buttonGroup.description"),
-  ogTitle: () => `${t("pages.forms.buttonGroup.title")} · mood-ui`,
-  ogDescription: () => t("pages.forms.buttonGroup.description"),
-});
 // ── A11y data ─────────────────────────────────────────────────────────────────
 const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
   { keys: ["Tab"], action: t("pages.forms.buttonGroup.a11y.kbTab") },

@@ -20,13 +20,6 @@ import TbSep from "~/components/toolbar/TbSep.vue";
 
 const { t } = useI18n();
 
-
-useSeoMeta({
-  title: () => t("pages.forms.checkbox.title"),
-  description: () => t("pages.forms.checkbox.description"),
-  ogTitle: () => `${t("pages.forms.checkbox.title")} · mood-ui`,
-  ogDescription: () => t("pages.forms.checkbox.description"),
-});
 // ── A11y data ─────────────────────────────────────────────────────────────────
 const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
   { keys: ["Tab"], action: t("pages.forms.checkbox.a11y.kbTab") },

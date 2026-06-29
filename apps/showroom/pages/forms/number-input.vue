@@ -20,13 +20,6 @@ import TbSep from "~/components/toolbar/TbSep.vue";
 
 const { t } = useI18n();
 
-
-useSeoMeta({
-  title: () => t("pages.forms.numberInput.title"),
-  description: () => t("pages.forms.numberInput.description"),
-  ogTitle: () => `${t("pages.forms.numberInput.title")} · mood-ui`,
-  ogDescription: () => t("pages.forms.numberInput.description"),
-});
 // ── A11y data ─────────────────────────────────────────────────────────────────
 const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
   { keys: ["Tab"], action: t("pages.forms.numberInput.a11y.kbTab") },
