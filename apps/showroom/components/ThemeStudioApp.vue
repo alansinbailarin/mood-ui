@@ -171,7 +171,7 @@ const RAND_COLORS = [
 ];
 const RAND_RADII: ModoRadius[] = ["none", "small", "medium", "large", "full"];
 const RAND_HALOS: ModoHalo[] = ["tinted", "neutral"];
-const RAND_SIZES: ModoSize[] = ["small", "medium", "large"];
+const RAND_SIZES: ModoSize[] = ["xsmall", "small", "medium", "large"];
 const RAND_SURFACES: DarkSurfacePreset[] = [
   "default",
   "navy",
@@ -1630,9 +1630,9 @@ function sendMessage() {
                 class="text-[9px] font-bold text-muted-foreground uppercase tracking-[0.1em] block mb-1.5"
                 >Density</span
               >
-              <div class="grid grid-cols-3 gap-1">
+              <div class="grid grid-cols-4 gap-1">
                 <button
-                  v-for="opt in ['small', 'medium', 'large'] as ModoSize[]"
+                  v-for="opt in ['xsmall', 'small', 'medium', 'large'] as ModoSize[]"
                   :key="opt"
                   type="button"
                   class="flex items-center justify-center py-2.25 rounded-lg border transition-all duration-100"

@@ -46,3 +46,6 @@ plan.md
 # Generated llms.txt files (rebuilt on each showroom build)
 apps/showroom/public/llms.txt
 apps/showroom/public/llms-full.txt
+
+# Dev-only scratch pages (local visual checks, never committed/deployed)
+apps/showroom/pages/dev-sizes.vue

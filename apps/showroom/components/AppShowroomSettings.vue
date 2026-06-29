@@ -97,6 +97,7 @@ const radiusOptions: { value: ModoRadius; label: string }[] = [
 ];
 
 const sizeOptions: { value: ModoSize; label: string }[] = [
+  { value: "xsmall", label: "xs" },
   { value: "small", label: "sm" },
   { value: "medium", label: "md" },
   { value: "large", label: "lg" },
