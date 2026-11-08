@@ -1,0 +1,312 @@
+/* Dialog & Sheet surfaces, scrim and parts — moved out of style.css; imported by the components that use it. */
+/* ── Scrim (Dialog & Sheet) ───────────────────────────────── */
+[data-modo-dialog-scrim],
+[data-modo-sheet-scrim] {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--modo-dialog-z) - 1);
+  background: var(--modo-dialog-scrim);
+  -webkit-backdrop-filter: var(--modo-dialog-scrim-backdrop);
+  backdrop-filter: var(--modo-dialog-scrim-backdrop);
+  opacity: 0;
+  pointer-events: none;
+}
+
+[data-modo-dialog-scrim][data-modo-phase="opening"] {
+  animation: modo-dialog-scrim-in var(--duration-base) var(--ease-standard) 0.18s both;
+}
+
+[data-modo-sheet-scrim][data-modo-phase="opening"] {
+  animation: modo-dialog-scrim-in var(--duration-slow) var(--ease-standard) 0.05s both;
+}
+
+[data-modo-dialog-scrim][data-modo-phase="open"],
+[data-modo-sheet-scrim][data-modo-phase="open"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+[data-modo-dialog-scrim][data-modo-phase="closing"],
+[data-modo-sheet-scrim][data-modo-phase="closing"] {
+  animation: modo-dialog-scrim-out var(--duration-base) var(--ease-standard) both;
+}
+
+@keyframes modo-dialog-scrim-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modo-dialog-scrim-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+
+/* ── Dialog Surface & Parts ───────────────────────────────── */
+[data-modo-dialog] {
+  position: fixed;
+  z-index: var(--modo-dialog-z);
+  width: max-content;
+  max-width: var(--modo-dialog-max-inline);
+  max-height: var(--modo-dialog-max-block);
+  padding: var(--modo-dialog-padding);
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--modo-dialog-radius);
+  background: var(--modo-dialog-surface);
+  -webkit-backdrop-filter: var(--modo-dialog-backdrop);
+  backdrop-filter: var(--modo-dialog-backdrop);
+  color: var(--card-foreground);
+  box-shadow:
+    inset 0 -1px 0 var(--modo-dialog-lowlight),
+    var(--shadow-xl);
+}
+
+[data-modo-dialog][data-modo-phase="opening"],
+[data-modo-dialog][data-modo-phase="closing"] {
+  will-change: transform, filter;
+}
+
+[data-modo-dialog][data-modo-phase="closing"] > :not(.modo-morph-ghost) {
+  opacity: 0;
+  filter: blur(6px);
+  transition:
+    opacity var(--duration-fast) var(--ease-standard),
+    filter var(--duration-fast) var(--ease-standard);
+}
+
+/* Width steps mirror Modal's `size`: max-w-xs / sm / md / 2xl / 4xl. */
+[data-modo-dialog][data-modo-width="xsmall"] {
+  width: min(92vw, 20rem);
+  max-width: none;
+}
+
+[data-modo-dialog][data-modo-width="small"] {
+  width: min(92vw, 24rem);
+  max-width: none;
+}
+
+[data-modo-dialog][data-modo-width="medium"] {
+  width: min(92vw, 28rem);
+  max-width: none;
+}
+
+[data-modo-dialog][data-modo-width="large"] {
+  width: min(94vw, 42rem);
+  max-width: none;
+}
+
+[data-modo-dialog][data-modo-width="xlarge"] {
+  width: min(94vw, 56rem);
+  max-width: none;
+}
+
+[data-modo-dialog][data-modo-width="full"] {
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  border: none;
+  border-radius: 0;
+  padding-bottom: calc(var(--modo-dialog-padding) + env(safe-area-inset-bottom));
+}
+
+[data-modo-dialog][data-modo-detached] {
+  animation: modo-dialog-pop var(--duration-base) var(--ease-decelerate) both;
+}
+
+@keyframes modo-dialog-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Sheet Surface & Parts ────────────────────────────────── */
+[data-modo-sheet] {
+  --modo-sheet-gutter: 0.625rem;
+  position: fixed;
+  left: max(var(--modo-sheet-gutter), env(safe-area-inset-left));
+  right: max(var(--modo-sheet-gutter), env(safe-area-inset-right));
+  bottom: max(var(--modo-sheet-gutter), env(safe-area-inset-bottom));
+  z-index: var(--modo-dialog-z);
+  max-height: min(85dvh, 44rem);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--modo-dialog-padding, 1.25rem);
+  border: 1px solid var(--border);
+  border-radius: var(--modo-dialog-radius);
+  background: var(--modo-dialog-surface);
+  -webkit-backdrop-filter: var(--modo-dialog-backdrop);
+  backdrop-filter: var(--modo-dialog-backdrop);
+  color: var(--card-foreground);
+  box-shadow:
+    inset 0 -1px 0 var(--modo-dialog-lowlight),
+    var(--shadow-xl);
+}
+
+[data-modo-sheet][data-modo-height="half"] {
+  height: 50dvh;
+}
+
+[data-modo-sheet][data-modo-height="full"],
+[data-modo-sheet][data-modo-expanded] {
+  height: calc(
+    100dvh - var(--modo-sheet-gutter, 0.625rem) -
+      max(0.875rem, env(safe-area-inset-top))
+  );
+  max-height: none;
+}
+
+[data-modo-sheet][data-modo-phase="opening"],
+[data-modo-sheet][data-modo-phase="closing"] {
+  will-change: transform;
+}
+
+[data-modo-sheet][data-modo-phase="opening"] {
+  animation: modo-sheet-up var(--duration-slow) var(--ease-decelerate) both;
+}
+
+[data-modo-sheet][data-modo-phase="closing"]:not([data-modo-skip-morph]) {
+  animation: modo-sheet-down var(--duration-base) var(--ease-accelerate) both;
+}
+
+[data-modo-sheet][data-modo-phase="closing"][data-modo-skip-morph] {
+  opacity: 0;
+}
+
+@keyframes modo-sheet-up {
+  from {
+    transform: translateY(calc(100% + 0.625rem));
+    -webkit-backdrop-filter: blur(0px) saturate(100%);
+    backdrop-filter: blur(0px) saturate(100%);
+  }
+  75% {
+    -webkit-backdrop-filter: blur(0px) saturate(100%);
+    backdrop-filter: blur(0px) saturate(100%);
+  }
+  to {
+    transform: translateY(0);
+    -webkit-backdrop-filter: var(--modo-dialog-backdrop);
+    backdrop-filter: var(--modo-dialog-backdrop);
+  }
+}
+
+@keyframes modo-sheet-down {
+  from {
+    transform: translateY(0);
+    -webkit-backdrop-filter: var(--modo-dialog-backdrop);
+    backdrop-filter: var(--modo-dialog-backdrop);
+  }
+  25% {
+    -webkit-backdrop-filter: blur(0px) saturate(100%);
+    backdrop-filter: blur(0px) saturate(100%);
+  }
+  to {
+    transform: translateY(calc(105% + 0.625rem));
+    -webkit-backdrop-filter: blur(0px) saturate(100%);
+    backdrop-filter: blur(0px) saturate(100%);
+  }
+}
+
+/* ── Shared Dialog & Sheet Structural Chrome ──────────────── */
+[data-modo-dialog]:has(.modo-dialog__body),
+[data-modo-sheet]:has(.modo-sheet__body) {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modo-dialog__body,
+.modo-sheet__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.modo-dialog__header,
+.modo-sheet__header {
+  flex: 0 0 auto;
+}
+
+.modo-dialog__footer,
+.modo-sheet__footer {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+@media (max-width: 480px) {
+  .modo-dialog__footer,
+  .modo-sheet__footer {
+    flex-direction: column-reverse;
+  }
+  .modo-dialog__footer > *,
+  .modo-sheet__footer > * {
+    width: 100%;
+  }
+}
+
+/* Typography comes from <Typography> (title / body-small muted, like Modal);
+ * only the spacing and the room for the close button live here. */
+.modo-dialog__title,
+.modo-sheet__title {
+  margin: 0 0 0.25rem;
+  padding-right: 2.25rem;
+}
+
+.modo-dialog__description,
+.modo-sheet__description {
+  margin: 0 0 1rem;
+}
+
+/* Close button: native <Button variant="text" size="small"> pinned like Modal's. */
+.modo-dialog__x,
+.modo-sheet__x {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 2;
+}
+
+.modo-dialog__fog,
+.modo-sheet__fog {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  height: 1.5rem;
+  margin-bottom: -1.5rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-standard);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  -webkit-mask-image: linear-gradient(to bottom, black, transparent);
+  mask-image: linear-gradient(to bottom, black, transparent);
+}
+
+[data-modo-scrolled] > .modo-dialog__fog,
+[data-modo-scrolled] > .modo-sheet__fog {
+  opacity: 1;
+}
+
+/* Reduced motion: the duration tokens already drop to 0ms; also drop the
+ * choreography delays so nothing waits on an animation that never plays. */
+@media (prefers-reduced-motion: reduce) {
+  [data-modo-dialog-scrim],
+  [data-modo-sheet-scrim],
+  [data-modo-dialog],
+  [data-modo-sheet] {
+    animation-delay: 0s !important;
+  }
+}
