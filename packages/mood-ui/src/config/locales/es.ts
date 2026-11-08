@@ -183,4 +183,13 @@ export const es: ModoLocale = {
     noResults: "Sin resultados.",
     activeItemSr: "Actualmente seleccionado",
   },
+  dialog: { label: "Diálogo" },
+  sheet: { label: "Panel" },
+  morphSelect: {
+    placeholder: "Selecciona…",
+    searchPlaceholder: "Buscar…",
+    empty: "Sin resultados.",
+  },
+  liquidToast: { region: "Notificaciones" },
+  modeOrb: { toggle: "Cambiar modo de color" },
 };

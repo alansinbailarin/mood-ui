@@ -256,6 +256,27 @@ export interface ModoLocale {
     /** Visually hidden text appended to the active item for screen readers. */
     activeItemSr: string;
   };
+  dialog: {
+    /** Fallback accessible name when the dialog has no DialogTitle. */
+    label: string;
+  };
+  sheet: {
+    /** Fallback accessible name when the sheet has no SheetTitle. */
+    label: string;
+  };
+  morphSelect: {
+    placeholder: string;
+    searchPlaceholder: string;
+    empty: string;
+  };
+  liquidToast: {
+    /** Accessible name of the toaster landmark. */
+    region: string;
+  };
+  modeOrb: {
+    /** Default aria-label of the color-mode toggle. */
+    toggle: string;
+  };
 }
 
 /** Default locale (English). Serves as the non-breaking fallback. */
@@ -410,6 +431,15 @@ export const defaultLocale: ModoLocale = {
     noResults: "No matches.",
     activeItemSr: "Currently selected",
   },
+  dialog: { label: "Dialog" },
+  sheet: { label: "Sheet" },
+  morphSelect: {
+    placeholder: "Select…",
+    searchPlaceholder: "Search…",
+    empty: "No results.",
+  },
+  liquidToast: { region: "Notifications" },
+  modeOrb: { toggle: "Toggle color mode" },
 };
 
 /** Deep-partial for consumer overrides. Each leaf string stays optional. */

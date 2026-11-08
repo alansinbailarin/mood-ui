@@ -1,0 +1,81 @@
+/* Morph trigger choreography (Dialog, Sheet, Popover, Menu) — moved out of style.css; imported by the components that use it. */
+/* ── Trigger Morph Choreographies ─────────────────────────── */
+.modo-morph-trigger[data-modo-morph-origin="hidden"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.modo-morph-trigger[data-modo-morph-origin="closing"] {
+  opacity: 1;
+  pointer-events: none;
+  transition: opacity var(--duration-instant) var(--ease-standard) 0.26s;
+}
+
+.modo-morph-trigger__content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  transform: scale(1);
+  transition: transform var(--duration-base) var(--ease-emphasized);
+}
+
+.modo-morph-trigger[data-modo-morph-origin="hidden"] .modo-morph-trigger__content {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: none;
+}
+
+.modo-morph-trigger[data-modo-morph-origin="closing"] .modo-morph-trigger__content {
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity var(--duration-instant) var(--ease-standard) 0.26s,
+    transform var(--duration-base) var(--ease-emphasized) 0.26s;
+}
+
+.modo-morph-trigger[data-modo-morph-origin="hidden"] .modo-press-button__icon,
+.modo-morph-trigger[data-modo-morph-origin="closing"] .modo-press-button__icon {
+  opacity: 0;
+}
+
+.modo-morph-trigger[data-modo-morph-origin="landed"] .modo-press-button__icon {
+  animation: modo-morph-icon-enter var(--duration-slow) var(--ease-emphasized) both;
+}
+
+@keyframes modo-morph-icon-enter {
+  from {
+    opacity: 0;
+    transform: translateX(-5px) scale(0.7);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+.modo-morph-ghost {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.modo-morph-ghost__inner {
+  display: inline-flex;
+  opacity: 0;
+  will-change: transform;
+}
+
+/* Reduced motion: the duration tokens drop to 0ms; the trigger also shows
+ * right away instead of waiting for the (skipped) return flight. */
+@media (prefers-reduced-motion: reduce) {
+  .modo-morph-trigger[data-modo-morph-origin="closing"],
+  .modo-morph-trigger[data-modo-morph-origin="closing"] .modo-morph-trigger__content {
+    transition-delay: 0s;
+  }
+}
