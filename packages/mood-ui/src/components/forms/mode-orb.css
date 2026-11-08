@@ -1,0 +1,107 @@
+/* ModeOrb & circular view-transition wave. Every color is a provider token:
+ * the sphere uses `--modo-orb` (foreground by default, so it is dark in light
+ * mode and light in dark mode) and the crest uses the incoming theme's
+ * foreground. Size, focus ring and disabled state come from utility classes
+ * set by the component. */
+.modo-mode-orb {
+  --modo-orb: var(--foreground);
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 9999px;
+  background: none;
+}
+
+.modo-mode-orb[data-modo-color="primary"] { --modo-orb: var(--primary); }
+.modo-mode-orb[data-modo-color="danger"] { --modo-orb: var(--destructive); }
+.modo-mode-orb[data-modo-color="success"] { --modo-orb: var(--success); }
+.modo-mode-orb[data-modo-color="warning"] { --modo-orb: var(--warning); }
+
+.modo-mode-orb[data-modo-fixed=""] {
+  position: fixed;
+  right: clamp(1rem, 4vw, 2rem);
+  bottom: clamp(1rem, 4vw, 2rem);
+  z-index: 1300;
+}
+
+.modo-mode-orb::before {
+  position: absolute;
+  content: "";
+  inset: 0;
+  border: 1px solid color-mix(in oklab, var(--modo-orb) 70%, var(--border));
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at 32% 28%,
+    color-mix(in oklab, var(--modo-orb) 62%, var(--background)),
+    var(--modo-orb) 58%,
+    color-mix(in oklab, var(--modo-orb) 78%, var(--foreground))
+  );
+  box-shadow: var(--shadow-md);
+  transition: transform var(--duration-fast) var(--ease-emphasized);
+}
+
+.modo-mode-orb:not(:disabled):hover::before {
+  transform: scale(1.08);
+}
+
+.modo-mode-orb:not(:disabled):active::before {
+  transform: scale(0.92);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modo-mode-orb::before {
+    transition: none;
+  }
+}
+
+:root[data-modo-wave]::view-transition {
+  pointer-events: none;
+}
+
+:root[data-modo-wave]::view-transition-old(root) {
+  animation: none;
+}
+
+:root[data-modo-wave]::view-transition-new(root) {
+  animation: none;
+  opacity: 1;
+  clip-path: circle(0 at var(--modo-wave-x) var(--modo-wave-y));
+}
+
+:root[data-modo-wave="go"]::view-transition-new(root) {
+  animation: modo-wave 850ms cubic-bezier(0.37, 0, 0.63, 1) both;
+}
+
+/* Foam ring at the wave's leading edge. It lives in the live DOM, which
+ * already carries the incoming theme, so `--foreground` is the new ink. */
+.modo-wave-crest {
+  position: fixed;
+  z-index: 1290;
+  width: 200px;
+  height: 200px;
+  border-radius: 9999px;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  background: radial-gradient(
+    circle closest-side,
+    transparent 78%,
+    color-mix(in oklab, var(--foreground) 4%, transparent) 86%,
+    color-mix(in oklab, var(--foreground) 38%, transparent) 96%,
+    color-mix(in oklab, var(--foreground) 60%, transparent) 100%
+  );
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+@keyframes modo-wave {
+  from {
+    clip-path: circle(0 at var(--modo-wave-x) var(--modo-wave-y));
+  }
+  to {
+    clip-path: circle(var(--modo-wave-r) at var(--modo-wave-x) var(--modo-wave-y));
+  }
+}
