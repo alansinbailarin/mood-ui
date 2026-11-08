@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { Badge, Table, Typography } from "mood-ui";
+import { Badge, Button, Table, Typography } from "mood-ui";
 import { useI18n } from "vue-i18n";
 import ComponentDoc from "~/components/ComponentDoc.vue";
 import ComponentPreview from "~/components/ComponentPreview.vue";
@@ -224,6 +224,7 @@ const paginationRows: Person[] = [
 ];
 
 const selected = ref<(string | number)[]>([]);
+const toolbarSelected = ref<(string | number)[]>([1]);
 const paginationState = ref({ page: 1, pageSize: 3, total: 6 });
 const loadingDemo = ref(true);
 
@@ -439,6 +440,50 @@ const selected = ref<(string | number)[]>([]);
   </div>
 </template>`;
 
+const toolbarCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { Table, Button, type TableColumn } from 'mood-ui';
+
+interface Person {
+  id: number; name: string; role: string; country: string; salary: number;
+}
+
+const rows: Person[] = [
+  { id: 1, name: 'Ada Lovelace',      role: 'Engineer',      country: 'UK', salary: 95000 },
+  { id: 2, name: 'Linus Torvalds',    role: 'Creator',       country: 'FI', salary: 110000 },
+  { id: 3, name: 'Grace Hopper',      role: 'Admiral',       country: 'US', salary: 80000 },
+  { id: 4, name: 'Alan Turing',       role: 'Mathematician', country: 'UK', salary: 75000 },
+  { id: 5, name: 'Margaret Hamilton', role: 'Director',      country: 'US', salary: 98000 },
+  { id: 6, name: 'Donald Knuth',      role: 'Professor',     country: 'US', salary: 87000 },
+];
+
+const cols: TableColumn<Person>[] = [
+  { key: 'name',    header: 'Name',    sortable: true },
+  { key: 'role',    header: 'Role',    sortable: true },
+  { key: 'country', header: 'Country', sortable: true },
+  { key: 'salary',  header: 'Salary',  sortable: true, type: 'number', accessor: (row) => '$' + row.salary.toLocaleString() },
+];
+
+const selected = ref<(string | number)[]>([1]);
+<\/script>
+
+<template>
+  <Table
+    :data="rows"
+    :columns="cols"
+    row-key="id"
+    selectable="multi"
+    v-model:selected="selected"
+    global-search
+    column-visibility
+    exportable
+  >
+    <template #bulk-actions="{ clear }">
+      <Button size="small" variant="outline" label="Clear" @click="clear" />
+    </template>
+  </Table>
+</template>`;
+
 const paginationCode = `<script setup lang="ts">
 import { ref } from 'vue';
 import { Table, type TableColumn, type TablePaginationState } from 'mood-ui';
@@ -472,6 +517,7 @@ const pagination = ref<TablePaginationState>({ page: 1, pageSize: 3, total: 6 })
     :columns="cols"
     row-key="id"
     :pagination="pagination"
+    :page-size-options="[3, 6, 10]"
     @update:pagination="pagination = $event"
   />
 </template>`;
@@ -1155,6 +1201,35 @@ const slotsList = computed<SlotDoc[]>(() => [
       </ComponentPreview>
 
       <ComponentPreview
+        :title="t('pages.data-display.table.examples.toolbar.title')"
+        :description="t('pages.data-display.table.examples.toolbar.desc')"
+        :code="toolbarCode"
+      >
+        <div class="w-full">
+          <Table
+            :data="paginationRows"
+            :columns="sortableCols"
+            row-key="id"
+            selectable="multi"
+            :selected="toolbarSelected"
+            global-search
+            column-visibility
+            exportable
+            @update:selected="toolbarSelected = $event"
+          >
+            <template #bulk-actions="{ clear }">
+              <Button
+                size="small"
+                variant="outline"
+                label="Clear"
+                @click="clear"
+              />
+            </template>
+          </Table>
+        </div>
+      </ComponentPreview>
+
+      <ComponentPreview
         :title="t('pages.data-display.table.examples.pagination.title')"
         :description="t('pages.data-display.table.examples.pagination.desc')"
         :code="paginationCode"
@@ -1165,6 +1240,7 @@ const slotsList = computed<SlotDoc[]>(() => [
             :columns="cols"
             row-key="id"
             :pagination="paginationState"
+            :page-size-options="[3, 6, 10]"
             @update:pagination="paginationState = $event"
           />
         </div>

@@ -1,5 +1,5 @@
 import type { TablePaginationState } from './Table.interface'; 
-import type { ModoSize } from '../../../config/ModoConfig';
+import type { ModoRadius, ModoSize } from '../../../config/ModoConfig';
  
 /** 
  * `<TablePagination>` props. The component renders a self-contained 
@@ -35,7 +35,17 @@ export interface TablePagination {
  
     /** Sizing scale, mirrors `<Table>`. @default 'medium' */ 
     size?: ModoSize; 
- 
+
+    /** Corner radius override forwarded to pagination controls. Inherits from `ModoProvider` when omitted. */
+    radius?: ModoRadius;
+
     /** Forwarded to the wrapping `<nav>` for screen readers. */ 
     ariaLabel?: string; 
+
+    /**
+     * Renders seamlessly on `<Table>`'s outer muted tray without its own
+     * card background or top border. Omit for standalone usage.
+     * @default false
+     */
+    embedded?: boolean;
 }

@@ -69,6 +69,10 @@ import {
     ChevronUpDownIcon, 
     ChevronRightIcon, 
 } from '@heroicons/vue/20/solid'; 
+import { 
+    ViewColumnsIcon, 
+    ArrowDownTrayIcon, 
+} from '@heroicons/vue/24/outline'; 
  
 const props = withDefaults(defineProps<TableProps<TRow>>(), { 
     striped: false, 
@@ -1104,12 +1108,23 @@ const rowHeightClass = computed(() => {
  
 const cellPaddingClass = computed(() => { 
     const d = effectiveDensity.value; 
-    if (d === 'compact') return 'px-2 py-1'; 
+    if (d === 'compact') return 'px-2.5 py-1'; 
     if (d === 'spacious') return 'px-4 py-3.5'; 
     switch (resolvedSize.value) { 
-        case 'small': return 'px-2.5 py-1.5'; 
+        case 'small': return 'px-3 py-1.5'; 
         case 'large': return 'px-4 py-3'; 
-        default: return 'px-3 py-2'; 
+        default: return 'px-3.5 py-2'; 
+    } 
+}); 
+
+const headerPaddingClass = computed(() => { 
+    const d = effectiveDensity.value; 
+    if (d === 'compact') return 'px-2.5 py-1.5'; 
+    if (d === 'spacious') return 'px-4 py-3'; 
+    switch (resolvedSize.value) { 
+        case 'small': return 'px-3 py-2'; 
+        case 'large': return 'px-4 py-3'; 
+        default: return 'px-3.5 py-2.5'; 
     } 
 }); 
  
@@ -1118,6 +1133,18 @@ const cellTextClass = computed(() => {
     if (resolvedSize.value === 'small') return 'text-caption'; 
     if (resolvedSize.value === 'large') return 'text-body-lg'; 
     return 'text-body'; 
+}); 
+
+const headerTextClass = computed(() => { 
+    if (
+        effectiveDensity.value === 'compact' ||
+        resolvedSize.value === 'small' ||
+        (resolvedSize.value as string) === 'xsmall'
+    ) {
+        return 'text-[11px] leading-4';
+    }
+    if (resolvedSize.value === 'large') return 'text-[13px] leading-[18px]'; 
+    return 'text-caption'; 
 }); 
  
 const cellBorderClass = computed(() => { 
@@ -1129,23 +1156,25 @@ const cellBorderClass = computed(() => {
             return ''; 
     } 
 }); 
-const rowBorderClass = computed(() => { 
-    switch (props.bordered) { 
-        case 'rows': 
-        case 'all': 
-            return 'border-b border-border last:border-b-0'; 
-        default: 
-            return ''; 
-    } 
-}); 
  
 const radiusClass = computed(() => { 
     switch (radius.value) { 
         case 'none': return 'rounded-none'; 
-        case 'small': return 'rounded-sm'; 
-        case 'large': return 'rounded-xl'; 
-        case 'full': return 'rounded-2xl'; 
-        default: return 'rounded-lg'; 
+        case 'small': return 'rounded-lg'; 
+        case 'large': return 'rounded-2xl'; 
+        case 'full': return 'rounded-3xl'; 
+        default: return 'rounded-xl'; 
+    } 
+}); 
+
+/** Concentric inner card radius (`outerRadius - 0.25rem` tray padding), matching `Card.vue` scale. */
+const innerRadiusCss = computed(() => { 
+    switch (radius.value) { 
+        case 'none': return '0px'; 
+        case 'small': return '0.25rem'; 
+        case 'large': return '0.75rem'; 
+        case 'full': return '1.25rem'; 
+        default: return '0.5rem'; 
     } 
 }); 
  
@@ -1163,9 +1192,8 @@ function defaultFormat(value: unknown, type: string): string {
  
 const headerCellClass = computed(() => [ 
     'font-medium text-muted-foreground select-none', 
-    cellPaddingClass.value, 
-    cellTextClass.value, 
-    cellBorderClass.value, 
+    headerPaddingClass.value, 
+    headerTextClass.value, 
 ]); 
  
 const bodyCellClass = computed(() => [ 
@@ -1175,9 +1203,6 @@ const bodyCellClass = computed(() => [
     cellBorderClass.value, 
     props.overflow === 'truncate' ? 'truncate max-w-0' : '', 
 ]); 
- 
-const stripedClass = computed(() => (props.striped ? 'odd:bg-muted/40' : '')); 
-const hoverClass = computed(() => (props.hover ? 'hover:bg-muted/60 transition-colors duration-fast' : '')); 
  
 function renderCell( 
     column: any, 
@@ -1648,190 +1673,317 @@ const stickyFirstRootClass = computed(() => {
         : 'modo-sticky-first'; 
 }); 
  
-const stickyFirstRootStyle = computed<Record<string, string> | undefined>(() => { 
-    if (!stickyFirstKey.value) return undefined; 
-    return { 
-        '--modo-table-first-sticky-left': 
-            leadingColCount.value * LEADING_COL_PX + 'px', 
+const rootStyle = computed<Record<string, string>>(() => { 
+    const s: Record<string, string> = { 
+        '--modo-table-inner-radius': innerRadiusCss.value, 
     }; 
+    if (stickyFirstKey.value) { 
+        s['--modo-table-first-sticky-left'] = 
+            leadingColCount.value * LEADING_COL_PX + 'px'; 
+    } 
+    return s; 
 }); 
  
 function isFirstStickyCell(c: { key: string }): boolean { 
     return c.key === stickyFirstKey.value; 
 } 
+
+const hasBulkActionsBar = computed(
+    () => Boolean(slots['bulk-actions']) && selectionApi.selected.value.length > 0,
+);
+
+/** Canonical mood-ui control size (`sm` = `'small'` on default `medium` tables). */
+const controlSize = computed<'xsmall' | 'small' | 'medium'>(() => {
+    if (resolvedSize.value === 'small') return 'xsmall';
+    if (resolvedSize.value === 'large') return 'medium';
+    return 'small';
+});
+
+/* ---------- Sort FLIP animation ----------
+ * Smoothly glides data rows on the compositor thread (`transform` + `opacity`)
+ * whenever the active sort order changes, respecting `prefers-reduced-motion`. */
+const tbodyEl = ref<HTMLTableSectionElement | null>(null);
+const sortRowAnims = new WeakMap<Element, Animation>();
+
+watch(
+    () => sortApi.sort.value.map((s) => `${s.key}:${s.direction}`).join(','),
+    async (nextSig, prevSig) => {
+        if (nextSig === prevSig) return;
+        if (typeof window === 'undefined') return;
+        const tbody = tbodyEl.value;
+        if (!tbody || virtualApi.isActive.value) return;
+        if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+
+        const prevTops = new Map<string, number>();
+        for (const rowEl of tbody.querySelectorAll<HTMLElement>('tr.modo-table-data-row[data-row-key]')) {
+            const key = rowEl.dataset.rowKey;
+            if (key) prevTops.set(key, rowEl.getBoundingClientRect().top);
+        }
+
+        await nextTick();
+
+        const currentTbody = tbodyEl.value;
+        if (!currentTbody) return;
+        const rows = currentTbody.querySelectorAll<HTMLElement>('tr.modo-table-data-row[data-row-key]');
+        rows.forEach((rowEl, idx) => {
+            sortRowAnims.get(rowEl)?.cancel();
+            if (typeof rowEl.animate !== 'function') return;
+
+            const key = rowEl.dataset.rowKey;
+            const prevTop = key ? prevTops.get(key) : undefined;
+            if (prevTop !== undefined) {
+                const deltaY = prevTop - rowEl.getBoundingClientRect().top;
+                if (Math.abs(deltaY) < 1) return;
+                const anim = rowEl.animate(
+                    [
+                        { transform: `translateY(${deltaY}px)`, opacity: 0.78 },
+                        { transform: 'translateY(0)', opacity: 1 },
+                    ],
+                    {
+                        duration: 240,
+                        easing: 'cubic-bezier(0.2, 0, 0, 1)',
+                    },
+                );
+                sortRowAnims.set(rowEl, anim);
+            } else if (prevTops.size > 0) {
+                const anim = rowEl.animate(
+                    [
+                        { transform: 'translateY(6px)', opacity: 0 },
+                        { transform: 'translateY(0)', opacity: 1 },
+                    ],
+                    {
+                        duration: 200,
+                        delay: Math.min(idx * 16, 80),
+                        easing: 'cubic-bezier(0.2, 0, 0, 1)',
+                        fill: 'backwards',
+                    },
+                );
+                sortRowAnims.set(rowEl, anim);
+            }
+        });
+    },
+    { flush: 'pre' },
+);
 </script> 
  
 <template> 
     <div 
         :class="[ 
-            'relative bg-card border border-border overflow-hidden', 
+            'modo-table-root relative bg-muted border border-border overflow-hidden', 
             radiusClass, 
             stickyFirstRootClass, 
+            (bordered === 'rows' || bordered === 'all') ? 'modo-table-row-borders' : '', 
+            striped ? 'modo-table-striped' : '', 
+            hover ? 'modo-table-hover' : '', 
         ]" 
-        :style="stickyFirstRootStyle" 
+        :style="rootStyle" 
         @keydown="onRootKeydown" 
     > 
         <span aria-hidden="true" class="hidden"><slot /></span> 
  
-        <!-- Toolbar (Phase 5a). Surfaces global search by default; the 
-             `#toolbar` slot lets consumers replace it entirely (e.g. add 
-             column-visibility menu, export, bulk actions). --> 
-        <div 
-            v-if="showToolbar" 
-            class="flex items-center gap-3 px-3 py-2 border-b border-border bg-muted/30" 
-        > 
-            <slot 
-                name="toolbar" 
-                :searchTerm="globalSearchTerm" 
-                :setSearchTerm="setGlobalSearch" 
-                :clearSearch="() => setGlobalSearch('')" 
+        <!-- Toolbar & Bulk-actions tray chrome (Phase 5a–5d). Uses standard
+             mood-ui `controlSize` (`small` by default) and inherits ModoProvider color. --> 
+        <div v-if="showToolbar || hasBulkActionsBar" class="flex flex-col gap-2 px-3 pt-2.5 pb-1.5">
+            <div 
+                v-if="showToolbar" 
+                class="flex flex-wrap items-center gap-2.5" 
             > 
-                <SearchInput 
-                    v-if="hasGlobalSearch" 
-                    :model-value="globalSearchTerm" 
-                    :placeholder="loc.table.searchPlaceholder" 
-                    size="small" 
-                    clearable 
-                    class="max-w-xs" 
-                    full-width 
-                    @update:model-value="setGlobalSearch" 
-                /> 
-                <div v-if="columnVisibility || hasExport" class="ml-auto flex items-center gap-2"> 
-                    <div v-if="columnVisibility"> 
-                    <Button 
-                        ref="colMenuTriggerEl" 
-                        variant="outline" 
-                        size="small" 
-                        radius="medium" 
-                        :icon="ChevronDownIcon" 
-                        iconPosition="right" 
-                        :label="loc.table.columnVisibility" 
-                        :aria-expanded="colMenuOpen" 
-                        aria-haspopup="dialog" 
-                        @click="toggleColMenu" 
-                    /> 
-                    <PopoverPanel 
-                        :open="colMenuOpen" 
-                        :style="colMenuPanelStyle" 
-                        role="dialog" 
-                        @update:panelRef="colMenuPanelRef = $event" 
-                    > 
-                        <div class="flex flex-col gap-1 py-2 min-w-48 max-h-72 overflow-y-auto"> 
-                            <div class="px-3 pb-1 text-caption font-medium text-muted-foreground"> 
-                                {{ loc.table.columnVisibility }} 
-                            </div> 
-                            <label 
-                                v-for="c in columns" 
-                                :key="c.key" 
-                                class="flex items-center gap-2 px-3 py-1.5 text-body cursor-pointer hover:bg-muted rounded" 
-                            > 
-                                <Checkbox 
-                                    :model-value="!isColumnHidden(c.key)" 
-                                    size="small" 
-                                    :disabled="!isColumnHidden(c.key) && visibleColumnCount <= 1" 
-                                    @update:model-value="(v: boolean) => toggleColumnHidden(c.key, !v)" 
-                                /> 
-                                <span class="truncate">{{ c.header ?? c.key }}</span> 
-                            </label> 
-                        </div> 
-                    </PopoverPanel> 
-                </div> 
- 
-                <div v-if="hasExport"> 
-                    <Button 
-                        ref="exportMenuTriggerEl" 
-                        variant="outline" 
-                        size="small" 
-                        radius="medium" 
-                        :icon="ChevronDownIcon" 
-                        iconPosition="right" 
-                        :label="loc.table.export" 
-                        :aria-expanded="exportMenuOpen" 
-                        aria-haspopup="menu" 
-                        @click="toggleExportMenu" 
-                    /> 
-                    <PopoverPanel 
-                        :open="exportMenuOpen" 
-                        :style="exportMenuPanelStyle" 
-                        role="menu" 
-                        @update:panelRef="exportMenuPanelRef = $event" 
-                    > 
-                        <div class="flex flex-col py-1 min-w-48"> 
-                            <button 
-                                v-if="exportFormats.csv" 
-                                type="button" 
-                                role="menuitem" 
-                                class="text-left px-3 py-2 text-body hover:bg-muted focus-visible:bg-muted focus-visible:outline-none" 
-                                @click="exportCsv" 
-                            >{{ loc.table.exportCsv }}</button> 
-                            <button 
-                                v-if="exportFormats.json" 
-                                type="button" 
-                                role="menuitem" 
-                                class="text-left px-3 py-2 text-body hover:bg-muted focus-visible:bg-muted focus-visible:outline-none" 
-                                @click="exportJson" 
-                            >{{ loc.table.exportJson }}</button> 
-                            <button 
-                                v-if="exportFormats.clipboard" 
-                                type="button" 
-                                role="menuitem" 
-                                class="text-left px-3 py-2 text-body hover:bg-muted focus-visible:bg-muted focus-visible:outline-none" 
-                                @click="exportClipboard" 
-                            >{{ loc.table.exportClipboard }}</button> 
-                        </div> 
-                    </PopoverPanel> 
-                </div> 
-                </div> 
-            </slot> 
-        </div> 
- 
-        <!-- Bulk-actions bar (Phase 5d). Renders when at least one row is 
-             selected. The slot receives selected keys + resolved rows + 
-             a clear() helper. Default rendering shows just the count + a 
-             "Clear" button so the bar is meaningful even without a slot. --> 
-        <div 
-            v-if="$slots['bulk-actions'] && selectionApi.selected.value.length > 0" 
-            class="flex items-center gap-3 px-3 py-2 border-b border-border bg-primary/10" 
-            role="region" 
-            :aria-label="interpolate(loc.table.selectedCount, { count: selectionApi.selected.value.length })" 
-        > 
-            <span class="text-body font-medium text-foreground"> 
-                {{ interpolate(loc.table.selectedCount, { count: selectionApi.selected.value.length }) }} 
-            </span> 
-            <div class="flex items-center gap-2 ml-auto"> 
                 <slot 
-                    name="bulk-actions" 
-                    :selected="selectionApi.selected.value" 
-                    :rows="selectedRowsResolved" 
-                    :count="selectionApi.selected.value.length" 
-                    :clear="() => selectionApi.clear()" 
-                /> 
+                    name="toolbar" 
+                    :searchTerm="globalSearchTerm" 
+                    :setSearchTerm="setGlobalSearch" 
+                    :clearSearch="() => setGlobalSearch('')" 
+                > 
+                    <SearchInput 
+                        v-if="hasGlobalSearch" 
+                        :model-value="globalSearchTerm" 
+                        :placeholder="loc.table.searchPlaceholder" 
+                        :aria-label="loc.table.searchPlaceholder" 
+                        :size="controlSize" 
+                        :radius="radius" 
+                        clearable 
+                        class="w-full max-w-xs" 
+                        full-width 
+                        @update:model-value="setGlobalSearch" 
+                    /> 
+                    <div v-if="hasBulkActionsBar || columnVisibility || hasExport" class="ml-auto flex flex-wrap items-center gap-2"> 
+                        <!-- Inline selection readout & bulk-actions (no blue background bar) -->
+                        <div 
+                            v-if="hasBulkActionsBar" 
+                            role="region" 
+                            :aria-label="interpolate(loc.table.selectedCount, { count: selectionApi.selected.value.length })" 
+                            class="modo-table-bulk-actions inline-flex items-center gap-2" 
+                        > 
+                            <span class="text-caption font-medium text-muted-foreground tabular-nums whitespace-nowrap px-1"> 
+                                {{ interpolate(loc.table.selectedCount, { count: selectionApi.selected.value.length }) }} 
+                            </span> 
+                            <div class="inline-flex items-center gap-1.5"> 
+                                <slot 
+                                    name="bulk-actions" 
+                                    :selected="selectionApi.selected.value" 
+                                    :rows="selectedRowsResolved" 
+                                    :count="selectionApi.selected.value.length" 
+                                    :clear="() => selectionApi.clear()" 
+                                /> 
+                            </div> 
+                            <span v-if="columnVisibility || hasExport" class="h-5 w-px bg-border mx-0.5 shrink-0" aria-hidden="true" /> 
+                        </div> 
+
+                        <div v-if="columnVisibility"> 
+                            <Button 
+                                ref="colMenuTriggerEl" 
+                                variant="outline" 
+                                :size="controlSize" 
+                                :radius="radius" 
+                                :aria-expanded="colMenuOpen" 
+                                aria-haspopup="dialog" 
+                                @click="toggleColMenu" 
+                            > 
+                                <ViewColumnsIcon class="w-4 h-4 shrink-0" aria-hidden="true" /> 
+                                <span>{{ loc.table.columnVisibility }}</span> 
+                                <ChevronDownIcon 
+                                    :class="[ 
+                                        'w-4 h-4 shrink-0 transition-transform duration-base ease-standard', 
+                                        colMenuOpen ? 'rotate-180' : '', 
+                                    ]" 
+                                    aria-hidden="true" 
+                                /> 
+                            </Button> 
+                            <PopoverPanel 
+                                :open="colMenuOpen" 
+                                :style="colMenuPanelStyle" 
+                                :radius="radius" 
+                                role="dialog" 
+                                @update:panelRef="colMenuPanelRef = $event" 
+                            > 
+                                <div class="flex flex-col gap-0.5 p-1.5 min-w-48 max-h-72 overflow-y-auto"> 
+                                    <div class="px-2.5 py-1 text-caption font-medium text-muted-foreground"> 
+                                        {{ loc.table.columnVisibility }} 
+                                    </div> 
+                                    <label 
+                                        v-for="c in columns" 
+                                        :key="c.key" 
+                                        class="flex items-center gap-2.5 px-2.5 py-1.5 text-body text-foreground cursor-pointer hover:bg-muted rounded-md transition-colors duration-fast" 
+                                    > 
+                                        <Checkbox 
+                                            :model-value="!isColumnHidden(c.key)" 
+                                            :aria-label="c.header ?? c.key" 
+                                            :size="controlSize" 
+                                            class="[&_.modo-checkbox-box]:mt-0" 
+                                            :disabled="!isColumnHidden(c.key) && visibleColumnCount <= 1" 
+                                            @update:model-value="(v: boolean) => toggleColumnHidden(c.key, !v)" 
+                                        /> 
+                                        <span class="truncate">{{ c.header ?? c.key }}</span> 
+                                    </label> 
+                                </div> 
+                            </PopoverPanel> 
+                        </div> 
+ 
+                        <div v-if="hasExport"> 
+                            <Button 
+                                ref="exportMenuTriggerEl" 
+                                variant="outline" 
+                                :size="controlSize" 
+                                :radius="radius" 
+                                :aria-expanded="exportMenuOpen" 
+                                aria-haspopup="menu" 
+                                @click="toggleExportMenu" 
+                            > 
+                                <ArrowDownTrayIcon class="w-4 h-4 shrink-0" aria-hidden="true" /> 
+                                <span>{{ loc.table.export }}</span> 
+                                <ChevronDownIcon 
+                                    :class="[ 
+                                        'w-4 h-4 shrink-0 transition-transform duration-base ease-standard', 
+                                        exportMenuOpen ? 'rotate-180' : '', 
+                                    ]" 
+                                    aria-hidden="true" 
+                                /> 
+                            </Button> 
+                            <PopoverPanel 
+                                :open="exportMenuOpen" 
+                                :style="exportMenuPanelStyle" 
+                                :radius="radius" 
+                                role="menu" 
+                                @update:panelRef="exportMenuPanelRef = $event" 
+                            > 
+                                <div class="flex flex-col gap-0.5 p-1.5 min-w-44"> 
+                                    <button 
+                                        v-if="exportFormats.csv" 
+                                        type="button" 
+                                        role="menuitem" 
+                                        class="text-left px-2.5 py-1.5 rounded-md text-body text-foreground hover:bg-muted focus-visible:bg-muted focus-visible:outline-none transition-colors duration-fast cursor-pointer" 
+                                        @click="exportCsv" 
+                                    >{{ loc.table.exportCsv }}</button> 
+                                    <button 
+                                        v-if="exportFormats.json" 
+                                        type="button" 
+                                        role="menuitem" 
+                                        class="text-left px-2.5 py-1.5 rounded-md text-body text-foreground hover:bg-muted focus-visible:bg-muted focus-visible:outline-none transition-colors duration-fast cursor-pointer" 
+                                        @click="exportJson" 
+                                    >{{ loc.table.exportJson }}</button> 
+                                    <button 
+                                        v-if="exportFormats.clipboard" 
+                                        type="button" 
+                                        role="menuitem" 
+                                        class="text-left px-2.5 py-1.5 rounded-md text-body text-foreground hover:bg-muted focus-visible:bg-muted focus-visible:outline-none transition-colors duration-fast cursor-pointer" 
+                                        @click="exportClipboard" 
+                                    >{{ loc.table.exportClipboard }}</button> 
+                                </div> 
+                            </PopoverPanel> 
+                        </div> 
+                    </div> 
+                </slot> 
+            </div> 
+
+            <!-- Fallback bulk-actions strip when no default toolbar is rendered -->
+            <div 
+                v-if="hasBulkActionsBar && (!showToolbar || Boolean($slots.toolbar))" 
+                class="modo-table-bulk-actions flex flex-wrap items-center gap-2.5" 
+                role="region" 
+                :aria-label="interpolate(loc.table.selectedCount, { count: selectionApi.selected.value.length })" 
+            > 
+                <span class="text-caption font-medium text-muted-foreground tabular-nums px-0.5"> 
+                    {{ interpolate(loc.table.selectedCount, { count: selectionApi.selected.value.length }) }} 
+                </span> 
+                <div class="flex items-center gap-2 ml-auto"> 
+                    <slot 
+                        name="bulk-actions" 
+                        :selected="selectionApi.selected.value" 
+                        :rows="selectedRowsResolved" 
+                        :count="selectionApi.selected.value.length" 
+                        :clear="() => selectionApi.clear()" 
+                    /> 
+                </div> 
             </div> 
         </div> 
  
+        <div :class="['px-1', effectivePagination ? 'pb-0' : 'pb-1']">
         <div 
             ref="viewportEl" 
             :class="[ 
+                'modo-table-viewport',
                 overflow === 'scroll' ? 'overflow-x-auto' : 'overflow-x-hidden', 
                 (stickyHeader || virtual) ? 'overflow-y-auto' : '', 
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-inset',
             ]" 
             :style="{ 
                 maxHeight: virtual 
                     ? toCssLength(virtualHeight) 
                     : (stickyHeader ? '60vh' : undefined), 
+                borderBottomLeftRadius: 'var(--modo-table-inner-radius)',
+                borderBottomRightRadius: 'var(--modo-table-inner-radius)',
             }" 
             :tabindex="overflow === 'scroll' ? 0 : -1" 
             role="region" 
             :aria-label="ariaLabel" 
         > 
             <table 
-                role="table" 
                 :aria-label="ariaLabel" 
                 :aria-busy="loading || undefined" 
                 :aria-rowcount="loading ? -1 : sortedData.length" 
                 :aria-colcount="colCount" 
                 :class="[ 
-                    'w-full border-collapse', 
+                    'w-full border-separate border-spacing-0', 
                     overflow === 'truncate' ? 'table-fixed' : 'table-auto', 
                 ]" 
             > 
@@ -1842,7 +1994,7 @@ function isFirstStickyCell(c: { key: string }): boolean {
                 <thead 
                     :class="[ 
                         'bg-muted', 
-                        (stickyHeader || virtual) ? 'sticky top-0 z-10 shadow-xs' : '', 
+                        (stickyHeader || virtual) ? 'sticky top-0 z-10' : '', 
                     ]" 
                 > 
                     <tr> 
@@ -1872,7 +2024,8 @@ function isFirstStickyCell(c: { key: string }): boolean {
                                     :indeterminate="selectionApi.headerState.value === 'indeterminate'" 
                                     :disabled="loading || data.length === 0" 
                                     :aria-label="loc.table.selectAllRows" 
-                                    size="small" 
+                                    :size="controlSize" 
+                                    class="[&_.modo-checkbox-box]:mt-0" 
                                     @update:model-value="selectionApi.toggleAll()" 
                                 /> 
                                 <span v-else class="sr-only">{{ loc.table.selectRow }}</span> 
@@ -1886,15 +2039,17 @@ function isFirstStickyCell(c: { key: string }): boolean {
                             :class="[ 
                                 headerCellClass, 
                                 c.headerClass, 
-                                'relative', 
+                                'relative select-none', 
                                 pinMap[c.key] ? 'bg-muted' : '', 
                                 isFirstStickyCell(c) ? 'modo-sticky-first-cell modo-sticky-first-th' : '', 
                                 c.align === 'right' ? 'text-right' : c.align === 'center' ? 'text-center' : 'text-left', 
-                                c.sortable ? 'cursor-pointer hover:bg-muted/40 transition-colors duration-fast' : '', 
+                                c.sortable ? 'cursor-pointer hover:text-foreground transition-colors duration-fast' : '', 
+                                (c.sortable || isReorderable(c)) ? 'modo-table-header-focus focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-inset rounded-md' : '', 
+                                c.sortable && sortApi.directionFor(c.key) ? 'text-foreground' : '', 
                                 isReorderable(c) ? 'cursor-grab active:cursor-grabbing' : '', 
                                 dragKey === c.key ? 'opacity-40' : '', 
-                                dropKey === c.key && dropSide === 'before' ? 'before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-primary before:z-10' : '', 
-                                dropKey === c.key && dropSide === 'after' ? 'after:absolute after:inset-y-0 after:right-0 after:w-0.5 after:bg-primary after:z-10' : '', 
+                                dropKey === c.key && dropSide === 'before' ? 'before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-foreground/60 before:z-10' : '', 
+                                dropKey === c.key && dropSide === 'after' ? 'after:absolute after:inset-y-0 after:right-0 after:w-0.5 after:bg-foreground/60 after:z-10' : '', 
                             ]" 
                             :style="{ 
                                 width: toCssLength(previewWidthFor(c.key) ?? c.effectiveWidth ?? c.width), 
@@ -1934,19 +2089,23 @@ function isFirstStickyCell(c: { key: string }): boolean {
                                 <template v-if="c.sortable"> 
                                     <span 
                                         aria-hidden="true" 
-                                        class="inline-flex items-center text-muted-foreground" 
+                                        class="relative inline-flex w-3.5 h-3.5 items-center justify-center shrink-0" 
                                     > 
-                                        <ChevronUpIcon 
-                                            v-if="sortApi.directionFor(c.key) === 'asc'" 
-                                            class="w-3.5 h-3.5" 
-                                        /> 
-                                        <ChevronDownIcon 
-                                            v-else-if="sortApi.directionFor(c.key) === 'desc'" 
-                                            class="w-3.5 h-3.5" 
-                                        /> 
                                         <ChevronUpDownIcon 
-                                            v-else 
-                                            class="w-3.5 h-3.5 opacity-40" 
+                                            :class="[ 
+                                                'modo-sort-icon absolute inset-0 w-3.5 h-3.5 text-muted-foreground', 
+                                                sortApi.directionFor(c.key) ? 'opacity-0 scale-75' : 'opacity-45 scale-100', 
+                                            ]" 
+                                        /> 
+                                        <ChevronUpIcon 
+                                            :class="[ 
+                                                'modo-sort-icon w-3.5 h-3.5 text-foreground', 
+                                                sortApi.directionFor(c.key) === 'asc' 
+                                                    ? 'opacity-100 scale-100 rotate-0' 
+                                                    : sortApi.directionFor(c.key) === 'desc' 
+                                                        ? 'opacity-100 scale-100 rotate-180' 
+                                                        : 'opacity-0 scale-75 rotate-0', 
+                                            ]" 
                                         /> 
                                     </span> 
                                     <span 
@@ -1963,8 +2122,8 @@ function isFirstStickyCell(c: { key: string }): boolean {
                                  reorder drag. --> 
                             <span 
                                 v-if="resizable && c.resizable !== false" 
-                                class="modo-table-resize-handle absolute top-0 right-0 h-full w-1.5 cursor-col-resize select-none touch-none z-20 hover:bg-primary/40 transition-colors duration-fast" 
-                                :class="resizeKey === c.key ? 'bg-primary/60' : ''" 
+                                class="modo-table-resize-handle absolute top-0 right-0 h-full w-1.5 cursor-col-resize select-none touch-none z-20 hover:bg-foreground/30 transition-colors duration-fast" 
+                                :class="resizeKey === c.key ? 'bg-foreground/50' : ''" 
                                 role="separator" 
                                 :aria-label="loc.table.resizeColumn" 
                                 aria-orientation="vertical" 
@@ -1980,12 +2139,12 @@ function isFirstStickyCell(c: { key: string }): boolean {
                          Rendered as a second row inside <thead> so it sticks 
                          together with the headers under `stickyHeader`. --> 
                     <tr v-if="hasFilterRow" class="bg-muted"> 
-                        <th v-if="effectiveExpandable" :class="[headerCellClass, 'w-10', hasLeftPinned ? 'bg-muted' : '']" :style="pinLeadingStyle(0, true)" /> 
-                        <th v-if="selectable !== 'none'" :class="[headerCellClass, 'w-10', hasLeftPinned ? 'bg-muted' : '']" :style="pinLeadingStyle(effectiveExpandable ? 1 : 0, true)" /> 
+                        <th v-if="effectiveExpandable" :class="[headerCellClass, 'w-10 pt-0 pb-2', hasLeftPinned ? 'bg-muted' : '']" :style="pinLeadingStyle(0, true)" /> 
+                        <th v-if="selectable !== 'none'" :class="[headerCellClass, 'w-10 pt-0 pb-2', hasLeftPinned ? 'bg-muted' : '']" :style="pinLeadingStyle(effectiveExpandable ? 1 : 0, true)" /> 
                         <th 
                             v-for="c in cols" 
                             :key="`f-${c.key}`" 
-                            :class="[headerCellClass, 'py-1.5', pinMap[c.key] ? 'bg-muted' : '', isFirstStickyCell(c) ? 'modo-sticky-first-cell modo-sticky-first-th' : '']" 
+                            :class="[headerCellClass, 'pt-0 pb-2', pinMap[c.key] ? 'bg-muted' : '', isFirstStickyCell(c) ? 'modo-sticky-first-cell modo-sticky-first-th' : '']" 
                             :style="pinHeaderStyle(c)" 
                         > 
                             <slot 
@@ -2000,7 +2159,8 @@ function isFirstStickyCell(c: { key: string }): boolean {
                                     :model-value="filterApi.filter.value[c.key] ?? ''" 
                                     :placeholder="loc.table.filterPlaceholder" 
                                     :clearable="true" 
-                                    size="small" 
+                                    :size="controlSize" 
+                                    :radius="radius" 
                                     full-width 
                                     :aria-label="`${c.header ?? c.key} filter`" 
                                     @update:model-value="(v: string) => filterApi.setFilter(c.key, v)" 
@@ -2012,14 +2172,14 @@ function isFirstStickyCell(c: { key: string }): boolean {
  
                 <!-- Loading body. Only when `loadingMode === 'skeleton'` 
                      (default). Overlay mode keeps the real data visible. --> 
-                <tbody v-if="loading && loadingMode === 'skeleton'"> 
+                <tbody v-if="loading && loadingMode === 'skeleton'" class="modo-table-body"> 
                     <tr 
                         v-for="i in loadingRowsArr" 
                         :key="`sk-${i}`" 
-                        :class="[rowHeightClass, rowBorderClass]" 
+                        :class="[rowHeightClass, 'modo-table-data-row']" 
                     > 
-                        <td v-if="effectiveExpandable" :class="[bodyCellClass, 'w-10', hasLeftPinned ? 'bg-card' : '']" :style="pinLeadingStyle(0)" /> 
-                        <td v-if="selectable !== 'none'" :class="[bodyCellClass, 'w-10', hasLeftPinned ? 'bg-card' : '']" :style="pinLeadingStyle(effectiveExpandable ? 1 : 0)"> 
+                        <td v-if="effectiveExpandable" :class="[bodyCellClass, 'w-10']" :style="pinLeadingStyle(0)" /> 
+                        <td v-if="selectable !== 'none'" :class="[bodyCellClass, 'w-10']" :style="pinLeadingStyle(effectiveExpandable ? 1 : 0)"> 
                             <span class="flex justify-center"> 
                                 <Skeleton shape="checkbox" size="small" /> 
                             </span> 
@@ -2027,7 +2187,7 @@ function isFirstStickyCell(c: { key: string }): boolean {
                         <td 
                             v-for="c in cols" 
                             :key="c.key" 
-                            :class="[bodyCellClass, c.cellClass, pinMap[c.key] ? 'bg-card' : '', isFirstStickyCell(c) ? 'modo-sticky-first-cell' : '']" 
+                            :class="[bodyCellClass, c.cellClass, isFirstStickyCell(c) ? 'modo-sticky-first-cell' : '']" 
                             :style="pinStyle(c)" 
                         > 
                             <span :class="['flex w-full', skeletonAlignClass(c.align)]"> 
@@ -2039,16 +2199,13 @@ function isFirstStickyCell(c: { key: string }): boolean {
                             </span> 
                         </td> 
                     </tr> 
-                    <tr class="sr-only" aria-live="polite"> 
-                        <td :colspan="colCount">{{ loc.table.loading }}</td> 
-                    </tr> 
                 </tbody> 
  
                 <!-- Empty body. Distinguishes "no data at all" vs "filters 
                      produced zero rows" — the latter offers a Clear filters 
                      affordance so users aren't stuck on a dead end. --> 
-                <tbody v-else-if="sortedData.length === 0"> 
-                    <tr> 
+                <tbody v-else-if="sortedData.length === 0" class="modo-table-body"> 
+                    <tr class="modo-table-empty-row"> 
                         <td :colspan="colCount" class="text-center text-muted-foreground py-10"> 
                             <slot 
                                 v-if="showNoResults" 
@@ -2060,7 +2217,7 @@ function isFirstStickyCell(c: { key: string }): boolean {
                                     <span class="text-body-lg text-foreground">{{ noResultsText }}</span> 
                                     <button 
                                         type="button" 
-                                        class="text-caption text-primary underline-offset-2 hover:underline focus-visible:underline focus-visible:outline-none" 
+                                        class="text-caption text-foreground underline underline-offset-4 hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 rounded-xs cursor-pointer" 
                                         @click="filterApi.clearAll(); setGlobalSearch('');" 
                                     > 
                                         {{ loc.table.clearFilter }} 
@@ -2075,9 +2232,10 @@ function isFirstStickyCell(c: { key: string }): boolean {
                 </tbody> 
  
                 <!-- Real data body. --> 
-                <tbody v-else> 
+                <tbody v-else ref="tbodyEl" class="modo-table-body"> 
                     <tr 
                         v-if="virtualApi.isActive.value && virtualApi.topSpacer.value > 0" 
+                        class="modo-table-spacer" 
                         aria-hidden="true" 
                     > 
                         <td 
@@ -2096,11 +2254,11 @@ function isFirstStickyCell(c: { key: string }): boolean {
                         <!-- Group header row (Phase 4c-group). --> 
                         <tr 
                             v-if="item.kind === 'header'" 
-                            class="bg-muted/40 border-y border-border" 
+                            class="modo-table-group-row" 
                         > 
                             <td 
                                 :colspan="colCount" 
-                                class="px-3 py-2" 
+                                class="px-3.5 py-2" 
                             > 
                                 <slot 
                                     name="group-header" 
@@ -2145,12 +2303,12 @@ function isFirstStickyCell(c: { key: string }): boolean {
                             <template v-for="row in [item.row!]" :key="`row-${item.ri}`"> 
                             <template v-for="ri in [item.ri!]" :key="`ri-${ri}`"> 
                             <tr 
+                            :data-row-key="String(resolveRowKey(rowKey, row, ri))"
                             :class="[ 
                                 rowHeightClass, 
-                                rowBorderClass, 
-                                stripedClass, 
-                                hoverClass, 
-                                selectionApi.isSelected(row, ri) ? 'bg-primary/5' : '', 
+                                'modo-table-data-row', 
+                                selectionApi.isSelected(row, ri) ? 'modo-table-row-selected' : '', 
+                                selectable === 'single' ? 'cursor-pointer' : '', 
                             ]" 
                             :aria-rowindex="ri + 2" 
                             :aria-selected="selectable !== 'none' ? selectionApi.isSelected(row, ri) : undefined" 
@@ -2164,7 +2322,7 @@ function isFirstStickyCell(c: { key: string }): boolean {
                             <!-- Expansion toggle cell. --> 
                             <td 
                                 v-if="effectiveExpandable" 
-                                :class="[bodyCellClass, 'w-10', hasLeftPinned ? 'bg-card' : '']" 
+                                :class="[bodyCellClass, 'w-10']" 
                                 :style="pinLeadingStyle(0)" 
                                 @click.stop 
                             > 
@@ -2189,7 +2347,7 @@ function isFirstStickyCell(c: { key: string }): boolean {
  
                             <td 
                                 v-if="selectable !== 'none'" 
-                                :class="[bodyCellClass, 'w-10', hasLeftPinned ? 'bg-card' : '']" 
+                                :class="[bodyCellClass, 'w-10']" 
                                 :style="pinLeadingStyle(effectiveExpandable ? 1 : 0)" 
                                 @click.stop 
                             > 
@@ -2201,7 +2359,8 @@ function isFirstStickyCell(c: { key: string }): boolean {
                                         :model-value="selectionApi.isSelected(row, ri)" 
                                         :disabled="!selectionApi.isSelectable(row, ri)" 
                                         :aria-label="loc.table.selectRow" 
-                                        size="small" 
+                                        :size="controlSize" 
+                                        class="[&_.modo-checkbox-box]:mt-0" 
                                         tabindex="-1" 
                                     /> 
                                 </span> 
@@ -2214,11 +2373,9 @@ function isFirstStickyCell(c: { key: string }): boolean {
                                 :class="[ 
                                     bodyCellClass, 
                                     c.cellClass, 
-                                    pinMap[c.key] ? 'bg-card' : '', 
                                     isFirstStickyCell(c) ? 'modo-sticky-first-cell' : '', 
                                     isColumnEditable(c, row, ri) ? 'cursor-text' : '',
-                                    'outline-none',
-                                    kb.isFocused(ri, ci) ? 'ring-2 ring-ring ring-inset relative z-[1]' : '',
+                                    'modo-table-cell-focus outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/65 focus-visible:ring-inset focus-visible:relative focus-visible:z-[1]',
                                 ]"
                                 :aria-colindex="ci + 1 + leadingColCount" 
                                 :tabindex="kb.isFocused(ri, ci) ? 0 : -1" 
@@ -2291,9 +2448,9 @@ function isFirstStickyCell(c: { key: string }): boolean {
                              avoid the cost of a hidden subtree per row. --> 
                         <tr 
                             v-if="effectiveExpandable && isExpanded(row, ri)" 
-                            class="bg-muted/30" 
+                            class="modo-table-expanded-row" 
                         > 
-                            <td :colspan="colCount" class="px-4 py-3 border-b border-border"> 
+                            <td :colspan="colCount" class="px-4 py-3"> 
                                 <slot name="row-expanded" :row="row" :index="ri" /> 
                             </td> 
                         </tr> 
@@ -2303,6 +2460,7 @@ function isFirstStickyCell(c: { key: string }): boolean {
                     </template> <!-- /v-for bodyItems --> 
                     <tr 
                         v-if="virtualApi.isActive.value && virtualApi.bottomSpacer.value > 0" 
+                        class="modo-table-spacer" 
                         aria-hidden="true" 
                     > 
                         <td 
@@ -2316,25 +2474,28 @@ function isFirstStickyCell(c: { key: string }): boolean {
                     </tr> 
                 </tbody> 
  
-                <tfoot v-if="$slots.footer"> 
+                <tfoot v-if="$slots.footer" class="modo-table-foot"> 
                     <tr> 
-                        <td :colspan="colCount" class="border-t border-border"> 
+                        <td :colspan="colCount"> 
                             <slot name="footer" /> 
                         </td> 
                     </tr> 
                 </tfoot> 
             </table> 
         </div> 
+        </div> 
  
         <!-- Pagination footer (only when pagination state is provided). --> 
         <TablePagination 
             v-if="effectivePagination" 
+            embedded 
             :pagination="{ 
                 ...effectivePagination, 
                 total: effectivePagination.total ?? sortedData.length, 
             }" 
             :page-size-options="pageSizeOptions" 
             :size="size" 
+            :radius="radius" 
             :disabled="loading" 
             @update:pagination="(next: unknown) => emit('update:pagination', next as any)" 
         /> 
@@ -2354,20 +2515,125 @@ function isFirstStickyCell(c: { key: string }): boolean {
             <span class="sr-only">{{ loc.table.loading }}</span> 
         </div> 
  
+        <div v-if="loading && loadingMode === 'skeleton'" class="sr-only" aria-live="polite">{{ loc.table.loading }}</div> 
         <div class="sr-only" aria-live="polite" aria-atomic="true">{{ liveMessage }}</div> 
     </div> 
 </template> 
  
 <style scoped> 
+.modo-table-root { 
+    --modo-table-inner-border: color-mix(in oklab, var(--border) 65%, transparent); 
+} 
+
+/* Suppress any global unlayered `:focus-visible` outline on elements inside
+   `<Table>` that render their own inset `focus-visible:ring-*`, preventing double focus borders. */
+.modo-table-cell-focus:focus-visible,
+.modo-table-header-focus:focus-visible,
+.modo-table-viewport:focus-visible {
+    outline: none;
+} 
+
+/* Inner card surface — every body and footer cell uses an opaque fill so 
+   rounded corners clip cleanly and sticky/pinned cells never bleed through. */ 
+.modo-table-body > tr:not(.modo-table-spacer) > td, 
+.modo-table-foot > tr > td { 
+    background-color: var(--card); 
+} 
+
+.modo-table-hover .modo-table-body > tr.modo-table-data-row > td { 
+    transition: background-color var(--duration-fast, 140ms) var(--ease-standard, cubic-bezier(0.2, 0, 0, 1)); 
+} 
+
+.modo-table-body > tr.modo-table-group-row > td { 
+    background-color: color-mix(in oklab, var(--card) 68%, var(--muted) 32%); 
+} 
+
+.modo-table-body > tr.modo-table-expanded-row > td { 
+    background-color: color-mix(in oklab, var(--card) 74%, var(--muted) 26%); 
+} 
+
+.modo-table-striped .modo-table-body > tr.modo-table-data-row:nth-child(even) > td { 
+    background-color: color-mix(in oklab, var(--card) 68%, var(--muted) 32%); 
+} 
+
+.modo-table-body > tr.modo-table-row-selected > td { 
+    background-color: color-mix(in oklab, var(--card) 94.5%, var(--foreground) 5.5%); 
+} 
+
+.modo-table-hover .modo-table-body > tr.modo-table-data-row:hover > td { 
+    background-color: color-mix(in oklab, var(--card) 56%, var(--muted) 44%); 
+} 
+
+.modo-table-hover .modo-table-body > tr.modo-table-row-selected:hover > td { 
+    background-color: color-mix(in oklab, var(--card) 91.5%, var(--foreground) 8.5%); 
+} 
+
+.modo-sort-icon {
+    transition:
+        transform 200ms var(--ease-standard, cubic-bezier(0.2, 0, 0, 1)),
+        opacity 160ms var(--ease-standard, cubic-bezier(0.2, 0, 0, 1));
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
+} 
+
+/* Row dividers inside the inner card (separated-borders model puts borders on <td>). */ 
+.modo-table-row-borders .modo-table-body > tr:not(:last-child):not(.modo-table-spacer) > td, 
+.modo-table-body > tr.modo-table-group-row:not(:last-child) > td { 
+    border-bottom: 1px solid var(--border); 
+} 
+
+.modo-table-foot > tr:first-child > td { 
+    border-top: 1px solid var(--border); 
+} 
+
+/* Subtle perimeter frame around the inner card so light & dark surfaces stay crisp. */ 
+.modo-table-body > tr:first-child:not(.modo-table-spacer) > td { 
+    border-top: 1px solid var(--modo-table-inner-border); 
+} 
+
+.modo-table-body > tr:not(.modo-table-spacer) > td:first-child, 
+.modo-table-foot > tr > td:first-child { 
+    border-left: 1px solid var(--modo-table-inner-border); 
+} 
+
+.modo-table-body > tr:not(.modo-table-spacer) > td:last-child, 
+.modo-table-foot > tr > td:last-child { 
+    border-right: 1px solid var(--modo-table-inner-border); 
+} 
+
+.modo-table-body:last-child > tr:last-child:not(.modo-table-spacer) > td, 
+.modo-table-foot > tr:last-child > td { 
+    border-bottom: 1px solid var(--modo-table-inner-border); 
+} 
+
+/* Inner card corner radii (concentric with outer tray radius). */ 
+.modo-table-body > tr:first-child:not(.modo-table-spacer) > td:first-child { 
+    border-top-left-radius: var(--modo-table-inner-radius, var(--radius)); 
+} 
+
+.modo-table-body > tr:first-child:not(.modo-table-spacer) > td:last-child { 
+    border-top-right-radius: var(--modo-table-inner-radius, var(--radius)); 
+} 
+
+.modo-table-body:last-child > tr:last-child:not(.modo-table-spacer) > td:first-child, 
+.modo-table-foot > tr:last-child > td:first-child { 
+    border-bottom-left-radius: var(--modo-table-inner-radius, var(--radius)); 
+} 
+
+.modo-table-body:last-child > tr:last-child:not(.modo-table-spacer) > td:last-child, 
+.modo-table-foot > tr:last-child > td:last-child { 
+    border-bottom-right-radius: var(--modo-table-inner-radius, var(--radius)); 
+} 
+
 /* Sticky-first column (Phase 4d). Pins the first non-pinned data column 
-   to the left edge while horizontal scrolling. Background uses bg-card 
-   tokens so cells stay opaque over scrolled content. */ 
+   to the left edge while horizontal scrolling. Body cells already carry 
+   opaque fills from `.modo-table-body > tr > td` above. */ 
 .modo-sticky-first .modo-sticky-first-cell, 
 .modo-sticky-first-mobile .modo-sticky-first-cell { 
     position: sticky; 
     left: var(--modo-table-first-sticky-left, 0); 
     z-index: 1; 
-    background-color: var(--card); 
     box-shadow: 4px 0 6px -4px rgb(0 0 0 / 0.18); 
 } 
  
@@ -2380,7 +2646,6 @@ function isFirstStickyCell(c: { key: string }): boolean {
 @media (min-width: 768px) { 
     .modo-sticky-first-mobile .modo-sticky-first-cell { 
         position: static; 
-        background-color: transparent; 
         box-shadow: none; 
         z-index: auto; 
     } 

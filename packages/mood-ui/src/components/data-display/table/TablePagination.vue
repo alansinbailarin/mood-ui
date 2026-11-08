@@ -25,7 +25,7 @@ import {
 } from '@heroicons/vue/20/solid'; 
 import type { TablePagination as TablePaginationProps } from '../../../interfaces/data-display/table/TablePagination.interface'; 
 import type { TablePaginationState } from '../../../interfaces/data-display/table/Table.interface'; 
-import { useModoLocale, useResolvedSize } from '../../../composables/useModoConfig'; 
+import { useModoLocale, useResolvedRadius, useResolvedSize } from '../../../composables/useModoConfig'; 
 import { interpolate } from '../../../config/ModoLocale'; 
 import Select from '../../forms/Select.vue'; 
 import Button from '../../forms/Button.vue'; 
@@ -35,9 +35,11 @@ const props = withDefaults(defineProps<TablePaginationProps>(), {
     hidePageSize: false, 
     hideEdgeButtons: false, 
     disabled: false, 
+    embedded: false,
 }); 
  
 const resolvedSize = useResolvedSize(() => props.size); 
+const resolvedRadius = useResolvedRadius(() => props.radius); 
  
 const emit = defineEmits<{ 
     'update:pagination': [next: TablePaginationState]; 
@@ -97,20 +99,23 @@ function onPageSizeChange(next: number) {
     emitNext({ page: 1, pageSize: Number(next) }); 
 } 
  
-const pageSizeSelectOptions = computed(() => 
-    props.pageSizeOptions.map((n) => ({ value: n, label: String(n) })), 
-); 
+const pageSizeSelectOptions = computed(() => {
+    const unique = Array.from(new Set([...props.pageSizeOptions, pageSize.value])).sort(
+        (a, b) => a - b,
+    );
+    return unique.map((n) => ({ value: n, label: String(n) }));
+}); 
  
 /* ---------- Sizing tokens ---------- */ 
 const textSizeClass = computed(() => { 
-    if (resolvedSize.value === 'small') return 'text-caption'; 
-    if (resolvedSize.value === 'large') return 'text-body-lg'; 
-    return 'text-body'; 
+    if (resolvedSize.value === 'small') return 'text-[11px] leading-4'; 
+    if (resolvedSize.value === 'large') return 'text-body'; 
+    return 'text-caption'; 
 }); 
- 
-/** Map pagination size to Button size. */ 
-const btnSize = computed<'xs' | 'small' | 'medium'>(() => { 
-    if (resolvedSize.value === 'small') return 'xs'; 
+
+/** Map pagination size to canonical mood-ui control size (`sm` by default). */ 
+const controlSize = computed<'xsmall' | 'small' | 'medium'>(() => { 
+    if (resolvedSize.value === 'small') return 'xsmall'; 
     if (resolvedSize.value === 'large') return 'medium'; 
     return 'small'; 
 }); 
@@ -118,11 +123,10 @@ const btnSize = computed<'xs' | 'small' | 'medium'>(() => {
  
 <template> 
     <nav 
-        role="navigation" 
         :aria-label="ariaLabel ?? 'Pagination'" 
         :class="[ 
-            'flex flex-wrap items-center gap-3 px-3 py-2', 
-            'bg-card border-t border-border', 
+            'flex flex-wrap items-center gap-3', 
+            embedded ? 'px-3 py-2 bg-transparent' : 'px-3 py-2 bg-card border-t border-border', 
             textSizeClass, 
         ]" 
     > 
@@ -133,7 +137,8 @@ const btnSize = computed<'xs' | 'small' | 'medium'>(() => {
                 :model-value="pageSize" 
                 :options="pageSizeSelectOptions" 
                 :disabled="disabled" 
-                size="small" 
+                :size="controlSize" 
+                :radius="resolvedRadius" 
                 aria-label="Rows per page" 
                 @update:model-value="(v: any) => onPageSizeChange(Number(v))" 
             /> 
@@ -144,11 +149,12 @@ const btnSize = computed<'xs' | 'small' | 'medium'>(() => {
             <span class="text-muted-foreground tabular-nums">{{ rangeText }}</span> 
  
             <!-- Buttons --> 
-            <div class="flex items-center gap-1"> 
+            <div class="flex items-center gap-1.5"> 
                 <Button 
                     v-if="!hideEdgeButtons" 
                     variant="outline" 
-                    :size="btnSize" 
+                    :size="controlSize" 
+                    :radius="resolvedRadius" 
                     :icon="ChevronDoubleLeftIcon" 
                     :ariaLabel="loc.table.pagination.first" 
                     :disabled="disabled || isFirst" 
@@ -156,7 +162,8 @@ const btnSize = computed<'xs' | 'small' | 'medium'>(() => {
                 /> 
                 <Button 
                     variant="outline" 
-                    :size="btnSize" 
+                    :size="controlSize" 
+                    :radius="resolvedRadius" 
                     :icon="ChevronLeftIcon" 
                     :ariaLabel="loc.table.pagination.previous" 
                     :disabled="disabled || isFirst" 
@@ -164,13 +171,14 @@ const btnSize = computed<'xs' | 'small' | 'medium'>(() => {
                 /> 
  
                 <span 
-                    class="px-2 text-muted-foreground tabular-nums" 
+                    class="px-1.5 text-muted-foreground tabular-nums" 
                     aria-current="page" 
                 >{{ pageText }}</span> 
  
                 <Button 
                     variant="outline" 
-                    :size="btnSize" 
+                    :size="controlSize" 
+                    :radius="resolvedRadius" 
                     :icon="ChevronRightIcon" 
                     :ariaLabel="loc.table.pagination.next" 
                     :disabled="disabled || isLast" 
@@ -179,7 +187,8 @@ const btnSize = computed<'xs' | 'small' | 'medium'>(() => {
                 <Button 
                     v-if="!hideEdgeButtons" 
                     variant="outline" 
-                    :size="btnSize" 
+                    :size="controlSize" 
+                    :radius="resolvedRadius" 
                     :icon="ChevronDoubleRightIcon" 
                     :ariaLabel="loc.table.pagination.last" 
                     :disabled="disabled || isLast" 
