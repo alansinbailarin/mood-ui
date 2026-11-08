@@ -25,6 +25,8 @@ export interface ComponentDoc {
   description: string;
   props: PropDoc[];
   referencedTypes: ReferencedType[];
+  /** Compound parts (`DialogTrigger`, `DialogContent`…) folded under their root. */
+  parts?: ComponentDoc[];
 }
 
 const project = new Project({ skipAddingFilesFromTsConfig: true });
@@ -38,8 +40,39 @@ const project = new Project({ skipAddingFilesFromTsConfig: true });
 function interfacePathFor(sourcePath: string, componentName: string): string {
   // Strip the leading components/ segment, replace filename with <Name>.interface.ts.
   const withoutComponents = sourcePath.replace(/^components\//, "");
-  const withoutFile = withoutComponents.replace(/[^/]+$/, "");
-  return resolve(LIB_ROOT, "interfaces", withoutFile + `${componentName}.interface.ts`);
+  const isBarrel = !/\.(vue|ts)$/.test(withoutComponents);
+  const dir = withoutComponents.replace(/[^/]+$/, "");
+  const candidates: string[] = [
+    resolve(LIB_ROOT, "interfaces", dir + `${componentName}.interface.ts`),
+    // Components living in their own folder (`forms/glass-switch/GlassSwitch.vue`)
+    // keep their interface one level up (`interfaces/forms/GlassSwitch.interface.ts`).
+    resolve(LIB_ROOT, "interfaces", dir.replace(/[^/]+\/$/, "") + `${componentName}.interface.ts`),
+  ];
+  // Compound parts (`DialogTrigger`) are declared as `<Name>Props` inside the
+  // family's interface file (`Dialog.interface.ts`).
+  for (const base of [dir, dir.replace(/[^/]+\/$/, "")]) {
+    for (const name of familyNames(componentName)) {
+      candidates.push(resolve(LIB_ROOT, "interfaces", base + `${name}.interface.ts`));
+    }
+  }
+  // Last resort: the family file named after the component's folder
+  // (`liquid-toast/LiquidToaster.vue` → `LiquidToast.interface.ts`,
+  // `navigation/menu` barrel → `Menu.interface.ts` for `ContextMenu`).
+  const folder = (isBarrel ? withoutComponents : dir.replace(/\/$/, "")).split("/").pop() ?? "";
+  const folderPascal = folder.replace(/(^|-)([a-z])/g, (_m, _d, ch: string) => ch.toUpperCase());
+  if (folderPascal) {
+    candidates.push(resolve(LIB_ROOT, "interfaces", dir.replace(/[^/]+\/$/, "") + `${folderPascal}.interface.ts`));
+    candidates.push(resolve(LIB_ROOT, "interfaces", dir + `${folderPascal}.interface.ts`));
+  }
+  return candidates.find(existsSync) ?? candidates[0] ?? "";
+}
+
+/** Every PascalCase prefix of the name, longest first: DialogTrigger → Dialog. */
+function familyNames(componentName: string): string[] {
+  const parts = componentName.match(/[A-Z][a-z0-9]*/g) ?? [componentName];
+  const out: string[] = [];
+  for (let i = parts.length - 1; i >= 1; i--) out.push(parts.slice(0, i).join(""));
+  return out;
 }
 
 export function extractComponent(
@@ -62,7 +95,9 @@ export function extractComponent(
   const source = project.addSourceFileAtPath(interfacePath);
   // The primary interface is the one whose name matches the component.
   const mainInterface =
-    source.getInterface(componentName) ?? source.getInterfaces()[0];
+    source.getInterface(componentName) ??
+    source.getInterface(`${componentName}Props`) ??
+    (interfacePath.endsWith(`/${componentName}.interface.ts`) ? source.getInterfaces()[0] : undefined);
   const props = mainInterface ? extractProps(mainInterface) : [];
   const referencedTypes = collectReferencedTypes(source, mainInterface);
   const fileLeading = source.getStatements()[0]
@@ -99,7 +134,7 @@ function collectReferencedTypes(
   for (const prop of mainInterface.getProperties()) {
     const typeText = prop.getTypeNode()?.getText() ?? "";
     for (const id of typeText.matchAll(/\b([A-Z][A-Za-z0-9_]*)\b/g)) {
-      refNames.add(id[1]);
+      if (id[1]) refNames.add(id[1]);
     }
   }
 
@@ -135,7 +170,9 @@ function resolveDescription(
   mainInterface: InterfaceDeclaration | undefined,
   fileLeadingComment: string | undefined,
 ): string {
-  const i18nKey = `pages.${group}.${toCamelKey(componentName)}.description`;
+  // i18n namespaces are camelCase (`data-display` → `dataDisplay`).
+  const groupKey = group.replace(/-([a-z])/g, (_m, ch: string) => ch.toUpperCase());
+  const i18nKey = `pages.${groupKey}.${toCamelKey(componentName)}.description`;
   const fromI18n = i18nLookup(i18nKey);
   if (fromI18n) return fromI18n;
 

@@ -14,9 +14,34 @@ async function main(): Promise<void> {
   const componentRecords = exports.filter(e => e.kind === "component");
   const composableRecords = exports.filter(e => e.kind === "composable");
 
-  const components = componentRecords.map(e =>
+  const allComponents = componentRecords.map(e =>
     extractComponent(e.name, e.group, e.sourcePath),
   );
+
+  // Compound families exported from one barrel (`components/feedback/dialog`)
+  // are documented as a single entry: `DialogTrigger`, `DialogContent`… are
+  // folded into `Dialog` as parts. A name is a part when another export from
+  // the same barrel is its prefix.
+  const isBarrel = (path: string) => !/\.(vue|ts)$/.test(path);
+  const partOf = new Map<string, string>();
+  for (const e of componentRecords) {
+    if (!isBarrel(e.sourcePath)) continue;
+    const roots = componentRecords
+      .filter(o => o.sourcePath === e.sourcePath && o.name !== e.name && e.name.startsWith(o.name))
+      .sort((a, b) => b.name.length - a.name.length);
+    if (roots[0]) partOf.set(e.name, roots[0].name);
+  }
+  const rootOf = (name: string): string => {
+    let cur = name;
+    while (partOf.has(cur)) cur = partOf.get(cur)!;
+    return cur;
+  };
+  const components = allComponents.filter(c => !partOf.has(c.name));
+  for (const c of allComponents) {
+    if (!partOf.has(c.name)) continue;
+    const root = components.find(r => r.name === rootOf(c.name));
+    if (root) (root.parts ??= []).push(c);
+  }
 
   const composables = composableRecords
     .map(e => extractComposable(e.name))

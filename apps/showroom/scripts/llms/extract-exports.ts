@@ -54,7 +54,10 @@ function inferGroup(sourcePath: string): string {
 function classify(name: string, sourcePath: string, isTypeOnly: boolean): ExportKind {
   if (isTypeOnly) return "type";
   if (sourcePath.endsWith(".vue")) return "component";
-  if (sourcePath.includes("/components/")) return "component";
+  // Barrel modules (`components/feedback/dialog`) export compound parts.
+  if (sourcePath.startsWith("components/") || sourcePath.includes("/components/")) {
+    return /^[A-Z]/.test(name) ? "component" : "constant";
+  }
   if (name.startsWith("use") && /^use[A-Z]/.test(name)) return "composable";
   return "constant";
 }

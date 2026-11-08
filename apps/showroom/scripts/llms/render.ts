@@ -80,17 +80,19 @@ function renderComponent(c: ComponentDoc): string {
   lines.push(`import { ${c.name} } from "mood-ui";`);
   lines.push("```");
   lines.push("");
-  if (c.props.length > 0) {
-    lines.push("**Props:**");
+  lines.push(...renderPropsTable(c));
+  if (c.parts?.length) {
+    lines.push(`**Parts:** ${c.parts.map(p => `\`${p.name}\``).join(", ")} (also exported individually).`);
     lines.push("");
-    lines.push("| Prop | Type | Required | Description |");
-    lines.push("|---|---|---|---|");
-    for (const p of c.props) {
-      const desc = p.description.replace(/\|/g, "\\|").replace(/\n/g, " ");
-      const type = p.type.replace(/\|/g, "\\|").replace(/\n/g, " ");
-      lines.push(`| ${p.name} | \`${type}\` | ${p.optional ? "no" : "yes"} | ${desc || "—"} |`);
+    for (const part of c.parts) {
+      lines.push(`#### ${part.name}`);
+      lines.push("");
+      if (part.description) {
+        lines.push(part.description);
+        lines.push("");
+      }
+      lines.push(...renderPropsTable(part));
     }
-    lines.push("");
   }
   if (c.referencedTypes.length > 0) {
     lines.push("**Referenced types:**");
@@ -104,6 +106,22 @@ function renderComponent(c: ComponentDoc): string {
     lines.push("");
   }
   return lines.join("\n");
+}
+
+function renderPropsTable(c: ComponentDoc): string[] {
+  if (c.props.length === 0) return [];
+  const lines: string[] = [];
+  lines.push("**Props:**");
+  lines.push("");
+  lines.push("| Prop | Type | Required | Description |");
+  lines.push("|---|---|---|---|");
+  for (const p of c.props) {
+    const desc = p.description.replace(/\|/g, "\\|").replace(/\n/g, " ");
+    const type = p.type.replace(/\|/g, "\\|").replace(/\n/g, " ");
+    lines.push(`| ${p.name} | \`${type}\` | ${p.optional ? "no" : "yes"} | ${desc || "—"} |`);
+  }
+  lines.push("");
+  return lines;
 }
 
 function renderComposable(c: ComposableDoc): string {
