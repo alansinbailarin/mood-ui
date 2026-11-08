@@ -7,7 +7,9 @@ import {
   paletteFromHex,
   darkSurfaces,
   useColorMode,
+  locales,
 } from "mood-ui";
+import { useI18n } from "vue-i18n";
 import { useDocsTheme } from "~/composables/useDocsTheme";
 import { tintedLightSurfaces, tintedDarkSurfaces } from "~/utils/tintedSurfaces";
 import { resolveHash } from "~/utils/hash-redirects";
@@ -19,6 +21,9 @@ import { resolveHash } from "~/utils/hash-redirects";
 // made the ColorModeSwitch capsule jump to sun/moon instead of staying
 // on the system icon. See the long-form note in `layouts/default.vue`.
 const { mode: colorMode } = useColorMode();
+// Library copy (aria labels, empty states…) follows the docs language.
+const { locale: docsLocale } = useI18n();
+const modoLocale = computed(() => (docsLocale.value === "es" ? locales.es : locales.en));
 
 // The globals (`<ToastContainer>` / `<ConfirmDialog>`) live in their own
 // `<ModoProvider>` here in app.vue — outside the layouts. We feed them the
@@ -105,6 +110,7 @@ useSeoMeta({ twitterCard: "summary_large_image" });
   <ClientOnly>
     <ModoProvider
       :theme="colorMode"
+      :locale="modoLocale"
       :radius="docsTheme.radius"
       :size="docsTheme.size"
       :halo="docsTheme.halo"

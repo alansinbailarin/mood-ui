@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { ModoProvider, paletteFromHex, darkSurfaces, useColorMode } from "mood-ui";
+import { ModoProvider, paletteFromHex, darkSurfaces, useColorMode, locales } from "mood-ui";
+import { useI18n } from "vue-i18n";
 import { useDocsTheme } from "~/composables/useDocsTheme";
 import { usePersistedThemeVars } from "~/composables/usePersistedThemeVars";
 import { tintedLightSurfaces, tintedDarkSurfaces } from "~/utils/tintedSurfaces";
@@ -10,6 +11,9 @@ import { tintedLightSurfaces, tintedDarkSurfaces } from "~/utils/tintedSurfaces"
 // feeding `resolved` would clobber `mode` back via ModoProvider's
 // `watch(theme) → setColorMode` and make the system option un-pickable.
 const { mode: colorMode } = useColorMode();
+// Library copy (aria labels, empty states…) follows the docs language.
+const { locale } = useI18n();
+const modoLocale = computed(() => (locale.value === "es" ? locales.es : locales.en));
 
 // Anti-FOUC cache — see composable docstring.
 usePersistedThemeVars();
@@ -46,6 +50,7 @@ const darkSurfaceConfig = computed(() => {
 <template>
   <ModoProvider
     :theme="colorMode"
+    :locale="modoLocale"
     :radius="state.radius"
     :size="state.size"
     :halo="state.halo"

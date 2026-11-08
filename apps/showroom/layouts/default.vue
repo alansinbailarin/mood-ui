@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, provide } from "vue";
-import { ModoProvider, paletteFromHex, darkSurfaces, useColorMode } from "mood-ui";
+import { ModoProvider, paletteFromHex, darkSurfaces, useColorMode, locales } from "mood-ui";
+import { useI18n } from "vue-i18n";
 import { createDocToc, DOC_TOC_KEY } from "~/composables/useDocToc";
 import { useDocsTheme } from "~/composables/useDocsTheme";
 import { usePersistedThemeVars } from "~/composables/usePersistedThemeVars";
@@ -23,6 +24,9 @@ usePersistedThemeVars();
 // `'system'` internally via `resolveColorMode` for overlay theming
 // (PopoverPanel, Tooltip), so we don't need to pre-resolve here.
 const { mode: colorMode } = useColorMode();
+// Library copy (aria labels, empty states…) follows the docs language.
+const { locale } = useI18n();
+const modoLocale = computed(() => (locale.value === "es" ? locales.es : locales.en));
 const primaryPalette = computed(() => ({
   primary: paletteFromHex(docsTheme.value.primaryHex),
 }));
@@ -60,6 +64,7 @@ router.beforeEach((_to, from) => {
 <template>
   <ModoProvider
     :theme="colorMode"
+    :locale="modoLocale"
     :radius="docsTheme.radius"
     :size="docsTheme.size"
     :halo="docsTheme.halo"
