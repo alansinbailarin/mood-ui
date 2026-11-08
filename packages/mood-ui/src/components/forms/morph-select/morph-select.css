@@ -1,0 +1,137 @@
+/* NOTE: this file is unlayered, so it must never set a property that a
+   template utility also sets (bg, color, border, font-size) or it would win.
+   MorphSelect — a native-Select-look field whose panel morphs out of it
+   (Menu material, Menu choreography). Field colors, radius, size and
+   focus come from `useFieldClasses` in the template; the panel reads the
+   `--modo-menu-*` tokens that `useTeleportedModoTheme` forwards inline. */
+
+/* The FIELD is the morph origin — hiding it whole makes the panel grow
+   out of the bordered box, border included. */
+.modo-morph-select__field {
+  transition-property: border-color, box-shadow, background-color, opacity;
+  transition-duration: var(--duration-base);
+  transition-timing-function: var(--ease-standard);
+}
+
+.modo-morph-select__field[data-modo-morph-origin="hidden"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.modo-morph-select__field[data-modo-morph-origin="closing"] {
+  opacity: 1;
+  pointer-events: none;
+  transition: opacity var(--duration-fast) var(--ease-standard) 0.24s;
+}
+
+/* ===== Panel: Menu material ===== */
+[data-modo-morph-select-panel] {
+  z-index: var(--modo-menu-z);
+  min-width: 12rem;
+  max-width: 92vw; /* width is synced to the trigger field at open */
+  max-height: var(--modo-menu-max-height);
+  padding: var(--modo-menu-padding);
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--modo-menu-radius);
+  background: var(--modo-menu-surface);
+  -webkit-backdrop-filter: var(--modo-menu-backdrop);
+  backdrop-filter: var(--modo-menu-backdrop);
+  box-shadow:
+    inset 0 -1px 0 var(--modo-menu-lowlight),
+    var(--shadow-lg);
+  font-family: var(--font-sans);
+  font-size: var(--modo-menu-font-size);
+}
+
+[data-modo-morph-select-panel][data-modo-phase="opening"],
+[data-modo-morph-select-panel][data-modo-phase="closing"] {
+  will-change: transform, filter;
+}
+
+[data-modo-morph-select-panel][data-modo-phase="closing"] > :not(.modo-morph-select-ghost) {
+  opacity: 0;
+  filter: blur(6px);
+  transition:
+    opacity var(--duration-fast) var(--ease-standard),
+    filter var(--duration-fast) var(--ease-standard);
+}
+
+.modo-morph-select__search {
+  padding-bottom: var(--modo-menu-padding);
+}
+
+.modo-morph-select__search-input {
+  padding: var(--modo-menu-item-padding);
+  border-radius: var(--modo-menu-item-radius);
+  font-size: var(--text-caption);
+  line-height: var(--text-caption--line-height);
+  transition: box-shadow var(--duration-fast) var(--ease-standard);
+}
+
+.modo-morph-select__list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.modo-morph-select__option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--modo-menu-item-gap, 0.75rem);
+  padding: var(--modo-menu-item-padding);
+  border-radius: var(--modo-menu-item-radius);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-standard);
+}
+
+.modo-morph-select__option:disabled {
+  cursor: not-allowed;
+}
+
+.modo-morph-select__option-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.modo-morph-select__check {
+  width: 1rem;
+  height: 1rem;
+}
+
+.modo-morph-select__empty {
+  margin: 0;
+  padding: var(--modo-menu-item-padding);
+}
+
+/* Return-ghost: the traveling label sits where the FIELD's text lives
+   (left-inset, vertically centered, same font size) — never panel-centered,
+   or it would visibly jump to the left at landing. */
+.modo-morph-select-ghost {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 var(--modo-morph-select-ghost-px, 0.875rem);
+  font-size: var(--modo-morph-select-ghost-fs, inherit);
+  pointer-events: none;
+}
+
+.modo-morph-select-ghost__inner {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modo-morph-select__field,
+  .modo-morph-select__option {
+    transition: none;
+  }
+}
