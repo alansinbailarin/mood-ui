@@ -21,7 +21,8 @@
 <script setup lang="ts"> 
 import { computed, provide, useSlots, type VNode } from 'vue'; 
 import type { AvatarGroup } from '../../../interfaces/data-display/avatar/AvatarGroup.interface'; 
-import { useResolvedRadius, useModoLocale } from '../../../composables/useModoConfig'; 
+import type { ModoSize } from '../../../config/ModoConfig';
+import { useResolvedRadius, useModoLocale, useSizeTokens } from '../../../composables/useModoConfig'; 
 import { interpolate } from '../../../config/ModoLocale'; 
  
 const props = withDefaults(defineProps<AvatarGroup>(), { 
@@ -30,6 +31,7 @@ const props = withDefaults(defineProps<AvatarGroup>(), {
 }); 
  
 const resolvedRadius = useResolvedRadius(() => props.radius); 
+const sz = useSizeTokens(() => (props.size === 'xl' ? 'large' : props.size) as ModoSize | undefined);
 const loc = useModoLocale(); 
  
 const slots = useSlots(); 
@@ -92,13 +94,8 @@ const shapeClasses = computed(() => {
 }); 
  
 const counterSizeClasses = computed(() => {
-    switch (props.size) {
-        case 'xsmall': return 'w-6 h-6';
-        case 'small': return 'w-8 h-8';
-        case 'large': return 'w-14 h-14';
-        case 'xl': return 'w-20 h-20';
-        default: return 'w-10 h-10';
-    }
+    if (props.size === 'xl') return 'w-20 h-20';
+    return `${sz.value.control} ${sz.value.control.replace('h-', 'w-')}`;
 });
 
 const counterFontClasses = computed(() => {

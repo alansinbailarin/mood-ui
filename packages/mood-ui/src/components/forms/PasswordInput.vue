@@ -249,14 +249,15 @@ const strength = computed(() => {
         return { score: 0 as PasswordStrengthScore, label: resolveStrengthLabel(0), barClass: 'bg-border' }; 
     } 
  
+    const length = [...value].length; 
     let score = 0; 
-    if (value.length >= 8) score++; 
-    if (value.length >= 12) score++; 
-    if (/[A-Z]/.test(value) && /[a-z]/.test(value)) score++; 
-    if (/\d/.test(value) && /[^A-Za-z0-9]/.test(value)) score++; 
+    if (length >= 8) score++; 
+    if (length >= 12) score++; 
+    if (/\p{Lu}/u.test(value) && /\p{Ll}/u.test(value)) score++; 
+    if (/\d/.test(value) && /[^\p{L}\p{N}]/u.test(value)) score++; 
     score = Math.min(score, 4); 
     // Si hay contenido pero aún 0 puntos, mostrar al menos 1 segmento rojo. 
-    if (value.length > 0 && score === 0) score = 1; 
+    if (length > 0 && score === 0) score = 1; 
  
     const s = score as PasswordStrengthScore; 
     const barClass = ['bg-border', 'bg-destructive/60', 'bg-warning/70', 'bg-success/70', 'bg-success'][s]; 

@@ -16,7 +16,7 @@
  
     <div 
         v-else 
-        :class="['relative inline-flex shrink-0', shapeClasses]" 
+        :class="['relative inline-flex shrink-0 bg-background', shapeClasses]" 
         :role="!src || imgError ? 'img' : undefined" 
         :aria-label="!src || imgError ? accessibleName : undefined" 
     > 

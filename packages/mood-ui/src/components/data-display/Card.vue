@@ -1,10 +1,16 @@
 <template> 
     <component 
         :is="clickable ? 'button' : 'div'" 
-        :class="[baseClasses, variantClasses, radiusClasses, hoverable ? hoverClasses : '', clickable ? 'cursor-pointer focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring text-left w-full' : '']" 
-        :tabindex="clickable ? 0 : undefined" 
+        :type="clickable ? 'button' : undefined"
+        :class="[
+            baseClasses,
+            variantClasses,
+            radiusClasses,
+            hoverable ? hoverClasses : '',
+            clickable ? 'cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 text-left w-full' : '',
+        ]" 
     > 
-        <div v-if="$slots.header" :class="[divided ? 'border-b border-inherit' : '', paddingClasses]"> 
+        <div v-if="$slots.header" :class="[divided ? 'border-b border-border' : '', paddingClasses]"> 
             <slot name="header" /> 
         </div> 
  
@@ -16,7 +22,7 @@
             <slot /> 
         </div> 
  
-        <div v-if="$slots.footer" :class="[divided ? 'border-t border-inherit' : '', paddingClasses]"> 
+        <div v-if="$slots.footer" :class="[divided ? 'border-t border-border' : '', paddingClasses]"> 
             <slot name="footer" /> 
         </div> 
     </component> 
@@ -37,16 +43,16 @@ const props = withDefaults(defineProps<Card>(), {
  
 const radius = useResolvedRadius(() => props.radius); 
  
-const baseClasses = 'block overflow-hidden transition-all duration-200 border-border text-card-foreground'; 
+const baseClasses = 'block overflow-hidden transition-all duration-200 text-foreground'; 
  
 const variantClasses = computed(() => { 
     switch (props.variant) { 
         case 'outlined': 
-            return 'border bg-card'; 
+            return 'border border-border bg-transparent'; 
         case 'filled': 
-            return 'bg-muted'; 
+            return 'modo-card--filled border border-transparent text-card-foreground'; 
         default: 
-            return 'bg-card border shadow-sm'; 
+            return 'border border-border bg-card text-card-foreground shadow-sm'; 
     } 
 }); 
  
@@ -63,9 +69,9 @@ const radiusClasses = computed(() => {
 const hoverClasses = computed(() => { 
     switch (props.variant) { 
         case 'outlined': 
-            return 'hover:border-border/70 hover:shadow-md'; 
+            return 'hover:border-foreground/25 hover:bg-muted/30'; 
         case 'filled': 
-            return 'hover:bg-muted/80'; 
+            return 'modo-card--filled-hover'; 
         default: 
             return 'hover:shadow-lg'; 
     } 
@@ -80,3 +86,24 @@ const paddingClasses = computed(() => {
     } 
 }); 
 </script>
+
+<style scoped>
+@layer base {
+    /* Subtle surface fill: uses exact `--card` surface in dark mode (what `outlined`
+     * used previously) and a soft `--muted`/`--card` blend in light mode where `--card`
+     * is pure white, while remaining overridable by consumer utility classes. */
+    .modo-card--filled {
+        background-color: light-dark(
+            color-mix(in oklab, var(--muted) 65%, var(--card) 35%),
+            var(--card)
+        );
+    }
+
+    .modo-card--filled.modo-card--filled-hover:hover {
+        background-color: light-dark(
+            var(--muted),
+            color-mix(in oklab, var(--card) 68%, var(--muted) 32%)
+        );
+    }
+}
+</style>
