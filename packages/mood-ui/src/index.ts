@@ -104,6 +104,8 @@ export {
 /*  Forms                                                               */
 /* ------------------------------------------------------------------ */
 export { default as Button } from "./components/forms/Button.vue";
+export { default as PressButton } from "./components/forms/PressButton.vue";
+export { default as PressButtonGroup } from "./components/forms/PressButtonGroup.vue";
 export { default as ButtonGroup } from "./components/forms/ButtonGroup.vue";
 export { default as MenuButton } from "./components/forms/MenuButton.vue";
 export { default as FormField } from "./components/forms/FormField.vue";
@@ -134,6 +136,7 @@ export type { PhoneInput as PhoneInputProps } from "./interfaces/forms/PhoneInpu
 export { default as OTPInput } from "./components/forms/OTPInput.vue";
 export type { OTPInput as OTPInputProps } from "./interfaces/forms/OTPInput.interface";
 export { default as ColorModeSwitch } from "./components/forms/ColorModeSwitch.vue";
+export { default as ModeOrb } from "./components/forms/ModeOrb.vue";
 export { default as AvatarUpload } from "./components/forms/AvatarUpload.vue";
 export { default as AvatarCropper } from "./components/forms/AvatarCropper.vue";
 export {
@@ -157,6 +160,29 @@ export { default as ToastContainer } from "./components/feedback/ToastContainer.
 export { default as ConfirmDialog } from "./components/feedback/ConfirmDialog.vue";
 export { default as EmptyState } from "./components/feedback/EmptyState.vue";
 export { default as ProgressBar } from "./components/feedback/ProgressBar.vue";
+export {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetBody,
+  SheetFooter,
+  SheetClose,
+} from "./components/feedback/sheet";
+export {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogBody,
+  DialogFooter,
+  DialogClose,
+  DialogIcon,
+} from "./components/feedback/dialog";
 
 /* ------------------------------------------------------------------ */
 /*  Layout                                                              */
@@ -170,6 +196,12 @@ export { default as HStack } from "./components/layout/HStack.vue";
 export { default as VStack } from "./components/layout/VStack.vue";
 export { default as PageHeader } from "./components/layout/PageHeader.vue";
 export { default as PopoverPanel } from "./components/layout/PopoverPanel.vue";
+export {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverClose,
+} from "./components/layout/popover";
 export { default as Sidebar } from "./components/layout/Sidebar.vue";
 export { default as SidebarRow } from "./components/layout/SidebarRow.vue";
 export { default as SidebarRowContent } from "./components/layout/SidebarRowContent.vue";
@@ -184,11 +216,32 @@ export { default as DropdownMenu } from "./components/navigation/DropdownMenu.vu
 export { default as Pagination } from "./components/navigation/Pagination.vue";
 export { default as Stepper } from "./components/navigation/Stepper.vue";
 export { default as Switcher } from "./components/navigation/Switcher.vue";
+export {
+  Menu,
+  MenuTrigger,
+  MenuContent,
+  MenuItem,
+  MenuLabel,
+  MenuSeparator,
+  ContextMenu,
+  ContextMenuTrigger,
+} from "./components/navigation/menu";
 
 /* ------------------------------------------------------------------ */
 /*  Data display                                                        */
 /* ------------------------------------------------------------------ */
 export { default as Card } from "./components/data-display/Card.vue";
+export {
+  SurfaceCard,
+  SurfaceCardMedia,
+  SurfaceCardHeader,
+  SurfaceCardTitle,
+  SurfaceCardSubtitle,
+  SurfaceCardBody,
+  SurfaceCardFooter,
+  SurfaceCardSeparator,
+  type SurfaceCardCompound,
+} from "./components/data-display/surface-card";
 export { default as Typography } from "./components/data-display/Typography.vue";
 export { default as Avatar } from "./components/data-display/avatar/Avatar.vue";
 export { default as AvatarGroup } from "./components/data-display/avatar/AvatarGroup.vue";
@@ -228,6 +281,8 @@ export { default as TablePagination } from "./components/data-display/table/Tabl
 /*  Public types — re-exports per category                              */
 /* ------------------------------------------------------------------ */
 export type * from "./interfaces/forms/Button.interface";
+export type * from "./interfaces/forms/PressButton.interface";
+export type * from "./interfaces/forms/PressButtonGroup.interface";
 export type * from "./interfaces/forms/FormField.interface";
 export type * from "./interfaces/forms/ButtonGroup.interface";
 export type * from "./interfaces/forms/MenuButton.interface";
@@ -252,6 +307,7 @@ export type * from "./interfaces/forms/Rating.interface";
 export type * from "./interfaces/forms/ColorPicker.interface";
 export type * from "./interfaces/forms/TagInput.interface";
 export type * from "./interfaces/forms/ColorModeSwitch.interface";
+export type * from "./interfaces/forms/ModeOrb.interface";
 export type * from "./interfaces/forms/AvatarUpload.interface";
 
 export type * from "./interfaces/feedback/Badge.interface";
@@ -266,6 +322,8 @@ export type * from "./interfaces/feedback/Toast.interface";
 export type * from "./interfaces/feedback/ConfirmDialog.interface";
 export type * from "./interfaces/feedback/EmptyState.interface";
 export type * from "./interfaces/feedback/ProgressBar.interface";
+export type * from "./interfaces/feedback/Sheet.interface";
+export type * from "./interfaces/feedback/Dialog.interface";
 
 export type * from "./interfaces/layout/AppShell.interface";
 export type * from "./interfaces/layout/Canvas.interface";
@@ -273,6 +331,7 @@ export type * from "./interfaces/layout/Container.interface";
 export type * from "./interfaces/layout/Divider.interface";
 export type * from "./interfaces/layout/Stack.interface";
 export type * from "./interfaces/layout/PageHeader.interface";
+export type * from "./interfaces/layout/Popover.interface";
 export type * from "./interfaces/layout/Sidebar.interface";
 export type * from "./interfaces/layout/Topbar.interface";
 
@@ -282,8 +341,10 @@ export type * from "./interfaces/navigation/DropdownMenu.interface";
 export type * from "./interfaces/navigation/Pagination.interface";
 export type * from "./interfaces/navigation/Stepper.interface";
 export type * from "./interfaces/navigation/Switcher.interface";
+export type * from "./interfaces/navigation/Menu.interface";
 
 export type * from "./interfaces/data-display/Card.interface";
+export type * from "./interfaces/data-display/SurfaceCard.interface";
 export type * from "./interfaces/data-display/Typography.interface";
 export type * from "./interfaces/data-display/Kbd.interface";
 export type * from "./interfaces/data-display/Code.interface";
@@ -304,3 +365,15 @@ export type * from "./interfaces/data-display/date-picker/DateTimePicker.interfa
 export type * from "./interfaces/data-display/table/Table.interface";
 export type * from "./interfaces/data-display/table/TableColumn.interface";
 export type * from "./interfaces/data-display/table/TablePagination.interface";
+
+// Valux motion controls — additive alternatives to the existing controls.
+export { default as GlassSwitch } from './components/forms/glass-switch/GlassSwitch.vue';
+export { default as LiquidToast } from './components/feedback/liquid-toast/LiquidToast.vue';
+export { default as LiquidToaster } from './components/feedback/liquid-toast/LiquidToaster.vue';
+export { liquidToast, createLiquidToast, type LiquidToastController } from './components/feedback/liquid-toast/liquidToast';
+export { MorphTooltip, MorphTooltipTrigger, MorphTooltipContent, MorphTooltipTitle, MorphTooltipDescription } from './components/feedback/morph-tooltip';
+export { MorphSelect, MorphSelectTrigger, MorphSelectContent } from './components/forms/morph-select';
+export type * from './interfaces/forms/GlassSwitch.interface';
+export type * from './interfaces/forms/MorphSelect.interface';
+export type * from './interfaces/feedback/LiquidToast.interface';
+export type * from './interfaces/feedback/MorphTooltip.interface';
