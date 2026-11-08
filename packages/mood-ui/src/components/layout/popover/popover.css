@@ -1,0 +1,45 @@
+/* Popover surface. Imported by the components that use it.
+ *
+ * Border, shadow and timing come from the semantic tokens, like the native
+ * PopoverPanel (`border-border shadow-lg`). Font size lives on the panel as
+ * the `text-body` utility; radius and padding arrive per panel through
+ * `useTeleportedModoTheme`. */
+[data-modo-popover] {
+  position: fixed;
+  z-index: var(--modo-menu-z);
+  width: max-content;
+  max-width: min(92vw, 22rem);
+  max-height: var(--modo-menu-max-height);
+  padding: var(--modo-popover-padding, 1rem 1.125rem);
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--modo-menu-radius);
+  background: var(--modo-menu-surface);
+  -webkit-backdrop-filter: var(--modo-menu-backdrop);
+  backdrop-filter: var(--modo-menu-backdrop);
+  color: var(--popover-foreground);
+  box-shadow:
+    inset 0 -1px 0 var(--modo-menu-lowlight),
+    var(--shadow-lg);
+}
+
+[data-modo-popover][data-modo-phase="opening"],
+[data-modo-popover][data-modo-phase="closing"] {
+  will-change: transform, filter;
+}
+
+[data-modo-popover][data-modo-phase="closing"] > :not(.modo-morph-ghost) {
+  opacity: 0;
+  filter: blur(6px);
+  transition:
+    opacity var(--duration-fast) var(--ease-accelerate),
+    filter var(--duration-fast) var(--ease-accelerate);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-modo-popover][data-modo-phase="closing"] > :not(.modo-morph-ghost) {
+    filter: none;
+    transition: none;
+  }
+}

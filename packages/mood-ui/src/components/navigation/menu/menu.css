@@ -1,0 +1,181 @@
+/* Menu & ContextMenu surface and items. Imported by the components that use it.
+ *
+ * Colors, borders, shadows, focus ring and timing come from the semantic
+ * tokens (same as the native DropdownMenu / PopoverPanel). Typography lives on
+ * the elements as `text-*` utilities, so this file never sets font-size or
+ * text color on rows, labels or shortcuts (unlayered rules would beat them).
+ * Radius and padding arrive per panel through `useTeleportedModoTheme`. */
+
+/* ── Surface ──────────────────────────────────────────────── */
+[data-modo-menu] {
+  position: fixed;
+  z-index: var(--modo-menu-z);
+  width: max-content;
+  min-width: 11.5rem;
+  max-height: var(--modo-menu-max-height);
+  padding: var(--modo-menu-padding);
+  overflow-x: hidden;
+  overflow-y: auto;
+  transform-origin: top left;
+  border: 1px solid var(--border);
+  border-radius: var(--modo-menu-radius);
+  background: var(--modo-menu-surface);
+  -webkit-backdrop-filter: var(--modo-menu-backdrop);
+  backdrop-filter: var(--modo-menu-backdrop);
+  color: var(--popover-foreground);
+  box-shadow:
+    inset 0 -1px 0 var(--modo-menu-lowlight),
+    var(--shadow-lg);
+}
+
+[data-modo-menu][data-modo-phase="opening"],
+[data-modo-menu][data-modo-phase="closing"] {
+  will-change: transform, filter;
+}
+
+[data-modo-menu][data-modo-point-bloom][data-modo-phase="closing"] > :not(.modo-morph-ghost) {
+  opacity: 0.55 !important;
+  filter: blur(1.5px) !important;
+  transition:
+    opacity var(--duration-base) var(--ease-standard),
+    filter var(--duration-base) var(--ease-standard) !important;
+}
+
+.modo-context-trigger {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ── Rows ─────────────────────────────────────────────────── */
+[data-modo-menu-item] {
+  /* Per-color highlight, overridden below. */
+  --modo-menu-row-highlight: var(--accent);
+
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: var(--modo-menu-item-gap);
+  border: none;
+  border-radius: var(--modo-menu-item-radius);
+  padding: var(--modo-menu-item-padding);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  text-align: left;
+  font-family: inherit;
+  font-weight: 500;
+  outline: none;
+  opacity: 0;
+  transform: translate(-6px, 6px);
+  /* Signature stagger spring stays; state feedback uses the motion tokens. */
+  transition:
+    opacity 0.38s var(--ease-decelerate),
+    transform 0.62s cubic-bezier(0.22, 1.5, 0.36, 1),
+    background-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
+}
+
+[data-modo-menu-item][data-modo-color="danger"] {
+  color: var(--destructive);
+  --modo-menu-row-highlight: color-mix(in oklab, var(--destructive) 10%, transparent);
+}
+
+[data-modo-menu-item][data-modo-color="primary"] {
+  color: var(--primary);
+  --modo-menu-row-highlight: color-mix(in oklab, var(--primary) 10%, transparent);
+}
+
+[data-modo-menu-item][data-modo-color="success"] {
+  color: var(--success);
+  --modo-menu-row-highlight: color-mix(in oklab, var(--success) 10%, transparent);
+}
+
+[data-modo-menu-item][data-modo-color="warning"] {
+  color: var(--warning);
+  --modo-menu-row-highlight: color-mix(in oklab, var(--warning) 10%, transparent);
+}
+
+/* On a surface adopted from the trigger, `--accent` would clash with the
+ * borrowed background: neutral rows tint with their own text color instead. */
+[data-modo-menu][data-modo-surface="trigger"] [data-modo-menu-item][data-modo-color="default"] {
+  --modo-menu-row-highlight: color-mix(in oklab, currentColor 12%, transparent);
+}
+
+[data-modo-menu][data-modo-phase="open"] [data-modo-menu-item],
+[data-modo-menu][data-modo-phase="opening"] [data-modo-menu-item] {
+  opacity: 1;
+  transform: none;
+}
+
+[data-modo-menu-item]:hover:not(:disabled),
+[data-modo-menu-item]:focus-visible {
+  background: var(--modo-menu-row-highlight);
+}
+
+[data-modo-menu-item]:focus-visible {
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--ring) 60%, transparent);
+}
+
+/* Disabled like DropdownMenu rows (opacity 50, not-allowed). Specific enough
+ * to beat the open/opening stagger rule above. */
+[data-modo-menu]:not([data-modo-phase="closing"]) [data-modo-menu-item]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.modo-menu-item__icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.modo-menu-item__icon > svg {
+  width: 100%;
+  height: 100%;
+}
+
+.modo-menu-item__label {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── Choreography ─────────────────────────────────────────── */
+[data-modo-menu][data-modo-phase="closing"] [data-modo-menu-item],
+[data-modo-menu][data-modo-phase="closing"] [data-modo-menu-label],
+[data-modo-menu][data-modo-phase="closing"] [data-modo-menu-separator] {
+  opacity: 0;
+  transform: translate(-3px, -7px) scale(0.99);
+  transition:
+    opacity 0.13s var(--ease-accelerate),
+    transform 0.2s var(--ease-emphasized);
+}
+
+[data-modo-menu][data-modo-phase="closing"] > *:nth-child(2):not(.modo-morph-ghost) { transition-delay: 0.022s; }
+[data-modo-menu][data-modo-phase="closing"] > *:nth-child(3):not(.modo-morph-ghost) { transition-delay: 0.044s; }
+[data-modo-menu][data-modo-phase="closing"] > *:nth-child(4):not(.modo-morph-ghost) { transition-delay: 0.064s; }
+[data-modo-menu][data-modo-phase="closing"] > *:nth-child(5):not(.modo-morph-ghost) { transition-delay: 0.08s; }
+[data-modo-menu][data-modo-phase="closing"] > *:nth-child(n + 6):not(.modo-morph-ghost) { transition-delay: 0.092s; }
+
+[data-modo-menu][data-modo-phase="opening"] [data-modo-menu-item]:nth-child(1) { transition-delay: 0.16s; }
+[data-modo-menu][data-modo-phase="opening"] [data-modo-menu-item]:nth-child(2) { transition-delay: 0.21s; }
+[data-modo-menu][data-modo-phase="opening"] [data-modo-menu-item]:nth-child(3) { transition-delay: 0.26s; }
+[data-modo-menu][data-modo-phase="opening"] [data-modo-menu-item]:nth-child(4) { transition-delay: 0.31s; }
+[data-modo-menu][data-modo-phase="opening"] [data-modo-menu-item]:nth-child(n + 5) { transition-delay: 0.35s; }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-modo-menu-item],
+  [data-modo-menu][data-modo-phase] [data-modo-menu-item],
+  [data-modo-menu][data-modo-phase="closing"] [data-modo-menu-label],
+  [data-modo-menu][data-modo-phase="closing"] [data-modo-menu-separator] {
+    transform: none;
+    transition: none;
+    transition-delay: 0s;
+  }
+  [data-modo-menu][data-modo-point-bloom][data-modo-phase="closing"] > :not(.modo-morph-ghost) {
+    filter: none !important;
+    transition: none !important;
+  }
+}
