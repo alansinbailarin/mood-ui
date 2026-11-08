@@ -47,8 +47,15 @@ plan.md
 apps/showroom/public/llms.txt
 apps/showroom/public/llms-full.txt
 
-# Dev-only scratch pages (local visual checks, never committed/deployed)
+# Dev-only scratch pages (local visual checks, excluded from Git)
 apps/showroom/pages/dev-sizes.vue
 apps/showroom/pages/calendar-showcase.vue
 apps/showroom/pages/align-check.vue
 apps/showroom/pages/chart-gallery.vue
+apps/showroom/pages/table-lab.vue
+apps/showroom/pages/sidebar-lab.vue
+apps/showroom/pages/drawer-lab.vue
+apps/showroom/pages/surface-card-lab.vue
+apps/showroom/pages/press-button-lab.vue
+apps/showroom/pages/search-input-lab.vue
+apps/showroom/pages/si-repro.vue
