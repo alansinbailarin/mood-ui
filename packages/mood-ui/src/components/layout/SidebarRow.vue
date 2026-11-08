@@ -1,85 +1,57 @@
 <template> 
     <li> 
-        <!-- Only wrap with Tooltip when collapsed (so the icon-only row gets a 
-             label tooltip on hover/focus). When expanded the Tooltip's 
-             `<span class="inline-flex">` wrapper would shrink the row and 
-             prevent the active pill / hover background from spanning the 
-             whole column. --> 
-        <Tooltip 
-            v-if="collapsed && depth === 0" 
-            :content="item.label" 
-            placement="right" 
-            wrapper-class="!flex !w-full" 
-        > 
-            <component 
-                :is="rowTag" 
-                v-bind="rowAttrs" 
-                :type="isButton ? 'button' : undefined" 
-                :aria-disabled="item.disabled || undefined" 
-                :aria-current="isActive ? 'page' : undefined" 
-                :aria-expanded="hasChildren ? expanded : undefined" 
-                :tabindex="item.disabled ? -1 : 0" 
-                :class="rowClasses" 
-                :style="indentStyle" 
-                @click="onActivate" 
-                @keydown.enter.prevent="onActivate" 
-                @keydown.space.prevent="onActivate" 
-            > 
-                <RowContent 
-                    :item="item" 
-                    :depth="depth" 
-                    :collapsed="collapsed" 
-                    :expanded="expanded" 
-                    :is-active="isActive" 
-                    :has-children="hasChildren" 
-                    :active-variant="activeVariant" 
-                    :bar-side="barSide" 
-                    :bar-color-class="barColorClass" 
-                /> 
-            </component> 
-        </Tooltip> 
-        <component 
-            v-else 
-            :is="rowTag" 
-            v-bind="rowAttrs" 
-            :type="isButton ? 'button' : undefined" 
-            :aria-disabled="item.disabled || undefined" 
-            :aria-current="isActive ? 'page' : undefined" 
-            :aria-expanded="hasChildren ? expanded : undefined" 
-            :tabindex="item.disabled ? -1 : 0" 
-            :class="rowClasses" 
-            :style="indentStyle" 
-            @click="onActivate" 
-            @keydown.enter.prevent="onActivate" 
-            @keydown.space.prevent="onActivate" 
-        > 
-            <RowContent 
-                :item="item" 
-                :depth="depth" 
-                :collapsed="collapsed" 
-                :expanded="expanded" 
-                :is-active="isActive" 
-                :has-children="hasChildren" 
-                :active-variant="activeVariant" 
-                :bar-side="barSide" 
-                :bar-color-class="barColorClass" 
-            > 
-                <template v-if="$slots.icon" #icon="slotProps"> 
-                    <slot name="icon" v-bind="slotProps" /> 
-                </template> 
-            </RowContent> 
-        </component> 
- 
+        <!-- Keep one row mounted so toggling the tooltip never resets focus
+             or replaces icons midway through the width transition. -->
+        <Tooltip
+            :disabled="!collapsed || depth > 0 || item.disabled"
+            :content="item.label"
+            placement="right"
+            wrapper-class="!flex !w-full min-w-0"
+        >
+            <component
+                :is="rowTag"
+                v-bind="rowAttrs"
+                :type="isButton ? 'button' : undefined"
+                :aria-disabled="item.disabled || undefined"
+                :aria-current="isActive ? 'page' : undefined"
+                :aria-expanded="hasChildren ? expanded && !collapsed : undefined"
+                :aria-label="collapsed ? item.label : undefined"
+                :tabindex="item.disabled ? -1 : 0"
+                :class="rowClasses"
+                :style="indentStyle"
+                @click="onActivate"
+                @keydown.enter.prevent="onActivate"
+                @keydown.space.prevent="onActivate"
+            >
+                <RowContent
+                    :item="item"
+                    :depth="depth"
+                    :collapsed="collapsed"
+                    :expanded="expanded"
+                    :is-active="isActive"
+                    :has-children="hasChildren"
+                    :active-variant="activeVariant"
+                    :bar-side="barSide"
+                    :bar-color-class="barColorClass"
+                >
+                    <template v-if="$slots.icon" #icon="slotProps">
+                        <slot name="icon" v-bind="slotProps" />
+                    </template>
+                </RowContent>
+            </component>
+        </Tooltip>
+
         <!-- Children — animated expand/collapse via CSS grid-template-rows. 
-             Children stay in DOM (so focus is preserved) but are visually 
-             clipped via overflow-hidden until the row expands. --> 
+             Children stay mounted to preserve their state. Hidden branches are
+             inert so keyboard navigation cannot enter clipped content. -->
         <div 
             v-if="hasChildren" 
             :class="[ 
                 'grid transition-[grid-template-rows] duration-base ease-standard motion-reduce:transition-none', 
             ]" 
             :style="{ gridTemplateRows: expanded && !collapsed ? '1fr' : '0fr' }" 
-            :aria-hidden="!expanded || collapsed" 
+            :aria-hidden="!expanded || collapsed"
+            :inert="!expanded || collapsed ? true : undefined"
         > 
             <div class="overflow-hidden min-h-0"> 
                 <ul class="flex flex-col gap-0.5 mt-0.5" role="list"> 
@@ -168,7 +140,7 @@ const rowAttrs = computed(() => {
 // --- Visual classes --------------------------------------------------------- 
 const sizeClass = computed(() => { 
     switch (props.size) { 
-        case 'small': return 'h-8 px-2 text-caption gap-2'; 
+        case 'small': return 'h-8 px-3 text-caption gap-2';
         case 'large': return 'h-11 px-3 text-body-lg gap-3'; 
         default: return 'h-9 px-3 text-body gap-3'; 
     } 
@@ -233,11 +205,11 @@ const idleHoverClass = computed(() => {
  
 const rowClasses = computed(() => [ 
     'relative flex items-center w-full whitespace-nowrap overflow-hidden', 
-    'transition-[background-color,color,padding] duration-fast ease-standard motion-reduce:transition-none', 
+    'transition-[background-color,color] duration-fast ease-standard motion-reduce:transition-none',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2', 
     sizeClass.value, 
     radiusClass.value, 
-    props.collapsed ? '!px-0 justify-center' : '', 
+    props.depth === 0 ? 'sidebar-top-level-row' : '',
     props.item.disabled 
         ? 'opacity-50 cursor-not-allowed pointer-events-none' 
         : 'cursor-pointer', 
@@ -263,6 +235,13 @@ function onActivate(_e: Event) {
 </script> 
  
 <style scoped> 
+/* Center the fixed 24px icon column in the shell's compact content width.
+   The inset is the same expanded and collapsed; only the row background grows. */
+.sidebar-top-level-row {
+    --modo-sidebar-icon-width: clamp(1.25rem, calc(var(--modo-sidebar-collapsed-width, 4rem) - 2 * var(--modo-sidebar-padding, 0.5rem)), 1.5rem);
+    padding-inline: max(0px, calc((var(--modo-sidebar-collapsed-width, 4rem) - 2 * var(--modo-sidebar-padding, 0.5rem) - var(--modo-sidebar-icon-width)) / 2));
+}
+
 /* Keep the focus ring visible above the bar accent. */ 
 .relative:focus-visible { 
     z-index: 1; 

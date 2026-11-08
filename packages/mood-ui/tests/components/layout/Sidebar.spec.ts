@@ -49,3 +49,52 @@ describe('Sidebar toggle button', () => {
     expect(btn.classes()).toContain('-left-3');
   });
 });
+
+describe('Sidebar collapse continuity', () => {
+  it('keeps the same focused row and label across collapse and expansion', async () => {
+    const wrapper = mount(Sidebar, { props: { items }, attachTo: document.body });
+    try {
+      const row = wrapper.find('button').element;
+      const label = Array.from(row.querySelectorAll('span')).find((el) => el.textContent?.trim() === 'Home');
+      row.focus();
+
+      await wrapper.setProps({ collapsed: true });
+      expect(wrapper.find('button').element).toBe(row);
+      expect(document.activeElement).toBe(row);
+      expect(row.contains(label!)).toBe(true);
+      expect(row.getAttribute('aria-label')).toBe('Home');
+
+      await wrapper.setProps({ collapsed: false });
+      expect(wrapper.find('button').element).toBe(row);
+      expect(document.activeElement).toBe(row);
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
+  it('preserves section headings and valid group names while collapsed', async () => {
+    const wrapper = mount(Sidebar, {
+      props: { sections: [{ id: 'workspace', title: 'Workspace', items }] },
+    });
+    const heading = wrapper.find('p').element;
+    await wrapper.setProps({ collapsed: true });
+    expect(wrapper.find('p').element).toBe(heading);
+    const group = wrapper.find('[role="group"]');
+    expect(group.attributes('aria-label')).toBe('Workspace');
+    expect(group.attributes('aria-labelledby')).toBeUndefined();
+    wrapper.unmount();
+  });
+
+  it('makes hidden sub-items inert and restores their open state', async () => {
+    const wrapper = mount(Sidebar, { props: { items: [
+      { id: 'projects', label: 'Projects', defaultExpanded: true, children: items },
+    ] } });
+    await wrapper.setProps({ collapsed: true });
+    expect(wrapper.find('button').attributes('aria-expanded')).toBe('false');
+    expect(wrapper.find('[aria-hidden="true"][inert]').exists()).toBe(true);
+    await wrapper.setProps({ collapsed: false });
+    expect(wrapper.find('button').attributes('aria-expanded')).toBe('true');
+    expect(wrapper.find('[inert]').exists()).toBe(false);
+    wrapper.unmount();
+  });
+});

@@ -2,6 +2,7 @@
     <component
         :is="as"
         class="relative flex flex-col h-full min-h-0 bg-card text-foreground"
+        :data-collapsed="collapsed"
         :aria-label="ariaLabel ?? 'Sidebar'"
         role="navigation"
     >
@@ -32,8 +33,9 @@
  
         <!-- BODY --> 
         <div 
+            :style="bodyStyle"
             :class="[ 
-                'flex-1 min-h-0 overflow-y-auto flex flex-col gap-4', 
+                'flex-1 min-h-0 overflow-y-auto overflow-x-hidden flex flex-col gap-4',
                 paddingClass, 
             ]" 
         > 
@@ -45,29 +47,27 @@
                 v-for="(section, sectionIdx) in resolvedSections" 
                 :key="section.id" 
                 class="flex flex-col gap-1" 
-                :aria-labelledby="section.title ? `sidebar-section-${section.id}` : undefined" 
+                :aria-label="section.title"
                 role="group" 
             > 
-                <Transition 
-                    enter-active-class="transition-opacity duration-base ease-standard motion-reduce:transition-none" 
-                    leave-active-class="transition-opacity duration-fast ease-standard motion-reduce:transition-none" 
-                    enter-from-class="opacity-0" 
-                    leave-to-class="opacity-0" 
-                > 
-                    <p 
-                        v-if="section.title && !collapsed" 
-                        :id="`sidebar-section-${section.id}`" 
-                        class="px-3 pt-1 pb-1 text-caption uppercase tracking-wide text-muted-foreground select-none" 
-                    > 
-                        {{ section.title }} 
-                    </p> 
-                    <p 
-                        v-else-if="section.title && collapsed && sectionIdx > 0" 
-                        aria-hidden="true" 
-                        class="mx-2 my-1 h-px bg-border" 
-                    /> 
-                </Transition> 
- 
+                <!-- Reserve the heading's height in both states. Removing it
+                     makes every row below it jump during collapse. -->
+                <div v-if="section.title" class="relative h-7 shrink-0 overflow-hidden">
+                    <p
+                        class="sidebar-section-title px-3 pt-1 pb-1 text-caption uppercase tracking-wide text-muted-foreground select-none whitespace-nowrap"
+                        :data-collapsed="collapsed"
+                        :aria-hidden="collapsed || undefined"
+                    >
+                        {{ section.title }}
+                    </p>
+                    <span
+                        v-if="sectionIdx > 0"
+                        aria-hidden="true"
+                        class="absolute left-3 top-1/2 h-px w-5 bg-border transition-opacity duration-fast motion-reduce:transition-none"
+                        :class="collapsed ? 'opacity-100' : 'opacity-0'"
+                    />
+                </div>
+
                 <ul class="flex flex-col gap-1" role="list"> 
                     <SidebarRow 
                         v-for="item in section.items" 
@@ -163,6 +163,12 @@ const paddingClass = computed(() => {
     }
 });
 
+const bodyStyle = computed(() => ({
+    '--modo-sidebar-padding': {
+        none: '0rem', small: '0.5rem', medium: '0.75rem', large: '1rem',
+    }[props.padding],
+}));
+
 const togglePositionClass = computed(() =>
     props.toggleSide === 'start' ? '-left-3' : '-right-3',
 );
@@ -190,3 +196,19 @@ function onSelect(item: SidebarItem) {
     emit('select', item); 
 } 
 </script>
+
+<style scoped>
+.sidebar-section-title {
+    opacity: 1;
+    transition: opacity var(--sidebar-label-duration, 140ms) ease-out var(--sidebar-label-delay, 70ms);
+}
+
+.sidebar-section-title[data-collapsed="true"] {
+    opacity: 0;
+    transition: opacity var(--sidebar-label-exit-duration, 80ms) ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sidebar-section-title { transition: none; }
+}
+</style>

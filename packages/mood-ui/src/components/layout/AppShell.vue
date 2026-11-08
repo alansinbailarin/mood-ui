@@ -56,6 +56,7 @@
                             railBorderClass,
                             stickySidebar ? desktopStickyClass : '',
                         ]"
+                        :style="railNavigationStyle"
                         :aria-label="'Primary navigation rail'"
                     >
                         <div v-if="$slots['rail-header']" class="shrink-0">
@@ -124,6 +125,7 @@
                             sidebarBorderClass,
                             stickySidebar ? desktopStickyClass : '',
                         ]"
+                        :style="standardNavigationStyle"
                         :aria-label="drawerAriaLabel ?? 'Sidebar navigation'"
                     >
                         <div v-if="$slots['sidebar-header']" class="shrink-0">
@@ -196,6 +198,7 @@
                             railBorderClass,
                             stickySidebar ? desktopStickyClass : '',
                         ]"
+                        :style="railNavigationStyle"
                         :aria-label="'Primary navigation rail'"
                     >
                         <div v-if="$slots['rail-header']" class="shrink-0">
@@ -223,6 +226,7 @@
                             sidebarBorderClass,
                             stickySidebar ? desktopStickyClass : '',
                         ]"
+                        :style="standardNavigationStyle"
                         :aria-label="drawerAriaLabel ?? 'Sidebar navigation'"
                     >
                         <div v-if="$slots['sidebar-header']" class="shrink-0">
@@ -366,7 +370,7 @@
                 > 
                     <!-- Backdrop --> 
                     <div 
-                        class="absolute inset-0 bg-foreground/40 backdrop-blur-[2px] transition-opacity duration-base ease-standard" 
+                        class="modo-scrim absolute inset-0 transition-opacity duration-base ease-standard" 
                         aria-hidden="true" 
                         @click="closeMobile" 
                     /> 
@@ -564,6 +568,18 @@ const standardSidebarWidthClass = computed(() =>
 const railWidthClass = computed(() => 
     props.railWidth === 'medium' ? 'w-16' : 'w-14', 
 ); 
+
+// Give Sidebar the final compact content width even while this container is
+// expanded. Its icon column can stay anchored throughout the width transition.
+// Tailwind widths include the divider, so subtract it from the available space.
+function compactNavigationStyle(width: 'small' | 'medium') {
+    return {
+        '--modo-sidebar-collapsed-width': `calc(${width === 'medium' ? '4rem' : '3.5rem'} - ${props.divider ? '1px' : '0px'})`,
+    };
+}
+
+const railNavigationStyle = computed(() => compactNavigationStyle(props.railWidth));
+const standardNavigationStyle = computed(() => compactNavigationStyle(props.collapsedWidth));
  
 // --- Borders ----------------------------------------------------------------- 
 const sidebarBorderClass = computed(() => { 
