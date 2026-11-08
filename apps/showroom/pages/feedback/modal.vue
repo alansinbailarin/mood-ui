@@ -227,7 +227,7 @@ const open = ref(false);
   </Modal>
 </template>`;
 
-const typesCode = `export type ModalSize = 'small' | 'medium' | 'large' | 'xlarge' | 'full';
+const typesCode = `export type ModalSize = 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge' | 'full';
 export type ModalPosition = 'center' | 'top';
 export type ModalOverlay = 'blur' | 'solid' | 'transparent' | 'dark' | 'dim' | 'glass';
 
@@ -259,7 +259,7 @@ const propsList = computed<PropDoc[]>(() => [
   },
   {
     name: "size",
-    type: "'small' | 'medium' | 'large' | 'xlarge' | 'full'",
+    type: "'xsmall' | 'small' | 'medium' | 'large' | 'xlarge' | 'full'",
     default: "'medium'",
     description: t("pages.feedback.modal.props.size"),
   },

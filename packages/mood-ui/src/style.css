@@ -383,31 +383,35 @@
   --radius-xl: calc(var(--radius) + 4px); 
 } 
  
-body { 
-  font-family: "Poppins", sans-serif; 
-} 
- 
-/* ============================================================ 
- * A11y baseline 
- * ============================================================ */ 
- 
-/* Global default focus ring for any interactive element without one. 
- * Components that set their own `focus-visible:ring-*` win by specificity. */ 
-:where(a, button, [role="button"], input, select, textarea, [tabindex]):focus-visible { 
-  outline: 2px solid var(--ring); 
-  outline-offset: 2px; 
-  border-radius: 2px; 
-} 
- 
-/* Never let focus be swallowed silently. Bring focused anchors into view 
- * when navigating with the keyboard through a scrollable container. */ 
-:where(a, button, [tabindex]):focus-visible { 
-  scroll-margin: 1rem; 
-} 
- 
-/* Keyboard-only focus on sticky headers shouldn't hide behind them. */ 
-:where([role="main"], main) { 
-  scroll-margin-top: 5rem; 
+@layer base {
+  body { 
+    font-family: "Poppins", sans-serif; 
+  } 
+   
+  /* ============================================================ 
+   * A11y baseline 
+   * ============================================================ */ 
+   
+  /* Global default focus ring for any interactive element without one. 
+   * Placed in `@layer base` so components in `@layer utilities` that set
+   * `focus-visible:outline-none focus-visible:ring-*` cleanly override it
+   * instead of rendering a double focus border. */ 
+  :where(a, button, [role="button"], input, select, textarea, [tabindex]):focus-visible { 
+    outline: 2px solid var(--ring); 
+    outline-offset: 2px; 
+    border-radius: 2px; 
+  } 
+   
+  /* Never let focus be swallowed silently. Bring focused anchors into view 
+   * when navigating with the keyboard through a scrollable container. */ 
+  :where(a, button, [tabindex]):focus-visible { 
+    scroll-margin: 1rem; 
+  } 
+   
+  /* Keyboard-only focus on sticky headers shouldn't hide behind them. */ 
+  :where([role="main"], main) { 
+    scroll-margin-top: 5rem; 
+  } 
 } 
  
 /* ========================================================== 
@@ -478,4 +482,149 @@ body {
 .modo-field-native::-webkit-search-decoration { 
   -webkit-appearance: none; 
   appearance: none; 
+}
+
+/* ==========================================================
+ * Morph overlay tokens (Dialog, Sheet, Popover, Menu, Drawer…)
+ * Geometry lives on the provider scope; the per-surface styles live in
+ * each component's own CSS file. `useTeleportedModoTheme` overrides the
+ * radius / padding tokens inline on every teleported panel.
+ * ========================================================== */
+:root,
+.modo-scope {
+  --modo-dialog-z: 1200;
+  --modo-menu-z: 1200;
+  --modo-dialog-backdrop: blur(24px) saturate(180%);
+  --modo-menu-backdrop: blur(20px) saturate(180%);
+  --modo-dialog-scrim-backdrop: blur(2px);
+  --modo-dialog-max-inline: min(92vw, 36rem);
+  --modo-dialog-max-block: min(85vh, 40rem);
+  --modo-dialog-radius: 0.75rem;
+  --modo-dialog-padding: 1.25rem;
+  --modo-menu-radius: 0.375rem;
+  --modo-menu-max-height: min(60vh, 24rem);
+  --modo-menu-padding: 0.375rem;
+  --modo-menu-item-padding: 0.625rem 0.875rem;
+  --modo-menu-item-gap: 0.75rem;
+  --modo-menu-item-radius: 0.25rem;
+  --modo-menu-font-size: 0.8125rem;
+}
+
+/* Theme-dependent tokens are (re)declared on every element that carries
+ * `data-modo-theme` — teleported panels included — so `var(--card)` /
+ * `var(--popover)` resolve against THAT element's palette and surfaces,
+ * not the ones computed on <html>. */
+:root,
+.modo-scope,
+[data-modo-theme] {
+  --modo-dialog-opacity: 94%;
+  --modo-menu-opacity: 92%;
+  --modo-dialog-surface: color-mix(
+    in oklab,
+    var(--card) var(--modo-dialog-opacity),
+    transparent
+  );
+  --modo-menu-surface: color-mix(
+    in oklab,
+    var(--popover) var(--modo-menu-opacity),
+    transparent
+  );
+  --modo-dialog-lowlight: color-mix(in oklab, var(--foreground) 5%, transparent);
+  --modo-menu-lowlight: color-mix(in oklab, var(--foreground) 5%, transparent);
+  --modo-dialog-scrim: rgba(9, 9, 11, 0.22);
+}
+
+.dark,
+[data-modo-theme="dark"] {
+  --modo-dialog-opacity: 88%;
+  --modo-menu-opacity: 85%;
+  --modo-dialog-lowlight: transparent;
+  --modo-menu-lowlight: transparent;
+  --modo-dialog-scrim: rgba(0, 0, 0, 0.46);
+}
+
+@media (pointer: coarse) {
+  :root,
+  .modo-scope {
+    --modo-dialog-scrim-backdrop: none;
+  }
+}
+
+/* ── Global scrim (Modal, Drawer, ConfirmDialog, AppShell…) ──
+ * Same material as the Dialog/Sheet scrim: always a dark veil (never
+ * `foreground`-based, which flips to WHITE in dark mode) plus a soft blur.
+ * Variants map the legacy `overlay` prop values onto the same family. */
+:root,
+.modo-scope,
+[data-modo-theme] {
+  --modo-scrim-dim: rgba(9, 9, 11, 0.1);
+  --modo-scrim-solid: rgba(9, 9, 11, 0.45);
+  --modo-scrim-dark: rgba(9, 9, 11, 0.7);
+}
+
+.dark,
+[data-modo-theme="dark"] {
+  --modo-scrim-dim: rgba(0, 0, 0, 0.25);
+  --modo-scrim-solid: rgba(0, 0, 0, 0.6);
+  --modo-scrim-dark: rgba(0, 0, 0, 0.78);
+}
+
+.modo-scrim {
+  background: var(--modo-dialog-scrim);
+  -webkit-backdrop-filter: var(--modo-dialog-scrim-backdrop);
+  backdrop-filter: var(--modo-dialog-scrim-backdrop);
+}
+.modo-scrim[data-modo-scrim="dim"] { background: var(--modo-scrim-dim); }
+.modo-scrim[data-modo-scrim="solid"] { background: var(--modo-scrim-solid); }
+.modo-scrim[data-modo-scrim="dark"] { background: var(--modo-scrim-dark); }
+.modo-scrim[data-modo-scrim="glass"] {
+  background: color-mix(in oklab, var(--background) 50%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+.modo-scrim[data-modo-scrim="transparent"] {
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* ── Drawer material: identical edge/surface to Sheet & Dialog ── */
+.modo-drawer-glass {
+  border-color: var(--border);
+  background: var(--modo-dialog-surface);
+  -webkit-backdrop-filter: var(--modo-dialog-backdrop);
+  backdrop-filter: var(--modo-dialog-backdrop);
+  color: var(--card-foreground);
+  box-shadow:
+    inset 0 -1px 0 var(--modo-dialog-lowlight),
+    var(--shadow-xl);
+}
+
+.modo-drawer__x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: none;
+  border-radius: calc(var(--radius, 0.625rem) * 0.8);
+  background: transparent;
+  color: inherit;
+  opacity: 0.55;
+  cursor: pointer;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+.modo-drawer__x:hover {
+  opacity: 1;
+  background: color-mix(in oklab, var(--foreground) 8%, transparent);
+}
+.modo-drawer__x:focus-visible {
+  outline: none;
+  opacity: 1;
+  box-shadow: inset 0 0 0 2px var(--ring);
+}
+.modo-drawer__x > svg {
+  width: 1rem;
+  height: 1rem;
 }

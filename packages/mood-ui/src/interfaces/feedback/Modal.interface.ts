@@ -1,4 +1,4 @@
-export type ModalSize = 'small' | 'medium' | 'large' | 'xlarge' | 'full'; 
+export type ModalSize = 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge' | 'full'; 
 export type ModalPosition = 'center' | 'top'; 
 export type ModalOverlay = 'blur' | 'solid' | 'transparent' | 'dark' | 'dim' | 'glass'; 
  

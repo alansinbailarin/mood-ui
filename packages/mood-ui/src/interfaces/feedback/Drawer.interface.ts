@@ -1,5 +1,5 @@
 export type DrawerSide = 'left' | 'right' | 'top' | 'bottom'; 
-export type DrawerSize = 'small' | 'medium' | 'large' | 'full'; 
+export type DrawerSize = 'xsmall' | 'small' | 'medium' | 'large' | 'full'; 
 export type DrawerOverlay = 'blur' | 'solid' | 'transparent' | 'dark' | 'dim' | 'glass'; 
  
 export interface Drawer { 
@@ -14,15 +14,21 @@ export interface Drawer {
  
     /** 
      * Tamaño del panel en su eje principal. 
-     * - `small | medium | large` se mapean a anchos/altos discretos. 
-     * - `full` ocupa el viewport completo en su eje. 
+     * - `xsmall | small | medium | large` se mapean a anchos/altos discretos. 
+     * - `full` ocupa el espacio disponible completo en su eje. 
      * @default 'medium' 
      */ 
     size?: DrawerSize; 
  
     /** 
-     * Radius del panel. Si se omite cascadea del provider. El lado opuesto 
-     * a `side` no se redondea (queda pegado al borde). 
+     * Separa el panel de los bordes del viewport con un margen flotante en todos
+     * sus lados y redondea sus cuatro esquinas. Si es `false`, queda pegado al borde.
+     * @default true
+     */
+    inset?: boolean;
+
+    /** 
+     * Radius del panel. Si se omite cascadea del provider. 
      */ 
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 
  

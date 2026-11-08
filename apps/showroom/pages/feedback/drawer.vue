@@ -215,13 +215,14 @@ const open = ref(false);
 </template>`;
 
 const typesCode = `export type DrawerSide = 'left' | 'right' | 'top' | 'bottom';
-export type DrawerSize = 'small' | 'medium' | 'large' | 'full';
+export type DrawerSize = 'xsmall' | 'small' | 'medium' | 'large' | 'full';
 export type DrawerOverlay = 'blur' | 'solid' | 'transparent' | 'dark' | 'dim' | 'glass';
 
 export interface Drawer {
   modelValue?: boolean;
   side?: DrawerSide;
   size?: DrawerSize;
+  inset?: boolean;
   radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
   title?: string;
   description?: string;
@@ -250,9 +251,15 @@ const propsList = computed<PropDoc[]>(() => [
   },
   {
     name: "size",
-    type: "'small' | 'medium' | 'large' | 'full'",
+    type: "'xsmall' | 'small' | 'medium' | 'large' | 'full'",
     default: "'medium'",
     description: t("pages.feedback.drawer.props.size"),
+  },
+  {
+    name: "inset",
+    type: "boolean",
+    default: "true",
+    description: t("pages.feedback.drawer.props.inset"),
   },
   {
     name: "radius",

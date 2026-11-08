@@ -6,14 +6,20 @@
                 ref="overlayRef" 
                 :class="[ 
                     'modo-drawer-overlay fixed inset-0 z-1200 flex opacity-0', 
+                    inset ? 'p-2.5' : '', 
                     positionClasses, 
-                    overlayClasses, 
                 ]" 
                 :style="overlayStyle" 
                 :data-modo-theme="scopedTheme || undefined" 
                 @mousedown="onOverlayMouseDown" 
                 @click="onOverlayClick" 
             > 
+                <!-- Scrim (shared Valux material, dark veil in both modes) -->
+                <div
+                    aria-hidden="true"
+                    class="modo-scrim pointer-events-none absolute inset-0"
+                    :data-modo-scrim="scrimVariant"
+                />
                 <div 
                     ref="panelRef" 
                     data-modo-drawer-panel 
@@ -23,9 +29,8 @@
                     :aria-describedby="description ? descriptionId : undefined" 
                     :aria-label="!title ? ariaLabel : undefined" 
                     :class="[ 
-                        'modo-drawer relative flex flex-col bg-card text-foreground', 
-                        'dark:bg-card/85 dark:backdrop-blur-xl', 
-                        'border-border shadow-xl', 
+                        'modo-drawer modo-drawer-glass relative flex flex-col text-foreground overflow-hidden', 
+                        'outline-none focus:outline-none focus-visible:outline-none', 
                         sideBorderClass, 
                         sizeClasses, 
                         radiusClasses, 
@@ -45,25 +50,27 @@
                     /> 
  
                     <!-- Close button --> 
-                    <div v-if="showClose" class="absolute top-3 right-3 z-10"> 
-                        <Button 
-                            variant="text" 
-                            size="small" 
-                            :color="resolvedColor" 
-                            :icon="XMarkIcon" 
-                            ariaLabel="Close" 
-                            @click="close" 
-                        /> 
+                    <div v-if="showClose" class="absolute top-3 right-3.5 z-10"> 
+                        <button
+                            type="button"
+                            class="modo-drawer__x"
+                            aria-label="Close"
+                            @click="close"
+                        >
+                            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+                                <path d="M4 4l8 8m0-8l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                            </svg>
+                        </button>
                     </div> 
  
                     <!-- Content wrapper --> 
-                    <div ref="contentRef" data-modo-drawer-content class="flex flex-col min-h-0 flex-1 opacity-0"> 
+                    <div ref="contentRef" data-modo-drawer-content class="flex flex-col min-h-0 flex-1"> 
                         <!-- Header --> 
                         <header 
                             v-if="$slots.header || title || description" 
                             :class="[ 
-                                'relative flex flex-col gap-1 px-6 pt-6', 
-                                showClose ? 'pr-12' : '', 
+                                'relative flex flex-col gap-1 px-5 pt-5', 
+                                showClose ? 'pr-14' : '', 
                                 $slots.default || $slots.body || $slots.footer ? 'pb-4' : 'pb-6', 
                             ]" 
                         > 
@@ -94,8 +101,8 @@
                         <div 
                             v-if="$slots.default || $slots.body" 
                             :class="[ 
-                                'relative flex-1 overflow-auto px-6', 
-                                ($slots.header || title || description) ? '' : 'pt-6', 
+                                'relative flex-1 overflow-auto px-5', 
+                                ($slots.header || title || description) ? '' : 'pt-5', 
                                 $slots.footer ? 'pb-4' : 'pb-6', 
                             ]" 
                         > 
@@ -107,7 +114,7 @@
                         <!-- Footer --> 
                         <footer 
                             v-if="$slots.footer" 
-                            class="relative flex items-center justify-end gap-2 px-6 py-4" 
+                            class="relative flex items-center justify-end gap-2 px-5 py-4" 
                         > 
                             <span 
                                 v-if="innerBorder" 
@@ -131,12 +138,9 @@
 <script setup lang="ts"> 
 import { computed, nextTick, onBeforeUnmount, ref, useId, watch } from 'vue'; 
 import { gsap } from 'gsap'; 
-import { XMarkIcon } from '@heroicons/vue/24/outline'; 
-import Button from '../forms/Button.vue'; 
 import Typography from '../data-display/Typography.vue'; 
 import type { Drawer } from '../../interfaces/feedback/Drawer.interface'; 
 import { 
-    useResolvedColor, 
     useResolvedRadius, 
     useResolvedTheme, 
     useModoConfig, 
@@ -146,12 +150,13 @@ import { lockBodyScroll, unlockBodyScroll } from '../../composables/useBodyScrol
 import { palettesToCssVars, semanticTokensFromPalettes } from '../../config/palettes'; 
 import { hexToOklchString, pickForegroundOklch } from '../../config/colorPrimitives'; 
 import { surfacesToCssVars } from '../../config/surfaces';
-import type { ModoColor, ModoRadius } from '../../config/ModoConfig'; 
+import type { ModoRadius } from '../../config/ModoConfig'; 
  
 const props = withDefaults(defineProps<Drawer>(), { 
     modelValue: false, 
     side: 'right', 
     size: 'medium', 
+    inset: true,
     closeOnOverlay: true, 
     closeOnEscape: true, 
     showClose: true, 
@@ -176,7 +181,6 @@ const overlayRef = ref<HTMLElement | null>(null);
 const panelRef = ref<HTMLElement | null>(null); 
 const contentRef = ref<HTMLElement | null>(null); 
  
-const resolvedColor = useResolvedColor(() => props.color as ModoColor | undefined); 
 const resolvedRadius = useResolvedRadius(() => props.radius as ModoRadius | undefined); 
  
 const cfg = useModoConfig(); 
@@ -261,12 +265,13 @@ function prefersReducedMotion() {
 let activeTimeline: gsap.core.Timeline | null = null; 
  
 function getEnterTransform() { 
+    const marginOffset = props.inset ? 28 : 0;
     switch (props.side) { 
-        case 'left': return { x: '-100%', y: 0 }; 
-        case 'right': return { x: '100%', y: 0 }; 
-        case 'top': return { x: 0, y: '-100%' }; 
-        case 'bottom': return { x: 0, y: '100%' }; 
-        default: return { x: '100%', y: 0 }; 
+        case 'left': return { xPercent: -100, x: -marginOffset, yPercent: 0, y: 0 }; 
+        case 'right': return { xPercent: 100, x: marginOffset, yPercent: 0, y: 0 }; 
+        case 'top': return { xPercent: 0, x: 0, yPercent: -100, y: -marginOffset }; 
+        case 'bottom': return { xPercent: 0, x: 0, yPercent: 100, y: marginOffset }; 
+        default: return { xPercent: 100, x: marginOffset, yPercent: 0, y: 0 }; 
     } 
 } 
  
@@ -275,15 +280,12 @@ function onOverlayEnter(el: Element, done: () => void) {
     const panel = 
         overlay?.querySelector<HTMLElement>('[data-modo-drawer-panel]') 
         ?? panelRef.value; 
-    const content = 
-        overlay?.querySelector<HTMLElement>('[data-modo-drawer-content]') 
-        ?? contentRef.value; 
-    if (!overlay || !panel || !content) { done(); return; } 
+    if (!overlay || !panel) { done(); return; } 
  
     activeTimeline?.kill(); 
  
     if (prefersReducedMotion()) { 
-        gsap.set([overlay, panel, content], { opacity: 1, clearProps: 'transform' }); 
+        gsap.set([overlay, panel], { opacity: 1, clearProps: 'transform' }); 
         done(); 
         return; 
     } 
@@ -292,20 +294,13 @@ function onOverlayEnter(el: Element, done: () => void) {
     const tl = gsap.timeline({ onComplete: () => { activeTimeline = null; done(); } }); 
     activeTimeline = tl; 
  
-    tl.fromTo(overlay, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: 'power2.out' }, 0); 
+    tl.fromTo(overlay, { opacity: 0 }, { opacity: 1, duration: 0.24, ease: 'power2.out' }, 0); 
  
     tl.fromTo( 
         panel, 
-        { x: enter.x, y: enter.y, opacity: 1 }, 
-        { x: 0, y: 0, opacity: 1, duration: 0.4, ease: 'power3.out' }, 
+        { xPercent: enter.xPercent, x: enter.x, yPercent: enter.yPercent, y: enter.y, opacity: 1 }, 
+        { xPercent: 0, x: 0, yPercent: 0, y: 0, opacity: 1, duration: 0.38, ease: 'power4.out' }, 
         0, 
-    ); 
- 
-    tl.fromTo( 
-        content, 
-        { opacity: 0 }, 
-        { opacity: 1, duration: 0.22, ease: 'power2.out' }, 
-        0.18, 
     ); 
 } 
  
@@ -314,11 +309,8 @@ function onOverlayLeave(el: Element, done: () => void) {
     const panel = 
         overlay.querySelector<HTMLElement>('[data-modo-drawer-panel]') 
         ?? panelRef.value; 
-    const content = 
-        overlay.querySelector<HTMLElement>('[data-modo-drawer-content]')
-        ?? contentRef.value;
     // Bail out without animating, but never without releasing the lock.
-    if (!overlay || !panel || !content) { releaseScrollLock(); done(); return; }
+    if (!overlay || !panel) { releaseScrollLock(); done(); return; }
  
     activeTimeline?.kill(); 
  
@@ -341,13 +333,12 @@ function onOverlayLeave(el: Element, done: () => void) {
     }); 
     activeTimeline = tl; 
  
-    tl.to(content, { opacity: 0, duration: 0.14, ease: 'power1.in' }, 0); 
     tl.to( 
         panel, 
-        { x: enter.x, y: enter.y, duration: 0.32, ease: 'power3.in' }, 
-        0.08, 
+        { xPercent: enter.xPercent, x: enter.x, yPercent: enter.yPercent, y: enter.y, duration: 0.28, ease: 'power3.in' }, 
+        0, 
     ); 
-    tl.to(overlay, { opacity: 0, duration: 0.28, ease: 'power2.in' }, 0.12); 
+    tl.to(overlay, { opacity: 0, duration: 0.24, ease: 'power2.in' }, 0.04); 
 } 
  
 /* ---------- Scroll lock + focus management ---------- */
@@ -408,18 +399,38 @@ const positionClasses = computed(() => {
  
 const sizeClasses = computed(() => { 
     if (isHorizontal.value) { 
-        // Width + full height 
+        if (props.inset) {
+            const baseCls = 'h-full max-h-full max-w-full';
+            switch (props.size) { 
+                case 'xsmall': return `${baseCls} w-[16rem]`; 
+                case 'small': return `${baseCls} w-[18rem]`; 
+                case 'large': return `${baseCls} w-[28rem]`; 
+                case 'full': return `${baseCls} w-full`; 
+                default: return `${baseCls} w-[22rem]`; 
+            }
+        }
         const heightCls = 'h-full'; 
         switch (props.size) { 
+            case 'xsmall': return `${heightCls} w-[17rem] max-w-[88vw]`; 
             case 'small': return `${heightCls} w-[20rem] max-w-[90vw]`; 
             case 'large': return `${heightCls} w-[36rem] max-w-[95vw]`; 
             case 'full': return `${heightCls} w-screen`; 
             default: return `${heightCls} w-[28rem] max-w-[92vw]`; 
         } 
     } else { 
-        // Height + full width 
+        if (props.inset) {
+            const baseCls = 'w-full max-w-full max-h-full';
+            switch (props.size) { 
+                case 'xsmall': return `${baseCls} h-[14rem]`; 
+                case 'small': return `${baseCls} h-[18rem]`; 
+                case 'large': return `${baseCls} h-[32rem] sm:max-h-[88dvh]`; 
+                case 'full': return `${baseCls} h-full`; 
+                default: return `${baseCls} h-[24rem] sm:max-h-[85dvh]`; 
+            }
+        }
         const widthCls = 'w-full'; 
         switch (props.size) { 
+            case 'xsmall': return `${widthCls} h-[14rem] max-h-[75vh]`; 
             case 'small': return `${widthCls} h-[18rem] max-h-[80vh]`; 
             case 'large': return `${widthCls} h-[32rem] max-h-[90vh]`; 
             case 'full': return `${widthCls} h-screen`; 
@@ -429,6 +440,7 @@ const sizeClasses = computed(() => {
 }); 
  
 const sideBorderClass = computed(() => { 
+    if (props.inset) return 'border';
     switch (props.side) { 
         case 'left': return 'border-r'; 
         case 'right': return 'border-l'; 
@@ -439,13 +451,22 @@ const sideBorderClass = computed(() => {
 }); 
  
 /** 
- * El radius se aplica solo a las dos esquinas opuestas al borde de entrada 
- * (las que quedan visibles dentro del viewport). El lado pegado al borde 
- * queda recto. 
+ * Cuando `inset` está activo (default), el panel flota despegado en sus 4 lados
+ * y redondea las 4 esquinas respetando `radius`. Si `inset=false`, solo redondea
+ * las dos esquinas internas al viewport.
  */ 
 const radiusClasses = computed(() => { 
+    if (props.inset) {
+        // Same radius scale as Sheet / Dialog (--modo-dialog-radius).
+        switch (resolvedRadius.value) {
+            case 'none': return 'rounded-none';
+            case 'small': return 'rounded-[0.5rem]';
+            case 'large': return 'rounded-[1.25rem]';
+            case 'full': return 'rounded-[1.75rem]';
+            default: return 'rounded-[0.875rem]';
+        }
+    }
     if (props.size === 'full') return 'rounded-none'; 
-    // Mapeo explícito (Tailwind JIT requiere class names literales). 
     const map = { 
         none: { 
             left: 'rounded-none', right: 'rounded-none', 
@@ -474,25 +495,15 @@ const radiusClasses = computed(() => {
 }); 
  
 const innerBorderRadiusClass = computed(() => { 
-    if (props.size === 'full') return 'rounded-none'; 
+    if (!props.inset && props.size === 'full') return 'rounded-none'; 
     switch (resolvedRadius.value) { 
         case 'none': return 'rounded-none'; 
-        case 'small': return 'rounded-sm'; 
-        case 'large': return 'rounded-xl'; 
-        case 'full': return 'rounded-[calc(1.5rem-4px)]'; 
-        default: return 'rounded-lg'; 
+        case 'small': return 'rounded-[calc(0.5rem-4px)]';
+        case 'large': return 'rounded-[calc(1.25rem-4px)]';
+        case 'full': return 'rounded-[calc(1.75rem-4px)]';
+        default: return 'rounded-[calc(0.875rem-4px)]'; 
     } 
 }); 
  
-const overlayClasses = computed(() => { 
-    switch (props.overlay) { 
-        case 'solid': return 'bg-foreground/60'; 
-        case 'transparent': return 'bg-transparent'; 
-        case 'dark': return 'bg-foreground/80'; 
-        case 'dim': return 'bg-foreground/20'; 
-        case 'glass': return 'bg-background/50 backdrop-blur-md'; 
-        case 'blur': 
-        default: return 'bg-foreground/40 backdrop-blur-sm'; 
-    } 
-}); 
+const scrimVariant = computed(() => props.overlay ?? 'blur'); 
 </script>

@@ -7,13 +7,18 @@
                 :class="[ 
                     'modo-modal-overlay fixed inset-0 z-1200 flex opacity-0', 
                     positionClasses, 
-                    overlayClasses, 
                 ]" 
                 :style="overlayStyle" 
                 :data-modo-theme="scopedTheme || undefined" 
                 @mousedown="onOverlayMouseDown" 
                 @click="onOverlayClick" 
             > 
+                <!-- Scrim (shared Valux material, dark veil in both modes) -->
+                <div
+                    aria-hidden="true"
+                    class="modo-scrim pointer-events-none absolute inset-0"
+                    :data-modo-scrim="scrimVariant"
+                />
                 <div 
                     ref="panelRef" 
                     data-modo-modal-panel 
@@ -23,9 +28,9 @@
                     :aria-describedby="description ? descriptionId : undefined" 
                     :aria-label="!title ? ariaLabel : undefined" 
                     :class="[ 
-                        'modo-modal relative flex flex-col w-full bg-card text-foreground', 
+                        'modo-modal relative flex flex-col w-full bg-card text-foreground overflow-hidden', 
                         'dark:bg-card/85 dark:backdrop-blur-xl', 
-                        'border border-border shadow-xl', 
+                        'border border-border shadow-xl outline-none focus:outline-none focus-visible:outline-none', 
                         sizeClasses, 
                         radiusClasses, 
                     ]" 
@@ -55,8 +60,8 @@
                         /> 
                     </div> 
  
-                    <!-- Content wrapper (animado en etapa 2) --> 
-                    <div ref="contentRef" data-modo-modal-content class="flex flex-col min-h-0 flex-1 opacity-0"> 
+                    <!-- Content wrapper --> 
+                    <div ref="contentRef" data-modo-modal-content class="flex flex-col min-h-0 flex-1"> 
                         <!-- Header --> 
                         <header 
                             v-if="$slots.header || title || description" 
@@ -128,7 +133,7 @@
 </template> 
  
 <script setup lang="ts"> 
-import { computed, nextTick, onBeforeUnmount, ref, useId, watch } from 'vue'; 
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue'; 
 import { gsap } from 'gsap'; 
 import { XMarkIcon } from '@heroicons/vue/24/outline'; 
 import Button from '../forms/Button.vue'; 
@@ -259,6 +264,16 @@ function prefersReducedMotion() {
 } 
  
 let capturedOrigin: HTMLElement | null = null; 
+let lastPointerTrigger: { el: HTMLElement; time: number } | null = null;
+
+function onWindowPointerDown(e: PointerEvent) {
+    const target = e.target as Element | null;
+    const trigger = target?.closest?.('button, a, [role="button"], [tabindex]') as HTMLElement | null;
+    if (trigger) {
+        lastPointerTrigger = { el: trigger, time: Date.now() };
+    }
+}
+
 function getOriginEl(): HTMLElement | null { 
     if (props.origin) return props.origin; 
     return capturedOrigin; 
@@ -271,15 +286,12 @@ function onOverlayEnter(el: Element, done: () => void) {
     const panel = 
         overlay?.querySelector<HTMLElement>('[data-modo-modal-panel]') 
         ?? panelRef.value; 
-    const content = 
-        overlay?.querySelector<HTMLElement>('[data-modo-modal-content]') 
-        ?? contentRef.value; 
-    if (!overlay || !panel || !content) { done(); return; } 
+    if (!overlay || !panel) { done(); return; } 
  
     activeTimeline?.kill(); 
  
     if (prefersReducedMotion()) { 
-        gsap.set([overlay, panel, content], { opacity: 1, clearProps: 'transform' }); 
+        gsap.set([overlay, panel], { opacity: 1, clearProps: 'transform' }); 
         done(); 
         return; 
     } 
@@ -293,7 +305,7 @@ function onOverlayEnter(el: Element, done: () => void) {
     // 1. Overlay fade in 
     tl.fromTo(overlay, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: 'power2.out' }, 0); 
  
-    // 2. Panel emerge from trigger (small) → grows to full size 
+    // 2. Panel + contenido emergen juntos desde el trigger hasta su tamaño real
     if (origin && document.body.contains(origin)) { 
         const oRect = origin.getBoundingClientRect(); 
         const dx = oRect.left + oRect.width / 2 - (pRect.left + pRect.width / 2); 
@@ -314,14 +326,6 @@ function onOverlayEnter(el: Element, done: () => void) {
             0, 
         ); 
     } 
- 
-    // 3. Contenido fade in una vez el panel tiene tamaño real 
-    tl.fromTo( 
-        content, 
-        { opacity: 0, y: 8 }, 
-        { opacity: 1, y: 0, duration: 0.28, ease: 'power2.out' }, 
-        0.38, 
-    ); 
 } 
  
 function onOverlayLeave(el: Element, done: () => void) { 
@@ -331,12 +335,9 @@ function onOverlayLeave(el: Element, done: () => void) {
     const panel = 
         overlay.querySelector<HTMLElement>('[data-modo-modal-panel]') 
         ?? panelRef.value; 
-    const content =
-        overlay.querySelector<HTMLElement>('[data-modo-modal-content]')
-        ?? contentRef.value;
     // Bail out without animating, but never without releasing the lock — this
     // path is the one that used to strand `overflow: hidden` on <body>.
-    if (!overlay || !panel || !content) { releaseScrollLock(); done(); return; }
+    if (!overlay || !panel) { releaseScrollLock(); done(); return; }
 
     activeTimeline?.kill();
 
@@ -361,11 +362,9 @@ function onOverlayLeave(el: Element, done: () => void) {
     }); 
     activeTimeline = tl; 
  
-    // 1. Contenido desaparece (solo opacidad, sin movimiento) 
-    tl.to(content, { opacity: 0, duration: 0.18, ease: 'power1.in' }, 0); 
- 
-    // 2. Panel se encoge hacia el trigger (inmediatamente despues de que 
-    //    el contenido ya es invisible, no solapado con el fade). 
+    // El panel regresa con todo su contenido visible hacia su lugar de origen;
+    // el overlay (padre del panel) solo cae en opacidad al final del recorrido
+    // para no ocultar el vuelo de regreso antes de llegar al trigger.
     if (origin && document.body.contains(origin)) { 
         const oRect = origin.getBoundingClientRect(); 
         const dx = oRect.left + oRect.width / 2 - (pRect.left + pRect.width / 2); 
@@ -374,19 +373,18 @@ function onOverlayLeave(el: Element, done: () => void) {
         const scaleY = Math.max(oRect.height / pRect.height, 0.05); 
         tl.to( 
             panel, 
-            { x: dx, y: dy, scaleX, scaleY, opacity: 0, duration: 0.38, ease: 'power3.in' }, 
-            0.18, 
+            { x: dx, y: dy, scaleX, scaleY, transformOrigin: 'center center', duration: 0.38, ease: 'power3.in' }, 
+            0, 
         ); 
+        tl.to(overlay, { opacity: 0, duration: 0.28, ease: 'power3.in' }, 0.1); 
     } else { 
         tl.to( 
             panel, 
             { y: 10, scale: 0.95, opacity: 0, duration: 0.24, ease: 'power2.in' }, 
-            0.18, 
+            0, 
         ); 
+        tl.to(overlay, { opacity: 0, duration: 0.24, ease: 'power2.in' }, 0.04); 
     } 
- 
-    // 3. Overlay fade out junto al panel 
-    tl.to(overlay, { opacity: 0, duration: 0.28, ease: 'power2.in' }, 0.22); 
 } 
  
 /* ---------- Scroll lock + focus management ---------- */
@@ -399,13 +397,29 @@ function releaseScrollLock() {
     unlockBodyScroll();
 }
 
+onMounted(() => {
+    if (typeof window !== 'undefined') {
+        window.addEventListener('pointerdown', onWindowPointerDown, { capture: true, passive: true });
+    }
+});
+
 watch( 
     () => props.modelValue, 
     (open) => { 
         if (open) { 
             const active = document.activeElement as HTMLElement | null; 
-            previouslyFocused = active; 
-            capturedOrigin = active && active !== document.body ? active : null; 
+            const recentPointer =
+                lastPointerTrigger
+                && Date.now() - lastPointerTrigger.time < 600
+                && document.body.contains(lastPointerTrigger.el)
+                    ? lastPointerTrigger.el
+                    : null;
+            const triggerEl =
+                active && active !== document.body && active !== document.documentElement
+                    ? active
+                    : recentPointer;
+            previouslyFocused = triggerEl; 
+            capturedOrigin = triggerEl; 
  
             if (props.lockScroll && !scrollLocked) {
                 scrollLocked = true;
@@ -431,6 +445,9 @@ watch(
 ); 
  
 onBeforeUnmount(() => { 
+    if (typeof window !== 'undefined') {
+        window.removeEventListener('pointerdown', onWindowPointerDown, { capture: true });
+    }
     activeTimeline?.kill(); 
     releaseScrollLock(); 
 }); 
@@ -438,6 +455,7 @@ onBeforeUnmount(() => {
 /* ---------- Style maps ---------- */ 
 const sizeClasses = computed(() => { 
     switch (props.size) { 
+        case 'xsmall': return 'max-w-xs';
         case 'small': return 'max-w-sm'; 
         case 'large': return 'max-w-2xl'; 
         case 'xlarge': return 'max-w-4xl'; 
@@ -473,15 +491,5 @@ const positionClasses = computed(() => {
     return 'items-center justify-center p-4 sm:p-6'; 
 }); 
  
-const overlayClasses = computed(() => { 
-    switch (props.overlay) { 
-        case 'solid': return 'bg-foreground/60'; 
-        case 'transparent': return 'bg-transparent'; 
-        case 'dark': return 'bg-foreground/80'; 
-        case 'dim': return 'bg-foreground/20'; 
-        case 'glass': return 'bg-background/50 backdrop-blur-md'; 
-        case 'blur': 
-        default: return 'bg-foreground/40 backdrop-blur-sm'; 
-    } 
-}); 
+const scrimVariant = computed(() => props.overlay ?? 'blur'); 
 </script>
