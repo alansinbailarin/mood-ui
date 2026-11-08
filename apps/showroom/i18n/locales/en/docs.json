@@ -163,6 +163,21 @@
         "description": "Every release of mood-ui listed newest first. SemVer-tracked, with highlights of new components, bug fixes and breaking changes.",
         "intro": "Every release listed newest first. We follow SemVer.",
         "releases": {
+          "v0.13.0": {
+            "title": "New morphing components and full provider theming",
+            "items": [
+              "New: Dialog and Sheet. Morphing dialog and bottom sheet that grow out of the button that opened them, with Modal's widths, built-in Trigger and Close buttons and an icon tile.",
+              "New: Popover, Menu and ContextMenu. Morphing popover and menus with color, size and radius props; MenuItem takes color, so danger rows look like DropdownMenu.",
+              "New: PressButton and PressButtonGroup. Tactile buttons with the same variants, colors, sizes, radius and halo as Button, plus press and spring motion.",
+              "New: GlassSwitch, with the Switch API and a draggable glass thumb, and MorphSelect, with the Select field props and a field that morphs into the option list.",
+              "New: SurfaceCard, LiquidToast (the useToast API on a liquid shape) and MorphTooltip (the Tooltip API with a morphing bubble).",
+              "New: ModeOrb, a color-mode toggle with a circular reveal that runs on the clock, so slow pages still finish the theme change.",
+              "New: every new component follows ModoProvider like the native ones: color, radius, size, palettes, surfaces, dark mode and locale (en, es).",
+              "New: Drawer inset (floating panel) and xsmall size, Modal xsmall size, TablePagination radius and embedded.",
+              "Changed: Modal, Drawer and the new overlays share one dark scrim; overlay tokens resolve per teleported panel, so scoped dark providers and tinted surfaces reach them.",
+              "Fixed: Card surfaces and dividers, AvatarGroup counter size, password strength with non-Latin letters, Sidebar row polish, and the dark primary-subtle tint."
+            ]
+          },
           "v0.12.1": {
             "title": "Custom calendar tooltips keep their surface",
             "items": [

@@ -163,6 +163,21 @@
         "description": "Cada release de mood-ui listado de más reciente a más antiguo. Versionado con SemVer, con detalles de nuevos componentes, fixes y breaking changes.",
         "intro": "Cada release listado de más reciente a más antiguo. Seguimos SemVer.",
         "releases": {
+          "v0.13.0": {
+            "title": "Nuevos componentes con morph y theming completo del provider",
+            "items": [
+              "Nuevo: Dialog y Sheet. Diálogo y bottom sheet que crecen desde el botón que los abrió, con los anchos de Modal, botones Trigger y Close integrados y un ícono.",
+              "Nuevo: Popover, Menu y ContextMenu. Popover y menús con morph y props de color, size y radius; MenuItem acepta color, así las filas danger se ven como en DropdownMenu.",
+              "Nuevo: PressButton y PressButtonGroup. Botones táctiles con las mismas variantes, colores, tamaños, radius y halo que Button, más movimiento de presión y rebote.",
+              "Nuevo: GlassSwitch, con la API de Switch y un thumb de vidrio arrastrable, y MorphSelect, con las props de campo de Select y un campo que se transforma en la lista de opciones.",
+              "Nuevo: SurfaceCard, LiquidToast (la API de useToast con forma líquida) y MorphTooltip (la API de Tooltip con burbuja que se transforma).",
+              "Nuevo: ModeOrb, un toggle de modo de color con revelado circular que corre por tiempo, así las páginas lentas también terminan el cambio de tema.",
+              "Nuevo: todos los componentes nuevos siguen a ModoProvider como los nativos: color, radius, size, paletas, superficies, modo oscuro y locale (en, es).",
+              "Nuevo: Drawer con inset (panel flotante) y tamaño xsmall, Modal con xsmall, TablePagination con radius y embedded.",
+              "Cambiado: Modal, Drawer y los nuevos overlays comparten un mismo scrim oscuro; los tokens de overlay se resuelven por panel teletransportado, así llegan los providers oscuros con scope y las superficies tintadas.",
+              "Corregido: superficies y divisores de Card, tamaño del contador de AvatarGroup, fuerza de contraseña con letras no latinas, detalles de filas de Sidebar y el tinte primary-subtle en oscuro."
+            ]
+          },
           "v0.12.1": {
             "title": "Los tooltips personalizados del calendario conservan su superficie",
             "items": [
