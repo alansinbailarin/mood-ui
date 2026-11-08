@@ -1,0 +1,367 @@
+/* Tooltip that EMERGES from its control: born as a thin streak at the facing
+   edge, opening sideways, and folding back INTO the control on exit. Color,
+   size, shadow and radius come from the provider through the same classes as
+   the native Tooltip (set in MorphTooltipContent); this file only holds the
+   morph choreography. The arrow appears once the morph has landed. */
+[data-modo-morph-tooltip] {
+  z-index: calc(var(--modo-menu-z) + 100);
+  border-radius: var(--modo-morph-tooltip-radius, 0.375rem);
+  font-family: var(--font-sans);
+  pointer-events: none;
+}
+
+.modo-morph-tooltip__description {
+  margin-top: 0.125rem;
+}
+
+.modo-morph-tooltip__arrow {
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-standard);
+}
+
+[data-modo-morph-tooltip][data-modo-phase="open"] .modo-morph-tooltip__arrow {
+  opacity: 1;
+}
+
+/* The growth origin sits on the edge FACING the trigger. */
+[data-modo-morph-tooltip][data-modo-side="top"] {
+  transform-origin: 50% 100%;
+}
+
+[data-modo-morph-tooltip][data-modo-side="bottom"] {
+  transform-origin: 50% 0%;
+}
+
+[data-modo-morph-tooltip][data-modo-side="left"] {
+  transform-origin: 100% 50%;
+}
+
+[data-modo-morph-tooltip][data-modo-side="right"] {
+  transform-origin: 0% 50%;
+}
+
+[data-modo-morph-tooltip][data-modo-side="top"][data-modo-phase="opening"] {
+  animation: modo-morph-tooltip-in-top var(--duration-slow) both;
+}
+
+[data-modo-morph-tooltip][data-modo-side="bottom"][data-modo-phase="opening"] {
+  animation: modo-morph-tooltip-in-bottom var(--duration-slow) both;
+}
+
+[data-modo-morph-tooltip][data-modo-side="left"][data-modo-phase="opening"] {
+  animation: modo-morph-tooltip-in-left var(--duration-slow) both;
+}
+
+[data-modo-morph-tooltip][data-modo-side="right"][data-modo-phase="opening"] {
+  animation: modo-morph-tooltip-in-right var(--duration-slow) both;
+}
+
+[data-modo-morph-tooltip][data-modo-side="top"][data-modo-phase="closing"] {
+  animation: modo-morph-tooltip-out-top var(--duration-base) both;
+}
+
+[data-modo-morph-tooltip][data-modo-side="bottom"][data-modo-phase="closing"] {
+  animation: modo-morph-tooltip-out-bottom var(--duration-base) both;
+}
+
+[data-modo-morph-tooltip][data-modo-side="left"][data-modo-phase="closing"] {
+  animation: modo-morph-tooltip-out-left var(--duration-base) both;
+}
+
+[data-modo-morph-tooltip][data-modo-side="right"][data-modo-phase="closing"] {
+  animation: modo-morph-tooltip-out-right var(--duration-base) both;
+}
+
+/* THE STREAK, refined: a thin seed squeezes out of the trigger, stretches
+   into a blurred line mid-flight, lands, and unfolds with a soft overshoot,
+   sharpening at the end. Exit mirrors it back INTO the trigger. Travel is a
+   CONSTANT distance: the scale origin sits on the trigger-facing edge, so
+   percentage travel made tall (multi-line) tooltips seed far away. Literal
+   per-side keyframes. Corners interpolate between the seed capsule and the
+   resolved provider radius (both custom properties set inline). */
+@keyframes modo-morph-tooltip-in-top {
+  0% {
+    opacity: 0;
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateY(30px) scale(0.2, 0.09);
+    filter: blur(5px);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+  }
+  14% {
+    opacity: 1;
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateY(24px) scale(0.3, 0.13);
+    filter: blur(5px);
+    animation-timing-function: cubic-bezier(0.3, 0, 0.2, 1);
+  }
+  42% {
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateY(10px) scale(0.46, 0.19);
+    filter: blur(4.5px);
+    animation-timing-function: cubic-bezier(0.25, 0.6, 0.3, 1);
+  }
+  68% {
+    border-radius: var(--modo-morph-tooltip-radius);
+    transform: translateY(0) scale(0.9, 0.74);
+    filter: blur(1.6px);
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.3, 1);
+  }
+  84% {
+    transform: translateY(0) scale(1.04, 0.98);
+    filter: blur(0.4px);
+    animation-timing-function: cubic-bezier(0.25, 0.8, 0.3, 1);
+  }
+  100% {
+    opacity: 1;
+    border-radius: var(--modo-morph-tooltip-radius);
+    transform: translateY(0) scale(1, 1);
+    filter: blur(0);
+  }
+}
+
+@keyframes modo-morph-tooltip-out-top {
+  0% {
+    opacity: 1;
+    border-radius: var(--modo-morph-tooltip-radius);
+    transform: translateY(0) scale(1, 1);
+    filter: blur(0);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.7, 0.6);
+  }
+  32% {
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateY(4px) scale(0.6, 0.46);
+    filter: blur(2.5px);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+  }
+  64% {
+    opacity: 1;
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateY(14px) scale(0.42, 0.16);
+    filter: blur(4px);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.7, 1);
+  }
+  100% {
+    opacity: 0;
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateY(30px) scale(0.2, 0.09);
+    filter: blur(5px);
+  }
+}
+
+@keyframes modo-morph-tooltip-in-bottom {
+  0% {
+    opacity: 0;
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateY(-30px) scale(0.2, 0.09);
+    filter: blur(5px);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+  }
+  14% {
+    opacity: 1;
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateY(-24px) scale(0.3, 0.13);
+    filter: blur(5px);
+    animation-timing-function: cubic-bezier(0.3, 0, 0.2, 1);
+  }
+  42% {
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateY(-10px) scale(0.46, 0.19);
+    filter: blur(4.5px);
+    animation-timing-function: cubic-bezier(0.25, 0.6, 0.3, 1);
+  }
+  68% {
+    border-radius: var(--modo-morph-tooltip-radius);
+    transform: translate(0, 0) scale(0.9, 0.74);
+    filter: blur(1.6px);
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.3, 1);
+  }
+  84% {
+    transform: translate(0, 0) scale(1.04, 0.98);
+    filter: blur(0.4px);
+    animation-timing-function: cubic-bezier(0.25, 0.8, 0.3, 1);
+  }
+  100% {
+    opacity: 1;
+    border-radius: var(--modo-morph-tooltip-radius);
+    transform: translate(0, 0) scale(1, 1);
+    filter: blur(0);
+  }
+}
+
+@keyframes modo-morph-tooltip-out-bottom {
+  0% {
+    opacity: 1;
+    border-radius: var(--modo-morph-tooltip-radius);
+    transform: translate(0, 0) scale(1, 1);
+    filter: blur(0);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.7, 0.6);
+  }
+  32% {
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateY(-4px) scale(0.6, 0.46);
+    filter: blur(2.5px);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+  }
+  64% {
+    opacity: 1;
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateY(-14px) scale(0.42, 0.16);
+    filter: blur(4px);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.7, 1);
+  }
+  100% {
+    opacity: 0;
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateY(-30px) scale(0.2, 0.09);
+    filter: blur(5px);
+  }
+}
+
+@keyframes modo-morph-tooltip-in-left {
+  0% {
+    opacity: 0;
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateX(30px) scale(0.2, 0.09);
+    filter: blur(5px);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+  }
+  14% {
+    opacity: 1;
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateX(24px) scale(0.3, 0.13);
+    filter: blur(5px);
+    animation-timing-function: cubic-bezier(0.3, 0, 0.2, 1);
+  }
+  42% {
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateX(10px) scale(0.46, 0.19);
+    filter: blur(4.5px);
+    animation-timing-function: cubic-bezier(0.25, 0.6, 0.3, 1);
+  }
+  68% {
+    border-radius: var(--modo-morph-tooltip-radius);
+    transform: translate(0, 0) scale(0.9, 0.74);
+    filter: blur(1.6px);
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.3, 1);
+  }
+  84% {
+    transform: translate(0, 0) scale(1.04, 0.98);
+    filter: blur(0.4px);
+    animation-timing-function: cubic-bezier(0.25, 0.8, 0.3, 1);
+  }
+  100% {
+    opacity: 1;
+    border-radius: var(--modo-morph-tooltip-radius);
+    transform: translate(0, 0) scale(1, 1);
+    filter: blur(0);
+  }
+}
+
+@keyframes modo-morph-tooltip-out-left {
+  0% {
+    opacity: 1;
+    border-radius: var(--modo-morph-tooltip-radius);
+    transform: translate(0, 0) scale(1, 1);
+    filter: blur(0);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.7, 0.6);
+  }
+  32% {
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateX(4px) scale(0.6, 0.46);
+    filter: blur(2.5px);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+  }
+  64% {
+    opacity: 1;
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateX(14px) scale(0.42, 0.16);
+    filter: blur(4px);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.7, 1);
+  }
+  100% {
+    opacity: 0;
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateX(30px) scale(0.2, 0.09);
+    filter: blur(5px);
+  }
+}
+
+@keyframes modo-morph-tooltip-in-right {
+  0% {
+    opacity: 0;
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateX(-30px) scale(0.2, 0.09);
+    filter: blur(5px);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+  }
+  14% {
+    opacity: 1;
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateX(-24px) scale(0.3, 0.13);
+    filter: blur(5px);
+    animation-timing-function: cubic-bezier(0.3, 0, 0.2, 1);
+  }
+  42% {
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateX(-10px) scale(0.46, 0.19);
+    filter: blur(4.5px);
+    animation-timing-function: cubic-bezier(0.25, 0.6, 0.3, 1);
+  }
+  68% {
+    border-radius: var(--modo-morph-tooltip-radius);
+    transform: translate(0, 0) scale(0.9, 0.74);
+    filter: blur(1.6px);
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.3, 1);
+  }
+  84% {
+    transform: translate(0, 0) scale(1.04, 0.98);
+    filter: blur(0.4px);
+    animation-timing-function: cubic-bezier(0.25, 0.8, 0.3, 1);
+  }
+  100% {
+    opacity: 1;
+    border-radius: var(--modo-morph-tooltip-radius);
+    transform: translate(0, 0) scale(1, 1);
+    filter: blur(0);
+  }
+}
+
+@keyframes modo-morph-tooltip-out-right {
+  0% {
+    opacity: 1;
+    border-radius: var(--modo-morph-tooltip-radius);
+    transform: translate(0, 0) scale(1, 1);
+    filter: blur(0);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.7, 0.6);
+  }
+  32% {
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateX(-4px) scale(0.6, 0.46);
+    filter: blur(2.5px);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+  }
+  64% {
+    opacity: 1;
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateX(-14px) scale(0.42, 0.16);
+    filter: blur(4px);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.7, 1);
+  }
+  100% {
+    opacity: 0;
+    border-radius: var(--modo-morph-tooltip-seed-radius, 9999px);
+    transform: translateX(-30px) scale(0.2, 0.09);
+    filter: blur(5px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-modo-morph-tooltip][data-modo-phase="opening"],
+  [data-modo-morph-tooltip][data-modo-phase="closing"] {
+    animation: none;
+  }
+
+  .modo-morph-tooltip__arrow {
+    transition: none;
+  }
+}

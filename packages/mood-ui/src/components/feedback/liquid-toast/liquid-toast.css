@@ -1,0 +1,564 @@
+/* Liquid toasts: a goo-fused pill+panel silhouette that GENERATES itself
+   (the panel stretches out of the pill) and reabsorbs on exit. Color and
+   variant follow the native Toast token mapping (filled / subtle / outline
+   over info / success / warning / danger); radius, size and shadow come from
+   the provider. Three stacked copies of the shape: shade (shadow token, under
+   everything), goo (fused opaque fill + rim) and ink (text and controls). */
+
+/* ---------- Color x variant (same tokens as Toast.vue) ---------- */
+.modo-liquid-toast {
+  --lt-tone: var(--info);
+  --lt-tone-fg: var(--info-foreground);
+}
+.modo-liquid-toast[data-modo-color="success"] { --lt-tone: var(--success); --lt-tone-fg: var(--success-foreground); }
+.modo-liquid-toast[data-modo-color="warning"] { --lt-tone: var(--warning); --lt-tone-fg: var(--warning-foreground); }
+.modo-liquid-toast[data-modo-color="danger"] { --lt-tone: var(--destructive); --lt-tone-fg: var(--destructive-foreground); }
+
+/* filled: bg-{c} text-{c}-foreground, everything else in currentColor tints */
+.modo-liquid-toast[data-modo-variant="filled"] {
+  --lt-surface: var(--lt-tone);
+  --lt-ink: var(--lt-tone-fg);
+  --lt-title: var(--lt-ink);
+  --lt-muted: color-mix(in oklab, var(--lt-ink) 85%, transparent);
+  --lt-icon: color-mix(in oklab, var(--lt-ink) 90%, transparent);
+  --lt-icon-bg: color-mix(in oklab, var(--lt-ink) 15%, transparent);
+  --lt-rim: transparent;
+  --lt-rim-2: transparent;
+  --lt-action: color-mix(in oklab, var(--lt-ink) 90%, transparent);
+  --lt-action-bg: color-mix(in oklab, var(--lt-ink) 12%, transparent);
+  --lt-action-bg-hover: color-mix(in oklab, var(--lt-ink) 18%, transparent);
+  --lt-action-bg-active: color-mix(in oklab, var(--lt-ink) 24%, transparent);
+  --lt-dismiss: color-mix(in oklab, var(--lt-ink) 70%, transparent);
+  --lt-dismiss-hover: var(--lt-ink);
+  --lt-dismiss-hover-bg: color-mix(in oklab, var(--lt-ink) 10%, transparent);
+  --lt-track: color-mix(in oklab, var(--lt-ink) 20%, transparent);
+  --lt-bar: color-mix(in oklab, var(--lt-ink) 60%, transparent);
+}
+/* subtle: bg-card border-border/80; outline: bg-card border-2 border-{c}/40 */
+.modo-liquid-toast[data-modo-variant="subtle"],
+.modo-liquid-toast[data-modo-variant="outline"] {
+  --lt-surface: var(--card);
+  --lt-ink: var(--foreground);
+  --lt-title: var(--foreground);
+  --lt-muted: var(--muted-foreground);
+  --lt-icon: var(--lt-tone);
+  --lt-icon-bg: color-mix(in oklab, var(--lt-tone) 10%, transparent);
+  --lt-rim: color-mix(in oklab, var(--border) 80%, transparent);
+  --lt-rim-2: transparent;
+  --lt-action: var(--lt-tone);
+  --lt-action-bg: color-mix(in oklab, var(--lt-tone) 10%, transparent);
+  --lt-action-bg-hover: color-mix(in oklab, var(--lt-tone) 16%, transparent);
+  --lt-action-bg-active: color-mix(in oklab, var(--lt-tone) 22%, transparent);
+  --lt-dismiss: var(--muted-foreground);
+  --lt-dismiss-hover: var(--foreground);
+  --lt-dismiss-hover-bg: var(--muted);
+  --lt-track: color-mix(in oklab, var(--lt-tone) 15%, transparent);
+  --lt-bar: color-mix(in oklab, var(--lt-tone) 70%, transparent);
+}
+.modo-liquid-toast[data-modo-variant="outline"] {
+  --lt-rim: color-mix(in oklab, var(--lt-tone) 40%, transparent);
+  --lt-rim-2: var(--lt-rim);
+}
+
+/* ---------- Size ---------- */
+.modo-liquid-toast {
+  --lt-title-size: var(--text-body);
+  --lt-text-size: var(--text-body);
+  --lt-pill-pad: 0.625rem 1.125rem;
+  --lt-panel-pad: 1.4375rem 1.25rem 1.125rem;
+  --lt-dot: 1.5rem;
+}
+.modo-liquid-toast[data-modo-size="xsmall"] { --lt-title-size: var(--text-caption); --lt-text-size: var(--text-caption); --lt-pill-pad: 0.4375rem 0.875rem; --lt-panel-pad: 1.25rem 1rem 0.875rem; --lt-dot: 1.25rem; }
+.modo-liquid-toast[data-modo-size="small"] { --lt-title-size: 0.8125rem; --lt-text-size: var(--text-caption); --lt-pill-pad: 0.5rem 1rem; --lt-panel-pad: 1.3125rem 1.125rem 1rem; --lt-dot: 1.375rem; }
+.modo-liquid-toast[data-modo-size="large"] { --lt-title-size: var(--text-body-lg); --lt-text-size: var(--text-body); --lt-pill-pad: 0.75rem 1.25rem; --lt-panel-pad: 1.625rem 1.5rem 1.25rem; --lt-dot: 1.75rem; }
+
+/* ---------- Layout ---------- */
+[data-modo-liquid-toaster] {
+  position: fixed;
+  z-index: calc(var(--modo-menu-z) + 200);
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  width: min(92vw, 23rem);
+  pointer-events: none;
+  font-family: var(--font-sans);
+}
+
+[data-modo-liquid-toaster][data-modo-position$="center"] {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+[data-modo-liquid-toaster][data-modo-position^="bottom"] {
+  flex-direction: column-reverse;
+}
+
+.modo-liquid-toast-slot {
+  position: relative;
+}
+
+.modo-liquid-toast {
+  position: relative;
+  pointer-events: auto;
+  cursor: default;
+  touch-action: pan-y;
+}
+
+/* Queued toasts stack behind the stage card as COMPLETE cards; on promotion
+   the same element slides to the front. */
+.modo-liquid-toast[data-modo-peek] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  pointer-events: none;
+  transform: translateY(16px) scale(0.96);
+  opacity: 0.75;
+  animation: modo-liquid-toast-peek-in var(--duration-slow) var(--ease-standard) 0.45s backwards;
+}
+
+.modo-liquid-toast[data-modo-peek="2"] {
+  z-index: -2;
+  transform: translateY(30px) scale(0.92);
+  opacity: 0.45;
+}
+
+[data-modo-position^="bottom"] .modo-liquid-toast[data-modo-peek] {
+  transform: translateY(-16px) scale(0.96);
+}
+
+[data-modo-position^="bottom"] .modo-liquid-toast[data-modo-peek="2"] {
+  transform: translateY(-30px) scale(0.92);
+}
+
+.modo-liquid-toast[data-modo-peek],
+.modo-liquid-toast[data-modo-phase="promoted"] {
+  transition:
+    transform var(--duration-slow) cubic-bezier(0.3, 1.05, 0.4, 1),
+    opacity var(--duration-slow) var(--ease-standard);
+}
+
+/* Peeks show settled shapes, never entrance frames. */
+.modo-liquid-toast[data-modo-phase="peek"] .modo-liquid-toast__pill,
+.modo-liquid-toast[data-modo-phase="peek"] .modo-liquid-toast__panel,
+.modo-liquid-toast[data-modo-phase="peek"] .modo-liquid-toast__ink .modo-liquid-toast__panel > *,
+.modo-liquid-toast[data-modo-phase="promoted"] .modo-liquid-toast__pill,
+.modo-liquid-toast[data-modo-phase="promoted"] .modo-liquid-toast__panel,
+.modo-liquid-toast[data-modo-phase="promoted"] .modo-liquid-toast__ink .modo-liquid-toast__panel > * {
+  animation: none;
+}
+
+@keyframes modo-liquid-toast-peek-in {
+  from {
+    filter: opacity(0);
+  }
+}
+
+/* ---------- The three layers ---------- */
+.modo-liquid-toast__shade,
+.modo-liquid-toast__goo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Shadow token under the fused fill: outer box-shadows only paint outside
+   each box, and the opaque goo layer above hides the seams between them. */
+.modo-liquid-toast__shade .modo-liquid-toast__pill,
+.modo-liquid-toast__shade .modo-liquid-toast__panel {
+  box-shadow: var(--shadow-md);
+}
+
+/* The goo filter fuses pill and panel; drop-shadows trace the FUSED outline
+   as the border (a CSS border cannot follow a goo shape). Square radii get a
+   tighter filter (small) or none at all (none) so corners stay square. */
+.modo-liquid-toast__goo {
+  --lt-goo: var(--modo-liquid-toast-goo, opacity(1));
+  filter: var(--lt-goo) drop-shadow(0 0 1px var(--lt-rim)) drop-shadow(0 0 1px var(--lt-rim-2));
+}
+
+.modo-liquid-toast[data-modo-radius="small"] .modo-liquid-toast__goo {
+  --lt-goo: var(--modo-liquid-toast-goo-tight, opacity(1));
+}
+
+.modo-liquid-toast[data-modo-radius="none"] .modo-liquid-toast__goo {
+  --lt-goo: opacity(1);
+}
+
+.modo-liquid-toast__goo .modo-liquid-toast__pill,
+.modo-liquid-toast__goo .modo-liquid-toast__panel {
+  background: var(--lt-surface);
+}
+
+.modo-liquid-toast__shade .modo-liquid-toast__pill > *,
+.modo-liquid-toast__shade .modo-liquid-toast__panel > *,
+.modo-liquid-toast__goo .modo-liquid-toast__pill > *,
+.modo-liquid-toast__goo .modo-liquid-toast__panel > * {
+  visibility: hidden; /* sizing twins — ink lives on the layer above */
+}
+
+.modo-liquid-toast__ink {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  color: var(--lt-ink);
+}
+
+/* ---------- Parts ---------- */
+.modo-liquid-toast__pill {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: max-content;
+  max-width: 100%;
+  margin: 0 auto -0.875rem;
+  padding: var(--lt-pill-pad);
+  border-radius: var(--modo-liquid-toast-pill-radius, 9999px);
+  font-size: var(--lt-title-size);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+/* Anchored sides are FLUSH AND STRAIGHT: pill and panel share one edge. */
+[data-modo-position$="left"] .modo-liquid-toast__pill {
+  margin-left: 0;
+  margin-right: auto;
+  border-bottom-left-radius: 0;
+}
+
+[data-modo-position$="left"] .modo-liquid-toast__panel {
+  border-top-left-radius: 0;
+  transform-origin: 0 0;
+}
+
+[data-modo-position$="right"] .modo-liquid-toast__pill {
+  margin-right: 0;
+  margin-left: auto;
+  border-bottom-right-radius: 0;
+}
+
+[data-modo-position$="right"] .modo-liquid-toast__panel {
+  border-top-right-radius: 0;
+  transform-origin: 100% 0;
+}
+
+/* Icon badge stays round, like the native Toast (rounded-full). */
+.modo-liquid-toast__dot {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--lt-dot);
+  height: var(--lt-dot);
+  border-radius: 9999px;
+  background: var(--lt-icon-bg);
+  color: var(--lt-icon);
+}
+
+.modo-liquid-toast__dot > svg {
+  width: 60%;
+  height: 60%;
+}
+
+.modo-liquid-toast__spinner {
+  animation: modo-liquid-toast-spin 0.8s linear infinite;
+}
+
+@keyframes modo-liquid-toast-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.modo-liquid-toast__title {
+  min-width: 0;
+  color: var(--lt-title);
+  overflow-wrap: anywhere;
+}
+
+.modo-liquid-toast__close {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: -0.375rem;
+  padding: 0;
+  border: none;
+  border-radius: var(--modo-liquid-toast-control-radius);
+  background: transparent;
+  color: var(--lt-dismiss);
+  cursor: pointer;
+  transition:
+    color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard);
+}
+
+.modo-liquid-toast__close > svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.modo-liquid-toast__close:hover {
+  color: var(--lt-dismiss-hover);
+  background: var(--lt-dismiss-hover-bg);
+}
+
+.modo-liquid-toast__panel {
+  position: relative;
+  border-radius: var(--modo-liquid-toast-radius);
+  padding: var(--lt-panel-pad);
+  transform-origin: 50% 0;
+}
+
+.modo-liquid-toast__description {
+  margin: 0;
+  font-size: var(--lt-text-size);
+  line-height: 1.5;
+  color: var(--lt-muted);
+}
+
+.modo-liquid-toast__action {
+  display: inline-block;
+  margin-top: 0.625rem;
+  padding: 0.375rem 0.875rem;
+  border: none;
+  border-radius: var(--modo-liquid-toast-control-radius);
+  background: var(--lt-action-bg);
+  color: var(--lt-action);
+  font: inherit;
+  font-size: var(--text-caption);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-standard);
+}
+
+.modo-liquid-toast__action:hover {
+  background: var(--lt-action-bg-hover);
+}
+
+.modo-liquid-toast__action:active {
+  background: var(--lt-action-bg-active);
+}
+
+.modo-liquid-toast__action:focus-visible,
+.modo-liquid-toast__close:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--ring) 60%, transparent);
+}
+
+/* Countdown bar, like the native Toast: pauses with the timer and keeps the
+   remaining time (animation-play-state follows data-modo-running). */
+.modo-liquid-toast__progress {
+  position: absolute;
+  left: 0.5rem;
+  right: 0.5rem;
+  bottom: 0.375rem;
+  height: 0.125rem;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: var(--lt-track);
+}
+
+.modo-liquid-toast__pill .modo-liquid-toast__progress {
+  left: 1rem;
+  right: 1rem;
+  bottom: 0.25rem;
+}
+
+.modo-liquid-toast__bar {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--lt-bar);
+  transform-origin: left;
+  animation: modo-liquid-toast-countdown var(--modo-liquid-toast-duration, 4500ms) linear forwards;
+  animation-play-state: paused;
+}
+
+.modo-liquid-toast[data-modo-running] .modo-liquid-toast__bar {
+  animation-play-state: running;
+}
+
+@keyframes modo-liquid-toast-countdown {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+[data-modo-announcer] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ===== LIQUID IN (chosen in the lab): pill morphs in; panel is born
+   congruent with it and stretches out; text breathes last. ===== */
+[data-modo-phase="entering"] .modo-liquid-toast__pill {
+  animation: modo-liquid-toast-pill-in 0.34s both;
+}
+
+[data-modo-phase="entering"] .modo-liquid-toast__panel {
+  animation: modo-liquid-toast-panel-in 0.55s 0.22s both;
+}
+
+[data-modo-phase="entering"] .modo-liquid-toast__ink .modo-liquid-toast__panel > * {
+  animation: modo-liquid-toast-text-in var(--duration-base) var(--ease-standard) 0.6s both;
+}
+
+/* ===== SETTLE / UPDATE (toast.promise, coalesced re-fires): the card stays;
+   the pill pulses while its dot+title crossfade, and the panel replays the
+   liquid stretch. Swap nodes are keyed by revision, so remount restarts the
+   animations even across repeated updates. ===== */
+[data-modo-phase="updating"] .modo-liquid-toast__pill {
+  animation: modo-liquid-toast-pill-swap 0.45s cubic-bezier(0.3, 1.3, 0.4, 1) both;
+}
+
+[data-modo-phase="updating"] .modo-liquid-toast__pill > * {
+  animation: modo-liquid-toast-text-in var(--duration-base) var(--ease-standard) 0.1s both;
+}
+
+[data-modo-phase="updating"] .modo-liquid-toast__panel {
+  animation: modo-liquid-toast-panel-in 0.55s 0.16s both;
+}
+
+[data-modo-phase="updating"] .modo-liquid-toast__ink .modo-liquid-toast__panel > * {
+  animation: modo-liquid-toast-text-in var(--duration-base) var(--ease-standard) 0.5s both;
+}
+
+@keyframes modo-liquid-toast-pill-swap {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.07, 1.14);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+/* ===== LIQUID OUT: text ducks, panel reabsorbs into the pill, pill pops
+   away. Removal listens for modo-liquid-toast-pill-out's end. ===== */
+[data-modo-phase="leaving"] .modo-liquid-toast__ink .modo-liquid-toast__panel > * {
+  animation: modo-liquid-toast-text-out var(--duration-fast) var(--ease-standard) both;
+}
+
+[data-modo-phase="leaving"] .modo-liquid-toast__panel {
+  animation: modo-liquid-toast-panel-out 0.3s cubic-bezier(0.4, 0.1, 0.6, 1) 0.08s both;
+}
+
+[data-modo-phase="leaving"] .modo-liquid-toast__pill {
+  animation: modo-liquid-toast-pill-out 0.2s ease-in 0.3s both;
+}
+
+@keyframes modo-liquid-toast-pill-in {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.35, 0.5);
+    animation-timing-function: cubic-bezier(0.3, 0.7, 0.4, 1);
+  }
+  55% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.06, 0.94);
+    animation-timing-function: cubic-bezier(0.3, 1.2, 0.4, 1);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes modo-liquid-toast-panel-in {
+  0% {
+    opacity: 0;
+    border-radius: var(--modo-liquid-toast-seed-radius, 9999px);
+    transform: translateY(-30px) scale(0.5, 0.34);
+    animation-timing-function: cubic-bezier(0.4, 0.2, 0.4, 1);
+  }
+  12% {
+    opacity: 1;
+    border-radius: var(--modo-liquid-toast-seed-radius, 9999px);
+    transform: translateY(-26px) scale(0.54, 0.4);
+    animation-timing-function: cubic-bezier(0.25, 0.6, 0.3, 1);
+  }
+  58% {
+    border-radius: var(--modo-liquid-toast-radius);
+    transform: translateY(2px) scale(1.01, 1.05);
+    animation-timing-function: cubic-bezier(0.25, 0.85, 0.3, 1);
+  }
+  100% {
+    opacity: 1;
+    border-radius: var(--modo-liquid-toast-radius);
+    transform: none;
+  }
+}
+
+@keyframes modo-liquid-toast-panel-out {
+  0% {
+    opacity: 1;
+    border-radius: var(--modo-liquid-toast-radius);
+    transform: none;
+  }
+  62% {
+    opacity: 1;
+    border-radius: var(--modo-liquid-toast-seed-radius, 9999px);
+    transform: translateY(-18px) scale(0.62, 0.5);
+  }
+  100% {
+    opacity: 0;
+    border-radius: var(--modo-liquid-toast-seed-radius, 9999px);
+    transform: translateY(-24px) scale(0.55, 0.42);
+  }
+}
+
+@keyframes modo-liquid-toast-pill-out {
+  0% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(3px) scale(0.68, 0.74);
+  }
+}
+
+@keyframes modo-liquid-toast-text-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes modo-liquid-toast-text-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* The countdown is information, not decoration: it keeps running. */
+  .modo-liquid-toast [class*="modo-liquid-toast__"]:not(.modo-liquid-toast__bar) {
+    animation: none !important;
+  }
+
+  .modo-liquid-toast {
+    animation: none !important;
+    transition: none !important;
+  }
+}
