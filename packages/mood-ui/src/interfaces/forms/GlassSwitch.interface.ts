@@ -25,7 +25,7 @@ export interface GlassSwitchProps {
   color?: ModoColor
   /** Size. Cascades from `ModoProvider`. */
   size?: ModoSize
-  /** Track radius. The thumb stays round. @default 'full' (pill) */
+  /** Track radius. The white thumb keeps its elongated chip shape. @default 'full' (pill) */
   radius?: ModoRadius
 
   disabled?: boolean

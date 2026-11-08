@@ -562,3 +562,28 @@
     transition: none !important;
   }
 }
+
+/* Valux's fused, inverted silhouette. Explicit Mood variants keep their own surfaces. */
+.modo-liquid-toast[data-modo-variant="liquid"] {
+  --lt-surface: color-mix(in srgb, var(--primary) 6%, var(--foreground));
+  --lt-ink: var(--background);
+  --lt-title: color-mix(in srgb, var(--lt-tone) 52%, var(--lt-ink));
+  --lt-muted: color-mix(in srgb, var(--lt-ink), transparent 18%);
+  --lt-icon: var(--lt-title);
+  --lt-icon-bg: color-mix(in srgb, var(--lt-tone) 24%, transparent);
+  --lt-action: var(--lt-ink);
+  --lt-action-bg: color-mix(in srgb, var(--lt-ink), transparent 88%);
+  --lt-action-bg-hover: var(--lt-action-bg);
+  --lt-action-bg-active: var(--lt-action-bg);
+  --lt-dismiss: var(--lt-ink);
+}
+[data-modo-variant="liquid"] .modo-liquid-toast__shade { display: none; }
+[data-modo-variant="liquid"] .modo-liquid-toast__goo {
+  filter: var(--modo-liquid-toast-goo) drop-shadow(0 0 1px color-mix(in srgb, var(--foreground), transparent 45%)) drop-shadow(0 8px 22px rgb(0 0 0 / .28));
+}
+[data-modo-variant="liquid"] .modo-liquid-toast__pill { font-weight: 700; }
+[data-modo-variant="liquid"] .modo-liquid-toast__description { line-height: 1.55; }
+[data-modo-variant="liquid"] .modo-liquid-toast__close:not(:focus-visible) { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); }
+
+.modo-liquid-toast[data-modo-color="neutral"] { --lt-tone: var(--foreground); }
+.modo-liquid-toast[data-modo-color="neutral"][data-modo-variant="liquid"] { --lt-tone: var(--lt-ink); }

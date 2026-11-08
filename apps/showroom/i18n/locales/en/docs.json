@@ -163,6 +163,14 @@
         "description": "Every release of mood-ui listed newest first. SemVer-tracked, with highlights of new components, bug fixes and breaking changes.",
         "intro": "Every release listed newest first. We follow SemVer.",
         "releases": {
+          "v0.13.1": {
+            "title": "Valux appearance and interaction fixes",
+            "items": [
+              "GlassSwitch restores the original track proportions and white lens in both themes.",
+              "MorphSelect restores field heights and rounded option rows. MorphTooltip opens after 400 ms on hover and immediately on keyboard focus.",
+              "LiquidToast defaults to the liquid surface, neutral tone and a four-second duration."
+            ]
+          },
           "v0.13.0": {
             "title": "New morphing components and full provider theming",
             "items": [

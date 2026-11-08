@@ -42,25 +42,15 @@ const trackRadiusClass = computed(() => {
     default: return 'rounded-full'
   }
 })
-const labelSizeClass = computed(() => {
-  switch (size.value) {
-    case 'xsmall':
-    case 'small': return 'text-caption'
-    case 'large': return 'text-body-lg'
-    case 'medium':
-    default: return 'text-body'
-  }
-})
-
 const CHECKED_BG_BY_COLOR: Record<string, string> = {
-  default: 'bg-foreground',
+  default: 'bg-primary',
   primary: 'bg-primary',
   danger: 'bg-destructive',
   success: 'bg-success',
   warning: 'bg-warning',
 }
-const fillClass = computed(() => CHECKED_BG_BY_COLOR[stateColor.value] ?? 'bg-foreground')
-const trackStateClass = computed(() => (hasError.value ? 'bg-destructive/20' : 'bg-input group-hover:bg-muted'))
+const fillClass = computed(() => CHECKED_BG_BY_COLOR[stateColor.value] ?? 'bg-primary')
+
 
 const internal = ref(props.defaultChecked)
 const checked = computed(() => props.modelValue ?? internal.value)
@@ -141,9 +131,10 @@ defineExpose({ focus: () => input.value?.focus() })
     <label
       :for="fieldId"
       :data-modo-size="size"
+      :data-modo-label-first="labelPosition === 'left' ? '' : undefined"
       :class="[
-        'modo-glass-switch group inline-flex items-start gap-2.5 select-none',
-        labelPosition === 'left' ? 'flex-row-reverse justify-end' : '',
+        'modo-glass-switch group inline-flex items-start select-none',
+        labelPosition === 'left' ? 'flex-row-reverse justify-between' : '',
         isDisabled ? 'opacity-60 cursor-not-allowed' : readonly ? 'cursor-default' : 'cursor-pointer',
       ]"
       @click.capture="click"
@@ -171,21 +162,21 @@ defineExpose({ focus: () => input.value?.focus() })
         ref="track"
         aria-hidden="true"
         :class="[
-          'modo-glass-switch__track mt-0.5 ring-4 ring-border/25',
+          'modo-glass-switch__track',
           'peer-focus-visible:ring-2 peer-focus-visible:ring-ring/60',
           trackRadiusClass,
-          trackStateClass,
+
         ]"
         @pointerdown="start"
       >
         <span :class="['modo-glass-switch__fill', fillClass]" /><span class="modo-glass-switch__thumb" />
       </span>
-      <span v-if="label || description" class="flex flex-col gap-0.5">
-        <span v-if="label" :class="['font-medium text-foreground', labelSizeClass]">
+      <span v-if="label || description" class="modo-glass-switch__text">
+        <span v-if="label" class="modo-glass-switch__label">
           {{ label }}
           <span v-if="required" aria-hidden="true" class="text-destructive ml-0.5">*</span>
         </span>
-        <span v-if="description" :id="descriptionId" class="text-caption text-muted-foreground">{{ description }}</span>
+        <span v-if="description" :id="descriptionId" class="modo-glass-switch__description">{{ description }}</span>
       </span>
     </label>
 

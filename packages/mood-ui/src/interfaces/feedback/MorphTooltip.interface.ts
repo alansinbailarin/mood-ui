@@ -14,9 +14,9 @@ export interface MorphTooltipProps {
   defaultOpen?: boolean
   /** How the tooltip opens. @default ['hover','focus'] */
   trigger?: MorphTooltipTriggerMode | MorphTooltipTriggerMode[]
-  /** Delay before opening on hover (ms). Skipped while another tooltip just closed. @default 200 */
+  /** Delay before opening on hover (ms). Skipped while another tooltip just closed. @default 400 */
   openDelay?: number
-  /** Delay before closing on hover leave (ms). @default 100 */
+  /** Delay before closing on hover leave (ms). @default 0 */
   closeDelay?: number
   /** Never opens while true. @default false */
   disabled?: boolean
@@ -34,7 +34,7 @@ export interface MorphTooltipContentProps {
   align?: MorphTooltipAlign
   /** Distance from the trigger in px. @default 8 */
   offset?: number
-  /** Arrow pointing at the trigger, shown once the morph lands. @default true */
+  /** Arrow pointing at the trigger, shown once the morph lands. @default false */
   arrow?: boolean
   /** @default 'default' (provider color; `inverted` swaps to the page surface) */
   color?: MorphTooltipColor
@@ -42,6 +42,6 @@ export interface MorphTooltipContentProps {
   size?: ModoSize
   /** @default provider radius */
   radius?: ModoRadius
-  /** Max width in px. @default 260 */
+  /** Max width in px. @default 256 (304 for rich content) */
   maxWidth?: number
 }

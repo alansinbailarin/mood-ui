@@ -1206,7 +1206,7 @@
       "liquidToast": {
         "title": "LiquidToast",
         "category": "Feedback",
-        "description": "Notifications where the title pill and the description panel melt into one liquid shape. Same colors, variants, placements and actions as Toast, plus a queue, in-place updates and promise tracking. Follows ModoProvider for size, radius and dark mode.",
+        "description": "The title pill fuses with its panel on an inverted surface. Queued notifications slide forward, and promise updates settle in place. Filled, subtle and outline variants are also available.",
         "seo": {
           "metaTitle": "Vue LiquidToast Component — Liquid Notifications",
           "metaDescription": "Free, open-source Vue 3 liquid toast: a pill and panel that melt into one shape, with a queue, promise and in-place updates, actions and swipe to dismiss.",
@@ -1313,7 +1313,7 @@
       "morphTooltip": {
         "title": "MorphTooltip",
         "category": "Feedback",
-        "description": "Tooltip that grows out of its trigger with a directional streak. Same colors, delays and open modes as Tooltip, and neighbouring tooltips open instantly once one is showing. Follows ModoProvider for color, size, radius and dark mode.",
+        "description": "A tooltip that grows from its trigger after 400 ms of hover or immediately on keyboard focus. Moving to a neighbour within 300 ms skips the delay.",
         "seo": {
           "metaTitle": "Vue MorphTooltip Component — Morphing Tooltip",
           "metaDescription": "Free, open-source Vue 3 morphing tooltip: grows out of its trigger, flips to fit, supports hover, focus, click and manual modes, and opens neighbours instantly.",
@@ -1380,7 +1380,7 @@
           "side": "Preferred side; flips when it does not fit.",
           "align": "Alignment along the side. 'auto' centers it.",
           "offset": "Distance from the trigger in px.",
-          "arrow": "Shows an arrow pointing at the trigger once the morph lands.",
+          "arrow": "Opt in to an arrow after the chip lands.",
           "color": "Tooltip color. 'default' follows ModoProvider; 'inverted' uses the page surface.",
           "size": "Text size and padding. Inherits from ModoProvider.",
           "radius": "Corner radius. Inherits from ModoProvider.",

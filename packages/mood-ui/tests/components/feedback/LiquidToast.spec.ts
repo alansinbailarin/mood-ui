@@ -10,10 +10,10 @@ const card = () => document.querySelector<HTMLElement>('[data-modo-liquid-toast]
 async function flush() { await nextTick(); await nextTick() }
 
 describe('liquid notifications', () => {
-  it('isolates controllers, coalesces duplicates and defaults to info', () => {
+  it('isolates controllers, coalesces duplicates and defaults to neutral', () => {
     const a = createLiquidToast(), b = createLiquidToast()
     const id = a('Saved'); expect(a('Saved')).toBe(id)
-    expect(a.items.value).toHaveLength(1); expect(a.items.value[0]).toMatchObject({ revision: 1, color: 'info' })
+    expect(a.items.value).toHaveLength(1); expect(a.items.value[0]).toMatchObject({ revision: 1, color: 'neutral' })
     expect(b.items.value).toHaveLength(0)
   })
 
@@ -55,14 +55,14 @@ describe('liquid notifications', () => {
     w.unmount()
   })
 
-  it('pauses on hover and keeps the remaining time', async () => {
+  it('restarts the liquid toast timer after hover', async () => {
     vi.useFakeTimers(); const store = createLiquidToast()
     const w = mount(LiquidToaster, { props: { controller: store }, attachTo: document.body })
     store({ title: 'Reading', duration: 1000 }); await flush()
     vi.advanceTimersByTime(400)
     card().dispatchEvent(new Event('pointerenter')); vi.advanceTimersByTime(2000); await nextTick()
     expect(store.items.value[0]?.leaving).toBe(false)
-    card().dispatchEvent(new Event('pointerleave')); vi.advanceTimersByTime(599); await nextTick()
+    card().dispatchEvent(new Event('pointerleave')); vi.advanceTimersByTime(999); await nextTick()
     expect(store.items.value[0]?.leaving).toBe(false)
     vi.advanceTimersByTime(2); await nextTick()
     expect(store.items.value[0]?.leaving).toBe(true)

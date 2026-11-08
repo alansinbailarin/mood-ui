@@ -1206,7 +1206,7 @@
       "liquidToast": {
         "title": "LiquidToast",
         "category": "Feedback",
-        "description": "Notificaciones donde la píldora del título y el panel de descripción se funden en una sola forma líquida. Mismos colores, variantes, posiciones y acciones que Toast, más cola, actualización en el sitio y seguimiento de promesas. Respeta ModoProvider en tamaño, radio y modo oscuro.",
+        "description": "La píldora del título se fusiona con el panel sobre una superficie invertida. Las notificaciones avanzan en cola y las promesas se actualizan en la misma tarjeta. También admite las variantes filled, subtle y outline.",
         "seo": {
           "metaTitle": "Componente LiquidToast para Vue — Notificaciones líquidas",
           "metaDescription": "Toast líquido gratuito y open-source para Vue 3: píldora y panel fundidos en una forma, con cola, promesas, actualización en el sitio, acciones y cierre con swipe.",
@@ -1313,7 +1313,7 @@
       "morphTooltip": {
         "title": "MorphTooltip",
         "category": "Feedback",
-        "description": "Tooltip que crece desde su trigger con un trazo direccional. Mismos colores, retrasos y modos de apertura que Tooltip, y los tooltips vecinos abren al instante cuando uno ya está visible. Respeta ModoProvider en color, tamaño, radio y modo oscuro.",
+        "description": "Tooltip que emerge del control tras 400 ms de hover o al recibir foco de teclado. Si pasas a otro control en menos de 300 ms, aparece sin espera.",
         "seo": {
           "metaTitle": "Componente MorphTooltip para Vue — Tooltip con morph",
           "metaDescription": "Tooltip con morph gratuito y open-source para Vue 3: crece desde su trigger, cambia de lado si no cabe, abre con hover, focus, click o manual y abre vecinos al instante.",
@@ -1380,7 +1380,7 @@
           "side": "Lado preferido; cambia si no cabe.",
           "align": "Alineación sobre el lado. 'auto' lo centra.",
           "offset": "Distancia al trigger en px.",
-          "arrow": "Muestra una flecha hacia el trigger cuando termina el morph.",
+          "arrow": "Activa una flecha opcional al terminar la apertura.",
           "color": "Color del tooltip. 'default' sigue a ModoProvider; 'inverted' usa la superficie de la página.",
           "size": "Tamaño de texto y relleno. Hereda de ModoProvider.",
           "radius": "Radio de las esquinas. Hereda de ModoProvider.",

@@ -3,10 +3,10 @@ import type { ModoRadius, ModoSize } from '../../config/ModoConfig'
 import type { ToastColor, ToastPlacement, ToastVariant } from './Toast.interface'
 import type { LiquidToastController } from '../../components/feedback/liquid-toast/liquidToast'
 
-/** Same color scale as the native `Toast` / `useToast`. @default 'info' */
-export type LiquidToastColor = ToastColor
-/** Same variants and token mapping as the native `Toast`. @default 'subtle' */
-export type LiquidToastVariant = ToastVariant
+/** Same color scale as the native `Toast` / `useToast`. @default 'neutral' */
+export type LiquidToastColor = ToastColor | 'neutral'
+/** Same variants and token mapping as the native `Toast`. @default 'liquid' */
+export type LiquidToastVariant = ToastVariant | 'liquid'
 /** Same placements as the native `ToastContainer`. */
 export type LiquidToastPlacement = ToastPlacement
 
@@ -22,9 +22,9 @@ export interface LiquidToastOptions {
   id?: string | number
   title: VNodeChild
   description?: VNodeChild
-  /** @default 'info' */
+  /** @default 'neutral' */
   color?: LiquidToastColor
-  /** @default the toaster's `defaultVariant` ('subtle') */
+  /** @default the toaster's `defaultVariant` ('liquid') */
   variant?: LiquidToastVariant
   /** @default the toaster's `radius`, then the provider */
   radius?: ModoRadius
@@ -34,7 +34,7 @@ export interface LiquidToastOptions {
   icon?: Component
   /** Hide the dot entirely. */
   hideIcon?: boolean
-  /** Milliseconds; `0` keeps the toast until dismissed. @default the toaster's `defaultDuration` (4500) */
+  /** Milliseconds; `0` keeps the toast until dismissed. @default the toaster's `defaultDuration` (4000) */
   duration?: number
   action?: LiquidToastAction
   loading?: boolean
@@ -63,9 +63,9 @@ export interface LiquidToasterProps {
   placement?: LiquidToastPlacement
   /** Toasts on stage per placement; the rest wait as peeks behind the last one. @default 1 */
   max?: number
-  /** Duration for toasts that don't set one. @default 4500 */
+  /** Duration for toasts that don't set one. @default 4000 */
   defaultDuration?: number
-  /** Variant for toasts that don't set one. @default 'subtle' */
+  /** Variant for toasts that don't set one. @default 'liquid' */
   defaultVariant?: LiquidToastVariant
   /** Distance from the viewport edge in px. @default 16 */
   offset?: number

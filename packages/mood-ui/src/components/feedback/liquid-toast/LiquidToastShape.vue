@@ -9,7 +9,7 @@ import type { LiquidToastItem } from '../../../interfaces/feedback/LiquidToast.i
  */
 const props = defineProps<{ item: LiquidToastItem; ink?: boolean; dismissable?: boolean; progress?: boolean; closeLabel?: string }>()
 const emit = defineEmits<{ action: []; dismiss: [] }>()
-const glyphs = { success: 'M3.5 8.5l3 3 6-7', danger: 'M4.5 4.5l7 7m0-7l-7 7', warning: 'M8 4v5m0 3v.01', info: 'M8 7v5m0-8v.01' }
+const glyphs = { neutral: 'M4 8h8', success: 'M3.5 8.5l3 3 6-7', danger: 'M4.5 4.5l7 7m0-7l-7 7', warning: 'M8 4v5m0 3v.01', info: 'M8 7v5m0-8v.01' }
 const hasPanel = () => !!(props.item.description || props.item.action)
 </script>
 <template>

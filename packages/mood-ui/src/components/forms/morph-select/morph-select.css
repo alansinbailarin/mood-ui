@@ -1,16 +1,49 @@
-/* NOTE: this file is unlayered, so it must never set a property that a
-   template utility also sets (bg, color, border, font-size) or it would win.
-   MorphSelect — a native-Select-look field whose panel morphs out of it
-   (Menu material, Menu choreography). Field colors, radius, size and
-   focus come from `useFieldClasses` in the template; the panel reads the
-   `--modo-menu-*` tokens that `useTeleportedModoTheme` forwards inline. */
+/* Select — an Input-look trigger whose panel morphs out of the field
+   (Menu material, Menu choreography). Options hover as full pills. */
+.modo-morph-select {
+  --modo-morph-select-h: 2.5rem;
+  --modo-morph-select-px: 1rem;
+  --modo-morph-select-fs: 0.875rem;
+  --modo-morph-select-tone: var(--primary);
+  position: relative;
+  font-family: var(--font-sans);
+}
+
+.modo-morph-select[data-modo-size="small"] { --modo-morph-select-h: 2rem; --modo-morph-select-px: 0.75rem; --modo-morph-select-fs: 0.8125rem; }
+.modo-morph-select[data-modo-size="large"] { --modo-morph-select-h: 3rem; --modo-morph-select-px: 1.25rem; --modo-morph-select-fs: 1rem; }
+
+.modo-morph-select[data-modo-tone="danger"] { --modo-morph-select-tone: var(--destructive); }
+.modo-morph-select[data-modo-tone="success"] { --modo-morph-select-tone: var(--success); }
+.modo-morph-select[data-modo-tone="warning"] { --modo-morph-select-tone: var(--warning); }
+
+.modo-morph-select__label {
+  display: block;
+  margin: 0 0 0.375rem 0.25rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--foreground), transparent 22%);
+}
 
 /* The FIELD is the morph origin — hiding it whole makes the panel grow
    out of the bordered box, border included. */
-.modo-morph-select__field {
-  transition-property: border-color, box-shadow, background-color, opacity;
-  transition-duration: var(--duration-base);
-  transition-timing-function: var(--ease-standard);
+.modo-morph-select[data-modo-variant="outline"] .modo-morph-select__field {
+  border: 1px solid color-mix(in srgb, var(--foreground), transparent 78%);
+
+  background: transparent;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.15s ease;
+}
+
+.modo-morph-select[data-modo-variant="filled"] .modo-morph-select__field {
+  background: color-mix(in srgb, var(--foreground) 3%, var(--background));
+  border-color: color-mix(in srgb, var(--foreground), transparent 90%);
+}
+
+.modo-morph-select[data-modo-variant="outline"] .modo-morph-select__field:focus-within {
+  border-color: color-mix(in srgb, var(--primary), transparent 25%);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary), transparent 85%);
 }
 
 .modo-morph-select__field[data-modo-morph-origin="hidden"] {
@@ -21,7 +54,57 @@
 .modo-morph-select__field[data-modo-morph-origin="closing"] {
   opacity: 1;
   pointer-events: none;
-  transition: opacity var(--duration-fast) var(--ease-standard) 0.24s;
+  transition: opacity 0.1s ease 0.24s;
+}
+
+.modo-morph-select__button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  height: calc(var(--modo-morph-select-h) - 2px);
+  padding: 0 calc(var(--modo-morph-select-px) * 0.6) 0 var(--modo-morph-select-px);
+  border: none;
+  background: none;
+  color: var(--foreground);
+  font: inherit;
+  font-size: var(--modo-morph-select-fs);
+  text-align: left;
+  cursor: pointer;
+  outline: none;
+}
+
+.modo-morph-select__button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.modo-morph-select__value[data-modo-placeholder] {
+  color: color-mix(in srgb, var(--foreground), transparent 58%);
+}
+
+.modo-morph-select__chevron {
+  flex: none;
+  width: 0.875rem;
+  height: 0.875rem;
+  color: color-mix(in srgb, var(--foreground), transparent 45%);
+  transition: transform 0.25s cubic-bezier(0.3, 1.05, 0.4, 1);
+}
+
+.modo-morph-select__button[aria-expanded="true"] .modo-morph-select__chevron {
+  transform: rotate(180deg);
+}
+
+.modo-morph-select__msg {
+  display: block;
+  margin: 0.375rem 0.25rem 0;
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--foreground), transparent 40%);
+}
+
+.modo-morph-select[data-modo-tone] .modo-morph-select__msg {
+  color: color-mix(in srgb, var(--modo-morph-select-tone) 85%, var(--foreground));
 }
 
 /* ===== Panel: Menu material ===== */
@@ -30,19 +113,18 @@
   min-width: 12rem;
   max-width: 92vw; /* width is synced to the trigger field at open */
   max-height: var(--modo-menu-max-height);
-  padding: var(--modo-menu-padding);
+  padding: 0.5rem;
   overflow-x: hidden;
   overflow-y: auto;
-  border: 1px solid var(--border);
+  border: 1px solid color-mix(in srgb, var(--foreground), transparent 92%);
   border-radius: var(--modo-menu-radius);
   background: var(--modo-menu-surface);
   -webkit-backdrop-filter: var(--modo-menu-backdrop);
   backdrop-filter: var(--modo-menu-backdrop);
-  box-shadow:
-    inset 0 -1px 0 var(--modo-menu-lowlight),
-    var(--shadow-lg);
+  color: var(--foreground);
+  box-shadow: inset 0 -1px 0 var(--modo-menu-lowlight);
   font-family: var(--font-sans);
-  font-size: var(--modo-menu-font-size);
+  font-size: 0.8125rem;
 }
 
 [data-modo-morph-select-panel][data-modo-phase="opening"],
@@ -54,20 +136,29 @@
   opacity: 0;
   filter: blur(6px);
   transition:
-    opacity var(--duration-fast) var(--ease-standard),
-    filter var(--duration-fast) var(--ease-standard);
+    opacity 0.16s ease,
+    filter 0.16s ease;
 }
 
 .modo-morph-select__search {
-  padding-bottom: var(--modo-menu-padding);
+  padding: 0.25rem 0.25rem 0.5rem;
 }
 
-.modo-morph-select__search-input {
-  padding: var(--modo-menu-item-padding);
-  border-radius: var(--modo-menu-item-radius);
-  font-size: var(--text-caption);
-  line-height: var(--text-caption--line-height);
-  transition: box-shadow var(--duration-fast) var(--ease-standard);
+.modo-morph-select__search input {
+  width: 100%;
+  height: 2rem;
+  padding: 0 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--foreground), transparent 82%);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--foreground);
+  font: inherit;
+  font-size: 0.8125rem;
+  outline: none;
+}
+
+.modo-morph-select__search input:focus {
+  border-color: color-mix(in srgb, var(--primary), transparent 30%);
 }
 
 .modo-morph-select__list {
@@ -76,20 +167,41 @@
   gap: 1px;
 }
 
+/* Options hover as FULL PILLS — same token AND same feel as the Menu:
+   one hover color across menus, selects, and friends. */
 .modo-morph-select__option {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--modo-menu-item-gap, 0.75rem);
-  padding: var(--modo-menu-item-padding);
-  border-radius: var(--modo-menu-item-radius);
+  gap: 0.75rem;
+  padding: 0.5rem 0.875rem;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
   text-align: left;
   cursor: pointer;
-  transition: background-color var(--duration-fast) var(--ease-standard);
+  outline: none;
+  transition: background-color 0.25s ease;
+}
+
+.modo-morph-select__option:hover:not(:disabled),
+.modo-morph-select__option:focus-visible {
+  background: var(--modo-menu-item-hover);
 }
 
 .modo-morph-select__option:disabled {
+  opacity: 0.45;
   cursor: not-allowed;
+}
+
+/* Readable primary on ANY panel: mixing toward on-surface lightens it
+   in dark mode (indigo -> lavender) and deepens it slightly in light —
+   the same trick the toast tones use. */
+.modo-morph-select__option[aria-selected="true"] {
+  color: color-mix(in srgb, var(--primary) 60%, var(--foreground));
+  font-weight: 600;
 }
 
 .modo-morph-select__option-text {
@@ -99,27 +211,34 @@
   min-width: 0;
 }
 
+.modo-morph-select__option-desc {
+  font-size: 0.6875rem;
+  font-weight: 400;
+  color: color-mix(in srgb, var(--foreground), transparent 45%);
+}
+
 .modo-morph-select__check {
-  width: 1rem;
-  height: 1rem;
+  flex: none;
+  width: 0.875rem;
+  height: 0.875rem;
 }
 
 .modo-morph-select__empty {
   margin: 0;
-  padding: var(--modo-menu-item-padding);
+  padding: 0.75rem 0.875rem;
+  color: color-mix(in srgb, var(--foreground), transparent 45%);
 }
 
 /* Return-ghost: the traveling label sits where the FIELD's text lives
-   (left-inset, vertically centered, same font size) — never panel-centered,
-   or it would visibly jump to the left at landing. */
+   (left-inset, vertically centered) — never panel-centered, or it would
+   visibly jump to the left at landing. */
 .modo-morph-select-ghost {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 0 var(--modo-morph-select-ghost-px, 0.875rem);
-  font-size: var(--modo-morph-select-ghost-fs, inherit);
+  padding: 0 var(--modo-morph-select-ghost-px, 1rem);
   pointer-events: none;
 }
 
@@ -131,7 +250,15 @@
 
 @media (prefers-reduced-motion: reduce) {
   .modo-morph-select__field,
-  .modo-morph-select__option {
+  .modo-morph-select__chevron {
     transition: none;
   }
 }
+
+.modo-morph-select[data-modo-size="xsmall"] { --modo-morph-select-h: 1.75rem; --modo-morph-select-px: .625rem; --modo-morph-select-fs: .75rem; }
+.modo-morph-select__field { height: var(--modo-morph-select-h); }
+.modo-morph-select__field:has([aria-invalid="true"]) { border-color: var(--destructive); }
+.modo-morph-select__button { justify-content: space-between; }
+
+.modo-morph-select[data-modo-radius="medium"] .modo-morph-select__field { border-radius: 1rem; }
+[data-modo-morph-select-panel][data-modo-radius="medium"] { border-radius: 1.5rem; }

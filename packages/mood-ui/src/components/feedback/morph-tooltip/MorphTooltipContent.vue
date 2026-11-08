@@ -11,7 +11,7 @@ import { resolveTooltipPosition, type TooltipSide } from './tooltipPlacement'
 import './morph-tooltip.css'
 
 const props = withDefaults(defineProps<MorphTooltipContentProps>(), {
-  side: 'top', align: 'auto', offset: 8, arrow: true, color: 'default', maxWidth: 260,
+  side: 'top', align: 'auto', offset: 8, arrow: false, color: 'default', maxWidth: undefined,
 })
 const { id, phase, trigger, disabled, hide } = useMorphTooltip()
 const panel = ref<HTMLElement | null>(null)
@@ -98,9 +98,9 @@ const panelStyle = computed<Record<string, string | undefined>>(() => {
     position: 'fixed',
     left: p ? `${p.left}px` : '0px',
     top: p ? `${p.top}px` : '0px',
-    maxWidth: `${props.maxWidth}px`,
+    maxWidth: props.maxWidth === undefined ? undefined : `${props.maxWidth}px`,
     transformOrigin: origin,
-    '--modo-morph-tooltip-radius': RADIUS_VALUE[resolvedRadius.value],
+    '--modo-morph-tooltip-radius': props.radius === undefined && resolvedRadius.value === 'medium' ? '1rem' : RADIUS_VALUE[resolvedRadius.value],
     '--modo-morph-tooltip-seed-radius': SEED_RADIUS_VALUE[resolvedRadius.value],
   }
 })
@@ -185,6 +185,8 @@ onBeforeUnmount(() => { clearTimeout(fallback) })
       role="tooltip"
       data-modo-morph-tooltip=""
       :data-modo-phase="phase"
+      :data-modo-color="colorKey"
+      :data-modo-size="resolvedSize"
       :data-modo-side="pos?.side"
       :data-modo-theme="scopedTheme"
       :class="['pointer-events-none select-none shadow-md', colorClasses, sizeClasses]"

@@ -8,8 +8,8 @@ const props = withDefaults(defineProps<MorphTooltipProps>(), {
   open: undefined,
   defaultOpen: false,
   trigger: () => ['hover', 'focus'] as MorphTooltipTriggerMode[],
-  openDelay: 200,
-  closeDelay: 100,
+  openDelay: 400,
+  closeDelay: 0,
   disabled: false,
 })
 const emit = defineEmits<{ 'update:open': [value: boolean]; openChange: [value: boolean]; show: []; hide: [] }>()
@@ -46,6 +46,7 @@ function scheduleOpen() {
 function scheduleClose() {
   clearTimeout(openTimer); openTimer = undefined
   if (!open.value || closeTimer) return
+  if (props.closeDelay <= 0) { hide(); return }
   closeTimer = setTimeout(hide, Math.max(0, props.closeDelay))
 }
 
@@ -53,9 +54,8 @@ function onPointerEnter(e: PointerEvent) { if (e.pointerType !== 'touch' && has(
 function onPointerLeave(e: PointerEvent) { if (e.pointerType !== 'touch' && has('hover')) scheduleClose() }
 function onPointerDown(e: PointerEvent) {
   lastPointer = e.pointerType
-  // Touch has no hover: a tap toggles the tooltip instead (outside taps and
-  // scrolling close it, see MorphTooltipContent).
-  if (e.pointerType === 'touch') { if (has('hover') || has('click')) set(!open.value); return }
+  // Only an explicitly clickable trigger opens on touch.
+  if (e.pointerType === 'touch') { if (has('click')) set(!open.value); else hide(); return }
   // Pressing the control dismisses an informational (hover) tooltip.
   if (!has('click')) hide()
 }
@@ -66,7 +66,7 @@ function onClick() {
   set(!open.value)
 }
 function onFocus(e: FocusEvent) {
-  if (!has('focus')) return
+  if (!has('focus') || lastPointer === 'touch') return
   let visible = true
   try { visible = (e.currentTarget as HTMLElement).matches(':focus-visible') } catch { /* old engines */ }
   if (visible) show()

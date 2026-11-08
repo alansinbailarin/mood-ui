@@ -365,3 +365,11 @@
     transition: none;
   }
 }
+
+/* Valux resting material, including the larger two-line chip. */
+[data-modo-morph-tooltip] { max-width: 16rem; line-height: 1.35; box-shadow: none; }
+[data-modo-morph-tooltip][data-modo-size="medium"] { padding: .4375rem .75rem; font-size: .75rem; }
+[data-modo-morph-tooltip][data-modo-color="default"] { background: color-mix(in srgb, var(--foreground) 92%, transparent); color: var(--background); border: 1px solid color-mix(in srgb, var(--background), transparent 82%); backdrop-filter: blur(8px); }
+[data-modo-morph-tooltip]:has(.modo-morph-tooltip__title) { max-width: 19rem; padding: .625rem .875rem .6875rem; }
+.modo-morph-tooltip__title { margin: 0; font-size: .8125rem; font-weight: 700; line-height: 1.3; letter-spacing: -.01em; }
+.modo-morph-tooltip__description { margin: .25rem 0 0; font-size: .6875rem; font-weight: 400; line-height: 1.5; color: color-mix(in srgb, currentColor, transparent 45%); }

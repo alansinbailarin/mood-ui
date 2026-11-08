@@ -18,7 +18,7 @@ describe('MorphTooltip', () => {
   it('delays hover with the native defaults, preserves descriptions and closes on Escape', async () => {
     vi.useFakeTimers(); const w = mount(fixture(), { attachTo: document.body })
     await w.get('button').trigger('pointerenter', { pointerType: 'mouse' })
-    vi.advanceTimersByTime(199); await nextTick(); expect(panel()).toBeNull()
+    vi.advanceTimersByTime(399); await nextTick(); expect(panel()).toBeNull()
     vi.advanceTimersByTime(1); await flush()
     expect(panel()?.textContent).toContain('Save changes')
     expect(w.get('button').attributes('aria-describedby')).toContain('existing')
@@ -29,23 +29,23 @@ describe('MorphTooltip', () => {
 
   it('closes after closeDelay when the pointer leaves', async () => {
     vi.useFakeTimers(); const w = mount(fixture(':close-delay="150"'), { attachTo: document.body })
-    await w.get('button').trigger('pointerenter', { pointerType: 'mouse' }); vi.advanceTimersByTime(200); await flush()
+    await w.get('button').trigger('pointerenter', { pointerType: 'mouse' }); vi.advanceTimersByTime(400); await flush()
     await w.get('button').trigger('pointerleave', { pointerType: 'mouse' }); vi.advanceTimersByTime(149); await flush()
     expect(panel()?.dataset.modoPhase).not.toBe('closing')
     vi.advanceTimersByTime(1); await flush()
     expect(panel()?.dataset.modoPhase).toBe('closing'); w.unmount()
   })
 
-  it('toggles on touch tap instead of hover, and closes on an outside touch', async () => {
-    vi.useFakeTimers(); const w = mount(fixture(), { attachTo: document.body })
-    await w.get('button').trigger('pointerenter', { pointerType: 'touch' }); vi.advanceTimersByTime(500); await nextTick()
+  it('keeps default tooltips closed on touch hover and tap', async () => {
+    vi.useFakeTimers()
+    const w = mount(fixture(), { attachTo: document.body })
+    await w.get('button').trigger('pointerenter', { pointerType: 'touch' })
+    await w.get('button').trigger('pointerdown', { pointerType: 'touch' })
+    await w.get('button').trigger('click')
+    vi.advanceTimersByTime(500)
+    await flush()
     expect(panel()).toBeNull()
-    await w.get('button').trigger('pointerdown', { pointerType: 'touch' }); await flush()
-    expect(panel()).not.toBeNull()
-    await w.get('button').trigger('click'); await flush()
-    expect(panel()?.dataset.modoPhase).not.toBe('closing')
-    document.body.dispatchEvent(new Event('touchstart', { bubbles: true })); await flush()
-    expect(panel()?.dataset.modoPhase).toBe('closing'); w.unmount()
+    w.unmount()
   })
 
   it('opens immediately on keyboard focus', async () => {
@@ -71,7 +71,7 @@ describe('MorphTooltip', () => {
   })
 
   it('renders color, size, radius, shadow and arrow like the native Tooltip', async () => {
-    const w = mount(defineComponent({ render: () => h(ModoProvider, { color: 'primary', radius: 'none' }, () => h(fixture('default-open', 'size="large"'))) }), { attachTo: document.body })
+    const w = mount(defineComponent({ render: () => h(ModoProvider, { color: 'primary', radius: 'none' }, () => h(fixture('default-open', 'size="large" arrow'))) }), { attachTo: document.body })
     await flush()
     const el = panel()!
     expect(el.className).toContain('bg-primary')

@@ -163,6 +163,14 @@
         "description": "Cada release de mood-ui listado de más reciente a más antiguo. Versionado con SemVer, con detalles de nuevos componentes, fixes y breaking changes.",
         "intro": "Cada release listado de más reciente a más antiguo. Seguimos SemVer.",
         "releases": {
+          "v0.13.1": {
+            "title": "Paridad visual y de interacción con Valux",
+            "items": [
+              "GlassSwitch recupera las proporciones del riel y la lente blanca en ambos temas.",
+              "MorphSelect recupera las alturas del campo y las filas redondeadas. MorphTooltip vuelve a abrirse tras 400 ms al pasar el cursor y de inmediato al recibir foco.",
+              "LiquidToast usa por defecto la superficie líquida con tono neutro y una duración de cuatro segundos."
+            ]
+          },
           "v0.13.0": {
             "title": "Nuevos componentes con morph y theming completo del provider",
             "items": [

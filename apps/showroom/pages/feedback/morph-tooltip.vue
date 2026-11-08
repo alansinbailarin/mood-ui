@@ -31,16 +31,16 @@ type Size = "xsmall" | "small" | "medium" | "large";
 const pgSide = ref<Side>("top");
 const pgColor = ref<Color>("default");
 const pgSize = ref<Size | undefined>(undefined);
-const pgDelay = ref<"0" | "200" | "500">("200");
-const pgArrow = ref(true);
+const pgDelay = ref<"0" | "400" | "500">("400");
+const pgArrow = ref(false);
 const pgDisabled = ref(false);
 
 function resetPlayground() {
   pgSide.value = "top";
   pgColor.value = "default";
   pgSize.value = undefined;
-  pgDelay.value = "200";
-  pgArrow.value = true;
+  pgDelay.value = "400";
+  pgArrow.value = false;
   pgDisabled.value = false;
 }
 
@@ -55,13 +55,13 @@ const colorDots = [
 
 const overviewCode = computed(() => {
   const rootAttrs: string[] = [];
-  if (pgDelay.value !== "200") rootAttrs.push(`:open-delay="${pgDelay.value}"`);
+  if (pgDelay.value !== "400") rootAttrs.push(`:open-delay="${pgDelay.value}"`);
   if (pgDisabled.value) rootAttrs.push("disabled");
   const contentAttrs: string[] = [];
   if (pgSide.value !== "top") contentAttrs.push(`side="${pgSide.value}"`);
   if (pgColor.value !== "default") contentAttrs.push(`color="${pgColor.value}"`);
   if (pgSize.value) contentAttrs.push(`size="${pgSize.value}"`);
-  if (!pgArrow.value) contentAttrs.push(':arrow="false"');
+  if (pgArrow.value) contentAttrs.push("arrow");
   const root = rootAttrs.length ? " " + rootAttrs.join(" ") : "";
   const content = contentAttrs.length ? " " + contentAttrs.join(" ") : "";
 
@@ -202,18 +202,18 @@ const propsList = computed<PropDoc[]>(() => [
   { name: "open / v-model:open", type: "boolean", default: "undefined", description: p("props.open") },
   { name: "defaultOpen", type: "boolean", default: "false", description: p("props.defaultOpen") },
   { name: "trigger", type: "'hover' | 'focus' | 'click' | 'manual' | array", default: "['hover','focus']", description: p("props.trigger") },
-  { name: "openDelay", type: "number", default: "200", description: p("props.openDelay") },
-  { name: "closeDelay", type: "number", default: "100", description: p("props.closeDelay") },
+  { name: "openDelay", type: "number", default: "400", description: p("props.openDelay") },
+  { name: "closeDelay", type: "number", default: "0", description: p("props.closeDelay") },
   { name: "disabled", type: "boolean", default: "false", description: p("props.disabled") },
   { name: "asChild (MorphTooltip.Trigger)", type: "boolean", default: "false", description: p("props.asChild") },
   { name: "side (MorphTooltip.Content)", type: "'auto' | 'top' | 'bottom' | 'left' | 'right'", default: "'top'", description: p("props.side") },
   { name: "align (MorphTooltip.Content)", type: "'auto' | 'start' | 'center' | 'end'", default: "'auto'", description: p("props.align") },
   { name: "offset (MorphTooltip.Content)", type: "number", default: "8", description: p("props.offset") },
-  { name: "arrow (MorphTooltip.Content)", type: "boolean", default: "true", description: p("props.arrow") },
+  { name: "arrow (MorphTooltip.Content)", type: "boolean", default: "false", description: p("props.arrow") },
   { name: "color (MorphTooltip.Content)", type: "'default' | 'inverted' | 'primary' | 'danger' | 'success' | 'warning'", default: "'default'", description: p("props.color") },
   { name: "size (MorphTooltip.Content)", type: "'xsmall' | 'small' | 'medium' | 'large'", description: p("props.size") },
   { name: "radius (MorphTooltip.Content)", type: "'none' | 'small' | 'medium' | 'large' | 'full'", description: p("props.radius") },
-  { name: "maxWidth (MorphTooltip.Content)", type: "number", default: "260", description: p("props.maxWidth") },
+  { name: "maxWidth (MorphTooltip.Content)", type: "number", default: "256 / 304 (rich)", description: p("props.maxWidth") },
 ]);
 
 const emitsList = computed<EmitDoc[]>(() => [
@@ -298,7 +298,7 @@ const a11yFocus = computed<string[]>(() => [
             :label="p('controls.delay')"
             :options="[
               { value: '0', label: '0ms' },
-              { value: '200', label: '200ms' },
+              { value: '400', label: '400ms' },
               { value: '500', label: '500ms' },
             ]"
           />

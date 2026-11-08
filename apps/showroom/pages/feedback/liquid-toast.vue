@@ -21,7 +21,7 @@ onBeforeUnmount(() => toast.dismissAll());
 
 // ── Playground ────────────────────────────────────────────────────────────────
 type Color = "info" | "success" | "warning" | "danger";
-type Variant = "filled" | "subtle" | "outline";
+type Variant = "liquid" | "filled" | "subtle" | "outline";
 type Placement =
   | "top-left"
   | "top-center"
@@ -33,7 +33,7 @@ type Size = "xsmall" | "small" | "medium" | "large";
 type Radius = "none" | "small" | "medium" | "large" | "full";
 
 const pgColor = ref<Color>("success");
-const pgVariant = ref<Variant>("subtle");
+const pgVariant = ref<Variant>("liquid");
 const pgPlacement = ref<Placement>("top-center");
 const pgMax = ref<"1" | "2" | "3">("1");
 const pgSize = ref<Size | undefined>(undefined);
@@ -41,7 +41,7 @@ const pgRadius = ref<Radius | undefined>(undefined);
 
 function resetPlayground() {
   pgColor.value = "success";
-  pgVariant.value = "subtle";
+  pgVariant.value = "liquid";
   pgPlacement.value = "top-center";
   pgMax.value = "1";
   pgSize.value = undefined;
@@ -80,7 +80,7 @@ const overviewCode = computed(() => {
   const attrs: string[] = [];
   if (pgPlacement.value !== "top-center") attrs.push(`placement="${pgPlacement.value}"`);
   if (pgMax.value !== "1") attrs.push(`:max="${pgMax.value}"`);
-  if (pgVariant.value !== "subtle") attrs.push(`default-variant="${pgVariant.value}"`);
+  if (pgVariant.value !== "liquid") attrs.push(`default-variant="${pgVariant.value}"`);
   if (pgSize.value) attrs.push(`size="${pgSize.value}"`);
   if (pgRadius.value) attrs.push(`radius="${pgRadius.value}"`);
   const attrStr = attrs.length ? " " + attrs.join(" ") : "";
@@ -258,8 +258,8 @@ const notifications = createLiquidToast();
 // <LiquidToaster :controller="notifications" />
 notifications.success({ title: 'Saved' });`;
 
-const typesCode = `export type LiquidToastColor = 'info' | 'success' | 'warning' | 'danger';
-export type LiquidToastVariant = 'filled' | 'subtle' | 'outline';
+const typesCode = `export type LiquidToastColor = 'neutral' | 'info' | 'success' | 'warning' | 'danger';
+export type LiquidToastVariant = 'liquid' | 'filled' | 'subtle' | 'outline';
 export type LiquidToastPlacement =
   | 'top-right' | 'top-left' | 'top-center'
   | 'bottom-right' | 'bottom-left' | 'bottom-center';
@@ -274,7 +274,7 @@ export interface LiquidToastOptions {
   id?: string | number;
   title: VNodeChild;
   description?: VNodeChild;
-  color?: LiquidToastColor;       // default 'info'
+  color?: LiquidToastColor;       // default 'neutral'
   variant?: LiquidToastVariant;   // default: the toaster's defaultVariant
   radius?: ModoRadius;
   size?: ModoSize;
@@ -293,7 +293,7 @@ export interface LiquidToastController {
   push(options: LiquidToastOptions | string): string | number;
   info / success / warning / danger(options: Omit<LiquidToastOptions, 'color'> | string): string | number;
   update(id: string | number, patch: Partial<LiquidToastOptions>): void;
-  dismiss(id: string | number): void;
+  dismiss(id?: string | number): void;
   dismissAll(): void;
   promise<T>(promise: Promise<T>, messages: { loading; success; error }): Promise<T>;
 }`;
@@ -305,8 +305,8 @@ const PLACEMENT_TYPE =
 const propsList = computed<PropDoc[]>(() => [
   { name: "placement", type: PLACEMENT_TYPE, default: "'top-center'", description: p("props.placement") },
   { name: "max", type: "number", default: "1", description: p("props.max") },
-  { name: "defaultDuration", type: "number", default: "4500", description: p("props.defaultDuration") },
-  { name: "defaultVariant", type: "'filled' | 'subtle' | 'outline'", default: "'subtle'", description: p("props.defaultVariant") },
+  { name: "defaultDuration", type: "number", default: "4000", description: p("props.defaultDuration") },
+  { name: "defaultVariant", type: "'liquid' | 'filled' | 'subtle' | 'outline'", default: "'liquid'", description: p("props.defaultVariant") },
   { name: "offset", type: "number", default: "16", description: p("props.offset") },
   { name: "size", type: "'xsmall' | 'small' | 'medium' | 'large'", description: p("props.size") },
   { name: "radius", type: "'none' | 'small' | 'medium' | 'large' | 'full'", description: p("props.radius") },
@@ -366,6 +366,7 @@ const a11yFocus = computed<string[]>(() => [
             :label="p('controls.variant')"
             :options="[
               { value: 'filled' },
+              { value: 'liquid' },
               { value: 'subtle' },
               { value: 'outline' },
             ]"

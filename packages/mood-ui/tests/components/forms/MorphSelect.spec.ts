@@ -70,7 +70,7 @@ describe('MorphSelect', () => {
     const selected = p.querySelector('[role="option"][aria-selected="true"]')!
     expect(selected.classList).toContain('hover:bg-primary/10')
     expect(selected.querySelector('svg')!.classList).toContain('text-primary')
-    expect(p.querySelector('.text-caption.text-muted-foreground')?.textContent).toBe('North'); w.unmount()
+    expect(p.querySelector('.modo-morph-select__option-desc')?.textContent).toBe('North'); w.unmount()
   })
   it('uses the FormField id and the error color when invalid', async () => {
     const Wrapped = defineComponent({

@@ -31,8 +31,8 @@ const selected = computed(() => options.value.find(option => option.value === va
 function key(event: KeyboardEvent) { if (event.key === 'ArrowDown' || event.key === 'ArrowUp') { event.preventDefault(); setOpen(true) } }
 </script>
 <template>
-  <div :class="['modo-morph-select flex flex-col gap-1.5', fullWidth ? 'w-full' : 'inline-flex']" data-modo-morph-select="" :data-modo-size="size" :data-modo-variant="variant">
-    <label v-if="label" :for="fieldId" class="text-caption font-medium text-foreground">
+  <div :class="['modo-morph-select flex flex-col', fullWidth ? 'w-full' : 'inline-flex']" data-modo-morph-select="" :data-modo-size="size" :data-modo-radius="radius" :data-modo-variant="variant">
+    <label v-if="label" :for="fieldId" class="modo-morph-select__label">
       {{ label }}
       <span v-if="required" aria-hidden="true" class="text-destructive ml-0.5">*</span>
     </label>
@@ -47,7 +47,7 @@ function key(event: KeyboardEvent) { if (event.key === 'ArrowDown' || event.key 
         <span :class="['modo-morph-select__value min-w-0 flex-1 truncate', selected ? 'text-foreground' : 'text-muted-foreground']" :data-modo-placeholder="selected ? undefined : ''">
           <slot :option="selected"><RenderContent :content="selected?.label ?? placeholder ?? loc.morphSelect.placeholder" /></slot>
         </span>
-        <ChevronDownIcon aria-hidden="true" :class="['shrink-0 transition-transform duration-base ease-standard', affordanceIconClass, sz.icon, open ? 'rotate-180' : '']" />
+        <ChevronDownIcon class="modo-morph-select__chevron" aria-hidden="true" :class="['shrink-0 transition-transform duration-base ease-standard', affordanceIconClass, sz.icon, open ? 'rotate-180' : '']" />
       </button>
     </div>
     <Typography v-if="hasError && errorText" :id="errorId" variant="caption" size="medium" color="danger" as="p">{{ errorText }}</Typography>

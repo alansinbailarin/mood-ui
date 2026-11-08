@@ -48,10 +48,10 @@ describe('GlassSwitch', () => {
     expect(w.get('.modo-glass-switch__track').attributes('data-modo-dragging')).toBeUndefined()
     w.unmount()
   })
-  it('fills per color like the native Switch and uses input/track tokens', () => {
+  it('uses the Valux primary fill and preserves explicit colors and radii', () => {
     const def = mount(GlassSwitch, { props: { ariaLabel: 'x' } })
-    expect(def.get('.modo-glass-switch__fill').classes()).toContain('bg-foreground')
-    expect(def.get('.modo-glass-switch__track').classes()).toEqual(expect.arrayContaining(['bg-input', 'group-hover:bg-muted', 'rounded-full', 'peer-focus-visible:ring-ring/60']))
+    expect(def.get('.modo-glass-switch__fill').classes()).toContain('bg-primary')
+    expect(def.get('.modo-glass-switch__track').classes()).toEqual(expect.arrayContaining(['rounded-full', 'peer-focus-visible:ring-ring/60']))
     const primary = mount(GlassSwitch, { props: { ariaLabel: 'x', color: 'primary', radius: 'small' } })
     expect(primary.get('.modo-glass-switch__fill').classes()).toContain('bg-primary')
     expect(primary.get('.modo-glass-switch__track').classes()).toContain('rounded-sm')

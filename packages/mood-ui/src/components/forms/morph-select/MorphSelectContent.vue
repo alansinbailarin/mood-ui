@@ -83,7 +83,7 @@ onBeforeUnmount(() => panel.value?.getAnimations?.().forEach(animation => animat
 <template>
   <Teleport to="body">
     <div v-if="phase !== 'closed'" ref="panel" tabindex="-1" class="modo-morph-select-panel text-foreground" data-modo-morph-select-panel="" data-modo-morph-layer=""
-      :data-modo-phase="phase" :data-modo-theme="scopedTheme" :data-modo-color="stateColor" :inert="phase === 'closing'" :style="[providerStyle, { position: 'fixed' }]" @keydown="key">
+      :data-modo-phase="phase" :data-modo-theme="scopedTheme" :data-modo-radius="radius" :data-modo-color="stateColor" :inert="phase === 'closing'" :style="[providerStyle, { position: 'fixed' }]" @keydown="key">
       <div v-if="searchable" class="modo-morph-select__search">
         <input v-model="filter" type="text" autocomplete="off" spellcheck="false" :placeholder="searchLabel" :aria-label="searchLabel" :aria-controls="`${fieldId}-listbox`"
           class="modo-morph-select__search-input w-full border border-input bg-transparent text-foreground placeholder:text-muted-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring/60" />
@@ -92,7 +92,7 @@ onBeforeUnmount(() => panel.value?.getAnimations?.().forEach(animation => animat
         <button v-for="option in shown" :key="option.value" type="button" role="option" tabindex="-1"
           :class="['modo-morph-select__option outline-none', option.value === value ? 'font-medium' : '', option.disabled ? 'text-muted-foreground/60' : optionClass]"
           :aria-selected="option.value === value" :disabled="option.disabled" :data-text-value="option.textValue ?? String(option.label)" @click="select(option.value)">
-          <span class="modo-morph-select__option-text"><slot name="option" :option="option" :selected="option.value === value"><span class="truncate"><RenderContent :content="option.label" /></span><span v-if="option.description" class="text-caption text-muted-foreground font-normal"><RenderContent :content="option.description" /></span></slot></span>
+          <span class="modo-morph-select__option-text"><slot name="option" :option="option" :selected="option.value === value"><span class="truncate"><RenderContent :content="option.label" /></span><span v-if="option.description" class="modo-morph-select__option-desc"><RenderContent :content="option.description" /></span></slot></span>
           <CheckIcon v-if="option.value === value" :class="['modo-morph-select__check shrink-0', checkClass]" aria-hidden="true" />
         </button>
       </div>

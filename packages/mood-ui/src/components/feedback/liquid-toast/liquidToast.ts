@@ -18,7 +18,7 @@ export function createLiquidToast() {
   let nextId = 0
   function push(options: Input): string | number {
     const { id: wanted, ...data } = normalize(options)
-    const color = data.color ?? 'info'
+    const color = data.color ?? 'neutral'
     // Same id → replace in place (keeps its stage slot, replays the update morph).
     const same = wanted !== undefined ? items.value.find(item => item.id === wanted && !item.leaving) : undefined
     // Same plain-text message fired again → coalesce into the visible one.
@@ -42,8 +42,8 @@ export function createLiquidToast() {
   /** Removes immediately (after the exit morph has played). */
   function remove(id: string | number) { items.value = items.value.filter(item => item.id !== id) }
   /** Plays the exit morph, then removes. No-op for unknown ids. */
-  function dismiss(id: string | number) {
-    items.value = items.value.map(item => item.id === id ? { ...item, leaving: true } : item)
+  function dismiss(id?: string | number) {
+    items.value = items.value.map(item => id === undefined || item.id === id ? { ...item, leaving: true } : item)
   }
   /** Clears the stage and the queue at once. */
   function dismissAll() { items.value = [] }
@@ -51,7 +51,7 @@ export function createLiquidToast() {
     const id = push({ ...normalize(messages.loading), loading: true, duration: 0 })
     void value.then(
       result => update(id, { color: 'success', duration: undefined, ...resolve(messages.success, result) }),
-      error => update(id, { color: 'danger', duration: undefined, ...resolve(messages.error, error) }),
+      error => update(id, { color: 'danger', duration: 5000, ...resolve(messages.error, error) }),
     ).catch(() => dismiss(id))
     return value
   }

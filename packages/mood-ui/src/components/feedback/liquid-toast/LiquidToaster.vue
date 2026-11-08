@@ -7,7 +7,7 @@ import { liquidToast } from './liquidToast'
 import LiquidToast from './LiquidToast.vue'
 
 const props = withDefaults(defineProps<LiquidToasterProps>(), {
-  placement: 'top-center', max: 1, defaultDuration: 4500, defaultVariant: 'subtle', offset: 16,
+  placement: 'top-center', max: 1, defaultDuration: 4000, defaultVariant: 'liquid', offset: 16,
 })
 const loc = useModoLocale()
 const store = computed(() => props.controller ?? liquidToast)

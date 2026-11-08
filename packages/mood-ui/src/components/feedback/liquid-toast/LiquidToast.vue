@@ -15,7 +15,7 @@ const props = withDefaults(defineProps<{
   defaultVariant?: LiquidToastVariant
   radius?: ModoRadius
   size?: ModoSize
-}>(), { peek: 0, defaultDuration: 4500, defaultVariant: 'subtle' })
+}>(), { peek: 0, defaultDuration: 4000, defaultVariant: 'liquid' })
 const emit = defineEmits<{ dismiss: [id: string | number]; remove: [id: string | number] }>()
 const loc = useModoLocale()
 const resolvedRadius = useResolvedRadius(() => props.item.radius ?? props.radius)
@@ -43,7 +43,7 @@ const CONTROL_RADIUS: Record<ModoRadius, string> = {
   full: '9999px',
 }
 const style = computed(() => ({
-  '--modo-liquid-toast-radius': PANEL_RADIUS[resolvedRadius.value],
+  '--modo-liquid-toast-radius': variant.value === 'liquid' && resolvedRadius.value === 'medium' ? '1.25rem' : PANEL_RADIUS[resolvedRadius.value],
   '--modo-liquid-toast-pill-radius': PILL_RADIUS[resolvedRadius.value],
   '--modo-liquid-toast-seed-radius': PILL_RADIUS[resolvedRadius.value],
   '--modo-liquid-toast-control-radius': CONTROL_RADIUS[resolvedRadius.value],
@@ -65,7 +65,7 @@ let suppressClick = false
 function pause() {
   if (!timer) return
   clearTimeout(timer); timer = undefined
-  remaining = Math.max(0, remaining - (Date.now() - started))
+  remaining = variant.value === 'liquid' ? duration.value : Math.max(0, remaining - (Date.now() - started))
   running.value = false
 }
 function resume() {
@@ -86,7 +86,9 @@ watch(() => [props.item.revision, duration.value, props.peek, props.item.leaving
   } else resume()
 })
 onMounted(() => {
-  mounted = true; resume()
+  mounted = true
+  if (props.item.leaving) emit('remove', props.item.id)
+  else resume()
   document.addEventListener('visibilitychange', visibility); window.addEventListener('blur', blur); window.addEventListener('focus', wake)
 })
 onBeforeUnmount(() => {
@@ -147,6 +149,6 @@ function action() {
     @pointerdown="start" @pointermove="move" @pointerup="end" @pointercancel="end" @click="click">
     <div class="modo-liquid-toast__shade" aria-hidden="true"><LiquidToastShape :item="item" :dismissable="dismissable" /></div>
     <div class="modo-liquid-toast__goo" aria-hidden="true"><LiquidToastShape :item="item" :dismissable="dismissable" /></div>
-    <div class="modo-liquid-toast__ink"><LiquidToastShape :item="item" ink :dismissable="dismissable" :progress="duration > 0 && !item.loading" :close-label="loc.common.dismiss" @action="action" @dismiss="close" /></div>
+    <div class="modo-liquid-toast__ink"><LiquidToastShape :item="item" ink :dismissable="dismissable" :progress="variant !== 'liquid' && duration > 0 && !item.loading" :close-label="loc.common.dismiss" @action="action" @dismiss="close" /></div>
   </div>
 </template>
