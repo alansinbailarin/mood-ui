@@ -704,6 +704,114 @@
           "ariaLabel": "Proporciona un nombre accesible para la pila vertical",
           "focusNative": "Elemento de layout no interactivo; no participa en el orden de tabulación"
         }
+      },
+      "popover": {
+        "title": "Popover",
+        "category": "Layout",
+        "description": "Panel flotante no modal que se transforma desde su disparador, con posición que evita colisiones, adopción de la superficie del disparador y cierre al arrastrar. Sigue a ModoProvider en color, tamaño, radio y modo oscuro.",
+        "seo": {
+          "metaTitle": "Componente Popover para Vue — Panel Flotante No Modal con Morph",
+          "metaDescription": "Componente Popover gratuito y open-source para Vue 3 y Nuxt: emerge desde su disparador con posicionamiento anticolisión, adopción de color y gesto pull-to-close.",
+          "h1": "Componente Popover para Vue",
+          "intro": "Popover de mood-ui es una superficie flotante no modal para Vue 3 y Nuxt. Comparte el motor morph WAAPI con Menu y Dialog para que el botón se expanda físicamente hacia el panel sin bloquear el scroll de la página."
+        },
+        "controls": {
+          "surface": "Superficie",
+          "disabled": "Deshabilitado"
+        },
+        "demo": {
+          "trigger": "Dimensiones",
+          "heading": "Dimensiones del marco",
+          "hint": "Límites de tamaño por defecto para la capa seleccionada.",
+          "width": "Ancho",
+          "maxWidth": "Ancho máximo",
+          "snap": "Ajustar a la cuadrícula de píxeles",
+          "done": "Listo",
+          "asChild": {
+            "trigger": "Compartir",
+            "heading": "Compartir este tablero",
+            "body": "Cualquiera con el enlace puede verlo.",
+            "cancel": "Cancelar",
+            "copy": "Copiar enlace"
+          },
+          "placement": {
+            "trigger": "Alinear: {align}",
+            "heading": "Alineado a {align}",
+            "body": "Cambia al otro lado cuando no hay espacio en la ventana."
+          },
+          "surface": {
+            "trigger": "Disparador teñido",
+            "heading": "Superficie heredada",
+            "body": "Adopta los colores de fondo, texto y borde del disparador."
+          },
+          "controlled": {
+            "toggle": "Alternar desde fuera",
+            "trigger": "Filtros",
+            "heading": "Filtros",
+            "body": "Se ignoran los clics fuera y Escape. Ciérralo con la X o con el botón de fuera.",
+            "open": "Abierto",
+            "closed": "Cerrado"
+          }
+        },
+        "examples": {
+          "asChild": {
+            "title": "Disparador propio con as-child",
+            "desc": "Popover.Trigger as-child convierte tu propio elemento en el disparador. Popover.Close renderiza un botón de texto con etiqueta, o envuelve tu elemento con as-child."
+          },
+          "placement": {
+            "title": "Lado y alineación",
+            "desc": "side (auto, top, bottom) y align (auto, start, center, end) con cambio de lado automático ante colisiones con la ventana."
+          },
+          "surface": {
+            "title": "Adopción de la superficie del disparador",
+            "desc": "surface=\"trigger\" hace que el panel herede los colores de fondo, texto y borde del disparador."
+          },
+          "controlled": {
+            "title": "Controlado y sin cierre externo",
+            "desc": "Controla el estado con v-model:open. :dismissable=\"false\" ignora los clics fuera, Escape y el arrastre para cerrar."
+          }
+        },
+        "props": {
+          "open": "Estado abierto controlado (v-model:open o v-model).",
+          "defaultOpen": "Estado abierto inicial cuando no está controlado.",
+          "color": "Color semántico del disparador y de los botones de cierre por defecto. default sigue a ModoProvider.",
+          "size": "Tamaño del disparador por defecto y del padding del panel. Hereda de ModoProvider.",
+          "radius": "Radio de esquina del panel y del disparador por defecto. Hereda de ModoProvider.",
+          "triggerAsChild": "Usa el elemento del slot como disparador en lugar de renderizar un Button.",
+          "triggerVariant": "Variante del Button disparador por defecto.",
+          "triggerDisabled": "Deshabilita el disparador por defecto.",
+          "side": "Lado vertical preferido respecto al disparador.",
+          "align": "Alineación horizontal preferida respecto al disparador.",
+          "surface": "auto usa los tokens de superficie del popover; trigger hereda los colores del disparador.",
+          "dismissable": "Si el clic fuera, Escape y el arrastre para cerrar cierran el popover.",
+          "contentOverrides": "Radio y padding propios del panel; si se omiten usa las props de Popover y luego ModoProvider.",
+          "closeAsChild": "Usa el elemento del slot como control de cierre en lugar de renderizar un Button.",
+          "closeVariant": "Variante del Button de cierre por defecto. Sin contenido en el slot renderiza una X solo con icono y la etiqueta de cerrar del idioma."
+        },
+        "emits": {
+          "updateOpen": "Se emite al cambiar el estado abierto (v-model:open).",
+          "updateModelValue": "Igual que update:open, para v-model.",
+          "openChange": "Se emite con el nuevo estado abierto en cada cambio."
+        },
+        "slots": {
+          "default": "Partes compuestas: Popover.Trigger, Popover.Content y Popover.Close.",
+          "trigger": "Etiqueta del disparador, o tu propio elemento con as-child.",
+          "content": "Contenido del panel.",
+          "close": "Etiqueta del botón de cierre, o tu propio elemento con as-child."
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaces de TypeScript de Popover y sus partes compuestas."
+        },
+        "a11y": {
+          "kbToggle": "Abre o cierra el popover desde el disparador",
+          "kbTab": "Mueve el foco por los controles del panel no modal",
+          "kbEsc": "Cierra el popover y devuelve el foco al disparador",
+          "ariaDialog": "El panel es un diálogo no modal etiquetado por el disparador, sin aria-modal",
+          "ariaTrigger": "El disparador anuncia el tipo de popup, si está expandido y qué panel controla",
+          "ariaClose": "El botón de cierre solo con icono recibe la etiqueta de cerrar del idioma",
+          "focusRestore": "Al abrir, el foco pasa al primer control enfocable; al cerrar, vuelve al disparador"
+        }
       }
     }
   }

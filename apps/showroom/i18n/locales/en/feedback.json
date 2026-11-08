@@ -341,7 +341,8 @@
           "modelValue": "Visibility. Use v-model.",
           "side": "Side the panel slides in from.",
           "size": "Size along the panel's main axis.",
-          "radius": "Corner radius (the edge touching the viewport side is not rounded).",
+          "inset": "Detaches the drawer from the viewport edges with an inset floating margin on all sides.",
+          "radius": "Corner radius applied to the floating drawer panel (inherits from ModoProvider when omitted).",
           "title": "Accessible title — rendered in header when no slot is provided.",
           "description": "Optional description below the title.",
           "closeOnOverlay": "Close when clicking the backdrop.",
@@ -956,6 +957,459 @@
           "ariaDescribedBy": "Links the tooltip text to the trigger element for screen reader context",
           "focusNative": "The trigger element remains focusable; the tooltip is announced on focus",
           "focusKeyboard": "Escape closes the tooltip; focus movement keeps it open"
+        }
+      },
+      "sheet": {
+        "title": "Sheet",
+        "category": "Feedback",
+        "description": "Floating bottom sheet with auto, half and full heights, optional upward expansion and drag-to-dismiss. Follows ModoProvider for color, size, radius and dark mode.",
+        "seo": {
+          "metaTitle": "Vue Sheet Component — Floating Bottom Sheet & Detents",
+          "metaDescription": "Free, open-source Vue 3 Sheet component: a floating bottom sheet with auto, half and full heights, upward expansion and drag-to-dismiss.",
+          "h1": "Vue Sheet Component",
+          "intro": "mood-ui's Sheet is a floating bottom sheet for Vue 3 and Nuxt. It slides up from the bottom edge, rests at auto, half or full height, can be pulled up into a full-height detent and closes when dragged down."
+        },
+        "controls": {
+          "height": "Height",
+          "color": "Color",
+          "size": "Size",
+          "radius": "Radius",
+          "expandable": "Expandable",
+          "dismissable": "Dismissable"
+        },
+        "playground": {
+          "open": "Notification settings",
+          "title": "Workspace notifications",
+          "desc": "Drag down to dismiss, or pull up when expandable is on.",
+          "push": "Push notifications",
+          "pushHint": "Instant alerts on your active devices",
+          "digest": "Weekly product digest",
+          "digestHint": "A summary every Monday morning",
+          "security": "Security alerts",
+          "securityHint": "New sign-ins and permission changes",
+          "cancel": "Cancel",
+          "save": "Save preferences"
+        },
+        "examples": {
+          "heights": {
+            "title": "Heights and expansion",
+            "desc": "auto fits the content up to 85dvh, half rests at 50dvh and full takes the viewport. With expandable, a half sheet can be pulled up to full height.",
+            "auto": "Auto",
+            "half": "Half + expandable",
+            "full": "Full",
+            "autoTitle": "Auto height",
+            "autoDesc": "Fits its content up to 85dvh. Drag down or press Escape to close it.",
+            "halfTitle": "Half height, expandable",
+            "halfDesc": "Starts at 50dvh. Pull it up, or keep scrolling up, to reach the full detent.",
+            "fullTitle": "Full height",
+            "fullDesc": "Opens at full height for editors or long forms. Dragging down from the top still closes it."
+          },
+          "scrollable": {
+            "title": "Pinned header and footer, scrolling body",
+            "desc": "Sheet.Body scrolls on its own while Sheet.Header and Sheet.Footer stay in place. Drag-to-dismiss only starts once the body is scrolled to the top.",
+            "cta": "Release notes",
+            "sheetTitle": "Release notes",
+            "sheetDesc": "Scroll the list. The header and footer stay pinned.",
+            "item": "Smoother drag handling: scrolling inside the body never closes the sheet by accident.",
+            "done": "Got it"
+          },
+          "buttons": {
+            "title": "Built-in buttons or your own trigger",
+            "desc": "Without as-child, Sheet.Trigger and Sheet.Close render a Button with label, variant, color, size, radius and icon. A Close without a label reads \"Close\" from the locale.",
+            "filters": "Filters",
+            "sheetDesc": "Trigger and Close take the sheet color unless you set one on them.",
+            "apply": "Apply",
+            "custom": "Custom trigger",
+            "customDesc": "This sheet was opened by a PressButton passed through as-child."
+          },
+          "controlled": {
+            "title": "Controlled and non-dismissable",
+            "desc": "Bind v-model:open to open the sheet from anywhere. With :dismissable=\"false\" the backdrop, Escape and dragging no longer close it.",
+            "cta": "Open from outside",
+            "sheetTitle": "Controlled sheet",
+            "sheetDesc": "Only the button below closes this sheet.",
+            "done": "Done"
+          }
+        },
+        "props": {
+          "open": "Controlled open state (v-model:open or v-model).",
+          "defaultOpen": "Initial open state when uncontrolled.",
+          "color": "Accent color shared by the trigger and close buttons. Inherits from ModoProvider.",
+          "height": "Resting height of Sheet.Content: fit content, half the viewport or full height.",
+          "expandable": "Lets the user drag or scroll the sheet up into the full-height detent.",
+          "dismissable": "Enables backdrop click, Escape and drag-down to dismiss.",
+          "size": "Panel padding density. Inherits from ModoProvider.",
+          "contentColor": "Accent color for the close button. Inherits from Sheet, then ModoProvider.",
+          "radius": "Corner radius. Inherits from ModoProvider.",
+          "closeLabel": "Accessible label for the corner close button.",
+          "ariaLabel": "Accessible name used when there is no Sheet.Title.",
+          "asChild": "Binds the behavior to the slotted element instead of rendering a Button.",
+          "label": "Button text when no slot content is given. Close falls back to the locale's \"Close\".",
+          "variant": "Button variant. Close defaults to 'outline'.",
+          "buttonTheme": "Button color, size and radius. Color inherits from the sheet; size and radius from ModoProvider.",
+          "icon": "Optional leading icon component.",
+          "disabled": "Disables the button."
+        },
+        "emits": {
+          "updateOpen": "Emitted when the open state changes (v-model:open).",
+          "updateModelValue": "Same as update:open, for v-model.",
+          "openChange": "Emitted on every open or close."
+        },
+        "slots": {
+          "default": "Compound children: Sheet.Trigger, Sheet.Content, Sheet.Header, Sheet.Title, Sheet.Description, Sheet.Body, Sheet.Footer and Sheet.Close.",
+          "trigger": "Button content, or the element to bind with as-child. Scoped: { open }.",
+          "close": "Button content, or the element to bind with as-child. Scoped: { close }."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for Sheet, Sheet.Content and the Trigger and Close buttons."
+        },
+        "a11y": {
+          "kbOpen": "Opens the sheet from the focused trigger",
+          "kbTab": "Moves focus inside the sheet while it is open (focus trap)",
+          "kbEsc": "Closes the topmost sheet when dismissable is true",
+          "ariaDialog": "Renders role=\"dialog\" with aria-modal=\"true\"",
+          "ariaLabelledby": "Linked automatically to Sheet.Title and Sheet.Description",
+          "ariaLabel": "Fallback accessible name when there is no Sheet.Title (locale sheet.label)",
+          "focusTrap": "Focus moves into the sheet when it opens and stays there",
+          "focusRestore": "Focus returns to the trigger when the sheet finishes closing",
+          "reducedMotion": "With prefers-reduced-motion the slide is skipped and the sheet appears in place"
+        }
+      },
+      "dialog": {
+        "title": "Dialog",
+        "category": "Feedback",
+        "description": "Modal dialog that grows out of the button that opened it, or settles in the center of the screen, and folds back into it on close. Width steps match Modal. Follows ModoProvider for color, size, radius and dark mode.",
+        "seo": {
+          "metaTitle": "Vue Dialog Component — Morphing Modal & Alert Dialog",
+          "metaDescription": "Free, open-source Vue 3 Dialog component: morphs out of its trigger, supports trigger or center placement, Modal width steps, alertdialog mode and pull-to-close.",
+          "h1": "Vue Dialog Component",
+          "intro": "mood-ui's Dialog is a morphing modal and alert dialog for Vue 3 and Nuxt. It measures the trigger before paint, animates position, radius and surface into the panel, and folds back into the trigger when it closes."
+        },
+        "controls": {
+          "placement": "Placement",
+          "width": "Width",
+          "color": "Color",
+          "size": "Size",
+          "radius": "Radius",
+          "surface": "Surface",
+          "alert": "Alert"
+        },
+        "options": {
+          "trigger": "Trigger",
+          "center": "Center",
+          "auto": "Auto"
+        },
+        "playground": {
+          "open": "Rename project",
+          "title": "Rename project",
+          "desc": "The button turns into this panel and folds back into it when you close it. You can also drag the panel down to close it.",
+          "field": "Project name",
+          "cancel": "Cancel",
+          "save": "Save changes"
+        },
+        "examples": {
+          "widths": {
+            "title": "Centered placement and widths",
+            "desc": "placement=\"center\" turns it into a classic modal over a dimmed backdrop. width uses the same steps as Modal: xsmall, small, medium, large, xlarge and full.",
+            "dialogTitle": "Centered dialog",
+            "dialogDesc": "It still morphs from the button you clicked, then settles in the center of the viewport.",
+            "done": "Done"
+          },
+          "buttons": {
+            "title": "Built-in buttons or your own trigger",
+            "desc": "Without as-child, Dialog.Trigger and Dialog.Close render a Button with label, variant, color, size, radius and icon. A Close without a label reads \"Close\" from the locale. With as-child, any element becomes the trigger.",
+            "edit": "Edit profile",
+            "dialogDesc": "Trigger and Close take the dialog color unless you set one on them.",
+            "save": "Save",
+            "custom": "Custom trigger",
+            "customDesc": "This dialog was opened by a PressButton passed through as-child."
+          },
+          "surface": {
+            "title": "Trigger surface and icon tile",
+            "desc": "surface=\"trigger\" keeps the trigger's background, lightly tinted with the dialog color. Dialog.Icon follows the dialog color and accepts its own size and radius.",
+            "cta": "Success surface",
+            "dialogTitle": "Surface continuity",
+            "dialogDesc": "The panel keeps the look of the button that opened it, so the morph reads as one object.",
+            "iconCta": "Warning icon",
+            "iconTitle": "Icon tile",
+            "iconDesc": "Large, fully rounded tile in the dialog's warning color."
+          },
+          "alert": {
+            "title": "Alert dialog",
+            "desc": "alert switches to role=\"alertdialog\", hides the corner close button and ignores outside clicks, so the user has to pick an action.",
+            "cta": "Delete workspace",
+            "dialogTitle": "Delete the workspace?",
+            "dialogDesc": "This cannot be undone. Outside clicks and the corner button are disabled in alert mode.",
+            "cancel": "Cancel",
+            "confirm": "Delete"
+          },
+          "controlled": {
+            "title": "Controlled open state",
+            "desc": "Bind v-model:open to open the dialog from anywhere. Without a Dialog.Title, ariaLabel gives the panel its accessible name.",
+            "cta": "Open from outside",
+            "dialogTitle": "Controlled dialog",
+            "state": "Open state"
+          }
+        },
+        "props": {
+          "open": "Controlled open state (v-model:open or v-model).",
+          "defaultOpen": "Initial open state when uncontrolled.",
+          "color": "Accent color shared by the trigger, close buttons and icon. Inherits from ModoProvider.",
+          "placement": "Where the dialog settles: next to the trigger or in the center of the viewport.",
+          "side": "Preferred vertical side relative to the trigger when placement is 'trigger'.",
+          "align": "Horizontal alignment relative to the trigger when placement is 'trigger'.",
+          "surface": "'auto' uses the card surface; 'trigger' keeps the trigger's background, tinted with the color.",
+          "width": "Panel width, same steps as Modal: 20rem, 24rem, 28rem, 42rem, 56rem or the full viewport.",
+          "size": "Panel padding density. Inherits from ModoProvider.",
+          "contentColor": "Accent color for the close button and icon. Inherits from Dialog, then ModoProvider.",
+          "radius": "Corner radius. Inherits from ModoProvider.",
+          "alert": "Uses role=\"alertdialog\", hides the corner close button and disables outside dismissal by default.",
+          "dismissable": "Allows outside click, Escape and drag-to-close.",
+          "closeLabel": "Accessible label for the corner close button.",
+          "ariaLabel": "Accessible name used when there is no Dialog.Title.",
+          "asChild": "Binds the behavior to the slotted element instead of rendering a Button.",
+          "label": "Button text when no slot content is given. Close falls back to the locale's \"Close\".",
+          "variant": "Button variant. Close defaults to 'outline'.",
+          "buttonTheme": "Button color, size and radius. Color inherits from the dialog; size and radius from ModoProvider.",
+          "icon": "Optional leading icon component.",
+          "disabled": "Disables the button.",
+          "iconTheme": "Dialog.Icon tile color, size (32/36/40/48px) and radius. Inherit from Dialog.Content, then ModoProvider."
+        },
+        "emits": {
+          "updateOpen": "Emitted when the open state changes (v-model:open).",
+          "updateModelValue": "Same as update:open, for v-model.",
+          "openChange": "Emitted on every open or close."
+        },
+        "slots": {
+          "default": "Compound children: Dialog.Trigger, Dialog.Content, Dialog.Header, Dialog.Icon, Dialog.Title, Dialog.Description, Dialog.Body, Dialog.Footer and Dialog.Close.",
+          "trigger": "Button content, or the element to bind with as-child. Scoped: { open }.",
+          "close": "Button content, or the element to bind with as-child. Scoped: { close }."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for Dialog, Dialog.Content, the Trigger and Close buttons, and Dialog.Icon."
+        },
+        "a11y": {
+          "kbOpen": "Opens the dialog from the focused trigger",
+          "kbTab": "Moves focus inside the dialog while it is open (focus trap)",
+          "kbEsc": "Closes the topmost dialog when dismissable is true",
+          "ariaDialog": "Renders role=\"dialog\" (role=\"alertdialog\" with alert) and aria-modal=\"true\"",
+          "ariaLabelledby": "Linked automatically to Dialog.Title and Dialog.Description",
+          "ariaLabel": "Fallback accessible name when there is no Dialog.Title (locale dialog.label)",
+          "ariaTrigger": "The built-in trigger announces that it opens a dialog and whether it is expanded",
+          "focusTrap": "Focus moves into the panel when it opens and stays there",
+          "focusRestore": "Focus returns to the trigger once the close morph finishes",
+          "reducedMotion": "With prefers-reduced-motion the morph is skipped and the panel appears in place"
+        }
+      },
+      "liquidToast": {
+        "title": "LiquidToast",
+        "category": "Feedback",
+        "description": "Notifications where the title pill and the description panel melt into one liquid shape. Same colors, variants, placements and actions as Toast, plus a queue, in-place updates and promise tracking. Follows ModoProvider for size, radius and dark mode.",
+        "seo": {
+          "metaTitle": "Vue LiquidToast Component — Liquid Notifications",
+          "metaDescription": "Free, open-source Vue 3 liquid toast: a pill and panel that melt into one shape, with a queue, promise and in-place updates, actions and swipe to dismiss.",
+          "h1": "Vue LiquidToast Component",
+          "intro": "mood-ui's LiquidToast is a notification stack for Vue 3 and Nuxt. Mount one LiquidToaster, then call liquidToast from anywhere: toasts queue up, update in place by id, follow a promise from loading to success or error, and can be swiped away."
+        },
+        "controls": {
+          "color": "Color",
+          "variant": "Variant",
+          "placement": "Placement",
+          "max": "Max",
+          "size": "Size",
+          "radius": "Radius"
+        },
+        "playground": {
+          "show": "Show notification",
+          "queue": "Queue three",
+          "dismissAll": "Dismiss all"
+        },
+        "demo": {
+          "savedTitle": "Changes saved",
+          "savedDesc": "Your workspace is up to date.",
+          "queued": "Notification",
+          "queuedDesc": "Waiting its turn in the queue."
+        },
+        "examples": {
+          "colors": {
+            "title": "Colors",
+            "desc": "info, success, warning and danger shortcuts set the color for you. The dot shows a glyph that matches the color.",
+            "infoTitle": "Syncing",
+            "infoDesc": "Fetching the latest data.",
+            "successTitle": "Saved",
+            "successDesc": "Changes applied.",
+            "warningTitle": "Storage almost full",
+            "warningDesc": "92% of your space is in use.",
+            "dangerTitle": "Payment failed",
+            "dangerDesc": "The card was declined."
+          },
+          "action": {
+            "title": "Action and persistent toast",
+            "desc": "action adds a button. onClick receives close(); the toast closes after the click unless keepOpen is true. duration: 0 keeps it on screen until dismissed.",
+            "cta": "Archive message",
+            "toastTitle": "Message archived",
+            "toastDesc": "It was moved to the archive.",
+            "undo": "Undo",
+            "restored": "Message restored"
+          },
+          "promise": {
+            "title": "Promise",
+            "desc": "promise() shows a loading toast and turns it into success or error when the promise settles. It returns the original promise.",
+            "ctaOk": "Export report",
+            "ctaFail": "Export and fail",
+            "loading": "Exporting report…",
+            "success": "Report ready",
+            "error": "Export failed",
+            "errorDesc": "Try again in a moment."
+          },
+          "update": {
+            "title": "Update in place",
+            "desc": "Give a toast a stable id and call update() to change its text, color or duration without stacking a new one.",
+            "cta": "Start upload",
+            "uploading": "Uploading file",
+            "done": "Upload complete"
+          },
+          "persistent": {
+            "title": "Filled and pinned",
+            "desc": "variant: 'filled' uses the solid color. With duration: 0 and pauseOnHover: false the toast stays until the user closes it or you call dismissAll().",
+            "cta": "Show notice",
+            "toastTitle": "Maintenance tonight",
+            "toastDesc": "The service will be read-only from 23:00 to 23:30."
+          }
+        },
+        "props": {
+          "placement": "Where the stack sits in the viewport. A toast can override it with its own placement.",
+          "max": "Toasts on stage per placement; the rest wait as previews behind the last one.",
+          "defaultDuration": "Duration in ms for toasts that do not set one. 0 keeps them until dismissed.",
+          "defaultVariant": "Variant for toasts that do not set one.",
+          "offset": "Distance from the viewport edge in px.",
+          "size": "Size for every toast; a toast's own size wins. Inherits from ModoProvider.",
+          "radius": "Radius for every toast; a toast's own radius wins. Inherits from ModoProvider.",
+          "controller": "Isolated store from createLiquidToast(). Defaults to the shared liquidToast.",
+          "ariaLabel": "Accessible name of the notification region."
+        },
+        "controller": {
+          "title": "Controller",
+          "desc": "liquidToast is a shared controller that only acts in the browser. createLiquidToast() returns an isolated one for a second app or per-request state in Nuxt; pass it to LiquidToaster through controller."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "Options accepted by push(), info(), success(), warning(), danger() and update(), and the controller API."
+        },
+        "a11y": {
+          "kbTab": "Reaches the toast's action and close buttons; focus never jumps to a toast on its own",
+          "kbActivate": "Runs the focused action or closes the toast",
+          "ariaRegion": "The stack is a labelled region (ariaLabel, locale liquidToast.region)",
+          "ariaPolite": "Info and success toasts are announced politely",
+          "ariaAssertive": "Warning and danger toasts are announced right away",
+          "ariaPeek": "Queued previews are hidden from assistive technology and cannot be focused",
+          "focusNoSteal": "Announcements come from two persistent live regions, so a toast is read once and never steals focus",
+          "focusPause": "The timer pauses while the pointer or focus is on the toast, and while the window is hidden",
+          "reducedMotion": "With prefers-reduced-motion the liquid morph and swipe animation are removed"
+        }
+      },
+      "morphTooltip": {
+        "title": "MorphTooltip",
+        "category": "Feedback",
+        "description": "Tooltip that grows out of its trigger with a directional streak. Same colors, delays and open modes as Tooltip, and neighbouring tooltips open instantly once one is showing. Follows ModoProvider for color, size, radius and dark mode.",
+        "seo": {
+          "metaTitle": "Vue MorphTooltip Component — Morphing Tooltip",
+          "metaDescription": "Free, open-source Vue 3 morphing tooltip: grows out of its trigger, flips to fit, supports hover, focus, click and manual modes, and opens neighbours instantly.",
+          "h1": "Vue MorphTooltip Component",
+          "intro": "mood-ui's MorphTooltip is a compound tooltip for Vue 3 and Nuxt. The label grows out of the trigger, lands with an arrow, flips when there is no room, and shares a warm window so a row of icon buttons reads fast."
+        },
+        "controls": {
+          "side": "Side",
+          "color": "Color",
+          "size": "Size",
+          "delay": "Delay",
+          "arrow": "Arrow",
+          "disabled": "Disabled"
+        },
+        "playground": {
+          "trigger": "Save",
+          "content": "Save changes"
+        },
+        "examples": {
+          "sides": {
+            "title": "Sides",
+            "desc": "side sets the preferred side. When there is no room the tooltip flips and stays inside the viewport.",
+            "top": "Opens on top",
+            "right": "Opens on the right",
+            "bottom": "Opens at the bottom",
+            "left": "Opens on the left"
+          },
+          "rich": {
+            "title": "Title and description",
+            "desc": "MorphTooltip.Title and MorphTooltip.Description add structure. color=\"inverted\" uses the page surface; maxWidth caps the width.",
+            "heading": "Version history",
+            "body": "Review and restore earlier versions of this document."
+          },
+          "warm": {
+            "title": "Neighbouring triggers",
+            "desc": "Once one tooltip is open, the ones next to it open without delay. Without as-child, the trigger renders a Button and forwards variant, icon and aria-label.",
+            "bold": "Bold",
+            "italic": "Italic",
+            "underline": "Underline",
+            "link": "Insert link"
+          },
+          "click": {
+            "title": "Open on click",
+            "desc": "trigger=\"click\" toggles the tooltip on click. Escape or a click outside closes it.",
+            "label": "What is this?",
+            "content": "Opens on click and closes on the next click, Escape or an outside tap."
+          },
+          "manual": {
+            "title": "Manual control",
+            "desc": "trigger=\"manual\" ignores hover and focus; the tooltip only follows v-model:open.",
+            "cta": "Toggle from outside",
+            "target": "Target",
+            "content": "Controlled with v-model:open"
+          }
+        },
+        "props": {
+          "open": "Controlled visibility. Pair it with trigger=\"manual\" to drive it only from outside.",
+          "defaultOpen": "Initial visibility when uncontrolled.",
+          "trigger": "What opens the tooltip: hover, focus, click, manual, or a list of them.",
+          "openDelay": "Delay in ms before opening on hover. Skipped while a neighbouring tooltip just closed.",
+          "closeDelay": "Delay in ms before closing after the pointer leaves.",
+          "disabled": "The tooltip never opens while true.",
+          "asChild": "Binds the behavior to the single slotted element instead of rendering a Button.",
+          "side": "Preferred side; flips when it does not fit.",
+          "align": "Alignment along the side. 'auto' centers it.",
+          "offset": "Distance from the trigger in px.",
+          "arrow": "Shows an arrow pointing at the trigger once the morph lands.",
+          "color": "Tooltip color. 'default' follows ModoProvider; 'inverted' uses the page surface.",
+          "size": "Text size and padding. Inherits from ModoProvider.",
+          "radius": "Corner radius. Inherits from ModoProvider.",
+          "maxWidth": "Maximum width in px."
+        },
+        "emits": {
+          "updateOpen": "Emitted when visibility changes (v-model:open).",
+          "openChange": "Same payload as update:open.",
+          "show": "Emitted when the tooltip opens.",
+          "hide": "Emitted when the tooltip closes."
+        },
+        "slots": {
+          "default": "Compound children: MorphTooltip.Trigger, MorphTooltip.Content, MorphTooltip.Title and MorphTooltip.Description.",
+          "trigger": "Button content, or the single element to bind with as-child.",
+          "content": "Tooltip content. Keep it non-interactive; use Popover for links or buttons."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for MorphTooltip, MorphTooltip.Trigger and MorphTooltip.Content."
+        },
+        "a11y": {
+          "kbTab": "Focusing the trigger with the keyboard shows the tooltip right away",
+          "kbShiftTab": "Moving focus away hides it",
+          "kbEsc": "Closes the open tooltip",
+          "ariaTooltip": "The content renders role=\"tooltip\"",
+          "ariaDescribedBy": "The trigger points to the visible tooltip through aria-describedby",
+          "focusVisible": "Only keyboard focus (:focus-visible) opens it; a mouse click on the trigger does not",
+          "focusNonInteractive": "Content is not focusable. Wrap disabled controls in a span so the tooltip still gets pointer events",
+          "reducedMotion": "With prefers-reduced-motion the morph and streak are removed"
         }
       }
     }

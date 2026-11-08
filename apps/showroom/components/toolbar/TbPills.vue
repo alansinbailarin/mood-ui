@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps<{
     options: Array<{ value: string; label?: string }>;
-    modelValue: string;
+    modelValue?: string;
     label?: string;
 }>();
 defineEmits<{ 'update:modelValue': [string] }>();

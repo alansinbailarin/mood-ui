@@ -341,7 +341,8 @@
           "modelValue": "Visibilidad. Usa v-model.",
           "side": "Lado desde el que entra el panel.",
           "size": "Tamaño en el eje principal del panel.",
-          "radius": "Radio de las esquinas (el lado pegado al borde no se redondea).",
+          "inset": "Despega el drawer de los bordes de la ventana con un margen flotante en todos los lados.",
+          "radius": "Radio de las esquinas del panel flotante (heredado de ModoProvider si se omite).",
           "title": "Título accesible — renderizado en header si no hay slot.",
           "description": "Descripción opcional bajo el título.",
           "closeOnOverlay": "Cierra al hacer click en el backdrop.",
@@ -956,6 +957,459 @@
           "ariaDescribedBy": "Vincula el texto del tooltip al elemento trigger para contexto del lector de pantalla",
           "focusNative": "El elemento trigger permanece enfocable; el tooltip se anuncia al enfocar",
           "focusKeyboard": "Escape cierra el tooltip; el movimiento de foco lo mantiene abierto"
+        }
+      },
+      "sheet": {
+        "title": "Sheet",
+        "category": "Feedback",
+        "description": "Panel inferior flotante con alturas auto, half y full, expansión opcional hacia arriba y cierre al arrastrar. Respeta ModoProvider en color, tamaño, radio y modo oscuro.",
+        "seo": {
+          "metaTitle": "Componente Sheet para Vue — Bottom Sheet Flotante con Detents",
+          "metaDescription": "Componente Sheet gratuito y open-source para Vue 3 y Nuxt: bottom sheet flotante con alturas auto, half y full, expansión hacia arriba y cierre al arrastrar.",
+          "h1": "Componente Sheet para Vue",
+          "intro": "Sheet de mood-ui es un panel inferior flotante para Vue 3 y Nuxt. Sube desde el borde inferior, descansa a altura auto, half o full, se puede estirar hasta la altura completa y se cierra al arrastrarlo hacia abajo."
+        },
+        "controls": {
+          "height": "Altura",
+          "color": "Color",
+          "size": "Tamaño",
+          "radius": "Radio",
+          "expandable": "Expandible",
+          "dismissable": "Descartable"
+        },
+        "playground": {
+          "open": "Ajustes de notificaciones",
+          "title": "Notificaciones del espacio",
+          "desc": "Arrastra hacia abajo para cerrar, o hacia arriba si está activado expandable.",
+          "push": "Notificaciones push",
+          "pushHint": "Avisos al instante en tus dispositivos activos",
+          "digest": "Resumen semanal",
+          "digestHint": "Un resumen cada lunes por la mañana",
+          "security": "Alertas de seguridad",
+          "securityHint": "Nuevos inicios de sesión y cambios de permisos",
+          "cancel": "Cancelar",
+          "save": "Guardar preferencias"
+        },
+        "examples": {
+          "heights": {
+            "title": "Alturas y expansión",
+            "desc": "auto se ajusta al contenido hasta 85dvh, half se queda en 50dvh y full ocupa la pantalla. Con expandable, un sheet half se puede estirar hasta la altura completa.",
+            "auto": "Auto",
+            "half": "Half + expandible",
+            "full": "Full",
+            "autoTitle": "Altura automática",
+            "autoDesc": "Se ajusta al contenido hasta 85dvh. Arrástralo hacia abajo o pulsa Escape para cerrarlo.",
+            "halfTitle": "Media altura, expandible",
+            "halfDesc": "Empieza en 50dvh. Tira hacia arriba, o sigue desplazando hacia arriba, para llegar a la altura completa.",
+            "fullTitle": "Altura completa",
+            "fullDesc": "Se abre a toda altura para editores o formularios largos. Arrastrar hacia abajo desde arriba lo sigue cerrando."
+          },
+          "scrollable": {
+            "title": "Cabecera y pie fijos, cuerpo con scroll",
+            "desc": "Sheet.Body tiene su propio scroll mientras Sheet.Header y Sheet.Footer se quedan en su sitio. El cierre al arrastrar solo empieza cuando el cuerpo está arriba del todo.",
+            "cta": "Notas de versión",
+            "sheetTitle": "Notas de versión",
+            "sheetDesc": "Desplaza la lista. La cabecera y el pie no se mueven.",
+            "item": "Arrastre más fino: desplazarte dentro del cuerpo nunca cierra el sheet por accidente.",
+            "done": "Entendido"
+          },
+          "buttons": {
+            "title": "Botones integrados o tu propio trigger",
+            "desc": "Sin as-child, Sheet.Trigger y Sheet.Close dibujan un Button con label, variant, color, size, radius e icon. Un Close sin label toma \"Cerrar\" del locale.",
+            "filters": "Filtros",
+            "sheetDesc": "Trigger y Close usan el color del sheet salvo que les pongas otro.",
+            "apply": "Aplicar",
+            "custom": "Trigger propio",
+            "customDesc": "Este sheet lo abrió un PressButton pasado con as-child."
+          },
+          "controlled": {
+            "title": "Controlado y sin cierre libre",
+            "desc": "Enlaza v-model:open para abrir el sheet desde cualquier lugar. Con :dismissable=\"false\" ni el fondo, ni Escape, ni el arrastre lo cierran.",
+            "cta": "Abrir desde fuera",
+            "sheetTitle": "Sheet controlado",
+            "sheetDesc": "Solo el botón de abajo cierra este sheet.",
+            "done": "Listo"
+          }
+        },
+        "props": {
+          "open": "Estado abierto controlado (v-model:open o v-model).",
+          "defaultOpen": "Estado abierto inicial cuando no está controlado.",
+          "color": "Color de acento del trigger y los botones de cierre. Hereda de ModoProvider.",
+          "height": "Altura de reposo de Sheet.Content: según contenido, media pantalla o completa.",
+          "expandable": "Permite arrastrar o desplazar el sheet hacia arriba hasta la altura completa.",
+          "dismissable": "Permite cerrar con clic en el fondo, Escape o arrastrando hacia abajo.",
+          "size": "Densidad del relleno del panel. Hereda de ModoProvider.",
+          "contentColor": "Color de acento del botón de cierre. Hereda de Sheet y luego de ModoProvider.",
+          "radius": "Radio de las esquinas. Hereda de ModoProvider.",
+          "closeLabel": "Etiqueta accesible del botón de cerrar de la esquina.",
+          "ariaLabel": "Nombre accesible cuando no hay Sheet.Title.",
+          "asChild": "Aplica el comportamiento al elemento del slot en lugar de dibujar un Button.",
+          "label": "Texto del botón si no hay contenido en el slot. Close usa \"Cerrar\" del locale.",
+          "variant": "Variante del botón. Close usa 'outline' por defecto.",
+          "buttonTheme": "Color, tamaño y radio del botón. El color hereda del sheet; tamaño y radio de ModoProvider.",
+          "icon": "Icono opcional al inicio.",
+          "disabled": "Desactiva el botón."
+        },
+        "emits": {
+          "updateOpen": "Se emite al cambiar el estado abierto (v-model:open).",
+          "updateModelValue": "Igual que update:open, para v-model.",
+          "openChange": "Se emite en cada apertura o cierre."
+        },
+        "slots": {
+          "default": "Hijos compuestos: Sheet.Trigger, Sheet.Content, Sheet.Header, Sheet.Title, Sheet.Description, Sheet.Body, Sheet.Footer y Sheet.Close.",
+          "trigger": "Contenido del botón, o el elemento a enlazar con as-child. Scoped: { open }.",
+          "close": "Contenido del botón, o el elemento a enlazar con as-child. Scoped: { close }."
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaces TypeScript de Sheet, Sheet.Content y los botones Trigger y Close."
+        },
+        "a11y": {
+          "kbOpen": "Abre el sheet desde el trigger con foco",
+          "kbTab": "Mueve el foco dentro del sheet mientras está abierto (trampa de foco)",
+          "kbEsc": "Cierra el sheet superior cuando dismissable es true",
+          "ariaDialog": "Usa role=\"dialog\" con aria-modal=\"true\"",
+          "ariaLabelledby": "Se enlaza solo con Sheet.Title y Sheet.Description",
+          "ariaLabel": "Nombre accesible de respaldo cuando no hay Sheet.Title (locale sheet.label)",
+          "focusTrap": "El foco entra al sheet al abrirse y se queda ahí",
+          "focusRestore": "El foco vuelve al trigger cuando el sheet termina de cerrarse",
+          "reducedMotion": "Con prefers-reduced-motion se omite el deslizamiento y el sheet aparece directamente"
+        }
+      },
+      "dialog": {
+        "title": "Dialog",
+        "category": "Feedback",
+        "description": "Diálogo modal que crece desde el botón que lo abrió, o se coloca al centro de la pantalla, y vuelve a él al cerrarse. Los anchos siguen los pasos de Modal. Respeta ModoProvider en color, tamaño, radio y modo oscuro.",
+        "seo": {
+          "metaTitle": "Componente Dialog para Vue — Modal con Morph y AlertDialog",
+          "metaDescription": "Componente Dialog gratuito y open-source para Vue 3 y Nuxt: se transforma desde su trigger, se coloca junto a él o al centro, usa los anchos de Modal y tiene modo alertdialog.",
+          "h1": "Componente Dialog para Vue",
+          "intro": "Dialog de mood-ui es un diálogo modal y alertdialog con morphing para Vue 3 y Nuxt. Mide el disparador antes de pintar, anima posición, radio y superficie hasta el panel, y se pliega de vuelta al botón al cerrarse."
+        },
+        "controls": {
+          "placement": "Posición",
+          "width": "Ancho",
+          "color": "Color",
+          "size": "Tamaño",
+          "radius": "Radio",
+          "surface": "Superficie",
+          "alert": "Alerta"
+        },
+        "options": {
+          "trigger": "Trigger",
+          "center": "Centro",
+          "auto": "Auto"
+        },
+        "playground": {
+          "open": "Renombrar proyecto",
+          "title": "Renombrar proyecto",
+          "desc": "El botón se convierte en este panel y vuelve a ser botón al cerrarlo. También puedes arrastrar el panel hacia abajo para cerrarlo.",
+          "field": "Nombre del proyecto",
+          "cancel": "Cancelar",
+          "save": "Guardar cambios"
+        },
+        "examples": {
+          "widths": {
+            "title": "Centrado y anchos",
+            "desc": "placement=\"center\" lo convierte en un modal clásico sobre un fondo atenuado. width usa los mismos pasos que Modal: xsmall, small, medium, large, xlarge y full.",
+            "dialogTitle": "Diálogo centrado",
+            "dialogDesc": "Sigue saliendo del botón que pulsaste y luego se acomoda al centro de la pantalla.",
+            "done": "Listo"
+          },
+          "buttons": {
+            "title": "Botones integrados o tu propio trigger",
+            "desc": "Sin as-child, Dialog.Trigger y Dialog.Close dibujan un Button con label, variant, color, size, radius e icon. Un Close sin label toma \"Cerrar\" del locale. Con as-child, cualquier elemento sirve de trigger.",
+            "edit": "Editar perfil",
+            "dialogDesc": "Trigger y Close usan el color del diálogo salvo que les pongas otro.",
+            "save": "Guardar",
+            "custom": "Trigger propio",
+            "customDesc": "Este diálogo lo abrió un PressButton pasado con as-child."
+          },
+          "surface": {
+            "title": "Superficie del trigger e icono",
+            "desc": "surface=\"trigger\" conserva el fondo del botón, con un tinte suave del color del diálogo. Dialog.Icon sigue el color del diálogo y acepta su propio size y radius.",
+            "cta": "Superficie success",
+            "dialogTitle": "Continuidad de superficie",
+            "dialogDesc": "El panel conserva el aspecto del botón que lo abrió, así la transición se lee como un solo objeto.",
+            "iconCta": "Icono warning",
+            "iconTitle": "Mosaico de icono",
+            "iconDesc": "Mosaico grande y redondo en el color warning del diálogo."
+          },
+          "alert": {
+            "title": "Diálogo de alerta",
+            "desc": "alert cambia a role=\"alertdialog\", oculta el botón de cerrar de la esquina e ignora los clics fuera, así que hay que elegir una acción.",
+            "cta": "Eliminar espacio",
+            "dialogTitle": "¿Eliminar el espacio de trabajo?",
+            "dialogDesc": "No se puede deshacer. En modo alerta se desactivan los clics fuera y el botón de la esquina.",
+            "cancel": "Cancelar",
+            "confirm": "Eliminar"
+          },
+          "controlled": {
+            "title": "Estado controlado",
+            "desc": "Enlaza v-model:open para abrir el diálogo desde cualquier lugar. Sin Dialog.Title, ariaLabel le da nombre accesible al panel.",
+            "cta": "Abrir desde fuera",
+            "dialogTitle": "Diálogo controlado",
+            "state": "Estado abierto"
+          }
+        },
+        "props": {
+          "open": "Estado abierto controlado (v-model:open o v-model).",
+          "defaultOpen": "Estado abierto inicial cuando no está controlado.",
+          "color": "Color de acento del trigger, los botones de cierre y el icono. Hereda de ModoProvider.",
+          "placement": "Dónde se coloca: junto al trigger o al centro de la pantalla.",
+          "side": "Lado vertical preferido respecto al trigger cuando placement es 'trigger'.",
+          "align": "Alineación horizontal respecto al trigger cuando placement es 'trigger'.",
+          "surface": "'auto' usa la superficie de tarjeta; 'trigger' conserva el fondo del botón, teñido con el color.",
+          "width": "Ancho del panel, mismos pasos que Modal: 20rem, 24rem, 28rem, 42rem, 56rem o toda la pantalla.",
+          "size": "Densidad del relleno del panel. Hereda de ModoProvider.",
+          "contentColor": "Color de acento del botón de cierre y el icono. Hereda de Dialog y luego de ModoProvider.",
+          "radius": "Radio de las esquinas. Hereda de ModoProvider.",
+          "alert": "Usa role=\"alertdialog\", oculta el botón de cerrar de la esquina y desactiva el cierre por clic fuera.",
+          "dismissable": "Permite cerrar con clic fuera, Escape o arrastrando.",
+          "closeLabel": "Etiqueta accesible del botón de cerrar de la esquina.",
+          "ariaLabel": "Nombre accesible cuando no hay Dialog.Title.",
+          "asChild": "Aplica el comportamiento al elemento del slot en lugar de dibujar un Button.",
+          "label": "Texto del botón si no hay contenido en el slot. Close usa \"Cerrar\" del locale.",
+          "variant": "Variante del botón. Close usa 'outline' por defecto.",
+          "buttonTheme": "Color, tamaño y radio del botón. El color hereda del diálogo; tamaño y radio de ModoProvider.",
+          "icon": "Icono opcional al inicio.",
+          "disabled": "Desactiva el botón.",
+          "iconTheme": "Color, tamaño (32/36/40/48px) y radio del mosaico de Dialog.Icon. Heredan de Dialog.Content y luego de ModoProvider."
+        },
+        "emits": {
+          "updateOpen": "Se emite al cambiar el estado abierto (v-model:open).",
+          "updateModelValue": "Igual que update:open, para v-model.",
+          "openChange": "Se emite en cada apertura o cierre."
+        },
+        "slots": {
+          "default": "Hijos compuestos: Dialog.Trigger, Dialog.Content, Dialog.Header, Dialog.Icon, Dialog.Title, Dialog.Description, Dialog.Body, Dialog.Footer y Dialog.Close.",
+          "trigger": "Contenido del botón, o el elemento a enlazar con as-child. Scoped: { open }.",
+          "close": "Contenido del botón, o el elemento a enlazar con as-child. Scoped: { close }."
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaces TypeScript de Dialog, Dialog.Content, los botones Trigger y Close, y Dialog.Icon."
+        },
+        "a11y": {
+          "kbOpen": "Abre el diálogo desde el trigger con foco",
+          "kbTab": "Mueve el foco dentro del diálogo mientras está abierto (trampa de foco)",
+          "kbEsc": "Cierra el diálogo superior cuando dismissable es true",
+          "ariaDialog": "Usa role=\"dialog\" (role=\"alertdialog\" con alert) y aria-modal=\"true\"",
+          "ariaLabelledby": "Se enlaza solo con Dialog.Title y Dialog.Description",
+          "ariaLabel": "Nombre accesible de respaldo cuando no hay Dialog.Title (locale dialog.label)",
+          "ariaTrigger": "El trigger integrado anuncia que abre un diálogo y si está expandido",
+          "focusTrap": "El foco entra al panel al abrirse y se queda ahí",
+          "focusRestore": "El foco vuelve al trigger cuando termina la animación de cierre",
+          "reducedMotion": "Con prefers-reduced-motion se omite el morph y el panel aparece directamente"
+        }
+      },
+      "liquidToast": {
+        "title": "LiquidToast",
+        "category": "Feedback",
+        "description": "Notificaciones donde la píldora del título y el panel de descripción se funden en una sola forma líquida. Mismos colores, variantes, posiciones y acciones que Toast, más cola, actualización en el sitio y seguimiento de promesas. Respeta ModoProvider en tamaño, radio y modo oscuro.",
+        "seo": {
+          "metaTitle": "Componente LiquidToast para Vue — Notificaciones líquidas",
+          "metaDescription": "Toast líquido gratuito y open-source para Vue 3: píldora y panel fundidos en una forma, con cola, promesas, actualización en el sitio, acciones y cierre con swipe.",
+          "h1": "Componente LiquidToast para Vue",
+          "intro": "LiquidToast de mood-ui es una pila de notificaciones para Vue 3 y Nuxt. Monta un LiquidToaster y llama a liquidToast desde cualquier parte: los toasts hacen cola, se actualizan por id, siguen una promesa de cargando a éxito o error, y se descartan deslizando."
+        },
+        "controls": {
+          "color": "Color",
+          "variant": "Variante",
+          "placement": "Posición",
+          "max": "Máx",
+          "size": "Tamaño",
+          "radius": "Radio"
+        },
+        "playground": {
+          "show": "Mostrar notificación",
+          "queue": "Encolar tres",
+          "dismissAll": "Descartar todas"
+        },
+        "demo": {
+          "savedTitle": "Cambios guardados",
+          "savedDesc": "Tu espacio de trabajo está al día.",
+          "queued": "Notificación",
+          "queuedDesc": "Esperando su turno en la cola."
+        },
+        "examples": {
+          "colors": {
+            "title": "Colores",
+            "desc": "Los atajos info, success, warning y danger ponen el color por ti. El punto muestra un glifo acorde al color.",
+            "infoTitle": "Sincronizando",
+            "infoDesc": "Trayendo los datos más recientes.",
+            "successTitle": "Guardado",
+            "successDesc": "Cambios aplicados.",
+            "warningTitle": "Almacenamiento casi lleno",
+            "warningDesc": "Tienes ocupado el 92% del espacio.",
+            "dangerTitle": "Pago rechazado",
+            "dangerDesc": "La tarjeta fue declinada."
+          },
+          "action": {
+            "title": "Acción y toast persistente",
+            "desc": "action agrega un botón. onClick recibe close(); el toast se cierra tras el clic salvo que keepOpen sea true. duration: 0 lo deja en pantalla hasta que se descarte.",
+            "cta": "Archivar mensaje",
+            "toastTitle": "Mensaje archivado",
+            "toastDesc": "Se movió al archivo.",
+            "undo": "Deshacer",
+            "restored": "Mensaje restaurado"
+          },
+          "promise": {
+            "title": "Promesa",
+            "desc": "promise() muestra un toast de carga y lo convierte en éxito o error cuando la promesa termina. Devuelve la promesa original.",
+            "ctaOk": "Exportar reporte",
+            "ctaFail": "Exportar y fallar",
+            "loading": "Exportando reporte…",
+            "success": "Reporte listo",
+            "error": "No se pudo exportar",
+            "errorDesc": "Inténtalo de nuevo en un momento."
+          },
+          "update": {
+            "title": "Actualizar en el sitio",
+            "desc": "Dale al toast un id fijo y llama a update() para cambiar su texto, color o duración sin apilar uno nuevo.",
+            "cta": "Iniciar subida",
+            "uploading": "Subiendo archivo",
+            "done": "Subida completa"
+          },
+          "persistent": {
+            "title": "Relleno y fijo",
+            "desc": "variant: 'filled' usa el color sólido. Con duration: 0 y pauseOnHover: false el toast se queda hasta que el usuario lo cierre o llames a dismissAll().",
+            "cta": "Mostrar aviso",
+            "toastTitle": "Mantenimiento esta noche",
+            "toastDesc": "El servicio estará en solo lectura de 23:00 a 23:30."
+          }
+        },
+        "props": {
+          "placement": "Dónde se coloca la pila en la pantalla. Cada toast puede cambiarla con su propio placement.",
+          "max": "Toasts en escena por posición; el resto espera como vista previa detrás del último.",
+          "defaultDuration": "Duración en ms para toasts sin duración propia. 0 los deja hasta que se descarten.",
+          "defaultVariant": "Variante para toasts sin variante propia.",
+          "offset": "Distancia al borde de la pantalla en px.",
+          "size": "Tamaño de todos los toasts; el size propio de un toast tiene prioridad. Hereda de ModoProvider.",
+          "radius": "Radio de todos los toasts; el radius propio de un toast tiene prioridad. Hereda de ModoProvider.",
+          "controller": "Store aislado de createLiquidToast(). Por defecto, el liquidToast compartido.",
+          "ariaLabel": "Nombre accesible de la región de notificaciones."
+        },
+        "controller": {
+          "title": "Controlador",
+          "desc": "liquidToast es un controlador compartido que solo actúa en el navegador. createLiquidToast() devuelve uno aislado para una segunda app o para estado por petición en Nuxt; pásalo a LiquidToaster con controller."
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Opciones que aceptan push(), info(), success(), warning(), danger() y update(), y la API del controlador."
+        },
+        "a11y": {
+          "kbTab": "Llega a los botones de acción y cierre del toast; el foco nunca salta solo a un toast",
+          "kbActivate": "Ejecuta la acción con foco o cierra el toast",
+          "ariaRegion": "La pila es una región con nombre (ariaLabel, locale liquidToast.region)",
+          "ariaPolite": "Los toasts info y success se anuncian de forma educada",
+          "ariaAssertive": "Los toasts warning y danger se anuncian de inmediato",
+          "ariaPeek": "Las vistas previas en cola se ocultan a las tecnologías de asistencia y no reciben foco",
+          "focusNoSteal": "Los anuncios salen de dos regiones live permanentes, así cada toast se lee una vez y nunca roba el foco",
+          "focusPause": "El temporizador se pausa con el puntero o el foco encima, y mientras la ventana está oculta",
+          "reducedMotion": "Con prefers-reduced-motion se quitan el morph líquido y la animación de swipe"
+        }
+      },
+      "morphTooltip": {
+        "title": "MorphTooltip",
+        "category": "Feedback",
+        "description": "Tooltip que crece desde su trigger con un trazo direccional. Mismos colores, retrasos y modos de apertura que Tooltip, y los tooltips vecinos abren al instante cuando uno ya está visible. Respeta ModoProvider en color, tamaño, radio y modo oscuro.",
+        "seo": {
+          "metaTitle": "Componente MorphTooltip para Vue — Tooltip con morph",
+          "metaDescription": "Tooltip con morph gratuito y open-source para Vue 3: crece desde su trigger, cambia de lado si no cabe, abre con hover, focus, click o manual y abre vecinos al instante.",
+          "h1": "Componente MorphTooltip para Vue",
+          "intro": "MorphTooltip de mood-ui es un tooltip compuesto para Vue 3 y Nuxt. La etiqueta crece desde el trigger, aterriza con una flecha, cambia de lado si no cabe y comparte una ventana cálida para que una fila de botones de icono se lea rápido."
+        },
+        "controls": {
+          "side": "Lado",
+          "color": "Color",
+          "size": "Tamaño",
+          "delay": "Retraso",
+          "arrow": "Flecha",
+          "disabled": "Desactivado"
+        },
+        "playground": {
+          "trigger": "Guardar",
+          "content": "Guardar cambios"
+        },
+        "examples": {
+          "sides": {
+            "title": "Lados",
+            "desc": "side indica el lado preferido. Si no hay espacio, el tooltip cambia de lado y se queda dentro de la pantalla.",
+            "top": "Abre arriba",
+            "right": "Abre a la derecha",
+            "bottom": "Abre abajo",
+            "left": "Abre a la izquierda"
+          },
+          "rich": {
+            "title": "Título y descripción",
+            "desc": "MorphTooltip.Title y MorphTooltip.Description le dan estructura. color=\"inverted\" usa la superficie de la página; maxWidth limita el ancho.",
+            "heading": "Historial de versiones",
+            "body": "Revisa y restaura versiones anteriores de este documento."
+          },
+          "warm": {
+            "title": "Triggers vecinos",
+            "desc": "En cuanto un tooltip está abierto, los de al lado abren sin retraso. Sin as-child, el trigger dibuja un Button y le pasa variant, icon y aria-label.",
+            "bold": "Negrita",
+            "italic": "Cursiva",
+            "underline": "Subrayado",
+            "link": "Insertar enlace"
+          },
+          "click": {
+            "title": "Abrir con clic",
+            "desc": "trigger=\"click\" alterna el tooltip al hacer clic. Escape o un clic fuera lo cierran.",
+            "label": "¿Qué es esto?",
+            "content": "Se abre con un clic y se cierra con el siguiente, con Escape o tocando fuera."
+          },
+          "manual": {
+            "title": "Control manual",
+            "desc": "trigger=\"manual\" ignora hover y focus; el tooltip solo sigue a v-model:open.",
+            "cta": "Alternar desde fuera",
+            "target": "Objetivo",
+            "content": "Controlado con v-model:open"
+          }
+        },
+        "props": {
+          "open": "Visibilidad controlada. Úsalo con trigger=\"manual\" para manejarlo solo desde fuera.",
+          "defaultOpen": "Visibilidad inicial cuando no está controlado.",
+          "trigger": "Qué lo abre: hover, focus, click, manual, o una lista de ellos.",
+          "openDelay": "Retraso en ms antes de abrir con hover. Se omite si un tooltip vecino acaba de cerrarse.",
+          "closeDelay": "Retraso en ms antes de cerrar cuando el puntero sale.",
+          "disabled": "Mientras sea true el tooltip no se abre.",
+          "asChild": "Aplica el comportamiento al único elemento del slot en lugar de dibujar un Button.",
+          "side": "Lado preferido; cambia si no cabe.",
+          "align": "Alineación sobre el lado. 'auto' lo centra.",
+          "offset": "Distancia al trigger en px.",
+          "arrow": "Muestra una flecha hacia el trigger cuando termina el morph.",
+          "color": "Color del tooltip. 'default' sigue a ModoProvider; 'inverted' usa la superficie de la página.",
+          "size": "Tamaño de texto y relleno. Hereda de ModoProvider.",
+          "radius": "Radio de las esquinas. Hereda de ModoProvider.",
+          "maxWidth": "Ancho máximo en px."
+        },
+        "emits": {
+          "updateOpen": "Se emite al cambiar la visibilidad (v-model:open).",
+          "openChange": "Mismo valor que update:open.",
+          "show": "Se emite al abrirse el tooltip.",
+          "hide": "Se emite al cerrarse el tooltip."
+        },
+        "slots": {
+          "default": "Hijos compuestos: MorphTooltip.Trigger, MorphTooltip.Content, MorphTooltip.Title y MorphTooltip.Description.",
+          "trigger": "Contenido del botón, o el único elemento a enlazar con as-child.",
+          "content": "Contenido del tooltip. Mantenlo no interactivo; usa Popover para enlaces o botones."
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaces TypeScript de MorphTooltip, MorphTooltip.Trigger y MorphTooltip.Content."
+        },
+        "a11y": {
+          "kbTab": "Enfocar el trigger con el teclado muestra el tooltip de inmediato",
+          "kbShiftTab": "Quitar el foco lo oculta",
+          "kbEsc": "Cierra el tooltip abierto",
+          "ariaTooltip": "El contenido usa role=\"tooltip\"",
+          "ariaDescribedBy": "El trigger apunta al tooltip visible con aria-describedby",
+          "focusVisible": "Solo el foco de teclado (:focus-visible) lo abre; un clic con el ratón en el trigger no",
+          "focusNonInteractive": "El contenido no recibe foco. Envuelve los controles desactivados en un span para que el tooltip reciba eventos del puntero",
+          "reducedMotion": "Con prefers-reduced-motion se quitan el morph y el trazo"
         }
       }
     }

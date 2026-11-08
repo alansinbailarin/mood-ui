@@ -34,6 +34,8 @@ export const HASH_TO_ROUTE: Readonly<Record<string, string>> = Object.freeze({
   // Forms
   button: "/forms/button",
   "button-group": "/forms/button-group",
+  "press-button": "/forms/press-button",
+  "press-button-group": "/forms/press-button-group",
   "form-field": "/forms/form-field",
   input: "/forms/input",
   textarea: "/forms/textarea",
@@ -58,6 +60,7 @@ export const HASH_TO_ROUTE: Readonly<Record<string, string>> = Object.freeze({
   "color-picker": "/forms/color-picker",
   "tag-input": "/forms/tag-input",
   "color-mode-switch": "/forms/color-mode-switch",
+  "mode-orb": "/forms/mode-orb",
   "avatar-upload": "/forms/avatar-upload",
   "phone-input": "/forms/phone-input",
   "otp-input": "/forms/otp-input",
@@ -67,8 +70,10 @@ export const HASH_TO_ROUTE: Readonly<Record<string, string>> = Object.freeze({
   banner: "/feedback/banner",
   chip: "/feedback/chip",
   drawer: "/feedback/drawer",
+  sheet: "/feedback/sheet",
   loader: "/feedback/loader",
   modal: "/feedback/modal",
+  dialog: "/feedback/dialog",
   skeleton: "/feedback/skeleton",
   tooltip: "/feedback/tooltip",
   toast: "/feedback/toast",
@@ -79,6 +84,7 @@ export const HASH_TO_ROUTE: Readonly<Record<string, string>> = Object.freeze({
 
   // Data display
   card: "/data-display/card",
+  "surface-card": "/data-display/surface-card",
   typography: "/data-display/typography",
   avatar: "/data-display/avatar",
   "avatar-group": "/data-display/avatar-group",
@@ -113,11 +119,14 @@ export const HASH_TO_ROUTE: Readonly<Record<string, string>> = Object.freeze({
   hstack: "/layout/hstack",
   vstack: "/layout/vstack",
   "popover-panel": "/layout/popover-panel",
+  popover: "/layout/popover",
 
   // Navigation
   tabs: "/navigation/tabs",
   breadcrumbs: "/navigation/breadcrumbs",
   "dropdown-menu": "/navigation/dropdown-menu",
+  menu: "/navigation/menu",
+  "context-menu": "/navigation/context-menu",
   pagination: "/navigation/pagination",
   stepper: "/navigation/stepper",
 

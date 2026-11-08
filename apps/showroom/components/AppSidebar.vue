@@ -75,7 +75,12 @@ const sidebarSections = computed(() =>
                   </span>
                   <span
                     v-if="item.badge"
-                    class="ml-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-primary/10 text-primary"
+                    class="ml-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
+                    :class="
+                      item.badge === 'Updated'
+                        ? 'bg-amber-500/12 text-amber-600 dark:text-amber-400'
+                        : 'bg-primary/10 text-primary'
+                    "
                   >
                     {{ item.badge }}
                   </span>

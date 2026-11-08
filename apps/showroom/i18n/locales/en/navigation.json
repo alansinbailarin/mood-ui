@@ -464,6 +464,189 @@
           "ariaSelected": "Indicates the currently active tab",
           "focusNative": "Focus is managed by the tablist; arrow keys navigate between tabs"
         }
+      },
+      "menu": {
+        "title": "Menu",
+        "category": "Navigation",
+        "description": "Actions menu that morphs out of its trigger, with live keyboard shortcuts, arrow navigation, type-ahead, labels, separators and trigger surface adoption. Follows ModoProvider for color, size, radius and dark mode.",
+        "seo": {
+          "metaTitle": "Vue Menu Component — Morphing Dropdown Menu & Live Shortcuts",
+          "metaDescription": "Free, open-source Vue 3 Menu component: morphs from its trigger with live keyboard shortcuts, arrow navigation, type-ahead search, and destructive items.",
+          "h1": "Vue Menu Component",
+          "intro": "mood-ui's Menu is a morphing action menu for Vue 3 and Nuxt. It expands seamlessly from its trigger, binds live keyboard shortcuts declared on Menu.Item while open, and supports roving arrow navigation plus type-ahead filtering."
+        },
+        "controls": {
+          "surface": "Surface",
+          "disabled": "Disabled"
+        },
+        "demo": {
+          "trigger": "Actions",
+          "label": "Document",
+          "edit": "Edit",
+          "duplicate": "Duplicate",
+          "share": "Share link",
+          "archive": "Archive (locked)",
+          "archiveShort": "Archive",
+          "delete": "Delete permanently",
+          "lastAction": "Last action:",
+          "none": "None yet",
+          "moreActions": "More actions",
+          "workspace": "Workspace",
+          "alignTrigger": "Align: {align}",
+          "danger": {
+            "project": "Project",
+            "rename": "Rename",
+            "deleteProject": "Delete project",
+            "zone": "Danger zone",
+            "archiveAll": "Archive all",
+            "deleteAll": "Delete all"
+          }
+        },
+        "examples": {
+          "asChild": {
+            "title": "Custom trigger with as-child",
+            "desc": "Menu.Trigger as-child turns your own element, here an icon-only button, into the trigger."
+          },
+          "danger": {
+            "title": "Destructive items",
+            "desc": "color=\"danger\" on Menu.Item marks one destructive row. On Menu it turns every row without its own color red."
+          },
+          "surface": {
+            "title": "Trigger surface adoption",
+            "desc": "surface=\"trigger\" on Menu.Content makes the menu inherit the trigger's colors."
+          },
+          "placement": {
+            "title": "Placement and alignment",
+            "desc": "side and align on Menu.Content, with collision-aware viewport clamping."
+          }
+        },
+        "props": {
+          "open": "Controlled open state (v-model:open or v-model).",
+          "defaultOpen": "Initial open state when uncontrolled.",
+          "color": "Color of the default trigger (default follows ModoProvider). An explicit danger also turns every item without its own color into a danger row.",
+          "size": "Size of the default trigger, the row padding and the item icons. Inherits from ModoProvider.",
+          "radius": "Corner radius of the panel, its rows and the default trigger. Inherits from ModoProvider.",
+          "triggerAsChild": "Uses the slotted element as the trigger instead of rendering a Button.",
+          "triggerVariant": "Variant of the default Button trigger.",
+          "triggerDisabled": "Disables the default trigger.",
+          "side": "Preferred vertical side relative to the trigger.",
+          "align": "Preferred horizontal alignment relative to the trigger.",
+          "surface": "auto uses the menu surface tokens; trigger inherits the trigger's colors.",
+          "contentOverrides": "Per-panel radius and row size overrides; fall back to the Menu props, then ModoProvider.",
+          "icon": "Leading icon component.",
+          "shortcut": "Shortcut hint (for example ⌘D or ⌫). It is shown and bound while the menu is open.",
+          "itemColor": "Row color. danger renders a destructive action. Without it the row inherits an explicit danger from the menu, otherwise it stays neutral.",
+          "disabled": "Disables click, keyboard selection and the shortcut."
+        },
+        "emits": {
+          "updateOpen": "Fires when the open state changes (v-model:open).",
+          "updateModelValue": "Same as update:open, for v-model.",
+          "openChange": "Fires with the new open state on every change.",
+          "select": "Fires when the item is chosen by click, Enter or its shortcut. The menu then closes.",
+          "click": "Native click. Call preventDefault() to keep the menu open and skip select."
+        },
+        "slots": {
+          "default": "Compound parts: Menu.Trigger, Menu.Content, Menu.Item, Menu.Label and Menu.Separator.",
+          "trigger": "Trigger label, or your own element when as-child is set.",
+          "item": "Item label.",
+          "icon": "Custom leading icon.",
+          "shortcut": "Custom shortcut hint."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for Menu and its compound parts."
+        },
+        "a11y": {
+          "kbOpen": "Opens the menu from the trigger and focuses the first item",
+          "kbArrows": "Move focus across the enabled items",
+          "kbTypeahead": "Typing focuses the next item that starts with those characters",
+          "kbShortcuts": "Runs the item that declares that shortcut while the menu is open",
+          "kbEsc": "Closes the menu and returns focus to the trigger",
+          "ariaMenu": "Panel with role=\"menu\", rows with role=\"menuitem\" and dividers with role=\"separator\"",
+          "ariaTrigger": "The trigger announces the menu popup and its expanded state",
+          "ariaDisabled": "Disabled items are skipped by keyboard navigation and shortcuts",
+          "focusRestore": "Focus moves to the first enabled item on open and returns to the trigger on close"
+        }
+      },
+      "contextMenu": {
+        "title": "ContextMenu",
+        "category": "Navigation",
+        "description": "Right-click and touch long-press menu that blooms from the pointer position, sharing the items, labels and separators of Menu. Follows ModoProvider for color, size, radius and dark mode.",
+        "seo": {
+          "metaTitle": "Vue ContextMenu Component — Right-Click & Touch Long-Press Menu",
+          "metaDescription": "Free, open-source Vue 3 ContextMenu component: blooms at pointer coordinates on desktop right-click or 500ms mobile touch long-press with full Menu keyboard semantics.",
+          "h1": "Vue ContextMenu Component",
+          "intro": "mood-ui's ContextMenu brings native-feeling contextual menus to Vue 3 and Nuxt. It opens at the exact cursor or finger coordinates via right-click on desktop or a 500ms long-press on touch devices, reusing Menu.Item, Menu.Label, and Menu.Separator."
+        },
+        "controls": {
+          "icons": "Icons",
+          "shortcuts": "Shortcuts"
+        },
+        "demo": {
+          "cardTitle": "Right-click anywhere on this card",
+          "cardSubtitle": "Or press and hold for 500ms on a touch screen.",
+          "label": "Canvas",
+          "newFolder": "New folder",
+          "rename": "Rename",
+          "duplicate": "Duplicate",
+          "delete": "Delete",
+          "lastAction": "Last action",
+          "none": "None yet",
+          "fileHint": "Right-click for file actions",
+          "copyLink": "Copy share link",
+          "trash": "Move to trash",
+          "zone": "Right-click here",
+          "paste": "Paste",
+          "pastePlain": "Paste as plain text",
+          "open": "Open",
+          "closed": "Closed"
+        },
+        "examples": {
+          "cards": {
+            "title": "Per-item menus",
+            "desc": "Wrap each card or row in its own ContextMenu so right-clicking it shows actions for that record."
+          },
+          "controlled": {
+            "title": "Controlled state",
+            "desc": "Read or drive the state with v-model:open and listen to openChange. Disabled items stay visible but cannot be chosen."
+          }
+        },
+        "props": {
+          "open": "Controlled open state (v-model:open or v-model).",
+          "color": "Semantic color. An explicit danger turns every item without its own color into a danger row.",
+          "size": "Row padding and item icon size. Inherits from ModoProvider.",
+          "radius": "Corner radius of the panel and its rows. Inherits from ModoProvider.",
+          "contentOverrides": "Per-panel radius and row size overrides; fall back to the ContextMenu props, then ModoProvider.",
+          "icon": "Leading icon component.",
+          "shortcut": "Shortcut hint. It is shown and bound while the menu is open.",
+          "itemColor": "Row color. danger renders a destructive action.",
+          "disabled": "Disables click, keyboard selection and the shortcut."
+        },
+        "emits": {
+          "updateOpen": "Fires when the open state changes (v-model:open).",
+          "updateModelValue": "Same as update:open, for v-model.",
+          "openChange": "Fires with the new open state on every change.",
+          "select": "Fires when the item is chosen. The menu then closes."
+        },
+        "slots": {
+          "default": "Compound parts: ContextMenu.Trigger, Content, Item, Label and Separator.",
+          "trigger": "The area that opens the menu on right-click or long-press.",
+          "item": "Custom icon and shortcut hint, same as Menu.Item."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for ContextMenu and the Menu parts it shares."
+        },
+        "a11y": {
+          "kbArrows": "Move focus across the enabled items",
+          "kbTypeahead": "Typing focuses the next item that starts with those characters",
+          "kbShortcuts": "Runs the item that declares that shortcut while the menu is open",
+          "kbEsc": "Closes the context menu",
+          "ariaMenu": "Same role=\"menu\", menuitem and separator semantics as Menu",
+          "ariaDisabled": "Disabled items are skipped by keyboard navigation and shortcuts",
+          "focusOpen": "Focus moves to the first enabled item when the menu opens",
+          "focusKeyboard": "Right-click has no keyboard equivalent here; offer the same actions in a visible Menu for keyboard users"
+        }
       }
     }
   }

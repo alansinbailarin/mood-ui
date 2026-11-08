@@ -976,6 +976,10 @@
             "title": "Selección de filas",
             "desc": "Activa la selección de una o varias filas con checkboxes. Enlaza :selected y escucha \\@update:selected."
           },
+          "toolbar": {
+            "title": "Toolbar, búsqueda y acciones masivas",
+            "desc": "Combina global-search, column-visibility y exportable con selección múltiple y el slot #bulk-actions para mostrar acciones contextuales en línea."
+          },
           "pagination": {
             "title": "Paginación",
             "desc": "Pasa un objeto de paginación con page, pageSize y total para dividir los datos en páginas."
@@ -2128,6 +2132,10 @@
           "stickyHeader": {
             "title": "Sticky header",
             "desc": "La cabecera permanece fija mientras se hace scroll dentro del contenedor."
+          },
+          "toolbar": {
+            "title": "Toolbar, búsqueda y acciones masivas",
+            "desc": "Combina global-search, column-visibility y exportable con selección múltiple y el slot #bulk-actions para mostrar acciones contextuales en línea."
           }
         }
       },
@@ -2354,6 +2362,136 @@
           "metaDescription": "Componente de gráficas Vue libre y open-source: línea, área, barras, dona, pastel, gauge, radar, heatmap y sparkline — SVG puro, cero dependencias. Una alternativa ligera a Recharts para Vue 3 y Nuxt.",
           "h1": "Componente Vue Chart",
           "intro": "El Chart de mood-ui es un componente de gráficas libre y open-source para Vue 3 y Nuxt: línea, área, barras, dispersión, dona, pastel, gauge, radial, radar, heatmap y sparkline, todo renderizado como SVG puro y sin dependencias de gráficas. Una alternativa ligera a Recharts y Chart.js."
+        }
+      },
+      "surfaceCard": {
+        "title": "SurfaceCard",
+        "description": "Tarjeta componible con bisel de doble marco concéntrico, tres variantes de superficie (outline, elevated, soft), partes compuestas (Media, Header, Title, Subtitle, Body, Footer, Separator) y respuesta táctil al presionar. Sigue a ModoProvider en tamaño, radio y modo oscuro.",
+        "seo": {
+          "metaTitle": "Componente Vue SurfaceCard — Card Componible con Doble Marco",
+          "metaDescription": "Card componible gratuita y open-source para Vue 3 y Nuxt con doble marco concéntrico, variantes outline/elevated/soft, media full-bleed, stretchedLink y respuesta táctil WAAPI.",
+          "h1": "Componente Vue SurfaceCard",
+          "intro": "La SurfaceCard de mood-ui es una card componible para Vue 3 y Nuxt con doble marco concéntrico por defecto, tres niveles de superficie adaptados a modo claro y oscuro, siete subcomponentes y animación táctil de resorte WAAPI."
+        },
+        "controls": {
+          "framed": "Con marco",
+          "interactive": "Interactiva",
+          "disabled": "Deshabilitada"
+        },
+        "demo": {
+          "overview": {
+            "title": "Design tokens",
+            "subtitle": "Tarjeta de superficie componible",
+            "body": "Cada sección toma su padding y su escala tipográfica de size. El marco concéntrico envuelve el contenido por defecto."
+          },
+          "variants": {
+            "outline": {
+              "title": "Outline",
+              "subtitle": "Borde fino",
+              "body": "Superficie de tarjeta con borde de 1px y sin sombra."
+            },
+            "elevated": {
+              "title": "Elevated",
+              "subtitle": "Borde y sombra",
+              "body": "Plano elevado que sube un poco más al pasar el cursor cuando es interactiva."
+            },
+            "soft": {
+              "title": "Soft",
+              "subtitle": "Relleno atenuado",
+              "body": "Superficie atenuada uniforme para paneles densos y ajustes."
+            }
+          },
+          "sizes": {
+            "subtitle": "Padding, espacios y escala tipográfica",
+            "body": "Cada sección lee su espaciado de size."
+          },
+          "editorial": {
+            "title": "Design tokens a escala",
+            "subtitle": "5 min de lectura · Ingeniería",
+            "body": "Cómo las variables OKLCH semánticas mantienen coherentes los modos claro y oscuro.",
+            "badge": "Nuevo",
+            "action": "Leer",
+            "alt": "Portada abstracta con paneles translúcidos superpuestos"
+          },
+          "grouped": {
+            "title": "Notificaciones",
+            "subtitle": "Elige cómo y cuándo te contactamos.",
+            "pushTitle": "Notificaciones push",
+            "pushDesc": "Alertas al instante en tus dispositivos activos.",
+            "digestTitle": "Resumen semanal",
+            "digestDesc": "Métricas clave cada lunes por la mañana.",
+            "synced": "Se sincroniza automáticamente",
+            "done": "Listo"
+          },
+          "interactive": {
+            "buttonTitle": "Acción directa",
+            "buttonBody": "Mantén presionado para sentir la compresión y suelta para el rebote elástico.",
+            "activations": "Activaciones",
+            "linkTitle": "Enlace extendido y acción",
+            "linkSubtitle": "Controles del pie independientes",
+            "linkBody": "Al hacer clic en la tarjeta se sigue el enlace del título. El botón Guardar solo se alterna a sí mismo.",
+            "bookmark": "Guardar",
+            "saved": "Guardado"
+          }
+        },
+        "examples": {
+          "variants": {
+            "title": "Variantes de superficie",
+            "desc": "outline, elevated y soft, cada una con el marco interior concéntrico. Usa :framed=\"false\" para una tarjeta de un solo borde."
+          },
+          "sizes": {
+            "title": "Tamaños",
+            "desc": "size controla el padding, los espacios y la escala tipográfica de cada sección. Omítelo para seguir a ModoProvider; padding=\"none\" deja todas las secciones sin padding."
+          },
+          "editorial": {
+            "title": "Media y diseño editorial",
+            "desc": "SurfaceCard.Media llega de borde a borde con una proporción reservada, seguido de Header, Body y un Footer con align=\"between\"."
+          },
+          "grouped": {
+            "title": "Ajustes agrupados",
+            "desc": "SurfaceCard.Separator va de borde a borde por defecto; inset=\"content\" lo alinea con el texto. surface=\"subtle\" tiñe una sección."
+          },
+          "interactive": {
+            "title": "Tarjetas interactivas",
+            "desc": "Renderiza la tarjeta completa como botón (as=\"button\") o enlace (href), o usa stretchedLink en SurfaceCard.Title para que los botones del pie sigan siendo independientes."
+          }
+        },
+        "props": {
+          "variant": "Aspecto de la superficie: outline (borde), elevated (borde y sombra) o soft (relleno atenuado). También acepta los alias outlined y filled.",
+          "size": "Token de tamaño. Controla el padding de las secciones, los espacios y la escala tipográfica. Hereda de ModoProvider si se omite.",
+          "radius": "Token de radio de esquina. El marco interior se mantiene concéntrico. Hereda de ModoProvider si se omite.",
+          "padding": "default sigue a size; none quita el padding y los espacios de todas las secciones (Media siempre llega al borde).",
+          "framed": "Envuelve el contenido en un borde interior concéntrico con un bisel fino. Ponlo en false para una tarjeta de un solo borde.",
+          "as": "Elemento raíz. Por defecto a cuando hay href; si no, article.",
+          "interactive": "Elevación al pasar el cursor y respuesta táctil al presionar. Se activa sola con as=\"button\", as=\"a\" y href.",
+          "disabled": "Deshabilita las tarjetas botón y enlace: sin clic, navegación ni animación de presión.",
+          "href": "Destino del enlace, target y rel cuando la tarjeta se renderiza como enlace.",
+          "type": "type nativo del botón cuando as=\"button\".",
+          "ariaLabel": "Nombre accesible cuando la tarjeta es el control interactivo.",
+          "sectionSurface": "subtle tiñe la sección con un velo atenuado translúcido, al estilo de ajustes agrupados.",
+          "sectionPadding": "none quita el padding solo de esa sección.",
+          "footerAlign": "Alineación horizontal del contenido del pie.",
+          "separatorInset": "none va de borde a borde; content alinea la línea con el padding de las secciones.",
+          "media": "Atajo para una imagen de portada a sangre con texto alternativo y proporción reservada. Deja alt vacío solo en imágenes decorativas.",
+          "stretchedLink": "Extiende el enlace del título sobre toda la tarjeta mientras los botones de Body o Footer siguen siendo clicables."
+        },
+        "slots": {
+          "default": "Partes compuestas: SurfaceCard.Media, Header, Title, Subtitle, Body, Separator y Footer.",
+          "media": "Media personalizada o una capa encima de la imagen de src."
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaces de TypeScript de SurfaceCard y sus partes compuestas (disponibles como SurfaceCard.* y como exports con nombre)."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco a las tarjetas interactivas, a los enlaces extendidos del título y a los controles del pie",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "kbActivate": "Activa las tarjetas botón o enlace",
+          "ariaArticle": "Renderiza un article semántico por defecto en tarjetas de contenido y de enlace extendido",
+          "ariaDisabled": "Las tarjetas enlace deshabilitadas pierden href y reciben role=\"link\", aria-disabled=\"true\" y tabindex=\"-1\"",
+          "ariaLabel": "Nombre accesible para tarjetas botón o enlace cuyo contenido no sirve como etiqueta",
+          "focusStretched": "Con stretchedLink, el anillo de foco rodea toda la tarjeta y los botones internos quedan por encima",
+          "focusMedia": "Da a SurfaceCard.Media un alt descriptivo cuando la imagen aporta información"
         }
       }
     }

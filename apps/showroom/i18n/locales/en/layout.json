@@ -704,6 +704,114 @@
           "ariaLabel": "Provides an accessible name for the vertical stack",
           "focusNative": "Non-interactive layout element; does not participate in the tab order"
         }
+      },
+      "popover": {
+        "title": "Popover",
+        "category": "Layout",
+        "description": "Non-modal floating panel that morphs out of its trigger, with collision-aware placement, trigger surface adoption and pull-to-close. Follows ModoProvider for color, size, radius and dark mode.",
+        "seo": {
+          "metaTitle": "Vue Popover Component — Morphing Non-Modal Floating Panel",
+          "metaDescription": "Free, open-source Vue 3 Popover component: morphs from its trigger with collision-aware side/align placement, surface color adoption, and pull-to-close gestures.",
+          "h1": "Vue Popover Component",
+          "intro": "mood-ui's Popover is a non-modal floating surface for Vue 3 and Nuxt. It shares the WAAPI morph engine with Menu and Dialog so the trigger physically expands into the panel without locking page scroll."
+        },
+        "controls": {
+          "surface": "Surface",
+          "disabled": "Disabled"
+        },
+        "demo": {
+          "trigger": "Dimensions",
+          "heading": "Frame dimensions",
+          "hint": "Default sizing constraints for the selected layer.",
+          "width": "Width",
+          "maxWidth": "Max width",
+          "snap": "Snap to pixel grid",
+          "done": "Done",
+          "asChild": {
+            "trigger": "Share",
+            "heading": "Share this board",
+            "body": "Anyone with the link can view it.",
+            "cancel": "Cancel",
+            "copy": "Copy link"
+          },
+          "placement": {
+            "trigger": "Align: {align}",
+            "heading": "Aligned {align}",
+            "body": "Flips to the other side when the viewport is tight."
+          },
+          "surface": {
+            "trigger": "Tinted trigger",
+            "heading": "Inherited surface",
+            "body": "Adopts the trigger's background, text and border colors."
+          },
+          "controlled": {
+            "toggle": "Toggle from outside",
+            "trigger": "Filters",
+            "heading": "Filters",
+            "body": "Outside clicks and Escape are ignored. Close it with the X or the outside button.",
+            "open": "Open",
+            "closed": "Closed"
+          }
+        },
+        "examples": {
+          "asChild": {
+            "title": "Custom trigger with as-child",
+            "desc": "Popover.Trigger as-child turns your own element into the trigger. Popover.Close renders a text button with a label, or wraps your element with as-child."
+          },
+          "placement": {
+            "title": "Side and alignment",
+            "desc": "side (auto, top, bottom) and align (auto, start, center, end) with automatic viewport collision flipping."
+          },
+          "surface": {
+            "title": "Trigger surface adoption",
+            "desc": "surface=\"trigger\" makes the panel inherit the trigger's background, text and border colors."
+          },
+          "controlled": {
+            "title": "Controlled and non-dismissable",
+            "desc": "Drive the state with v-model:open. :dismissable=\"false\" ignores outside clicks, Escape and pull-to-close."
+          }
+        },
+        "props": {
+          "open": "Controlled open state (v-model:open or v-model).",
+          "defaultOpen": "Initial open state when uncontrolled.",
+          "color": "Semantic color of the default trigger and close buttons. default follows ModoProvider.",
+          "size": "Size of the default trigger and the panel padding. Inherits from ModoProvider.",
+          "radius": "Corner radius of the panel and the default trigger. Inherits from ModoProvider.",
+          "triggerAsChild": "Uses the slotted element as the trigger instead of rendering a Button.",
+          "triggerVariant": "Variant of the default Button trigger.",
+          "triggerDisabled": "Disables the default trigger.",
+          "side": "Preferred vertical side relative to the trigger.",
+          "align": "Preferred horizontal alignment relative to the trigger.",
+          "surface": "auto uses the popover surface tokens; trigger inherits the trigger's colors.",
+          "dismissable": "Whether outside click, Escape and pull-to-close dismiss the popover.",
+          "contentOverrides": "Per-panel radius and padding overrides; fall back to the Popover props, then ModoProvider.",
+          "closeAsChild": "Uses the slotted element as the close control instead of rendering a Button.",
+          "closeVariant": "Variant of the default close Button. Without slot content it renders an icon-only X labelled with the locale's close text."
+        },
+        "emits": {
+          "updateOpen": "Fires when the open state changes (v-model:open).",
+          "updateModelValue": "Same as update:open, for v-model.",
+          "openChange": "Fires with the new open state on every change."
+        },
+        "slots": {
+          "default": "Compound parts: Popover.Trigger, Popover.Content and Popover.Close.",
+          "trigger": "Trigger label, or your own element when as-child is set.",
+          "content": "Panel content.",
+          "close": "Close button label, or your own element when as-child is set."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for Popover and its compound parts."
+        },
+        "a11y": {
+          "kbToggle": "Opens or closes the popover from the trigger",
+          "kbTab": "Moves focus through the controls inside the non-modal panel",
+          "kbEsc": "Closes the popover and returns focus to the trigger",
+          "ariaDialog": "The panel is a non-modal dialog labelled by the trigger, without aria-modal",
+          "ariaTrigger": "The trigger announces the popup type, its expanded state and the panel it controls",
+          "ariaClose": "The icon-only close button gets the localized close label",
+          "focusRestore": "Focus moves to the first tabbable control on open and returns to the trigger on close"
+        }
       }
     }
   }

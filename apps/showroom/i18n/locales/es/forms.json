@@ -2670,6 +2670,565 @@
           "h1": "Componente Vue MenuButton",
           "intro": "El MenuButton de mood-ui es un botón desplegable y split libre y open-source para Vue 3 y Nuxt: abre un menú de acciones desde un solo botón, con navegación por teclado, iconos y accesibilidad integrada."
         }
+      },
+      "pressButton": {
+        "category": "Forms",
+        "title": "PressButton",
+        "description": "Botón táctil que se hunde con la Web Animations API y rebota como resorte al soltarlo. Mismas variantes, colores y tamaños que el Button nativo, carga sin salto de ancho y render como enlace. Sigue a ModoProvider en color, tamaño, radio y modo oscuro.",
+        "seo": {
+          "metaTitle": "Componente Vue PressButton — Botón Táctil con Resorte",
+          "metaDescription": "Botón táctil gratuito y open-source para Vue 3 y Nuxt con presión WAAPI y rebote de resorte, las mismas cuatro variantes y cinco colores semánticos que el Button nativo, y carga sin salto de ancho.",
+          "h1": "Componente Vue PressButton",
+          "intro": "El PressButton de mood-ui lleva una presión con rebote de resorte a Vue 3 y Nuxt, con las mismas variantes que el Button nativo (normal, outline, ghost, text), cinco colores semánticos, carga sin salto de ancho y accesibilidad completa."
+        },
+        "controls": {
+          "variant": "Variante",
+          "color": "Color",
+          "size": "Tamaño",
+          "radius": "Radio",
+          "loading": "Cargando",
+          "disabled": "Deshabilitado",
+          "fullWidth": "Ancho completo",
+          "gradient": "Degradado",
+          "skeleton": "Skeleton",
+          "colors": {
+            "default": "Por defecto",
+            "primary": "Primario",
+            "success": "Éxito",
+            "warning": "Advertencia",
+            "danger": "Peligro"
+          }
+        },
+        "playground": {
+          "label": "Presióname"
+        },
+        "examples": {
+          "variants": {
+            "title": "Variantes",
+            "desc": "Los mismos cuatro tratamientos que el Button nativo: normal, outline, ghost y text.",
+            "normal": "Normal",
+            "outline": "Contorno",
+            "ghost": "Fantasma",
+            "text": "Texto"
+          },
+          "colors": {
+            "title": "Colores",
+            "desc": "Cinco colores semánticos. default sigue el color de ModoProvider."
+          },
+          "sizes": {
+            "title": "Tamaños",
+            "desc": "La escala de tamaños compartida (xsmall, small, medium, large) con icono y spinner a juego.",
+            "xsmall": "Extra pequeño",
+            "small": "Pequeño",
+            "medium": "Mediano",
+            "large": "Grande"
+          },
+          "gradient": {
+            "title": "Degradado",
+            "desc": "gradient agrega el relleno degradado a la variante normal, igual que en el Button nativo.",
+            "label": "Comenzar"
+          },
+          "icons": {
+            "title": "Iconos y solo icono",
+            "desc": "Pasa startIcon / endIcon (o icon con iconPosition). Los botones de solo icono son cuadrados y necesitan ariaLabel.",
+            "continue": "Continuar",
+            "settings": "Ajustes",
+            "like": "Me gusta",
+            "confirm": "Confirmar"
+          },
+          "loading": {
+            "title": "Carga sin salto",
+            "desc": "El spinner se coloca sobre la etiqueta, así que activar loading no cambia el ancho. Haz clic en el primer botón para probarlo.",
+            "save": "Guardar cambios",
+            "processing": "Procesando…",
+            "submit": "Enviar"
+          },
+          "link": {
+            "title": "Como enlace",
+            "desc": "as=\"a\" renderiza un ancla nativa. Deshabilitado, quita el href y aplica aria-disabled.",
+            "visit": "Ver documentación",
+            "disabled": "Enlace deshabilitado"
+          }
+        },
+        "props": {
+          "label": "Texto visible cuando no hay slot por defecto.",
+          "type": "Atributo type nativo del botón. Se omite con as=\"a\".",
+          "variant": "Tratamiento visual, mismos nombres y aspecto que el Button nativo.",
+          "color": "Color semántico. 'default' sigue el color de ModoProvider.",
+          "gradient": "Relleno degradado en la variante normal.",
+          "size": "Tamaño del control. Se hereda de ModoProvider si se omite.",
+          "radius": "Radio de esquinas. Se hereda de ModoProvider si se omite.",
+          "cursor": "Cursor CSS personalizado. Se fuerza a not-allowed si está deshabilitado o cargando.",
+          "disabled": "Deshabilita la interacción y conserva la variante con opacidad reducida.",
+          "loading": "Muestra un spinner centrado, conserva el ancho y bloquea la activación.",
+          "loadingText": "Texto junto al spinner. Sin él, los lectores de pantalla oyen el texto de carga localizado.",
+          "icon": "Icono único, ubicado según iconPosition o centrado si es solo icono.",
+          "iconPosition": "Posición de icon cuando acompaña a una etiqueta.",
+          "startIcon": "Componente de icono inicial.",
+          "endIcon": "Componente de icono final.",
+          "iconOnly": "Fuerza la geometría cuadrada de solo icono.",
+          "fullWidth": "Estira el botón al 100% del contenedor.",
+          "ariaLabel": "Nombre accesible. Obligatorio en botones de solo icono.",
+          "skeleton": "Muestra un skeleton con las dimensiones del botón.",
+          "as": "Etiqueta del elemento raíz.",
+          "href": "URL de destino cuando se renderiza como ancla.",
+          "target": "target del ancla con as=\"a\".",
+          "rel": "rel del ancla con as=\"a\"."
+        },
+        "emits": {
+          "click": "Click nativo, solo se reenvía si el botón no está deshabilitado ni cargando."
+        },
+        "slots": {
+          "default": "Contenido de la etiqueta del botón.",
+          "startIcon": "Icono inicial personalizado.",
+          "endIcon": "Icono final personalizado.",
+          "loadingText": "Contenido personalizado junto al spinner durante la carga."
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaz TypeScript de las props de PressButton."
+        },
+        "a11y": {
+          "kbActivate": "Activa el botón con la semántica nativa de teclado",
+          "kbTab": "Mueve el foco al botón",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "ariaType": "Por defecto usa type=\"button\" para no enviar formularios por accidente",
+          "ariaBusy": "Se activa mientras está cargando",
+          "ariaDisabled": "Se aplica en botones-ancla deshabilitados (as=\"a\") junto con tabindex=\"-1\"",
+          "ariaLabel": "Nombre accesible para botones de solo icono",
+          "focusNative": "El anillo de foco solo aparece con teclado (:focus-visible)",
+          "focusReducedMotion": "Respeta prefers-reduced-motion: reduce omitiendo la animación de presión y resorte"
+        }
+      },
+      "pressButtonGroup": {
+        "category": "Forms",
+        "title": "PressButtonGroup",
+        "description": "Une varios PressButton en una sola barra cuyo contorno se curva suavemente al presionar un segmento. Pasa variante, color, tamaño, radio, deshabilitado, degradado y ancho completo a cada segmento, y sigue a ModoProvider como el ButtonGroup nativo.",
+        "seo": {
+          "metaTitle": "Componente Vue PressButtonGroup — Grupo de Botones Táctiles",
+          "metaDescription": "Grupo de botones gratuito y open-source para PressButton en Vue 3: una barra conectada cuyo contorno se deforma al presionar, separadores compartidos y orientación horizontal o vertical.",
+          "h1": "Componente Vue PressButtonGroup",
+          "intro": "El PressButtonGroup de mood-ui une acciones PressButton en una sola barra. Su contorno exterior y su borde se curvan de forma continua mientras se mantiene presionado un segmento, y todos los segmentos comparten la variante, el color, el tamaño y el radio del grupo."
+        },
+        "controls": {
+          "variant": "Variante",
+          "color": "Color",
+          "size": "Tamaño",
+          "radius": "Radio",
+          "orientation": "Orientación",
+          "disabled": "Deshabilitado",
+          "gradient": "Degradado",
+          "fullWidth": "Ancho completo",
+          "colors": {
+            "default": "Por defecto",
+            "primary": "Primario",
+            "success": "Éxito",
+            "warning": "Advertencia",
+            "danger": "Peligro"
+          }
+        },
+        "labels": {
+          "day": "Día",
+          "week": "Semana",
+          "month": "Mes",
+          "year": "Año",
+          "left": "Izquierda",
+          "center": "Centro",
+          "right": "Derecha",
+          "draft": "Borrador",
+          "review": "Revisión",
+          "publish": "Publicar",
+          "fast": "Rápido",
+          "auto": "Auto",
+          "precise": "Preciso",
+          "edit": "Editar",
+          "duplicate": "Duplicar",
+          "archive": "Archivar",
+          "overview": "Resumen",
+          "metrics": "Métricas",
+          "logs": "Registros",
+          "settings": "Ajustes",
+          "groupLabel": "Rango de tiempo"
+        },
+        "examples": {
+          "basic": {
+            "title": "Barra conectada",
+            "desc": "Mantén presionado cualquier segmento para ver cómo el contorno se curva sobre las uniones vecinas."
+          },
+          "variants": {
+            "title": "Variantes y colores",
+            "desc": "variant y color se aplican a cada PressButton del grupo."
+          },
+          "pill": {
+            "title": "Radio píldora e iconos",
+            "desc": "Usa radius=\"full\" para barras tipo cápsula con iconos iniciales."
+          },
+          "vertical": {
+            "title": "Orientación vertical",
+            "desc": "Apila los segmentos con separadores horizontales."
+          },
+          "fullWidth": {
+            "title": "Ancho completo",
+            "desc": "Reparte los segmentos por igual en todo el ancho del contenedor."
+          }
+        },
+        "props": {
+          "orientation": "Eje de los segmentos conectados.",
+          "variant": "Variante aplicada a cada PressButton hijo.",
+          "color": "Color que se pasa a los hijos. 'default' sigue a ModoProvider; un color explícito en un hijo tiene prioridad.",
+          "size": "Tamaño aplicado a cada hijo. Se hereda de ModoProvider si se omite.",
+          "radius": "Radio exterior de la barra. Se hereda de ModoProvider si se omite.",
+          "disabled": "Deshabilita todos los segmentos.",
+          "gradient": "Relleno degradado en los segmentos normal.",
+          "fullWidth": "Estira el grupo y reparte los segmentos al 100% del ancho.",
+          "ariaLabel": "Etiqueta accesible del contenedor role=\"group\"."
+        },
+        "slots": {
+          "default": "Segmentos PressButton que se unen dentro del grupo."
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaz TypeScript de las props de PressButtonGroup."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco por cada segmento PressButton en orden",
+          "kbShiftTab": "Mueve el foco al segmento anterior",
+          "kbActivate": "Activa el segmento enfocado",
+          "ariaGroup": "Expone role=\"group\" en el contenedor",
+          "ariaLabel": "Da nombre al grupo cuando se pasa ariaLabel",
+          "ariaDisabled": "Cada segmento queda deshabilitado de forma nativa cuando el grupo lo está",
+          "focusNoTrap": "Cada segmento conserva su propia parada de tabulación y anillo :focus-visible; el grupo no atrapa el foco"
+        }
+      },
+      "modeOrb": {
+        "category": "Forms",
+        "title": "ModeOrb",
+        "description": "Esfera de modo de color que cambia el tema global entre claro y oscuro con una onda circular View Transition y una cresta que se expande desde el centro de la esfera. Su diámetro coincide con la altura de los controles y sigue a ModoProvider en color y tamaño.",
+        "seo": {
+          "metaTitle": "Componente Vue ModeOrb — Cambio de Tema con View Transition",
+          "metaDescription": "ModeOrb gratuito y open-source para Vue 3 y Nuxt: esfera de modo claro/oscuro basada en useColorMode y una onda circular con document.startViewTransition.",
+          "h1": "Componente Vue ModeOrb",
+          "intro": "El ModeOrb de mood-ui es un selector de modo de color para Vue 3 y Nuxt. Al pulsar la esfera cambia el modo global y lanza una onda circular View Transition desde su centro hasta la esquina más lejana de la pantalla. La onda dura un tiempo fijo, así que termina a tiempo aunque la página esté ocupada."
+        },
+        "controls": {
+          "size": "Tamaño",
+          "color": "Color",
+          "disabled": "Deshabilitado",
+          "fixed": "Esquina fija",
+          "colors": {
+            "default": "Por defecto",
+            "primary": "Primario",
+            "success": "Éxito",
+            "warning": "Advertencia",
+            "danger": "Peligro"
+          }
+        },
+        "playground": {
+          "theme": "Tema",
+          "light": "Claro",
+          "dark": "Oscuro",
+          "hint": "Haz clic en la esfera para cambiar el tema con una onda circular."
+        },
+        "examples": {
+          "inline": {
+            "title": "Esfera en una barra",
+            "desc": "Coloca ModeOrb en cualquier encabezado, tarjeta o barra. La onda nace en el centro de la esfera pulsada.",
+            "cardTitle": "Apariencia",
+            "cardSubtitle": "Haz clic en la esfera para cambiar el tema"
+          },
+          "corners": {
+            "title": "Origen de la onda",
+            "desc": "Pulsa esferas en distintos lugares para ver la onda expandirse desde cada una.",
+            "topLeft": "Arriba a la izquierda",
+            "topRight": "Arriba a la derecha",
+            "bottomLeft": "Abajo a la izquierda",
+            "bottomRight": "Abajo a la derecha"
+          },
+          "colors": {
+            "title": "Colores",
+            "desc": "color tiñe la esfera. default sigue el color del provider y, con un provider default, la esfera usa el color de primer plano."
+          },
+          "fixed": {
+            "title": "Esquina fija de la pantalla",
+            "desc": "fixed fija la esfera en la esquina inferior derecha de la pantalla. Activa el control Esquina fija en el playground para probarlo."
+          }
+        },
+        "props": {
+          "fixed": "Fija la esfera en la esquina inferior derecha de la pantalla con position: fixed.",
+          "size": "Tamaño de la esfera. El diámetro coincide con la altura de los controles (32 / 36 / 40 / 48 px). Se hereda de ModoProvider.",
+          "color": "Color de la esfera. default sigue el color del provider, o el color de primer plano si el provider es default.",
+          "disabled": "Deshabilita el cambio de tema.",
+          "ariaLabel": "Etiqueta accesible. Por defecto usa el texto localizado \"Cambiar modo de color\"."
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaz TypeScript de las props de ModeOrb."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco de teclado a la esfera",
+          "kbActivate": "Cambia el modo de color",
+          "ariaLabel": "Nombre accesible del botón, localizado por defecto",
+          "ariaPressed": "true mientras el modo oscuro está activo",
+          "focusReducedMotion": "Con prefers-reduced-motion: reduce, o sin soporte de View Transitions, el tema cambia al instante"
+        }
+      },
+      "glassSwitch": {
+        "category": "Forms",
+        "title": "GlassSwitch",
+        "description": "Interruptor encendido/apagado con un pulgar de vidrio líquido que puedes arrastrar o tocar. Misma API que el Switch nativo (label, descripción, texto de ayuda y error, loading, readonly) sobre un checkbox real, y sigue a ModoProvider en color, tamaño, radio y modo oscuro.",
+        "seo": {
+          "metaTitle": "Componente Vue GlassSwitch — Interruptor de Vidrio Arrastrable",
+          "metaDescription": "Interruptor gratuito y open-source para Vue 3 con pulgar de vidrio líquido arrastrable, la misma API que el Switch nativo, semántica de formulario nativa y accesibilidad completa.",
+          "h1": "Componente Vue GlassSwitch",
+          "intro": "El GlassSwitch de mood-ui es un interruptor para Vue 3 y Nuxt con un pulgar de vidrio líquido que sigue tu dedo. Conserva la API del Switch nativo y un checkbox real debajo, así que formularios, validación y lectores de pantalla funcionan como se espera."
+        },
+        "controls": {
+          "color": "Color",
+          "size": "Tamaño",
+          "radius": "Radio",
+          "label": "Etiqueta",
+          "loading": "Cargando",
+          "readonly": "Solo lectura",
+          "disabled": "Deshabilitado",
+          "colors": {
+            "default": "Por defecto",
+            "primary": "Primario",
+            "success": "Éxito",
+            "warning": "Advertencia",
+            "danger": "Peligro"
+          }
+        },
+        "playground": {
+          "label": "Notificaciones",
+          "description": "Avisos push y por correo."
+        },
+        "examples": {
+          "basic": {
+            "title": "Uso básico",
+            "desc": "Interruptor binario con v-model y etiqueta visible. Tócalo o arrastra el pulgar más allá de la mitad.",
+            "pushLabel": "Notificaciones push",
+            "darkLabel": "Modo oscuro"
+          },
+          "description": {
+            "title": "Con descripción",
+            "desc": "Texto secundario bajo la etiqueta para dar contexto.",
+            "label": "Marketing",
+            "description": "Recibe novedades y actualizaciones del producto."
+          },
+          "labelLeft": {
+            "title": "Etiqueta a la izquierda",
+            "desc": "Útil en filas de ajustes, con fullWidth llevando el control al final.",
+            "label": "Activo"
+          },
+          "validation": {
+            "title": "Texto de ayuda y error",
+            "desc": "helperText agrega una guía; errorText la reemplaza y marca el interruptor como inválido.",
+            "helperLabel": "Resumen semanal",
+            "helperText": "Se envía cada lunes por la mañana.",
+            "errorLabel": "Aceptar los términos",
+            "errorText": "Debes aceptar los términos para continuar."
+          },
+          "colors": {
+            "title": "Colores",
+            "desc": "Colores semánticos para el estado encendido."
+          },
+          "sizes": {
+            "title": "Tamaños",
+            "desc": "La escala de tamaños compartida para distintas densidades."
+          },
+          "states": {
+            "title": "Deshabilitado y solo lectura",
+            "desc": "Deshabilitado bloquea la interacción; readonly mantiene el foco pero fija el valor.",
+            "disabledOn": "Deshabilitado encendido",
+            "disabledOff": "Deshabilitado apagado",
+            "readonly": "Solo lectura"
+          },
+          "uncontrolled": {
+            "title": "No controlado en un formulario",
+            "desc": "Sin v-model, defaultChecked define el estado inicial y el reset del formulario lo restaura. Solo un interruptor encendido envía su name y value.",
+            "label": "Suscribirme al boletín"
+          }
+        },
+        "props": {
+          "modelValue": "Estado encendido (v-model). Si se omite, el interruptor es no controlado.",
+          "defaultChecked": "Estado inicial cuando es no controlado; también se restaura al hacer reset del formulario.",
+          "label": "Etiqueta visible junto al control.",
+          "description": "Texto secundario bajo la etiqueta.",
+          "helperText": "Texto de ayuda bajo el control. Se oculta si hay errorText.",
+          "errorText": "Mensaje de error que reemplaza a helperText y aplica el estado de error.",
+          "invalid": "Fuerza el estado inválido sin mostrar errorText (por ejemplo dentro de FormField).",
+          "color": "Color semántico del estado encendido. Se hereda de ModoProvider.",
+          "size": "Tamaño del track y del pulgar. Se hereda de ModoProvider.",
+          "radius": "Radio del track. El pulgar siempre es redondo.",
+          "labelPosition": "Posición de la etiqueta respecto al control.",
+          "fullWidth": "Estira el campo al ancho del contenedor.",
+          "disabled": "Deshabilita el interruptor e impide la interacción.",
+          "readonly": "Bloquea los cambios pero conserva el foco.",
+          "required": "Marca el campo como obligatorio y muestra un asterisco.",
+          "loading": "Deshabilita el control mientras hay un cambio asíncrono pendiente.",
+          "name": "Atributo name para el envío del formulario.",
+          "value": "Valor enviado cuando está encendido.",
+          "id": "id del input. Se genera si se omite.",
+          "ariaLabel": "Nombre accesible cuando no hay etiqueta visible."
+        },
+        "emits": {
+          "updateModelValue": "Se emite al cambiar el valor (sincroniza v-model).",
+          "change": "Se emite tras cada cambio del usuario, con el nuevo estado."
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaz TypeScript de las props de GlassSwitch. Misma forma que el Switch nativo, más defaultChecked y value."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al siguiente elemento enfocable",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "kbSpace": "Enciende / apaga",
+          "roleSwitch": "El checkbox subyacente expone role=\"switch\" y su estado",
+          "ariaInvalid": "Se activa si hay errorText o invalid",
+          "ariaDescribedBy": "Vincula la descripción, la ayuda o el error al interruptor",
+          "ariaReadonly": "Se activa con readonly",
+          "ariaLabel": "Nombre accesible cuando no hay etiqueta visible",
+          "focusNative": "Un input checkbox real permanece en el orden de tabulación y recibe el anillo de foco",
+          "focusDrag": "Arrastrar es un gesto extra; tocar o usar el teclado lo cambia igual",
+          "focusReducedMotion": "prefers-reduced-motion: reduce elimina las transiciones del pulgar"
+        }
+      },
+      "morphSelect": {
+        "category": "Forms",
+        "title": "MorphSelect",
+        "description": "Selector de un valor cuyo campo se transforma en la lista de opciones y vuelve al cerrarse, con búsqueda opcional. API compuesta (MorphSelect, Trigger, Content) con las mismas props de campo que el Select nativo, y sigue a ModoProvider en color, tamaño, radio, halo y modo oscuro.",
+        "seo": {
+          "metaTitle": "Componente Vue MorphSelect — Select que se Transforma",
+          "metaDescription": "Select gratuito y open-source para Vue 3 cuyo campo se transforma en la lista de opciones, con búsqueda, descripciones por opción, soporte de formularios nativo y la misma API de campo que el Select nativo.",
+          "h1": "Componente Vue MorphSelect",
+          "intro": "El MorphSelect de mood-ui es un selector de un valor para Vue 3 y Nuxt. El campo crece hasta convertirse en la lista de opciones y se repliega al cerrarse, conservando las props de campo del Select nativo, la navegación por teclado y el envío en formularios."
+        },
+        "controls": {
+          "variant": "Variante",
+          "color": "Color",
+          "size": "Tamaño",
+          "radius": "Radio",
+          "searchable": "Con búsqueda",
+          "disabled": "Deshabilitado",
+          "colors": {
+            "default": "Por defecto",
+            "primary": "Primario",
+            "success": "Éxito",
+            "warning": "Advertencia",
+            "danger": "Peligro"
+          }
+        },
+        "options": {
+          "mx": "México",
+          "us": "Estados Unidos",
+          "ca": "Canadá",
+          "br": "Brasil",
+          "ar": "Argentina",
+          "co": "Colombia"
+        },
+        "playground": {
+          "label": "País",
+          "placeholder": "Elige un país",
+          "helper": "Se usa para facturación e impuestos."
+        },
+        "examples": {
+          "basic": {
+            "title": "Uso básico",
+            "desc": "La raíz guarda el valor, las opciones y las props de campo; Trigger muestra el campo y Content el panel.",
+            "label": "País",
+            "placeholder": "Elige un país"
+          },
+          "searchable": {
+            "title": "Con búsqueda",
+            "desc": "searchable en Content agrega un campo de filtro. Compara con textValue, o con la etiqueta cuando es texto.",
+            "label": "País",
+            "search": "Buscar países…",
+            "empty": "Ningún país coincide"
+          },
+          "variants": {
+            "title": "Variantes",
+            "desc": "La variante del Trigger usa los mismos estilos que el Select nativo: outline, filled y ghost."
+          },
+          "sizes": {
+            "title": "Tamaños",
+            "desc": "La escala de tamaños compartida, definida en la raíz."
+          },
+          "states": {
+            "title": "Estados",
+            "desc": "Texto de ayuda, deshabilitado, solo lectura y error, todos definidos en la raíz.",
+            "helperLabel": "País",
+            "helperText": "Elige el país de facturación.",
+            "disabledLabel": "Deshabilitado",
+            "readonlyLabel": "Solo lectura",
+            "errorLabel": "País",
+            "errorText": "Elige un país compatible."
+          },
+          "form": {
+            "title": "No controlado en un formulario",
+            "desc": "Sin v-model, defaultValue define la opción inicial. name envía el valor mediante un input oculto y el reset del formulario lo restaura.",
+            "label": "País de envío"
+          }
+        },
+        "props": {
+          "options": "Opciones: value, label, description?, disabled? y textValue?.",
+          "modelValue": "Valor seleccionado (v-model). Si se omite, el selector es no controlado.",
+          "defaultValue": "Valor inicial cuando es no controlado; también se restaura al hacer reset del formulario.",
+          "label": "Etiqueta visible sobre el campo.",
+          "helperText": "Texto de ayuda bajo el campo. Se oculta si hay errorText.",
+          "errorText": "Mensaje de error que reemplaza a helperText y aplica el estado de error.",
+          "invalid": "Fuerza el estado inválido sin mostrar errorText.",
+          "color": "Color semántico de los acentos de foco y selección. Se hereda de ModoProvider.",
+          "size": "Tamaño del campo y las opciones. Se hereda de ModoProvider.",
+          "radius": "Radio del campo y del panel. Se hereda de ModoProvider.",
+          "halo": "Halo persistente del campo. Se hereda de ModoProvider.",
+          "disabled": "Impide abrir y seleccionar.",
+          "readonly": "Muestra el valor pero impide cambiarlo.",
+          "required": "Marca el campo como obligatorio y muestra un asterisco.",
+          "fullWidth": "Estira el campo al ancho del contenedor.",
+          "id": "id del trigger. Se genera, o se toma de un FormField padre.",
+          "name": "name del input oculto que se envía con el formulario.",
+          "ariaLabel": "Nombre accesible cuando no hay etiqueta visible.",
+          "ariaDescribedBy": "ids extra que se agregan a aria-describedby.",
+          "triggerPlaceholder": "Texto cuando no hay selección. Por defecto usa el placeholder localizado.",
+          "triggerVariant": "Estilo del campo, mismas variantes que el Select nativo.",
+          "contentSide": "Posición vertical; auto elige el lado con más espacio.",
+          "contentAlign": "Alineación del panel respecto al campo.",
+          "contentSearchable": "Muestra un campo de filtro arriba del panel.",
+          "contentSearchPlaceholder": "Placeholder del campo de búsqueda. Por defecto usa el texto localizado.",
+          "contentEmptyMessage": "Texto cuando la búsqueda no encuentra nada. Por defecto usa el texto localizado."
+        },
+        "emits": {
+          "updateModelValue": "Se emite al seleccionar una opción (sincroniza v-model).",
+          "change": "Se emite tras cada selección del usuario, con el nuevo valor.",
+          "openChange": "Se emite al abrir o cerrar el panel."
+        },
+        "slots": {
+          "default": "Slot de la raíz para Trigger y Content. Expone value y open.",
+          "trigger": "Slot por defecto de MorphSelect.Trigger: render personalizado de la opción elegida.",
+          "option": "Slot option de MorphSelect.Content: fila personalizada con option y selected."
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaces TypeScript de la raíz, Trigger, Content y la forma de las opciones."
+        },
+        "a11y": {
+          "kbTab": "Mueve el foco al trigger; dentro del panel abierto, lo cierra",
+          "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
+          "kbOpen": "Abre el panel desde el trigger y recorre las opciones habilitadas",
+          "kbHomeEnd": "Va a la primera o a la última opción habilitada",
+          "kbSelect": "Selecciona la opción enfocada",
+          "kbEsc": "Cierra el panel y devuelve el foco al trigger",
+          "kbType": "Salta a la siguiente opción que empieza con las letras escritas",
+          "roleCombobox": "El trigger es un combobox que controla un listbox",
+          "ariaExpanded": "Indica si el panel está abierto",
+          "ariaSelected": "Marca la opción elegida dentro del listbox",
+          "ariaInvalid": "Se activa si hay errorText o invalid",
+          "ariaRequired": "Se activa con required",
+          "ariaDescribedBy": "Vincula la ayuda o el error al trigger",
+          "ariaLabel": "Nombre accesible cuando no hay etiqueta visible",
+          "focusOpen": "Al abrir, el foco va a la opción elegida, o al campo de búsqueda si hay searchable",
+          "focusReducedMotion": "prefers-reduced-motion: reduce hace la transformación inmediata"
+        }
       }
     }
   }

@@ -2670,6 +2670,565 @@
           "h1": "Vue MenuButton Component",
           "intro": "mood-ui's MenuButton is a free, open-source dropdown and split button for Vue 3 and Nuxt — trigger a menu of actions from a single button, with keyboard navigation, icons and accessibility built in."
         }
+      },
+      "pressButton": {
+        "category": "Forms",
+        "title": "PressButton",
+        "description": "Tactile button that presses in with the Web Animations API and springs back on release. Same variants, colors and sizes as the native Button, zero-shift loading and rendering as a link. Follows ModoProvider for color, size, radius and dark mode.",
+        "seo": {
+          "metaTitle": "Vue PressButton — Tactile Spring Button",
+          "metaDescription": "Free, open-source tactile Vue 3 button with a WAAPI press and spring rebound, the same four variants and five semantic colors as the native Button, and zero-shift loading.",
+          "h1": "Vue PressButton Component",
+          "intro": "mood-ui's PressButton brings a native-feeling press and spring rebound to Vue 3 and Nuxt, with the same variants as the native Button (normal, outline, ghost, text), five semantic colors, zero-shift loading and full accessibility."
+        },
+        "controls": {
+          "variant": "Variant",
+          "color": "Color",
+          "size": "Size",
+          "radius": "Radius",
+          "loading": "Loading",
+          "disabled": "Disabled",
+          "fullWidth": "Full width",
+          "gradient": "Gradient",
+          "skeleton": "Skeleton",
+          "colors": {
+            "default": "Default",
+            "primary": "Primary",
+            "success": "Success",
+            "warning": "Warning",
+            "danger": "Danger"
+          }
+        },
+        "playground": {
+          "label": "Press me"
+        },
+        "examples": {
+          "variants": {
+            "title": "Variants",
+            "desc": "The same four treatments as the native Button: normal, outline, ghost and text.",
+            "normal": "Normal",
+            "outline": "Outline",
+            "ghost": "Ghost",
+            "text": "Text"
+          },
+          "colors": {
+            "title": "Colors",
+            "desc": "Five semantic colors. default follows the ModoProvider color."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "The shared size scale (xsmall, small, medium, large) with matching icon and spinner sizes.",
+            "xsmall": "Extra small",
+            "small": "Small",
+            "medium": "Medium",
+            "large": "Large"
+          },
+          "gradient": {
+            "title": "Gradient",
+            "desc": "gradient adds the gradient fill to the normal variant, same as the native Button.",
+            "label": "Get started"
+          },
+          "icons": {
+            "title": "Icons & icon-only",
+            "desc": "Pass startIcon / endIcon (or icon with iconPosition). Icon-only buttons are square and need an ariaLabel.",
+            "continue": "Continue",
+            "settings": "Settings",
+            "like": "Like",
+            "confirm": "Confirm"
+          },
+          "loading": {
+            "title": "Zero-shift loading",
+            "desc": "The spinner sits over the label, so toggling loading does not change the width. Click the first button to try it.",
+            "save": "Save changes",
+            "processing": "Processing…",
+            "submit": "Submit"
+          },
+          "link": {
+            "title": "As link",
+            "desc": "as=\"a\" renders a native anchor. When disabled it drops the href and sets aria-disabled.",
+            "visit": "Visit documentation",
+            "disabled": "Disabled link"
+          }
+        },
+        "props": {
+          "label": "Visible text when no default slot is provided.",
+          "type": "Native button type attribute. Omitted when as=\"a\".",
+          "variant": "Visual treatment, same names and look as the native Button.",
+          "color": "Semantic color. 'default' follows the ModoProvider color.",
+          "gradient": "Gradient fill on the normal variant.",
+          "size": "Control size. Inherits from ModoProvider when omitted.",
+          "radius": "Corner radius. Inherits from ModoProvider when omitted.",
+          "cursor": "Custom CSS cursor. Forced to not-allowed when disabled or loading.",
+          "disabled": "Disables interaction and keeps the variant look at reduced opacity.",
+          "loading": "Shows a centered spinner, keeps the width and blocks activation.",
+          "loadingText": "Text shown next to the spinner. Without it, screen readers hear the localized loading string.",
+          "icon": "Single icon, placed by iconPosition or centered when icon-only.",
+          "iconPosition": "Placement of icon when paired with a label.",
+          "startIcon": "Leading icon component.",
+          "endIcon": "Trailing icon component.",
+          "iconOnly": "Forces square icon-only geometry.",
+          "fullWidth": "Stretches the button to 100% of its container.",
+          "ariaLabel": "Accessible name. Required for icon-only buttons.",
+          "skeleton": "Renders a skeleton placeholder with the button's footprint.",
+          "as": "Root element tag.",
+          "href": "Destination URL when rendered as an anchor.",
+          "target": "Anchor target when as=\"a\".",
+          "rel": "Anchor rel when as=\"a\"."
+        },
+        "emits": {
+          "click": "Native click, forwarded only when the button is not disabled or loading."
+        },
+        "slots": {
+          "default": "Button label content.",
+          "startIcon": "Custom leading icon.",
+          "endIcon": "Custom trailing icon.",
+          "loadingText": "Custom content next to the spinner while loading."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interface for the PressButton props."
+        },
+        "a11y": {
+          "kbActivate": "Activates the button with native keyboard semantics",
+          "kbTab": "Moves focus to the button",
+          "kbShiftTab": "Moves focus to the previous focusable element",
+          "ariaType": "Defaults to type=\"button\" so it never submits forms by accident",
+          "ariaBusy": "Set to true while loading",
+          "ariaDisabled": "Applied to disabled anchor buttons (as=\"a\") together with tabindex=\"-1\"",
+          "ariaLabel": "Accessible name for icon-only buttons",
+          "focusNative": "The focus ring appears only on keyboard :focus-visible",
+          "focusReducedMotion": "Honors prefers-reduced-motion: reduce by skipping the press and spring animation"
+        }
+      },
+      "pressButtonGroup": {
+        "category": "Forms",
+        "title": "PressButtonGroup",
+        "description": "Joins several PressButton segments into one bar whose outline bends smoothly when a segment is pressed. Passes variant, color, size, radius, disabled, gradient and full width to every segment, and follows ModoProvider like the native ButtonGroup.",
+        "seo": {
+          "metaTitle": "Vue PressButtonGroup — Morphing Tactile Button Group",
+          "metaDescription": "Free, open-source Vue 3 button group for PressButton: one connected bar whose outline morphs on press, shared dividers, horizontal and vertical orientation.",
+          "h1": "Vue PressButtonGroup Component",
+          "intro": "mood-ui's PressButtonGroup joins PressButton actions into a single bar. Its outer contour and border bend continuously while a segment is held down, and every segment shares the group's variant, color, size and radius."
+        },
+        "controls": {
+          "variant": "Variant",
+          "color": "Color",
+          "size": "Size",
+          "radius": "Radius",
+          "orientation": "Orientation",
+          "disabled": "Disabled",
+          "gradient": "Gradient",
+          "fullWidth": "Full width",
+          "colors": {
+            "default": "Default",
+            "primary": "Primary",
+            "success": "Success",
+            "warning": "Warning",
+            "danger": "Danger"
+          }
+        },
+        "labels": {
+          "day": "Day",
+          "week": "Week",
+          "month": "Month",
+          "year": "Year",
+          "left": "Left",
+          "center": "Center",
+          "right": "Right",
+          "draft": "Draft",
+          "review": "Review",
+          "publish": "Publish",
+          "fast": "Fast",
+          "auto": "Auto",
+          "precise": "Precise",
+          "edit": "Edit",
+          "duplicate": "Duplicate",
+          "archive": "Archive",
+          "overview": "Overview",
+          "metrics": "Metrics",
+          "logs": "Logs",
+          "settings": "Settings",
+          "groupLabel": "Time range"
+        },
+        "examples": {
+          "basic": {
+            "title": "Connected bar",
+            "desc": "Press and hold any segment to see the outline bend across the neighboring seams."
+          },
+          "variants": {
+            "title": "Variants & colors",
+            "desc": "variant and color cascade to every PressButton inside the group."
+          },
+          "pill": {
+            "title": "Pill radius & icons",
+            "desc": "Use radius=\"full\" for capsule toolbars with leading icons."
+          },
+          "vertical": {
+            "title": "Vertical orientation",
+            "desc": "Stacks the segments with horizontal dividers."
+          },
+          "fullWidth": {
+            "title": "Full width",
+            "desc": "Distributes the segments evenly across the container width."
+          }
+        },
+        "props": {
+          "orientation": "Layout axis of the connected segments.",
+          "variant": "Variant applied to every child PressButton.",
+          "color": "Color cascaded to the children. 'default' follows ModoProvider; an explicit color on a child still wins.",
+          "size": "Size applied to every child. Inherits from ModoProvider when omitted.",
+          "radius": "Outer radius of the bar. Inherits from ModoProvider when omitted.",
+          "disabled": "Disables every segment.",
+          "gradient": "Gradient fill on normal segments.",
+          "fullWidth": "Stretches the group and each segment evenly to 100% width.",
+          "ariaLabel": "Accessible label for the role=\"group\" container."
+        },
+        "slots": {
+          "default": "PressButton segments to join inside the group."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interface for the PressButtonGroup props."
+        },
+        "a11y": {
+          "kbTab": "Moves focus through each PressButton segment in order",
+          "kbShiftTab": "Moves focus to the previous segment",
+          "kbActivate": "Activates the focused segment",
+          "ariaGroup": "Exposes role=\"group\" on the container",
+          "ariaLabel": "Names the group when ariaLabel is provided",
+          "ariaDisabled": "Each segment is natively disabled when the group is disabled",
+          "focusNoTrap": "Every segment keeps its own tab stop and :focus-visible ring; the group does not trap focus"
+        }
+      },
+      "modeOrb": {
+        "category": "Forms",
+        "title": "ModeOrb",
+        "description": "Color-mode sphere that switches the global theme between light and dark with a circular View Transition wave and a crest spreading from the orb's center. Its diameter matches the control height, and it follows ModoProvider for color and size.",
+        "seo": {
+          "metaTitle": "Vue ModeOrb — Circular View Transition Theme Toggle",
+          "metaDescription": "Free, open-source Vue 3 ModeOrb: a dark/light mode sphere built on useColorMode and a circular document.startViewTransition wave.",
+          "h1": "Vue ModeOrb Component",
+          "intro": "mood-ui's ModeOrb is a color-mode toggle for Vue 3 and Nuxt. Clicking the sphere switches the global mode and plays a circular View Transition wave from the orb's center to the farthest corner of the viewport. The wave runs on a fixed duration, so it finishes on time even on a busy page."
+        },
+        "controls": {
+          "size": "Size",
+          "color": "Color",
+          "disabled": "Disabled",
+          "fixed": "Fixed corner",
+          "colors": {
+            "default": "Default",
+            "primary": "Primary",
+            "success": "Success",
+            "warning": "Warning",
+            "danger": "Danger"
+          }
+        },
+        "playground": {
+          "theme": "Theme",
+          "light": "Light",
+          "dark": "Dark",
+          "hint": "Click the orb to switch the theme with a circular wave."
+        },
+        "examples": {
+          "inline": {
+            "title": "Inline toolbar orb",
+            "desc": "Place ModeOrb in any header, card or toolbar. The wave starts at the clicked orb's center.",
+            "cardTitle": "Appearance",
+            "cardSubtitle": "Click the sphere to switch the theme"
+          },
+          "corners": {
+            "title": "Wave origin",
+            "desc": "Click orbs in different places to see the wave spread from each one.",
+            "topLeft": "Top left",
+            "topRight": "Top right",
+            "bottomLeft": "Bottom left",
+            "bottomRight": "Bottom right"
+          },
+          "colors": {
+            "title": "Colors",
+            "desc": "color tints the sphere. default follows the provider color, and with a default provider the sphere uses the foreground color."
+          },
+          "fixed": {
+            "title": "Fixed viewport corner",
+            "desc": "fixed pins the orb to the bottom-right corner of the viewport. Turn on the Fixed corner control in the playground to try it."
+          }
+        },
+        "props": {
+          "fixed": "Pins the orb to the bottom-right corner of the viewport with position: fixed.",
+          "size": "Orb size. The diameter matches the control height (32 / 36 / 40 / 48 px). Inherits from ModoProvider.",
+          "color": "Sphere color. default follows the provider color, or the foreground color when the provider is default.",
+          "disabled": "Disables the toggle.",
+          "ariaLabel": "Accessible label. Falls back to the localized \"Toggle color mode\" string."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interface for the ModeOrb props."
+        },
+        "a11y": {
+          "kbTab": "Moves keyboard focus to the orb",
+          "kbActivate": "Switches the color mode",
+          "ariaLabel": "Accessible name for the toggle, localized by default",
+          "ariaPressed": "true while the dark mode is active",
+          "focusReducedMotion": "With prefers-reduced-motion: reduce, or without View Transitions support, the theme switches instantly"
+        }
+      },
+      "glassSwitch": {
+        "category": "Forms",
+        "title": "GlassSwitch",
+        "description": "On/off switch with a liquid-glass thumb you can drag or tap. Same API as the native Switch (label, description, helper and error text, loading, readonly) on top of a real checkbox, and follows ModoProvider for color, size, radius and dark mode.",
+        "seo": {
+          "metaTitle": "Vue GlassSwitch — Draggable Glass Toggle",
+          "metaDescription": "Free, open-source Vue 3 toggle switch with a draggable liquid-glass thumb, the same API as the native Switch, native form semantics and full accessibility.",
+          "h1": "Vue GlassSwitch Component",
+          "intro": "mood-ui's GlassSwitch is a Vue 3 and Nuxt toggle with a liquid-glass thumb that follows your finger. It keeps the native Switch API and a real checkbox underneath, so forms, validation and screen readers work as expected."
+        },
+        "controls": {
+          "color": "Color",
+          "size": "Size",
+          "radius": "Radius",
+          "label": "Label",
+          "loading": "Loading",
+          "readonly": "Read only",
+          "disabled": "Disabled",
+          "colors": {
+            "default": "Default",
+            "primary": "Primary",
+            "success": "Success",
+            "warning": "Warning",
+            "danger": "Danger"
+          }
+        },
+        "playground": {
+          "label": "Notifications",
+          "description": "Push and email updates."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Binary toggle with v-model and a visible label. Tap it or drag the thumb past the middle.",
+            "pushLabel": "Push notifications",
+            "darkLabel": "Dark mode"
+          },
+          "description": {
+            "title": "With description",
+            "desc": "Secondary text below the label to add context.",
+            "label": "Marketing",
+            "description": "Receive product news and updates."
+          },
+          "labelLeft": {
+            "title": "Label on the left",
+            "desc": "Useful in settings rows, with fullWidth pushing the control to the end.",
+            "label": "Active"
+          },
+          "validation": {
+            "title": "Helper and error text",
+            "desc": "helperText adds guidance; errorText replaces it and marks the switch invalid.",
+            "helperLabel": "Weekly digest",
+            "helperText": "Sent every Monday morning.",
+            "errorLabel": "Accept the terms",
+            "errorText": "You need to accept the terms to continue."
+          },
+          "colors": {
+            "title": "Colors",
+            "desc": "Semantic colors for the on state."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "The shared size scale for different UI densities."
+          },
+          "states": {
+            "title": "Disabled and read only",
+            "desc": "Disabled blocks interaction; readonly keeps focus but locks the value.",
+            "disabledOn": "Disabled on",
+            "disabledOff": "Disabled off",
+            "readonly": "Read only"
+          },
+          "uncontrolled": {
+            "title": "Uncontrolled in a form",
+            "desc": "Without v-model, defaultChecked sets the initial state and a form reset restores it. Only a checked switch submits its name and value.",
+            "label": "Subscribe to the newsletter"
+          }
+        },
+        "props": {
+          "modelValue": "Checked state (v-model). When omitted the switch is uncontrolled.",
+          "defaultChecked": "Initial state when uncontrolled; also restored on form reset.",
+          "label": "Visible label next to the control.",
+          "description": "Secondary text below the label.",
+          "helperText": "Helper text below the control. Hidden when errorText is present.",
+          "errorText": "Error message that replaces helperText and applies the error state.",
+          "invalid": "Forces the invalid state without rendering errorText (for example inside FormField).",
+          "color": "Semantic color of the on state. Inherits from ModoProvider.",
+          "size": "Track and thumb size. Inherits from ModoProvider.",
+          "radius": "Track radius. The thumb stays round.",
+          "labelPosition": "Position of the label relative to the control.",
+          "fullWidth": "Stretches the field to the container width.",
+          "disabled": "Disables the switch and prevents interaction.",
+          "readonly": "Locks changes but keeps focus.",
+          "required": "Marks the field as required and shows an asterisk.",
+          "loading": "Disables the control while an async change is pending.",
+          "name": "HTML name used for form submission.",
+          "value": "Value submitted when checked.",
+          "id": "Input id. Generated when omitted.",
+          "ariaLabel": "Accessible name when there is no visible label."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when the value changes (syncs v-model).",
+          "change": "Emitted after each user change, with the new checked state."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interface for the GlassSwitch props. Same shape as the native Switch, plus defaultChecked and value."
+        },
+        "a11y": {
+          "kbTab": "Moves focus to the next focusable element",
+          "kbShiftTab": "Moves focus to the previous focusable element",
+          "kbSpace": "Toggles on / off",
+          "roleSwitch": "The underlying checkbox exposes role=\"switch\" and its checked state",
+          "ariaInvalid": "Set to true when errorText is present or invalid is set",
+          "ariaDescribedBy": "Links the description, helper or error text to the switch",
+          "ariaReadonly": "Set when readonly is active",
+          "ariaLabel": "Accessible name when there is no visible label",
+          "focusNative": "A real checkbox input stays in the tab order and receives the focus ring",
+          "focusDrag": "Dragging is an extra pointer gesture; a tap or the keyboard toggles the same way",
+          "focusReducedMotion": "prefers-reduced-motion: reduce removes the thumb transitions"
+        }
+      },
+      "morphSelect": {
+        "category": "Forms",
+        "title": "MorphSelect",
+        "description": "Single-value select whose field morphs into the option list and back on close, with optional search. Compound API (MorphSelect, Trigger, Content) with the same field props as the native Select, and follows ModoProvider for color, size, radius, halo and dark mode.",
+        "seo": {
+          "metaTitle": "Vue MorphSelect — Morphing Select Field",
+          "metaDescription": "Free, open-source Vue 3 select whose field morphs into the option list, with search, option descriptions, native form support and the same field API as the native Select.",
+          "h1": "Vue MorphSelect Component",
+          "intro": "mood-ui's MorphSelect is a Vue 3 and Nuxt single-value select. The field grows into the option list and folds back on close, while keeping the native Select field props, keyboard navigation and form submission."
+        },
+        "controls": {
+          "variant": "Variant",
+          "color": "Color",
+          "size": "Size",
+          "radius": "Radius",
+          "searchable": "Searchable",
+          "disabled": "Disabled",
+          "colors": {
+            "default": "Default",
+            "primary": "Primary",
+            "success": "Success",
+            "warning": "Warning",
+            "danger": "Danger"
+          }
+        },
+        "options": {
+          "mx": "Mexico",
+          "us": "United States",
+          "ca": "Canada",
+          "br": "Brazil",
+          "ar": "Argentina",
+          "co": "Colombia"
+        },
+        "playground": {
+          "label": "Country",
+          "placeholder": "Choose a country",
+          "helper": "Used for billing and taxes."
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic usage",
+            "desc": "Root holds the value, options and field props; Trigger renders the field and Content the panel.",
+            "label": "Country",
+            "placeholder": "Choose a country"
+          },
+          "searchable": {
+            "title": "Searchable",
+            "desc": "searchable on Content adds a filter field. It matches textValue, or the label when it is text.",
+            "label": "Country",
+            "search": "Search countries…",
+            "empty": "No matching countries"
+          },
+          "variants": {
+            "title": "Variants",
+            "desc": "The Trigger variant uses the same looks as the native Select: outline, filled and ghost."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "The shared size scale, set on the root."
+          },
+          "states": {
+            "title": "States",
+            "desc": "Helper text, disabled, read only and error, all set on the root.",
+            "helperLabel": "Country",
+            "helperText": "Choose the billing country.",
+            "disabledLabel": "Disabled",
+            "readonlyLabel": "Read only",
+            "errorLabel": "Country",
+            "errorText": "Choose a supported country."
+          },
+          "form": {
+            "title": "Uncontrolled in a form",
+            "desc": "Without v-model, defaultValue sets the initial option. name submits the value through a hidden input and a form reset restores it.",
+            "label": "Shipping country"
+          }
+        },
+        "props": {
+          "options": "Options: value, label, description?, disabled? and textValue?.",
+          "modelValue": "Selected value (v-model). When omitted the select is uncontrolled.",
+          "defaultValue": "Initial value when uncontrolled; also restored on form reset.",
+          "label": "Visible label above the field.",
+          "helperText": "Helper text below the field. Hidden when errorText is present.",
+          "errorText": "Error message that replaces helperText and applies the error state.",
+          "invalid": "Forces the invalid state without rendering errorText.",
+          "color": "Semantic color for focus and selection accents. Inherits from ModoProvider.",
+          "size": "Field and option size. Inherits from ModoProvider.",
+          "radius": "Field and panel radius. Inherits from ModoProvider.",
+          "halo": "Persistent field halo. Inherits from ModoProvider.",
+          "disabled": "Prevents opening and selection.",
+          "readonly": "Shows the value but prevents changes.",
+          "required": "Marks the field as required and shows an asterisk.",
+          "fullWidth": "Stretches the field to the container width.",
+          "id": "Trigger id. Generated, or taken from a parent FormField.",
+          "name": "Name of the hidden input submitted with the form.",
+          "ariaLabel": "Accessible name when there is no visible label.",
+          "ariaDescribedBy": "Extra ids appended to aria-describedby.",
+          "triggerPlaceholder": "Text shown when nothing is selected. Defaults to the localized placeholder.",
+          "triggerVariant": "Field look, same variants as the native Select.",
+          "contentSide": "Vertical placement; auto picks the side with more room.",
+          "contentAlign": "Panel alignment relative to the field.",
+          "contentSearchable": "Shows a filter field at the top of the panel.",
+          "contentSearchPlaceholder": "Placeholder of the search field. Defaults to the localized string.",
+          "contentEmptyMessage": "Text shown when the search has no matches. Defaults to the localized string."
+        },
+        "emits": {
+          "updateModelValue": "Emitted when an option is selected (syncs v-model).",
+          "change": "Emitted after each user selection, with the new value.",
+          "openChange": "Emitted when the panel opens or closes."
+        },
+        "slots": {
+          "default": "Root slot for Trigger and Content. Exposes value and open.",
+          "trigger": "MorphSelect.Trigger default slot: custom rendering of the selected option.",
+          "option": "MorphSelect.Content option slot: custom row with option and selected."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for the root, Trigger, Content and option shape."
+        },
+        "a11y": {
+          "kbTab": "Moves focus to the trigger; inside the open panel, closes it",
+          "kbShiftTab": "Moves focus to the previous focusable element",
+          "kbOpen": "Opens the panel from the trigger and moves between enabled options",
+          "kbHomeEnd": "Moves to the first or last enabled option",
+          "kbSelect": "Selects the focused option",
+          "kbEsc": "Closes the panel and returns focus to the trigger",
+          "kbType": "Jumps to the next option that starts with the typed letters",
+          "roleCombobox": "The trigger is a combobox that controls a listbox",
+          "ariaExpanded": "Reflects whether the panel is open",
+          "ariaSelected": "Marks the selected option inside the listbox",
+          "ariaInvalid": "Set when errorText is present or invalid is set",
+          "ariaRequired": "Set when required is active",
+          "ariaDescribedBy": "Links helper or error text to the trigger",
+          "ariaLabel": "Accessible name when there is no visible label",
+          "focusOpen": "Opening focuses the selected option, or the search field when searchable",
+          "focusReducedMotion": "prefers-reduced-motion: reduce makes the morph immediate"
+        }
       }
     }
   }

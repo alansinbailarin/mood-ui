@@ -464,6 +464,189 @@
           "ariaSelected": "Indica el tab actualmente activo",
           "focusNative": "El foco es gestionado por el tablist; las flechas navegan entre tabs"
         }
+      },
+      "menu": {
+        "title": "Menu",
+        "category": "Navigation",
+        "description": "Menú de acciones que se transforma desde su disparador, con atajos de teclado activos, navegación con flechas, búsqueda al escribir, etiquetas, separadores y adopción de la superficie del disparador. Sigue a ModoProvider en color, tamaño, radio y modo oscuro.",
+        "seo": {
+          "metaTitle": "Componente Menu para Vue — Menú Desplegable con Morph y Atajos",
+          "metaDescription": "Componente Menu gratuito y open-source para Vue 3 y Nuxt: emerge desde su botón con atajos de teclado activos, búsqueda type-ahead e ítems destructivos.",
+          "h1": "Componente Menu para Vue",
+          "intro": "Menu de mood-ui es un menú de acciones con morphing para Vue 3 y Nuxt. Se expande suavemente desde su disparador, escucha en vivo los atajos de teclado declarados en cada Menu.Item mientras está abierto e incluye navegación por flechas y filtrado al escribir."
+        },
+        "controls": {
+          "surface": "Superficie",
+          "disabled": "Deshabilitado"
+        },
+        "demo": {
+          "trigger": "Acciones",
+          "label": "Documento",
+          "edit": "Editar",
+          "duplicate": "Duplicar",
+          "share": "Compartir enlace",
+          "archive": "Archivar (bloqueado)",
+          "archiveShort": "Archivar",
+          "delete": "Eliminar para siempre",
+          "lastAction": "Última acción:",
+          "none": "Ninguna aún",
+          "moreActions": "Más acciones",
+          "workspace": "Espacio de trabajo",
+          "alignTrigger": "Alinear: {align}",
+          "danger": {
+            "project": "Proyecto",
+            "rename": "Renombrar",
+            "deleteProject": "Eliminar proyecto",
+            "zone": "Zona de peligro",
+            "archiveAll": "Archivar todo",
+            "deleteAll": "Eliminar todo"
+          }
+        },
+        "examples": {
+          "asChild": {
+            "title": "Disparador propio con as-child",
+            "desc": "Menu.Trigger as-child convierte tu propio elemento, aquí un botón solo con icono, en el disparador."
+          },
+          "danger": {
+            "title": "Elementos destructivos",
+            "desc": "color=\"danger\" en Menu.Item marca una fila destructiva. En Menu pone en rojo todas las filas que no tengan color propio."
+          },
+          "surface": {
+            "title": "Adopción de la superficie del disparador",
+            "desc": "surface=\"trigger\" en Menu.Content hace que el menú herede los colores del disparador."
+          },
+          "placement": {
+            "title": "Posición y alineación",
+            "desc": "side y align en Menu.Content, con ajuste a la ventana para evitar colisiones."
+          }
+        },
+        "props": {
+          "open": "Estado abierto controlado (v-model:open o v-model).",
+          "defaultOpen": "Estado abierto inicial cuando no está controlado.",
+          "color": "Color del disparador por defecto (default sigue a ModoProvider). Un danger explícito convierte también en fila de peligro cada elemento sin color propio.",
+          "size": "Tamaño del disparador por defecto, del padding de las filas y de los iconos. Hereda de ModoProvider.",
+          "radius": "Radio de esquina del panel, sus filas y el disparador por defecto. Hereda de ModoProvider.",
+          "triggerAsChild": "Usa el elemento del slot como disparador en lugar de renderizar un Button.",
+          "triggerVariant": "Variante del Button disparador por defecto.",
+          "triggerDisabled": "Deshabilita el disparador por defecto.",
+          "side": "Lado vertical preferido respecto al disparador.",
+          "align": "Alineación horizontal preferida respecto al disparador.",
+          "surface": "auto usa los tokens de superficie del menú; trigger hereda los colores del disparador.",
+          "contentOverrides": "Radio y tamaño de fila propios del panel; si se omiten usa las props de Menu y luego ModoProvider.",
+          "icon": "Componente de icono inicial.",
+          "shortcut": "Indicación del atajo (por ejemplo ⌘D o ⌫). Se muestra y queda activo mientras el menú está abierto.",
+          "itemColor": "Color de la fila. danger representa una acción destructiva. Sin él, la fila hereda un danger explícito del menú; si no, queda neutral.",
+          "disabled": "Deshabilita el clic, la selección con teclado y el atajo."
+        },
+        "emits": {
+          "updateOpen": "Se emite al cambiar el estado abierto (v-model:open).",
+          "updateModelValue": "Igual que update:open, para v-model.",
+          "openChange": "Se emite con el nuevo estado abierto en cada cambio.",
+          "select": "Se emite al elegir el elemento con clic, Enter o su atajo. Después el menú se cierra.",
+          "click": "Clic nativo. Llama a preventDefault() para mantener el menú abierto y omitir select."
+        },
+        "slots": {
+          "default": "Partes compuestas: Menu.Trigger, Menu.Content, Menu.Item, Menu.Label y Menu.Separator.",
+          "trigger": "Etiqueta del disparador, o tu propio elemento con as-child.",
+          "item": "Etiqueta del elemento.",
+          "icon": "Icono inicial personalizado.",
+          "shortcut": "Indicación de atajo personalizada."
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaces de TypeScript de Menu y sus partes compuestas."
+        },
+        "a11y": {
+          "kbOpen": "Abre el menú desde el disparador y enfoca el primer elemento",
+          "kbArrows": "Mueven el foco entre los elementos habilitados",
+          "kbTypeahead": "Al escribir se enfoca el siguiente elemento que empieza con esos caracteres",
+          "kbShortcuts": "Ejecuta el elemento que declara ese atajo mientras el menú está abierto",
+          "kbEsc": "Cierra el menú y devuelve el foco al disparador",
+          "ariaMenu": "Panel con role=\"menu\", filas con role=\"menuitem\" y divisores con role=\"separator\"",
+          "ariaTrigger": "El disparador anuncia el menú emergente y si está expandido",
+          "ariaDisabled": "La navegación con teclado y los atajos omiten los elementos deshabilitados",
+          "focusRestore": "Al abrir, el foco pasa al primer elemento habilitado; al cerrar, vuelve al disparador"
+        }
+      },
+      "contextMenu": {
+        "title": "ContextMenu",
+        "category": "Navigation",
+        "description": "Menú de clic derecho y pulsación larga táctil que surge desde la posición del puntero y comparte los elementos, etiquetas y separadores de Menu. Sigue a ModoProvider en color, tamaño, radio y modo oscuro.",
+        "seo": {
+          "metaTitle": "Componente ContextMenu para Vue — Menú de Clic Derecho y Long-Press",
+          "metaDescription": "Componente ContextMenu gratuito y open-source para Vue 3 y Nuxt: se abre en las coordenadas del cursor con clic derecho o pulsación larga táctil de 500ms.",
+          "h1": "Componente ContextMenu para Vue",
+          "intro": "ContextMenu de mood-ui lleva menús contextuales nativos a Vue 3 y Nuxt. Se despliega en las coordenadas exactas del cursor o dedo mediante clic derecho en escritorio o pulsación larga de 500ms en pantallas táctiles, reutilizando Menu.Item, Menu.Label y Menu.Separator."
+        },
+        "controls": {
+          "icons": "Iconos",
+          "shortcuts": "Atajos"
+        },
+        "demo": {
+          "cardTitle": "Haz clic derecho en cualquier parte de esta tarjeta",
+          "cardSubtitle": "O mantén presionado 500ms en una pantalla táctil.",
+          "label": "Lienzo",
+          "newFolder": "Nueva carpeta",
+          "rename": "Renombrar",
+          "duplicate": "Duplicar",
+          "delete": "Eliminar",
+          "lastAction": "Última acción",
+          "none": "Ninguna aún",
+          "fileHint": "Clic derecho para ver acciones del archivo",
+          "copyLink": "Copiar enlace para compartir",
+          "trash": "Mover a la papelera",
+          "zone": "Haz clic derecho aquí",
+          "paste": "Pegar",
+          "pastePlain": "Pegar como texto sin formato",
+          "open": "Abierto",
+          "closed": "Cerrado"
+        },
+        "examples": {
+          "cards": {
+            "title": "Menús por elemento",
+            "desc": "Envuelve cada tarjeta o fila en su propio ContextMenu para que el clic derecho muestre acciones de ese registro."
+          },
+          "controlled": {
+            "title": "Estado controlado",
+            "desc": "Lee o controla el estado con v-model:open y escucha openChange. Los elementos deshabilitados se ven pero no se pueden elegir."
+          }
+        },
+        "props": {
+          "open": "Estado abierto controlado (v-model:open o v-model).",
+          "color": "Color semántico. Un danger explícito convierte en fila de peligro cada elemento sin color propio.",
+          "size": "Padding de las filas y tamaño de los iconos. Hereda de ModoProvider.",
+          "radius": "Radio de esquina del panel y sus filas. Hereda de ModoProvider.",
+          "contentOverrides": "Radio y tamaño de fila propios del panel; si se omiten usa las props de ContextMenu y luego ModoProvider.",
+          "icon": "Componente de icono inicial.",
+          "shortcut": "Indicación del atajo. Se muestra y queda activo mientras el menú está abierto.",
+          "itemColor": "Color de la fila. danger representa una acción destructiva.",
+          "disabled": "Deshabilita el clic, la selección con teclado y el atajo."
+        },
+        "emits": {
+          "updateOpen": "Se emite al cambiar el estado abierto (v-model:open).",
+          "updateModelValue": "Igual que update:open, para v-model.",
+          "openChange": "Se emite con el nuevo estado abierto en cada cambio.",
+          "select": "Se emite al elegir el elemento. Después el menú se cierra."
+        },
+        "slots": {
+          "default": "Partes compuestas: ContextMenu.Trigger, Content, Item, Label y Separator.",
+          "trigger": "La zona que abre el menú con clic derecho o pulsación larga.",
+          "item": "Icono e indicación de atajo personalizados, igual que en Menu.Item."
+        },
+        "types": {
+          "title": "Tipos",
+          "desc": "Interfaces de TypeScript de ContextMenu y de las partes de Menu que comparte."
+        },
+        "a11y": {
+          "kbArrows": "Mueven el foco entre los elementos habilitados",
+          "kbTypeahead": "Al escribir se enfoca el siguiente elemento que empieza con esos caracteres",
+          "kbShortcuts": "Ejecuta el elemento que declara ese atajo mientras el menú está abierto",
+          "kbEsc": "Cierra el menú contextual",
+          "ariaMenu": "Misma semántica role=\"menu\", menuitem y separator que Menu",
+          "ariaDisabled": "La navegación con teclado y los atajos omiten los elementos deshabilitados",
+          "focusOpen": "Al abrir el menú, el foco pasa al primer elemento habilitado",
+          "focusKeyboard": "El clic derecho no tiene equivalente de teclado aquí; ofrece las mismas acciones en un Menu visible para quien usa teclado"
+        }
       }
     }
   }

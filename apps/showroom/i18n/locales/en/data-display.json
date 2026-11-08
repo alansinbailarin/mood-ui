@@ -976,6 +976,10 @@
             "title": "Row selection",
             "desc": "Enable single or multi-row selection with checkboxes. Bind :selected and listen to \\@update:selected."
           },
+          "toolbar": {
+            "title": "Toolbar, search & bulk actions",
+            "desc": "Combine global-search, column-visibility and exportable with multi-row selection and the #bulk-actions slot for inline contextual actions."
+          },
           "pagination": {
             "title": "Pagination",
             "desc": "Pass a pagination object with page, pageSize and total to split the data across pages."
@@ -2128,6 +2132,10 @@
           "stickyHeader": {
             "title": "Sticky header",
             "desc": "The header stays fixed while scrolling inside the container."
+          },
+          "toolbar": {
+            "title": "Toolbar, search & bulk actions",
+            "desc": "Combine global-search, column-visibility and exportable with multi-row selection and the #bulk-actions slot for inline contextual actions."
           }
         }
       },
@@ -2354,6 +2362,136 @@
           "metaDescription": "Free, open-source Vue chart component: line, area, bar, donut, pie, gauge, radar, heatmap and sparkline — pure SVG, zero dependencies. A lightweight Recharts alternative for Vue 3 and Nuxt.",
           "h1": "Vue Chart Component",
           "intro": "mood-ui's Chart is a free, open-source charting component for Vue 3 and Nuxt — line, area, bar, scatter, donut, pie, gauge, radial, radar, heatmap and sparkline, all rendered as pure SVG with zero chart dependencies. A lightweight alternative to Recharts and Chart.js."
+        }
+      },
+      "surfaceCard": {
+        "title": "SurfaceCard",
+        "description": "Composable card with a concentric double-frame bezel, three surface variants (outline, elevated, soft), compound parts (Media, Header, Title, Subtitle, Body, Footer, Separator) and tactile press feedback. Follows ModoProvider for size, radius and dark mode.",
+        "seo": {
+          "metaTitle": "Vue SurfaceCard Component — Composable Framed Card",
+          "metaDescription": "Free, open-source composable Vue 3 card with a concentric double-frame bezel, dual light/dark elevation ladder, full-bleed media, stretched-link support, and WAAPI press feedback.",
+          "h1": "Vue SurfaceCard Component",
+          "intro": "mood-ui's SurfaceCard is a composable Vue 3 and Nuxt card component featuring a default concentric double-frame bezel, three dual-mode surface variants (outline, elevated, soft), seven subcomponents, and tactile WAAPI spring motion."
+        },
+        "controls": {
+          "framed": "Framed",
+          "interactive": "Interactive",
+          "disabled": "Disabled"
+        },
+        "demo": {
+          "overview": {
+            "title": "Design tokens",
+            "subtitle": "Composable surface card",
+            "body": "Every section takes its padding and type scale from size. The concentric frame wraps the content by default."
+          },
+          "variants": {
+            "outline": {
+              "title": "Outline",
+              "subtitle": "Hairline border",
+              "body": "Card surface with a 1px border and no shadow."
+            },
+            "elevated": {
+              "title": "Elevated",
+              "subtitle": "Border and shadow",
+              "body": "Raised plane that lifts further on hover when it is interactive."
+            },
+            "soft": {
+              "title": "Soft",
+              "subtitle": "Muted fill",
+              "body": "Uniform muted surface for dense panels and settings."
+            }
+          },
+          "sizes": {
+            "subtitle": "Padding, gaps and type scale",
+            "body": "Every section reads its spacing from size."
+          },
+          "editorial": {
+            "title": "Design tokens at scale",
+            "subtitle": "5 min read · Engineering",
+            "body": "How semantic OKLCH variables keep light and dark modes coherent.",
+            "badge": "New",
+            "action": "Read",
+            "alt": "Abstract cover with layered translucent panels"
+          },
+          "grouped": {
+            "title": "Notifications",
+            "subtitle": "Choose how and when we reach you.",
+            "pushTitle": "Push notifications",
+            "pushDesc": "Instant alerts on active devices.",
+            "digestTitle": "Weekly digest",
+            "digestDesc": "Key metrics every Monday morning.",
+            "synced": "Synced automatically",
+            "done": "Done"
+          },
+          "interactive": {
+            "buttonTitle": "Direct action",
+            "buttonBody": "Press and hold to feel the compression, then release for the spring rebound.",
+            "activations": "Activations",
+            "linkTitle": "Stretched link and action",
+            "linkSubtitle": "Independent footer controls",
+            "linkBody": "Clicking the card follows the title link. The Bookmark button only toggles itself.",
+            "bookmark": "Bookmark",
+            "saved": "Saved"
+          }
+        },
+        "examples": {
+          "variants": {
+            "title": "Surface variants",
+            "desc": "outline, elevated and soft, each with the concentric inner frame. Pass :framed=\"false\" for a single-border card."
+          },
+          "sizes": {
+            "title": "Sizes",
+            "desc": "size drives the padding, gaps and type scale of every section. Omit it to follow ModoProvider; padding=\"none\" zeroes every section."
+          },
+          "editorial": {
+            "title": "Media and editorial layout",
+            "desc": "SurfaceCard.Media bleeds edge to edge with a reserved aspect ratio, followed by Header, Body and a Footer with align=\"between\"."
+          },
+          "grouped": {
+            "title": "Grouped settings",
+            "desc": "SurfaceCard.Separator bleeds edge to edge by default; inset=\"content\" aligns it with the text. surface=\"subtle\" tints a section."
+          },
+          "interactive": {
+            "title": "Interactive cards",
+            "desc": "Render the whole card as a button (as=\"button\") or a link (href), or use stretchedLink on SurfaceCard.Title so footer buttons stay independent."
+          }
+        },
+        "props": {
+          "variant": "Surface look: outline (border), elevated (border and shadow) or soft (muted fill). Also accepts the aliases outlined and filled.",
+          "size": "Size token. Drives section padding, gaps and the type scale. Inherits from ModoProvider when omitted.",
+          "radius": "Corner radius token. The inner frame stays concentric. Inherits from ModoProvider when omitted.",
+          "padding": "default follows size; none drops the padding and gaps of every section (Media always bleeds).",
+          "framed": "Wraps the content in a concentric inner border with a thin bezel. Set it to false for a single-border card.",
+          "as": "Root element. Defaults to a when href is set, otherwise article.",
+          "interactive": "Hover lift and tactile press feedback. On automatically for as=\"button\", as=\"a\" and href.",
+          "disabled": "Disables button and link cards: no click, navigation or press motion.",
+          "href": "Link destination, target and rel when the card renders as a link.",
+          "type": "Native button type when as=\"button\".",
+          "ariaLabel": "Accessible name when the card is the interactive control.",
+          "sectionSurface": "subtle tints the section with a translucent muted wash for a grouped-settings look.",
+          "sectionPadding": "none drops the padding of that section only.",
+          "footerAlign": "Horizontal alignment of the footer content.",
+          "separatorInset": "none bleeds edge to edge; content aligns the hairline with the section padding.",
+          "media": "Shortcut for a full-bleed cover image with alt text and a reserved aspect ratio. Leave alt empty only for decorative images.",
+          "stretchedLink": "Stretches the title link over the whole card while buttons in Body or Footer stay clickable."
+        },
+        "slots": {
+          "default": "Compound parts: SurfaceCard.Media, Header, Title, Subtitle, Body, Separator and Footer.",
+          "media": "Custom media or an overlay drawn on top of the src image."
+        },
+        "types": {
+          "title": "Types",
+          "desc": "TypeScript interfaces for SurfaceCard and its compound parts (available as SurfaceCard.* and as flat named exports)."
+        },
+        "a11y": {
+          "kbTab": "Moves focus to interactive cards, stretched title links and nested footer controls",
+          "kbShiftTab": "Moves focus to the previous focusable element",
+          "kbActivate": "Activates button or link cards",
+          "ariaArticle": "Renders a semantic article by default for content and stretched-link cards",
+          "ariaDisabled": "Disabled link cards drop href and get role=\"link\", aria-disabled=\"true\" and tabindex=\"-1\"",
+          "ariaLabel": "Accessible name for button or link cards whose content is not a good label",
+          "focusStretched": "With stretchedLink, the focus ring is drawn around the whole card while nested buttons stay above it",
+          "focusMedia": "Give SurfaceCard.Media a descriptive alt when the image carries information"
         }
       }
     }
