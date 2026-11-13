@@ -34,8 +34,8 @@ const hasValue = computed(() => selectedOptions.value.length > 0)
 function key(event: KeyboardEvent) { if (event.key === 'ArrowDown' || event.key === 'ArrowUp') { event.preventDefault(); setOpen(true) } }
 </script>
 <template>
-  <div :class="['modo-morph-select flex flex-col', fullWidth ? 'w-full' : 'inline-flex']" data-modo-morph-select="" :data-modo-size="size" :data-modo-radius="radius" :data-modo-variant="variant">
-    <label v-if="label" :for="fieldId" class="modo-morph-select__label">
+  <div :class="['modo-morph-select flex flex-col gap-1.5', fullWidth ? 'w-full' : 'inline-flex']" data-modo-morph-select="" :data-modo-size="size" :data-modo-radius="radius" :data-modo-variant="variant">
+    <label v-if="label" :for="fieldId" class="modo-morph-select__label text-caption font-medium text-foreground">
       {{ label }}
       <span v-if="required" aria-hidden="true" class="text-destructive ml-0.5">*</span>
     </label>

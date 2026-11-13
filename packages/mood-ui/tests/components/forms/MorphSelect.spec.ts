@@ -3,6 +3,9 @@ import { mount, flushPromises } from '@vue/test-utils'
 import { defineComponent } from 'vue'
 import { MorphSelect } from '../../../src/components/forms/morph-select'
 import FormField from '../../../src/components/forms/FormField.vue'
+import Input from '../../../src/components/forms/Input.vue'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 const OPTIONS = `[{value:'mx',label:'Mexico',description:'North'}, {value:'br',label:'Brazil',disabled:true},{value:'us',label:'USA'}]`
 const fixture = (rootAttrs = '', contentAttrs = '') => defineComponent({
   components: { MorphSelect, MorphSelectTrigger: MorphSelect.Trigger, MorphSelectContent: MorphSelect.Content },
@@ -10,6 +13,20 @@ const fixture = (rootAttrs = '', contentAttrs = '') => defineComponent({
 })
 const panel = () => document.querySelector<HTMLElement>('[data-modo-morph-select-panel]')
 describe('MorphSelect', () => {
+  it.each(['none', 'small', 'medium', 'large', 'full'] as const)('matches Input radius and label at radius=%s', (radius) => {
+    const select = mount(fixture(`radius="${radius}"`))
+    const input = mount(Input, { props: { label: 'Country', radius } })
+    const rounded = (classes: string[]) => classes.filter(c => c.startsWith('rounded'))
+    expect(rounded(select.get('.modo-morph-select__field').classes())).toEqual(rounded(input.get('.modo-field-wrapper').classes()))
+    expect(select.get('label').classes()).toEqual(expect.arrayContaining(input.get('label').classes()))
+    expect(select.get('.modo-morph-select').classes()).toContain('gap-1.5')
+    select.unmount(); input.unmount()
+  })
+  it('has no stylesheet override of the provider radius', () => {
+    const css = readFileSync(resolve(__dirname, '../../../src/components/forms/morph-select/morph-select.css'), 'utf8')
+    expect(css).not.toMatch(/data-modo-radius/)
+    expect(css).not.toMatch(/border-radius:\s*999px/)
+  })
   it('opens at selected option, skips disabled and submits selected value', async () => {
     const w = mount(fixture(), { attachTo: document.body })
     await w.get('[role="combobox"]').trigger('keydown', { key: 'ArrowDown' }); await flushPromises()

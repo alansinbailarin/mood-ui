@@ -16,14 +16,6 @@
 .modo-morph-select[data-modo-tone="success"] { --modo-morph-select-tone: var(--success); }
 .modo-morph-select[data-modo-tone="warning"] { --modo-morph-select-tone: var(--warning); }
 
-.modo-morph-select__label {
-  display: block;
-  margin: 0 0 0.375rem 0.25rem;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: color-mix(in srgb, var(--foreground), transparent 22%);
-}
-
 /* The FIELD is the morph origin — hiding it whole makes the panel grow
    out of the bordered box, border included. */
 .modo-morph-select[data-modo-variant="outline"] .modo-morph-select__field {
@@ -149,7 +141,7 @@
   height: 2rem;
   padding: 0 0.75rem;
   border: 1px solid color-mix(in srgb, var(--foreground), transparent 82%);
-  border-radius: 999px;
+  border-radius: var(--modo-menu-item-radius);
   background: transparent;
   color: var(--foreground);
   font: inherit;
@@ -167,8 +159,8 @@
   gap: 1px;
 }
 
-/* Options hover as FULL PILLS — same token AND same feel as the Menu:
-   one hover color across menus, selects, and friends. */
+/* Options share the Menu row: same hover token and the same provider-driven
+   item radius (concentric with the panel; pills only at radius="full"). */
 .modo-morph-select__option {
   display: flex;
   align-items: center;
@@ -176,7 +168,7 @@
   gap: 0.75rem;
   padding: 0.5rem 0.875rem;
   border: none;
-  border-radius: 999px;
+  border-radius: var(--modo-menu-item-radius);
   background: transparent;
   color: inherit;
   font: inherit;
@@ -260,5 +252,3 @@
 .modo-morph-select__field:has([aria-invalid="true"]) { border-color: var(--destructive); }
 .modo-morph-select__button { justify-content: space-between; }
 
-.modo-morph-select[data-modo-radius="medium"] .modo-morph-select__field { border-radius: 1rem; }
-[data-modo-morph-select-panel][data-modo-radius="medium"] { border-radius: 1.5rem; }
