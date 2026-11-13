@@ -163,6 +163,18 @@
         "description": "Every release of mood-ui listed newest first. SemVer-tracked, with highlights of new components, bug fixes and breaking changes.",
         "intro": "Every release listed newest first. We follow SemVer.",
         "releases": {
+          "v0.14.0": {
+            "title": "MorphSelect multiple mode, keyboard triggers and translatable close buttons",
+            "items": [
+              "New: MorphSelect multiple. People pick several options, the panel stays open while they toggle rows, v-model is a string[] and the form submits one value per option.",
+              "New: MorphSelect.Trigger icon prop and icon slot for a leading glyph, sized and colored like the chevron.",
+              "New: closeLabel on Drawer and Modal. Their close buttons, and Toast's dismiss button and region, now read the provider locale instead of fixed English.",
+              "Changed: ModeOrb paints its sphere with the provider's primary palette by default, so it follows the theme's brand color.",
+              "Fixed: MorphSelect search on phones. Opening the keyboard resized and scrolled the page and closed the select; the panel now follows the field while you type.",
+              "Fixed: as-child triggers of Menu, Popover, Dialog and Sheet open with Enter and Space when the slotted element is not a native button.",
+              "Fixed: an off GlassSwitch in dark mode is easier to see against cards."
+            ]
+          },
           "v0.13.1": {
             "title": "Valux appearance and interaction fixes",
             "items": [
