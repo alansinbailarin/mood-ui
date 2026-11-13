@@ -149,4 +149,21 @@ describe("Drawer — floating inset design & backwards compatibility", () => {
     expect(wrapper.emitted("update:modelValue")?.[0]).toEqual([false]);
     expect(wrapper.emitted("close")).toHaveLength(1);
   });
+
+  it("labels the close button from the provider locale, and closeLabel wins", () => {
+    const localized = mount(ModoProvider, {
+      props: { locale: { common: { close: "Cerrar" } } },
+      slots: { default: () => h(Drawer, { modelValue: true, title: "Filters" }) },
+      attachTo: document.body,
+    });
+    mounted.push(localized as VueWrapper);
+    expect(document.querySelector('[aria-label="Cerrar"]')).not.toBeNull();
+    localized.unmount();
+    mounted = mounted.filter((w) => w !== localized);
+    document.body.innerHTML = "";
+
+    const custom = mount(Drawer, { props: { ...{ modelValue: true, title: "Filters" }, closeLabel: "Dismiss panel" }, attachTo: document.body });
+    mounted.push(custom as VueWrapper);
+    expect(document.querySelector('[aria-label="Dismiss panel"]')).not.toBeNull();
+  });
 });

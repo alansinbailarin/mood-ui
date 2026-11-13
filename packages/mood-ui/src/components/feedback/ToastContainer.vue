@@ -8,7 +8,7 @@
             :class="['modo-toast-container fixed z-[9999] flex flex-col gap-2 pointer-events-none', zone.classes]"
             :style="{ ...zone.style, ...cssVarStyle }"
             role="region"
-            aria-label="Notifications"
+            :aria-label="loc.toast.region"
             aria-live="polite"
         > 
             <TransitionGroup 
@@ -41,7 +41,7 @@ import type {
     ToastEntry,
     ToastPlacement,
 } from '../../interfaces/feedback/Toast.interface';
-import { useModoConfig, useResolvedTheme } from '../../composables/useModoConfig';
+import { useModoConfig, useModoLocale, useResolvedTheme } from '../../composables/useModoConfig';
 import { resolveColorMode } from '../../composables/useColorMode';
 import { palettesToCssVars, semanticTokensFromPalettes } from '../../config/palettes';
 import { surfacesToCssVars } from '../../config/surfaces';
@@ -54,7 +54,9 @@ const props = withDefaults(defineProps<ToastContainer>(), {
     defaultVariant: 'subtle', 
     offset: 16, 
     reducedMotion: 'auto', 
-}); 
+});
+const loc = useModoLocale();
+ 
  
 const queue = useToastQueue();
 const { dismiss } = useToast();

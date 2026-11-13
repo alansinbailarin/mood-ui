@@ -64,7 +64,7 @@
                 'focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
                 dismissClasses,
             ]"
-            aria-label="Dismiss notification"
+            :aria-label="loc.toast.dismiss"
             @click="$emit('dismiss')"
         >
             <XMarkIcon class="w-3.5 h-3.5" aria-hidden="true" />
@@ -95,7 +95,7 @@ import {
     InformationCircleIcon,
 } from '@heroicons/vue/24/outline';
 import type { ToastEntry } from '../../interfaces/feedback/Toast.interface';
-import { useResolvedRadius } from '../../composables/useModoConfig';
+import { useModoLocale, useResolvedRadius } from '../../composables/useModoConfig';
 
 const props = defineProps<{
     entry: ToastEntry;
@@ -104,6 +104,8 @@ const props = defineProps<{
     /** Whether the auto-dismiss timer is currently paused. */
     paused: boolean;
 }>();
+
+const loc = useModoLocale();
 
 const emit = defineEmits<{
     dismiss: [];

@@ -55,7 +55,7 @@
                             size="small" 
                             :color="resolvedColor" 
                             :icon="XMarkIcon" 
-                            ariaLabel="Close" 
+                            :ariaLabel="closeLabelText" 
                             @click="close" 
                         /> 
                     </div> 
@@ -144,6 +144,7 @@ import {
     useResolvedRadius, 
     useResolvedTheme, 
     useModoConfig, 
+    useModoLocale,
 } from '../../composables/useModoConfig'; 
 import { resolveColorMode } from '../../composables/useColorMode';
 import { lockBodyScroll, unlockBodyScroll } from '../../composables/useBodyScrollLock';
@@ -164,7 +165,11 @@ const props = withDefaults(defineProps<Modal>(), {
     overlay: 'blur', 
     innerBorder: true, 
     disableOriginAnimation: false, 
-}); 
+});
+// Close button label: prop wins, then the provider locale (`common.close`).
+const loc = useModoLocale();
+const closeLabelText = computed(() => props.closeLabel ?? loc.value.common.close);
+ 
  
 const emit = defineEmits<{ 
     'update:modelValue': [value: boolean]; 

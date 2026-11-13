@@ -54,7 +54,7 @@
                         <button
                             type="button"
                             class="modo-drawer__x"
-                            aria-label="Close"
+                            :aria-label="closeLabelText"
                             @click="close"
                         >
                             <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
@@ -144,6 +144,7 @@ import {
     useResolvedRadius, 
     useResolvedTheme, 
     useModoConfig, 
+    useModoLocale,
 } from '../../composables/useModoConfig'; 
 import { resolveColorMode } from '../../composables/useColorMode';
 import { lockBodyScroll, unlockBodyScroll } from '../../composables/useBodyScrollLock';
@@ -164,7 +165,11 @@ const props = withDefaults(defineProps<Drawer>(), {
     color: 'default', 
     overlay: 'blur', 
     innerBorder: false, 
-}); 
+});
+// Close button label: prop wins, then the provider locale (`common.close`).
+const loc = useModoLocale();
+const closeLabelText = computed(() => props.closeLabel ?? loc.value.common.close);
+ 
  
 const emit = defineEmits<{ 
     'update:modelValue': [value: boolean]; 

@@ -191,5 +191,6 @@ export const es: ModoLocale = {
     empty: "Sin resultados.",
   },
   liquidToast: { region: "Notificaciones" },
+  toast: { region: "Notificaciones", dismiss: "Descartar notificación" },
   modeOrb: { toggle: "Cambiar modo de color" },
 };

@@ -64,4 +64,7 @@ export interface Modal {
  
     /** aria-label cuando no hay title. */ 
     ariaLabel?: string; 
+
+    /** aria-label del botón de cerrar. Si se omite usa el locale del provider (`common.close`). */
+    closeLabel?: string;
 }

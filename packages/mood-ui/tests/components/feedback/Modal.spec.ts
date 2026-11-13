@@ -1,7 +1,9 @@
+import { h } from "vue";
 import { describe, it, expect, beforeAll, afterEach, vi } from "vitest";
 import { mount, type VueWrapper } from "@vue/test-utils";
 import { gsap } from "gsap";
 import Modal from "../../../src/components/feedback/Modal.vue";
+import ModoProvider from "../../../src/components/ModoProvider.vue";
 
 beforeAll(() => {
   if (typeof window !== "undefined" && !window.matchMedia) {
@@ -163,5 +165,22 @@ describe("Modal — unified panel and content animation", () => {
 
     timelineSpy.mockRestore();
     window.matchMedia = originalMatchMedia;
+  });
+
+  it("labels the close button from the provider locale, and closeLabel wins", () => {
+    const localized = mount(ModoProvider, {
+      props: { locale: { common: { close: "Cerrar" } } },
+      slots: { default: () => h(Modal, { modelValue: true, title: "Edit" }) },
+      attachTo: document.body,
+    });
+    mounted.push(localized as VueWrapper);
+    expect(document.querySelector('[aria-label="Cerrar"]')).not.toBeNull();
+    localized.unmount();
+    mounted = mounted.filter((w) => w !== localized);
+    document.body.innerHTML = "";
+
+    const custom = mount(Modal, { props: { ...{ modelValue: true, title: "Edit" }, closeLabel: "Dismiss panel" }, attachTo: document.body });
+    mounted.push(custom as VueWrapper);
+    expect(document.querySelector('[aria-label="Dismiss panel"]')).not.toBeNull();
   });
 });

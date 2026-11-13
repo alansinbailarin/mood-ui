@@ -273,6 +273,12 @@ export interface ModoLocale {
     /** Accessible name of the toaster landmark. */
     region: string;
   };
+  toast: {
+    /** Accessible name of the toast region. */
+    region: string;
+    /** Accessible name of the per-toast dismiss button. */
+    dismiss: string;
+  };
   modeOrb: {
     /** Default aria-label of the color-mode toggle. */
     toggle: string;
@@ -439,6 +445,7 @@ export const defaultLocale: ModoLocale = {
     empty: "No results.",
   },
   liquidToast: { region: "Notifications" },
+  toast: { region: "Notifications", dismiss: "Dismiss notification" },
   modeOrb: { toggle: "Toggle color mode" },
 };
 
