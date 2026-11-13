@@ -352,7 +352,8 @@
           "color": "Color de acento aplicado a borde y ring.",
           "overlay": "Estilo del backdrop.",
           "innerBorder": "Borde interior sutil dentro del panel.",
-          "ariaLabel": "Etiqueta accesible cuando no hay title."
+          "ariaLabel": "Etiqueta accesible cuando no hay title.",
+          "closeLabel": "Nombre accesible del botón de cerrar. Por defecto usa el locale del provider (common.close), así sigue el idioma de la app."
         },
         "emits": {
           "updateModelValue": "Cambio del estado abierto/cerrado."
@@ -585,7 +586,8 @@
           "overlay": "Estilo del backdrop.",
           "innerBorder": "Renderiza un borde interior sutil dentro del borde principal.",
           "origin": "Elemento de origen para la animación FLIP-style.",
-          "ariaLabel": "Etiqueta accesible cuando no hay title."
+          "ariaLabel": "Etiqueta accesible cuando no hay title.",
+          "closeLabel": "Nombre accesible del botón de cerrar. Por defecto usa el locale del provider (common.close), así sigue el idioma de la app."
         },
         "emits": {
           "updateModelValue": "Cambio del estado abierto/cerrado."

@@ -235,6 +235,7 @@ export interface Drawer {
   innerBorder?: boolean;
   id?: string;
   ariaLabel?: string;
+  closeLabel?: string;
 }`;
 
 const propsList = computed<PropDoc[]>(() => [
@@ -321,6 +322,12 @@ const propsList = computed<PropDoc[]>(() => [
     name: "ariaLabel",
     type: "string",
     description: t("pages.feedback.drawer.props.ariaLabel"),
+  },
+  {
+    name: "closeLabel",
+    type: "string",
+    default: "locale common.close",
+    description: t("pages.feedback.drawer.props.closeLabel"),
   },
 ]);
 

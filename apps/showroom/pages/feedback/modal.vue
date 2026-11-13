@@ -249,6 +249,7 @@ export interface Modal {
   disableOriginAnimation?: boolean;
   id?: string;
   ariaLabel?: string;
+  closeLabel?: string;
 }`;
 
 const propsList = computed<PropDoc[]>(() => [
@@ -334,6 +335,12 @@ const propsList = computed<PropDoc[]>(() => [
     name: "ariaLabel",
     type: "string",
     description: t("pages.feedback.modal.props.ariaLabel"),
+  },
+  {
+    name: "closeLabel",
+    type: "string",
+    default: "locale common.close",
+    description: t("pages.feedback.modal.props.closeLabel"),
   },
 ]);
 

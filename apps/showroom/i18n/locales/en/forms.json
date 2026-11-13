@@ -2946,7 +2946,7 @@
           },
           "colors": {
             "title": "Colors",
-            "desc": "color tints the sphere. default follows the provider color, and with a default provider the sphere uses the foreground color."
+            "desc": "color tints the sphere. default paints it with the provider's primary palette, so it follows the theme's brand color; a semantic color uses that token."
           },
           "fixed": {
             "title": "Fixed viewport corner",
@@ -2956,7 +2956,7 @@
         "props": {
           "fixed": "Pins the orb to the bottom-right corner of the viewport with position: fixed.",
           "size": "Orb size. The diameter matches the control height (32 / 36 / 40 / 48 px). Inherits from ModoProvider.",
-          "color": "Sphere color. default follows the provider color, or the foreground color when the provider is default.",
+          "color": "Sphere color. default uses the provider's primary palette; a semantic color uses that token.",
           "disabled": "Disables the toggle.",
           "ariaLabel": "Accessible label. Falls back to the localized \"Toggle color mode\" string."
         },
@@ -3145,6 +3145,17 @@
             "search": "Search countries…",
             "empty": "No matching countries"
           },
+          "multiple": {
+            "title": "Multiple",
+            "desc": "multiple lets people pick several options. The panel stays open while they toggle rows, v-model is an array in option order and the form submits one value per selected option.",
+            "label": "Markets",
+            "placeholder": "Pick markets"
+          },
+          "icon": {
+            "title": "Leading icon",
+            "desc": "icon on Trigger places a glyph before the value, sized and colored like the chevron. The icon slot takes any custom content.",
+            "label": "Country"
+          },
           "variants": {
             "title": "Variants",
             "desc": "The Trigger variant uses the same looks as the native Select: outline, filled and ghost."
@@ -3195,7 +3206,9 @@
           "contentAlign": "Panel alignment relative to the field.",
           "contentSearchable": "Shows a filter field at the top of the panel.",
           "contentSearchPlaceholder": "Placeholder of the search field. Defaults to the localized string.",
-          "contentEmptyMessage": "Text shown when the search has no matches. Defaults to the localized string."
+          "contentEmptyMessage": "Text shown when the search has no matches. Defaults to the localized string.",
+          "multiple": "Lets people pick several options; v-model becomes a string[] and the panel stays open while toggling.",
+          "triggerIcon": "Leading icon inside the field, sized and colored like the chevron."
         },
         "emits": {
           "updateModelValue": "Emitted when an option is selected (syncs v-model).",
@@ -3205,7 +3218,8 @@
         "slots": {
           "default": "Root slot for Trigger and Content. Exposes value and open.",
           "trigger": "MorphSelect.Trigger default slot: custom rendering of the selected option.",
-          "option": "MorphSelect.Content option slot: custom row with option and selected."
+          "option": "MorphSelect.Content option slot: custom row with option and selected.",
+          "triggerIcon": "Replaces the leading icon with custom content."
         },
         "types": {
           "title": "Types",
@@ -3227,7 +3241,8 @@
           "ariaDescribedBy": "Links helper or error text to the trigger",
           "ariaLabel": "Accessible name when there is no visible label",
           "focusOpen": "Opening focuses the selected option, or the search field when searchable",
-          "focusReducedMotion": "prefers-reduced-motion: reduce makes the morph immediate"
+          "focusReducedMotion": "prefers-reduced-motion: reduce makes the morph immediate",
+          "ariaMultiselectable": "Set on the listbox in multiple mode so screen readers announce that several options can be selected."
         }
       }
     }

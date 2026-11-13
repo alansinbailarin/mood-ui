@@ -2,6 +2,7 @@
 import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { MorphSelect, Typography } from "mood-ui";
+import { GlobeAmericasIcon } from "@heroicons/vue/24/outline";
 import type { MorphSelectOption } from "mood-ui";
 import ComponentDoc from "~/components/ComponentDoc.vue";
 import ComponentPreview from "~/components/ComponentPreview.vue";
@@ -37,6 +38,7 @@ const a11yAria = computed<A11yAriaRow[]>(() => [
   { attribute: "role", value: '"combobox"', desc: k("a11y.roleCombobox") },
   { attribute: "aria-expanded", value: "true", desc: k("a11y.ariaExpanded") },
   { attribute: "aria-selected", value: "true", desc: k("a11y.ariaSelected") },
+  { attribute: "aria-multiselectable", value: "true", desc: k("a11y.ariaMultiselectable") },
   { attribute: "aria-invalid", value: "true", desc: k("a11y.ariaInvalid") },
   { attribute: "aria-required", value: "true", desc: k("a11y.ariaRequired") },
   { attribute: "aria-describedby", value: "id", desc: k("a11y.ariaDescribedBy") },
@@ -114,6 +116,8 @@ const overviewCode = computed(() => {
 // ── Example state ─────────────────────────────────────────────────────────────
 const ex1 = ref<string | undefined>(undefined);
 const ex2 = ref("ca");
+const exMulti = ref<string[]>(["mx", "ca"]);
+const exIcon = ref("us");
 const exVariant = ref("us");
 
 // ── Example code strings (self-contained) ─────────────────────────────────────
@@ -161,6 +165,40 @@ ${optionsSnippet}
       search-placeholder="Search countries…"
       empty-message="No matching countries"
     />
+  </MorphSelect>
+</template>`;
+
+const multipleCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { MorphSelect } from 'mood-ui';
+import type { MorphSelectOption } from 'mood-ui';
+
+// With multiple, v-model is an array in option order.
+const markets = ref<string[]>(['mx', 'ca']);
+
+${optionsSnippet}
+<\/script>
+
+<template>
+  <MorphSelect v-model="markets" multiple name="markets" :options="countries" label="Markets">
+    <MorphSelect.Trigger placeholder="Pick markets" />
+    <MorphSelect.Content searchable />
+  </MorphSelect>
+</template>`;
+
+const iconCode = `<script setup lang="ts">
+import { ref } from 'vue';
+import { MorphSelect } from 'mood-ui';
+import { GlobeAmericasIcon } from '@heroicons/vue/24/outline';
+
+const country = ref('us');
+<\/script>
+
+<template>
+  <MorphSelect v-model="country" :options="countries" label="Country">
+    <!-- or <template #icon>…</template> for any custom glyph -->
+    <MorphSelect.Trigger :icon="GlobeAmericasIcon" />
+    <MorphSelect.Content />
   </MorphSelect>
 </template>`;
 
@@ -281,10 +319,16 @@ const propsList = computed<PropDoc[]>(() => [
     required: true,
     description: k("props.options"),
   },
-  { name: "modelValue", type: "string", description: k("props.modelValue") },
+  {
+    name: "multiple",
+    type: "boolean",
+    default: "false",
+    description: k("props.multiple"),
+  },
+  { name: "modelValue", type: "string | string[]", description: k("props.modelValue") },
   {
     name: "defaultValue",
-    type: "string",
+    type: "string | string[]",
     default: "''",
     description: k("props.defaultValue"),
   },
@@ -359,6 +403,11 @@ const propsList = computed<PropDoc[]>(() => [
     description: k("props.triggerPlaceholder"),
   },
   {
+    name: "Trigger.icon",
+    type: "Component",
+    description: k("props.triggerIcon"),
+  },
+  {
     name: "Trigger.variant",
     type: "'outline' | 'filled' | 'ghost'",
     default: "'outline'",
@@ -397,16 +446,17 @@ const propsList = computed<PropDoc[]>(() => [
 const emitsList = computed<EmitDoc[]>(() => [
   {
     name: "update:modelValue",
-    payload: "string",
+    payload: "string | string[]",
     description: k("emits.updateModelValue"),
   },
-  { name: "change", payload: "string", description: k("emits.change") },
+  { name: "change", payload: "string | string[]", description: k("emits.change") },
   { name: "openChange", payload: "boolean", description: k("emits.openChange") },
 ]);
 
 const slotsList = computed<SlotDoc[]>(() => [
   { name: "default", description: k("slots.default") },
   { name: "Trigger · default", description: k("slots.trigger") },
+  { name: "Trigger · icon", description: k("slots.triggerIcon") },
   { name: "Content · option", description: k("slots.option") },
 ]);
 </script>
@@ -529,6 +579,41 @@ const slotsList = computed<SlotDoc[]>(() => [
               :search-placeholder="k('examples.searchable.search')"
               :empty-message="k('examples.searchable.empty')"
             />
+          </MorphSelect>
+        </div>
+      </ComponentPreview>
+
+      <ComponentPreview
+        :title="k('examples.multiple.title')"
+        :description="k('examples.multiple.desc')"
+        :code="multipleCode"
+      >
+        <div class="w-72">
+          <MorphSelect
+            v-model="exMulti"
+            multiple
+            :options="countries"
+            :label="k('examples.multiple.label')"
+          >
+            <MorphSelect.Trigger :placeholder="k('examples.multiple.placeholder')" />
+            <MorphSelect.Content searchable />
+          </MorphSelect>
+        </div>
+      </ComponentPreview>
+
+      <ComponentPreview
+        :title="k('examples.icon.title')"
+        :description="k('examples.icon.desc')"
+        :code="iconCode"
+      >
+        <div class="w-64">
+          <MorphSelect
+            v-model="exIcon"
+            :options="countries"
+            :label="k('examples.icon.label')"
+          >
+            <MorphSelect.Trigger :icon="GlobeAmericasIcon" />
+            <MorphSelect.Content />
           </MorphSelect>
         </div>
       </ComponentPreview>

@@ -2946,7 +2946,7 @@
           },
           "colors": {
             "title": "Colores",
-            "desc": "color tiñe la esfera. default sigue el color del provider y, con un provider default, la esfera usa el color de primer plano."
+            "desc": "color tiñe la esfera. default la pinta con la paleta primaria del provider, así sigue el color de marca del tema; un color semántico usa ese token."
           },
           "fixed": {
             "title": "Esquina fija de la pantalla",
@@ -2956,7 +2956,7 @@
         "props": {
           "fixed": "Fija la esfera en la esquina inferior derecha de la pantalla con position: fixed.",
           "size": "Tamaño de la esfera. El diámetro coincide con la altura de los controles (32 / 36 / 40 / 48 px). Se hereda de ModoProvider.",
-          "color": "Color de la esfera. default sigue el color del provider, o el color de primer plano si el provider es default.",
+          "color": "Color de la esfera. default usa la paleta primaria del provider; un color semántico usa ese token.",
           "disabled": "Deshabilita el cambio de tema.",
           "ariaLabel": "Etiqueta accesible. Por defecto usa el texto localizado \"Cambiar modo de color\"."
         },
@@ -3145,6 +3145,17 @@
             "search": "Buscar países…",
             "empty": "Ningún país coincide"
           },
+          "multiple": {
+            "title": "Múltiple",
+            "desc": "multiple permite elegir varias opciones. El panel sigue abierto mientras se marcan filas, v-model es un arreglo en el orden de las opciones y el formulario envía un valor por cada opción elegida.",
+            "label": "Mercados",
+            "placeholder": "Elige mercados"
+          },
+          "icon": {
+            "title": "Ícono inicial",
+            "desc": "icon en Trigger pone un ícono antes del valor, con el tamaño y color del chevron. El slot icon acepta cualquier contenido.",
+            "label": "País"
+          },
           "variants": {
             "title": "Variantes",
             "desc": "La variante del Trigger usa los mismos estilos que el Select nativo: outline, filled y ghost."
@@ -3195,7 +3206,9 @@
           "contentAlign": "Alineación del panel respecto al campo.",
           "contentSearchable": "Muestra un campo de filtro arriba del panel.",
           "contentSearchPlaceholder": "Placeholder del campo de búsqueda. Por defecto usa el texto localizado.",
-          "contentEmptyMessage": "Texto cuando la búsqueda no encuentra nada. Por defecto usa el texto localizado."
+          "contentEmptyMessage": "Texto cuando la búsqueda no encuentra nada. Por defecto usa el texto localizado.",
+          "multiple": "Permite elegir varias opciones; v-model pasa a ser string[] y el panel sigue abierto al marcar.",
+          "triggerIcon": "Ícono inicial dentro del campo, con el tamaño y color del chevron."
         },
         "emits": {
           "updateModelValue": "Se emite al seleccionar una opción (sincroniza v-model).",
@@ -3205,7 +3218,8 @@
         "slots": {
           "default": "Slot de la raíz para Trigger y Content. Expone value y open.",
           "trigger": "Slot por defecto de MorphSelect.Trigger: render personalizado de la opción elegida.",
-          "option": "Slot option de MorphSelect.Content: fila personalizada con option y selected."
+          "option": "Slot option de MorphSelect.Content: fila personalizada con option y selected.",
+          "triggerIcon": "Reemplaza el ícono inicial con contenido propio."
         },
         "types": {
           "title": "Tipos",
@@ -3227,7 +3241,8 @@
           "ariaDescribedBy": "Vincula la ayuda o el error al trigger",
           "ariaLabel": "Nombre accesible cuando no hay etiqueta visible",
           "focusOpen": "Al abrir, el foco va a la opción elegida, o al campo de búsqueda si hay searchable",
-          "focusReducedMotion": "prefers-reduced-motion: reduce hace la transformación inmediata"
+          "focusReducedMotion": "prefers-reduced-motion: reduce hace la transformación inmediata",
+          "ariaMultiselectable": "Se pone en el listbox en modo múltiple para que los lectores de pantalla anuncien que se pueden elegir varias opciones."
         }
       }
     }

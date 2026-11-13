@@ -352,7 +352,8 @@
           "color": "Accent color applied to border and ring.",
           "overlay": "Backdrop style.",
           "innerBorder": "Subtle inner border inside the panel.",
-          "ariaLabel": "Accessible label when there is no title."
+          "ariaLabel": "Accessible label when there is no title.",
+          "closeLabel": "Accessible name of the close button. Defaults to the provider locale (common.close), so it follows the app language."
         },
         "emits": {
           "updateModelValue": "Change in open/closed state."
@@ -585,7 +586,8 @@
           "overlay": "Backdrop style.",
           "innerBorder": "Renders a subtle inner border inside the main border.",
           "origin": "Origin element for the FLIP-style animation.",
-          "ariaLabel": "Accessible label when there is no title."
+          "ariaLabel": "Accessible label when there is no title.",
+          "closeLabel": "Accessible name of the close button. Defaults to the provider locale (common.close), so it follows the app language."
         },
         "emits": {
           "updateModelValue": "Change in open/closed state."
