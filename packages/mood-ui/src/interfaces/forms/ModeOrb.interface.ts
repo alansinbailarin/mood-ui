@@ -15,9 +15,9 @@ export interface ModeOrbProps {
   size?: ModoSize
 
   /**
-   * Sphere color. `default` follows the provider color; with the provider on
-   * `default` the sphere uses the foreground token, so it is dark in light
-   * mode and light in dark mode.
+   * Sphere color. Follows the provider: `default` paints the sphere with the
+   * provider's primary palette; a semantic color (`danger`, `success`…) uses
+   * that token instead.
    */
   color?: ModoColor
 

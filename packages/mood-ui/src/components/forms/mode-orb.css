@@ -1,10 +1,10 @@
 /* ModeOrb & circular view-transition wave. Every color is a provider token:
- * the sphere uses `--modo-orb` (foreground by default, so it is dark in light
- * mode and light in dark mode) and the crest uses the incoming theme's
+ * the sphere uses `--modo-orb` (the provider's primary palette by default,
+ * or the semantic color passed in) and the crest uses the incoming theme's
  * foreground. Size, focus ring and disabled state come from utility classes
  * set by the component. */
 .modo-mode-orb {
-  --modo-orb: var(--foreground);
+  --modo-orb: var(--primary);
   position: relative;
   display: inline-flex;
   flex-shrink: 0;
