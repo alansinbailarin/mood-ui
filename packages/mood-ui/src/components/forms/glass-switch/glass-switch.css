@@ -53,7 +53,15 @@
   flex: none;
   width: var(--modo-glass-switch-w);
   height: var(--modo-glass-switch-h);
-  background: color-mix(in srgb, var(--foreground), transparent 78%);
+  /* Off track: Valux's 22% ink in light mode. In dark mode 22% of a light
+     ink barely separates from a card, so it goes to 34% and gets a hairline
+     edge. `light-dark()` follows the color-scheme set by `.dark` and by a
+     scoped `[data-modo-theme]`. */
+  background: light-dark(
+    color-mix(in srgb, var(--foreground), transparent 78%),
+    color-mix(in srgb, var(--foreground), transparent 66%)
+  );
+  box-shadow: inset 0 0 0 1px light-dark(transparent, color-mix(in srgb, var(--foreground), transparent 86%));
   /* On BOTH track and thumb: the touch usually lands on the thumb, and
      iOS fires pointercancel (to scroll) unless the target opts out. */
   touch-action: none;
