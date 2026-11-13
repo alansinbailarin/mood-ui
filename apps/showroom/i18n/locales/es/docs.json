@@ -163,6 +163,13 @@
         "description": "Cada release de mood-ui listado de más reciente a más antiguo. Versionado con SemVer, con detalles de nuevos componentes, fixes y breaking changes.",
         "intro": "Cada release listado de más reciente a más antiguo. Seguimos SemVer.",
         "releases": {
+          "v0.14.1": {
+            "title": "MorphSelect vuelve a seguir el radio del provider",
+            "items": [
+              "Corregido: el campo, el panel, las filas y el buscador de MorphSelect usan el mismo mapeo de radio que Input y Select en todos los radios. La 0.13.1 tenía esquinas más redondas fijas con radius=\"medium\" y filas en forma de píldora con cualquier radio.",
+              "Corregido: el label de MorphSelect usa la misma tipografía, color y espaciado que el de Input, así que los dos quedan alineados en un formulario."
+            ]
+          },
           "v0.14.0": {
             "title": "MorphSelect múltiple, triggers con teclado y botones de cerrar traducibles",
             "items": [

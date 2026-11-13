@@ -163,6 +163,13 @@
         "description": "Every release of mood-ui listed newest first. SemVer-tracked, with highlights of new components, bug fixes and breaking changes.",
         "intro": "Every release listed newest first. We follow SemVer.",
         "releases": {
+          "v0.14.1": {
+            "title": "MorphSelect follows the provider radius again",
+            "items": [
+              "Fixed: MorphSelect's field, panel, rows and search box use the same radius mapping as Input and Select at every radius. Version 0.13.1 had hard-coded rounder corners at radius=\"medium\" and pill rows at every radius.",
+              "Fixed: MorphSelect's label uses the same type, color and spacing as Input's label, so the two line up in a form."
+            ]
+          },
           "v0.14.0": {
             "title": "MorphSelect multiple mode, keyboard triggers and translatable close buttons",
             "items": [
