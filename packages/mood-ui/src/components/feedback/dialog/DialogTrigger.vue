@@ -5,6 +5,7 @@ import Button from '../../forms/Button.vue'
 import { useResolvedColor } from '../../../composables/useModoConfig'
 import type { DialogTriggerProps } from '../../../interfaces/feedback/Dialog.interface'
 import { useDialogContext } from './DialogContext'
+import { isKeyboardActivation } from '../../../utils/morph/morphHelpers'
 
 defineOptions({
   name: 'DialogTrigger',
@@ -74,6 +75,15 @@ function handleClick(event: MouseEvent) {
   syncTriggerEl()
   setOpen(!open.value)
 }
+
+// asChild with a non-native element (a `<span role="button">`): Enter/Space
+// don't become a click, so open by hand. Native buttons keep their own click.
+function handleKeyDown(event: KeyboardEvent) {
+  if (!isKeyboardActivation(event)) return
+  event.preventDefault()
+  syncTriggerEl()
+  setOpen(!open.value)
+}
 </script>
 
 <template>
@@ -82,6 +92,7 @@ function handleClick(event: MouseEvent) {
     ref="rootRef"
     class="contents"
     @click="handleClick"
+    @keydown="handleKeyDown"
   >
     <slot :open="open" />
   </span>

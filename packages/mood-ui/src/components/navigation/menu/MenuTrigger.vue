@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import Button from '../../forms/Button.vue'
 import type { MenuTriggerProps } from '../../../interfaces/navigation/Menu.interface'
 import { useMenuContext } from './MenuContext'
+import { isKeyboardActivation } from '../../../utils/morph/morphHelpers'
 
 defineOptions({
   name: 'MenuTrigger',
@@ -93,6 +94,12 @@ function handleClick(event: MouseEvent) {
 }
 
 function handleKeyDown(event: KeyboardEvent) {
+  if (props.asChild && isKeyboardActivation(event)) {
+    event.preventDefault()
+    syncTriggerEl()
+    setOpen(!open.value)
+    return
+  }
   if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
     event.preventDefault()
     syncTriggerEl()

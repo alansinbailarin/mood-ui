@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import Button from '../../forms/Button.vue'
 import type { PopoverTriggerProps } from '../../../interfaces/layout/Popover.interface'
 import { usePopoverContext } from './PopoverContext'
+import { isKeyboardActivation } from '../../../utils/morph/morphHelpers'
 
 defineOptions({
   name: 'PopoverTrigger',
@@ -91,6 +92,15 @@ function handleClick(event: MouseEvent) {
   syncTriggerEl()
   setOpen(!open.value)
 }
+
+// asChild with a non-native element (a `<span role="button">`): Enter/Space
+// don't become a click, so open by hand. Native buttons keep their own click.
+function handleKeyDown(event: KeyboardEvent) {
+  if (!isKeyboardActivation(event)) return
+  event.preventDefault()
+  syncTriggerEl()
+  setOpen(!open.value)
+}
 </script>
 
 <template>
@@ -98,6 +108,7 @@ function handleClick(event: MouseEvent) {
     ref="rootRef"
     class="contents"
     @click="asChild && handleClick($event)"
+    @keydown="asChild && handleKeyDown($event)"
   >
     <slot v-if="asChild" :open="open" />
     <Button

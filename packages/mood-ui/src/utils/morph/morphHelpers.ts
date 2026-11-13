@@ -875,3 +875,21 @@ export function matchesShortcut(
     parsed.ctrl === event.ctrlKey
   );
 }
+
+const NATIVE_ACTIVATION =
+  'button, a[href], input, select, textarea, summary, [contenteditable="true"]';
+
+/**
+ * True when Enter or Space on an `asChild` trigger must open the overlay by
+ * hand: the slotted element is not a native control (e.g. a `<span
+ * role="button">`), so the browser will not turn the key into a click.
+ */
+export function isKeyboardActivation(event: KeyboardEvent): boolean {
+  if (event.key !== "Enter" && event.key !== " ") return false;
+  if (event.repeat || event.defaultPrevented) return false;
+  const target = event.target as Element | null;
+  const host = event.currentTarget as Element | null;
+  if (!target || !host) return false;
+  const native = target.closest(NATIVE_ACTIVATION);
+  return !(native && host.contains(native));
+}

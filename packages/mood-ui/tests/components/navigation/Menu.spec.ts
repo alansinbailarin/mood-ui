@@ -33,7 +33,7 @@ const Icon = defineComponent({ render: () => h("svg", { "data-test-icon": "" }) 
 function mountMenu(options: {
   rootProps?: Record<string, unknown>;
   contentProps?: Record<string, unknown>;
-  asChild?: boolean;
+  asChild?: boolean | "span";
   provider?: Partial<ModoConfig>;
   onSelect?: () => void;
 } = {}) {
@@ -41,8 +41,12 @@ function mountMenu(options: {
     setup() {
       return () =>
         h(Menu, { ...options.rootProps }, () => [
-          h(MenuTrigger, { asChild: options.asChild }, () =>
-            options.asChild ? h("button", { type: "button", class: "custom" }, "Open") : "Open",
+          h(MenuTrigger, { asChild: !!options.asChild }, () =>
+            options.asChild === "span"
+              ? h("span", { role: "button", tabindex: 0, class: "custom" }, "Open")
+              : options.asChild
+                ? h("button", { type: "button", class: "custom" }, "Open")
+                : "Open",
           ),
           h(MenuContent, options.contentProps ?? {}, () => [
             h(MenuLabel, null, () => "Actions"),
@@ -93,6 +97,25 @@ describe("Menu", () => {
     const labelledBy = panel()!.getAttribute("aria-labelledby");
     expect(labelledBy).toBeTruthy();
     expect(document.getElementById(labelledBy!)).toBe(wrapper.get("button.custom").element);
+  });
+
+  it("asChild on a non-native element opens with Enter and Space", async () => {
+    for (const key of ["Enter", " "]) {
+      const wrapper = mountMenu({ asChild: "span" });
+      await wrapper.get("span.custom").trigger("keydown", { key });
+      await flush();
+      expect(panel(), `key ${JSON.stringify(key)}`).not.toBeNull();
+      wrapper.unmount();
+      mounted = mounted.filter((w) => w !== wrapper);
+      document.body.innerHTML = "";
+    }
+  });
+
+  it("asChild on a native button leaves Enter to the browser's click", async () => {
+    const wrapper = mountMenu({ asChild: true });
+    await wrapper.get("button.custom").trigger("keydown", { key: "Enter" });
+    await flush();
+    expect(panel()).toBeNull();
   });
 
   it("rows use color, text and size tokens", async () => {
