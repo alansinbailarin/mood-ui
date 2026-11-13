@@ -1,4 +1,4 @@
-import type { VNodeChild } from 'vue'
+import type { Component, VNodeChild } from 'vue'
 import type { ModoColor, ModoHalo, ModoRadius, ModoSize } from '../../config/ModoConfig'
 
 export interface MorphSelectOption { value: string; label: VNodeChild; description?: VNodeChild; disabled?: boolean; textValue?: string }
@@ -10,10 +10,16 @@ export interface MorphSelectOption { value: string; label: VNodeChild; descripti
  */
 export interface MorphSelectProps {
   options: readonly MorphSelectOption[]
-  /** v-model. When omitted the select is uncontrolled (`defaultValue`). */
-  modelValue?: string
-  /** Initial value when uncontrolled; also the value restored on form reset. */
-  defaultValue?: string
+  /**
+   * Lets the user pick several options. The panel stays open while options
+   * are toggled, `v-model` is a `string[]` and the form submits one value per
+   * selected option. @default false
+   */
+  multiple?: boolean
+  /** v-model: a `string`, or a `string[]` with `multiple`. When omitted the select is uncontrolled (`defaultValue`). */
+  modelValue?: string | string[]
+  /** Initial value when uncontrolled (`string[]` with `multiple`); also the value restored on form reset. */
+  defaultValue?: string | string[]
 
   /** Visible label above the field. */
   label?: string
@@ -52,6 +58,8 @@ export interface MorphSelectProps {
 export interface MorphSelectTriggerProps {
   /** Placeholder when nothing is selected. Defaults to the `morphSelect.placeholder` locale string. */
   placeholder?: string
+  /** Leading icon inside the field, sized and colored like the chevron. The `icon` slot overrides it. */
+  icon?: Component
   /** Field look, same variants as the native `Select`. @default 'outline' */
   variant?: 'outline' | 'filled' | 'ghost'
 }

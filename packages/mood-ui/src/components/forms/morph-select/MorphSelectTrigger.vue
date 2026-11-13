@@ -10,7 +10,7 @@ import { useMorphSelect } from './MorphSelectContext'
 defineOptions({ inheritAttrs: false })
 const props = withDefaults(defineProps<MorphSelectTriggerProps>(), { variant: 'outline' })
 const {
-  fieldId, value, options, disabled, readonly, required, label, ariaLabel, helperText, errorText, hasError, stateColor,
+  fieldId, multiple, selectedOptions, disabled, readonly, required, label, ariaLabel, helperText, errorText, hasError, stateColor,
   radius, size, halo, fullWidth, errorId, helperId, describedBy, phase, open, trigger, button, setOpen,
 } = useMorphSelect()
 const loc = useModoLocale()
@@ -27,7 +27,10 @@ watch(phase, (next, previous) => {
   }
 })
 onBeforeUnmount(() => clearTimeout(landedTimer))
-const selected = computed(() => options.value.find(option => option.value === value.value))
+const selected = computed(() => selectedOptions.value[0])
+// Multiple: the selected labels joined, in option order.
+const summary = computed(() => selectedOptions.value.map(option => option.textValue ?? String(option.label)).join(', '))
+const hasValue = computed(() => selectedOptions.value.length > 0)
 function key(event: KeyboardEvent) { if (event.key === 'ArrowDown' || event.key === 'ArrowUp') { event.preventDefault(); setOpen(true) } }
 </script>
 <template>
@@ -44,8 +47,14 @@ function key(event: KeyboardEvent) { if (event.key === 'ArrowDown' || event.key 
         :aria-expanded="open" :aria-controls="phase !== 'closed' ? `${fieldId}-listbox` : undefined"
         :aria-label="!label ? ariaLabel : undefined" :aria-describedby="describedBy" :aria-invalid="hasError || undefined"
         :aria-required="required || undefined" :aria-readonly="readonly || undefined" :disabled="disabled" @keydown="key" @click="setOpen(!open)">
-        <span :class="['modo-morph-select__value min-w-0 flex-1 truncate', selected ? 'text-foreground' : 'text-muted-foreground']" :data-modo-placeholder="selected ? undefined : ''">
-          <slot :option="selected"><RenderContent :content="selected?.label ?? placeholder ?? loc.morphSelect.placeholder" /></slot>
+        <span v-if="$slots.icon || icon" :class="['modo-morph-select__icon inline-flex shrink-0 items-center', affordanceIconClass]" aria-hidden="true">
+          <slot name="icon"><component :is="icon" :class="sz.icon" /></slot>
+        </span>
+        <span :class="['modo-morph-select__value min-w-0 flex-1 truncate', hasValue ? 'text-foreground' : 'text-muted-foreground']" :data-modo-placeholder="hasValue ? undefined : ''">
+          <slot :option="selected" :options="selectedOptions">
+            <template v-if="multiple && hasValue">{{ summary }}</template>
+            <RenderContent v-else :content="selected?.label ?? placeholder ?? loc.morphSelect.placeholder" />
+          </slot>
         </span>
         <ChevronDownIcon class="modo-morph-select__chevron" aria-hidden="true" :class="['shrink-0 transition-transform duration-base ease-standard', affordanceIconClass, sz.icon, open ? 'rotate-180' : '']" />
       </button>

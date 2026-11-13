@@ -5,7 +5,12 @@ import type { MorphPhase } from '../../../utils/morph/morphEngine'
 interface SelectContext {
   /** Trigger id (FormField-aware); the listbox is `${fieldId}-listbox`. */
   fieldId: ComputedRef<string>
-  options: Ref<readonly MorphSelectOption[]>; value: Ref<string>
+  options: Ref<readonly MorphSelectOption[]>; value: Ref<string | string[]>
+  /** True when the select keeps several values (`multiple`). */
+  multiple: ComputedRef<boolean>
+  /** Selected options, in option order. */
+  selectedOptions: ComputedRef<MorphSelectOption[]>
+  isSelected: (value: string) => boolean
   disabled: ComputedRef<boolean>; readonly: ComputedRef<boolean>; required: ComputedRef<boolean>
   label: ComputedRef<string | undefined>; ariaLabel: ComputedRef<string | undefined>
   helperText: ComputedRef<string | undefined>; errorText: ComputedRef<string | undefined>

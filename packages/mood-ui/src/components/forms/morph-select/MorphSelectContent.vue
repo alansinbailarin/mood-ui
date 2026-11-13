@@ -10,7 +10,7 @@ import RenderContent from '../../../utils/RenderContent'
 import { useMorphSelect } from './MorphSelectContext'
 import { useMorphSelectKeyboard } from './useMorphSelectKeyboard'
 const props = withDefaults(defineProps<MorphSelectContentProps>(), { side: 'auto', align: 'auto' })
-const { fieldId, options, value, phase, trigger, button, select, setOpen, restoreFocus, stateColor, radius, size } = useMorphSelect()
+const { fieldId, options, multiple, selectedOptions, isSelected, phase, trigger, button, select, setOpen, restoreFocus, stateColor, radius, size } = useMorphSelect()
 const loc = useModoLocale()
 const searchLabel = computed(() => props.searchPlaceholder ?? loc.value.morphSelect.searchPlaceholder)
 const emptyLabel = computed(() => props.emptyMessage ?? loc.value.morphSelect.empty)
@@ -32,6 +32,7 @@ const CHECK_COLOR: Record<string, string> = {
 const optionClass = computed(() => OPTION_HOVER[stateColor.value] ?? OPTION_HOVER.default)
 const checkClass = computed(() => CHECK_COLOR[stateColor.value] ?? CHECK_COLOR.default)
 const panel = ref<HTMLElement | null>(null), ghost = ref<HTMLElement | null>(null)
+const selectedSummary = computed(() => selectedOptions.value.map(option => option.textValue ?? String(option.label)).join(', '))
 const filter = ref('')
 const shown = computed(() => options.value.filter(option => (option.textValue ?? String(option.label)).toLocaleLowerCase().includes(filter.value.toLocaleLowerCase())))
 const { scopedTheme, providerStyle } = useTeleportedModoTheme({ radius, size })
@@ -72,10 +73,15 @@ watch([() => phase.value === 'open', panel], ([active, el], _, cleanup) => {
 watch(() => phase.value === 'opening' || phase.value === 'open', (active, _, cleanup) => {
   if (!active) return
   function outside(event: PointerEvent) { const p = panel.value, target = event.target as Node; if (p && isTopMorphLayer(p) && !p.contains(target) && !trigger.value?.contains(target)) setOpen(false, false) }
-  function scroll(event: Event) { if (!panel.value?.contains(event.target as Node)) setOpen(false, false) }
-  function resize() { setOpen(false) }
-  document.addEventListener('pointerdown', outside); document.addEventListener('scroll', scroll, true); window.addEventListener('resize', resize)
-  cleanup(() => { document.removeEventListener('pointerdown', outside); document.removeEventListener('scroll', scroll, true); window.removeEventListener('resize', resize) })
+  // While the search field has focus, a phone opens its keyboard: the
+  // viewport resizes and the page scrolls the field into view. Those are not
+  // the user leaving the select, so the panel follows instead of closing.
+  function typing() { const el = document.activeElement; return !!el && el.tagName === 'INPUT' && !!panel.value?.contains(el) }
+  function scroll(event: Event) { if (panel.value?.contains(event.target as Node)) return; if (typing()) { position(); return } setOpen(false, false) }
+  function resize() { if (typing()) { position(); return } setOpen(false) }
+  const vv = window.visualViewport
+  document.addEventListener('pointerdown', outside); document.addEventListener('scroll', scroll, true); window.addEventListener('resize', resize); vv?.addEventListener('resize', resize)
+  cleanup(() => { document.removeEventListener('pointerdown', outside); document.removeEventListener('scroll', scroll, true); window.removeEventListener('resize', resize); vv?.removeEventListener('resize', resize) })
 })
 watch([filter, () => props.side, () => props.align, () => options.value.length], () => nextTick(position))
 onBeforeUnmount(() => panel.value?.getAnimations?.().forEach(animation => animation.cancel()))
@@ -88,16 +94,16 @@ onBeforeUnmount(() => panel.value?.getAnimations?.().forEach(animation => animat
         <input v-model="filter" type="text" autocomplete="off" spellcheck="false" :placeholder="searchLabel" :aria-label="searchLabel" :aria-controls="`${fieldId}-listbox`"
           class="modo-morph-select__search-input w-full border border-input bg-transparent text-foreground placeholder:text-muted-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring/60" />
       </div>
-      <div :id="`${fieldId}-listbox`" role="listbox" :aria-labelledby="fieldId" class="modo-morph-select__list">
+      <div :id="`${fieldId}-listbox`" role="listbox" :aria-labelledby="fieldId" :aria-multiselectable="multiple || undefined" class="modo-morph-select__list">
         <button v-for="option in shown" :key="option.value" type="button" role="option" tabindex="-1"
-          :class="['modo-morph-select__option outline-none', option.value === value ? 'font-medium' : '', option.disabled ? 'text-muted-foreground/60' : optionClass]"
-          :aria-selected="option.value === value" :disabled="option.disabled" :data-text-value="option.textValue ?? String(option.label)" @click="select(option.value)">
-          <span class="modo-morph-select__option-text"><slot name="option" :option="option" :selected="option.value === value"><span class="truncate"><RenderContent :content="option.label" /></span><span v-if="option.description" class="modo-morph-select__option-desc"><RenderContent :content="option.description" /></span></slot></span>
-          <CheckIcon v-if="option.value === value" :class="['modo-morph-select__check shrink-0', checkClass]" aria-hidden="true" />
+          :class="['modo-morph-select__option outline-none', isSelected(option.value) ? 'font-medium' : '', option.disabled ? 'text-muted-foreground/60' : optionClass]"
+          :aria-selected="isSelected(option.value)" :disabled="option.disabled" :data-text-value="option.textValue ?? String(option.label)" @click="select(option.value)">
+          <span class="modo-morph-select__option-text"><slot name="option" :option="option" :selected="isSelected(option.value)"><span class="truncate"><RenderContent :content="option.label" /></span><span v-if="option.description" class="modo-morph-select__option-desc"><RenderContent :content="option.description" /></span></slot></span>
+          <CheckIcon v-if="isSelected(option.value)" :class="['modo-morph-select__check shrink-0', checkClass]" aria-hidden="true" />
         </button>
       </div>
       <p v-if="!shown.length" role="status" class="modo-morph-select__empty text-caption text-muted-foreground text-center">{{ emptyLabel }}</p>
-      <div v-if="phase === 'closing'" class="modo-morph-select-ghost" aria-hidden="true"><span ref="ghost" class="modo-morph-select-ghost__inner"><RenderContent :content="options.find(option => option.value === value)?.label" /></span></div>
+      <div v-if="phase === 'closing'" class="modo-morph-select-ghost" aria-hidden="true"><span ref="ghost" class="modo-morph-select-ghost__inner"><RenderContent v-if="!multiple" :content="selectedOptions[0]?.label" /><template v-else>{{ selectedSummary }}</template></span></div>
     </div>
   </Teleport>
 </template>

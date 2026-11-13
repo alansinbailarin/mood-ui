@@ -83,4 +83,57 @@ describe('MorphSelect', () => {
     expect(button.attributes('aria-invalid')).toBe('true')
     expect(button.text()).toContain('Select…')
   })
+  it('multiple: toggles options, keeps the panel open and submits every value', async () => {
+    const w = mount(fixture('multiple :default-value="[\'mx\']"'), { attachTo: document.body })
+    await w.get('[role="combobox"]').trigger('click'); await flushPromises()
+    expect(document.querySelector('[role="listbox"]')!.getAttribute('aria-multiselectable')).toBe('true')
+    const usa = Array.from(document.querySelectorAll<HTMLButtonElement>('[role="option"]')).find(o => o.textContent?.includes('USA'))!
+    usa.click(); await flushPromises()
+    expect(panel()).not.toBeNull()
+    expect(usa.getAttribute('aria-selected')).toBe('true')
+    expect(new FormData(w.get('form').element as HTMLFormElement).getAll('country')).toEqual(['mx', 'us'])
+    expect(w.get('.modo-morph-select__value').text()).toBe('Mexico, USA')
+    const mexico = Array.from(document.querySelectorAll<HTMLButtonElement>('[role="option"]')).find(o => o.textContent?.includes('Mexico'))!
+    mexico.click(); await flushPromises()
+    expect(new FormData(w.get('form').element as HTMLFormElement).getAll('country')).toEqual(['us'])
+    w.unmount()
+  })
+  it('multiple: v-model is an array in option order', async () => {
+    const Host = defineComponent({
+      components: { MorphSelect, MorphSelectTrigger: MorphSelect.Trigger, MorphSelectContent: MorphSelect.Content },
+      data: () => ({ picked: [] as string[] }),
+      template: `<MorphSelect v-model="picked" multiple :options="${OPTIONS}"><MorphSelectTrigger/><MorphSelectContent /></MorphSelect>`,
+    })
+    const w = mount(Host, { attachTo: document.body })
+    await w.get('[role="combobox"]').trigger('click'); await flushPromises()
+    const opts = Array.from(document.querySelectorAll<HTMLButtonElement>('[role="option"]'))
+    opts.find(o => o.textContent?.includes('USA'))!.click(); await flushPromises()
+    opts.find(o => o.textContent?.includes('Mexico'))!.click(); await flushPromises()
+    expect((w.vm as unknown as { picked: string[] }).picked).toEqual(['mx', 'us'])
+    w.unmount()
+  })
+  it('renders a leading icon from the prop or the slot', () => {
+    const Icon = defineComponent({ template: '<svg data-test-icon />' })
+    const w = mount(defineComponent({
+      components: { MorphSelect, MorphSelectTrigger: MorphSelect.Trigger },
+      setup: () => ({ Icon }),
+      template: `<MorphSelect :options="${OPTIONS}"><MorphSelectTrigger :icon="Icon" /></MorphSelect>`,
+    }))
+    expect(w.find('.modo-morph-select__icon [data-test-icon]').exists()).toBe(true)
+    const slotted = mount(defineComponent({
+      components: { MorphSelect, MorphSelectTrigger: MorphSelect.Trigger },
+      template: `<MorphSelect :options="${OPTIONS}"><MorphSelectTrigger><template #icon><i data-slot-icon /></template></MorphSelectTrigger></MorphSelect>`,
+    }))
+    expect(slotted.find('.modo-morph-select__icon [data-slot-icon]').exists()).toBe(true)
+  })
+  it('stays open when the phone keyboard resizes or scrolls the page while searching', async () => {
+    const w = mount(fixture('', ':searchable="true"'), { attachTo: document.body })
+    await w.get('[role="combobox"]').trigger('click'); await flushPromises()
+    const input = document.querySelector('.modo-morph-select__search input') as HTMLInputElement
+    input.focus()
+    window.dispatchEvent(new Event('resize')); document.dispatchEvent(new Event('scroll')); await flushPromises()
+    expect(panel()).not.toBeNull()
+    expect(w.get('[role="combobox"]').attributes('aria-expanded')).toBe('true')
+    w.unmount()
+  })
 })
