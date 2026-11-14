@@ -18,6 +18,8 @@ import {
   GlobeAltIcon,
 } from "@heroicons/vue/24/outline";
 import { navManifest } from "~/utils/nav-manifest";
+import { canonicalPath, isKitPath } from "~/utils/kit-docs";
+import { kitNavManifest } from "~/utils/kit-nav";
 
 const emit = defineEmits<{
   "open-search": [];
@@ -51,8 +53,11 @@ function onSearch() {
 // Theme Studio needs an explicit entry here. We keep the rest of the
 // `hiddenInSidebar` filter intact so generic placeholder categories
 // stay out.
+const isActive = (path: string) => canonicalPath(route.path) === path;
 const mobileSections = computed(() =>
-  navManifest.filter((c) => !c.hiddenInSidebar || c.id === "theme-studio"),
+  isKitPath(route.path)
+    ? kitNavManifest
+    : navManifest.filter((c) => !c.hiddenInSidebar || c.id === "theme-studio"),
 );
 </script>
 
@@ -143,7 +148,7 @@ const mobileSections = computed(() =>
                 :to="item.route"
                 class="inline-flex items-center gap-2 py-1.5 text-sm transition-colors"
                 :class="
-                  route.path === item.route
+                  isActive(item.route)
                     ? 'text-primary font-medium'
                     : 'text-muted-foreground hover:text-foreground'
                 "

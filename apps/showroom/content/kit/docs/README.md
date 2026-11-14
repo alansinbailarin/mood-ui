@@ -1,0 +1,108 @@
+# Mood Kit documentation
+
+These pages cover Mood Kit as it ships today: a Laravel 13 API in `backend/` and a Nuxt 4 frontend in
+`frontend/`, with workspaces on subdomains, sign-in, roles and permissions, an audit trail and self-service
+signup. Start with [Getting started](getting-started.md) if you have not run the kit yet.
+
+For the rules the code itself follows (layers, boundaries, what each gate checks), read
+[`AGENTS.md`](../AGENTS.md) at the repo root. These pages describe what the kit does and how to use and
+configure it; `AGENTS.md` describes how to change it.
+
+## Start here
+
+- [Getting started](getting-started.md): run the kit locally, sign in to the demo workspace and create a
+  workspace through signup.
+
+## Concepts
+
+- [Architecture](concepts/architecture.md): the monorepo, the backend packages, the frontend layers and how
+  they reach each other.
+- [Multi-tenancy](concepts/multi-tenancy.md): workspaces on subdomains, how a request finds its workspace,
+  row-level security and `TENANCY_ENFORCE_RLS`.
+- [Errors and the API](concepts/errors-and-api.md): `/api/v1`, the response envelope, error codes and how
+  the frontend shows them.
+
+## Packages and layers
+
+Each backend package, with the frontend layer that pairs with it.
+
+- [Support](packages/support.md): the envelope, the error contract, request locale, secret scrubbing for
+  Sentry.
+- [Tenancy](packages/tenancy.md) and the `tenancy` layer: workspaces, the `tenant` middleware, RLS helpers,
+  tenant-aware queues.
+- [Auth](packages/auth.md) and the `auth` layer: login, password reset, workspace switching, captcha,
+  `GET /me`.
+- [Rbac](packages/rbac.md) and the `rbac` and `dashboard` layers: roles, permissions, the menu, the roles
+  screens.
+- [Audit](packages/audit.md): the append-only audit trail.
+- [Signup](packages/signup.md) and the `signup` layer: creating a workspace from the root domain.
+- [Settings](packages/settings.md) and the `settings` layer: workspace identity and localization, brand, logo,
+  history, each member's theme.
+- [Plans](packages/plans.md): plans, subscriptions, quota limits and feature flags.
+- [Billing](packages/billing.md) and the `billing` layer: paying for a plan through Stripe Billing, the pricing grid, the webhook.
+- [Notifications](packages/notifications.md) and the `notifications` layer: event types, templates, deliveries, bounces.
+- [Onboarding](packages/onboarding.md) and the `onboarding` layer: the steps of a new workspace, the wizard, the checklist and
+  workspace templates.
+- [Team](packages/team.md): a workspace's people, their invitations, working hours and skills.
+- [Branches](packages/branches.md): a workspace's branches, their place on the map, opening hours and people.
+- [Clients](packages/clients.md): a workspace's clients, their tags, duplicates and merging, activity, CSV import and export,
+  and their privacy rights.
+- [Platform](packages/platform.md): the platform's own administration, on a host of its own.
+- [Geocoding](packages/geocoding.md): places from an address and an address from a point, for the location picker, through
+  the provider the app configures.
+- [Frontend](frontend.md): the Nuxt layers, `core`, calling the API, hooks, design rules, i18n and visual
+  tests.
+
+## Configuration
+
+- [The `.env` file](configuration/environment.md): the one env file, the Postgres roles, ports, and every
+  setting the kit adds.
+- [Domains](configuration/domains.md): the root domain, wildcard DNS, `*.localhost` and the frontend URL.
+- [Storage](configuration/storage.md): uploaded files in an S3 bucket, MinIO locally and Cloudflare R2 in
+  production.
+- [Stripe](configuration/stripe.md): a sandbox, the products and prices, the webhook, the Customer Portal, testing with the
+  Stripe CLI and going live.
+- [Mail](configuration/mail.md): Mailpit locally; SMTP or SES in production, or Postmark or Resend once their transport is installed.
+- [Realtime (Reverb)](configuration/realtime.md): the inbox's live updates.
+- [Captcha](configuration/captcha.md): Cloudflare Turnstile and `SIGNUP_REQUIRE_CAPTCHA`.
+- [Maps and geocoding](configuration/maps.md): the address search of the location picker: Nominatim, Google, Mapbox or
+  none, their keys, usage policies and cache.
+- [Sentry](configuration/sentry.md): error reporting and what is scrubbed before it leaves.
+- [Queues and the scheduler](configuration/queues-and-scheduler.md): what the worker and the scheduler run,
+  and how to keep them running.
+- [The admin host](configuration/admin-host.md): the platform's administration on `admin.<root domain>`, and what keeps
+  it apart from the workspaces.
+- [Production checklist](configuration/production.md): what a deployment needs that the local defaults
+  leave out.
+
+## Guides
+
+- [Add a permission and a menu entry](guides/add-a-permission-and-menu-entry.md)
+- [Add a role template](guides/add-a-role-template.md)
+- [Add a settings group](guides/add-a-settings-group.md)
+- [Add a quota or a feature flag](guides/add-a-quota-or-feature.md)
+- [Add a platform flag](guides/add-a-platform-flag.md)
+- [Brand the platform](guides/brand-the-platform.md)
+- [Control who signs up](guides/control-who-signs-up.md)
+- [Set up the first super admin](guides/set-up-the-first-super-admin.md)
+- [Impersonate a member](guides/impersonate-a-member.md)
+- [Add a notification event type](guides/add-a-notification-event-type.md)
+- [Send a notification](guides/send-a-notification.md)
+- [Add a notification attachment](guides/add-a-notification-attachment.md)
+- [Show a notification in the app](guides/show-a-notification-in-the-app.md)
+- [Add a digest contributor](guides/add-a-digest-contributor.md)
+- [Add an onboarding step](guides/add-an-onboarding-step.md)
+- [Add a workspace template](guides/add-a-workspace-template.md)
+- [Invite your team](guides/invite-your-team.md)
+- [Attach data to members](guides/attach-data-to-members.md)
+- [Attach data to branches](guides/attach-data-to-branches.md)
+- [Attach data to clients](guides/attach-data-to-clients.md)
+- [Add a portal section](guides/add-a-portal-section.md)
+- [Scope data by branch](guides/scope-data-by-branch.md)
+- [Register secret fields and headers](guides/register-secret-fields.md)
+- [Add a locale](guides/add-a-locale.md)
+- [Testing and quality gates](guides/testing.md)
+
+## Coming next
+
+Not in the kit yet: search. See [Architecture](concepts/architecture.md#what-it-does-not-ship).

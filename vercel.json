@@ -9,6 +9,16 @@
       "source": "/index.html",
       "destination": "/",
       "permanent": true
+    },
+    {
+      "source": "/kit",
+      "destination": "/nuxt-saas-boilerplate",
+      "permanent": true
+    },
+    {
+      "source": "/es/kit",
+      "destination": "/es/nuxt-saas-boilerplate",
+      "permanent": true
     }
   ],
   "headers": [

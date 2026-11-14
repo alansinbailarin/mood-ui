@@ -49,7 +49,10 @@ export const navManifest: NavCategory[] = [
   {
     id: "templates",
     title: "Templates",
-    entries: [{ id: "templates", label: "Templates", route: "/templates" }],
+    entries: [
+      { id: "templates", label: "Templates", route: "/templates" },
+      { id: "mood-kit", label: "Mood Kit", route: "/nuxt-saas-boilerplate", badge: "New" },
+    ],
   },
   {
     id: "theme-studio",

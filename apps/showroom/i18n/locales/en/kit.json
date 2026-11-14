@@ -1,0 +1,182 @@
+{
+  "kit": {
+    "tab": "Kit",
+    "docsLabel": "Mood Kit docs",
+    "englishOnly": "These docs are written in English. The Spanish site shows the same pages.",
+    "agent": {
+      "title": "Let an agent do it",
+      "intro": "Paste this into Claude Code, Cursor or another coding agent, from the root of your Mood Kit repository. It makes the agent read the rules first.",
+      "promptLabel": "Prompt",
+      "copy": "Copy",
+      "copied": "Copied",
+      "canTitle": "What the agent can do",
+      "mustTitle": "What you do yourself",
+      "secretsNote": "An agent should never see real secrets. Keys, passwords and tokens go into your environment by hand, and accounts, DNS and payments are yours to create. Details in Working with agents."
+    },
+    "landing": {
+      "seo": {
+        "title": "Nuxt SaaS Boilerplate with a Laravel API and Multi-tenancy",
+        "description": "Laravel + Nuxt SaaS starter kit: multi-tenant workspaces on subdomains with Postgres row-level security, roles, Stripe billing, notifications and an admin.",
+        "ogTitle": "Mood Kit: Laravel + Nuxt SaaS starter kit"
+      },
+      "overline": "Mood Kit",
+      "h1": "A Nuxt SaaS boilerplate with a Laravel API and tenant isolation in the database",
+      "lead": "Mood Kit is a Laravel 13 API and a Nuxt 4 app on mood-ui. Each customer gets a workspace on its own subdomain, and Postgres row-level security keeps their rows apart even when a query forgets a filter. Sign-in, roles, plans, Stripe billing, notifications, onboarding, team, clients and a platform admin are already built and tested.",
+      "ctaDocs": "Read the docs",
+      "ctaBuy": "Get Mood Kit",
+      "ctaStart": "Run it locally in 15 minutes",
+      "buyTodo": "TODO for the owner: replace the placeholder buy link (utils/kit-config.ts).",
+      "pricingNote": "Pricing and licence terms will be published here before the launch.",
+      "factsTitle": "What it is, in four lines",
+      "facts": {
+        "api": "A Laravel 13 JSON API, versioned under /api/v1, with one response envelope and a code for every error.",
+        "app": "A Nuxt 4 frontend built from Nuxt layers, with server rendering and the mood-ui components.",
+        "tenancy": "Workspaces on subdomains, one database, row-level security on every tenant table.",
+        "checks": "Architecture rules enforced by Deptrac, Pest and ESLint, so the code stays the shape the docs describe."
+      },
+      "forTitle": "Who it is for",
+      "forBody": "Teams that are building a B2B product where each customer is an organization with its own people, roles, plan and data: a booking tool, a CRM, a back office, a vertical SaaS. It also suits agencies that build the same kind of product for several clients, and Laravel developers who want a separate Vue front end instead of Inertia.",
+      "notForTitle": "Who it is not for",
+      "notForBody": "If you want a landing page and a login for a weekend MVP, a lighter Nuxt template will get you there sooner. If you want a single-user app with no workspaces, the tenancy layer is more than you need.",
+      "includedTitle": "What is included",
+      "includedLead": "Everything below exists in the kit today and has a documentation page.",
+      "features": {
+        "tenancy": {
+          "title": "Multi-tenancy with row-level security",
+          "text": "Workspaces on acme.yourdomain.com. The tenant is set per database session and enforced by Postgres policies, with a runtime role that cannot bypass them. A command fails the deploy if it can."
+        },
+        "auth": {
+          "title": "Sign-in and workspace switching",
+          "text": "Bearer-token login across subdomains, password reset, a captcha with Cloudflare Turnstile, and moving between the workspaces a person belongs to."
+        },
+        "rbac": {
+          "title": "Roles, permissions and the menu",
+          "text": "Roles and permissions per workspace, role templates, a permission middleware and a menu that follows what the person may do."
+        },
+        "billing": {
+          "title": "Plans, quotas and Stripe Billing",
+          "text": "A catalog of plans with quota limits and feature flags, checkout, plan changes, the Customer Portal and a webhook, plus an admin editor for the catalog."
+        },
+        "notifications": {
+          "title": "Notifications",
+          "text": "Event types, templates per language, an in-app inbox with live updates, email deliveries with bounce handling, and daily digests."
+        },
+        "onboarding": {
+          "title": "Onboarding and workspace templates",
+          "text": "A wizard and a checklist for a new workspace, steps your modules can add, and templates a workspace starts from."
+        },
+        "team": {
+          "title": "Team, branches and clients",
+          "text": "Invitations, working hours and skills; branches on a map with opening hours; clients with tags, duplicate merging, CSV import and export, privacy rights and a client portal."
+        },
+        "platform": {
+          "title": "A platform admin on its own host",
+          "text": "Super admins on admin.yourdomain.com: workspaces, plans, signup mode, impersonating a member, and an audit trail nobody can edit."
+        },
+        "brand": {
+          "title": "Brand per workspace",
+          "text": "Each workspace sets its name, logo and colors, and each member picks a theme. The platform has its own brand for emails and public screens."
+        },
+        "ops": {
+          "title": "The production plumbing",
+          "text": "Queues and a scheduler, Reverb for realtime, Sentry with secrets scrubbed, S3 or R2 storage, and a checklist with the commands to run on every deploy."
+        }
+      },
+      "stackTitle": "The stack",
+      "stackLead": "Nothing exotic. You can read every layer.",
+      "stack": {
+        "backend": {
+          "name": "Backend",
+          "value": "Laravel 13, PHP 8.4, Sanctum tokens, Pest"
+        },
+        "frontend": {
+          "name": "Frontend",
+          "value": "Nuxt 4, Vue 3, TypeScript, mood-ui"
+        },
+        "database": {
+          "name": "Database",
+          "value": "PostgreSQL with row-level security, Redis for cache and queue"
+        },
+        "payments": {
+          "name": "Payments",
+          "value": "Stripe Billing"
+        },
+        "realtime": {
+          "name": "Realtime",
+          "value": "Laravel Reverb"
+        },
+        "storage": {
+          "name": "Storage and mail",
+          "value": "S3-compatible (MinIO, Cloudflare R2); SMTP, SES, Postmark or Resend"
+        },
+        "quality": {
+          "name": "Quality gates",
+          "value": "Pint, Deptrac, Larastan, Rector, ESLint, Vitest, Playwright, gitleaks"
+        },
+        "agents": {
+          "name": "For agents",
+          "value": "AGENTS.md with the rules, enforced by those gates"
+        }
+      },
+      "notYetTitle": "What is not there yet",
+      "notYet": {
+        "connect": "Stripe Connect, so your customers can charge their own customers. It will be an optional package.",
+        "search": "Search across the app.",
+        "modules": "The module recipe and reference deployments for specific hosts. The docs say so on those pages.",
+        "legal": "Terms and privacy pages. The signup form links to yours."
+      },
+      "docsTitle": "Start with the docs",
+      "docsLead": "The documentation is public. It is the same text the kit repository ships.",
+      "docsLinks": {
+        "start": "Getting started",
+        "concepts": "Architecture and multi-tenancy",
+        "setup": "Set up each service: local and production",
+        "agents": "Working with agents",
+        "guides": "Guides: add a permission, a plan limit, a language"
+      },
+      "faqTitle": "Questions",
+      "faq": {
+        "template": {
+          "q": "Is this a Nuxt SaaS template or a complete application?",
+          "a": "A complete application. It has an API, a Nuxt frontend, a database schema, background jobs and a test suite. It is not a landing page template. If you want a marketing site with pricing and docs, Nuxt UI ships a free one, and it works well beside this."
+        },
+        "why": {
+          "q": "Why a Laravel API with Nuxt and not Inertia?",
+          "a": "Because the API stands on its own: a mobile app or another client can use it, and the frontend deploys separately. The cost is two things to deploy. The docs cover the part people struggle with, authentication across subdomains, which uses bearer tokens instead of cookies."
+        },
+        "isolation": {
+          "q": "How are tenants isolated?",
+          "a": "All workspaces share one database. Every tenant table has a row-level security policy, the app connects as a role that cannot bypass it, and php artisan tenancy:verify-rls fails the deploy if the setup could let rows leak. A forgotten where clause does not show another customer's data."
+        },
+        "connect": {
+          "q": "Does it include Stripe Connect?",
+          "a": "Not yet. Stripe Billing, for charging workspaces for their plan, is included. Connect, for letting your customers take payments, will come as its own optional package."
+        },
+        "requirements": {
+          "q": "What do I need to run it?",
+          "a": "Node 22 or 24 with pnpm 10, PHP 8.4 with a few extensions, Composer 2 and Docker. Docker runs Postgres, Redis, Mailpit and MinIO. Getting started takes about 15 minutes, most of it installing dependencies."
+        },
+        "agents": {
+          "q": "Can I build on it with Claude Code or Cursor?",
+          "a": "Yes, that is a design goal. AGENTS.md at the repository root holds the rules, and each rule names the check that enforces it. The docs have a prompt for each common task and say which steps an agent can do alone and which need you."
+        },
+        "language": {
+          "q": "Is it available in Spanish?",
+          "a": "The application ships English and Spanish, and adding a language is a documented guide. The documentation itself is in English for now."
+        },
+        "license": {
+          "q": "How is it licensed and delivered?",
+          "a": "Buyers get access to a private repository and receive updates through it. Pricing and licence terms are being finalised and will be published on this page."
+        }
+      },
+      "ctaTitle": "Run it before you decide",
+      "ctaBody": "The quickest check is the docs: Getting started takes you to a running workspace, with the demo sign-in, on your own machine.",
+      "backToTemplates": "Part of Templates"
+    },
+    "templatesCard": {
+      "title": "Mood Kit",
+      "desc": "A Nuxt SaaS boilerplate with a Laravel API: multi-tenant workspaces, roles, Stripe billing and a platform admin. Docs are public.",
+      "cta": "See the kit"
+    }
+  }
+}

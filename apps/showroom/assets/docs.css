@@ -34,3 +34,157 @@
 .docs-page-leave-to {
   opacity: 0;
 }
+
+/* ── Kit docs ───────────────────────────────────────────────────────────────
+ * Rendered markdown of the Kit section (pages/kit/[...slug].vue). Kept in one
+ * block so the section's look can change without touching the docs pages. */
+.kit-prose {
+  min-width: 0;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--foreground);
+  overflow-wrap: anywhere;
+}
+.kit-prose > * + * { margin-top: 1rem; }
+.kit-prose h2, .kit-prose h3, .kit-prose h4 {
+  position: relative;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  scroll-margin-top: 5rem;
+}
+.kit-prose h2 { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 1.5rem; }
+.kit-prose h3 { margin-top: 2rem; font-size: 1.15rem; }
+.kit-prose h4 { margin-top: 1.5rem; font-size: 1rem; }
+.kit-prose .kit-anchor {
+  margin-left: 0.4rem;
+  color: var(--muted-foreground);
+  opacity: 0;
+  text-decoration: none;
+  transition: opacity 120ms;
+}
+.kit-prose :is(h2, h3, h4):hover .kit-anchor, .kit-prose .kit-anchor:focus-visible { opacity: 1; }
+.kit-prose a:not(.kit-anchor) {
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.kit-prose .kit-unresolved { color: var(--muted-foreground); }
+.kit-prose ul, .kit-prose ol { padding-left: 1.4rem; }
+.kit-prose ul { list-style: disc; }
+.kit-prose ol { list-style: decimal; }
+.kit-prose li + li { margin-top: 0.35rem; }
+.kit-prose li > ul, .kit-prose li > ol { margin-top: 0.35rem; }
+.kit-prose :not(pre) > code {
+  padding: 0.1rem 0.35rem;
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  background: var(--muted);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.85em;
+}
+.kit-prose hr { border: 0; border-top: 1px solid var(--border); }
+.kit-prose blockquote {
+  padding: 0.75rem 1rem;
+  border-left: 3px solid var(--border);
+  background: var(--muted);
+  border-radius: 0.5rem;
+  color: var(--muted-foreground);
+}
+.kit-prose blockquote > * + * { margin-top: 0.5rem; }
+.kit-prose blockquote[data-callout] {
+  border-left-color: var(--primary);
+  color: var(--foreground);
+}
+.kit-prose blockquote[data-callout]::before {
+  content: attr(data-label);
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+.kit-prose blockquote[data-callout="unverified"] {
+  border-left-color: var(--warning);
+  background: color-mix(in srgb, var(--warning) 10%, transparent);
+}
+.kit-prose blockquote[data-callout="unverified"]::before { color: var(--warning); }
+
+/* Tables scroll on their own, so a wide one never widens the page. */
+.kit-table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 0.75rem; }
+.kit-prose table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.kit-prose th { background: var(--muted); text-align: left; font-weight: 500; }
+.kit-prose th, .kit-prose td { padding: 0.5rem 0.75rem; vertical-align: top; border-top: 1px solid var(--border); }
+.kit-prose thead th { border-top: 0; }
+.kit-prose td { overflow-wrap: normal; }
+
+/* Code: Shiki writes both themes into CSS variables; the page picks one. */
+.kit-code { position: relative; }
+.kit-code[data-lang]::after {
+  content: attr(data-lang);
+  position: absolute;
+  top: 0.4rem;
+  right: 0.75rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  pointer-events: none;
+}
+.kit-code pre {
+  overflow-x: auto;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  background: var(--shiki-light-bg, var(--muted));
+}
+.kit-code pre code { background: none; border: 0; padding: 0; font-size: inherit; overflow-wrap: normal; white-space: pre; }
+.kit-code .shiki span { color: var(--shiki-light); }
+.dark .kit-code pre, [data-modo-theme="dark"] .kit-code pre { background: var(--shiki-dark-bg, var(--muted)); }
+.dark .kit-code .shiki span, [data-modo-theme="dark"] .kit-code .shiki span { color: var(--shiki-dark); }
+
+.kit-lang-note {
+  padding: 0.6rem 0.9rem;
+  border: 1px dashed var(--border);
+  border-radius: 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+}
+
+/* "Let an agent do it" block */
+.kit-agent {
+  margin-top: 2.5rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--card);
+}
+.kit-agent > * + * { margin-top: 1rem; }
+.kit-agent__title { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.01em; scroll-margin-top: 5rem; }
+.kit-agent__intro, .kit-agent__note { font-size: 0.875rem; color: var(--muted-foreground); }
+.kit-agent__prompt { border: 1px solid var(--border); border-radius: 0.75rem; overflow: hidden; }
+.kit-agent__prompt-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.4rem 0.75rem; border-bottom: 1px solid var(--border);
+  background: var(--muted); font-size: 0.75rem; color: var(--muted-foreground);
+}
+.kit-agent__copy {
+  display: inline-flex; align-items: center; gap: 0.35rem; cursor: pointer;
+  padding: 0.2rem 0.6rem; border: 1px solid var(--border); border-radius: 999px;
+  background: var(--background); color: var(--foreground); font-size: 0.75rem;
+}
+.kit-agent__pre {
+  margin: 0; padding: 0.9rem 1rem; white-space: pre-wrap; overflow-wrap: anywhere;
+  font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.8125rem; line-height: 1.6;
+}
+.kit-agent__cols { display: grid; gap: 1.25rem; }
+@media (min-width: 40rem) { .kit-agent__cols { grid-template-columns: 1fr 1fr; } }
+.kit-agent__cols h3 { margin-bottom: 0.4rem; font-size: 0.95rem; font-weight: 600; }
+.kit-agent__cols ul { padding-left: 1.2rem; list-style: disc; font-size: 0.875rem; }
+.kit-agent__cols li + li { margin-top: 0.3rem; }

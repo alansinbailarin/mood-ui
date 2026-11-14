@@ -9,6 +9,8 @@ import { computed } from "vue";
 import { MagnifyingGlassIcon } from "@heroicons/vue/24/outline";
 import { useI18n } from "vue-i18n";
 import { navManifest } from "~/utils/nav-manifest";
+import { canonicalPath, isKitPath } from "~/utils/kit-docs";
+import { kitNavManifest } from "~/utils/kit-nav";
 
 defineEmits<{ "open-search": [] }>();
 
@@ -18,8 +20,14 @@ const { t } = useI18n();
 // Categories flagged `hiddenInSidebar` (Theme Studio at the moment) live
 // only in the top pill nav — they're top-level shortcuts that already
 // have a dedicated tab and don't need to take a slot in the left rail.
+// Compare without the /es prefix, so Spanish pages highlight too.
+const isActive = (path: string) => canonicalPath(route.path) === path;
+
+// On the Kit landing and its docs the sidebar is the Kit's own tree.
 const sidebarSections = computed(() =>
-  navManifest.filter((c) => !c.hiddenInSidebar),
+  isKitPath(route.path)
+    ? kitNavManifest
+    : navManifest.filter((c) => !c.hiddenInSidebar),
 );
 </script>
 
@@ -59,7 +67,7 @@ const sidebarSections = computed(() =>
                   :to="item.route"
                   class="docs-sidebar-link group relative inline-flex items-center gap-2 py-1 text-sm transition-colors"
                   :class="
-                    route.path === item.route
+                    isActive(item.route)
                       ? 'text-primary font-medium'
                       : 'text-muted-foreground hover:text-foreground'
                   "
@@ -69,7 +77,7 @@ const sidebarSections = computed(() =>
                     <span
                       class="docs-sidebar-link__underline pointer-events-none absolute left-0 right-0 -bottom-0.5 h-px origin-left scale-x-0 bg-current transition-transform duration-200 ease-out"
                       :class="
-                        route.path === item.route ? 'scale-x-100 bg-primary' : ''
+                        isActive(item.route) ? 'scale-x-100 bg-primary' : ''
                       "
                     />
                   </span>
