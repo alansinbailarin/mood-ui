@@ -13,11 +13,13 @@
     "postinstall": "nuxt prepare",
     "typecheck": "nuxt typecheck",
     "test": "vitest run",
-    "llms": "tsx scripts/generate-llms.ts"
+    "llms": "tsx scripts/generate-llms.ts",
+    "kit:sync": "tsx scripts/sync-kit-docs.ts"
   },
   "dependencies": {
     "@heroicons/vue": "^2.2.0",
     "gsap": "^3.15.0",
+    "markdown-it": "^14.3.3",
     "mood-ui": "workspace:*",
     "vue": "^3.5.32"
   },
@@ -27,6 +29,7 @@
     "@nuxtjs/seo": "^5.3.1",
     "@tailwindcss/vite": "^4.2.4",
     "@takumi-rs/core": "2.0.0-beta.14",
+    "@types/markdown-it": "^14.2.0",
     "@types/node": "^24.12.2",
     "nuxt": "^4.0.0",
     "shiki": "^1.29.2",

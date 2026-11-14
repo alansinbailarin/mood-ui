@@ -8,6 +8,7 @@
 import { ref, computed, nextTick, onMounted, onBeforeUnmount, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { navManifest, COMPONENT_CATEGORY_IDS } from "~/utils/nav-manifest";
+import { isKitPath, KIT_LANDING } from "~/utils/kit-docs";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -49,6 +50,12 @@ const tabs = computed<Tab[]>(() => {
         categoryIds: ["templates"],
       },
       {
+        key: "kit",
+        label: t("kit.tab"),
+        route: KIT_LANDING,
+        categoryIds: [],
+      },
+      {
         key: "theme-studio",
         label: t("themeStudio"),
         route: findFirstRoute("theme-studio"),
@@ -59,6 +66,8 @@ const tabs = computed<Tab[]>(() => {
 });
 
 const activeTabKey = computed(() => {
+  // The Kit landing is also a Templates entry; the Kit tab wins on its pages.
+  if (isKitPath(route.path)) return "kit";
   for (const tab of tabs.value) {
     for (const catId of tab.categoryIds) {
       const cat = navManifest.find((c) => c.id === catId);

@@ -1,5 +1,7 @@
 import tailwindcss from "@tailwindcss/vite";
 import { defineOrganization } from "nuxt-schema-org/schema";
+import { kitDocRoutes } from "./utils/kit-nav";
+import { KIT_LANDING } from "./utils/kit-docs";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -22,7 +24,9 @@ export default defineNuxtConfig({
       // localized sidebar links (NuxtLinkLocale) are in place, crawling /es
       // discovers every /es/* page the same way "/" discovers the EN ones.
       crawlLinks: true,
-      routes: ["/", "/es"],
+      // The Kit landing and every Kit docs page are listed too: the docs are one
+      // catch-all route, which the crawler only finds through links.
+      routes: ["/", "/es", KIT_LANDING, `/es${KIT_LANDING}`, ...kitDocRoutes(), ...kitDocRoutes().map((r) => `/es${r}`)],
     },
   },
 
@@ -61,6 +65,7 @@ export default defineNuxtConfig({
           "en/docs.json",
           "en/welcome.json",
           "en/theme-studio.json",
+          "en/kit.json",
         ],
       },
       {
@@ -80,6 +85,7 @@ export default defineNuxtConfig({
           "es/docs.json",
           "es/welcome.json",
           "es/theme-studio.json",
+          "es/kit.json",
         ],
       },
     ],
@@ -106,6 +112,13 @@ export default defineNuxtConfig({
 
   sitemap: {
     autoLastmod: true,
+    // The Kit docs are one catch-all page, so the sitemap cannot find them by
+    // itself. English only: the Spanish site shows the same English text and
+    // points its canonical at the English page. `modules` is a stub (noindex).
+    exclude: ["/es/kit/**", "/kit/modules"],
+    urls: kitDocRoutes()
+      .filter((r) => r !== "/kit/modules")
+      .map((loc) => ({ loc, changefreq: "weekly" as const })),
     // SSG: bake the sitemap at build time, no server runtime needed.
     zeroRuntime: true,
   },

@@ -1,0 +1,445 @@
+{
+  "source": {
+    "commit": "97e35268d0ba",
+    "ref": "HEAD",
+    "dirty": false
+  },
+  "groups": [
+    {
+      "id": "start-here",
+      "title": "Start here",
+      "pages": [
+        {
+          "slug": "getting-started",
+          "file": "docs/getting-started.md",
+          "title": "Getting started",
+          "label": "Getting started",
+          "description": "This guide takes a fresh clone to a running kit on your machine: the API, the frontend, a queue worker and the scheduler, with Postgres, Redis, Mailpit and…"
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "title": "Concepts",
+      "pages": [
+        {
+          "slug": "concepts/architecture",
+          "file": "docs/concepts/architecture.md",
+          "title": "Architecture",
+          "label": "Architecture",
+          "description": "Mood Kit is one repository with two applications: a Laravel API in backend/ and a Nuxt app in frontend/. Each is split into units with a narrow surface:…"
+        },
+        {
+          "slug": "concepts/multi-tenancy",
+          "file": "docs/concepts/multi-tenancy.md",
+          "title": "Multi-tenancy",
+          "label": "Multi-tenancy",
+          "description": "Every customer of a product built on Mood Kit gets a workspace (a tenant in the code) on a subdomain of its own: acme.example.com. One database holds every…"
+        },
+        {
+          "slug": "concepts/errors-and-api",
+          "file": "docs/concepts/errors-and-api.md",
+          "title": "Errors and the API",
+          "label": "Errors and the API",
+          "description": "Every route of the API lives under /api/v1 and answers in one JSON envelope, success or failure. Every failure carries a stable, dotted error code and a…"
+        }
+      ]
+    },
+    {
+      "id": "packages-and-layers",
+      "title": "Packages and layers",
+      "pages": [
+        {
+          "slug": "packages/support",
+          "file": "docs/packages/support.md",
+          "title": "Support",
+          "label": "Support",
+          "description": "backend/packages/Support, namespace MoodKit\\Support\\. The primitives every other package builds on: the response envelope, the error contract, the request…"
+        },
+        {
+          "slug": "packages/tenancy",
+          "file": "docs/packages/tenancy.md",
+          "title": "Tenancy",
+          "label": "Tenancy",
+          "description": "backend/packages/Tenancy, namespace MoodKit\\Tenancy\\, and the frontend layer frontend/layers/tenancy. Workspaces, how a request finds its workspace,…"
+        },
+        {
+          "slug": "packages/auth",
+          "file": "docs/packages/auth.md",
+          "title": "Auth",
+          "label": "Auth",
+          "description": "backend/packages/Auth, namespace MoodKit\\Auth\\, and the frontend layer frontend/layers/auth. Users, memberships, login tokens, password reset, moving between…"
+        },
+        {
+          "slug": "packages/rbac",
+          "file": "docs/packages/rbac.md",
+          "title": "Rbac",
+          "label": "Rbac",
+          "description": "backend/packages/Rbac, namespace MoodKit\\Rbac\\, with the frontend layers frontend/layers/rbac (the roles screens) and frontend/layers/dashboard (the…"
+        },
+        {
+          "slug": "packages/audit",
+          "file": "docs/packages/audit.md",
+          "title": "Audit",
+          "label": "Audit",
+          "description": "backend/packages/Audit, namespace MoodKit\\Audit\\. An append-only audit trail per workspace: who did what to which resource, and how it looked before and…"
+        },
+        {
+          "slug": "packages/signup",
+          "file": "docs/packages/signup.md",
+          "title": "Signup",
+          "label": "Signup",
+          "description": "backend/packages/Signup, namespace MoodKit\\Signup\\, and the frontend layer frontend/layers/signup. A person creates a workspace from the root domain, signed…"
+        },
+        {
+          "slug": "packages/settings",
+          "file": "docs/packages/settings.md",
+          "title": "Settings",
+          "label": "Settings",
+          "description": "backend/packages/Settings, namespace MoodKit\\Settings\\, with the settings frontend layer. Each workspace's settings, saved by group and key: its identity…"
+        },
+        {
+          "slug": "packages/plans",
+          "file": "docs/packages/plans.md",
+          "title": "Plans",
+          "label": "Plans",
+          "description": "backend/packages/Plans, namespace MoodKit\\Plans\\. Plans, subscriptions, quota limits and feature flags. Every workspace has one subscription to a plan of the…"
+        },
+        {
+          "slug": "packages/billing",
+          "file": "docs/packages/billing.md",
+          "title": "Billing",
+          "label": "Billing",
+          "description": "backend/packages/Billing, namespace MoodKit\\Billing\\. A workspace pays for its plan through Stripe Billing: Stripe's hosted Checkout to subscribe, plan…"
+        },
+        {
+          "slug": "packages/notifications",
+          "file": "docs/packages/notifications.md",
+          "title": "Notifications",
+          "label": "Notifications",
+          "description": "The Notifications package (backend/packages/Notifications) sends a workspace's notifications: modules declare event types, the workspace chooses which ones…"
+        },
+        {
+          "slug": "packages/onboarding",
+          "file": "docs/packages/onboarding.md",
+          "title": "Onboarding",
+          "label": "Onboarding",
+          "description": "The first steps of a new workspace: a wizard its owner goes through after signup, a checklist on the dashboard for what is left, and the workspace template…"
+        },
+        {
+          "slug": "packages/team",
+          "file": "docs/packages/team.md",
+          "title": "Team",
+          "label": "Team",
+          "description": "A workspace's people: inviting them by email, the members list and what can be done to a member (change their role, deactivate, reactivate, remove), and the…"
+        },
+        {
+          "slug": "packages/branches",
+          "file": "docs/packages/branches.md",
+          "title": "Branches",
+          "label": "Branches",
+          "description": "A workspace's branches: where it works. Each has a name, an address and its point on the map, a timezone, contact details, its opening hours and the people…"
+        },
+        {
+          "slug": "packages/clients",
+          "file": "docs/packages/clients.md",
+          "title": "Clients",
+          "label": "Clients",
+          "description": "A workspace's clients: the people it serves. Each has a name, contact details, an address, a birthday, a language, notes, a home branch, their marketing…"
+        },
+        {
+          "slug": "packages/platform",
+          "file": "docs/packages/platform.md",
+          "title": "Platform",
+          "label": "Platform",
+          "description": "The platform's own administration, for whoever runs the SaaS rather than a workspace: its super admins, the admin's own host, the workspaces seen across…"
+        },
+        {
+          "slug": "packages/geocoding",
+          "file": "docs/packages/geocoding.md",
+          "title": "Geocoding",
+          "label": "Geocoding",
+          "description": "Places from an address and an address from a point, through the provider the app configures: the backend side of the location picker (Branches' address, or…"
+        },
+        {
+          "slug": "frontend",
+          "file": "docs/frontend.md",
+          "title": "Frontend",
+          "label": "Frontend",
+          "description": "The Nuxt 4 app in frontend/, built on mood-ui. This page covers what a layer may use, how to call the API, how layers share the session, the design rules and…"
+        }
+      ]
+    },
+    {
+      "id": "configuration",
+      "title": "Configuration",
+      "pages": [
+        {
+          "slug": "configuration/environment",
+          "file": "docs/configuration/environment.md",
+          "title": "The .env file",
+          "label": "The .env file",
+          "description": "The kit has one env file, .env at the repo root, copied from .env.example. Docker Compose, Laravel and Nuxt all read it, and its defaults work locally as…"
+        },
+        {
+          "slug": "configuration/domains",
+          "file": "docs/configuration/domains.md",
+          "title": "Domains",
+          "label": "Domains",
+          "description": "Workspaces live on subdomains of one root domain: acme.example.com, globex.example.com. This guide sets up the domain, the DNS records and the settings that…"
+        },
+        {
+          "slug": "configuration/storage",
+          "file": "docs/configuration/storage.md",
+          "title": "Storage",
+          "label": "Storage",
+          "description": "Files people upload (a workspace's logo, for now) live in an S3 bucket. The kit writes, links and deletes them through one class,…"
+        },
+        {
+          "slug": "configuration/stripe",
+          "file": "docs/configuration/stripe.md",
+          "title": "Stripe",
+          "label": "Stripe",
+          "description": "Billing takes payments through Stripe Billing: Stripe's hosted Checkout to subscribe, its Customer Portal for the card, the invoices and cancelling, and a…"
+        },
+        {
+          "slug": "configuration/mail",
+          "file": "docs/configuration/mail.md",
+          "title": "Mail",
+          "label": "Mail",
+          "description": "The kit sends the account emails (Auth: the password reset link and the notices about a person's account), the signup verification email (Signup) and each…"
+        },
+        {
+          "slug": "configuration/realtime",
+          "file": "docs/configuration/realtime.md",
+          "title": "Realtime (Reverb)",
+          "label": "Realtime (Reverb)",
+          "description": "The inbox (the bell, the notifications page) shows a new notification the moment it arrives through Laravel Reverb, the websocket server that runs with the…"
+        },
+        {
+          "slug": "configuration/captcha",
+          "file": "docs/configuration/captcha.md",
+          "title": "Captcha",
+          "label": "Captcha",
+          "description": "Login, password recovery, signup, accepting an invitation to a team and asking for a sign-in code of the client portal can ask for a captcha. The kit…"
+        },
+        {
+          "slug": "configuration/maps",
+          "file": "docs/configuration/maps.md",
+          "title": "Maps and geocoding",
+          "label": "Maps and geocoding",
+          "description": "The location picker (a branch's address, or one of your modules) does two things with a map: it draws one, in the browser (The map), and it turns an address…"
+        },
+        {
+          "slug": "configuration/sentry",
+          "file": "docs/configuration/sentry.md",
+          "title": "Sentry",
+          "label": "Sentry",
+          "description": "The API reports unexpected exceptions to Sentry through sentry/sentry-laravel. It is off until you set a DSN. Before anything leaves, the kit blanks the…"
+        },
+        {
+          "slug": "configuration/queues-and-scheduler",
+          "file": "docs/configuration/queues-and-scheduler.md",
+          "title": "Queues and the scheduler",
+          "label": "Queues and the scheduler",
+          "description": "Besides the web server, the API needs two long-running processes: a queue worker, which runs the jobs the app queues, and the scheduler, which runs the…"
+        },
+        {
+          "slug": "configuration/admin-host",
+          "file": "docs/configuration/admin-host.md",
+          "title": "The admin host",
+          "label": "The admin host",
+          "description": "The platform's own administration lives on a host of its own, admin.<root domain> (admin.example.com), apart from every workspace: no workspace context, its…"
+        },
+        {
+          "slug": "configuration/production",
+          "file": "docs/configuration/production.md",
+          "title": "Production checklist",
+          "label": "Production checklist",
+          "description": "What a deployment needs that the local defaults leave out. Go through it before the first launch, and again when you add a server or change hosts. Each item…"
+        }
+      ]
+    },
+    {
+      "id": "guides",
+      "title": "Guides",
+      "pages": [
+        {
+          "slug": "guides/add-a-permission-and-menu-entry",
+          "file": "docs/guides/add-a-permission-and-menu-entry.md",
+          "title": "Add a permission and a menu entry",
+          "label": "Add a permission and a menu entry",
+          "description": "This guide gives a feature of your own a permission, guards its routes with it, and puts its screen in the dashboard menu for the members who hold it. The…"
+        },
+        {
+          "slug": "guides/add-a-role-template",
+          "file": "docs/guides/add-a-role-template.md",
+          "title": "Add a role template",
+          "label": "Add a role template",
+          "description": "A role template is a system role every workspace gets, with the permissions its template grants. The kit declares three (owner, manager, member, in…"
+        },
+        {
+          "slug": "guides/add-a-settings-group",
+          "file": "docs/guides/add-a-settings-group.md",
+          "title": "Add a settings group",
+          "label": "Add a settings group",
+          "description": "A settings group is a set of values each workspace chooses for itself, saved by key with a version and a history. The kit declares two (identity and…"
+        },
+        {
+          "slug": "guides/add-a-quota-or-feature",
+          "file": "docs/guides/add-a-quota-or-feature.md",
+          "title": "Add a quota or a feature flag",
+          "label": "Add a quota or a feature flag",
+          "description": "A module limits how many of something a workspace may create with a quota resource, and turns a whole feature on per plan with a feature flag. Both are…"
+        },
+        {
+          "slug": "guides/add-a-platform-flag",
+          "file": "docs/guides/add-a-platform-flag.md",
+          "title": "Add a platform flag",
+          "label": "Add a platform flag",
+          "description": "A platform flag switches something of a module on or off for the whole platform (a kill switch), or releases it to a share of the workspaces the platform's…"
+        },
+        {
+          "slug": "guides/brand-the-platform",
+          "file": "docs/guides/brand-the-platform.md",
+          "title": "Brand the platform",
+          "label": "Brand the platform",
+          "description": "There are two brands in the kit. A workspace's brand (its name, logo and color, from its own Settings) is what its people see inside it. The platform's brand…"
+        },
+        {
+          "slug": "guides/control-who-signs-up",
+          "file": "docs/guides/control-who-signs-up.md",
+          "title": "Control who signs up",
+          "label": "Control who signs up",
+          "description": "The platform's access mode decides who may make a new workspace through signup. It never touches the workspaces that exist: their people sign in, pay and…"
+        },
+        {
+          "slug": "guides/set-up-the-first-super-admin",
+          "file": "docs/guides/set-up-the-first-super-admin.md",
+          "title": "Set up the first super admin",
+          "label": "Set up the first super admin",
+          "description": "A super admin runs the platform from the admin host: the workspaces, the flags, the brand, who signs up. It is not a role of a workspace and gives nothing…"
+        },
+        {
+          "slug": "guides/impersonate-a-member",
+          "file": "docs/guides/impersonate-a-member.md",
+          "title": "Impersonate a member",
+          "label": "Impersonate a member",
+          "description": "A super admin can enter a workspace as one of its people, to see what they see when they ask for help. It is a short, visible and recorded session, and some…"
+        },
+        {
+          "slug": "guides/add-a-notification-event-type",
+          "file": "docs/guides/add-a-notification-event-type.md",
+          "title": "Add a notification event type",
+          "label": "Add a notification event type",
+          "description": "A module that wants to notify a workspace declares an event type: what happened, which values its message may use, who it can go to, and its default words in…"
+        },
+        {
+          "slug": "guides/send-a-notification",
+          "file": "docs/guides/send-a-notification.md",
+          "title": "Send a notification",
+          "label": "Send a notification",
+          "description": "Once your event type is declared (guide), ask for it with NotificationRequested where the thing happens. Send it from inside your transaction: it waits for…"
+        },
+        {
+          "slug": "guides/add-a-notification-attachment",
+          "file": "docs/guides/add-a-notification-attachment.md",
+          "title": "Add a notification attachment",
+          "label": "Add a notification attachment",
+          "description": "An attachment is a file a workspace may add to an event's emails, audience by audience (the owner gets the invoice PDF, the customer does not). The module…"
+        },
+        {
+          "slug": "guides/show-a-notification-in-the-app",
+          "file": "docs/guides/show-a-notification-in-the-app.md",
+          "title": "Show a notification in the app",
+          "label": "Show a notification in the app",
+          "description": "A module's notification reaches the members it is for in their inbox (the bell and the notifications page) when its event type goes through the in_app…"
+        },
+        {
+          "slug": "guides/add-a-digest-contributor",
+          "file": "docs/guides/add-a-digest-contributor.md",
+          "title": "Add a digest contributor",
+          "label": "Add a digest contributor",
+          "description": "A member who chooses the daily summary gets one email a day with what their notifications said and what your module adds. A contributor gives a few lines…"
+        },
+        {
+          "slug": "guides/add-an-onboarding-step",
+          "file": "docs/guides/add-an-onboarding-step.md",
+          "title": "Add an onboarding step",
+          "label": "Add an onboarding step",
+          "description": "A module that needs something from a new workspace before it is useful (its first location, its opening hours, the people who work there) adds an onboarding…"
+        },
+        {
+          "slug": "guides/add-a-workspace-template",
+          "file": "docs/guides/add-a-workspace-template.md",
+          "title": "Add a workspace template",
+          "label": "Add a workspace template",
+          "description": "A workspace template is what a new workspace starts with: a brand color, a default currency, a module's starting records (the categories of a booking module,…"
+        },
+        {
+          "slug": "guides/invite-your-team",
+          "file": "docs/guides/invite-your-team.md",
+          "title": "Invite your team",
+          "label": "Invite your team",
+          "description": "How a workspace brings its people in, end to end, what you can change, and how to try it locally. The rules behind each step are in Team."
+        },
+        {
+          "slug": "guides/attach-data-to-members",
+          "file": "docs/guides/attach-data-to-members.md",
+          "title": "Attach data to members",
+          "label": "Attach data to members",
+          "description": "A module often keeps something about each person of a workspace: their shifts, an hourly rate, the equipment they carry. This guide shows how to keep it so…"
+        },
+        {
+          "slug": "guides/attach-data-to-branches",
+          "file": "docs/guides/attach-data-to-branches.md",
+          "title": "Attach data to branches",
+          "label": "Attach data to branches",
+          "description": "A module often keeps something about each branch of a workspace: its closures and holidays, the services and prices it offers, the cash register's daily…"
+        },
+        {
+          "slug": "guides/attach-data-to-clients",
+          "file": "docs/guides/attach-data-to-clients.md",
+          "title": "Attach data to clients",
+          "label": "Attach data to clients",
+          "description": "A module often keeps something about each client of a workspace: their appointments, their visits, a loyalty card, the notes of a treatment. This guide shows…"
+        },
+        {
+          "slug": "guides/add-a-portal-section",
+          "file": "docs/guides/add-a-portal-section.md",
+          "title": "Add a portal section",
+          "label": "Add a portal section",
+          "description": "A workspace's clients sign in to the client portal, on the workspace's address, to see and change their details (see Clients: Client portal). A module adds…"
+        },
+        {
+          "slug": "guides/scope-data-by-branch",
+          "file": "docs/guides/scope-data-by-branch.md",
+          "title": "Scope data by branch",
+          "label": "Scope data by branch",
+          "description": "Once a workspace has two active branches or more, each person works at one branch at a time, or at every branch, and chooses it in the switcher at the top of…"
+        },
+        {
+          "slug": "guides/register-secret-fields",
+          "file": "docs/guides/register-secret-fields.md",
+          "title": "Register secret fields and headers",
+          "label": "Register secret fields and headers",
+          "description": "When a request of your package carries a credential (a password, a token, a one-time code, an API key), the value must never reach Sentry. Support blanks…"
+        },
+        {
+          "slug": "guides/add-a-locale",
+          "file": "docs/guides/add-a-locale.md",
+          "title": "Add a locale",
+          "label": "Add a locale",
+          "description": "The kit ships English (en, the default and fallback) and Spanish (es). This guide adds a third language, French (fr) in the examples, to the API and the…"
+        },
+        {
+          "slug": "guides/testing",
+          "file": "docs/guides/testing.md",
+          "title": "Testing and quality gates",
+          "label": "Testing and quality gates",
+          "description": "The kit has four gates. CI runs the same ones on every pull request and every push to main, so a gate you skip locally fails there. This guide shows what…"
+        }
+      ]
+    }
+  ]
+}

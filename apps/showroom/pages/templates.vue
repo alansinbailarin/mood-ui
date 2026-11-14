@@ -6,6 +6,7 @@ import {
   LockClosedIcon,
   CurrencyDollarIcon,
   Cog6ToothIcon,
+  ArrowRightIcon,
 } from "@heroicons/vue/24/outline";
 
 
@@ -109,6 +110,24 @@ const items = computed(() =>
         {{ t("pages.templates.index.subtitle") }}
       </Typography>
     </header>
+
+    <!-- Mood Kit: the one template that is a real product, with its own page. -->
+    <NuxtLinkLocale to="/nuxt-saas-boilerplate" class="block no-underline group">
+      <Card
+        variant="outlined"
+        padding="large"
+        class="transition-colors duration-300 group-hover:border-primary/50"
+      >
+        <Stack direction="column" spacing="xsmall">
+          <Typography variant="title" size="medium" as="h2">{{ t("kit.templatesCard.title") }}</Typography>
+          <Typography variant="body" size="small" color="muted">{{ t("kit.templatesCard.desc") }}</Typography>
+          <span class="inline-flex items-center gap-1.5 text-primary text-sm pt-2">
+            {{ t("kit.templatesCard.cta") }}
+            <ArrowRightIcon class="size-4" />
+          </span>
+        </Stack>
+      </Card>
+    </NuxtLinkLocale>
 
     <div v-reveal-children class="grid sm:grid-cols-2 gap-5">
       <Card

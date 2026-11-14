@@ -1,0 +1,182 @@
+{
+  "kit": {
+    "tab": "Kit",
+    "docsLabel": "Documentación de Mood Kit",
+    "englishOnly": "Esta documentación está escrita en inglés. El sitio en español muestra las mismas páginas.",
+    "agent": {
+      "title": "Hazlo con un agente",
+      "intro": "Pega esto en Claude Code, Cursor u otro agente de código, desde la raíz de tu repositorio de Mood Kit. Hace que el agente lea primero las reglas.",
+      "promptLabel": "Prompt",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "canTitle": "Lo que el agente puede hacer",
+      "mustTitle": "Lo que haces tú",
+      "secretsNote": "Un agente nunca debe ver secretos reales. Las claves, contraseñas y tokens los pones tú en tu entorno, y las cuentas, el DNS y los pagos los creas tú. Más detalle en Working with agents (en inglés)."
+    },
+    "landing": {
+      "seo": {
+        "title": "Boilerplate SaaS con Nuxt y Laravel: kit multi-tenant",
+        "description": "Kit de inicio SaaS con Laravel y Nuxt: workspaces en subdominios aislados con row-level security de Postgres, roles, Stripe, notificaciones y panel de admin.",
+        "ogTitle": "Mood Kit: kit SaaS con Laravel y Nuxt"
+      },
+      "overline": "Mood Kit",
+      "h1": "Un boilerplate SaaS con Nuxt, una API en Laravel y aislamiento de tenants en la base de datos",
+      "lead": "Mood Kit es una API en Laravel 13 y una app en Nuxt 4 sobre mood-ui. Cada cliente tiene un workspace en su propio subdominio, y la row-level security de Postgres mantiene sus filas separadas aunque una consulta olvide un filtro. Inicio de sesión, roles, planes, facturación con Stripe, notificaciones, onboarding, equipo, clientes y un panel de plataforma ya están construidos y probados.",
+      "ctaDocs": "Leer la documentación",
+      "ctaBuy": "Conseguir Mood Kit",
+      "ctaStart": "Córrelo en local en 15 minutos",
+      "buyTodo": "TODO del dueño: reemplazar el enlace de compra provisional (utils/kit-config.ts).",
+      "pricingNote": "Los precios y los términos de la licencia se publicarán aquí antes del lanzamiento.",
+      "factsTitle": "Qué es, en cuatro líneas",
+      "facts": {
+        "api": "Una API JSON en Laravel 13, versionada en /api/v1, con un solo formato de respuesta y un código para cada error.",
+        "app": "Un frontend en Nuxt 4 armado con layers de Nuxt, con renderizado en servidor y los componentes de mood-ui.",
+        "tenancy": "Workspaces en subdominios, una sola base de datos, row-level security en cada tabla de tenant.",
+        "checks": "Reglas de arquitectura vigiladas por Deptrac, Pest y ESLint, para que el código conserve la forma que describe la documentación."
+      },
+      "forTitle": "Para quién es",
+      "forBody": "Equipos que construyen un producto B2B donde cada cliente es una organización con su gente, sus roles, su plan y sus datos: una herramienta de reservas, un CRM, un back office, un SaaS vertical. También sirve a agencias que construyen el mismo tipo de producto para varios clientes, y a desarrolladores Laravel que quieren un front Vue separado en lugar de Inertia.",
+      "notForTitle": "Para quién no es",
+      "notForBody": "Si quieres una landing y un login para un MVP de fin de semana, una plantilla de Nuxt más ligera te llevará antes. Si quieres una app de un solo usuario sin workspaces, la capa de tenancy es más de lo que necesitas.",
+      "includedTitle": "Qué incluye",
+      "includedLead": "Todo lo de abajo existe hoy en el kit y tiene su página de documentación.",
+      "features": {
+        "tenancy": {
+          "title": "Multi-tenancy con row-level security",
+          "text": "Workspaces en acme.tudominio.com. El tenant se fija por sesión de base de datos y lo aplican políticas de Postgres, con un rol de ejecución que no puede saltárselas. Un comando hace fallar el despliegue si puede."
+        },
+        "auth": {
+          "title": "Inicio de sesión y cambio de workspace",
+          "text": "Login con token entre subdominios, recuperación de contraseña, captcha con Cloudflare Turnstile y cambio entre los workspaces a los que pertenece una persona."
+        },
+        "rbac": {
+          "title": "Roles, permisos y menú",
+          "text": "Roles y permisos por workspace, plantillas de rol, un middleware de permisos y un menú que sigue lo que la persona puede hacer."
+        },
+        "billing": {
+          "title": "Planes, cuotas y Stripe Billing",
+          "text": "Un catálogo de planes con límites de cuota y feature flags, checkout, cambios de plan, el Customer Portal y un webhook, más un editor del catálogo en el admin."
+        },
+        "notifications": {
+          "title": "Notificaciones",
+          "text": "Tipos de evento, plantillas por idioma, una bandeja en la app con actualización en vivo, envíos por correo con manejo de rebotes y resúmenes diarios."
+        },
+        "onboarding": {
+          "title": "Onboarding y plantillas de workspace",
+          "text": "Un asistente y una lista de pasos para un workspace nuevo, pasos que tus módulos pueden añadir y plantillas desde las que arranca un workspace."
+        },
+        "team": {
+          "title": "Equipo, sucursales y clientes",
+          "text": "Invitaciones, horarios y habilidades; sucursales en un mapa con horarios de apertura; clientes con etiquetas, fusión de duplicados, importación y exportación CSV, derechos de privacidad y un portal del cliente."
+        },
+        "platform": {
+          "title": "Un admin de plataforma en su propio host",
+          "text": "Super admins en admin.tudominio.com: workspaces, planes, modo de registro, suplantar a un miembro y una auditoría que nadie puede editar."
+        },
+        "brand": {
+          "title": "Marca por workspace",
+          "text": "Cada workspace define su nombre, logo y colores, y cada miembro elige un tema. La plataforma tiene su propia marca para correos y pantallas públicas."
+        },
+        "ops": {
+          "title": "Lo necesario para producción",
+          "text": "Colas y un scheduler, Reverb para tiempo real, Sentry con secretos filtrados, almacenamiento S3 o R2 y una lista de verificación con los comandos de cada despliegue."
+        }
+      },
+      "stackTitle": "El stack",
+      "stackLead": "Nada exótico. Puedes leer cada capa.",
+      "stack": {
+        "backend": {
+          "name": "Backend",
+          "value": "Laravel 13, PHP 8.4, tokens de Sanctum, Pest"
+        },
+        "frontend": {
+          "name": "Frontend",
+          "value": "Nuxt 4, Vue 3, TypeScript, mood-ui"
+        },
+        "database": {
+          "name": "Base de datos",
+          "value": "PostgreSQL con row-level security, Redis para caché y cola"
+        },
+        "payments": {
+          "name": "Pagos",
+          "value": "Stripe Billing"
+        },
+        "realtime": {
+          "name": "Tiempo real",
+          "value": "Laravel Reverb"
+        },
+        "storage": {
+          "name": "Archivos y correo",
+          "value": "Compatible con S3 (MinIO, Cloudflare R2); SMTP, SES, Postmark o Resend"
+        },
+        "quality": {
+          "name": "Controles de calidad",
+          "value": "Pint, Deptrac, Larastan, Rector, ESLint, Vitest, Playwright, gitleaks"
+        },
+        "agents": {
+          "name": "Para agentes",
+          "value": "AGENTS.md con las reglas, vigiladas por esos controles"
+        }
+      },
+      "notYetTitle": "Lo que todavía no está",
+      "notYet": {
+        "connect": "Stripe Connect, para que tus clientes cobren a sus propios clientes. Será un paquete opcional.",
+        "search": "Búsqueda en toda la app.",
+        "modules": "La receta de módulos y los despliegues de referencia para hosts concretos. La documentación lo dice en esas páginas.",
+        "legal": "Páginas de términos y privacidad. El formulario de registro enlaza a las tuyas."
+      },
+      "docsTitle": "Empieza por la documentación",
+      "docsLead": "La documentación es pública. Es el mismo texto que trae el repositorio del kit.",
+      "docsLinks": {
+        "start": "Inicio rápido (Getting started)",
+        "concepts": "Arquitectura y multi-tenancy",
+        "setup": "Configurar cada servicio: local y producción",
+        "agents": "Trabajar con agentes",
+        "guides": "Guías: añadir un permiso, un límite de plan, un idioma"
+      },
+      "faqTitle": "Preguntas",
+      "faq": {
+        "template": {
+          "q": "¿Es una plantilla SaaS de Nuxt o una aplicación completa?",
+          "a": "Una aplicación completa. Tiene una API, un frontend en Nuxt, un esquema de base de datos, trabajos en segundo plano y una suite de pruebas. No es una plantilla de landing. Si quieres un sitio de marketing con precios y documentación, Nuxt UI trae uno gratuito, y funciona bien junto a este."
+        },
+        "why": {
+          "q": "¿Por qué una API en Laravel con Nuxt y no Inertia?",
+          "a": "Porque la API se sostiene sola: una app móvil u otro cliente puede usarla y el frontend se despliega por separado. El costo es que hay dos cosas que desplegar. La documentación cubre la parte que más cuesta, la autenticación entre subdominios, que usa tokens bearer en lugar de cookies."
+        },
+        "isolation": {
+          "q": "¿Cómo se aíslan los tenants?",
+          "a": "Todos los workspaces comparten una base de datos. Cada tabla de tenant tiene una política de row-level security, la app se conecta con un rol que no puede saltársela, y php artisan tenancy:verify-rls hace fallar el despliegue si la configuración permitiría filtrar filas. Un where olvidado no muestra los datos de otro cliente."
+        },
+        "connect": {
+          "q": "¿Incluye Stripe Connect?",
+          "a": "Todavía no. Stripe Billing, para cobrar a los workspaces su plan, sí está incluido. Connect, para que tus clientes reciban pagos, llegará como un paquete opcional."
+        },
+        "requirements": {
+          "q": "¿Qué necesito para correrlo?",
+          "a": "Node 22 o 24 con pnpm 10, PHP 8.4 con algunas extensiones, Composer 2 y Docker. Docker corre Postgres, Redis, Mailpit y MinIO. Getting started toma unos 15 minutos, casi todo instalando dependencias."
+        },
+        "agents": {
+          "q": "¿Puedo construir sobre él con Claude Code o Cursor?",
+          "a": "Sí, es un objetivo de diseño. AGENTS.md en la raíz del repositorio tiene las reglas, y cada regla nombra el control que la vigila. La documentación trae un prompt para cada tarea común e indica qué pasos puede hacer un agente solo y cuáles necesitan de ti."
+        },
+        "language": {
+          "q": "¿Está disponible en español?",
+          "a": "La aplicación trae inglés y español, y añadir un idioma es una guía documentada. La documentación en sí está, por ahora, en inglés."
+        },
+        "license": {
+          "q": "¿Cómo se licencia y se entrega?",
+          "a": "Quien compra recibe acceso a un repositorio privado y las actualizaciones llegan por ahí. Los precios y los términos de la licencia se están cerrando y se publicarán en esta página."
+        }
+      },
+      "ctaTitle": "Pruébalo antes de decidir",
+      "ctaBody": "La forma más rápida es la documentación: Getting started te lleva a un workspace en marcha, con el usuario de demo, en tu propia máquina.",
+      "backToTemplates": "Parte de Plantillas"
+    },
+    "templatesCard": {
+      "title": "Mood Kit",
+      "desc": "Un boilerplate SaaS con Nuxt y una API en Laravel: workspaces multi-tenant, roles, facturación con Stripe y un admin de plataforma. La documentación es pública.",
+      "cta": "Ver el kit"
+    }
+  }
+}
