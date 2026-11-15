@@ -219,6 +219,19 @@ const BLOCKS: Record<string, AgentBlock> = {
       "Read the provider's terms on storing results.",
     ],
   },
+  search: {
+    docs: ["docs/configuration/search.md"],
+    task: "Check SCOUT_DRIVER. If I want Meilisearch, set the variables the page lists, then run php artisan scout:sync-index-settings and php artisan search:reindex. Tell me which Meilisearch key I must create myself.",
+    agentCan: [
+      "Set SCOUT_DRIVER, SCOUT_PREFIX and SCOUT_QUEUE and explain what each one changes.",
+      "Run php artisan scout:sync-index-settings and php artisan search:reindex.",
+      "Check that a queue worker is running and read php artisan queue:failed.",
+    ],
+    humanMust: [
+      "Create the Meilisearch key for the clients' index and keep the master key out of the app.",
+      "Provision the hosted Meilisearch you run in production.",
+    ],
+  },
 };
 
 /** Which block each page gets. Pages not listed get none. */
@@ -235,6 +248,7 @@ const PAGE_TO_BLOCK: Record<string, string> = {
   "configuration/sentry": "sentry",
   "configuration/queues-and-scheduler": "scheduler",
   "configuration/maps": "maps",
+  "configuration/search": "search",
   "configuration/production": "deployment",
   "setup/domains": "domains",
   "setup/database": "database",

@@ -1,7 +1,7 @@
 {
   "source": {
-    "commit": "97e35268d0ba",
-    "ref": "HEAD",
+    "commit": "c1b1612da838",
+    "ref": "working-tree",
     "dirty": false
   },
   "groups": [
@@ -162,6 +162,20 @@
           "description": "Places from an address and an address from a point, through the provider the app configures: the backend side of the location picker (Branches' address, or…"
         },
         {
+          "slug": "packages/search",
+          "file": "docs/packages/search.md",
+          "title": "Search",
+          "label": "Search",
+          "description": "The global search of the dashboard: what someone types, looked up in every kind of record they may open. Search keeps no tables and knows nothing of members,…"
+        },
+        {
+          "slug": "packages/dashboard",
+          "file": "docs/packages/dashboard.md",
+          "title": "Dashboard",
+          "label": "Dashboard",
+          "description": "The home of the dashboard: a card for each thing a person may want to know at a glance. Dashboard keeps no tables and knows nothing of members, branches or…"
+        },
+        {
           "slug": "frontend",
           "file": "docs/frontend.md",
           "title": "Frontend",
@@ -229,6 +243,13 @@
           "title": "Maps and geocoding",
           "label": "Maps and geocoding",
           "description": "The location picker (a branch's address, or one of your modules) does two things with a map: it draws one, in the browser (The map), and it turns an address…"
+        },
+        {
+          "slug": "configuration/search",
+          "file": "docs/configuration/search.md",
+          "title": "Search",
+          "label": "Search",
+          "description": "The palette (Cmd+K) finds the team's members, the branches and the clients a person may open: see Search for how it works and how a module adds what it…"
         },
         {
           "slug": "configuration/sentry",
@@ -417,6 +438,20 @@
           "title": "Scope data by branch",
           "label": "Scope data by branch",
           "description": "Once a workspace has two active branches or more, each person works at one branch at a time, or at every branch, and chooses it in the switcher at the top of…"
+        },
+        {
+          "slug": "guides/add-a-search-source",
+          "file": "docs/guides/add-a-search-source.md",
+          "title": "Add a search source",
+          "label": "Add a search source",
+          "description": "This guide makes the records of a module of your own show up in the dashboard's global search (the palette, Cmd+K): a group of its own, with the records the…"
+        },
+        {
+          "slug": "guides/add-a-dashboard-widget",
+          "file": "docs/guides/add-a-dashboard-widget.md",
+          "title": "Add a dashboard widget",
+          "label": "Add a dashboard widget",
+          "description": "This guide puts a card of a module of your own on the dashboard's home: a few figures, for the people who may see them. The example is the bookings of a…"
         },
         {
           "slug": "guides/register-secret-fields",

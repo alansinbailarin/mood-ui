@@ -36,7 +36,7 @@
             "text": "Los botones solo de icono y los botones de cierre exponen aria-label. Usa la prop label o aria-label para dar texto significativo a los lectores de pantalla."
           }
         },
-        "wcagTitle": "WCAG 2.2 — los cuatro principios",
+        "wcagTitle": "WCAG 2.2: los cuatro principios",
         "wcagDesc": "WCAG 2.2 es el estándar del W3C para la accesibilidad web. El nivel AA es la línea base ampliamente aceptada para software empresarial y del sector público.",
         "pour": {
           "perceivable": {
@@ -141,13 +141,13 @@
           "axeExt": "Extensión para Chrome y Firefox. Ejecuta auditorías bajo demanda directamente en las DevTools.",
           "wave": "Herramienta de overlay visual. Resalta errores, alertas y problemas de estructura en la página en tiempo real.",
           "lighthouse": "Integrado en las DevTools de Chrome. Auditoría completa de accesibilidad junto a rendimiento y SEO.",
-          "voiceover": "Lector de pantalla nativo de macOS/iOS. Sin instalación — pulsa Cmd+F5 para iniciarlo.",
+          "voiceover": "Lector de pantalla nativo de macOS/iOS. Sin instalación, pulsa Cmd+F5 para iniciarlo.",
           "nvda": "Lector de pantalla gratuito y de código abierto para Windows. El más usado con Chrome y Firefox."
         },
         "testChecklistTitle": "Checklist básico",
         "checklist": {
           "item1": "Todos los elementos interactivos son alcanzables y operables solo con teclado.",
-          "item2": "El indicador de foco siempre es visible — nunca ocultado con outline: none.",
+          "item2": "El indicador de foco siempre es visible, nunca ocultado con outline: none.",
           "item3": "No hay trampas de teclado no intencionadas fuera de los overlays modales.",
           "item4": "El contraste del texto cumple 4.5:1 (texto normal) o 3:1 (texto grande y componentes UI).",
           "item5": "Las imágenes no decorativas tienen un atributo alt significativo.",
@@ -214,26 +214,26 @@
           "v0.12.0": {
             "title": "Correcciones en mobile y calendarios con scroll",
             "items": [
-              "Nuevo: maxHeight en AgendaView, MonthView, DayView, WeekView y Scheduler — limita la altura del calendario y su contenido hace scroll interno. Los números son píxeles, los strings aceptan cualquier unidad CSS.",
+              "Nuevo: maxHeight en AgendaView, MonthView, DayView, WeekView y Scheduler, limita la altura del calendario y su contenido hace scroll interno. Los números son píxeles, los strings aceptan cualquier unidad CSS.",
               "Corregido: los overlays ya no dejan overflow:hidden pegado en body. Modal y Drawer comparten un scroll lock con contador de referencias, así que cerrar uno de dos overlays abiertos ya no congela la página.",
               "Corregido: los paneles de popover se limitan al viewport y hacen scroll internamente en vez de salirse de la pantalla, y siguen al contenido que crece después de abrirse.",
-              "Corregido: Combobox en touch — el dropdown sobrevive al auto-scroll que provoca enfocar el campo, así que los resultados aparecen al primer tap y no solo después de escribir. Las opciones vuelven a ser seleccionables con el dedo.",
-              "Corregido: SearchInput mantiene el foco mientras cargan los resultados — el campo ya no se deshabilita a mitad de la consulta — y el panel conserva los resultados en vez de colapsar a un spinner en cada tecla.",
-              "Corregido: PhoneInput — al salir con Tab del buscador de país el foco va al input del número, y con Shift+Tab regresa al selector de bandera.",
-              "Corregido: Tooltip en touch — un gesto de scroll lo cierra en vez de dejarlo flotando, y un tap fuera ahora también cierra los tooltips con trigger de click.",
+              "Corregido: Combobox en touch, el dropdown sobrevive al auto-scroll que provoca enfocar el campo, así que los resultados aparecen al primer tap y no solo después de escribir. Las opciones vuelven a ser seleccionables con el dedo.",
+              "Corregido: SearchInput mantiene el foco mientras cargan los resultados, el campo ya no se deshabilita a mitad de la consulta, y el panel conserva los resultados en vez de colapsar a un spinner en cada tecla.",
+              "Corregido: PhoneInput: al salir con Tab del buscador de país el foco va al input del número, y con Shift+Tab regresa al selector de bandera.",
+              "Corregido: Tooltip en touch, un gesto de scroll lo cierra en vez de dejarlo flotando, y un tap fuera ahora también cierra los tooltips con trigger de click.",
               "Corregido: la flecha del Tooltip queda centrada en su trigger y libre de las esquinas redondeadas, así que en tooltips pequeños ya no se ve como un diamante saliéndose del panel.",
               "Corregido: los eventos del calendario quitan la regla de color izquierda con radius large y full, donde el border-radius la barría por la esquina y quedaba como media luna.",
               "Corregido: los tiles de icono del Switcher siguen el radius resuelto en vez de un rounded-md fijo.",
-              "Corregido: DateTimePicker centra la opción seleccionada en su columna — se notaba sobre todo en timeOnly, donde quedaba detrás del label."
+              "Corregido: DateTimePicker centra la opción seleccionada en su columna, se notaba sobre todo en timeOnly, donde quedaba detrás del label."
             ]
           },
           "v0.11.0": {
             "title": "Gráficas, MenuButton y un focus ring unificado",
             "items": [
-              "Nuevo: Chart — un componente para sparkline, line, area, bar, scatter, donut, pie, gauge, radial, radar y heatmap (elige el renderer con el prop type). Puro SVG, paleta apta para daltonismo, crosshair + tooltip de hover integrados.",
-              "Nuevo: MenuButton — un botón que abre menú y entra en un ButtonGroup como segmento.",
-              "Nuevo: dropdown de resultados en SearchInput — pasa :items para un popover de resultados agrupado y navegable por teclado.",
-              "Nuevo: slot #chart en Stat — incrusta un Chart para una tarjeta KPI, u omite label/value para una tarjeta solo-gráfica. Stat ahora compone Card.",
+              "Nuevo: Chart: un componente para sparkline, line, area, bar, scatter, donut, pie, gauge, radial, radar y heatmap (elige el renderer con el prop type). Puro SVG, paleta apta para daltonismo, crosshair + tooltip de hover integrados.",
+              "Nuevo: MenuButton: un botón que abre menú y entra en un ButtonGroup como segmento.",
+              "Nuevo: dropdown de resultados en SearchInput, pasa :items para un popover de resultados agrupado y navegable por teclado.",
+              "Nuevo: slot #chart en Stat, incrusta un Chart para una tarjeta KPI, u omite label/value para una tarjeta solo-gráfica. Stat ahora compone Card.",
               "Nuevo: Button as=\"a\" renderiza un elemento ancla real (href / target / rel) con estado deshabilitado accesible.",
               "Mejora: un focus ring consistente en todos los controles; corregido el bleed del radio completo; alturas de control iguales por tamaño.",
               "Mejora: Tooltip con modo anchor virtual (sigue un punto en movimiento); el Topbar ahora comparte la superficie del sidebar."
@@ -242,7 +242,7 @@
           "v0.10.0": {
             "title": "Escala de tamaños unificada",
             "items": [
-              "Nuevo: SIZE_TOKENS central + resolver useSizeTokens — cada control lee tokens de tamaño compartidos.",
+              "Nuevo: SIZE_TOKENS central + resolver useSizeTokens, cada control lee tokens de tamaño compartidos.",
               "Mejora: Button ancla la escala de tamaños con alturas de control fijas; inputs, selects, controles de fecha y múltiples, controles de selección, Segmented, Tabs, Pagination y Avatar se alinean por tamaño.",
               "Mejora: el prop size se amplió a ModoSize en toda la librería.",
               "Corregido: build tree-shakeable para que las dependencias peer opcionales sean realmente opcionales."
@@ -251,14 +251,14 @@
           "v0.9.3": {
             "title": "Modo timeOnly en DateTimeField",
             "items": [
-              "Nuevo: prop timeOnly en DateTimeField — oculta el calendario y muestra solo las columnas del selector de hora. El v-model sigue siendo Date | null; la parte de fecha usa hoy como base cuando el usuario elige una hora.",
-              "Nuevo: prop timeOnly en DateTimePicker — mismo comportamiento para el picker standalone."
+              "Nuevo: prop timeOnly en DateTimeField, oculta el calendario y muestra solo las columnas del selector de hora. El v-model sigue siendo Date | null; la parte de fecha usa hoy como base cuando el usuario elige una hora.",
+              "Nuevo: prop timeOnly en DateTimePicker, mismo comportamiento para el picker standalone."
             ]
           },
           "v0.9.2": {
             "title": "Fix del token primary-subtle en dark mode",
             "items": [
-              "Fix: --primary-subtle en dark mode ahora usa color-mix translúcido (16% del primary) en lugar del tono sólido p[900] de la paleta. Esto hace que los estados ghost y subtle sean visualmente consistentes con hover (20%) y active (25%) — el reposo ahora es más suave que el hover, como debe ser."
+              "Fix: --primary-subtle en dark mode ahora usa color-mix translúcido (16% del primary) en lugar del tono sólido p[900] de la paleta. Esto hace que los estados ghost y subtle sean visualmente consistentes con hover (20%) y active (25%), el reposo ahora es más suave que el hover, como debe ser."
             ]
           },
           "v0.9.1": {
@@ -270,21 +270,21 @@
           "v0.9.0": {
             "title": "Componente Switcher · Layout sidebar-first en AppShell · Toggle en Sidebar · useLocalStorage",
             "items": [
-              "Nuevo: componente Switcher — cambiador de workspace/contexto con búsqueda, navegación por teclado, v-model, skeletons de carga y slots #trigger/#item-trailing/#footer.",
-              "Nuevo: prop topbarSpan en AppShell — el modo 'content' ubica la barra superior solo sobre la columna principal, permitiendo que el sidebar ocupe toda la altura (estilo Linear / Notion).",
-              "Nuevo: prop showToggle en Sidebar — botón circular de colapso/expansión integrado que se posiciona sobre el borde del sidebar. toggleSide controla en qué lado aparece.",
-              "Nuevo: composable useLocalStorage — ref reactiva ligada a localStorage, segura para SSR y con deep-watch automático de objetos y arrays.",
+              "Nuevo: componente Switcher: cambiador de workspace/contexto con búsqueda, navegación por teclado, v-model, skeletons de carga y slots #trigger/#item-trailing/#footer.",
+              "Nuevo: prop topbarSpan en AppShell, el modo 'content' ubica la barra superior solo sobre la columna principal, permitiendo que el sidebar ocupe toda la altura (estilo Linear / Notion).",
+              "Nuevo: prop showToggle en Sidebar, botón circular de colapso/expansión integrado que se posiciona sobre el borde del sidebar. toggleSide controla en qué lado aparece.",
+              "Nuevo: composable useLocalStorage: ref reactiva ligada a localStorage, segura para SSR y con deep-watch automático de objetos y arrays.",
               "Fix: posición vertical del botón toggle del Sidebar corregida de top-[18px] a top-[16px] para que su centro quede alineado con el topbar h-14 por defecto.",
               "Fix: wrapper del sidebar en AppShell cambiado de overflow-y-auto a overflow-visible para que el botón toggle no quede recortado.",
-              "Showroom: generador de snippet de configuración de ModoProvider — copiá tu paleta de tema como un bloque de código listo para usar.",
+              "Showroom: generador de snippet de configuración de ModoProvider, copiá tu paleta de tema como un bloque de código listo para usar.",
               "Showroom: página de documentación de useLocalStorage con demos interactivos para strings, objetos y persistencia del estado del sidebar."
             ]
           },
           "v0.8.2": {
             "title": "Anti-FOUC + darkClass aditivo + fixes de ColorModeSwitch",
             "items": [
-              "Fix: la opción darkClass de useColorMode ahora es ADITIVA en lugar de reemplazar. El lib siempre mantiene su clase 'dark' interna sobre el elemento raíz (su CSS compilado depende de ella). Cuando configurás darkClass como 'appdark', ambas clases 'appdark' y 'dark' se alternan — tu CSS de app y el CSS del lib funcionan en dark mode.",
-              "Fix: ModoProvider ya no emite sus CSS custom properties durante SSR — serializa un inline style vacío en el div wrapper y solo lo rellena cuando el componente se monta en el cliente. Esto deja la puerta abierta para que los consumers usen un script inline en el head que escriba el tema cacheado del usuario sobre el elemento raíz y gane el primer paint.",
+              "Fix: la opción darkClass de useColorMode ahora es ADITIVA en lugar de reemplazar. El lib siempre mantiene su clase 'dark' interna sobre el elemento raíz (su CSS compilado depende de ella). Cuando configurás darkClass como 'appdark', ambas clases 'appdark' y 'dark' se alternan, tu CSS de app y el CSS del lib funcionan en dark mode.",
+              "Fix: ModoProvider ya no emite sus CSS custom properties durante SSR, serializa un inline style vacío en el div wrapper y solo lo rellena cuando el componente se monta en el cliente. Esto deja la puerta abierta para que los consumers usen un script inline en el head que escriba el tema cacheado del usuario sobre el elemento raíz y gane el primer paint.",
               "Fix: ColorModeSwitch suprime su outline de focus en ambas variantes (default y collapsed) vía una regla CSS dedicada. El click ya no deja indicador cuadrado ni puntos, y el browser ya no flashea el outline al entrar en fullscreen.",
               "Showroom: se le pasa el mode crudo (no el theme resuelto) al ModoProvider del layout, así el indicador del ColorModeSwitch global se queda en el icono de system cuando el user lo elige, en lugar de saltar al sol o la luna. El watch(theme) → setColorMode del ModoProvider antes sobreescribía el mode con el valor resuelto.",
               "Showroom: los CSS vars resueltos ahora se cachean en localStorage y se re-aplican al elemento raíz antes del primer paint, así los visitantes recurrentes ya no parpadean a través de los indigo defaults del lib en su camino al palette y surface preset que eligieron en el panel de settings.",
@@ -325,7 +325,7 @@
             "title": "ColorModeSwitch + UX mobile + correcciones de componentes",
             "items": [
               "Nuevo componente público: ColorModeSwitch con página de documentación.",
-              "Tooltip refactorizado — mejor posicionamiento, tema aislado, soporte de arrow y delays.",
+              "Tooltip refactorizado: mejor posicionamiento, tema aislado, soporte de arrow y delays.",
               "Avatar: el fallback de ícono ahora respeta la prop color.",
               "DateRangeField: colapsa automáticamente a 1 mes en mobile.",
               "Combobox: soporte de touchstart para dispositivos táctiles.",
@@ -464,7 +464,7 @@
           },
           "a11y": {
             "title": "Accesible por defecto",
-            "text": "Roles ARIA, focus rings visibles, navegación por teclado y contrastes verificados — sin trabajo extra."
+            "text": "Roles ARIA, focus rings visibles, navegación por teclado y contrastes verificados, sin trabajo extra."
           },
           "treeShake": {
             "title": "Tree-shakeable",
@@ -543,24 +543,24 @@
         "step1Title": "Instalar el paquete",
         "step1Desc": "mood-ui se distribuye en ESM, CJS y un bundle CSS pre-compilado. Sin peer dependencies que instalar por separado; Vue 3.5+ es el único peer requerido.",
         "step2Title": "Configurar app.vue",
-        "step2Desc": "El provider en la raíz le da a cada descendiente — incluyendo layouts, páginas y overlays teleportados — los mismos tokens de tema, paleta y surfaces. ToastContainer y ConfirmDialog son globals obligatorios: useToast() y useConfirm() empujan a una queue compartida y estos componentes la renderizan.",
+        "step2Desc": "El provider en la raíz le da a cada descendiente, incluyendo layouts, páginas y overlays teleportados, los mismos tokens de tema, paleta y surfaces. ToastContainer y ConfirmDialog son globals obligatorios: useToast() y useConfirm() empujan a una queue compartida y estos componentes la renderizan.",
         "step2Tip": "Envuelve ToastContainer y ConfirmDialog en ClientOnly. Sus teleports internos son browser-only y un render en SSR emitiría hydration warnings sin eso.",
         "step3Title": "Configurar nuxt.config.ts",
         "step3Desc": "Carga el stylesheet de la lib una vez e inyecta un script anti-FOUC en head para que la clase .dark aparezca antes del primer paint.",
-        "step3Warning": "El script inline DEBE correr antes de que se parsee body. Usa tagPosition: \"head\" — un plugin runtime (.client.ts) es demasiado tarde: el HTML SSG repintaría de light a dark al hidratar.",
+        "step3Warning": "El script inline DEBE correr antes de que se parsee body. Usa tagPosition: \"head\", un plugin runtime (.client.ts) es demasiado tarde: el HTML SSG repintaría de light a dark al hidratar.",
         "step4Title": "Opcional: estado del tema persistido",
         "step4Desc": "Para apps que permiten al usuario afinar el tema en runtime (color picker, selector de radius, etc.), guarda el estado con useState + localStorage y pásalo como props al ModoProvider. Abajo está el patrón que usa este showroom para su settings panel.",
         "step5Title": "Tailwind v4: source scanning",
         "step5Desc": "Solo necesario si tu app usa su propio layer de Tailwind v4. La lib ship un CSS pre-compilado, pero si tu bundle sobreescribe shadow tokens o genera utilities default, apunta {'@'}source a la lib para que las clases responsive coincidan.",
         "step6Title": "Demos SSG-friendly",
-        "step6Desc": "La mayoría de componentes de la lib son SSR-safe por defecto — no necesitan wrapper. Solo DOS situaciones requieren ClientOnly: los singletons globales de overlays (ToastContainer, ConfirmDialog) y demos tipo showroom que muestran un overlay ya abierto. El uso normal en una app (Modal, Drawer, Tooltip en su estado cerrado default, etc.) renderiza bien en SSR.",
+        "step6Desc": "La mayoría de componentes de la lib son SSR-safe por defecto, no necesitan wrapper. Solo DOS situaciones requieren ClientOnly: los singletons globales de overlays (ToastContainer, ConfirmDialog) y demos tipo showroom que muestran un overlay ya abierto. El uso normal en una app (Modal, Drawer, Tooltip en su estado cerrado default, etc.) renderiza bien en SSR.",
         "pitfallsTitle": "Problemas comunes",
         "pitfallsIntro": "Consulta esta lista si algo no se ve bien después del setup básico.",
         "pitfalls": {
           "queueTitle": "useToast() o useConfirm() no hacen nada",
-          "queueText": "Te olvidaste de montar ToastContainer y ConfirmDialog globalmente. Los composables empujan a una queue compartida pero no renderizan nada por sí solos. Monta los dos en algún lugar global — app.vue es el más limpio.",
+          "queueText": "Te olvidaste de montar ToastContainer y ConfirmDialog globalmente. Los composables empujan a una queue compartida pero no renderizan nada por sí solos. Monta los dos en algún lugar global, app.vue es el más limpio.",
           "themeTitle": "El overlay muestra el tema invertido",
-          "themeText": "Un popover, modal o tooltip se ve dark sobre una página light (o viceversa). El fix es :theme=\"resolved\" desde useColorMode en el ModoProvider — nunca \"system\". Internamente los overlays llaman resolveColorMode que usa prefers-color-scheme cuando el prop es \"system\", lo cual NO es lo que el user toggleó.",
+          "themeText": "Un popover, modal o tooltip se ve dark sobre una página light (o viceversa). El fix es :theme=\"resolved\" desde useColorMode en el ModoProvider, nunca \"system\". Internamente los overlays llaman resolveColorMode que usa prefers-color-scheme cuando el prop es \"system\", lo cual NO es lo que el user toggleó.",
           "providerTitle": "Provider muy profundo en el árbol",
           "providerText": "Si el ModoProvider está dentro de un layout pero ToastContainer / ConfirmDialog viven fuera (e.g. directamente en app.vue), los overlays no ven el context del provider y caen a defaults. Monta el provider en app.vue para que el árbol entero quede envuelto.",
           "fofTitle": "Flash de light a dark al cargar",
@@ -580,7 +580,7 @@
         "ssgClientOnly": "Envolver en ClientOnly",
         "ssgClientOnlyText": "ToastContainer, ConfirmDialog (la queue está vacía en SSR; nada que renderizar). Theme Studio (muta CSS vars en vivo). Demos de Calendar / Scheduler que arrancan con eventos ya colocados (los drag handlers se registran en mount).",
         "ssgServerSafe": "SSR por defecto (sin wrapper)",
-        "ssgServerSafeText": "Button, Input, Select, Card, Typography, Badge, Chip, Avatar, Stat, Banner, Loader, Skeleton, ProgressBar, Kbd, Code, Divider. Tabs, Accordion, Table (read-only), AppShell. Modal, Drawer, Tooltip, PopoverPanel, DropdownMenu en su estado cerrado default — el portal se monta solo al interactuar.",
+        "ssgServerSafeText": "Button, Input, Select, Card, Typography, Badge, Chip, Avatar, Stat, Banner, Loader, Skeleton, ProgressBar, Kbd, Code, Divider. Tabs, Accordion, Table (read-only), AppShell. Modal, Drawer, Tooltip, PopoverPanel, DropdownMenu en su estado cerrado default, el portal se monta solo al interactuar.",
         "ssgWhyMost": "Por qué casi todo es SSR-safe",
         "ssgWhyMostText": "La lib usa patrones SSR-safe de Vue 3 internamente: setup() nunca lee window ni document a nivel top; todo acceso al DOM vive dentro de hooks onMounted o event handlers. El HTML compilado es idéntico entre el servidor y el primer paint del cliente."
       },
@@ -590,18 +590,18 @@
         "subtitle": "mood-ui publica documentación legible por máquinas en /llms.txt y /llms-full.txt para que los asistentes de IA generen código de mood-ui correcto y al día.",
         "filesTitle": "Dos archivos",
         "shortName": "/llms.txt",
-        "shortDesc": "Un índice corto — cada componente y composable con un resumen de una línea y un enlace directo a la referencia completa. Ideal como mapa ligero que mantienes en contexto.",
+        "shortDesc": "Un índice corto: cada componente y composable con un resumen de una línea y un enlace directo a la referencia completa. Ideal como mapa ligero que mantienes en contexto.",
         "fullName": "/llms-full.txt",
-        "fullDesc": "La referencia completa — instalación, configuración de ModoProvider, theming y filosofía, y luego cada componente y composable con sus tablas de props y tipos de TypeScript.",
+        "fullDesc": "La referencia completa: instalación, configuración de ModoProvider, theming y filosofía, y luego cada componente y composable con sus tablas de props y tipos de TypeScript.",
         "howTitle": "Cómo usarlas",
         "step1Title": "Apunta tu asistente de IA a la URL",
         "step1Desc": "En Cursor, Claude Code, Copilot o cualquier chat, agrega el archivo al contexto del modelo (o pega la URL). El asistente conocerá la API exacta de mood-ui y dejará de inventar props.",
         "step2Title": "O ponlo en tu prompt",
         "step2Desc": "Agrega una instrucción de una línea para que el modelo siempre consulte la referencia antes de escribir código de UI.",
         "step3Title": "Descárgalas por código",
-        "step3Desc": "Ambos archivos son texto plano servido desde la raíz del sitio — pásalos a cualquier herramienta o pre-cárgalos en tu propio agente.",
+        "step3Desc": "Ambos archivos son texto plano servido desde la raíz del sitio, pásalos a cualquier herramienta o pre-cárgalos en tu propio agente.",
         "syncTitle": "Siempre sincronizadas",
-        "syncDesc": "Ambos archivos se generan desde los exports públicos de la librería y las interfaces de TypeScript en cada build, así que siempre coinciden con la versión que instalas — nunca una doc escrita a mano y desactualizada.",
+        "syncDesc": "Ambos archivos se generan desde los exports públicos de la librería y las interfaces de TypeScript en cada build, así que siempre coinciden con la versión que instalas, nunca una doc escrita a mano y desactualizada.",
         "openShort": "Abrir llms.txt",
         "openFull": "Abrir llms-full.txt"
       }

@@ -30,7 +30,7 @@ const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
     keys: ["ArrowDown", "ArrowUp", "Home", "End"],
     action: k("a11y.kbArrows"),
   },
-  { keys: ["A–Z"], action: k("a11y.kbTypeahead") },
+  { keys: ["A-Z"], action: k("a11y.kbTypeahead") },
   { keys: ["N", "⌫"], action: k("a11y.kbShortcuts") },
   { keys: ["Escape", "Tab"], action: k("a11y.kbEsc") },
 ]);
@@ -259,7 +259,7 @@ const emitsList = computed<EmitDoc[]>(() => [
   { name: "openChange", payload: "boolean", description: k("emits.openChange") },
   {
     name: "select (ContextMenu.Item)",
-    payload: "—",
+    payload: "-",
     description: k("emits.select"),
   },
 ]);

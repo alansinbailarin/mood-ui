@@ -31,7 +31,7 @@ const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
   { keys: ["Home", "End"], action: k("a11y.kbHomeEnd") },
   { keys: ["Enter", "Space"], action: k("a11y.kbSelect") },
   { keys: ["Escape"], action: k("a11y.kbEsc") },
-  { keys: ["A–Z"], action: k("a11y.kbType") },
+  { keys: ["A-Z"], action: k("a11y.kbType") },
 ]);
 
 const a11yAria = computed<A11yAriaRow[]>(() => [

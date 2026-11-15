@@ -106,7 +106,7 @@ export default defineNuxtConfig({
     url: "https://mood-ui.com",
     name: "mood-ui",
     description:
-      "Vue 3 component library — TypeScript, Tailwind CSS v4, dark mode, accessible.",
+      "Vue 3 component library, TypeScript, Tailwind CSS v4, dark mode, accessible.",
     defaultLocale: "en",
   },
 

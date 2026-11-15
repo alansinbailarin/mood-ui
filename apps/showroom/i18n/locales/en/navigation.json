@@ -6,10 +6,10 @@
         "category": "Navigation",
         "description": "Accessible breadcrumbs with per-item icons, swappable separators and optional collapsing when the trail exceeds the max.",
         "seo": {
-          "metaTitle": "Vue Breadcrumbs — Trail Navigation",
+          "metaTitle": "Vue Breadcrumbs: Trail Navigation",
           "metaDescription": "Free, open-source Vue Breadcrumbs for Vue 3 and Nuxt: accessible breadcrumbs with per-item icons, swappable separators and optional collapsing when long.",
           "h1": "Vue Breadcrumbs Component",
-          "intro": "mood-ui's Breadcrumbs is a free, open-source Vue 3 breadcrumbs component — accessible breadcrumb navigation with per-item icons, swappable separators and optional collapsing when the trail exceeds the max."
+          "intro": "mood-ui's Breadcrumbs is a free, open-source Vue 3 breadcrumbs component: accessible breadcrumb navigation with per-item icons, swappable separators and optional collapsing when the trail exceeds the max."
         },
         "items": {
           "home": "Home",
@@ -75,10 +75,10 @@
         "category": "Navigation",
         "description": "Floating action menu with headers, dividers, keyboard shortcuts, descriptions, destructive items and external links.",
         "seo": {
-          "metaTitle": "Vue Dropdown Menu — Action Menu",
+          "metaTitle": "Vue Dropdown Menu: Action Menu",
           "metaDescription": "Free, open-source Vue Dropdown Menu for Vue 3 and Nuxt: a floating action menu with headers, dividers, keyboard shortcuts, descriptions, destructive items and links.",
           "h1": "Vue Dropdown Menu Component",
-          "intro": "mood-ui's DropdownMenu is a free, open-source Vue 3 dropdown menu — a floating action menu with headers, dividers, keyboard shortcuts, descriptions, destructive items and external links."
+          "intro": "mood-ui's DropdownMenu is a free, open-source Vue 3 dropdown menu: a floating action menu with headers, dividers, keyboard shortcuts, descriptions, destructive items and external links."
         },
         "trigger": {
           "actions": "Actions",
@@ -163,10 +163,10 @@
         "category": "Navigation",
         "description": "Accessible paginator with first/last jumps, configurable siblings and all the design system's visual tokens.",
         "seo": {
-          "metaTitle": "Vue Pagination Component — Paginator",
+          "metaTitle": "Vue Pagination Component: Paginator",
           "metaDescription": "Free, open-source Vue Pagination for Vue 3 and Nuxt: an accessible paginator with first and last jumps, configurable siblings and the full design-system token set.",
           "h1": "Vue Pagination Component",
-          "intro": "mood-ui's Pagination is a free, open-source Vue 3 paginator — accessible pagination with first/last jumps, configurable siblings and all of the design system's visual tokens."
+          "intro": "mood-ui's Pagination is a free, open-source Vue 3 paginator: accessible pagination with first/last jumps, configurable siblings and all of the design system's visual tokens."
         },
         "examples": {
           "basic": {
@@ -229,10 +229,10 @@
         "category": "Navigation",
         "description": "Step-by-step progress indicator. Useful for wizards, onboarding and checkouts. Supports numbered, dots and progress variants, horizontal or vertical.",
         "seo": {
-          "metaTitle": "Vue Stepper Component — Wizard Steps",
+          "metaTitle": "Vue Stepper Component: Wizard Steps",
           "metaDescription": "Free, open-source Vue Stepper for Vue 3 and Nuxt: a step-by-step progress indicator for wizards, onboarding and checkouts with numbered, dots and progress variants.",
           "h1": "Vue Stepper Component",
-          "intro": "mood-ui's Stepper is a free, open-source Vue 3 stepper component — a step-by-step progress indicator for wizards, onboarding and checkouts, with numbered, dots and progress variants in horizontal or vertical layout."
+          "intro": "mood-ui's Stepper is a free, open-source Vue 3 stepper component: a step-by-step progress indicator for wizards, onboarding and checkouts, with numbered, dots and progress variants in horizontal or vertical layout."
         },
         "examples": {
           "basic": {
@@ -339,12 +339,12 @@
       "switcher": {
         "title": "Switcher",
         "category": "Navigation",
-        "description": "Context switcher — change between branches, profiles, workspaces, or any equivalent contexts the user owns. Domain-agnostic.",
+        "description": "Context switcher: change between branches, profiles, workspaces, or any equivalent contexts the user owns. Domain-agnostic.",
         "seo": {
-          "metaTitle": "Vue Switcher — Context Switcher",
+          "metaTitle": "Vue Switcher: Context Switcher",
           "metaDescription": "Free, open-source Vue Switcher for Vue 3 and Nuxt: a domain-agnostic context switcher to change between branches, profiles, workspaces or any contexts the user owns.",
           "h1": "Vue Switcher Component",
-          "intro": "mood-ui's Switcher is a free, open-source Vue 3 context switcher — change between branches, profiles, workspaces or any equivalent contexts the user owns, fully domain-agnostic."
+          "intro": "mood-ui's Switcher is a free, open-source Vue 3 context switcher: change between branches, profiles, workspaces or any equivalent contexts the user owns, fully domain-agnostic."
         },
         "examples": {
           "basicTitle": "Business branches",
@@ -379,10 +379,10 @@
         "category": "Navigation",
         "description": "Accessible tabs with three variants (line, pill, segmented), icons, badges and support for panels via `panel-{value}` slots.",
         "seo": {
-          "metaTitle": "Vue Tabs Component — Tab Panels",
+          "metaTitle": "Vue Tabs Component: Tab Panels",
           "metaDescription": "Free, open-source Vue Tabs for Vue 3 and Nuxt: accessible tabs with line, pill and segmented variants, icons, badges and panels via panel-{value} slots. Zero cost.",
           "h1": "Vue Tabs Component",
-          "intro": "mood-ui's Tabs is a free, open-source Vue 3 tabs component — accessible tabs with three variants (line, pill, segmented), icons, badges and support for panels via panel-{value} slots."
+          "intro": "mood-ui's Tabs is a free, open-source Vue 3 tabs component: accessible tabs with three variants (line, pill, segmented), icons, badges and support for panels via panel-{value} slots."
         },
         "examples": {
           "variants": {
@@ -470,7 +470,7 @@
         "category": "Navigation",
         "description": "Actions menu that morphs out of its trigger, with live keyboard shortcuts, arrow navigation, type-ahead, labels, separators and trigger surface adoption. Follows ModoProvider for color, size, radius and dark mode.",
         "seo": {
-          "metaTitle": "Vue Menu Component — Morphing Dropdown Menu & Live Shortcuts",
+          "metaTitle": "Vue Menu Component: Morphing Dropdown Menu & Live Shortcuts",
           "metaDescription": "Free, open-source Vue 3 Menu component: morphs from its trigger with live keyboard shortcuts, arrow navigation, type-ahead search, and destructive items.",
           "h1": "Vue Menu Component",
           "intro": "mood-ui's Menu is a morphing action menu for Vue 3 and Nuxt. It expands seamlessly from its trigger, binds live keyboard shortcuts declared on Menu.Item while open, and supports roving arrow navigation plus type-ahead filtering."
@@ -573,7 +573,7 @@
         "category": "Navigation",
         "description": "Right-click and touch long-press menu that blooms from the pointer position, sharing the items, labels and separators of Menu. Follows ModoProvider for color, size, radius and dark mode.",
         "seo": {
-          "metaTitle": "Vue ContextMenu Component — Right-Click & Touch Long-Press Menu",
+          "metaTitle": "Vue ContextMenu Component: Right-Click & Touch Long-Press Menu",
           "metaDescription": "Free, open-source Vue 3 ContextMenu component: blooms at pointer coordinates on desktop right-click or 500ms mobile touch long-press with full Menu keyboard semantics.",
           "h1": "Vue ContextMenu Component",
           "intro": "mood-ui's ContextMenu brings native-feeling contextual menus to Vue 3 and Nuxt. It opens at the exact cursor or finger coordinates via right-click on desktop or a 500ms long-press on touch devices, reusing Menu.Item, Menu.Label, and Menu.Separator."

@@ -351,7 +351,7 @@ onMounted(() => {
                     class="text-xs font-mono text-muted-foreground"
                     >{{ p.default }}</code
                   >
-                  <span v-else class="text-xs text-muted-foreground/40">—</span>
+                  <span v-else class="text-xs text-muted-foreground/40">-</span>
                 </td>
                 <td
                   class="px-4 py-3 text-xs text-foreground/80 leading-relaxed"
@@ -406,7 +406,7 @@ onMounted(() => {
                 </td>
                 <td class="px-4 py-3">
                   <code class="text-xs font-mono text-muted-foreground">{{
-                    e.payload ?? "—"
+                    e.payload ?? "-"
                   }}</code>
                 </td>
                 <td
@@ -466,7 +466,7 @@ onMounted(() => {
                     class="text-xs font-mono text-muted-foreground"
                     >{{ s.bindings }}</code
                   >
-                  <span v-else class="text-xs text-muted-foreground/40">—</span>
+                  <span v-else class="text-xs text-muted-foreground/40">-</span>
                 </td>
                 <td
                   class="px-4 py-3 text-xs text-foreground/80 leading-relaxed"

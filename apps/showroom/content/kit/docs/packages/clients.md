@@ -732,6 +732,54 @@ What else follows the branch, and what does not:
 | The notice of a finished import | no | it is the importer's |
 | The `clients` quota | no | it counts the live clients of the whole workspace |
 
+## Search
+
+Clients brings the source `clients.clients` to the global search ([Search](search.md)), through `ClientsSearchProvider`
+(tagged `search.sources` by its own `ClientsSearchServiceProvider`, so Clients also depends on Search): the group
+"Clients" (icon `identification`, order 30), for whoever has `clients.view`. Without it the source is never asked, so
+nobody without `clients.view` sees a client's name, email or phone in the palette. It needs no feature of the plan.
+
+`Search\ClientsFinder` runs the list's own query (`Records\ClientSearch::query()` with
+`ClientQuery(search: ..., sort: 'name')`, no `branch`, asking for `search.per_source` rows), so it finds whom the list
+shows with no filter and nobody else:
+
+- words of the name (any case, accents or not), the email, or the phone once what was typed has three digits or more; a
+  `%`, `_` or `\` is a letter;
+- the branch of the top bar, as the list with no `branch` ([Following the branch](#following-the-branch)): that branch's
+  clients and those of no branch; only those of no branch while working at none; everyone with "All branches" or while
+  the workspace does not work by branch;
+- never a client in the trash, nor an erased one;
+- by name.
+
+Each hit is the client's name, their email under it (their phone, as stored, when they have no email; nothing when they
+have neither), and their page, `/dashboard/clients/{id}`. The search has its own limiter (`search`), not `clients-read`.
+
+With a search index on (`SCOUT_DRIVER=meilisearch`, off by default), `Search\ClientIndex` keeps each live client's id,
+workspace, name, email and phone in Meilisearch, and the finder runs the same query, with no words, over the ids the index
+proposes, in its order: the index suggests, Postgres decides. `search:reindex` sends them again. See
+[Search configuration](../configuration/search.md).
+
+## On the dashboard
+
+Clients brings the widget `clients.overview` to the home ([Dashboard](dashboard.md)), through `ClientsDashboardProvider` (tagged
+`dashboard.widgets`): the card "Clients", small, order 30, for whoever has `clients.view`. It needs no feature of the plan. Its data:
+
+| Key | What it is |
+| --- | ---------- |
+| `total` | the clients the list shows the person with no filter: the branch of the top bar and the clients of no branch (only those of no branch while working at none, everyone with "All branches"), never the trash nor the erased |
+| `recent` | of those, the ones added in the last 30 days, counted in UTC (never the workspace's "today", which would need its time zone) |
+| `recentDays` | the days `recent` looks back: 30 |
+
+Both counts use the list's own query (`ClientSearch`), so they follow the branch bar as the list does. The list reads the bar
+from the current request, so the widget answers only for the person signed in (`Search\Contracts\RequestingPerson`, as the
+global search's finder does): a call for someone else's id, or with nobody signed in, throws instead of answering the whole workspace.
+
+The frontend draws it in `frontend/layers/clients` (`ClientsOverviewWidget`, registered by the `clients-dashboard` plugin
+through `kit:dashboard:widgets`): `DashboardWidgetCard` linking to the clients, with two mood-ui `Stat`s, "Clients" and "New"
+with "In the last 30 days" under it (the days are `recentDays`; "In the last day" for one). The same plugin adds New client to
+the top bar's Create menu (`kit:topbar:actions`, order 30, to `/dashboard/clients/new`) for whoever has `clients.manage`,
+which the page itself requires too.
+
 ## Import
 
 A workspace brings its clients in from a CSV file: it uploads the file, maps its columns to the fields, previews what will

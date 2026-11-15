@@ -187,7 +187,7 @@ const apiList = computed<PropDoc[]>(() => [
       >
         <Typography variant="body" size="small">
           Selected:
-          <strong>{{ selectedDate?.toLocaleDateString() ?? "—" }}</strong>
+          <strong>{{ selectedDate?.toLocaleDateString() ?? "-" }}</strong>
         </Typography>
       </ComponentPreview>
 

@@ -221,7 +221,7 @@ const propsList = computed<PropDoc[]>(() => [
 const emitsList = computed<EmitDoc[]>(() => [
   {
     name: "dismiss",
-    payload: "—",
+    payload: "-",
     description: t("pages.feedback.banner.emits.dismiss"),
   },
 ]);

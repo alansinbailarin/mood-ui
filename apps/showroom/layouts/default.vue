@@ -88,7 +88,7 @@ router.beforeEach((_to, from) => {
           <!-- Main content. Page-level fade is handled by Nuxt's global
                `app.pageTransition` (configured in nuxt.config). Wrapping
                the `<slot />` in a local `<Transition>` keyed on route.path
-               caused a visual "double-paint" — the new page would render
+               caused a visual "double-paint", the new page would render
                into the slot first, then fade out + fade back in. -->
           <main class="flex-1 min-w-0 py-8">
             <slot />

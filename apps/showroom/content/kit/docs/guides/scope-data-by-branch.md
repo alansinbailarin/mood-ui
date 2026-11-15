@@ -19,6 +19,8 @@ Not everything does. Write down, in your module's plan, what follows the branch 
 
 The kernel's own choices are listed in `AGENTS.md` ("Branch scope"): the team list, the branches, the inbox and the
 notifications follow it; settings, roles, the plan and billing, the profile and the onboarding do not.
+The global search follows it source by source, as each list does ([Add a search source](add-a-search-source.md#3-following-the-branch)), and so do the dashboard's widgets, each as its list
+([Add a dashboard widget](add-a-dashboard-widget.md#3-following-the-branch)); the plan's widget never does.
 
 ## 2. The table
 

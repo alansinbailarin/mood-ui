@@ -63,12 +63,12 @@ const toast = useToast();
 
 const pgTone = ref<Tone>("primary");
 const pgSize = ref<Size>("small");
-const lastResult = ref<string>("—");
+const lastResult = ref<string>("-");
 
 function resetPlayground() {
   pgTone.value = "primary";
   pgSize.value = "small";
-  lastResult.value = "—";
+  lastResult.value = "-";
 }
 
 async function runPlayground() {

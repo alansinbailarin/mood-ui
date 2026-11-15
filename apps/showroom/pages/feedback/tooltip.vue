@@ -267,12 +267,12 @@ const emitsList = computed<EmitDoc[]>(() => [
   },
   {
     name: "show",
-    payload: "—",
+    payload: "-",
     description: t("pages.feedback.tooltip.emits.show"),
   },
   {
     name: "hide",
-    payload: "—",
+    payload: "-",
     description: t("pages.feedback.tooltip.emits.hide"),
   },
 ]);

@@ -115,7 +115,7 @@ import { paletteFromHex, darkSurfaces, type ModoRadius } from 'mood-ui'
 interface AppTheme {
   primaryHex: string
   radius: ModoRadius
-  baseIntensity: number  // 0–100
+  baseIntensity: number  // 0-100
 }
 
 const STORAGE_KEY = 'app:theme'

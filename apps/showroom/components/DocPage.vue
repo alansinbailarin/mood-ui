@@ -88,7 +88,7 @@ const active = ref<string>('examples');
                                             <Badge v-if="p.required" color="danger" variant="subtle" size="small" class="ml-1">required</Badge>
                                         </td>
                                         <td class="px-4 py-3 font-mono text-primary text-xs">{{ p.type }}</td>
-                                        <td class="px-4 py-3 font-mono text-muted-foreground text-xs">{{ p.default ?? '—' }}</td>
+                                        <td class="px-4 py-3 font-mono text-muted-foreground text-xs">{{ p.default ?? '-' }}</td>
                                         <td class="px-4 py-3 text-muted-foreground">{{ p.description }}</td>
                                     </tr>
                                 </tbody>
@@ -132,7 +132,7 @@ const active = ref<string>('examples');
                                 <tbody>
                                     <tr v-for="s in props.slotsList" :key="s.name" class="border-t border-border align-top">
                                         <td class="px-4 py-3 font-mono text-foreground">{{ s.name }}</td>
-                                        <td class="px-4 py-3 font-mono text-primary text-xs">{{ s.bindings ?? '—' }}</td>
+                                        <td class="px-4 py-3 font-mono text-primary text-xs">{{ s.bindings ?? '-' }}</td>
                                         <td class="px-4 py-3 text-muted-foreground">{{ s.description }}</td>
                                     </tr>
                                 </tbody>

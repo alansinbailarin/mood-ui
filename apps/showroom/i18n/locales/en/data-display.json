@@ -838,7 +838,7 @@
           },
           "chart": {
             "title": "With a chart",
-            "desc": "Drop any Chart into the #chart slot — a sparkline for a KPI card, or a full chart with no label/value for a chart-only tile."
+            "desc": "Drop any Chart into the #chart slot, a sparkline for a KPI card, or a full chart with no label/value for a chart-only tile."
           }
         },
         "types": {
@@ -938,7 +938,7 @@
           "updateState": "Emitted with a full snapshot of all table state."
         },
         "slots": {
-          "default": "Fallback slot — currently unused, reserved for future extensions.",
+          "default": "Fallback slot: currently unused, reserved for future extensions.",
           "caption": "Accessible table caption rendered as a caption element.",
           "empty": "Custom content shown when data is empty. Exposes { message }.",
           "noResults": "Custom content shown when filters yield no results. Exposes \\{ message, clear \\}.",
@@ -1047,7 +1047,7 @@
           },
           "rightSide": {
             "title": "Right side",
-            "desc": "Rail inverted with side='right' — useful for asymmetric layouts."
+            "desc": "Rail inverted with side='right', useful for asymmetric layouts."
           }
         },
         "types": {
@@ -1197,7 +1197,7 @@
       },
       "chart": {
         "title": "Chart",
-        "description": "One component for every chart: sparkline, line, area, bar, scatter, donut, pie, gauge, radial, radar and heatmap. Pure SVG — responsive, themeable with a colorblind-safe palette, and interactive with a built-in hover crosshair + tooltip.",
+        "description": "One component for every chart: sparkline, line, area, bar, scatter, donut, pie, gauge, radial, radar and heatmap. Pure SVG, responsive, themeable with a colorblind-safe palette, and interactive with a built-in hover crosshair + tooltip.",
         "controls": {
           "type": "Type",
           "stacked": "Stacked",
@@ -1224,7 +1224,7 @@
           },
           "radar": {
             "title": "Radar",
-            "desc": "Compare several series across shared axes — great for skill and spec profiles."
+            "desc": "Compare several series across shared axes, great for skill and spec profiles."
           },
           "heatmap": {
             "title": "Heatmap",
@@ -1246,10 +1246,10 @@
         "title": "Accordion",
         "description": "Expandable panels for displaying hierarchical content compactly. Ideal for FAQs, settings and filters.",
         "seo": {
-          "metaTitle": "Vue Accordion — Collapse Panels",
+          "metaTitle": "Vue Accordion: Collapse Panels",
           "metaDescription": "Free, open-source Vue Accordion for Vue 3 and Nuxt: expandable panels for displaying hierarchical content compactly, ideal for FAQs, settings and filters.",
           "h1": "Vue Accordion Component",
-          "intro": "mood-ui's Accordion is a free, open-source Vue 3 accordion component — expandable collapse panels for displaying hierarchical content compactly, ideal for FAQs, settings and filters."
+          "intro": "mood-ui's Accordion is a free, open-source Vue 3 accordion component: expandable collapse panels for displaying hierarchical content compactly, ideal for FAQs, settings and filters."
         },
         "controls": {
           "variant": "Variant",
@@ -1301,10 +1301,10 @@
         "title": "AgendaView",
         "description": "Chronological list of events per day. Ideal for \"upcoming events\" sections, dashboards and compact agendas.",
         "seo": {
-          "metaTitle": "Vue Agenda View — Event List Calendar",
+          "metaTitle": "Vue Agenda View: Event List Calendar",
           "metaDescription": "Free, open-source Vue agenda view component: chronological list of events per day for upcoming-events sections, dashboards and compact agendas in Vue 3 and Nuxt.",
           "h1": "Vue Agenda View Component",
-          "intro": "mood-ui's AgendaView is a free, open-source agenda list calendar for Vue 3 and Nuxt — a chronological list of events per day, ideal for upcoming-events sections, dashboards and compact agendas."
+          "intro": "mood-ui's AgendaView is a free, open-source agenda list calendar for Vue 3 and Nuxt: a chronological list of events per day, ideal for upcoming-events sections, dashboards and compact agendas."
         },
         "controls": {
           "days": "Days",
@@ -1360,10 +1360,10 @@
         "title": "Avatar",
         "description": "User avatar with image, initials fallback, status indicator and multiple sizes and shapes.",
         "seo": {
-          "metaTitle": "Vue Avatar Component — User Avatar",
+          "metaTitle": "Vue Avatar Component: User Avatar",
           "metaDescription": "Free, open-source Vue Avatar for Vue 3 and Nuxt: a user avatar with image, initials fallback, a status indicator and multiple sizes and shapes. Zero license cost.",
           "h1": "Vue Avatar Component",
-          "intro": "mood-ui's Avatar is a free, open-source Vue 3 avatar component — a user avatar with image, initials fallback, status indicator and multiple sizes and shapes."
+          "intro": "mood-ui's Avatar is a free, open-source Vue 3 avatar component: a user avatar with image, initials fallback, status indicator and multiple sizes and shapes."
         },
         "controls": {
           "mode": "Mode",
@@ -1412,10 +1412,10 @@
         "title": "AvatarGroup",
         "description": "Stacks overlapping avatars showing up to N visible and a counter for the rest. Ideal for collaborator, assignee or member lists.",
         "seo": {
-          "metaTitle": "Vue Avatar Group — Stacked Avatars",
+          "metaTitle": "Vue Avatar Group: Stacked Avatars",
           "metaDescription": "Free, open-source Vue Avatar Group for Vue 3 and Nuxt: stacks overlapping avatars showing up to N visible plus a counter, ideal for collaborator and member lists.",
           "h1": "Vue Avatar Group Component",
-          "intro": "mood-ui's AvatarGroup is a free, open-source Vue 3 avatar group — it stacks overlapping avatars showing up to N visible and a counter for the rest, ideal for collaborator, assignee or member lists."
+          "intro": "mood-ui's AvatarGroup is a free, open-source Vue 3 avatar group: it stacks overlapping avatars showing up to N visible and a counter for the rest, ideal for collaborator, assignee or member lists."
         },
         "controls": {
           "size": "Size",
@@ -1456,10 +1456,10 @@
         "title": "Calendar",
         "description": "Monthly calendar for selecting a date. Supports minDate, maxDate, disabled dates, locale and visual variants.",
         "seo": {
-          "metaTitle": "Vue Calendar Component — Date Selection",
+          "metaTitle": "Vue Calendar Component: Date Selection",
           "metaDescription": "Free, open-source Vue Calendar component: month grid date selection, minDate/maxDate, disabled dates, locale and visual variants. A FullCalendar alternative for Vue 3.",
           "h1": "Vue Calendar Component",
-          "intro": "mood-ui's Calendar is a free, open-source calendar component for Vue 3 and Nuxt — monthly date selection with minDate/maxDate, disabled dates, locale support and visual variants. A zero-cost alternative to FullCalendar."
+          "intro": "mood-ui's Calendar is a free, open-source calendar component for Vue 3 and Nuxt: monthly date selection with minDate/maxDate, disabled dates, locale support and visual variants. A zero-cost alternative to FullCalendar."
         },
         "controls": {
           "variant": "Variant",
@@ -1511,10 +1511,10 @@
         "title": "Card",
         "description": "Structural container with three variants (elevated, outlined, filled), padding control, border radius and hover state. Base block for metrics, lists, forms and sections.",
         "seo": {
-          "metaTitle": "Vue Card Component — Content Card",
+          "metaTitle": "Vue Card Component: Content Card",
           "metaDescription": "Free, open-source Vue Card for Vue 3 and Nuxt: a structural container with elevated, outlined and filled variants, padding control, border radius and hover state.",
           "h1": "Vue Card Component",
-          "intro": "mood-ui's Card is a free, open-source Vue 3 card component — a structural container with three variants (elevated, outlined, filled), padding control, border radius and hover state, the base block for metrics, lists, forms and sections."
+          "intro": "mood-ui's Card is a free, open-source Vue 3 card component: a structural container with three variants (elevated, outlined, filled), padding control, border radius and hover state, the base block for metrics, lists, forms and sections."
         },
         "controls": {
           "variant": "Variant",
@@ -1569,10 +1569,10 @@
         "title": "Code",
         "description": "Inline code snippets for highlighting values, props or errors in docs and messages.",
         "seo": {
-          "metaTitle": "Vue Code — Inline Code Snippet",
+          "metaTitle": "Vue Code: Inline Code Snippet",
           "metaDescription": "Free, open-source Vue Code for Vue 3 and Nuxt: inline code snippets for highlighting values, props or errors in docs and messages. Zero license cost.",
           "h1": "Vue Code Component",
-          "intro": "mood-ui's Code is a free, open-source Vue 3 inline code component — for highlighting values, props or errors inline in docs and messages."
+          "intro": "mood-ui's Code is a free, open-source Vue 3 inline code component: for highlighting values, props or errors inline in docs and messages."
         },
         "controls": {
           "variant": "Variant",
@@ -1715,10 +1715,10 @@
         "title": "DayView",
         "description": "Single-day view with an hourly grid. Ideal for detailed agendas, time blocks and operational planning.",
         "seo": {
-          "metaTitle": "Vue Day View — Daily Calendar Schedule",
+          "metaTitle": "Vue Day View: Daily Calendar Schedule",
           "metaDescription": "Free, open-source Vue day view component: single-day hourly grid for detailed agendas, time blocks and operational planning in Vue 3 and Nuxt.",
           "h1": "Vue Day View Component",
-          "intro": "mood-ui's DayView is a free, open-source single-day calendar for Vue 3 and Nuxt — an hourly grid built for detailed agendas, time blocks and operational planning."
+          "intro": "mood-ui's DayView is a free, open-source single-day calendar for Vue 3 and Nuxt: an hourly grid built for detailed agendas, time blocks and operational planning."
         },
         "controls": {
           "format": "Format",
@@ -1780,10 +1780,10 @@
         "title": "Kbd",
         "description": "Visual representation of keyboard keys or shortcuts. Useful in docs, tooltips and command palettes.",
         "seo": {
-          "metaTitle": "Vue Kbd — Keyboard Key Component",
+          "metaTitle": "Vue Kbd: Keyboard Key Component",
           "metaDescription": "Free, open-source Vue Kbd for Vue 3 and Nuxt: a visual representation of keyboard keys or shortcuts, useful in docs, tooltips and command palettes. Zero cost.",
           "h1": "Vue Kbd Component",
-          "intro": "mood-ui's Kbd is a free, open-source Vue 3 keyboard key component — a visual representation of keys or shortcuts, useful in docs, tooltips and command palettes."
+          "intro": "mood-ui's Kbd is a free, open-source Vue 3 keyboard key component: a visual representation of keys or shortcuts, useful in docs, tooltips and command palettes."
         },
         "controls": {
           "variant": "Variant",
@@ -1826,10 +1826,10 @@
         "title": "MonthView",
         "description": "Grid-style monthly view for displaying events per day. Supports week numbers, any first day of week and event drag-and-drop.",
         "seo": {
-          "metaTitle": "Vue Month View — Event Calendar Grid",
+          "metaTitle": "Vue Month View: Event Calendar Grid",
           "metaDescription": "Free, open-source Vue month view component: grid-style monthly event calendar with week numbers, configurable first day of week and event drag-and-drop for Vue 3 and Nuxt.",
           "h1": "Vue Month View Component",
-          "intro": "mood-ui's MonthView is a free, open-source month view for Vue 3 and Nuxt — a grid-style monthly calendar showing events per day with week numbers, any first day of week and event drag-and-drop."
+          "intro": "mood-ui's MonthView is a free, open-source month view for Vue 3 and Nuxt: a grid-style monthly calendar showing events per day with week numbers, any first day of week and event drag-and-drop."
         },
         "controls": {
           "weekStart": "Start",
@@ -1890,10 +1890,10 @@
         "title": "Scheduler",
         "description": "Agenda-style view with resources as columns (rooms, people, teams). Each resource shows its events on a shared hourly grid.",
         "seo": {
-          "metaTitle": "Vue Scheduler Component — Resource Scheduling",
+          "metaTitle": "Vue Scheduler Component: Resource Scheduling",
           "metaDescription": "Free, open-source Vue 3 scheduler: resource columns, drag-and-drop events, business hours, 12/24h. A FullCalendar alternative with zero license cost.",
           "h1": "Vue Scheduler Component",
-          "intro": "mood-ui's Scheduler is a free, open-source resource scheduler for Vue 3 and Nuxt — events laid out across resource columns on a shared hourly grid, cross-resource drag-and-drop and business hours. A zero-cost alternative to FullCalendar."
+          "intro": "mood-ui's Scheduler is a free, open-source resource scheduler for Vue 3 and Nuxt: events laid out across resource columns on a shared hourly grid, cross-resource drag-and-drop and business hours. A zero-cost alternative to FullCalendar."
         },
         "controls": {
           "format": "Format",
@@ -1957,10 +1957,10 @@
         "title": "Stat",
         "description": "Compact KPI card for displaying metrics with trend, icon and semantic color. Ideal for dashboards and summaries.",
         "seo": {
-          "metaTitle": "Vue Stat — KPI Metric Card",
+          "metaTitle": "Vue Stat: KPI Metric Card",
           "metaDescription": "Free, open-source Vue Stat for Vue 3 and Nuxt: a compact KPI card for metrics with trend, icon and semantic color, ideal for dashboards and summaries. Zero cost.",
           "h1": "Vue Stat Component",
-          "intro": "mood-ui's Stat is a free, open-source Vue 3 KPI card — a compact metric card with trend, icon and semantic color, ideal for dashboards and summaries."
+          "intro": "mood-ui's Stat is a free, open-source Vue 3 KPI card: a compact metric card with trend, icon and semantic color, ideal for dashboards and summaries."
         },
         "controls": {
           "variant": "Variant",
@@ -2003,7 +2003,7 @@
           },
           "chart": {
             "title": "With a chart",
-            "desc": "Drop any Chart into the #chart slot — a sparkline for a KPI card, or a full chart with no label/value for a chart-only tile."
+            "desc": "Drop any Chart into the #chart slot, a sparkline for a KPI card, or a full chart with no label/value for a chart-only tile."
           }
         }
       },
@@ -2011,10 +2011,10 @@
         "title": "Table",
         "description": "Powerful table with sorting, pagination, selection, sticky header, expandable rows, virtualization, toolbar actions and tree support. Rows provide the data; columns describe how each field is rendered.",
         "seo": {
-          "metaTitle": "Vue Data Table Component — Sort & Paginate",
+          "metaTitle": "Vue Data Table Component: Sort & Paginate",
           "metaDescription": "Free, open-source Vue Data Table: sorting, pagination, row selection, sticky header, virtualization and tree rows. A zero-cost AG Grid alternative for Vue 3.",
           "h1": "Vue Data Table Component",
-          "intro": "mood-ui's Table is a free, open-source data table for Vue 3 and Nuxt — sorting, pagination, row selection, sticky header, virtualization, toolbar actions and tree support. A zero-cost alternative to AG Grid."
+          "intro": "mood-ui's Table is a free, open-source data table for Vue 3 and Nuxt: sorting, pagination, row selection, sticky header, virtualization, toolbar actions and tree support. A zero-cost alternative to AG Grid."
         },
         "controls": {
           "size": "Size",
@@ -2143,10 +2143,10 @@
         "title": "Timeline",
         "description": "Vertical list of chronological events with dot, icon or outline markers. Each item supports title, description, timestamp and a per-item color.",
         "seo": {
-          "metaTitle": "Vue Timeline Component — Activity Feed",
+          "metaTitle": "Vue Timeline Component: Activity Feed",
           "metaDescription": "Free, open-source Vue Timeline for Vue 3 and Nuxt: a vertical list of chronological events with dot, icon or outline markers, title, description and time.",
           "h1": "Vue Timeline Component",
-          "intro": "mood-ui's Timeline is a free, open-source Vue 3 timeline component — a vertical list of chronological events with dot, icon or outline markers, each item supporting a title, description, timestamp and per-item color."
+          "intro": "mood-ui's Timeline is a free, open-source Vue 3 timeline component: a vertical list of chronological events with dot, icon or outline markers, each item supporting a title, description, timestamp and per-item color."
         },
         "controls": {
           "variant": "Variant",
@@ -2191,10 +2191,10 @@
         "title": "Typography",
         "description": "Typographic system with semantic variants (display, heading, title, body, caption…), sizes and weights. The as prop lets you map to the appropriate HTML tag to maintain accessible hierarchy.",
         "seo": {
-          "metaTitle": "Vue Typography — Text Styles System",
+          "metaTitle": "Vue Typography: Text Styles System",
           "metaDescription": "Free, open-source Vue Typography for Vue 3 and Nuxt: a typographic system with semantic variants, sizes and weights, plus an as prop to map to the right HTML tag.",
           "h1": "Vue Typography Component",
-          "intro": "mood-ui's Typography is a free, open-source Vue 3 typography component — a typographic system with semantic variants (display, heading, title, body, caption), sizes and weights, plus an as prop to map to the right HTML tag for accessible hierarchy."
+          "intro": "mood-ui's Typography is a free, open-source Vue 3 typography component: a typographic system with semantic variants (display, heading, title, body, caption), sizes and weights, plus an as prop to map to the right HTML tag for accessible hierarchy."
         },
         "controls": {
           "variant": "Variant",
@@ -2249,10 +2249,10 @@
         "title": "WeekView",
         "description": "Weekly view with an hourly grid. Supports business hours, disabled ranges, drag & drop and event resizing.",
         "seo": {
-          "metaTitle": "Vue Week View — Weekly Calendar Grid",
+          "metaTitle": "Vue Week View: Weekly Calendar Grid",
           "metaDescription": "Free, open-source Vue week view component: weekly calendar with hourly grid, business hours, disabled ranges, drag & drop and event resizing for Vue 3 and Nuxt.",
           "h1": "Vue Week View Component",
-          "intro": "mood-ui's WeekView is a free, open-source weekly calendar for Vue 3 and Nuxt — an hourly grid with business hours, disabled ranges, drag-and-drop and event resizing."
+          "intro": "mood-ui's WeekView is a free, open-source weekly calendar for Vue 3 and Nuxt: an hourly grid with business hours, disabled ranges, drag-and-drop and event resizing."
         },
         "controls": {
           "format": "Format",
@@ -2315,7 +2315,7 @@
       },
       "chart": {
         "title": "Chart",
-        "description": "One component for every chart: sparkline, line, area, bar, scatter, donut, pie, gauge, radial, radar and heatmap. Pure SVG — responsive, themeable with a colorblind-safe palette, and interactive with a built-in hover crosshair + tooltip.",
+        "description": "One component for every chart: sparkline, line, area, bar, scatter, donut, pie, gauge, radial, radar and heatmap. Pure SVG, responsive, themeable with a colorblind-safe palette, and interactive with a built-in hover crosshair + tooltip.",
         "controls": {
           "type": "Type",
           "stacked": "Stacked",
@@ -2342,7 +2342,7 @@
           },
           "radar": {
             "title": "Radar",
-            "desc": "Compare several series across shared axes — great for skill and spec profiles."
+            "desc": "Compare several series across shared axes, great for skill and spec profiles."
           },
           "heatmap": {
             "title": "Heatmap",
@@ -2358,17 +2358,17 @@
           "desc": "The full set of chart types and the polymorphic data each one accepts."
         },
         "seo": {
-          "metaTitle": "Vue Chart Component — SVG Charts for Vue 3",
-          "metaDescription": "Free, open-source Vue chart component: line, area, bar, donut, pie, gauge, radar, heatmap and sparkline — pure SVG, zero dependencies. A lightweight Recharts alternative for Vue 3 and Nuxt.",
+          "metaTitle": "Vue Chart Component: SVG Charts for Vue 3",
+          "metaDescription": "Free, open-source Vue chart component: line, area, bar, donut, pie, gauge, radar, heatmap and sparkline: pure SVG, zero dependencies. A lightweight Recharts alternative for Vue 3 and Nuxt.",
           "h1": "Vue Chart Component",
-          "intro": "mood-ui's Chart is a free, open-source charting component for Vue 3 and Nuxt — line, area, bar, scatter, donut, pie, gauge, radial, radar, heatmap and sparkline, all rendered as pure SVG with zero chart dependencies. A lightweight alternative to Recharts and Chart.js."
+          "intro": "mood-ui's Chart is a free, open-source charting component for Vue 3 and Nuxt: line, area, bar, scatter, donut, pie, gauge, radial, radar, heatmap and sparkline, all rendered as pure SVG with zero chart dependencies. A lightweight alternative to Recharts and Chart.js."
         }
       },
       "surfaceCard": {
         "title": "SurfaceCard",
         "description": "Composable card with a concentric double-frame bezel, three surface variants (outline, elevated, soft), compound parts (Media, Header, Title, Subtitle, Body, Footer, Separator) and tactile press feedback. Follows ModoProvider for size, radius and dark mode.",
         "seo": {
-          "metaTitle": "Vue SurfaceCard Component — Composable Framed Card",
+          "metaTitle": "Vue SurfaceCard Component: Composable Framed Card",
           "metaDescription": "Free, open-source composable Vue 3 card with a concentric double-frame bezel, dual light/dark elevation ladder, full-bleed media, stretched-link support, and WAAPI press feedback.",
           "h1": "Vue SurfaceCard Component",
           "intro": "mood-ui's SurfaceCard is a composable Vue 3 and Nuxt card component featuring a default concentric double-frame bezel, three dual-mode surface variants (outline, elevated, soft), seven subcomponents, and tactile WAAPI spring motion."

@@ -178,7 +178,8 @@ session, and its tenant, to another request.
 and the worker sets the tenant context and the RLS setting from it before the job is unserialized, so
 `SerializesModels` works on tenant tables. Afterwards it puts back whatever was set before. A job without a
 workspace runs with none. A job whose workspace is suspended or deleted fails without running, after the
-usual `--tries`.
+usual `--tries`; a job that implements `MoodKit\Tenancy\Contracts\RunsForSuspendedTenant` runs for a suspended workspace (not
+for a deleted one).
 
 A job dispatched where there is no current workspace (a command, the scheduler) or for another workspace
 implements `MoodKit\Tenancy\Contracts\TenantScopedJob` and returns the workspace's id from `tenantId()`. So

@@ -57,6 +57,7 @@ Every service binds to `127.0.0.1`. If a port is taken, change it in `.env` and 
 | `MAILPIT_UI_PORT` | `8025` | Mailpit inbox |
 | `MINIO_PORT` | `9000` | MinIO's S3 API. `ASSETS_ENDPOINT` and `ASSETS_URL` follow it. |
 | `MINIO_CONSOLE_PORT` | `9001` | MinIO's console |
+| `MEILISEARCH_PORT` | `7700` | Meilisearch, only with `docker compose --profile meilisearch` ([Search](search.md)). `MEILISEARCH_HOST` follows it. |
 
 ## Two clones on one machine
 
@@ -108,6 +109,10 @@ into, so two clones never share data. Two clones in folders with the same name n
 | `GEOCODING_NOMINATIM_URL`, `GEOCODING_NOMINATIM_EMAIL`, `GEOCODING_NOMINATIM_REQUESTS_PER_SECOND` | the public server, none, `1` | backend: the Nominatim server, an email its operators may write to, and requests per second for the whole app | [Geocoding](../packages/geocoding.md#configuration) |
 | `GEOCODING_GOOGLE_KEY`, `GEOCODING_MAPBOX_TOKEN` | empty | backend: the server-side key of Google's Geocoding API and Mapbox's secret token, for those drivers | [Geocoding](../packages/geocoding.md#configuration) |
 | `GEOCODING_CACHE_DAYS` | `30` | backend: days a found place is kept; `0` keeps nothing | [Geocoding](../packages/geocoding.md#configuration) |
+| `SCOUT_DRIVER` | `database` | backend: `database` searches the clients in Postgres alone; `meilisearch` also keeps them in Meilisearch, which proposes the ids Postgres filters | [Search](search.md) |
+| `SCOUT_QUEUE` | `true` | backend: with an index, a change reaches it from a queued job after its commit; `search:reindex` sends right away whatever it says | [Search](search.md#in-production) |
+| `SCOUT_PREFIX` | empty | backend: put in front of the index's name (`clients`), so one Meilisearch serves several installs | [Search](search.md#in-production) |
+| `MEILISEARCH_HOST`, `MEILISEARCH_KEY` | `http://localhost:7700`, none (`.env.example`: the dev master key of Docker Compose) | backend: where Meilisearch is and its key; in production a key limited to the clients' index, never the master key | [Search](search.md#in-production) |
 | `STRIPE_SECRET` | empty: billing is off | backend: the secret key of your Stripe account (a sandbox's `sk_test_...` to try it) | [Billing](../packages/billing.md#configuration) |
 | `STRIPE_BILLING_WEBHOOK_SECRET` | empty | backend: the signing secret of the billing webhook endpoint (`whsec_...`; `stripe listen` prints its own) | [Billing](../packages/billing.md#configuration) |
 | `STRIPE_LOOKUP_PREFIX` | `mood_kit` | backend: what the ids of the products and prices `billing:sync-plans` writes begin with | [Billing](../packages/billing.md#configuration) |

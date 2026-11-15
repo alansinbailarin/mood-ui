@@ -2,7 +2,7 @@
 
 A workspace's people: inviting them by email, the members list and what can be done to a member (change their role,
 deactivate, reactivate, remove), and the weekly hours and skills of each, which a module may read. Team depends on Auth,
-Rbac, Plans, Notifications, Onboarding, Settings, Signup, Audit, Support and Tenancy through their contracts, and none of them
+Rbac, Plans, Notifications, Onboarding, Settings, Signup, Search, Audit, Support and Tenancy through their contracts, and none of them
 depends on it: remove the package and the `members` quota counts active members alone again.
 
 ## Permissions and the menu
@@ -470,6 +470,38 @@ member's hours change it, through `MoodKit\Team\Contracts\MemberAccess`, asked a
 
 Use it on a route that changes something of a member; [Attach data to members](../guides/attach-data-to-members.md#5-the-routes)
 shows it.
+
+## Search
+
+Team brings the source `team.members` to the global search ([Search](search.md)), through `TeamSearchProvider` (tagged
+`search.sources`): the group "Team" (icon `users`, order 10), for whoever has `team.view`. Without it the source is never
+asked, so nobody without `team.view` sees a member's name or email in the palette. It needs no feature of the plan.
+
+`Search\MembersFinder` runs the list's own query (`ListTeamMembers` with `MemberQuery(search: ...)`, asking for
+`search.per_source` rows), so it finds whom the list shows and nobody else:
+
+- words of the name or the email, any case; a `%`, `_` or `\` is a letter;
+- the active members alone for someone without `team.manage`;
+- the branch the person works at, as the list: that branch's people; nobody while working at no branch (`none`); everyone
+  with "All branches" or while the workspace does not work by branch;
+- the oldest first.
+
+Each hit is the member's name (their email when they have none), their email under it, and their page,
+`/dashboard/team/{id}`.
+
+## On the dashboard
+
+Team brings the widget `team.members` to the home ([Dashboard](dashboard.md)), through `TeamDashboardProvider` (tagged
+`dashboard.widgets`): the card "Team", small, order 10, for whoever has `team.view`. It needs no feature of the plan. Its data:
+
+| Key | What it is |
+| --- | ---------- |
+| `active` | the active members the person sees: the list's own rule (`ListTeamMembers::filters`), so the branch they work at narrows it (nobody while working at no branch, everyone with "All branches" or while the workspace does not work by branch); inactive members never count, whoever asks |
+| `pending` | the workspace's open invitations (not accepted, not revoked, not expired) for whoever has `team.invite`; `null` for anyone else. The invitations' list is the whole workspace's, so it does not follow the branch |
+
+The list reads the branch bar from the current request, so the widget answers only for the person signed in
+(`Search\Contracts\RequestingPerson`, as the global search's finder does): a call for someone else's id, or with nobody signed
+in, throws instead of answering the whole workspace.
 
 ## Notifications
 

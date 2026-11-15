@@ -116,7 +116,7 @@ const apiList = computed<PropDoc[]>(() => [
             class="px-3 py-2 rounded text-sm"
             :class="previewClass(c)"
           >
-            {{ c }} — {{ t("pages.utilities.eventColors.playground.event") }}
+            {{ c }}: {{ t("pages.utilities.eventColors.playground.event") }}
           </div>
         </div>
       </ComponentPreview>

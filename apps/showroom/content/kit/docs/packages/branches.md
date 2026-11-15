@@ -1,7 +1,7 @@
 # Branches
 
 A workspace's branches: where it works. Each has a name, an address and its point on the map, a timezone, contact details,
-its opening hours and the people who work there. Branches depends on Auth, Rbac, Plans, Settings, Onboarding, Signup (its `WorkspaceProvisioned`), Audit, Team,
+its opening hours and the people who work there. Branches depends on Auth, Rbac, Plans, Settings, Onboarding, Signup (its `WorkspaceProvisioned`), Search, Audit, Team,
 Support and Tenancy through their contracts, and none of them depends on it: remove the package and nothing else changes
 (the location picker, which lives in the frontend's `core` and asks [Geocoding](geocoding.md), keeps working). Only
 [Clients](clients.md) depends on it: a client's home branch is a branch, so Clients needs Branches installed.
@@ -385,6 +385,26 @@ its place:
 
 Both run inside the transaction that records the step: if the branch is refused, the step is not done.
 
+## Search
+
+Branches brings the source `branches.branches` to the global search ([Search](search.md)), through
+`BranchesSearchProvider` (tagged `search.sources`): the group "Branches" (icon `map-pin`, order 20), for whoever has
+`branches.view`. Without it the source is never asked, so nobody without `branches.view` sees a branch's name or city in
+the palette. It needs no feature of the plan.
+
+`Search\BranchesFinder` runs the list's own query (`ListBranches` with `BranchQuery(search: ...)`, asking for
+`search.per_source` rows), so it finds what the list shows and nothing else:
+
+- words of the name or the city, any case; a `%`, `_` or `\` is a letter;
+- active and inactive branches, as the list; a deleted branch is gone;
+- the branches the person may see ([Who sees which branch](#who-sees-which-branch)): every one with `branches.all` or while
+  the workspace does not work by branch, else the ones they work at. It is not narrowed to the branch chosen in the
+  sidebar's switcher: someone who works at two branches finds both whichever one they work at right now;
+- the oldest first.
+
+Each hit is the branch's name (its slug when the name is blank), its city under it (nothing while it has none), and its
+page, `/dashboard/branches/{id}`.
+
 ## For a module
 
 A module that works at branches (Booking's availability, a cash register per branch, a public page) reads them through
@@ -649,3 +669,24 @@ every screen of the dashboard (core's `kit:dashboard:banners`, order 20, `Branch
 `info` color): "You do not work at any branch yet", and that what belongs to a branch shows once someone who manages the
 branches adds them to one. It cannot be closed: it goes when they are on a branch. There is no switcher then (nothing to
 choose), and the lists that follow the branch show nothing of one.
+
+## On the dashboard
+
+Branches brings the widget `branches.overview` to the home ([Dashboard](dashboard.md)), through `BranchesDashboardProvider`
+(tagged `dashboard.widgets`): the card "Branches", small, order 20, for whoever has `branches.view`. It needs no feature of
+the plan. Its data:
+
+| Key | What it is |
+| --- | ---------- |
+| `active` | the branches the person sees that take work |
+| `inactive` | the branches the person sees that do not |
+
+Both count only the branches the person may see, by the list's own rule (`Places\VisibleBranches`, which `ListBranches` uses
+too): everyone with "All branches" sees the whole workspace's, anyone else the ones they work at. So someone who works at one
+branch learns nothing of the others, not even how many there are.
+
+The frontend draws it in `frontend/layers/branches` (`BranchesOverviewWidget`, registered by the `branches-dashboard` plugin
+through `kit:dashboard:widgets`): `DashboardWidgetCard` linking to the branches, with two mood-ui `Stat`s, "Active branches"
+and "Inactive branches" (singular for one). The same plugin adds New branch to the top bar's Create menu
+(`kit:topbar:actions`, order 20, to `/dashboard/branches/new`) for whoever has `branches.manage`, which the page itself
+requires too.

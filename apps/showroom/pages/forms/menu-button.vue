@@ -103,7 +103,7 @@ const richCode = `const items = [
 
 // ── API ───────────────────────────────────────────────────────────────────────
 const propsList = computed<PropDoc[]>(() => [
-  { name: "items", type: "DropdownMenuEntry[]", required: true, description: "Menu entries — the same model as DropdownMenu (items / dividers / headers)." },
+  { name: "items", type: "DropdownMenuEntry[]", required: true, description: "Menu entries, the same model as DropdownMenu (items / dividers / headers)." },
   { name: "label", type: "string", description: "Visible trigger label. Omit for an icon-only trigger." },
   { name: "icon", type: "Component", description: "Leading trigger icon." },
   { name: "chevron", type: "boolean", default: "true", description: "Show the trailing chevron." },
@@ -115,7 +115,7 @@ const propsList = computed<PropDoc[]>(() => [
   { name: "placement", type: "PopoverPlacement", default: "'bottom-start'", description: "Menu placement relative to the trigger." },
   { name: "minWidth", type: "string", default: "'12rem'", description: "Min width of the menu panel." },
   { name: "closeOnSelect", type: "boolean", default: "true", description: "Close the menu after a selection." },
-  { name: "ariaLabel", type: "string", description: "Accessible name — required when the trigger is icon-only." },
+  { name: "ariaLabel", type: "string", description: "Accessible name, required when the trigger is icon-only." },
 ]);
 
 const emitsList = computed<EmitDoc[]>(() => [

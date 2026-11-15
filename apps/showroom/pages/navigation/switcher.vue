@@ -139,7 +139,7 @@ const a11yKeyboard = computed<A11yKeyboardRow[]>(() => [
   { keys: ["Home", "End"], action: t("pages.navigation.switcher.a11y.kbHomeEnd") },
   { keys: ["Enter"], action: t("pages.navigation.switcher.a11y.kbEnter") },
   { keys: ["Escape"], action: t("pages.navigation.switcher.a11y.kbEsc") },
-  { keys: ["A–Z", "0–9"], action: t("pages.navigation.switcher.a11y.kbTypeAhead") },
+  { keys: ["A-Z", "0-9"], action: t("pages.navigation.switcher.a11y.kbTypeAhead") },
 ]);
 
 const a11yAria = computed<A11yAriaRow[]>(() => [
@@ -157,7 +157,7 @@ const a11yAria = computed<A11yAriaRow[]>(() => [
 
 // ── API reference ─────────────────────────────────────────────────────────────
 const propsList: PropDoc[] = [
-  { name: "modelValue", type: "string | number | null", default: "null", description: "v-model — value of the active item." },
+  { name: "modelValue", type: "string | number | null", default: "null", description: "v-model, value of the active item." },
   { name: "items", type: "SwitcherItem[]", required: true, description: "Items rendered in the panel." },
   { name: "placeholder", type: "string", default: "locale", description: "Trigger primary text when no item is active." },
   { name: "compactTrigger", type: "boolean", default: "false", description: "Hides the secondary line in the trigger." },
@@ -166,7 +166,7 @@ const propsList: PropDoc[] = [
   { name: "fullWidth", type: "boolean", default: "false", description: "Trigger spans the full width of its container." },
   { name: "panelTitle", type: "string", description: "Optional heading rendered above the list." },
   { name: "panelWidth", type: "'trigger' | 'auto'", default: "'trigger'", description: "Whether the panel matches the trigger width or sizes to content." },
-  { name: "panelMinWidth", type: "number | string", default: "'15rem'", description: "Minimum panel width — floors a narrow trigger." },
+  { name: "panelMinWidth", type: "number | string", default: "'15rem'", description: "Minimum panel width, floors a narrow trigger." },
   { name: "panelMaxHeight", type: "number | string", default: "320", description: "Max panel height; the list scrolls beyond it." },
   { name: "placement", type: "PopoverPlacement", default: "'bottom-start'", description: "Panel placement relative to the trigger." },
   { name: "searchable", type: "boolean", default: "false", description: "Renders a search input at the top of the panel." },
@@ -185,8 +185,8 @@ const propsList: PropDoc[] = [
 const emitsList: EmitDoc[] = [
   { name: "update:modelValue", payload: "value", description: "Fired when a new item is selected (v-model)." },
   { name: "change", payload: "value, item", description: "Like update:modelValue, but also passes the full item." },
-  { name: "open", payload: "—", description: "Fired when the panel opens." },
-  { name: "close", payload: "—", description: "Fired when the panel closes." },
+  { name: "open", payload: "-", description: "Fired when the panel opens." },
+  { name: "close", payload: "-", description: "Fired when the panel closes." },
   { name: "search", payload: "query", description: "Fired on every search input change (for remote search)." },
 ];
 

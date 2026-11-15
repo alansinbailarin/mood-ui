@@ -95,7 +95,8 @@ is wrong, change it in its own commit and say why.
   query parameter) with `MoodKit\Support\Reporting\SecretFields` (Audit redacts these in its entries too), a path that
   must carry one (`.../{secret}`) with `MoodKit\Support\Reporting\SecretPaths`. A field that is no credential but has no
   business in Sentry (what someone typed, where they are) goes in `Reporting\SentryOnlyFields`, which Audit does not read:
-  Geocoding registers `query`, `latitude` and `longitude` there. Signup does
+  Geocoding registers `query`, `latitude` and `longitude` there, Search `q`. The map's searches and the palette's search
+  take what was typed in a `POST` body, never a query string, so it never sits in a URL or an access log. Signup does
   `$this->app->make(SecretHeaders::class)->add(SignupTokenRequest::HEADER)` and
   `$this->app->make(SecretFields::class)->add('verification', 'password', 'claim', 'captchaToken', 'invite')`; Auth registers `password`,
   `passwordConfirmation`, `currentPassword`, `token`, `code` and `captchaToken`. A field is blanked at any depth, so a common name covers every
@@ -228,12 +229,14 @@ How a module follows the branch: [docs/guides/scope-data-by-branch.md](docs/guid
   `branchId` to `NotificationRequested` (and its event type is `branched` if it may go to the people of the branch); its
   domain events carry `branchId`. *(convention; tested by `AuditBranchTest`, `BranchNoticesTest`)*
 - What follows the branch in the kernel: the team list, the branches' list and page, a branch's history, the inbox's
-  "only this branch", the notifications (the `branch` audience; nobody gets one of a branch they may not see), and the
-  clients by their home branch (the list keeps the top bar's branch and the clients of none; a client opens when its home
+  "only this branch", the notifications (the `branch` audience; nobody gets one of a branch they may not see), the global
+  search (each source as its list), the home's widgets (each as its list; the plan's never), and the clients by their home
+  branch (the list keeps the top bar's branch and the clients of none; a client opens when its home
   branch is one the person sees, or it has none). What does not: settings, roles, the plan and billing, the profile, the
   onboarding, the platform's admin and the clients' tags. **From 3C on, every plan says what of its own follows the branch
   and what does not.** *(convention; tested by `MembersByBranchTest`, `BranchVisibilityTest`, `BranchHistoryTest`,
   `InboxBranchTest`, `BranchAudienceTest`, `ClientsByBranchTest`)*
+- `subscription.view` shows workspace-wide usage counts, so a branch-limited role that has it can work out totals for other branches. *(convention)*
 - The frontend never sends the branch: it reads it from core (`useCurrentBranch()`) and loads again with
   `useBranchReload()`. *(convention)*
 - A test that follows the branch without Branches' tables binds `MoodKit\Tenancy\Testing\FakeBranches`. *(convention)*
@@ -289,8 +292,8 @@ What the package does: [docs/packages/auth.md](docs/packages/auth.md). The rules
   data, birthday, address, notes or consent), the clients' tags (add, rename), a client's tags and tagging in bulk
   (`PUT /clients/{client}/tags`, `POST /clients/tags/apply`), ending a client's portal sessions
   (`POST /clients/{client}/portal/sign-out`) or every portal session of the workspace (`POST /clients/portal/sign-out`), which
-  protects them, and the map's two searches (`geocoding/search`,
-  `geocoding/reverse`), which change nothing.
+  protects them, the map's two searches (`geocoding/search`, `geocoding/reverse`) and the palette's search (`POST /search`),
+  which change nothing.
   A new write route of the `workspace` group goes in one list or the other. Never build a session from an impersonation
   token. *(tested by `ImpersonationGuardTest` and `ImpersonationRoutesTest`, which lists both and fails on a write route
   in neither)*
@@ -803,6 +806,65 @@ What the package does: [docs/packages/platform.md](docs/packages/platform.md) an
   *(convention)*
 - Run `php artisan platform:verify` and `php artisan platform:setup` in the deploy script. *(tested by `PlatformHostTest`)*
 
+### Search (`packages/Search`)
+
+What the package does: [docs/packages/search.md](docs/packages/search.md) and
+[docs/configuration/search.md](docs/configuration/search.md); how a module adds a source:
+[docs/guides/add-a-search-source.md](docs/guides/add-a-search-source.md). The rules:
+
+- A package adds what the global search finds with a `SearchSourceProvider` tagged `search.sources`, returning
+  `Search\Contracts\SearchSource`s: a key `<package>.<what>` declared once, a label in every language, a finder that
+  implements `FindsRecords`, and the permission it needs, always named (`permission: null` only on purpose, for a source any
+  member may ask), plus the plan's feature if any. `SearchRegistry` refuses a malformed one (`InvalidRegistry`: the key, the
+  finder, a permission or feature not shaped as Rbac's and Plans' names); that they are declared is a test's.
+  *(tested by `SearchRegistryTest`, `InstalledSourcesTest`, `SearchTranslationsTest`)*
+- A finder runs **its list's own query** (the list's visibility, the branch, the trash), never a second query of its own
+  that could show what the list hides, asks it for `max(1, $limit)` rows, and answers a list of `SearchHit`s whose route is
+  a page of the dashboard (`/dashboard/...`, no `\` nor `//`). It never writes the term anywhere and lets a failure reach
+  Search. *(convention; tested by `TeamSearchTest`, `BranchesSearchTest`, `ClientsSearchTest`; an answer that is not a list
+  of hits, or a stray route, fails the source in `RunSearch`)*
+- The route is `POST /search` with `q` in the JSON body, never in the address (a `?q=` is not read). It takes `workspace`,
+  `KeepOutOfCachesAndReferrers` ahead of `throttle:search` (a named limiter by workspace and member) and no permission; it
+  changes nothing, so an impersonation may search. *(tested by `SearchRoutesTest`, `SearchApiTest`,
+  `ImpersonationRoutesTest`)*
+- A source is asked only of someone with its permission and its plan's feature, checked before its finder is made and
+  outside the `try` (an Rbac or Plans failure fails the request). A source that fails is reported as `SourceFailed` (its key,
+  the exception's class, SQLSTATE, file and line through `FailureText`; never its message, nothing chained) and the rest
+  answer with `meta.incomplete`. What was searched is never kept, logged or audited: `q` is a Sentry-only field and the
+  term is a `#[SensitiveParameter]` of `RunSearch`. *(tested by `SearchApiTest`; failing closed is a convention)*
+- An index outside Postgres (Scout's driver other than `database`) only proposes ids of one workspace
+  (`where('tenant_id', ...)`), read through `Ids::canonicalAll()` with anything that is not a uuid dropped; the list's query
+  over them (RLS, the branch, the trash, the erased) decides what is seen, in the index's order. Its document holds what the
+  palette searches by and what ranks it among what the person may see, never more (Clients': `id`, `tenant_id`, `name`,
+  `email`, `phone`, `branch`), and nothing of a record in the trash or erased. With the `database` driver, Scout watches
+  nothing. *(tested by `ClientIndexTest`, `ClientIndexBranchDeletedTest`)*
+- A package that keeps an index implements `ReindexesSearch`, tagged `search.indexes`; its `reindex()` sends synchronously,
+  never through the queue. `search:reindex` asks each index one workspace at a time inside `RunAsTenant`, reports a failure
+  as `ReindexFailed` (no message, nothing chained) and never removes a document: to rebuild, flush the index first. Never
+  `scout:import` nor `scout:queue-import`: they run with no workspace. *(tested by `ReindexCommandTest`, `ClientIndexTest`)*
+
+### Dashboard (`packages/Dashboard`)
+
+What the package does: [docs/packages/dashboard.md](docs/packages/dashboard.md); how a module adds a widget:
+[docs/guides/add-a-dashboard-widget.md](docs/guides/add-a-dashboard-widget.md). The rules:
+
+- A package puts a card on the dashboard's home with a `DashboardWidgetProvider` tagged `dashboard.widgets`, returning
+  `Dashboard\Contracts\DashboardWidget`s: a key `<package>.<what>` declared once, a label in every language, a `WidgetData`
+  class, a size of `small`, `medium` or `large`, the permission and the plan feature it needs (a feature slug has no dots).
+  `WidgetRegistry` refuses a malformed one (`InvalidRegistry`). Plans never declares one (Dashboard depends on Plans): the
+  plan's widget is Dashboard's. *(tested by `WidgetRegistryTest`, `DashboardTranslationsTest`)*
+- A widget's data is worked out with **its list's own rule** (visibility, the branch, the trash), never a second query that
+  could count what the list hides; it is a few values, never a list of people, and a count of a list that follows the
+  branch counts only what the person sees. A list that reads the branch bar from the current request makes the widget ask
+  `RequestingPerson::mustBe($tenantId, $userId)` first. Days are UTC: no "today" of the workspace's time zone. *(convention;
+  tested by `TeamWidgetTest`, `BranchesWidgetTest`, `ClientsWidgetTest`)*
+- `GET /dashboard` works out a widget only for someone with its permission and its plan's feature (checked before the
+  widget is made), reports one that fails as `WidgetFailed` through `FailureText` (never its message, which for a database
+  error holds values) and sends it as `failed`, and leaves out one whose data is `null`. *(tested by `DashboardApiTest`;
+  failing closed is a convention)*
+- The route takes `workspace`, `KeepOutOfCachesAndReferrers` ahead of `throttle:dashboard` (a named limiter by workspace and
+  member) and no permission; it changes nothing, so an impersonation may load it. *(tested by `DashboardRoutesTest`)*
+
 ### PHP rules
 
 - `declare(strict_types=1);`, strict comparisons and strict parameters in every file (Pint, plus an
@@ -863,6 +925,7 @@ What the package does: [docs/packages/platform.md](docs/packages/platform.md) an
 - Unexpected exceptions go to Sentry through `Integration::handles()` in `backend/bootstrap/app.php`. It does
   nothing until `SENTRY_LARAVEL_DSN` is set, and a `DomainError` is never reported. *(tested by
   `SentryReportingTest`)*
+- A failure a package reports on every request (a widget or a search source that is down) implements Support's `ThrottledReport`, and `backend/bootstrap/app.php` lets only 3 identical ones (same class and message) a minute through; every other exception is reported each time. Such a message holds no personal data (`FailureText`). *(tested by `SentryReportingTest`)*
 - Before an error or a transaction goes to Sentry, Support's `ScrubSecrets` (`before_send` and
   `before_send_transaction` in `backend/config/sentry.php`, by name so that `config:cache` can write it) blanks every request
   header registered in `SecretHeaders` and every field registered in `SecretFields` or `SentryOnlyFields`, whatever `SENTRY_SEND_DEFAULT_PII` says,
@@ -1241,7 +1304,7 @@ gateway's HTML page) gets one chosen by what went wrong: `core.errors.network`, 
   already gone when it runs, and a listener that throws is logged without keeping the user signed in.
   *(convention; tested in auth)*
 - Layer messages live in `layers/<x>/i18n/locales/{en,es}.json`, namespaced by layer (`core.*`), and every key
-  segment is snake_case (`rbac.editor.save_with_count`). *(tested in core: `localeKeys.test.ts`; the namespace is
+  segment is snake_case (`rbac.editor.save_with_count`). *(tested in core: `locales.test.ts`; the namespace is
   convention)*
 - Coverage is enforced per file. *(Vitest `thresholds.perFile`)*
 - A unit test reaches no network: Vitest's setup (`frontend/tests/setup/no-network.ts`) refuses every address with a
@@ -1297,9 +1360,12 @@ gateway's HTML page) gets one chosen by what went wrong: `core.errors.network`, 
   Subscription page) and
   `useOnboardingSteps.ts` (`kit:onboarding:steps`: a layer pushes `{ step, component }` for the screen of an onboarding
   step it brings) and `useTopbarItems.ts` (`kit:topbar:items`: a layer pushes `{ id, order, component }` for the
-  dashboard's top bar, before the profile menu) and `useSidebarTopItems.ts` (`kit:sidebar:top`: a layer pushes
+  dashboard's top bar, before the profile menu) and `useTopbarActions.ts` (`kit:topbar:actions`: a layer pushes `{ id, order, labelKey, icon, to, permission, offWhileImpersonating? }` for the top
+  bar's Create menu; only what the person has the permission for is offered, and what is flagged `offWhileImpersonating` not while impersonating) and `useDashboardWidgets.ts` (`kit:dashboard:widgets`: a layer pushes `{ key, component }` for a widget of the home; the
+  component gets `widget` and draws in core's `DashboardWidgetCard`) and `useSidebarTopItems.ts` (`kit:sidebar:top`: a layer pushes
   `{ id, order, component }` for the top of the dashboard's sidebar, above the menu and in the mobile drawer; the component
-  gets `collapsed`) and `useTeamMemberSections.ts` (`kit:team:member-sections`: a layer pushes
+  gets `collapsed`) and `useSearchShortcuts.ts` (`kit:search:shortcuts`: a layer pushes `{ id, label, icon, to }` for a
+  page the global search's palette offers) and `useTeamMemberSections.ts` (`kit:team:member-sections`: a layer pushes
   `{ id, order, component }` for a section of a member's page of the team). A layer answers from a plugin and never names
   a page or component of another layer. `kit:auth:logout` tells that a session ended (see
   Calling the API). The others ask auth to act and are answered by its plugin: `kit:auth:sign-out`,
@@ -1381,6 +1447,11 @@ gateway's HTML page) gets one chosen by what went wrong: `core.errors.network`, 
     the buttons cannot line up at the bottom on their own. The billing layer's `PlanCard` lays the body out as the card's
     growing column (`flex flex-1 flex-col`), so its content pushes the button down. Needs a body that fills the card (or a
     `fill` prop).
+  - `Loader` stops at 22px (`large`) and has no size in CSS length: a block or page loading state needs a 40px spinner
+    in the tenant's color, so core keeps its own `AppLoader` (used only through `LoadingBlock` and `LoadingOverlay`,
+    with `!important` only to outlast the global reduced-motion reset). Needs larger sizes (or a CSS length) in `Loader`.
+  - `Switcher` takes `size` but its trigger keeps one padding (`px-3 py-2`) and one icon box whatever it is: the branch
+    switcher passes `size="small"` and stays as tall as the default. Needs its trigger to follow `size`.
   - `SurfaceCard` has no chosen state, and there is no card radio: a choice card is a `SurfaceCard` with a `Radio` inside.
     Its `as="button"` card is a `<button>`, so it cannot hold the radio (a radio inside a button is not valid HTML, and the
     keyboard stops twice): `ChoiceCard` is an `interactive` card (it lifts and presses) that takes the pointer, and the
@@ -1423,6 +1494,11 @@ gateway's HTML page) gets one chosen by what went wrong: `core.errors.network`, 
     `DateField` are teleported out of it: picking an option of a select inside a dialog closed the dialog. A dialog that
     holds one is `KitDialog` with `:dismissable="false"` (mood-ui's own prop): Escape and a click outside no longer close
     it, its close button and its actions do. Needs the dialog to count a teleported layer opened from inside it as inside.
+  - `SearchInput`'s clear button has no tooltip and cannot get one from outside, and after a row is chosen it keeps the
+    focus and opens its list again once the field empties: the search palette blurs the field when a row is chosen. Its
+    results are drawn outside its box, so the palette in the phone's dialog is a `KitDialog` with `:dismissable="false"`.
+    Needs a `clearTooltip` (or the clear button as a slot), closing the list when a row is chosen, and a list that counts
+    as inside a dialog.
   - `AvatarUpload` declares `onSave` both as a prop (the upload, which answers with the address to show) and as an
     event, so one listener is called twice for one photo: once by the event and once as the upload. My profile's
     `useAvatarSave` sends a photo it was already given once, and answers both calls the same. Its picture's `alt` is
