@@ -158,6 +158,16 @@ limiter counts the requests it refuses by address too, so behind a proxy it need
   read the provider's terms on storing results. See [Maps and geocoding](maps.md).
 - [ ] `GEOCODING_NOMINATIM_EMAIL` set when you use a Nominatim server someone else runs.
 
+## Search index (optional)
+
+- [ ] Nothing to do with `SCOUT_DRIVER=database`, the default: Postgres answers every search.
+- [ ] With Meilisearch (`SCOUT_DRIVER=meilisearch`): reached over HTTPS, a `MEILISEARCH_KEY` limited to the clients'
+  index (never the master key), `SCOUT_PREFIX` when one Meilisearch serves several installs, a queue worker always
+  running, its failed jobs watched (a `RemoveFromSearch` there left a client taken out in the index: `queue:retry` it),
+  never `SCOUT_QUEUE=false`, and `scout:sync-index-settings` then `search:reindex` once, in the deploy that turns it on.
+  It keeps each client's name, email, phone and home branch's id outside Postgres: say so in your privacy policy if
+  someone else runs it. Never `scout:import`. See [Search](search.md#in-production).
+
 ## Processes
 
 - [ ] The PHP `gd` extension, built with WEBP: Composer requires it, and the logo upload decodes every image with it.

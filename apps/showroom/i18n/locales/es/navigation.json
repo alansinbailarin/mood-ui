@@ -6,10 +6,10 @@
         "category": "Navigation",
         "description": "Migas de pan accesibles con iconos por item, separadores intercambiables y colapsado opcional cuando el trail supera el máximo.",
         "seo": {
-          "metaTitle": "Vue Breadcrumbs — Navegación de Trail",
+          "metaTitle": "Vue Breadcrumbs: Navegación de Trail",
           "metaDescription": "Vue Breadcrumbs gratuito y open-source para Vue 3 y Nuxt: migas de pan accesibles con iconos por item, separadores intercambiables y colapsado opcional en trails largos.",
           "h1": "Vue Breadcrumbs Component",
-          "intro": "El Breadcrumbs de mood-ui es un componente Vue Breadcrumbs gratuito y de código abierto para Vue 3 y Nuxt — migas de pan accesibles con iconos por item, separadores intercambiables y colapsado opcional cuando el trail supera el máximo."
+          "intro": "El Breadcrumbs de mood-ui es un componente Vue Breadcrumbs gratuito y de código abierto para Vue 3 y Nuxt: migas de pan accesibles con iconos por item, separadores intercambiables y colapsado opcional cuando el trail supera el máximo."
         },
         "items": {
           "home": "Inicio",
@@ -75,10 +75,10 @@
         "category": "Navigation",
         "description": "Menú flotante de acciones con headers, dividers, atajos de teclado, descripciones, items destructivos y enlaces externos.",
         "seo": {
-          "metaTitle": "Vue Dropdown Menu — Menú de Acciones",
+          "metaTitle": "Vue Dropdown Menu: Menú de Acciones",
           "metaDescription": "Vue Dropdown Menu gratuito y open-source para Vue 3 y Nuxt: menú flotante de acciones con headers, dividers, atajos de teclado, descripciones, items destructivos y enlaces.",
           "h1": "Vue Dropdown Menu Component",
-          "intro": "El DropdownMenu de mood-ui es un menú dropdown Vue 3 gratuito y de código abierto — un menú flotante de acciones con headers, dividers, atajos de teclado, descripciones, items destructivos y enlaces externos."
+          "intro": "El DropdownMenu de mood-ui es un menú dropdown Vue 3 gratuito y de código abierto: un menú flotante de acciones con headers, dividers, atajos de teclado, descripciones, items destructivos y enlaces externos."
         },
         "trigger": {
           "actions": "Acciones",
@@ -163,10 +163,10 @@
         "category": "Navigation",
         "description": "Paginador accesible con saltos a primera/última página, hermanos configurables y todos los tokens visuales del sistema.",
         "seo": {
-          "metaTitle": "Vue Pagination — Paginador",
+          "metaTitle": "Vue Pagination: Paginador",
           "metaDescription": "Vue Pagination gratuito y open-source para Vue 3 y Nuxt: paginador accesible con saltos a primera y última página, hermanos configurables y todos los tokens del sistema.",
           "h1": "Vue Pagination Component",
-          "intro": "El Pagination de mood-ui es un paginador Vue 3 gratuito y de código abierto — paginación accesible con saltos a primera/última página, hermanos configurables y todos los tokens visuales del sistema de diseño."
+          "intro": "El Pagination de mood-ui es un paginador Vue 3 gratuito y de código abierto: paginación accesible con saltos a primera/última página, hermanos configurables y todos los tokens visuales del sistema de diseño."
         },
         "examples": {
           "basic": {
@@ -229,10 +229,10 @@
         "category": "Navigation",
         "description": "Indicador de progreso por pasos. Útil para wizards, onboarding y checkouts. Soporta variantes numbered, dots y progress, en horizontal o vertical.",
         "seo": {
-          "metaTitle": "Vue Stepper Component — Pasos de Wizard",
+          "metaTitle": "Vue Stepper Component: Pasos de Wizard",
           "metaDescription": "Vue Stepper gratuito y open-source para Vue 3 y Nuxt: indicador de progreso por pasos para wizards, onboarding y checkouts con variantes numbered, dots y progress.",
           "h1": "Vue Stepper Component",
-          "intro": "El Stepper de mood-ui es un componente Vue Stepper gratuito y de código abierto para Vue 3 y Nuxt — un indicador de progreso por pasos para wizards, onboarding y checkouts, con variantes numbered, dots y progress, en horizontal o vertical."
+          "intro": "El Stepper de mood-ui es un componente Vue Stepper gratuito y de código abierto para Vue 3 y Nuxt: un indicador de progreso por pasos para wizards, onboarding y checkouts, con variantes numbered, dots y progress, en horizontal o vertical."
         },
         "examples": {
           "basic": {
@@ -339,12 +339,12 @@
       "switcher": {
         "title": "Switcher",
         "category": "Navigation",
-        "description": "Selector de contexto — cambia entre sucursales, perfiles, espacios de trabajo o cualquier contexto equivalente del usuario. Agnóstico de dominio.",
+        "description": "Selector de contexto: cambia entre sucursales, perfiles, espacios de trabajo o cualquier contexto equivalente del usuario. Agnóstico de dominio.",
         "seo": {
-          "metaTitle": "Vue Switcher — Selector de Contexto",
+          "metaTitle": "Vue Switcher: Selector de Contexto",
           "metaDescription": "Vue Switcher gratuito y open-source para Vue 3 y Nuxt: selector de contexto agnóstico de dominio para cambiar entre sucursales, perfiles, espacios de trabajo o cualquier contexto.",
           "h1": "Vue Switcher Component",
-          "intro": "El Switcher de mood-ui es un selector de contexto Vue 3 gratuito y de código abierto — cambia entre sucursales, perfiles, espacios de trabajo o cualquier contexto equivalente del usuario, totalmente agnóstico de dominio."
+          "intro": "El Switcher de mood-ui es un selector de contexto Vue 3 gratuito y de código abierto: cambia entre sucursales, perfiles, espacios de trabajo o cualquier contexto equivalente del usuario, totalmente agnóstico de dominio."
         },
         "examples": {
           "basicTitle": "Sucursales de negocio",
@@ -379,10 +379,10 @@
         "category": "Navigation",
         "description": "Tabs accesibles con tres variantes (line, pill, segmented), iconos, badges y soporte para paneles vía slots `panel-{value}`.",
         "seo": {
-          "metaTitle": "Vue Tabs Component — Paneles de Tabs",
+          "metaTitle": "Vue Tabs Component: Paneles de Tabs",
           "metaDescription": "Vue Tabs gratuito y open-source para Vue 3 y Nuxt: tabs accesibles con variantes line, pill y segmented, iconos, badges y paneles vía slots panel-{value}. Sin coste.",
           "h1": "Vue Tabs Component",
-          "intro": "El Tabs de mood-ui es un componente Vue Tabs gratuito y de código abierto para Vue 3 y Nuxt — tabs accesibles con tres variantes (line, pill, segmented), iconos, badges y soporte para paneles vía slots panel-{value}."
+          "intro": "El Tabs de mood-ui es un componente Vue Tabs gratuito y de código abierto para Vue 3 y Nuxt: tabs accesibles con tres variantes (line, pill, segmented), iconos, badges y soporte para paneles vía slots panel-{value}."
         },
         "examples": {
           "variants": {
@@ -470,7 +470,7 @@
         "category": "Navigation",
         "description": "Menú de acciones que se transforma desde su disparador, con atajos de teclado activos, navegación con flechas, búsqueda al escribir, etiquetas, separadores y adopción de la superficie del disparador. Sigue a ModoProvider en color, tamaño, radio y modo oscuro.",
         "seo": {
-          "metaTitle": "Componente Menu para Vue — Menú Desplegable con Morph y Atajos",
+          "metaTitle": "Componente Menu para Vue: Menú Desplegable con Morph y Atajos",
           "metaDescription": "Componente Menu gratuito y open-source para Vue 3 y Nuxt: emerge desde su botón con atajos de teclado activos, búsqueda type-ahead e ítems destructivos.",
           "h1": "Componente Menu para Vue",
           "intro": "Menu de mood-ui es un menú de acciones con morphing para Vue 3 y Nuxt. Se expande suavemente desde su disparador, escucha en vivo los atajos de teclado declarados en cada Menu.Item mientras está abierto e incluye navegación por flechas y filtrado al escribir."
@@ -573,7 +573,7 @@
         "category": "Navigation",
         "description": "Menú de clic derecho y pulsación larga táctil que surge desde la posición del puntero y comparte los elementos, etiquetas y separadores de Menu. Sigue a ModoProvider en color, tamaño, radio y modo oscuro.",
         "seo": {
-          "metaTitle": "Componente ContextMenu para Vue — Menú de Clic Derecho y Long-Press",
+          "metaTitle": "Componente ContextMenu para Vue: Menú de Clic Derecho y Long-Press",
           "metaDescription": "Componente ContextMenu gratuito y open-source para Vue 3 y Nuxt: se abre en las coordenadas del cursor con clic derecho o pulsación larga táctil de 500ms.",
           "h1": "Componente ContextMenu para Vue",
           "intro": "ContextMenu de mood-ui lleva menús contextuales nativos a Vue 3 y Nuxt. Se despliega en las coordenadas exactas del cursor o dedo mediante clic derecho en escritorio o pulsación larga de 500ms en pantallas táctiles, reutilizando Menu.Item, Menu.Label y Menu.Separator."

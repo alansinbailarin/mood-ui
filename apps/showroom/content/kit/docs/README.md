@@ -50,6 +50,10 @@ Each backend package, with the frontend layer that pairs with it.
 - [Platform](packages/platform.md): the platform's own administration, on a host of its own.
 - [Geocoding](packages/geocoding.md): places from an address and an address from a point, for the location picker, through
   the provider the app configures.
+- [Search](packages/search.md): the dashboard's global search (`Cmd+K`): the sources each package declares, its route and
+  an optional index outside Postgres.
+- [Dashboard](packages/dashboard.md): the home's cards: the widgets each package declares, with the permission and the plan
+  feature each needs, and the route that works them out.
 - [Frontend](frontend.md): the Nuxt layers, `core`, calling the API, hooks, design rules, i18n and visual
   tests.
 
@@ -67,6 +71,7 @@ Each backend package, with the frontend layer that pairs with it.
 - [Captcha](configuration/captcha.md): Cloudflare Turnstile and `SIGNUP_REQUIRE_CAPTCHA`.
 - [Maps and geocoding](configuration/maps.md): the address search of the location picker: Nominatim, Google, Mapbox or
   none, their keys, usage policies and cache.
+- [Search](configuration/search.md): where the global search runs: Postgres by default, or Meilisearch for the clients.
 - [Sentry](configuration/sentry.md): error reporting and what is scrubbed before it leaves.
 - [Queues and the scheduler](configuration/queues-and-scheduler.md): what the worker and the scheduler run,
   and how to keep them running.
@@ -99,10 +104,12 @@ Each backend package, with the frontend layer that pairs with it.
 - [Attach data to clients](guides/attach-data-to-clients.md)
 - [Add a portal section](guides/add-a-portal-section.md)
 - [Scope data by branch](guides/scope-data-by-branch.md)
+- [Add a search source](guides/add-a-search-source.md)
+- [Add a dashboard widget](guides/add-a-dashboard-widget.md)
 - [Register secret fields and headers](guides/register-secret-fields.md)
 - [Add a locale](guides/add-a-locale.md)
 - [Testing and quality gates](guides/testing.md)
 
-## Coming next
+## What it does not ship
 
-Not in the kit yet: search. See [Architecture](concepts/architecture.md#what-it-does-not-ship).
+See [Architecture](concepts/architecture.md#what-it-does-not-ship).

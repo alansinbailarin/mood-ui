@@ -108,7 +108,7 @@ import { Typography } from 'mood-ui';
   <Typography variant="heading" size="large">Heading</Typography>
   <Typography variant="title"   size="medium">Title</Typography>
   <Typography variant="subtitle">Subtitle</Typography>
-  <Typography variant="body">Body — Lorem ipsum dolor sit amet.</Typography>
+  <Typography variant="body">Body: Lorem ipsum dolor sit amet.</Typography>
   <Typography variant="caption" color="muted">Caption helper</Typography>
   <Typography variant="overline" color="muted">Overline</Typography>
 </template>`;
@@ -346,7 +346,7 @@ const slotsList = computed<SlotDoc[]>(() => [
           <Typography variant="title" size="medium">Title</Typography>
           <Typography variant="subtitle">Subtitle</Typography>
           <Typography variant="body"
-            >Body — Lorem ipsum dolor sit amet.</Typography
+            >Body: Lorem ipsum dolor sit amet.</Typography
           >
           <Typography variant="caption" color="muted"
             >Caption auxiliar</Typography

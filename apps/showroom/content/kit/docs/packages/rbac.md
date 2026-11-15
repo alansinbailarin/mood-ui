@@ -114,6 +114,7 @@ Each refusal is a `DomainError` (codes in [Errors and the API](../concepts/error
 - A role someone holds cannot be deleted (409 `rbac.role_has_users`, `meta.usersCount`).
 - Slugs and names are unique in the workspace, deleted roles included, and a system slug is never free. A
   name with nothing to make a slug of (emoji, non-Latin script) gets `role`, or the shortest free `role-N`.
+- `subscription.view` shows workspace-wide usage counts, so a branch-limited role that has it can work out totals for other branches.
 - Permissions must be declared (`rbac.permission_unknown`). Saving a role adds the permissions its
   permissions `require` (`meta.autoAddedDependencies`).
 - Only the owner role holds owner-critical permissions, and it cannot lose one. A copy of a role leaves them

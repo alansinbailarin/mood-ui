@@ -11,7 +11,7 @@ backend/                 Laravel 13 API
   app/                   thin shell: one middleware (your providers go in bootstrap/providers.php)
   config/                framework config, and the env overrides of each package
   packages/<Name>/       kernel packages (Support, Tenancy, Auth, Rbac, Audit, Signup, Settings, Plans, Notifications,
-                         Onboarding, Billing, Team, Platform, Geocoding, Branches, Clients)
+                         Onboarding, Billing, Team, Platform, Geocoding, Branches, Clients, Search)
   tests/                 app tests and the architecture tests
 frontend/                Nuxt 4 app on mood-ui
   app/                   shell: app.vue, the home page, main.css with the color tokens
@@ -45,6 +45,7 @@ bindings. `backend/routes/api.php` and `backend/routes/console.php` are empty on
 | [Geocoding](../packages/geocoding.md) | places from an address and an address from a point, for the location picker; it depends on Support alone |
 | [Branches](../packages/branches.md) | a workspace's branches, their place on the map, opening hours and people; it uses Auth, Rbac, Plans, Settings, Onboarding, Audit and Team through their contracts, and only Clients depends on it (a client's home branch) |
 | [Clients](../packages/clients.md) | a workspace's clients: their data, tags, duplicates and merging, activity, CSV import and export, and their privacy rights; it uses Auth, Rbac, Audit, Plans, Notifications and Branches through their contracts, and modules hang their data from it through its own |
+| [Search](../packages/search.md) | the global search: a registry of the sources each package declares (`search.sources`); it uses Auth, Rbac and Plans through their contracts and knows no package that registers a source |
 
 Every package's settings live in its own `config/`, with defaults only. The env overrides are in
 `backend/config/<file>.php`, the one place that calls `env()`, so `php artisan config:cache` works.
@@ -169,8 +170,9 @@ already cover both. Kit code never references yours. `AGENTS.md` ("Packages" and
 
 ## What it does not ship
 
-`backend/composer.json` requires only what a kit feature uses. Realtime (Laravel Reverb) and search (Laravel Scout,
-Meilisearch) are not installed: add them with the feature that needs them. Billing brings `stripe/stripe-php`. The S3 Flysystem
+`backend/composer.json` requires only what a kit feature uses: Laravel Reverb for the inbox's live updates
+([Realtime](../configuration/realtime.md)). Clients brings Laravel Scout for the global search; Meilisearch's PHP client is
+not installed until you turn it on ([Search](../configuration/search.md)). Billing brings `stripe/stripe-php`. The S3 Flysystem
 adapter backs the `assets` disk, where uploaded files go (see [Storage](../configuration/storage.md)), and brings the
 AWS SDK that the SES mailer uses.
 

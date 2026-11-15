@@ -490,7 +490,7 @@ const emitsList = computed<EmitDoc[]>(() => [
           />
           <span class="text-caption text-muted-foreground">
             {{ t('pages.forms.phoneInput.examples.country.countryLabel') }}: {{ exCountry }}
-            &nbsp;·&nbsp; Value: {{ exCountryPhone || '—' }}
+            &nbsp;·&nbsp; Value: {{ exCountryPhone || '-' }}
           </span>
         </div>
       </ComponentPreview>
@@ -508,7 +508,7 @@ const emitsList = computed<EmitDoc[]>(() => [
               format="national"
               :label="t('pages.forms.phoneInput.examples.formats.nationalLabel')"
             />
-            <span class="text-caption text-muted-foreground font-mono">{{ exNational || '—' }}</span>
+            <span class="text-caption text-muted-foreground font-mono">{{ exNational || '-' }}</span>
           </div>
           <div class="flex flex-col gap-1">
             <PhoneInput
@@ -516,7 +516,7 @@ const emitsList = computed<EmitDoc[]>(() => [
               format="international"
               :label="t('pages.forms.phoneInput.examples.formats.intlLabel')"
             />
-            <span class="text-caption text-muted-foreground font-mono">{{ exIntl || '—' }}</span>
+            <span class="text-caption text-muted-foreground font-mono">{{ exIntl || '-' }}</span>
           </div>
           <div class="flex flex-col gap-1">
             <PhoneInput
@@ -524,7 +524,7 @@ const emitsList = computed<EmitDoc[]>(() => [
               format="e164"
               :label="t('pages.forms.phoneInput.examples.formats.e164Label')"
             />
-            <span class="text-caption text-muted-foreground font-mono">{{ exE164 || '—' }}</span>
+            <span class="text-caption text-muted-foreground font-mono">{{ exE164 || '-' }}</span>
           </div>
         </div>
       </ComponentPreview>

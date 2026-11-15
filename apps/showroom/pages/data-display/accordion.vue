@@ -95,7 +95,7 @@ const faqItems = [
     value: "install",
     title: "¿Cómo se instala?",
     content:
-      "npm install mood-ui — luego importa los estilos y envuelve tu app con <ModoProvider>.",
+      "npm install mood-ui, luego importa los estilos y envuelve tu app con <ModoProvider>.",
   },
 ];
 
@@ -160,7 +160,7 @@ const open = ref('what');
 const items = [
   { value: 'what',    title: 'What is mood-ui?',    content: 'A fully typed Vue 3 component library with runtime theming, dark mode and i18n.' },
   { value: 'license', title: 'What is the license?', content: 'MIT. You can use it in personal and commercial projects without restriction.' },
-  { value: 'install', title: 'How do I install?',  content: 'npm install mood-ui — then import the styles and wrap your app with <ModoProvider>.' },
+  { value: 'install', title: 'How do I install?',  content: 'npm install mood-ui, then import the styles and wrap your app with <ModoProvider>.' },
 ];
 <\/script>
 

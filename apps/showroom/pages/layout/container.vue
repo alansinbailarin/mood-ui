@@ -69,10 +69,10 @@ import { Container } from 'mood-ui';
 <\/script>
 
 <template>
-  <Container max-width="sm" centered>sm — 640px</Container>
-  <Container max-width="md" centered>md — 768px</Container>
-  <Container max-width="lg" centered>lg — 1024px</Container>
-  <Container max-width="xl" centered>xl — 1280px</Container>
+  <Container max-width="sm" centered>sm: 640px</Container>
+  <Container max-width="md" centered>md: 768px</Container>
+  <Container max-width="lg" centered>lg: 1024px</Container>
+  <Container max-width="xl" centered>xl: 1280px</Container>
 </template>`;
 
 const fluidCode = `<script setup lang="ts">
@@ -218,25 +218,25 @@ const typesCode = `export interface Container {
             max-width="sm"
             centered
             class="bg-primary/5 rounded-md py-2 px-4 text-center text-sm"
-            >sm — 640px</Container
+            >sm: 640px</Container
           >
           <Container
             max-width="md"
             centered
             class="bg-primary/5 rounded-md py-2 px-4 text-center text-sm"
-            >md — 768px</Container
+            >md: 768px</Container
           >
           <Container
             max-width="lg"
             centered
             class="bg-primary/5 rounded-md py-2 px-4 text-center text-sm"
-            >lg — 1024px</Container
+            >lg: 1024px</Container
           >
           <Container
             max-width="xl"
             centered
             class="bg-primary/5 rounded-md py-2 px-4 text-center text-sm"
-            >xl — 1280px</Container
+            >xl: 1280px</Container
           >
         </div>
       </ComponentPreview>

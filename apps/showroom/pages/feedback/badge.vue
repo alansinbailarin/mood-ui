@@ -199,7 +199,7 @@ const propsList = computed<PropDoc[]>(() => [
 const emitsList = computed<EmitDoc[]>(() => [
   {
     name: "remove",
-    payload: "—",
+    payload: "-",
     description: t("pages.feedback.badge.emits.remove"),
   },
 ]);

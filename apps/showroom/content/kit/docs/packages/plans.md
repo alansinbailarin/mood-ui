@@ -14,6 +14,8 @@ It is not the owner's alone, so the owner and the manager roles of every workspa
 not. On an installation that already has workspaces, run `php artisan rbac:sync` after the deploy that brings this
 package.
 
+`subscription.view` shows workspace-wide usage counts, so a branch-limited role that has it can work out totals for other branches.
+
 The menu gets **Subscription** (`/dashboard/subscription`, icon `credit-card`) in the `administration` section, at order
 95, for whoever holds `subscription.view`.
 
@@ -42,6 +44,8 @@ Branches registers `branches` (`total`): the workspace's active branches; an ina
 Clients registers `clients` (`total`): the workspace's live clients; one in the trash holds no place. It registers the
 features `clients_import` (importing clients from a CSV file) and `clients_portal` (the client portal) too (see
 [Clients](clients.md#quota-and-plan)).
+The plan and what the workspace uses of each limit also show on the home, for whoever holds `subscription.view`: Dashboard's
+`dashboard.plan_usage` widget reads them through `ReadsCatalog` and `ReadsQuotas` (see [Dashboard](dashboard.md)).
 See [Add a quota or a feature flag](../guides/add-a-quota-or-feature.md).
 
 The catalog lives in `backend/config/plans.php`. The kit ships an example: **Free** (tier 0, the default, no trial, 3

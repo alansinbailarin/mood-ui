@@ -24,7 +24,7 @@ import TbToggle from "~/components/toolbar/TbToggle.vue";
 import TbSep from "~/components/toolbar/TbSep.vue";
 import type { AvatarProvider, AvatarSavePayload } from "../../../interfaces/forms/AvatarUpload.interface";
 
-// Suppress unused import warnings — available for code examples
+// Suppress unused import warnings, available for code examples
 void Badge; void createAvatarProvider; void Button; void Stack;
 void LockClosedIcon; void SparklesIcon; void KeyIcon; void BeakerIcon;
 
@@ -36,7 +36,7 @@ const liveAvatarUrl = ref("");
 
 /**
  * We use a ref (not a computed) so the provider stays alive after the key is
- * cleared from the input — keeping the AI buttons visible for regeneration.
+ * cleared from the input, keeping the AI buttons visible for regeneration.
  * The key is captured in a closure at the moment the user finishes typing it,
  * and erased from the input field immediately after every request.
  */
@@ -97,7 +97,7 @@ watch(openaiKey, (key) => {
       const data: any = await res.json();
       return data.data[0].url;
     } finally {
-      // Clear the key from the visible input — the provider closure still holds
+      // Clear the key from the visible input, the provider closure still holds
       // the captured key in memory for regeneration, but it's no longer visible
       // in the DOM or accessible via DevTools input inspection.
       openaiKey.value = "";
@@ -168,7 +168,7 @@ const inFormBio = ref("");
 const inFormUrl = ref("");
 const readonlyUrl = ref("https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=256&q=80");
 
-// Mock AI provider — random portrait after 1.5s delay
+// Mock AI provider, random portrait after 1.5s delay
 const mockProvider: AvatarProvider = (_opts, signal) =>
   new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
@@ -181,7 +181,7 @@ const mockProvider: AvatarProvider = (_opts, signal) =>
     });
   });
 
-// Manual save handler — simulates upload delay and returns the blob URL
+// Manual save handler, simulates upload delay and returns the blob URL
 async function handleSave(payload: AvatarSavePayload): Promise<string> {
   await new Promise((r) => setTimeout(r, 800));
   return payload.url;
@@ -319,7 +319,7 @@ const bio = ref('');
 <\/script>
 
 <template>
-  <!-- Inside a profile form — centered avatar above the fields -->
+  <!-- Inside a profile form, centered avatar above the fields -->
   <Card class="max-w-sm">
     <div class="flex flex-col gap-5">
       <div class="flex justify-center">
@@ -391,7 +391,7 @@ const provider = createAvatarProvider({ url: '/api/generate-avatar' });
 //   • No image  → POST JSON  { prompt, variant }          → text-to-image
 //   • With image → POST multipart { image, prompt, variant } → img2img`;
 
-const openaiDirectCode = `// ⚠️  Dev / testing only — never expose API keys in production
+const openaiDirectCode = `// ⚠️  Dev / testing only, never expose API keys in production
 //
 // Routes automatically:
 //   • User uploaded a photo → gpt-image-1 /v1/images/edits  (img2img)
@@ -444,7 +444,7 @@ const provider = createAvatarProvider({
   extractUrl: (d: any) => d.output[0],
 });`;
 
-const backendNodeCode = `// Node.js / Express  (Hono, Fastify — same idea)
+const backendNodeCode = `// Node.js / Express  (Hono, Fastify, same idea)
 import express from 'express';
 import multer from 'multer';
 import OpenAI from 'openai';
@@ -478,7 +478,7 @@ app.post('/api/generate-avatar-from-photo', upload.single('image'), async (req, 
   res.json({ url: item.url, b64_json: item.b64_json });
 });`;
 
-const backendVercelCode = `// Vercel / Next.js — app/api/generate-avatar/route.ts
+const backendVercelCode = `// Vercel / Next.js, app/api/generate-avatar/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
@@ -526,7 +526,7 @@ app.post('/api/upload-avatar', upload.single('avatar'), async (req, res) => {
 import type { AvatarSavePayload } from 'mood-ui';
 
 async function onSave(payload: AvatarSavePayload): Promise<string> {
-  // blob is null when AI returned a CORS-restricted URL — use remoteUrl instead
+  // blob is null when AI returned a CORS-restricted URL, use remoteUrl instead
   if (payload.blob) {
     const form = new FormData();
     form.append('avatar', payload.blob, 'avatar.webp');
@@ -570,7 +570,7 @@ const emitsList = computed<EmitDoc[]>(() => [
   { name: "error", payload: "Error", description: t("pages.forms.avatarUpload.emits.error") },
   { name: "loading", payload: "boolean", description: t("pages.forms.avatarUpload.emits.loading") },
   { name: "change", payload: "string | null", description: t("pages.forms.avatarUpload.emits.change") },
-  { name: "remove", payload: "—", description: t("pages.forms.avatarUpload.emits.remove") },
+  { name: "remove", payload: "-", description: t("pages.forms.avatarUpload.emits.remove") },
   { name: "save", payload: "AvatarSavePayload", description: t("pages.forms.avatarUpload.emits.save") },
   { name: "saved", payload: "string", description: t("pages.forms.avatarUpload.emits.saved") },
   { name: "save-error", payload: "Error", description: t("pages.forms.avatarUpload.emits.saveError") },
@@ -680,7 +680,7 @@ const emitsList = computed<EmitDoc[]>(() => [
               </Typography>
               <Typography variant="body" size="small" color="muted" weight="light">
                 Tap a suggestion, type a prompt, or use the sparkles button. A
-                random portrait arrives in ~1.5 s — no API key needed.
+                random portrait arrives in ~1.5 s, no API key needed.
               </Typography>
             </div>
           </div>
@@ -785,7 +785,7 @@ const emitsList = computed<EmitDoc[]>(() => [
       <!-- OpenAI live test -->
       <ComponentPreview
         title="OpenAI live test"
-        description="Test real AI generation directly from your browser — no backend needed."
+        description="Test real AI generation directly from your browser, no backend needed."
         :code="openaiDirectCode"
         min-height="520px"
       >
@@ -826,7 +826,7 @@ const emitsList = computed<EmitDoc[]>(() => [
             color="success"
             variant="subtle"
             :icon="LockClosedIcon"
-            description="Your key is used for this request only — never stored in cookies, localStorage, or sent anywhere except api.openai.com. It is erased from the input after each generation."
+            description="Your key is used for this request only, never stored in cookies, localStorage, or sent anywhere except api.openai.com. It is erased from the input after each generation."
             full-width
             class="mb-5"
           />

@@ -23,7 +23,7 @@
       "finalCtaTitle": "Start building today.",
       "finalCtaBody": "Open source, MIT, no lock-in. Just Vue 3 + Tailwind v4 + your own creativity.",
       "seo": {
-        "title": "Mood UI — The most beautiful Vue and Nuxt component library",
+        "title": "Mood UI: The most beautiful Vue and Nuxt component library",
         "description": "The most beautiful open source Vue and Nuxt component library with {n}+ accessible components, Tailwind CSS v4, TypeScript, dark mode, WAI-ARIA accessibility and native i18n. MIT."
       },
       "stats": {
@@ -59,7 +59,7 @@
         },
         "tailwind": {
           "title": "Tailwind v4 native",
-          "text": "CSS vars, design tokens and \\@theme inline. Override from your tailwind.config - no hacks."
+          "text": "CSS vars, design tokens and \\@theme inline. Override from your tailwind.config, no hacks."
         }
       }
     }

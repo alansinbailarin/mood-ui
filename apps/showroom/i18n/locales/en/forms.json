@@ -4,12 +4,12 @@
       "avatarUpload": {
         "category": "Forms",
         "title": "AvatarUpload",
-        "description": "An all-in-one avatar manager: upload a photo, crop it to a circle, and optionally generate one with AI. The AI provider is always external — you supply the function; mood-ui only handles the UI and state.",
+        "description": "An all-in-one avatar manager: upload a photo, crop it to a circle, and optionally generate one with AI. The AI provider is always external, you supply the function; mood-ui only handles the UI and state.",
         "seo": {
-          "metaTitle": "Vue Avatar Upload — Crop & Upload",
+          "metaTitle": "Vue Avatar Upload: Crop & Upload",
           "metaDescription": "Free, open-source Vue avatar upload for Vue 3 and Nuxt: upload a photo, crop it to a circle and optionally generate one with an external AI provider.",
           "h1": "Vue Avatar Upload Component",
-          "intro": "mood-ui's AvatarUpload is a free, open-source Vue 3 avatar upload component — upload a photo, crop it to a circle and optionally generate one with an external AI provider you supply, while mood-ui handles the UI and state."
+          "intro": "mood-ui's AvatarUpload is a free, open-source Vue 3 avatar upload component: upload a photo, crop it to a circle and optionally generate one with an external AI provider you supply, while mood-ui handles the UI and state."
         },
         "examples": {
           "basic": {
@@ -25,7 +25,7 @@
             "desc": "Three sizes control the preview circle and icon scale."
           },
           "saveMode": {
-            "title": "Save mode — manual",
+            "title": "Save mode: manual",
             "desc": "With saveMode=\"manual\" a Save button appears once an image is ready. The onSave callback receives an AvatarSavePayload so you can upload to your backend and return the final URL."
           },
           "withAi": {
@@ -34,11 +34,11 @@
           },
           "lightbox": {
             "title": "Lightbox preview",
-            "desc": "Add :lightbox=\"true\" to show an expand button on the avatar. Clicking it opens the image full-size in a modal — useful in profile cards, read-only views, and dashboards."
+            "desc": "Add :lightbox=\"true\" to show an expand button on the avatar. Clicking it opens the image full-size in a modal, useful in profile cards, read-only views, and dashboards."
           },
           "profileCard": {
             "title": "Profile card",
-            "desc": "Horizontal layout with the avatar on the left and user info on the right — a common pattern in dashboards and profile pages."
+            "desc": "Horizontal layout with the avatar on the left and user info on the right, a common pattern in dashboards and profile pages."
           },
           "settingsRow": {
             "title": "Settings row",
@@ -46,7 +46,7 @@
           },
           "inForm": {
             "title": "Inside a form",
-            "desc": "Avatar centered at the top of a profile form, with name and bio fields below — a typical onboarding pattern."
+            "desc": "Avatar centered at the top of a profile form, with name and bio fields below, a typical onboarding pattern."
           },
           "readonly": {
             "title": "Read-only",
@@ -92,16 +92,16 @@
         },
         "integration": {
           "title": "AI provider integration",
-          "desc": "mood-ui never ships an AI SDK — you bring your own. The component calls the provider function you supply; that function can call any API you want. The cleanest approach is a backend endpoint that holds your API keys.",
+          "desc": "mood-ui never ships an AI SDK, you bring your own. The component calls the provider function you supply; that function can call any API you want. The cleanest approach is a backend endpoint that holds your API keys.",
           "helperTitle": "createAvatarProvider helper",
           "helperDesc": "The included helper turns a URL into a ready-to-use provider. By default it POSTs \\{ prompt, variant \\} and auto-detects common response shapes (OpenAI, Replicate, or plain \\{ url \\}).",
-          "backendNodeTitle": "Backend — Node.js / Express",
+          "backendNodeTitle": "Backend: Node.js / Express",
           "backendNodeDesc": "Create a POST endpoint that calls your AI service and returns \\{ url \\}. mood-ui fetches that URL and converts it to a local blob.",
-          "backendVercelTitle": "Backend — Vercel / Next.js app router",
+          "backendVercelTitle": "Backend: Vercel / Next.js app router",
           "uploadTitle": "Saving the processed image to your backend",
           "uploadDesc": "When onSave is provided, mood-ui calls it with an AvatarSavePayload containing a 512×512 WebP Blob. Upload it to S3, Cloudinary, Supabase Storage, etc. and return the final CDN URL.",
           "directTitle": "Direct AI API calls (development / testing only)",
-          "directDesc": "You can call an AI API directly from the browser during development. Never do this in production — API keys in the frontend are public. Use a .env variable and exclude it from production builds."
+          "directDesc": "You can call an AI API directly from the browser during development. Never do this in production. API keys in the frontend are public. Use a .env variable and exclude it from production builds."
         },
         "types": {
           "title": "Types",
@@ -128,10 +128,10 @@
         "title": "Button",
         "description": "The primary action of any interface. Four variants, five semantic colors, four sizes, configurable icons, loading state and support for rendering as a link or any element.",
         "seo": {
-          "metaTitle": "Vue Button Component — Variants & Icons",
+          "metaTitle": "Vue Button Component: Variants & Icons",
           "metaDescription": "Free, open-source Vue button for Vue 3 and Nuxt: four variants, five semantic colors, configurable icons, a loading state and link rendering. Zero license cost.",
           "h1": "Vue Button Component",
-          "intro": "mood-ui's Button is a free, open-source Vue 3 button component for the primary action of any interface — four variants, five semantic colors, configurable icons, a loading state and support for rendering as a link."
+          "intro": "mood-ui's Button is a free, open-source Vue 3 button component for the primary action of any interface: four variants, five semantic colors, configurable icons, a loading state and support for rendering as a link."
         },
         "controls": {
           "variant": "Variant",
@@ -220,7 +220,7 @@
           "ariaDisabled": "Communicates disabled state to assistive technologies",
           "ariaBusy": "Communicates loading state while the action is in progress",
           "ariaLabel": "Provides an accessible name for icon-only buttons (no visible text)",
-          "focusNative": "Uses a native button element — participates in the tab order by default",
+          "focusNative": "Uses a native button element, participates in the tab order by default",
           "focusDisabled": "Excluded from the tab order when the disabled prop is true",
           "focusRing": "Focus ring is always visible; style is controlled by the focusHalo setting in ModoConfig"
         }
@@ -233,7 +233,7 @@
           "metaTitle": "Vue Button Group Component",
           "metaDescription": "Free, open-source Vue button group for Vue 3 and Nuxt: groups several buttons into one visual unit sharing variant, color and size, horizontal or vertical.",
           "h1": "Vue Button Group Component",
-          "intro": "mood-ui's ButtonGroup is a free, open-source Vue 3 button group component — it groups several buttons into a single visual unit sharing variant, color and size, with horizontal or vertical orientation."
+          "intro": "mood-ui's ButtonGroup is a free, open-source Vue 3 button group component: it groups several buttons into a single visual unit sharing variant, color and size, with horizontal or vertical orientation."
         },
         "controls": {
           "variant": "Variant",
@@ -258,7 +258,7 @@
           },
           "vertical": {
             "title": "Vertical",
-            "desc": "Stacks buttons in a column — useful for context menus or action lists."
+            "desc": "Stacks buttons in a column, useful for context menus or action lists."
           },
           "icons": {
             "title": "With icons",
@@ -296,10 +296,10 @@
         "title": "Checkbox",
         "description": "Accessible checkbox with support for indeterminate state, description and all color and size variants.",
         "seo": {
-          "metaTitle": "Vue Checkbox — Indeterminate State",
+          "metaTitle": "Vue Checkbox: Indeterminate State",
           "metaDescription": "Free, open-source Vue checkbox for Vue 3 and Nuxt: accessible checkbox with indeterminate state, description text and all color and size variants.",
           "h1": "Vue Checkbox Component",
-          "intro": "mood-ui's Checkbox is a free, open-source Vue 3 checkbox component — an accessible checkbox with indeterminate state support, description text and all color and size variants."
+          "intro": "mood-ui's Checkbox is a free, open-source Vue 3 checkbox component: an accessible checkbox with indeterminate state support, description text and all color and size variants."
         },
         "controls": {
           "color": "Color",
@@ -381,7 +381,7 @@
           "ariaRequired": "Set to true when the required prop is active",
           "ariaDisabled": "Communicates disabled state to assistive technologies",
           "ariaLabel": "Provides an accessible name when no visible label is present",
-          "focusNative": "Uses a native input[type=checkbox] — participates in the tab order by default",
+          "focusNative": "Uses a native input[type=checkbox], participates in the tab order by default",
           "focusIndeterminate": "The indeterminate state is visually reflected and announced to screen readers"
         }
       },
@@ -389,10 +389,10 @@
         "title": "ColorModeSwitch",
         "description": "Three-state segmented selector for the color mode (light · system · dark) with a smooth animated sliding indicator. Supports a collapsed variant that expands on hover.",
         "seo": {
-          "metaTitle": "Vue Dark Mode Toggle — Theme Switch",
+          "metaTitle": "Vue Dark Mode Toggle: Theme Switch",
           "metaDescription": "Free, open-source Vue dark mode toggle for Vue 3 and Nuxt: three-state color-mode selector (light, system, dark) with an animated sliding indicator.",
           "h1": "Vue Color Mode Switch Component",
-          "intro": "mood-ui's ColorModeSwitch is a free, open-source Vue 3 dark mode toggle component — a three-state color-mode selector (light, system, dark) with an animated sliding indicator and a collapsed variant that expands on hover."
+          "intro": "mood-ui's ColorModeSwitch is a free, open-source Vue 3 dark mode toggle component: a three-state color-mode selector (light, system, dark) with an animated sliding indicator and a collapsed variant that expands on hover."
         },
         "controls": {
           "variant": "Variant",
@@ -449,10 +449,10 @@
         "title": "ColorPicker",
         "description": "Color selector with popover, configurable swatches, hex input and advanced HSV canvas for picking any color.",
         "seo": {
-          "metaTitle": "Vue Color Picker — Hex & HSV",
+          "metaTitle": "Vue Color Picker: Hex & HSV",
           "metaDescription": "Free, open-source Vue color picker for Vue 3 and Nuxt: color selector with a popover, configurable swatches, hex input and an advanced HSV canvas.",
           "h1": "Vue Color Picker Component",
-          "intro": "mood-ui's ColorPicker is a free, open-source Vue 3 color picker component — a color selector with a popover, configurable swatches, a hex input and an advanced HSV canvas for picking any color."
+          "intro": "mood-ui's ColorPicker is a free, open-source Vue 3 color picker component: a color selector with a popover, configurable swatches, a hex input and an advanced HSV canvas for picking any color."
         },
         "controls": {
           "size": "Size",
@@ -517,7 +517,7 @@
           "ariaDescribedBy": "Links helper or error text to the trigger for screen reader context",
           "ariaDisabled": "Communicates disabled state to assistive technologies",
           "ariaLabel": "Provides an accessible name when no visible label is present",
-          "focusNative": "Uses a native button as trigger — participates in the tab order by default",
+          "focusNative": "Uses a native button as trigger, participates in the tab order by default",
           "focusTrap": "Focus is trapped inside the popover while it is open"
         }
       },
@@ -526,10 +526,10 @@
         "title": "Combobox",
         "description": "Autocomplete text input with static or async suggestions. Supports free values (combobox) or strict selection (autocomplete).",
         "seo": {
-          "metaTitle": "Vue Combobox — Autocomplete Input",
+          "metaTitle": "Vue Combobox: Autocomplete Input",
           "metaDescription": "Free, open-source Vue combobox for Vue 3 and Nuxt: autocomplete text input with static or async suggestions and free values or strict selection.",
           "h1": "Vue Combobox Component",
-          "intro": "mood-ui's Combobox is a free, open-source Vue 3 combobox component — an autocomplete text input with static or async suggestions, supporting free values or strict selection."
+          "intro": "mood-ui's Combobox is a free, open-source Vue 3 combobox component: an autocomplete text input with static or async suggestions, supporting free values or strict selection."
         },
         "examples": {
           "basic": {
@@ -603,7 +603,7 @@
           "ariaRequired": "Set to true when the required prop is active",
           "ariaDisabled": "Communicates disabled state to assistive technologies",
           "ariaLabel": "Provides an accessible name when no visible label is present",
-          "focusNative": "Uses a native input element — participates in the tab order by default",
+          "focusNative": "Uses a native input element, participates in the tab order by default",
           "focusTrap": "Focus is trapped inside the dropdown panel while it is open"
         }
       },
@@ -612,10 +612,10 @@
         "title": "DateField",
         "description": "Date input with a calendar popover. Localizable, with minDate / maxDate and configurable display format.",
         "seo": {
-          "metaTitle": "Vue Date Picker — Calendar Date Field",
+          "metaTitle": "Vue Date Picker: Calendar Date Field",
           "metaDescription": "Free, open-source Vue date picker: date field with a calendar popover, localizable formatting and minDate/maxDate limits. A Nuxt date picker with zero license cost.",
           "h1": "Vue Date Picker Component",
-          "intro": "mood-ui's DateField is a free, open-source date picker for Vue 3 and Nuxt — a date input with a calendar popover, localizable display format and minDate/maxDate limits."
+          "intro": "mood-ui's DateField is a free, open-source date picker for Vue 3 and Nuxt: a date input with a calendar popover, localizable display format and minDate/maxDate limits."
         },
         "controls": {
           "size": "Size",
@@ -686,7 +686,7 @@
           "ariaRequired": "Set to true when the required prop is active",
           "ariaDisabled": "Communicates disabled state to assistive technologies",
           "ariaLabel": "Provides an accessible name when no visible label is present",
-          "focusNative": "Uses a native button as trigger — participates in the tab order by default",
+          "focusNative": "Uses a native button as trigger, participates in the tab order by default",
           "focusTrap": "Focus is trapped inside the calendar popover while it is open"
         }
       },
@@ -695,10 +695,10 @@
         "title": "DateRangeField",
         "description": "Date range picker with a dual-calendar popover and preset shortcuts.",
         "seo": {
-          "metaTitle": "Vue Date Range Picker — Dual Calendar",
+          "metaTitle": "Vue Date Range Picker: Dual Calendar",
           "metaDescription": "Free, open-source Vue date range picker for Vue 3 and Nuxt: date range field with a dual-calendar popover and preset shortcuts. Zero license cost.",
           "h1": "Vue Date Range Picker Component",
-          "intro": "mood-ui's DateRangeField is a free, open-source Vue 3 date range picker component — a date range field with a dual-calendar popover and preset shortcuts."
+          "intro": "mood-ui's DateRangeField is a free, open-source Vue 3 date range picker component: a date range field with a dual-calendar popover and preset shortcuts."
         },
         "controls": {
           "size": "Size",
@@ -768,7 +768,7 @@
           "ariaRequired": "Set to true when the required prop is active",
           "ariaDisabled": "Communicates disabled state to assistive technologies",
           "ariaLabel": "Provides an accessible name when no visible label is present",
-          "focusNative": "Uses a native button as trigger — participates in the tab order by default",
+          "focusNative": "Uses a native button as trigger, participates in the tab order by default",
           "focusTrap": "Focus is trapped inside the popover while it is open"
         }
       },
@@ -777,10 +777,10 @@
         "title": "DateTimeField",
         "description": "Combined date and time input with a calendar popover and built-in time picker.",
         "seo": {
-          "metaTitle": "Vue Datetime Picker — Date & Time Field",
+          "metaTitle": "Vue Datetime Picker: Date & Time Field",
           "metaDescription": "Free, open-source Vue datetime picker: combined date and time field with a calendar popover and built-in time picker for Vue 3 and Nuxt. Zero license cost.",
           "h1": "Vue Datetime Picker Component",
-          "intro": "mood-ui's DateTimeField is a free, open-source datetime picker for Vue 3 and Nuxt — a combined date and time field with a calendar popover and a built-in time picker."
+          "intro": "mood-ui's DateTimeField is a free, open-source datetime picker for Vue 3 and Nuxt: a combined date and time field with a calendar popover and a built-in time picker."
         },
         "controls": {
           "size": "Size",
@@ -814,7 +814,7 @@
           },
           "timeOnly": {
             "title": "Time only",
-            "desc": "Set timeOnly to hide the calendar and show just the time picker. v-model is still Date | null — the date part is set to today when the user picks a time."
+            "desc": "Set timeOnly to hide the calendar and show just the time picker. v-model is still Date | null, the date part is set to today when the user picks a time."
           }
         },
         "props": {
@@ -857,7 +857,7 @@
           "ariaRequired": "Set to true when the required prop is active",
           "ariaDisabled": "Communicates disabled state to assistive technologies",
           "ariaLabel": "Provides an accessible name when no visible label is present",
-          "focusNative": "Uses a native button as trigger — participates in the tab order by default",
+          "focusNative": "Uses a native button as trigger, participates in the tab order by default",
           "focusTrap": "Focus is trapped inside the popover while it is open"
         }
       },
@@ -866,10 +866,10 @@
         "title": "FileInput",
         "description": "File selector with drag & drop support, validation, image previews and two visual variants (inline and prominent area).",
         "seo": {
-          "metaTitle": "Vue File Upload — Drag & Drop",
+          "metaTitle": "Vue File Upload: Drag & Drop",
           "metaDescription": "Free, open-source Vue file upload for Vue 3 and Nuxt: file selector with drag & drop, validation, image previews and inline or prominent variants.",
           "h1": "Vue File Upload Component",
-          "intro": "mood-ui's FileInput is a free, open-source Vue 3 file upload component — a file selector with drag & drop, validation, image previews and two visual variants (inline and prominent area)."
+          "intro": "mood-ui's FileInput is a free, open-source Vue 3 file upload component: a file selector with drag & drop, validation, image previews and two visual variants (inline and prominent area)."
         },
         "controls": {
           "variant": "Variant",
@@ -943,7 +943,7 @@
           "size": "Size in bytes.",
           "type": "MIME type string.",
           "previewUrl": "Local object URL for image previews (created via URL.createObjectURL).",
-          "progress": "Upload progress 0–100 when provided externally.",
+          "progress": "Upload progress 0-100 when provided externally.",
           "error": "Validation or upload error message."
         },
         "a11y": {
@@ -956,7 +956,7 @@
           "ariaRequired": "Set to true when the required prop is active",
           "ariaDisabled": "Communicates disabled state to assistive technologies",
           "ariaLabel": "Provides an accessible name when no visible label is present",
-          "focusNative": "The file input is a native element — participates in the tab order by default",
+          "focusNative": "The file input is a native element, participates in the tab order by default",
           "focusDropzone": "The dropzone area is focusable when clickToSelect is enabled"
         }
       },
@@ -965,10 +965,10 @@
         "title": "FormField",
         "description": "Accessible wrapper that provides label, helper text, error state and id/aria linking for any form control.",
         "seo": {
-          "metaTitle": "Vue Form Field — Label & Error",
+          "metaTitle": "Vue Form Field: Label & Error",
           "metaDescription": "Free, open-source Vue form field for Vue 3 and Nuxt: accessible wrapper providing label, helper text, error state and id/aria linking for any control.",
           "h1": "Vue Form Field Component",
-          "intro": "mood-ui's FormField is a free, open-source Vue 3 form field component — an accessible wrapper that provides a label, helper text, error state and id/aria linking for any form control."
+          "intro": "mood-ui's FormField is a free, open-source Vue 3 form field component: an accessible wrapper that provides a label, helper text, error state and id/aria linking for any form control."
         },
         "controls": {
           "layout": "Layout",
@@ -1042,10 +1042,10 @@
         "title": "Input",
         "description": "Text input with label, helper, error messages, icons, prefix/suffix and three visual variants.",
         "seo": {
-          "metaTitle": "Vue Input Component — Text Field",
+          "metaTitle": "Vue Input Component: Text Field",
           "metaDescription": "Free, open-source Vue text input for Vue 3 and Nuxt: label, helper and error messages, icons, prefix/suffix and three visual variants. Zero license cost.",
           "h1": "Vue Input Component",
-          "intro": "mood-ui's Input is a free, open-source Vue 3 text input component — a form input with label, helper and error messages, icons, prefix/suffix slots and three visual variants."
+          "intro": "mood-ui's Input is a free, open-source Vue 3 text input component: a form input with label, helper and error messages, icons, prefix/suffix slots and three visual variants."
         },
         "controls": {
           "variant": "Variant",
@@ -1140,7 +1140,7 @@
           "ariaRequired": "Set to true when the required prop is active",
           "ariaDisabled": "Communicates disabled state to assistive technologies",
           "ariaLabel": "Provides an accessible name when no visible label is present",
-          "focusNative": "Uses a native input element — participates in the tab order by default",
+          "focusNative": "Uses a native input element, participates in the tab order by default",
           "focusClear": "The clear button is focusable and keyboard-activatable (Enter or Space)"
         }
       },
@@ -1149,10 +1149,10 @@
         "title": "MultiSelect",
         "description": "Multi-select with chips, search and bulk selection. Designed for medium-sized lists where users need to pick multiple options.",
         "seo": {
-          "metaTitle": "Vue Multi Select — Chips & Search",
+          "metaTitle": "Vue Multi Select: Chips & Search",
           "metaDescription": "Free, open-source Vue multiselect for Vue 3 and Nuxt: multi-select with chips, search and bulk selection, built for medium-sized lists with multiple options.",
           "h1": "Vue Multi Select Component",
-          "intro": "mood-ui's MultiSelect is a free, open-source Vue 3 multiselect component — a multi-select with chips, search and bulk selection, designed for medium-sized lists where users pick multiple options."
+          "intro": "mood-ui's MultiSelect is a free, open-source Vue 3 multiselect component: a multi-select with chips, search and bulk selection, designed for medium-sized lists where users pick multiple options."
         },
         "examples": {
           "basic": {
@@ -1193,7 +1193,7 @@
           "maxSelected": "Maximum number of selectable options.",
           "maxVisibleChips": "Number of chips before collapsing to \"+N\".",
           "disabled": "Disables the control.",
-          "readonly": "Read-only mode — blocks changes.",
+          "readonly": "Read-only mode: blocks changes.",
           "required": "Marks the field as required.",
           "loading": "Shows a spinner instead of the chevron.",
           "fullWidth": "Applies w-full to the root control.",
@@ -1223,7 +1223,7 @@
           "ariaRequired": "Set to true when the required prop is active",
           "ariaDisabled": "Communicates disabled state to assistive technologies",
           "ariaLabel": "Provides an accessible name when no visible label is present",
-          "focusNative": "Uses a native button as trigger — participates in the tab order by default",
+          "focusNative": "Uses a native button as trigger, participates in the tab order by default",
           "focusTrap": "Focus is trapped inside the dropdown panel while it is open"
         }
       },
@@ -1232,10 +1232,10 @@
         "title": "NumberInput",
         "description": "Numeric input with steppers, min/max, decimal precision, thousand separator and prefix/suffix.",
         "seo": {
-          "metaTitle": "Vue Number Input — Numeric Stepper",
+          "metaTitle": "Vue Number Input: Numeric Stepper",
           "metaDescription": "Free, open-source Vue number input for Vue 3 and Nuxt: numeric input with steppers, min/max, decimal precision, thousand separator and prefix/suffix.",
           "h1": "Vue Number Input Component",
-          "intro": "mood-ui's NumberInput is a free, open-source Vue 3 number input component — a numeric input with steppers, min/max limits, decimal precision, a thousand separator and prefix/suffix slots."
+          "intro": "mood-ui's NumberInput is a free, open-source Vue 3 number input component: a numeric input with steppers, min/max limits, decimal precision, a thousand separator and prefix/suffix slots."
         },
         "controls": {
           "variant": "Variant",
@@ -1323,7 +1323,7 @@
           "ariaRequired": "Set to true when the required prop is active",
           "ariaDisabled": "Communicates disabled state to assistive technologies",
           "ariaLabel": "Provides an accessible name when no visible label is present",
-          "focusNative": "Uses a native input element — participates in the tab order by default",
+          "focusNative": "Uses a native input element, participates in the tab order by default",
           "focusSteppers": "Stepper buttons are focusable and keyboard-activatable (Enter or Space)"
         }
       },
@@ -1331,10 +1331,10 @@
         "title": "OTPInput",
         "description": "One-time password input with configurable digit slots, paste support, auto-advance and mask mode.",
         "seo": {
-          "metaTitle": "Vue OTP Input — Verification Code",
+          "metaTitle": "Vue OTP Input: Verification Code",
           "metaDescription": "Free, open-source Vue OTP input for Vue 3 and Nuxt: one-time password input with configurable digit slots, paste support, auto-advance and a mask mode.",
           "h1": "Vue OTP Input Component",
-          "intro": "mood-ui's OTPInput is a free, open-source Vue 3 OTP input component — a one-time password and verification code input with configurable digit slots, paste support, auto-advance and a mask mode."
+          "intro": "mood-ui's OTPInput is a free, open-source Vue 3 OTP input component: a one-time password and verification code input with configurable digit slots, paste support, auto-advance and a mask mode."
         },
         "controls": {
           "length": "Length",
@@ -1357,7 +1357,7 @@
           },
           "mask": {
             "title": "Masked",
-            "desc": "Set mask to hide the entered characters — useful for PIN entry."
+            "desc": "Set mask to hide the entered characters, useful for PIN entry."
           },
           "alphanumeric": {
             "title": "Alphanumeric",
@@ -1418,12 +1418,12 @@
           "kbArrow": "Navigate between slots with ArrowLeft / ArrowRight",
           "kbHome": "Jump to the first slot",
           "kbEnd": "Jump to the last slot",
-          "kbPaste": "Paste a full OTP code — characters are distributed across slots",
+          "kbPaste": "Paste a full OTP code, characters are distributed across slots",
           "ariaGroup": "Slots are wrapped in a role=group with an accessible label",
           "ariaInvalid": "Set to true when errorText is present",
           "ariaDescribedBy": "Links helper or error text to the group for screen reader context",
           "ariaLabel": "Each slot has its own aria-label (e.g. \"Digit 1\")",
-          "focusNative": "Each slot is a native input — participates in the tab order by default",
+          "focusNative": "Each slot is a native input, participates in the tab order by default",
           "autocomplete": "The first slot uses autocomplete=one-time-code for SMS auto-fill"
         }
       },
@@ -1431,10 +1431,10 @@
         "title": "PasswordInput",
         "description": "Password input with a visibility toggle and an optional heuristic strength meter.",
         "seo": {
-          "metaTitle": "Vue Password Input — Strength Meter",
+          "metaTitle": "Vue Password Input: Strength Meter",
           "metaDescription": "Free, open-source Vue password input for Vue 3 and Nuxt: a password field with a visibility toggle and an optional heuristic strength meter. Zero license cost.",
           "h1": "Vue Password Input Component",
-          "intro": "mood-ui's PasswordInput is a free, open-source Vue 3 password field component — a password input with a visibility toggle and an optional heuristic strength meter."
+          "intro": "mood-ui's PasswordInput is a free, open-source Vue 3 password field component: a password input with a visibility toggle and an optional heuristic strength meter."
         },
         "controls": {
           "variant": "Variant",
@@ -1515,7 +1515,7 @@
           "focus": "Emitted when the input receives focus.",
           "blur": "Emitted when the input loses focus.",
           "updateVisible": "Emitted when the password visibility is toggled.",
-          "strengthChange": "Emitted when the strength score changes (0–4)."
+          "strengthChange": "Emitted when the strength score changes (0-4)."
         },
         "types": {
           "title": "PasswordInput",
@@ -1532,7 +1532,7 @@
           "ariaDisabled": "Communicates disabled state to assistive technologies",
           "ariaLabel": "Provides an accessible name when no visible label is present",
           "ariaPressed": "The visibility toggle button exposes its on/off state",
-          "focusNative": "Uses a native input element — participates in the tab order by default",
+          "focusNative": "Uses a native input element, participates in the tab order by default",
           "focusToggle": "The visibility toggle button is focusable and keyboard-activatable"
         }
       },
@@ -1543,7 +1543,7 @@
           "metaTitle": "Vue Phone Number Input Component",
           "metaDescription": "Free, open-source Vue phone number input for Vue 3 and Nuxt: international phone field with a searchable country selector and configurable output format.",
           "h1": "Vue Phone Number Input Component",
-          "intro": "mood-ui's PhoneInput is a free, open-source Vue 3 phone number input component — an international phone field with a searchable country selector, configurable output format and full accessibility support."
+          "intro": "mood-ui's PhoneInput is a free, open-source Vue 3 phone number input component: an international phone field with a searchable country selector, configurable output format and full accessibility support."
         },
         "controls": {
           "variant": "Variant",
@@ -1661,7 +1661,7 @@
           "metaTitle": "Vue Radio Button Component",
           "metaDescription": "Free, open-source Vue radio button for Vue 3 and Nuxt: individual radio input with all color and size variants. For groups, pair it with RadioGroup.",
           "h1": "Vue Radio Component",
-          "intro": "mood-ui's Radio is a free, open-source Vue 3 radio button component — an individual radio input you pair with RadioGroup for managed roving tabindex and a shared name attribute."
+          "intro": "mood-ui's Radio is a free, open-source Vue 3 radio button component: an individual radio input you pair with RadioGroup for managed roving tabindex and a shared name attribute."
         },
         "controls": {
           "color": "Color",
@@ -1734,7 +1734,7 @@
           "ariaRequired": "Set to true when the required prop is active",
           "ariaDisabled": "Communicates disabled state to assistive technologies",
           "ariaLabel": "Provides an accessible name when no visible label is present",
-          "focusNative": "Uses a native input[type=radio] — participates in the tab order by default",
+          "focusNative": "Uses a native input[type=radio], participates in the tab order by default",
           "focusGroup": "Arrow keys cycle between radios sharing the same name attribute"
         }
       },
@@ -1745,7 +1745,7 @@
           "metaTitle": "Vue Radio Group Component",
           "metaDescription": "Free, open-source Vue radio group for Vue 3 and Nuxt: single-selection group with semantic fieldset/legend and full label, helper and error support.",
           "h1": "Vue Radio Group Component",
-          "intro": "mood-ui's RadioGroup is a free, open-source Vue 3 radio group component — a single-selection group with semantic fieldset/legend markup and full label, helper and error support."
+          "intro": "mood-ui's RadioGroup is a free, open-source Vue 3 radio group component: a single-selection group with semantic fieldset/legend markup and full label, helper and error support."
         },
         "controls": {
           "color": "Color",
@@ -1830,10 +1830,10 @@
         "title": "RangeSlider",
         "description": "Dual-thumb slider for selecting a numeric range. Supports marks, value formatting and the usual visual modes.",
         "seo": {
-          "metaTitle": "Vue Range Slider — Dual Thumb",
+          "metaTitle": "Vue Range Slider: Dual Thumb",
           "metaDescription": "Free, open-source Vue range slider for Vue 3 and Nuxt: dual-thumb slider for selecting a numeric range, with marks, value formatting and visual modes.",
           "h1": "Vue Range Slider Component",
-          "intro": "mood-ui's RangeSlider is a free, open-source Vue 3 range slider component — a dual-thumb slider for selecting a numeric range, with marks, value formatting and the usual visual modes."
+          "intro": "mood-ui's RangeSlider is a free, open-source Vue 3 range slider component: a dual-thumb slider for selecting a numeric range, with marks, value formatting and the usual visual modes."
         },
         "controls": {
           "color": "Color",
@@ -1923,7 +1923,7 @@
           "metaTitle": "Vue Star Rating Component",
           "metaDescription": "Free, open-source Vue star rating for Vue 3 and Nuxt: star rating control with half steps, a read-only mode and all color and size variants. Zero cost.",
           "h1": "Vue Rating Component",
-          "intro": "mood-ui's Rating is a free, open-source Vue 3 star rating component — a rating control with half steps, a read-only mode and all color and size variants."
+          "intro": "mood-ui's Rating is a free, open-source Vue 3 star rating component: a rating control with half steps, a read-only mode and all color and size variants."
         },
         "controls": {
           "max": "Max",
@@ -1959,7 +1959,7 @@
           "modelValue": "Current value (v-model).",
           "max": "Total number of items (stars) rendered.",
           "allowHalf": "Allows values in 0.5 steps.",
-          "readonly": "Read-only mode — no interaction accepted.",
+          "readonly": "Read-only mode: no interaction accepted.",
           "disabled": "Disables and reduces opacity.",
           "clearable": "Re-clicking the active value resets it to 0.",
           "color": "Semantic color of the filled stars.",
@@ -1982,7 +1982,7 @@
           "kbEnter": "Confirm the current rating value",
           "ariaLabel": "Provides an accessible name for the rating group",
           "ariaDisabled": "Communicates disabled state to assistive technologies",
-          "focusNative": "Each star is a focusable button — arrow keys navigate and change the value",
+          "focusNative": "Each star is a focusable button, arrow keys navigate and change the value",
           "focusReadonly": "Read-only mode preserves visual state and announces the current value without allowing edits"
         }
       },
@@ -1990,10 +1990,10 @@
         "title": "SearchInput",
         "description": "Search-optimised input: magnifier icon, automatic clear button, optional debounce and keyboard shortcut support.",
         "seo": {
-          "metaTitle": "Vue Search Input — Search Bar",
+          "metaTitle": "Vue Search Input: Search Bar",
           "metaDescription": "Free, open-source Vue search input for Vue 3 and Nuxt: search field with magnifier icon, automatic clear button, optional debounce and keyboard shortcuts.",
           "h1": "Vue Search Input Component",
-          "intro": "mood-ui's SearchInput is a free, open-source Vue 3 search input component — a search-optimised field with a magnifier icon, automatic clear button, optional debounce and keyboard shortcut support."
+          "intro": "mood-ui's SearchInput is a free, open-source Vue 3 search input component: a search-optimised field with a magnifier icon, automatic clear button, optional debounce and keyboard shortcut support."
         },
         "controls": {
           "variant": "Variant",
@@ -2090,7 +2090,7 @@
           "ariaRequired": "Set to true when the required prop is active",
           "ariaDisabled": "Communicates disabled state to assistive technologies",
           "ariaLabel": "Provides an accessible name when no visible label is present",
-          "focusNative": "Uses a native input element — participates in the tab order by default",
+          "focusNative": "Uses a native input element, participates in the tab order by default",
           "focusShortcut": "Global keyboard shortcut (e.g. Cmd+K) moves focus directly to the search input"
         }
       },
@@ -2101,7 +2101,7 @@
           "metaTitle": "Vue Segmented Control Component",
           "metaDescription": "Free, open-source Vue segmented control for Vue 3 and Nuxt: single-value pill-group selector with a sliding indicator for switching views or filters.",
           "h1": "Vue Segmented Control Component",
-          "intro": "mood-ui's Segmented is a free, open-source Vue 3 segmented control component — a single-value pill-group selector with a sliding indicator, ideal for switching views or short filters."
+          "intro": "mood-ui's Segmented is a free, open-source Vue 3 segmented control component: a single-value pill-group selector with a sliding indicator, ideal for switching views or short filters."
         },
         "controls": {
           "color": "Color",
@@ -2169,10 +2169,10 @@
         "title": "Select",
         "description": "Accessible single-value selector with a dropdown panel. Supports search, grouping, icons and the standard visual modes.",
         "seo": {
-          "metaTitle": "Vue Select Component — Dropdown",
+          "metaTitle": "Vue Select Component: Dropdown",
           "metaDescription": "Free, open-source Vue select for Vue 3 and Nuxt: accessible single-value dropdown with search, option grouping and icons. A select dropdown with zero license cost.",
           "h1": "Vue Select Component",
-          "intro": "mood-ui's Select is a free, open-source Vue 3 select dropdown component — an accessible single-value selector with a dropdown panel, search, option grouping and icons."
+          "intro": "mood-ui's Select is a free, open-source Vue 3 select dropdown component: an accessible single-value selector with a dropdown panel, search, option grouping and icons."
         },
         "controls": {
           "variant": "Variant",
@@ -2232,7 +2232,7 @@
           "clearable": "Shows an X button to clear the selection.",
           "searchable": "Shows a search input inside the panel.",
           "disabled": "Disables the control.",
-          "readonly": "Read-only mode — blocks changes.",
+          "readonly": "Read-only mode: blocks changes.",
           "required": "Marks the field as required.",
           "loading": "Shows a spinner instead of the chevron.",
           "fullWidth": "Applies w-full to the control root.",
@@ -2256,7 +2256,7 @@
           "description": "Secondary text rendered below the label inside the dropdown item.",
           "icon": "Optional icon rendered to the left of the label.",
           "disabled": "When true, the item is visible but not selectable.",
-          "group": "Group name — items with the same group are visually grouped together."
+          "group": "Group name: items with the same group are visually grouped together."
         },
         "a11y": {
           "kbTab": "Move focus to the next focusable element",
@@ -2270,7 +2270,7 @@
           "ariaRequired": "Set to true when the required prop is active",
           "ariaDisabled": "Communicates disabled state to assistive technologies",
           "ariaLabel": "Provides an accessible name when no visible label is present",
-          "focusNative": "Uses a native button as trigger — participates in the tab order by default",
+          "focusNative": "Uses a native button as trigger, participates in the tab order by default",
           "focusTrap": "Focus is trapped inside the dropdown panel while it is open"
         }
       },
@@ -2278,10 +2278,10 @@
         "title": "Slider",
         "description": "Single-value numeric slider with marks, value formatting, label and all the usual visual variants.",
         "seo": {
-          "metaTitle": "Vue Slider Component — Range Input",
+          "metaTitle": "Vue Slider Component: Range Input",
           "metaDescription": "Free, open-source Vue slider for Vue 3 and Nuxt: single-value numeric slider with marks, value formatting, a label and the usual visual variants.",
           "h1": "Vue Slider Component",
-          "intro": "mood-ui's Slider is a free, open-source Vue 3 slider component — a single-value numeric range input with marks, value formatting, a label and all the usual visual variants."
+          "intro": "mood-ui's Slider is a free, open-source Vue 3 slider component: a single-value numeric range input with marks, value formatting, a label and all the usual visual variants."
         },
         "controls": {
           "color": "Color",
@@ -2368,10 +2368,10 @@
         "title": "Switch",
         "description": "Semantically accessible on/off toggle. Supports left or right label position, description and all color and size variants.",
         "seo": {
-          "metaTitle": "Vue Switch — On/Off Toggle",
+          "metaTitle": "Vue Switch: On/Off Toggle",
           "metaDescription": "Free, open-source Vue toggle switch for Vue 3 and Nuxt: accessible on/off toggle with left or right label, description and all color and size variants.",
           "h1": "Vue Switch Component",
-          "intro": "mood-ui's Switch is a free, open-source Vue 3 toggle switch component — a semantically accessible on/off toggle with left or right label position, description and all color and size variants."
+          "intro": "mood-ui's Switch is a free, open-source Vue 3 toggle switch component: a semantically accessible on/off toggle with left or right label position, description and all color and size variants."
         },
         "controls": {
           "color": "Color",
@@ -2453,17 +2453,17 @@
           "ariaRequired": "Set to true when the required prop is active",
           "ariaDisabled": "Communicates disabled state to assistive technologies",
           "ariaLabel": "Provides an accessible name when no visible label is present",
-          "focusNative": "Uses a native button element — participates in the tab order by default"
+          "focusNative": "Uses a native button element, participates in the tab order by default"
         }
       },
       "tagInput": {
         "title": "TagInput",
         "description": "Tag editor: the user types text, presses Enter (or a delimiter) and a chip is added. Supports validation, maximums and visual variants.",
         "seo": {
-          "metaTitle": "Vue Tag Input — Tags Field",
+          "metaTitle": "Vue Tag Input: Tags Field",
           "metaDescription": "Free, open-source Vue tag input for Vue 3 and Nuxt: tag editor where users type and press Enter to add a chip, with validation, maximums and variants.",
           "h1": "Vue Tag Input Component",
-          "intro": "mood-ui's TagInput is a free, open-source Vue 3 tag input component — a tag editor where users type, press Enter or a delimiter to add a chip, with validation, maximums and visual variants."
+          "intro": "mood-ui's TagInput is a free, open-source Vue 3 tag input component: a tag editor where users type, press Enter or a delimiter to add a chip, with validation, maximums and visual variants."
         },
         "playground": {
           "placeholder": "Add a tag and press Enter…"
@@ -2505,7 +2505,7 @@
           "size": "Size of the input and chips.",
           "radius": "Corner radius of the wrapper and chips.",
           "disabled": "Disables interaction.",
-          "readonly": "Read-only mode — tags cannot be removed.",
+          "readonly": "Read-only mode: tags cannot be removed.",
           "ariaLabel": "Accessible name for the input."
         },
         "emits": {
@@ -2527,7 +2527,7 @@
           "ariaDescribedBy": "Links helper or error text to the input for screen reader context",
           "ariaDisabled": "Communicates disabled state to assistive technologies",
           "ariaLabel": "Provides an accessible name when no visible label is present",
-          "focusNative": "Uses a native input element — participates in the tab order by default",
+          "focusNative": "Uses a native input element, participates in the tab order by default",
           "focusChips": "Each tag chip has a remove button that is focusable and keyboard-activatable"
         }
       },
@@ -2535,10 +2535,10 @@
         "title": "Textarea",
         "description": "Multi-line text area with autoresize, character counter, helper/error text and all the visual variants of Input.",
         "seo": {
-          "metaTitle": "Vue Textarea Component — Autoresize",
+          "metaTitle": "Vue Textarea Component: Autoresize",
           "metaDescription": "Free, open-source Vue textarea for Vue 3 and Nuxt: multi-line text area with autoresize, a character counter, helper/error text and Input's visual variants.",
           "h1": "Vue Textarea Component",
-          "intro": "mood-ui's Textarea is a free, open-source Vue 3 textarea component — a multi-line text area with autoresize, a character counter, helper/error text and the same visual variants as Input."
+          "intro": "mood-ui's Textarea is a free, open-source Vue 3 textarea component: a multi-line text area with autoresize, a character counter, helper/error text and the same visual variants as Input."
         },
         "controls": {
           "variant": "Variant",
@@ -2634,13 +2634,13 @@
           "ariaRequired": "Set to true when the required prop is active",
           "ariaDisabled": "Communicates disabled state to assistive technologies",
           "ariaLabel": "Provides an accessible name when no visible label is present",
-          "focusNative": "Uses a native textarea element — participates in the tab order by default",
+          "focusNative": "Uses a native textarea element, participates in the tab order by default",
           "focusResize": "Manual resize handle is a browser feature and does not interfere with keyboard navigation"
         }
       },
       "menuButton": {
         "title": "MenuButton",
-        "description": "A button that opens a menu on click. Its DOM root is the trigger button, so it drops straight into a ButtonGroup as a segment — inheriting the group's variant, size and radius and collapsing its borders — and it works standalone too.",
+        "description": "A button that opens a menu on click. Its DOM root is the trigger button, so it drops straight into a ButtonGroup as a segment, inheriting the group's variant, size and radius and collapsing its borders, and it works standalone too.",
         "controls": {
           "variant": "Variant",
           "size": "Size",
@@ -2649,7 +2649,7 @@
         "examples": {
           "basic": {
             "title": "Basic",
-            "desc": "Pass an items array — the same model as DropdownMenu (items, dividers, headers)."
+            "desc": "Pass an items array, the same model as DropdownMenu (items, dividers, headers)."
           },
           "group": {
             "title": "In a ButtonGroup",
@@ -2665,10 +2665,10 @@
           }
         },
         "seo": {
-          "metaTitle": "Vue MenuButton — Dropdown & Split Button",
+          "metaTitle": "Vue MenuButton: Dropdown & Split Button",
           "metaDescription": "Free, open-source Vue MenuButton: a button that opens a menu of actions, with dropdown and split-button variants, keyboard navigation and full accessibility. For Vue 3 and Nuxt.",
           "h1": "Vue MenuButton Component",
-          "intro": "mood-ui's MenuButton is a free, open-source dropdown and split button for Vue 3 and Nuxt — trigger a menu of actions from a single button, with keyboard navigation, icons and accessibility built in."
+          "intro": "mood-ui's MenuButton is a free, open-source dropdown and split button for Vue 3 and Nuxt: trigger a menu of actions from a single button, with keyboard navigation, icons and accessibility built in."
         }
       },
       "pressButton": {
@@ -2676,7 +2676,7 @@
         "title": "PressButton",
         "description": "Tactile button that presses in with the Web Animations API and springs back on release. Same variants, colors and sizes as the native Button, zero-shift loading and rendering as a link. Follows ModoProvider for color, size, radius and dark mode.",
         "seo": {
-          "metaTitle": "Vue PressButton — Tactile Spring Button",
+          "metaTitle": "Vue PressButton: Tactile Spring Button",
           "metaDescription": "Free, open-source tactile Vue 3 button with a WAAPI press and spring rebound, the same four variants and five semantic colors as the native Button, and zero-shift loading.",
           "h1": "Vue PressButton Component",
           "intro": "mood-ui's PressButton brings a native-feeling press and spring rebound to Vue 3 and Nuxt, with the same variants as the native Button (normal, outline, ghost, text), five semantic colors, zero-shift loading and full accessibility."
@@ -2805,7 +2805,7 @@
         "title": "PressButtonGroup",
         "description": "Joins several PressButton segments into one bar whose outline bends smoothly when a segment is pressed. Passes variant, color, size, radius, disabled, gradient and full width to every segment, and follows ModoProvider like the native ButtonGroup.",
         "seo": {
-          "metaTitle": "Vue PressButtonGroup — Morphing Tactile Button Group",
+          "metaTitle": "Vue PressButtonGroup: Morphing Tactile Button Group",
           "metaDescription": "Free, open-source Vue 3 button group for PressButton: one connected bar whose outline morphs on press, shared dividers, horizontal and vertical orientation.",
           "h1": "Vue PressButtonGroup Component",
           "intro": "mood-ui's PressButtonGroup joins PressButton actions into a single bar. Its outer contour and border bend continuously while a segment is held down, and every segment shares the group's variant, color, size and radius."
@@ -2905,7 +2905,7 @@
         "title": "ModeOrb",
         "description": "Color-mode sphere that switches the global theme between light and dark with a circular View Transition wave and a crest spreading from the orb's center. Its diameter matches the control height, and it follows ModoProvider for color and size.",
         "seo": {
-          "metaTitle": "Vue ModeOrb — Circular View Transition Theme Toggle",
+          "metaTitle": "Vue ModeOrb: Circular View Transition Theme Toggle",
           "metaDescription": "Free, open-source Vue 3 ModeOrb: a dark/light mode sphere built on useColorMode and a circular document.startViewTransition wave.",
           "h1": "Vue ModeOrb Component",
           "intro": "mood-ui's ModeOrb is a color-mode toggle for Vue 3 and Nuxt. Clicking the sphere switches the global mode and plays a circular View Transition wave from the orb's center to the farthest corner of the viewport. The wave runs on a fixed duration, so it finishes on time even on a busy page."
@@ -2977,7 +2977,7 @@
         "title": "GlassSwitch",
         "description": "On/off switch with a liquid-glass thumb you can drag or tap. Same API as the native Switch (label, description, helper and error text, loading, readonly) on top of a real checkbox, and follows ModoProvider for color, size, radius and dark mode.",
         "seo": {
-          "metaTitle": "Vue GlassSwitch — Draggable Glass Toggle",
+          "metaTitle": "Vue GlassSwitch: Draggable Glass Toggle",
           "metaDescription": "Free, open-source Vue 3 toggle switch with a draggable liquid-glass thumb, the same API as the native Switch, native form semantics and full accessibility.",
           "h1": "Vue GlassSwitch Component",
           "intro": "mood-ui's GlassSwitch is a Vue 3 and Nuxt toggle with a liquid-glass thumb that follows your finger. It keeps the native Switch API and a real checkbox underneath, so forms, validation and screen readers work as expected."
@@ -3098,7 +3098,7 @@
         "title": "MorphSelect",
         "description": "Single-value select whose field morphs into the option list and back on close, with optional search. Compound API (MorphSelect, Trigger, Content) with the same field props as the native Select, and follows ModoProvider for color, size, radius, halo and dark mode.",
         "seo": {
-          "metaTitle": "Vue MorphSelect — Morphing Select Field",
+          "metaTitle": "Vue MorphSelect: Morphing Select Field",
           "metaDescription": "Free, open-source Vue 3 select whose field morphs into the option list, with search, option descriptions, native form support and the same field API as the native Select.",
           "h1": "Vue MorphSelect Component",
           "intro": "mood-ui's MorphSelect is a Vue 3 and Nuxt single-value select. The field grows into the option list and folds back on close, while keeping the native Select field props, keyboard navigation and form submission."

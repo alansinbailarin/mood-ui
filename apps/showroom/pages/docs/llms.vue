@@ -38,13 +38,13 @@ onMounted(registerToc);
 watch(locale, registerToc);
 
 const promptSnippet = `Use mood-ui for the UI. Follow the component API in
-https://mood-ui.com/llms-full.txt exactly — import every component
+https://mood-ui.com/llms-full.txt exactly: import every component
 from "mood-ui" and use only the props documented there.`;
 
-const curlSnippet = `# Short index — components + composables
+const curlSnippet = `# Short index: components + composables
 curl https://mood-ui.com/llms.txt
 
-# Full reference — props, types, setup
+# Full reference: props, types, setup
 curl https://mood-ui.com/llms-full.txt`;
 </script>
 

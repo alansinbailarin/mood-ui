@@ -219,8 +219,8 @@ const propsList = computed<PropDoc[]>(() => [
 const emitsList = computed<EmitDoc[]>(() => [
   { name: "update:open", payload: "boolean", description: p("emits.updateOpen") },
   { name: "openChange", payload: "boolean", description: p("emits.openChange") },
-  { name: "show", payload: "—", description: p("emits.show") },
-  { name: "hide", payload: "—", description: p("emits.hide") },
+  { name: "show", payload: "-", description: p("emits.show") },
+  { name: "hide", payload: "-", description: p("emits.hide") },
 ]);
 
 const slotsList = computed<SlotDoc[]>(() => [

@@ -110,6 +110,24 @@ that workspace's portal with that token or none, with no guard's user left from 
 `portalCodeFor($email)` reads the code mailed to `$email` off `Mail::fake()` (it fails the test when no `PortalCodeMail`
 went at all, and answers `''` when codes went to other addresses only).
 
+A test of the global search starts from Search's world (`packages/Search/tests/Support/search-world.php`):
+`searchWorld($this)` is Team's world (alpha with Olga, Mia and Max, bravo with Zed, each signed in) with no source of a test
+installed, and `searchAs($this, $token)` a request signed in to alpha. `withSearchSources(...)` (`fake-sources.php`) installs
+sources of the test's own, as a package's provider would, once per application, and forgets the registry; its finders find
+(`NotesFinder`), fail (`BrokenFinder`, `QueryFailingFinder`) or break the contract (`StrayFinder`, `OddFinder`). A real
+source is tested through the API, `POST /api/v1/search` with `{"q": ...}`, reading its group. No test reaches Meilisearch:
+`phpunit.xml` pins `SCOUT_DRIVER=database`, and Clients' `fake-index.php` gives `withFakeIndex($driver, $queue)`, a
+`FakeIndex` installed as Scout's driver that answers the ids in `$answer` and keeps what it was sent; undo it with
+`withoutFakeIndex()` in `afterEach`, since Scout keeps its syncing switch in a static property.
+
+A test of the dashboard's home starts from Dashboard's world (`packages/Dashboard/tests/Support/dashboard-world.php`):
+`dashboardWorld($this)` is Team's world (alpha with Olga the owner, Mia the manager and Max a member, bravo with Zed, each
+signed in) with no widget of a test installed, `dashboardAs($this, $token)` a request signed in to alpha, and
+`widgetsOf($response)` the widgets of one `GET /api/v1/dashboard` answer, by key. `withWidgets(...)` (`fake-widgets.php`)
+installs widgets of the test's own, as a package's provider would, and forgets the registry; its data classes answer
+(`NotesWidget`), have nothing to show (`QuietWidget`), fail with a person's email in the message (`BrokenWidget`) or are not
+widget data at all (`NotWidgetData`). A real widget is tested through the API, reading its key in `widgetsOf()`.
+
 A platform read (`ReadsAcrossWorkspaces`) runs in a session of its own, which cannot see the rows of a test's
 transaction: write what it must read with `committedConnection()` (and `asCommittedTenant()` for a tenant table), delete
 it in `afterEach`, and close the sessions with `closePlatformSessions()` (`packages/Support/tests/Support/committed.php`).
@@ -208,6 +226,21 @@ closed portal. Asking for a code always answers 202, and the one code that signs
 STUB_PORTAL_TOKEN)` before the page loads, as `client-portal.spec.ts` does). It is no member's: `GET /me` with it is a 401.
 A change of her details or her consent answers `{client}` with what was sent applied, and keeps nothing. Ana's page shows
 two portal sessions, and the clients' owner sees the portal's section in Settings.
+
+The global search answers from `support/stub-search.ts` (`POST /search`), in any workspace, by each person's permissions:
+it finds people, branches and clients the other stubs already have, so a result opens a page that exists. Typing `fail`
+answers as if one source had failed (`meta.incomplete`) and `boom` as if the whole search had. A module's source is added by
+a `Source` entry (its permission, its labels in both languages and a few hits whose `route` is a stub page). `search.spec.ts`
+is the model: it presses Cmd+K or Ctrl+K by what `navigator.platform` says, as mood-ui does, because the projects use a
+Windows Chrome profile.
+
+The dashboard's home answers from `support/stub-dashboard.ts` (`GET /dashboard`), in any workspace, by each person's
+permissions, in the shape of the API (`key`, `label`, `size`, `data`, `failed`): the team's, the branches', the clients' and the
+plan's widgets with fixed figures, the plan's quotas labelled in both languages. In the workspace `shop-broken` the clients'
+widget comes back `failed` with no data. A module's widget is added by a `Widget` entry (its permission, its labels in both
+languages and its `data`). The Create menu in the top bar comes from the layers' own actions, by the same permissions: it shows
+for the sessions that may invite, add a branch or add a client (`STUB_TEAM_TOKEN`, `STUB_BRANCHES_TOKEN`, `STUB_CLIENTS_TOKEN`)
+and not for the demo owner or a member. `dashboard-home.spec.ts` is the model, with the menu open on a desktop and on a phone.
 
 The admin's editor of the plans answers from `support/stub-platform-plans.ts`, behind the stub's admin token
 (`STUB_PLATFORM_TOKEN`): Free (the default), Pro (its monthly price not on Stripe yet) and Legacy (off sale), three

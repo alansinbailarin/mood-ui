@@ -8,7 +8,8 @@ package are documented with it: [Tenancy](packages/tenancy.md#the-tenancy-layer)
 [Plans](packages/plans.md#the-plans-layer), [Notifications](packages/notifications.md#the-notifications-layer),
 [Team](packages/team.md#the-team-layer) (the team, a member's page and `/join`),
 [Branches](packages/branches.md#the-branches-layer) (the branches, a branch's page with its map, hours and people),
-[Clients](packages/clients.md#the-clients-layer) (the clients, their tags, imports and exports) and
+[Clients](packages/clients.md#the-clients-layer) (the clients, their tags, imports and exports),
+[Search](packages/search.md#the-search-layer) (the palette in the top bar, `Cmd+K`, and a dialog on a phone) and
 [Platform](packages/platform.md#the-platform-layer) (the admin's panel on its own host).
 
 ## Commands
@@ -247,8 +248,8 @@ utility does not give the shade its number suggests; use mood-ui's semantic toke
 `useSubscriptionSections.ts` (`kit:subscription:sections`: a layer pushes `{ id, order, component }` for a section of
 the Subscription page, drawn under the plan's summary; the billing layer's plans and payments) and
 `useOnboardingSteps.ts` (`kit:onboarding:steps`), `useTopbarItems.ts` (`kit:topbar:items`),
-`useSidebarTopItems.ts` (`kit:sidebar:top`),
-`useTeamMemberSections.ts` (`kit:team:member-sections`) and `useMapAdapter.ts` (`kit:map:adapter`):
+`useSidebarTopItems.ts` (`kit:sidebar:top`), `useSearchShortcuts.ts` (`kit:search:shortcuts`),
+`useTeamMemberSections.ts` (`kit:team:member-sections`), `useDashboardWidgets.ts` (`kit:dashboard:widgets`), `useTopbarActions.ts` (`kit:topbar:actions`) and `useMapAdapter.ts` (`kit:map:adapter`):
 
 | Hook | Called by | Meaning |
 | ---- | --------- | ------- |
@@ -268,7 +269,10 @@ the Subscription page, drawn under the plan's summary; the billing layer's plans
 | `kit:clients:tabs` | a client's page (the clients layer's), with an array, when it mounts | a layer pushes `{ id, order, labelKey, component }` for a tab of the page; the clients layer's own are Profile (10) and Activity (20), a module's from 50 (a client's appointments). The component gets the prop `clientId` (string); `labelKey` is a message key of the layer that brings it; `readOnly: true` marks a tab with nothing to save (the Activity), on which the page shows no action bar. `collectClientTabs()` gathers them, by order (then id). |
 | `kit:portal:sections` | the client portal's account page (the clients layer's), with an array | a layer pushes `{ id, order, component }` for a section of the portal, its `id` the section's key as `GET /portal/me` lists it (`spa.visits`). The page draws only the sections the API listed for the client, in the API's order, each under the API's label; the component gets no props. `collectPortalSections()` gathers them, by order (then id). See [Add a portal section](guides/add-a-portal-section.md#3-draw-it). |
 | `kit:subscription:sections` | the Subscription page, with an array, when it mounts | a layer pushes `{ id, order, component }` for a section drawn under the plan's summary (the billing layer's plans and payments, see [Billing](packages/billing.md#the-billing-layer)). `collectSubscriptionSections()` gathers them, by order (then id). |
-| `kit:topbar:items` | the dashboard's top bar, with an array, when it mounts | a layer pushes `{ id, order, component }` for something of the dashboard's top bar, before the profile menu (the notifications layer's bell). `collectTopbarItems()` gathers them, by order (then id). |
+| `kit:topbar:items` | the dashboard's top bar, with an array, when it mounts | a layer pushes `{ id, order, component }` for something of the dashboard's top bar, before the profile menu (the search at order 5, the dashboard's Create menu at 8, the notifications layer's bell at 10). `collectTopbarItems()` gathers them, by order (then id). |
+| `kit:topbar:actions` | the top bar's Create menu, with an array, when it mounts | a layer pushes `{ id, order, labelKey, icon, to, permission, offWhileImpersonating? }` for something people may create from the top bar (`labelKey` a message key of the layer, `icon` a component, `to` a path of the app). `collectTopbarActions()` gathers them by order (then id) and keeps only those whose `permission` the person has; the page itself still checks the plan. `offWhileImpersonating: true` (every create) leaves it out while a super admin acts as the person, since the API refuses it; with none left the menu is not drawn. |
+| `kit:dashboard:widgets` | the dashboard's home, with an array, when it mounts | a layer pushes `{ key, component }` for a widget of the home, `key` being the widget's key as `GET /dashboard` lists it (`clients.recent`). The component gets one prop, `widget` (`DashboardWidgetView`: `key`, `label`, `size`, `data`, `failed`) and draws in core's `DashboardWidgetCard`. `collectDashboardWidgets()` gathers them by key, the first of a key winning. |
+| `kit:search:shortcuts` | the search palette, with an array, as it opens | a layer pushes `{ id, label, icon, to }` for a page the palette offers under "Pages" (`label` already translated, `icon` a Heroicons outline name as the menu's, `to` a path of the app). The dashboard layer answers with the menu entries it already loaded, with no request of its own. `collectSearchShortcuts()` gathers them in the order pushed, each id once. |
 | `kit:sidebar:top` | the dashboard's sidebar, with an array, when it mounts | a layer pushes `{ id, order, component }` for something at the top of the dashboard's sidebar, above the menu, in the mobile drawer too (the branches layer's switcher). The component gets one prop, `collapsed` (the sidebar shows icons only), and draws an icon with its tooltip then. An entry may add `shown`, read reactively, saying whether it has anything to show now: the sidebar draws its header (where mood-ui centres the collapse toggle) only for what shows. `collectSidebarTopItems()` gathers them, by order (then id); core's `MenuSidebar` draws them in mood-ui's `Sidebar` header. |
 | `kit:team:member-sections` | a member's page of the team (the team layer's), with an array, when it mounts | a layer pushes `{ id, order, component }` for a section of a member's page; Team's working hours (10) and skills (20) come first, a module's from 50. The component gets the props `memberId` (string) and `editable` (boolean: the person may change it) and saves with the page's action bar through `useSaverEntry()`, its fields in the page's change set. `collectTeamMemberSections()` gathers them, by order (then id). See [Team](packages/team.md#a-members-page). |
 | `kit:map:adapter` | the location picker's map (`resolveMapAdapter()`), with `{ factory: null }`, when a map mounts | a layer sets `choice.factory` to a `MapAdapterFactory` of another library (Google Maps JS, Leaflet); MapLibre (`createMapLibreAdapter`) otherwise. See [Maps](configuration/maps.md#another-map-library). |
@@ -315,7 +319,7 @@ is what the page calls a closed day, and `editable` turns it read-only), `useWee
 draft of the week on an editing page, made again when `original` changes, with `isDirty`, `valid` (no day ends before
 it starts), `reset`, its field in the page's change set and its group marked dirty; the section saves it through
 `useSaverEntry()`), and `week-hours.ts` (`WEEKDAY_KEYS`, `weekOf`, `dayProblem`, `sameWeek`, `describeWeek`,
-`timeAsDate`, `dateAsTime`) with the `WeekDay` type (`app/types/week.ts`, the API's shape: `weekday` 1–7, `enabled`,
+`timeAsDate`, `dateAsTime`) with the `WeekDay` type (`app/types/week.ts`, the API's shape: `weekday` 1 to 7, `enabled`,
 `startsAt` and `endsAt` as `HH:mm`). The days' names and the field's messages are `core.week.*`. Team's
 `WorkingHoursSection` is the model. A set of ids edited with a `KitSelect` with `multiple` (a member's skills, a branch's people) has its draft in
 `useSetDraft(group, original, { title, field, label, nameOf })`: `selected` for the field's `v-model`, `isDirty` (in any
@@ -406,6 +410,17 @@ export default defineNuxtPlugin((nuxtApp) => {
   });
 });
 ```
+
+## The dashboard's home
+
+The home draws what `GET /dashboard` lists, in the API's order, each widget by the component a layer registered under its
+`key` through `kit:dashboard:widgets`. Every component draws inside core's `DashboardWidgetCard` (`widget`, an optional
+`to` with its `linkTooltip`, and its figures in the default slot), so every card looks the same: a title, a link to the
+page it sums up, and the figures (mood-ui's `Stat`). When the widget's data could not be worked out (`failed`), the card
+says so in place of its content. The `size` (`small`, `medium`, `large`) is a third, two thirds or all of a wide row, and
+one column on a phone. A widget the API lists with no component registered is not drawn. `quotaView()` (core's
+`utils/quota-tone.ts`) gives a quota's percentage and tone for every screen that shows one (the subscription, the home).
+The widgets themselves are described in [Dashboard](packages/dashboard.md).
 
 ## Gating an action by plan
 
@@ -818,6 +833,9 @@ difference):
 - A `Dialog` closes on a pointer down outside its panel, and a `MorphSelect`'s list and a `DateField`'s calendar are
   teleported out of it: a dialog that holds one is `KitDialog` with `:dismissable="false"`, closed by its button and its
   actions only.
+- `SearchInput`'s clear button has no tooltip and takes none from outside. After a row is chosen it keeps the focus and
+  opens its list again when the field empties: the search palette blurs the field when a row is chosen. Its results are
+  drawn outside its own box, so the palette in the phone's dialog is `KitDialog` with `:dismissable="false"` too.
 - `AvatarUpload` calls one `save` listener twice for a photo (it is both its `onSave` prop and its `save` event): My
   profile sends the photo once and answers both calls the same. Its picture's `alt` is fixed Spanish in any locale.
 - mood-ui has no text link: a link is its text `PressButton` as an anchor, with a control's height and padding.

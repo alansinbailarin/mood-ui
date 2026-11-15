@@ -969,12 +969,12 @@ const emitsList = computed<EmitDoc[]>(() => [
 const slotsList = computed<SlotDoc[]>(() => [
   {
     name: "default",
-    bindings: "—",
+    bindings: "-",
     description: t("pages.data-display.table.slots.default"),
   },
   {
     name: "caption",
-    bindings: "—",
+    bindings: "-",
     description: t("pages.data-display.table.slots.caption"),
   },
   {
@@ -989,7 +989,7 @@ const slotsList = computed<SlotDoc[]>(() => [
   },
   {
     name: "footer",
-    bindings: "—",
+    bindings: "-",
     description: t("pages.data-display.table.slots.footer"),
   },
   {

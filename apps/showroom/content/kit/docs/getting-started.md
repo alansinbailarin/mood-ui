@@ -203,6 +203,20 @@ choice about news and offers: change one and save, then, back as the owner, the 
 their **Profile** has a **Client portal** card that says on how many devices they are signed in, with **Sign out everywhere**.
 See [The client portal](packages/clients.md#client-portal).
 
+### Search
+
+Press `Cmd+K` (`Ctrl+K` outside macOS) from any page of the dashboard: the field in the top bar takes the focus and offers
+the pages of the menu. Type two letters of a client's or a member's name and pick one: the results come grouped, and
+choosing one opens its page. On a phone the magnifying glass in the top bar opens the same search in a dialog.
+
+### The home
+
+`/dashboard` shows a card for each thing the person may want to know at a glance: the team's active members and open
+invitations, the branches they work at, their clients and how many are new, and the plan's use of each limit. Each card is
+there only for someone with its permission, and its numbers follow the branch in the top bar as the list does. The **Create**
+menu in the top bar (before the bell) offers what the person may add: invite someone, a new branch, a new client. See
+[Dashboard](packages/dashboard.md).
+
 ### Edit a plan
 
 Signed in to the admin's panel as above, open **Plans and subscriptions** and press Edit on Pro. Its tabs hold its texts in

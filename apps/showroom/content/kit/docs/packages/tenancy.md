@@ -59,6 +59,7 @@ also forgets the cached lookup.
 | `Contracts\CurrentTenant` | the current workspace: `id()`, `slug()`, `requireId()` and `require()` (a `TenantSummary`: `id`, `slug`, `name`), both of which throw `tenancy.required` when there is none. Other packages use it, never `Context\TenantContext`. |
 | `Contracts\TenantPayloadContributor` | adds keys to the public `GET /tenant`; tag it `tenancy.public` |
 | `Contracts\TenantScopedJob` | a queued job that names its own workspace through `tenantId()` |
+| `Contracts\RunsForSuspendedTenant` | a marker for a queued job that still runs when its workspace is suspended, because it only deletes by id what the workspace left elsewhere (Clients' removal from the search index). The workspace is applied as for any job. Use it for nothing that writes the workspace's data |
 | `Platform\ReadsAcrossWorkspaces` | `read($purpose, fn (ConnectionInterface $db) => ..., $scope)`: the one way to read data of every workspace, as the platform's read-only role, in a read-only transaction, logged first in `platform_reads` (`Models\PlatformReadEntry`). Throws `Platform\PlatformReadsUnavailable` with no role configured. See [the platform context](../concepts/multi-tenancy.md#the-platform-context). |
 | `Context\RunAsTenant` | `run(Tenant $tenant, callable $callback)`, or `runById($tenantId, $callback)`, an instance method: inject it or `app(RunAsTenant::class)->run(...)`, to run code as a workspace from a command or a seeder |
 | `Validation\TenantSlug` | validation rule for a slug (shape and reserved list), code `validation.tenant_slug` |
@@ -82,7 +83,7 @@ request header. Anything only the browser should read (a reset token) goes in `$
 
 - Stamps the current workspace on every queued job's payload, and has the worker apply it before the job is
   unserialized and put back the previous one afterwards. A job of a suspended or deleted workspace fails
-  without running.
+  without running, unless it implements `Contracts\RunsForSuspendedTenant` (a deleted workspace still fails it).
 - Forgets a workspace's cache entry when its model is saved or deleted, after the transaction commits.
 - Checks the database role on the first connection of each process when `tenancy.enforce_rls` is on.
 
