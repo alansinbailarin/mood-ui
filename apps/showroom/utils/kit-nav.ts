@@ -239,7 +239,42 @@ export const kitNavManifest: NavCategory[] = (() => {
   }));
 })();
 
+/**
+ * Directory-like paths (`/kit/setup`, `/kit/packages`…) are small generated
+ * index pages listing their section, so no URL under `/kit/` is ever a bare
+ * directory on a static host.
+ */
+const SECTION_GROUPS: Record<string, string> = {
+  concepts: "concepts",
+  packages: "packages-and-layers",
+  configuration: "configuration",
+  guides: "guides",
+  setup: "setup",
+};
+export interface KitSection {
+  slug: string;
+  title: string;
+  description: string;
+  pages: KitPage[];
+}
+export function kitSectionFor(slug: string): KitSection | null {
+  const gid = SECTION_GROUPS[slug];
+  const g = gid ? kitGroups().find((x) => x.id === gid) : undefined;
+  if (!g) return null;
+  return {
+    slug,
+    title: g.title,
+    description: `Every page in the ${g.title} part of the Mood Kit documentation.`,
+    pages: g.pages,
+  };
+}
+export const kitSectionSlugs = () =>
+  Object.keys(SECTION_GROUPS).filter((s) => kitSectionFor(s));
+
 /** Routes to prerender and list in the sitemap. English only: Spanish shows the same text. */
 export function kitDocRoutes(): string[] {
-  return kitPageList().map((p) => routeForSlug(p.slug));
+  return [
+    ...kitPageList().map((p) => routeForSlug(p.slug)),
+    ...kitSectionSlugs().map((s) => routeForSlug(s)),
+  ];
 }

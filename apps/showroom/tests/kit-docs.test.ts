@@ -20,7 +20,7 @@ import {
 } from "../utils/kit-docs";
 import { renderKitMarkdown } from "../utils/kit-markdown";
 import { agentBlockFor, agentPrompt, AGENT_PAGE_SLUGS } from "../utils/kit-agents";
-import { kitDocRoutes, kitPageList, kitSteps, kitGroups } from "../utils/kit-nav";
+import { kitDocRoutes, kitPageList, kitSteps, kitGroups, kitSectionSlugs } from "../utils/kit-nav";
 import { KIT_BUY_URL, KIT_FAQ_IDS } from "../utils/kit-config";
 
 const ROOT = resolve(__dirname, "../content");
@@ -207,6 +207,29 @@ describe("landing", () => {
       }
       expect(kit.agent.title).toBe(l === "es" ? "Hazlo con un agente" : "Let an agent do it");
       expect(kit.landing.seo.description.length).toBeLessThanOrEqual(165);
+    }
+  });
+});
+
+describe("no bare directories", () => {
+  const routes = kitDocRoutes();
+  it("/kit is the docs home and every directory under /kit is a route of its own", () => {
+    expect(routes).toContain("/kit");
+    for (const r of routes) {
+      const parts = r.split("/").filter(Boolean);
+      for (let i = 1; i < parts.length; i++) {
+        expect(routes, `${r} needs ${"/" + parts.slice(0, i).join("/")}`).toContain("/" + parts.slice(0, i).join("/"));
+      }
+    }
+    expect(kitSectionSlugs()).toEqual(expect.arrayContaining(["setup", "packages", "concepts", "guides", "configuration"]));
+  });
+  // Runs after `pnpm generate`: the static output has a real page for each route.
+  const out = resolve(__dirname, "../.vercel/output/static");
+  it.skipIf(!existsSync(out))("the generated output has an index.html for every route, in both locales", () => {
+    for (const r of routes) {
+      for (const base of [r, `/es${r}`]) {
+        expect(existsSync(join(out, base, "index.html")), base).toBe(true);
+      }
     }
   });
 });

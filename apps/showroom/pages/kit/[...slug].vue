@@ -13,7 +13,7 @@ import { canonicalPath, KIT_LANDING, routeForSlug } from "~/utils/kit-docs";
 import { renderKitMarkdown } from "~/utils/kit-markdown";
 import { loadKitSource } from "~/utils/kit-content";
 import { agentBlockFor } from "~/utils/kit-agents";
-import { findKitPage, kitPageList, kitSteps } from "~/utils/kit-nav";
+import { findKitPage, kitPageList, kitSectionFor, kitSteps } from "~/utils/kit-nav";
 
 // A fresh component per page, so the table of contents and the scroll reset.
 definePageMeta({ key: (route) => route.path });
@@ -25,21 +25,21 @@ const site = useSiteConfig();
 
 const slug = computed(() => {
   const p = route.params.slug;
-  return Array.isArray(p) ? p.join("/") : (p ?? "");
+  return (Array.isArray(p) ? p.join("/") : (p ?? "")) || "overview";
 });
 
-if (!slug.value) {
-  await navigateTo(localePath(KIT_LANDING), { redirectCode: 301 });
-}
-
-const page = findKitPage(slug.value);
-if (!page && slug.value) {
+const section = kitSectionFor(slug.value);
+const isHome = slug.value === "overview";
+const page = section
+  ? { title: section.title, description: section.description, source: "kit" as const, file: "", slug: slug.value, label: section.title }
+  : findKitPage(slug.value);
+if (!page) {
   throw createError({ statusCode: 404, statusMessage: "Page not found", fatal: true });
 }
 
 const localePrefix = locale.value === "es" ? "/es" : "";
 const { data } = await useAsyncData(`kit:${locale.value}:${slug.value}`, async () => {
-  if (!page) return null;
+  if (!page || section) return null;
   const source = await loadKitSource(page);
   return renderKitMarkdown(source, {
     file: page.source === "kit" ? page.file : `site/${page.file}`,
@@ -54,7 +54,8 @@ const comingSoon = page?.slug === "modules";
 // ── SEO ──────────────────────────────────────────────────────────────────────
 const metaTitle = `${page?.title ?? ""} · Mood Kit docs`;
 const description = page?.description ?? "";
-const canonical = site.url + canonicalPath(route.path);
+// `/kit/overview` and `/kit` are the same page; `/kit` is the one to index.
+const canonical = site.url + (isHome ? "/kit" : canonicalPath(route.path));
 useSeoMeta({
   title: metaTitle,
   description,
@@ -141,6 +142,22 @@ function onBodyClick(e: MouseEvent) {
     <p v-if="locale === 'es'" class="kit-lang-note" role="note">
       {{ t("kit.englishOnly") }}
     </p>
+
+    <p v-if="isHome" class="kit-lang-note" role="note">
+      <NuxtLinkLocale :to="KIT_LANDING" class="text-primary underline underline-offset-4">{{ t("kit.docsHome.landingLink") }}</NuxtLinkLocale>
+    </p>
+
+    <ul v-if="section" class="flex flex-col gap-3 list-none p-0">
+      <li v-for="p in section.pages" :key="p.slug">
+        <NuxtLinkLocale
+          :to="routeForSlug(p.slug)"
+          class="block rounded-xl border border-border px-4 py-3 no-underline hover:bg-muted/40 hover:border-primary/30 transition-all"
+        >
+          <span class="block text-sm font-medium text-foreground">{{ p.label }}</span>
+          <span class="block text-sm text-muted-foreground">{{ p.description }}</span>
+        </NuxtLinkLocale>
+      </li>
+    </ul>
 
     <div v-if="data" class="kit-prose" @click="onBodyClick" v-html="data.html" />
 

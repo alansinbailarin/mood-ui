@@ -25,8 +25,9 @@ export function slugForFile(file: string): string | null {
   return rel === "README" ? "overview" : rel;
 }
 
+/** The docs home (the kit README) lives at `/kit` itself. */
 export function routeForSlug(slug: string): string {
-  return `${KIT_BASE}/${slug}`;
+  return slug === "overview" ? KIT_BASE : `${KIT_BASE}/${slug}`;
 }
 
 /** Strips a locale prefix and a trailing slash: `/es/kit/x/` -> `/kit/x`. */
@@ -38,6 +39,7 @@ export function canonicalPath(path: string): string {
 /** The slug of a `/kit/...` path, or null when the path is not a kit docs page. */
 export function slugFromPath(path: string): string | null {
   const p = canonicalPath(path);
+  if (p === KIT_BASE) return "overview";
   if (!p.startsWith(`${KIT_BASE}/`)) return null;
   return p.slice(KIT_BASE.length + 1) || null;
 }
