@@ -115,7 +115,7 @@ export default defineNuxtConfig({
     // The Kit docs are one catch-all page, so the sitemap cannot find them by
     // itself. English only: the Spanish site shows the same English text and
     // points its canonical at the English page. `modules` is a stub (noindex).
-    exclude: ["/es/kit/**", "/kit/modules"],
+    exclude: ["/es/kit", "/es/kit/**", "/kit/modules"],
     urls: kitDocRoutes()
       .filter((r) => r !== "/kit/modules")
       .map((loc) => ({ loc, changefreq: "weekly" as const })),

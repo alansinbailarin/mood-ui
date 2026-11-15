@@ -177,6 +177,9 @@
       "title": "Mood Kit",
       "desc": "Un boilerplate SaaS con Nuxt y una API en Laravel: workspaces multi-tenant, roles, facturación con Stripe y un admin de plataforma. La documentación es pública.",
       "cta": "Ver el kit"
+    },
+    "docsHome": {
+      "landingLink": "Resumen de Mood Kit, qué incluye y cómo conseguirlo"
     }
   }
 }
