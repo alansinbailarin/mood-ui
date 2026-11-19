@@ -26,7 +26,7 @@
       "ctaBuy": "Conseguir Mood Kit",
       "ctaStart": "Córrelo en local en 15 minutos",
       "buyTodo": "TODO del dueño: reemplazar el enlace de compra provisional (utils/kit-config.ts).",
-      "pricingNote": "Los precios y los términos de la licencia se publicarán aquí antes del lanzamiento.",
+      "pricingNote": "Un solo pago, actualizaciones de por vida de la versión 1 y proyectos sin límite.",
       "factsTitle": "Qué es, en cuatro líneas",
       "facts": {
         "api": "Una API JSON en Laravel 13, versionada en /api/v1, con un solo formato de respuesta y un código para cada error.",
@@ -121,9 +121,7 @@
       "notYetTitle": "Lo que todavía no está",
       "notYet": {
         "connect": "Stripe Connect, para que tus clientes cobren a sus propios clientes. Será un paquete opcional.",
-        "search": "Búsqueda en toda la app.",
-        "modules": "La receta de módulos y los despliegues de referencia para hosts concretos. La documentación lo dice en esas páginas.",
-        "legal": "Páginas de términos y privacidad. El formulario de registro enlaza a las tuyas."
+        "modules": "La receta de módulos y los despliegues de referencia para hosts concretos. La documentación lo dice en esas páginas."
       },
       "docsTitle": "Empieza por la documentación",
       "docsLead": "La documentación es pública. Es el mismo texto que trae el repositorio del kit.",
@@ -166,7 +164,7 @@
         },
         "license": {
           "q": "¿Cómo se licencia y se entrega?",
-          "a": "Quien compra recibe acceso a un repositorio privado y las actualizaciones llegan por ahí. Los precios y los términos de la licencia se están cerrando y se publicarán en esta página."
+          "a": "Un solo pago de 149 USD, o 99 USD con el descuento de lanzamiento para los primeros 100 compradores. Lo usas en todos tus proyectos, sin límite, y todas las actualizaciones de la versión 1 están incluidas. Recibes acceso de lectura al repositorio privado de GitHub y una clave de licencia, las dos desde Polar justo después de pagar."
         }
       },
       "ctaTitle": "Pruébalo antes de decidir",

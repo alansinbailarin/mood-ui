@@ -1,14 +1,11 @@
 /**
  * Mood Kit facts the landing page and its structured data share.
  *
- * TODO(owner): before launch, set both values below.
- *  - KIT_BUY_URL: the real checkout link. It is a deliberately invalid
- *    placeholder now: no real Polar link has been added.
- *  - KIT_PRICE_USD: the entry price, as a string ("349"). While it is null the
- *    structured data carries an Offer with no price rather than a made-up one.
+ * KIT_BUY_URL is the Polar checkout link with the launch discount already applied.
+ * KIT_PRICE_USD is what a buyer pays through that link, for the structured data.
  */
-export const KIT_BUY_URL = "https://TODO-replace-with-checkout-link.invalid/mood-kit";
-export const KIT_PRICE_USD: string | null = null;
+export const KIT_BUY_URL = "https://buy.polar.sh/polar_cl_JH81D3Yqkdb3aHHKX45X2u21jOSk5EypVt7AV0taXXZ";
+export const KIT_PRICE_USD: string | null = "99";
 
 export const kitBuyUrlIsPlaceholder = () => KIT_BUY_URL.includes("TODO");
 
@@ -45,5 +42,5 @@ export const KIT_FAQ_IDS = [
   "language",
   "license",
 ] as const;
-export const KIT_NOT_YET_IDS = ["connect", "search", "modules", "legal"] as const;
+export const KIT_NOT_YET_IDS = ["connect", "modules"] as const;
 export const KIT_FACT_IDS = ["api", "app", "tenancy", "checks"] as const;
