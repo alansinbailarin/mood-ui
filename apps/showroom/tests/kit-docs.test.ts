@@ -197,8 +197,8 @@ describe("Let an agent do it", () => {
 });
 
 describe("landing", () => {
-  it("keeps the buy link a placeholder until the owner sets it, and has Spanish copy for every FAQ", () => {
-    expect(KIT_BUY_URL).toContain("TODO");
+  it("sends buyers to the Polar checkout, and has Spanish copy for every FAQ", () => {
+    expect(KIT_BUY_URL).toMatch(/^https:\/\/buy\.polar\.sh\//);
     for (const l of ["en", "es"]) {
       const kit = JSON.parse(readFileSync(resolve(__dirname, `../i18n/locales/${l}/kit.json`), "utf8")).kit;
       for (const id of KIT_FAQ_IDS) {

@@ -26,7 +26,7 @@
       "ctaBuy": "Get Mood Kit",
       "ctaStart": "Run it locally in 15 minutes",
       "buyTodo": "TODO for the owner: replace the placeholder buy link (utils/kit-config.ts).",
-      "pricingNote": "Pricing and licence terms will be published here before the launch.",
+      "pricingNote": "One payment, lifetime updates to version 1, as many projects as you want.",
       "factsTitle": "What it is, in four lines",
       "facts": {
         "api": "A Laravel 13 JSON API, versioned under /api/v1, with one response envelope and a code for every error.",
@@ -121,9 +121,7 @@
       "notYetTitle": "What is not there yet",
       "notYet": {
         "connect": "Stripe Connect, so your customers can charge their own customers. It will be an optional package.",
-        "search": "Search across the app.",
-        "modules": "The module recipe and reference deployments for specific hosts. The docs say so on those pages.",
-        "legal": "Terms and privacy pages. The signup form links to yours."
+        "modules": "The module recipe and reference deployments for specific hosts. The docs say so on those pages."
       },
       "docsTitle": "Start with the docs",
       "docsLead": "The documentation is public. It is the same text the kit repository ships.",
@@ -166,7 +164,7 @@
         },
         "license": {
           "q": "How is it licensed and delivered?",
-          "a": "Buyers get access to a private repository and receive updates through it. Pricing and licence terms are being finalised and will be published on this page."
+          "a": "One payment of 149 USD, or 99 USD with the launch discount for the first 100 buyers. You can use it in as many of your own projects as you want, and every update to version 1 is included. You get read access to the private GitHub repository and a license key, both from Polar right after paying."
         }
       },
       "ctaTitle": "Run it before you decide",
