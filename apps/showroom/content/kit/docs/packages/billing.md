@@ -6,8 +6,6 @@ Stripe's Customer Portal for the card, the invoices and cancelling, and a signed
 line with Stripe. Plans keeps the subscription a workspace is on; Billing tells it what Stripe says. With no Stripe key
 the kit runs as if Billing were not installed. To set Stripe up, see [Stripe](../configuration/stripe.md).
 
-Stripe Connect (taking payments on a workspace's behalf) is not this package: it comes as its own optional package.
-
 ## Permissions
 
 | Permission | Lets a member |

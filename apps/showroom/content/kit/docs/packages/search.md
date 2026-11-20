@@ -56,6 +56,7 @@ checks shapes only; that the permission and the feature are declared by some pac
 | `team.members` | Team | `team.view` | none | "Team", `users`, order 10 | the members by name or email, as the team list shows them (the active ones alone without `team.manage`); the name (or the email), the email, `/dashboard/team/{id}` | yes, as the team list ([Team](team.md#search)) |
 | `branches.branches` | Branches | `branches.view` | none | "Branches", `map-pin`, order 20 | the branches by name or city, as the branches list shows them (active or not; the ones the person works at without `branches.all`); the name (or the slug), the city, `/dashboard/branches/{id}` | the branches the person may see, not the one chosen in the switcher ([Branches](branches.md#search)) |
 | `clients.clients` | Clients | `clients.view` | none | "Clients", `identification`, order 30 | the clients by name, email or phone, as the clients list shows them with no filter (never the trash nor the erased); the name, the email (else the phone), `/dashboard/clients/{id}` | yes, as the clients list: the top bar's branch and the clients of none ([Clients](clients.md#search)) |
+| `rbac.roles` | Rbac | `rbac.view` | none | "Roles", `shield-check`, order 40 | the roles by name (a system role by its name in the language of the request) or slug, as the roles list has them; the name, how many members hold it, `/dashboard/roles/{id}` | no: roles are the workspace's, not a branch's ([Rbac](rbac.md#search)) |
 
 ## The route
 

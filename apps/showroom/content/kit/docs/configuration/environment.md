@@ -17,6 +17,9 @@ users, ports, and every setting the kit adds to Laravel's and Nuxt's own.
 The last block of `.env.example`, "Framework options", lists Laravel settings the kit leaves at their
 defaults, each commented out with its default value. Remove the `#` only to override one.
 
+The database and Redis connections read Laravel's stock keys (`DB_*` and `REDIS_*`, as `backend/config/database.php` names
+them), which Laravel's own documentation explains; this page covers only what the kit adds or changes.
+
 ## The Postgres users
 
 Postgres has five users, all created by Docker Compose on the first boot of an empty volume:

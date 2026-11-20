@@ -1,8 +1,6 @@
 # Deployment
 
-The kit ships no deployment recipe for a particular host yet. What it does define is what a deployment needs and the commands to run on every deploy: the [production checklist](/kit/configuration/production) is the reference, and this page is a map to it.
-
-> [!SOON] Reference deployments for specific hosts are planned and not written yet. Until then, follow the checklist and adapt it to your platform.
+The kit is not tied to a host. What it defines is what a deployment needs and the commands to run on every deploy: the [production checklist](/kit/configuration/production) is the reference, and this page is a map to it.
 
 ## Local
 

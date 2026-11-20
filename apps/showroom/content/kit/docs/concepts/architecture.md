@@ -10,12 +10,13 @@ This page explains what they are, how they reach each other, and where your own 
 backend/                 Laravel 13 API
   app/                   thin shell: one middleware (your providers go in bootstrap/providers.php)
   config/                framework config, and the env overrides of each package
-  packages/<Name>/       kernel packages (Support, Tenancy, Auth, Rbac, Audit, Signup, Settings, Plans, Notifications,
-                         Onboarding, Billing, Team, Platform, Geocoding, Branches, Clients, Search)
+  packages/<Name>/       kernel packages (Audit, Auth, Billing, Branches, Clients, Dashboard, Geocoding, Notifications,
+                         Onboarding, Plans, Platform, Rbac, Search, Settings, Signup, Support, Team, Tenancy)
   tests/                 app tests and the architecture tests
 frontend/                Nuxt 4 app on mood-ui
   app/                   shell: app.vue, the home page, main.css with the color tokens
-  layers/<name>/         Nuxt layers (core, tenancy, auth, dashboard, rbac, settings, signup)
+  layers/<name>/         Nuxt layers (auth, billing, branches, clients, core, dashboard, notifications, onboarding, plans,
+                         platform, rbac, search, settings, signup, team, tenancy)
   tests/e2e/             Playwright visual tests
 scripts/postgres-init/   creates the app role and the test database on the first Postgres boot
 docker-compose.yml       Postgres, Redis, Mailpit and MinIO, for local use only
@@ -40,6 +41,11 @@ bindings. `backend/routes/api.php` and `backend/routes/console.php` are empty on
 | [Audit](../packages/audit.md) | the append-only audit trail |
 | [Signup](../packages/signup.md) | creating a workspace and its owner from the root domain |
 | [Settings](../packages/settings.md) | workspace settings by group and key, with versions and history; the workspace brand and each member's theme |
+| [Plans](../packages/plans.md) | plans, subscriptions, quota limits and feature flags |
+| [Notifications](../packages/notifications.md) | event types, templates and audiences, the inbox, the delivery log, bounces and the daily summary |
+| [Dashboard](../packages/dashboard.md) | the home's cards: a registry of the widgets each package declares |
+| [Team](../packages/team.md) | a workspace's people: invitations, the members list, working hours and skills |
+| [Platform](../packages/platform.md) | the platform's own administration: super admins, the admin host, the waitlist, flags and the plans' catalog; no package depends on it |
 | [Onboarding](../packages/onboarding.md) | the steps of a new workspace, its checklist and the workspace template it starts from |
 | [Billing](../packages/billing.md) | paying for a workspace's plan through Stripe Billing: checkout, plan changes, the portal, the webhook |
 | [Geocoding](../packages/geocoding.md) | places from an address and an address from a point, for the location picker; it depends on Support alone |
@@ -146,6 +152,15 @@ Each area of the UI is a Nuxt layer in `frontend/layers/<name>`, registered by N
 | `rbac` | the roles screens under `/dashboard/roles`, and the permissions and roles of `GET /me` |
 | `signup` | the signup screens under `/signup` |
 | `settings` | the workspace settings under `/dashboard/settings` (identity, with the brand color and logo, and localization), the appearance on My profile (the palette, color mode and radius, through `kit:profile:sections`), and the brand, localization and theme of `GET /me` |
+| `plans` | the plan of the session (`GET /me`), the subscription page, and the gates that ask for an upgrade |
+| `billing` | paying for the plan on the subscription page: the pricing grid, checkout, the billing portal |
+| `notifications` | the Notifications section of the settings, the templates, the delivery log, the bell and the inbox, the preferences of My profile |
+| `onboarding` | the setup wizard at `/onboarding`, the dashboard's checklist and the workspace templates |
+| `team` | the Team page, a member's page, the public `/join` page and the skills |
+| `branches` | the branches, a branch's page with its map, hours and people, and the branch switcher |
+| `clients` | the clients, their tags, imports and exports, and the client portal |
+| `search` | the search palette in the top bar (`Cmd+K`), and a dialog on a phone |
+| `platform` | the admin's panel under `/platform`, on the admin host only, and the public `/waitlist` |
 
 A layer imports only from itself and `core` (ESLint `boundaries`), and uses no other layer's
 auto-imports (ESLint `mood-kit/no-cross-layer-auto-import`). What two layers both need lives in `core` as
@@ -166,13 +181,15 @@ every workspace (`<slug>.localhost:3000`). See [Multi-tenancy](multi-tenancy.md)
 
 A feature of your own is a backend package under `backend/packages/` plus a frontend layer under
 `frontend/layers/`, built the same way as the kit's: Composer, Deptrac, Larastan, Rector, Pest, Nuxt, ESLint and Vitest
-already cover both. Kit code never references yours. `AGENTS.md` ("Packages" and "Layers") lists the steps for each.
+already cover both. Kit code never references yours. `AGENTS.md` ("Packages" and "Layers") lists the steps for each, and
+[Build a module: the checklist](../guides/build-a-module.md) lists what a new module registers so that the search, the "+" menu,
+the home and the sidebar know it.
 
 ## What it does not ship
 
 `backend/composer.json` requires only what a kit feature uses: Laravel Reverb for the inbox's live updates
-([Realtime](../configuration/realtime.md)). Clients brings Laravel Scout for the global search; Meilisearch's PHP client is
-not installed until you turn it on ([Search](../configuration/search.md)). Billing brings `stripe/stripe-php`. The S3 Flysystem
+([Realtime](../configuration/realtime.md)). Clients brings Laravel Scout for the global search, with Meilisearch's PHP client so the
+switch to it is only configuration ([Search](../configuration/search.md)). Billing brings `stripe/stripe-php`. The S3 Flysystem
 adapter backs the `assets` disk, where uploaded files go (see [Storage](../configuration/storage.md)), and brings the
 AWS SDK that the SES mailer uses.
 

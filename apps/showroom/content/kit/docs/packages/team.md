@@ -202,7 +202,7 @@ Every route is in the `workspace` group.
 | ----- | ----- | ---- |
 | `GET /team/seats` | `team.view` | `{used, limit, active, pending}`: what the `members` quota counts and its limit (null for none; the lower of the plan's and that of a plan the workspace moves down to), and of it the active members and pending invitations. For the Invite button of whoever may not see the subscription |
 | `GET /team/roles` | `team.view` | the workspace's roles (`id`, `name`, `slug`, `isSystem`) with `grantable`: whether the person may give it |
-| `GET /team/invitations` | `team.invite` | the workspace's invitations, newest first, a page at a time (`team.invitations_per_page`, `cursor`); `status` narrows to `pending`, `expired`, `accepted` or `revoked` |
+| `GET /team/invitations` | `team.invite` | the workspace's invitations, newest first, a page at a time (`team.invitations_per_page`; `page`, `perPage`: the total is in `meta.pagination`); `status` narrows to `pending`, `expired`, `accepted` or `revoked` |
 | `POST /team/invitations` | `team.invite`, `not-impersonating`, `team-invite` | `{email, roleId}`: invites; 201 with the invitation |
 | `POST /team/invitations/{invitation}/resend` | `team.invite`, `not-impersonating`, `team-invite` | sends a pending or expired invitation again; 200 with the invitation |
 | `DELETE /team/invitations/{invitation}` | `team.invite`, `team-invite` (and `GuardImpersonation`, as every `DELETE`) | withdraws a pending or expired invitation; `data: null` |
@@ -226,12 +226,11 @@ an owner does not give the owner role). A hint for the screen, never a permissio
 ### The list
 
 `GET /team/members` (`team.view`) lists the people with a place in the workspace, active and inactive, by when they
-joined, the oldest first (the owner on top), a page at a time (`team.members_per_page`, 25; `cursor` from
-`meta.pagination.nextCursor`). It narrows by:
+joined, the oldest first (the owner on top), a page at a time (`team.members_per_page`, 25; `page`, `perPage` up to 100, and `meta.pagination.total` counts what the filters and the person's branch leave). It narrows by:
 
 | Query | Narrows to |
 | ----- | ---------- |
-| `search` | words of the name or the email, any case (up to 100 characters; `%` and `_` are letters) |
+| `search` | words of the name or the email, any case, a typo forgiven ("Aln" finds "Alan": see [Search](../configuration/search.md#the-default-postgres)); up to 100 characters; `%` and `_` are letters |
 | `status` | `active` or `inactive` |
 | `role` | the holders of a role of the workspace, by id (nobody for another workspace's) |
 | `skill` | the members with a skill of the workspace, by id (nobody for another workspace's) |
@@ -247,7 +246,7 @@ with "All branches", or while the workspace does not work by branch (fewer than 
 package), it shows everyone. The client never sends the branch. A member's own page (`GET /team/members/{user}`) does not
 follow it: people belong to the whole workspace.
 
-A value the list does not take (a status of its own, an id that is not a UUID, a cursor it did not hand out) is 422 on its
+A value the list does not take (a status of its own, an id that is not a UUID, a `page` that is no number) is 422 on its
 field. Roles and skills are worked out first (Rbac's `WorkspaceRoles::holders`, `ReadsSkills::holders`), then Auth's
 `ListsMembers` pages the people.
 
@@ -646,7 +645,7 @@ onboarding step. Its messages are `team.*` in `i18n/locales/{en,es}.json`; its A
 - **`Tabs`** (`line`): **Members**, **Invitations** (only with `team.invite`) and **Skills**.
 - **Members:** a `PageToolbar` with the search (sent 300 ms after the person stops typing, core's `useDebouncedValue`) and
   the role, status (only for whoever has `team.manage`, the only ones the API shows inactive members to) and skill
-  filters; the table (who, with "You" on one's own row, role, status, skills, since when) and **Show more**. Each row's
+  filters; the table (who, with "You" on one's own row, role, status, skills, since when) and a pager. Each row's
   actions are icons with their tooltip: open the member, change role, deactivate or reactivate, remove. Which show comes
   from the row's `allowed` (the API's answer for the person asking; never worked out on the screen), and the ones that
   change someone's place are disabled during an impersonation. Change role lists the roles of `GET /team/roles` with

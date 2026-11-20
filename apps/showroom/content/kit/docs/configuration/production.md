@@ -145,8 +145,8 @@ limiter counts the requests it refuses by address too, so behind a proxy it need
   limits by IP and address as the only brake. `CLIENTS_PORTAL_REQUIRE_CAPTCHA` left empty does the same for the client
   portal: with the `null` driver the portal is unavailable in every workspace. See [Captcha](captcha.md).
 - [ ] `SENTRY_LARAVEL_DSN`, if you use Sentry. See [Sentry](sentry.md).
-- [ ] `NUXT_PUBLIC_SIGNUP_TERMS_URL` and `NUXT_PUBLIC_SIGNUP_PRIVACY_URL` point at your own legal pages; the
-  kit ships none.
+- [ ] `NUXT_PUBLIC_SIGNUP_TERMS_URL` and `NUXT_PUBLIC_SIGNUP_PRIVACY_URL` point at your own legal pages, or
+  the text of the kit's `/terms` and `/privacy` templates is replaced with yours (they say they are templates).
 - [ ] Stripe, if you take payments: the live keys, `billing:sync-plans --live` once, the live webhook endpoint and its
   secret, the Customer Portal (see [Stripe](stripe.md#5-going-live)).
 

@@ -464,10 +464,10 @@ id at all) is 404 `branches.not_found`.
 ### The list
 
 `GET /branches` answers the workspace's branches a page at a time (`branches.branches_per_page`, 25), oldest first, with
-Support's cursor (`cursor`; one the API did not hand out is 422 `validation.invalid_cursor`) in `meta.pagination`. It is
+its page and total (`page`, `perPage`: at most 100) in `meta.pagination`; the total counts only the branches the person sees and the filters leave. It is
 narrowed by:
 
-- `search`: words of the name or the city, any case, up to 100 characters (`%` and `_` are letters);
+- `search`: words of the name or the city, any case, a typo forgiven (see [Search](../configuration/search.md#the-default-postgres)), up to 100 characters (`%` and `_` are letters);
 - `status`: `active` or `inactive` (both when left out);
 - `member`: a user id: only the branches that person works at.
 
@@ -586,7 +586,7 @@ the screen of the onboarding step, and the branch switcher at the top of the sid
 - **`PageToolbar`:** the search by name or city (sent 300 ms after the person stops typing) and the status filter.
 - **The table** (a table, not cards with a map each: a map per row would be a WebGL context per row): the branch and its
   slug, its address (street, then city, state and the country by name), its timezone, how many people work there, its
-  status, and **Show more**. Each row's actions are icons with their tooltip: open the branch (anyone who sees the
+  status, and a pager. Each row's actions are icons with their tooltip: open the branch (anyone who sees the
   branches), deactivate or reactivate, and delete (whoever has `branches.manage`). Deactivating and deleting ask first
   (core's `ConfirmActionDialog`, two actions); reactivating does not. A refusal is a toast with the API's message:
   deleting a branch a module's records hold on to (409 `branches.in_use`) says to deactivate it instead, and reactivating

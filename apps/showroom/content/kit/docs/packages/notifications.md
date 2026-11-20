@@ -30,7 +30,7 @@ Modules declare what Notifications knows with providers, the way they declare pe
 
 | Tag | Returns | Declares |
 | --- | ------- | -------- |
-| `notifications.channels` | `ChannelProvider::channels()`, `ChannelDefinition` values | a way to reach someone; one not available is listed with its reason |
+| `notifications.channels` | `ChannelProvider::channels()`, `ChannelDefinition` values | a way to reach someone; one not available is listed with its reason, and one nobody registers is not listed |
 | `notifications.event_types` | `EventTypeProvider::eventTypes()`, `EventType` values | something that can notify a workspace: its variables, audiences, channels, look and default template |
 | `notifications.attachments` | `AttachmentProvider` objects | a file a workspace may add to an event's messages |
 | `notifications.digest_contributors` | `DigestContributor` objects | lines of a member's daily summary (see Digests) |
@@ -52,8 +52,11 @@ A channel may reach members only (`membersOnly`, the kernel's inbox): it takes n
 members a system audience names, and the checks of an address (valid, not suppressed) do not apply to it.
 `GET /notifications/settings` says so in each channel's `membersOnly`.
 
-The kernel registers email and the inbox (`in_app`, members only), the channels that send today (SMS, WhatsApp and push
-are listed, not available yet), and six event types, each through both:
+The kernel registers two channels, email and the inbox (`in_app`, members only), and seven event types: six through both
+channels and the daily summary through email alone. The settings matrix lists a channel only when a provider registers
+it, so there are no SMS, WhatsApp or push columns until a module brings one (see
+[Registering a channel](#registering-a-channel)). These are the kernel's own event types; Team, Clients, Billing and
+Onboarding add theirs (see [The notices of other packages](#the-notices-of-other-packages)).
 
 | Event type | Default audience | Counts towards the email quota |
 | ---------- | ---------------- | ------------------------------ |
@@ -88,10 +91,45 @@ nor are refused by it, so a workspace that used all its emails still hears so. S
 again, they count like any email. The account emails (a password reset, a change of email) stay Auth's own mail: they carry a secret,
 which the delivery log would keep and an editable template could drop.
 
-Other packages declare their own: Onboarding's `onboarding.completed` ([Onboarding](onboarding.md#the-email-of-a-set-up-workspace)),
-Billing's `billing.fell_back_to_default` ([Billing](billing.md#notifications)), Team's `team.invitation_accepted` and
-`team.member_removed` ([Team](team.md#notifications)), and Clients' `clients.import_finished`
-([Clients](clients.md#notifications)).
+### The notices of other packages
+
+Four packages of the kernel declare event types of their own, through the same provider contract a module uses. All
+but `team.member_removed` stay out of the plan's `email_sends_per_month`; that one counts like any email:
+
+| Event type | Declared by | Default audience | Channels | More |
+| ---------- | ----------- | ---------------- | -------- | ---- |
+| `team.invitation_accepted` | Team | `system:inviter`, whoever sent the invitation | email, in the app | [Team](team.md#notifications) |
+| `team.member_removed` | Team | `system:member`, the person removed (personal) | email | [Team](team.md#notifications) |
+| `clients.import_finished` | Clients | `system:importer`, whoever started the import (personal) | in the app, email | [Clients](clients.md#notifications) |
+| `billing.fell_back_to_default` | Billing | `role:owner` | email, in the app | [Billing](billing.md#notifications) |
+| `onboarding.completed` | Onboarding | `role:owner` | email, in the app | [Onboarding](onboarding.md#the-email-of-a-set-up-workspace) |
+
+### Registering a channel
+
+A channel is a way to reach someone. A module adds one by tagging a provider in its service provider:
+
+```php
+$this->app->tag([ReportsChannels::class], 'notifications.channels');
+```
+
+```php
+final class ReportsChannels implements ChannelProvider
+{
+    public function channels(): array
+    {
+        return [
+            new ChannelDefinition('sms', 'reports::channels.sms', available: true, sender: SmsSender::class, order: 20),
+        ];
+    }
+}
+```
+
+The sender implements `Contracts\ChannelSender` and gets an `OutgoingMessage`. Give the channel a label key in every
+language, and `quotaResource` if its sends should count against a plan's quota. Then add the channel's slug to the
+`channels` of the event types that may go through it, and run `php artisan notifications:sync`. From then on the settings
+matrix, My profile's preferences and the delivery log show it. A channel with `available: false` is listed disabled,
+with its `unavailableReasonKey` as the reason; the registry refuses one that is neither available nor says why. A
+channel nobody registers is not shown at all.
 
 ### Asking from a listener: `SendsWorkspaceNotices`
 
@@ -550,7 +588,7 @@ Takes `notification_settings.view`. Everything the notifications section shows:
 {
   "channels": [
     { "slug": "email", "label": "Email", "available": true, "unavailableReason": null, "membersOnly": false },
-    { "slug": "push", "label": "Push", "available": false, "unavailableReason": "Not available yet", "membersOnly": false }
+    { "slug": "in_app", "label": "In the app", "available": true, "unavailableReason": null, "membersOnly": true }
   ],
   "eventTypes": [
     {
@@ -679,7 +717,7 @@ address is not `http(s)`; `badge` is null when the event has none.
 ### The delivery log and resends
 
 `GET /notifications/deliveries` takes `notification_settings.view` and lists the workspace's deliveries, newest first, 25
-a page with a cursor (`meta.pagination`; one it did not hand out is 422 `validation.invalid_cursor`), filtered by any of
+a page (`page`, `perPage` up to 100; `meta.pagination` carries the total), filtered by any of
 `subjectType` with `subjectId` (the record a notification was about), `eventType`, `status` and `branchId` (a uuid, in
 any case: the deliveries about that branch; anything else is 422 on `branchId`). The log is the workspace's whole log for
 whoever may read it, so the branch is a filter they choose, not their access. A row:
@@ -727,8 +765,7 @@ Each resend is audited (`notifications.delivery.resent`).
 
 Every route is the signed-in member's own inbox in the current workspace (`workspace` group, no permission):
 
-- `GET /notifications/inbox`: newest first, 20 a page with a cursor (one it did not hand out is 422
-  `validation.invalid_cursor`); `?unread=1` for the unread only; `?branch=current` for only what concerns the branch the
+- `GET /notifications/inbox`: newest first, 20 a page (`page`, `perPage` up to 100; `meta.pagination` carries the total of the person's own items that match); `?unread=1` for the unread only; `?branch=current` for only what concerns the branch the
   person works at (Tenancy's `CurrentBranch`) plus what concerns no branch (the workspace's own). Working at no branch it
   keeps the workspace's own alone; with "All branches", or while the workspace does not work by branch, it narrows nothing.
   `current` is the only value it takes: the inbox never takes a branch's id from the client (anything else is 422 on
@@ -827,7 +864,7 @@ Localization.
   without realtime. It opens mood-ui's `Drawer` from the right, titled Notifications (its close button read in the screen's language), with the eight latest (each marked
   read or unread, or opened, which closes the drawer) and two actions in its footer, "Mark all as read" and "See all".
 - **The page.** `/dashboard/notifications` lists the whole inbox, every paragraph, under two tabs (`line`): All and Unread, with "Mark all
-  as read" as the page's action and "Show more" for older ones. Each item opens what it is about (inside the app when its
+  as read" as the page's action and core's `ListPagination` (mood-ui's `TablePagination`) for the older ones. Each item opens what it is about (inside the app when its
   button points at this workspace, marking it read) and can be marked read or unread. A change made in another tab, or
   by Reverb, loads the list again. While the person works at one branch (core's `useCurrentBranch()`), a toolbar under the
   tabs has a switch at its right, "Only {branch}" (mood-ui's `GlassSwitch`): on, the list asks `GET /notifications/inbox?branch=current` (what
@@ -862,7 +899,7 @@ Localization.
 - **The delivery log.** `/dashboard/notifications/deliveries` (`notification_settings.view`; the menu does not list it)
   shows the log in mood-ui's `Table`: when, the subject (or the event), to whom (masked), the channel, the status in its
   color with the reason under it, and **Send it again** on a row that allows it (`canResend`). The address's query filters
-  it (`subjectType` with `subjectId`, `eventType`, `status`), the status from the page's toolbar too, and "Show more"
+  it (`subjectType` with `subjectId`, `eventType`, `status`), the status from the page's toolbar too, and a pager
   loads older rows. In Settings → Notifications, the section links to it, and a channel that reaches members only (the
   inbox) offers no other addresses.
 - While a super admin of the platform acts as a member (core's `useImpersonationGate()`), what the API refuses then stays in

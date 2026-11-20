@@ -160,7 +160,7 @@ describe("navigation", () => {
   });
   it("has the sections the design spec asks for", () => {
     const titles = kitGroups().map((g) => g.title);
-    expect(titles).toEqual(expect.arrayContaining(["Concepts", "Configuration", "Set up a service", "Modules", "Working with agents"]));
+    expect(titles).toEqual(expect.arrayContaining(["Concepts", "Configuration", "Set up a service", "Working with agents"]));
   });
   it("walks the landing, then every page, once", () => {
     const steps = kitSteps();

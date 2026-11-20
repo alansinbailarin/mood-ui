@@ -4,6 +4,8 @@ This guide makes the records of a module of your own show up in the dashboard's 
 group of its own, with the records the person may open. The example is the projects of a `Projects` package. How the
 search works is in [Search](../packages/search.md).
 
+> Part of the checklist every new module follows: [Build a module](build-a-module.md).
+
 ## Before you start
 
 - You have a backend package, here `backend/packages/Projects` with the namespace `MoodKit\Projects\` and a
@@ -26,11 +28,11 @@ If the list reads the branch bar (or anything else) from the current request ins
 throws instead of answering from the whole workspace.
 
 ```php
-public function handle(string $tenantId, string $actorId, ProjectQuery $query, ?Cursor $cursor, ?int $perPage = null): CursorPaginator
+public function handle(string $tenantId, string $actorId, ProjectQuery $query, PageRequest $page, ?int $perPage = null): LengthAwarePaginator
 {
     // ... the list's query, as it was ...
 
-    return $projects->cursorPaginate($perPage ?? (int) $this->config->get('projects.per_page'), ['*'], 'cursor', $cursor);
+    return Paginate::of($page, $projects, $perPage ?? (int) $this->config->get('projects.per_page'));
 }
 ```
 

@@ -188,8 +188,7 @@ client then leaves nothing of them in a table that cannot be changed.
 sent after the commit, for modules that react to a new client.
 
 **Sentry.** What people write about a client is registered in Support's `SentryOnlyFields` (`name`, `email`, `phone`,
-`birthday`, `notes`, `addressLine1`, `addressLine2`, `city`, `state`, `postalCode`, `custom`, `search`, and `cursor`,
-which carries a name when the list goes by name), so a failure's report never carries it. `country` and `locale` are
+`birthday`, `notes`, `addressLine1`, `addressLine2`, `city`, `state`, `postalCode`, `custom`, and `search`), so a failure's report never carries it. `country` and `locale` are
 left: codes that place nobody, and a name is blanked in every package's requests (a member's language, a place search's
 country). They are not `SecretFields`: the trail names these fields and must keep the names. A database error's message
 holds the values of its query, so a write the database refuses for another reason than a duplicate or a deleted branch,
@@ -566,8 +565,8 @@ merged or erased again, and is never a possible duplicate; its email and phone a
   data, so a tag named after someone stays there by that name.
 - The page's title: a client's page is titled with the client's name, which the browser keeps in its history, out of the
   app's reach.
-- The list's `search` and `cursor` in the query string (the cursor carries the name the list goes by): Sentry never gets
-  them (`SentryOnlyFields` blanks them in the request, and a query of the list or the export that breaks is reported
+- The list's `search` in the query string: Sentry never gets
+  it (`SentryOnlyFields` blanks them in the request, and a query of the list or the export that breaks is reported
   without its message, see [Adding a client](#adding-a-client)), but a web server's or a proxy's access log that records
   query strings keeps them for as long as you keep that log. Treat such logs as the rest of your users' data, or log
   `/api/v1/clients` without its query.
@@ -656,7 +655,7 @@ a row:
     "homeBranch": {"id": "…", "name": "Centro", "isActive": true}, "marketingConsent": true,
     "tags": [{"id": "…", "name": "VIP", "color": "success"}], "createdAt": "2026-11-12T18:00:00Z", "deletedAt": null
   }],
-  "meta": {"pagination": {"perPage": 25, "nextCursor": "…", "prevCursor": null, "hasMore": true}},
+  "meta": {"pagination": {"page": 1, "perPage": 25, "total": 41, "lastPage": 2}},
   "errors": []
 }
 ```
@@ -671,17 +670,17 @@ Every parameter is optional, and they add up:
 | `branch` | `visible`, or a branch's id (any case) | see [Following the branch](#following-the-branch) |
 | `trash` | `1` (or `0`) | the trash instead of the live clients; takes `clients.manage` |
 | `sort` | `newest` (the default), `oldest` or `name` | newest first (`created_at`, then `id`, descending), oldest first, or by name (`name_key`, then `id`) |
-| `cursor` | the `nextCursor` or `prevCursor` of a page | the next or the previous page |
+| `page` | a whole number from 1 | that page of the list (1 by default) |
+| `perPage` | a whole number from 1, at most 100 (more is 100) | how many clients a page holds (`clients.per_page`, 25, by default) |
 
 **Search.** What the person types is looked for anywhere in the name, the email and the phone (`Records\ClientSearch`): in
 the name as `NameKey` reads it (so `jose nunez` finds "José Núñez", and `LÓPEZ` finds "Ana López"), in the email in
 lowercase, and in the phone by its digits alone, when it has three or more (`664 999` finds `+526649999999`; fewer would
-match nearly everyone). A `%`, an `_` or a `\` is a letter like any other, never a wildcard.
+match nearly everyone). The name and the email also match a word they only *resemble* (Postgres' trigram similarity,
+`Support\Database\FuzzyMatch`: `Aln` finds "Alan Pacheco", `Pacheko` finds "Pacheco"; a word of fewer than three letters only
+matches by containing); the list keeps its own order. A `%`, an `_` or a `\` is a letter like any other, never a wildcard.
 
-**The cursor** is checked against the columns of the order asked for before any query sees it (`PageCursor`): a cursor
-of `name` sent with `newest`, or one that is not a cursor, is 422 `validation.invalid_cursor`. `newest` and `oldest`
-order by the same columns, so their cursors are of one kind. A cursor of `name` carries the last name of the page, every
-letter outside ASCII escaped, so it takes up to 4096 characters: the longest name of any script pages.
+**The page** is the list's order, cut by number: `total` counts the clients the filters, the trash and the top bar's branch leave (the same query as the page, so a client the person may not see is never counted), and `lastPage` is the last page of that many. A `name` list orders by `name_key`, then `id`.
 
 **The trash** (`trash=1`) lists the clients deleted and not yet restored, newest first like the rest, with their
 `deletedAt`. It takes `clients.manage` (403 `auth.forbidden`, `meta.requiredPermission: "clients.manage"`, otherwise). A
@@ -693,7 +692,6 @@ sees (`ClientPayload::prime()`; a closed home branch is read on its own): the qu
 | Error | When |
 | ----- | ---- |
 | 422 validation on the parameter | a parameter breaks its rule (`tags.0` for a tag that is no id, `tags` for more than 100) |
-| 422 `validation.invalid_cursor` | a cursor that is not one, or not of the order asked for |
 | 422 `clients.branch_not_allowed` on `branch` | a branch the person may not see |
 | 403 `auth.forbidden` (`meta.requiredPermission: "clients.manage"`) | the trash, to someone who does not manage clients |
 
@@ -740,7 +738,7 @@ Clients brings the source `clients.clients` to the global search ([Search](searc
 nobody without `clients.view` sees a client's name, email or phone in the palette. It needs no feature of the plan.
 
 `Search\ClientsFinder` runs the list's own query (`Records\ClientSearch::query()` with
-`ClientQuery(search: ..., sort: 'name')`, no `branch`, asking for `search.per_source` rows), so it finds whom the list
+`ClientQuery(search: ..., sort: 'name', bestMatch: true)` (the closest name or email first, then by name), no `branch`, asking for `search.per_source` rows), so it finds whom the list
 shows with no filter and nobody else:
 
 - words of the name (any case, accents or not), the email, or the phone once what was typed has three digits or more; a
@@ -1181,7 +1179,7 @@ Adding, changing or deleting a client tells nobody; a module that needs to liste
 `GET /clients/export` (`clients.export`) downloads the list as a CSV file. It takes the list's parameters (`search`,
 `tags[]`, `marketing`, `branch`, `trash`, `sort`), checks them the same way and keeps the same clients, the branch of the top
 bar included (`Records\ClientSearch::query()`, the list's own query): what the person sees in the list, every page of it, is
-what the file holds. `cursor` is ignored: the file is the whole list.
+what the file holds. `page` and `perPage` are ignored: the file is the whole list, streamed by its own cursor.
 
 ```
 name,email,phone,birthday,locale,address_line_1,address_line_2,city,state,postal_code,country,notes,home_branch,marketing_consent,marketing_consent_at,tags,created_at
@@ -1903,7 +1901,7 @@ holds this table: a route that is not in it fails the test.
 
 | Route | Permission | Limiter | Plan | Impersonation | Answers |
 | ----- | ---------- | ------- | ---- | ------------- | ------- |
-| `GET /clients` | `clients.view` | `clients-read` | | allowed | a page of the list (`search`, `tags[]`, `marketing`, `branch`, `trash`, `sort`, `cursor`) |
+| `GET /clients` | `clients.view` | `clients-read` | | allowed | a page of the list (`search`, `tags[]`, `marketing`, `branch`, `trash`, `sort`, `page`, `perPage`) |
 | `GET /clients/tags` | `clients.view` | | | allowed | the catalog of tags |
 | `GET /clients/fields` | `clients.view` | | | allowed | the fields modules declare |
 | `GET /clients/options` | `clients.view` | | | allowed | the countries and languages a client may have |
@@ -2098,7 +2096,7 @@ anatomy: the header, the tabs, each tab's toolbar and its content.
   its tooltip and its aria label, "1 more tag: C"), the marketing consent, and the row's actions at its end
   (`ClientRowActions`): **Open** for everyone, **Send to trash** for whoever has `clients.manage`. Sending a client to
   the trash asks first and says it frees up a spot on the plan. Whoever has `clients.manage` can pick rows with their
-  checkboxes; the rows picked keep only those the list still shows. "Load more" takes the next page.
+  checkboxes; the rows picked keep only those the list still shows. A pager (previous, next and the pages already seen) turns the page.
 - **A selection.** While rows are picked, mood-ui's selection bar above the table says how many and holds **Tag**
   (`ClientsTable`), disabled past 500 picked (`CLIENT_BULK_MAX`, the API's `clients.bulk_max`) with a tooltip that names
   the limit ("Tag up to 500 clients"). Tag opens a dialog (`ClientBulkTagDialog`) with two lists of the catalog's tags:
@@ -2111,7 +2109,7 @@ anatomy: the header, the tabs, each tab's toolbar and its content.
   stays on while a super admin acts as the person (the API audits it).
 - **Export**, for whoever has `clients.export`, is the download button at the right edge of the toolbar
   (`ClientExportButton`). It downloads the list as a CSV file as it is filtered: the search, the filters, the order and
-  the trash as they are, every page of it (never the cursor of the page the list reached), and the top bar's branch as
+  the trash as they are, every page of it (never the page the list reached), and the top bar's branch as
   the API applies it (the page never sends it). The page names the file `clients-<YYYY-MM-DD>.csv` by the day on the
   person's own calendar (it cannot read the API's name). A refusal is a toast with the API's message: more than the
   hour's downloads (429), or a list too long for one file (`clients.export_too_large`). While a super admin acts as the
@@ -2138,7 +2136,7 @@ hands to the tab:
 - **The table** (`ClientTagsTable`): each tag as mood-ui's `Badge` draws it in its color (`ClientTagBadge`), and how
   many live clients carry it among those the person sees. It does not follow the top bar's branch.
 - **New tag**, for whoever has `clients.manage`, at the right of the tab's toolbar. It opens the tag's dialog
-  (`ClientTagDialog`): a name of up to 40 characters, a color from a select, and the tag as it will show. The colors are
+  (`ClientTagDialog`): a name of up to 40 characters, a color from mood-ui's `ColorPicker` (one swatch for each color, no custom one: its value is a hex, so `tagColorHex` paints each token's color into a canvas pixel and `tagColorOfHex` maps the pick back), and the tag as it will show. The colors are
   mood-ui's Badge colors as it comes, named for the person: Gray (`default`), Brand (`primary`, which follows the
   workspace's brand), Green (`success`), Amber (`warning`) and Red (`danger`); a new tag starts gray. Save stays off
   while the name is blank. A name the workspace already has (422 `clients.tag_taken`) is shown on the name's field until

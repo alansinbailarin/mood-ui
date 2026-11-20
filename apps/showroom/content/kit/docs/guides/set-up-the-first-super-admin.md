@@ -26,8 +26,9 @@ owner, like `migrate`. Run them with `DB_MIGRATION_USERNAME` and `DB_MIGRATION_P
 `platform:setup` does nothing once the platform has a super admin, so it is safe in every deploy (see
 [Production](../configuration/production.md#every-deploy)). From then on the list grants nothing, whatever it says.
 
-Locally, `.env.example` lists `owner@demo.test`, the demo workspace's owner that `db:seed` makes: run
-`php artisan platform:setup` after seeding.
+Locally (`APP_ENV=local`), `db:seed` makes `owner@demo.test`, the demo workspace's owner, a super admin itself, the way
+`platform:setup` does, so there is nothing to run. `.env.example` still lists it in `PLATFORM_BOOTSTRAP_ADMINS`, which
+`platform:setup` reads if you start from a database with no admin. In `testing` the seeder makes no admin.
 
 ## More, or fewer
 

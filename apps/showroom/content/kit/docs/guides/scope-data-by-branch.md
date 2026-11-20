@@ -43,7 +43,7 @@ $appointments = Appointment::query()
     ->where('tenant_id', $tenantId)
     ->when($branches !== null, fn (Builder $query): Builder => $query->whereIn('branch_id', $branches))
     ->latest('starts_at')
-    ->cursorPaginate(25);
+    ->paginate(25);
 ```
 
 | `scope()->mode` | `branchIds()` | The list keeps |

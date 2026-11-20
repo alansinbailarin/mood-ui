@@ -84,10 +84,24 @@ php artisan db:seed
 ```
 
 `key:generate` writes `APP_KEY` into the root `.env`. `notifications:sync` writes the catalog of notification channels
-and event types the packages declare; run it again when you add or change an event type. `db:seed` creates the demo workspace (`demo`), its
-owner and its member, and their roles, writes the catalog of plans (`backend/config/plans.php`) and puts the demo
-workspace on the default plan, Free, gives it the default audiences of its notifications and marks its onboarding as done. It does this only when `APP_ENV` is `local` or `testing`; in any
-other environment the seeder creates nothing.
+and event types the packages declare; run it again when you add or change an event type. `db:seed` creates the demo
+workspace and fills it, so no screen opens empty or locked. It does this only when `APP_ENV` is `local` or `testing`; in any
+other environment the seeder creates nothing. You can run it again: nothing is made twice.
+
+### What the demo contains
+
+| Where | What is there |
+| ----- | ------------- |
+| The workspace `demo` | an owner (`owner@demo.test`) and a member (`member@demo.test`) with their roles, and its onboarding done |
+| Plan | **Pro**, active: the clients' import, the client portal and up to 5 branches work. The catalog of plans (`backend/config/plans.php`) is written too. |
+| Branches | "Main branch", **Centro** and **Playas**, the last two with an address and a pin in Tijuana |
+| Clients | 46 over the last sixty days: forty with the tags VIP and Frecuente, and three homed at Centro and three at Playas |
+| Team | three skills (Barbería, Colorimetría, Atención al cliente) and one invitation that waits, to `new.hire@example.com` |
+| Notifications | the default audiences of every event type, and in the owner's inbox three notices (two unread) with their deliveries in the log, one of them a failed email |
+| Platform | two people on the waitlist (Marta Ruiz and Luis Ortega), one pending invitation to sign up, and, in `local` only, `owner@demo.test` as a super admin of the platform, the way `platform:setup` makes one. In `testing` there is no admin. |
+
+Change the plan to see the other states: edit it in the admin's panel (see **Edit a plan** below), or write a different one in
+`DemoSubscriptionSeeder`.
 
 Billing is off until you set Stripe's keys: the Subscription page lists the plans and says payments are not set up yet.
 To try it, see [Stripe](configuration/stripe.md).
@@ -101,7 +115,7 @@ Each runs in its own terminal and keeps running.
 | API       | `php artisan serve`, in `backend/`              | serves the API on http://localhost:8000         |
 | Frontend  | `pnpm --filter ./frontend dev`, at the repo root | serves the Nuxt app on http://localhost:3000    |
 | Worker    | `php artisan queue:work`, in `backend/`         | sends the emails, builds new workspaces         |
-| Scheduler | `php artisan schedule:work`, in `backend/`      | runs `signup:prune` every minute and the daily and hourly Auth tasks |
+| Scheduler | `php artisan schedule:work`, in `backend/`      | runs the periodic commands: the full table is in [Queues and the scheduler](configuration/queues-and-scheduler.md#the-scheduler) |
 | Realtime  | `php artisan reverb:start`, in `backend/`       | pushes new notifications to the bell (optional: without it the bell updates every minute) |
 
 Check the API with `curl -i http://localhost:8000/up`: it answers `200`.
@@ -120,12 +134,12 @@ is http://demo.localhost:3000.
 1. Open http://demo.localhost:3000/login.
 2. Sign in with `owner@demo.test` and `Demo-Password-2026`.
 
-You land on `/dashboard`, with **Home** and **Roles** in the sidebar. The owner can open, create and edit
-roles.
+You land on `/dashboard`. The owner's sidebar has **Home** and **Clients**, then **Team**, **Branches**, **Roles**,
+**Settings** and **Subscription**: the owner holds every permission.
 
-Sign out from the profile menu and sign in again as `member@demo.test` with the same password. The member
-has the member role, which holds no permission until a module gives it one: the sidebar shows **Home** only, and `/dashboard/roles` sends them back to the
-dashboard.
+Sign out from the profile menu and sign in again as `member@demo.test` with the same password. The member role holds what
+each module gives it, which is to look and not to change: the sidebar shows **Home**, **Clients**, **Team** and **Branches**,
+and `/dashboard/roles`, `/dashboard/settings` and `/dashboard/subscription` send them back to the dashboard.
 
 These two users exist only in `local` and `testing`. Their password is public, so the seeders refuse to run
 anywhere else.
@@ -133,10 +147,10 @@ anywhere else.
 To try password recovery, use **Forgot password** on the sign-in page and open Mailpit at
 http://localhost:8025. The email arrives only while the worker runs.
 
-To make the demo owner a super admin of the platform, run `php artisan platform:setup` in `backend/` once: `.env.example`
-lists `owner@demo.test` in `PLATFORM_BOOTSTRAP_ADMINS`. See [Set up the first super admin](guides/set-up-the-first-super-admin.md)
-and [The admin host](configuration/admin-host.md). Then sign in to the admin's panel at
-http://admin.localhost:3000/platform/login with the demo owner's email and password (`/` on that host goes there too).
+In `local`, `db:seed` has made the demo owner a super admin of the platform already, so there is nothing to run: sign in to the
+admin's panel at http://admin.localhost:3000/platform/login with the demo owner's email and password (`/` on that host goes there
+too). Anywhere else a super admin comes from `php artisan platform:setup`: see
+[Set up the first super admin](guides/set-up-the-first-super-admin.md) and [The admin host](configuration/admin-host.md).
 
 ### Invite someone
 
@@ -148,24 +162,23 @@ the email that says she joined. See [Invite your team](guides/invite-your-team.m
 
 ### Add a branch
 
-The demo workspace starts with its main branch ("Main branch", with no address yet), as every new workspace does: open
-**Branches** in the sidebar, then the branch, to give it an address and a pin, or confirm it from the onboarding's step on
-a new workspace. To add another, press **New branch**. Give it a name, then type a street and a
+The demo workspace has three branches: its main branch ("Main branch", with no address yet, as every new workspace gets
+one), **Centro** and **Playas**. Open **Branches** in the sidebar, then a branch, to see its address and pin or to give the
+main one an address. To add another, press **New branch**. Give it a name, then type a street and a
 city (for example `Av. Revolución 1234` and `Tijuana`, country Mexico): about a second after you stop typing, the pin
 drops on the map. Drag it and the address follows, unless you turn off **Fill the address from the pin**. The map and the
 address search use OpenStreetMap and its public Nominatim server, so this needs an internet connection and no key (see
 [Maps](configuration/maps.md)). Save: the branch's page opens, where you set its opening hours and its people and save
-them with the bar at the bottom. The demo workspace is on Free, which allows one active branch and the main branch holds it,
-so **New branch** is disabled with "Your plan includes 1 branch"; deactivate the main branch to free its place, or raise
-the plan as below. See
+them with the bar at the bottom. The demo workspace is on Pro, which allows 5 active branches, so two places are left. A
+workspace on Free allows one, and there **New branch** is disabled with "Your plan includes 1 branch". See
 [Branches](packages/branches.md).
 
 ### Work by branch
 
-With two active branches or more the workspace works by branch. Free allows one: to try it locally, raise `branches` of
-the `free` plan in `backend/config/plans.php`, run `php artisan plans:sync`, and add a branch beside the main one. Reload: the top
-of the sidebar has the branch switcher, on "All branches" for the owner (an icon when the sidebar is collapsed, and at the
-top of the side menu on a phone). Choose one, then open **Team**: it says "Showing the people
+With two active branches or more the workspace works by branch, and the demo has three. The top of the sidebar has the
+branch switcher, on "All branches" for the owner (an icon when the sidebar is collapsed, and at the top of the side menu on a
+phone). Choose **Centro**, then open **Clients**: the list shows the three clients homed there, and the cards of the home
+follow the branch. Open **Team**: it says "Showing the people
 of {branch}." and lists only the people of that branch (add Ana to one from its page first). Ana, who sees only the
 branches she works at, has no switcher while she works at one, and sees a notice above every screen while she works at
 none. A branch's page ends with its **History**. See [Branches](packages/branches.md#the-branch-someone-works-at).
@@ -177,9 +190,8 @@ another client has is refused, with the way to that client). Save with **Save ch
 **Profile** and **Activity**. Open the **Tags** tab of the list, press **New tag** and name one; then, on the **Clients**
 tab, tick the client and press **Tag** in the bar that appears, and add the tag.
 
-The demo workspace is on Free, which leaves the import out: **Import** is disabled with the plan's tooltip. To try it
-locally, add `clients_import` to the `features` of the `free` plan in `backend/config/plans.php`, run
-`php artisan plans:sync` and reload. Then save a CSV of three lines, a row of headers and two clients:
+The demo has 46 clients to look at already. It is on Pro, so **Import** is enabled (on Free it is disabled with the plan's
+tooltip). Save a CSV of three lines, a row of headers and two clients:
 
 ```csv
 Nombre,Correo,Teléfono
@@ -194,8 +206,7 @@ running, see step 5); the page follows it to the end and the bell has the notice
 Back on the list, the download button at the end of the toolbar saves the clients, as the list is filtered, as a CSV. See
 [Clients](packages/clients.md).
 
-The client portal is left out of Free too: add `clients_portal` to the same `features` and run `php artisan plans:sync`.
-Open **Settings**, then **Client portal**, turn on **Portal open** and press **Save changes**: the section shows the
+The client portal is part of Pro too. Open **Settings**, then **Client portal**, turn on **Portal open** and press **Save changes**: the section shows the
 portal's address. Give a client an email first (the portal signs in by email), then open `http://demo.localhost:3000/portal`
 in a private window, type that email and press **Email me a code**. The code goes by email through the worker of step 5:
 take it from Mailpit (`http://localhost:8025`), type it and press **Sign in**. The client's page has their details and their

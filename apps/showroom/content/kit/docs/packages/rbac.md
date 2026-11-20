@@ -180,6 +180,14 @@ Code that makes or changes roles outside a request or a job runs inside a worksp
 [Multi-tenancy](../concepts/multi-tenancy.md)), or `runById($tenantId, $callback)` from an id. Never call spatie's
 `setPermissionsTeamId()`: the team follows the workspace and that call does nothing here.
 
+## Search
+
+Rbac brings the source `rbac.roles` to the global search ([Search](search.md)), through `RbacSearchProvider`: whoever has
+`rbac.view` (the permission of the roles list) finds the workspace's roles by name or slug, and each hit opens the role's
+page (`/dashboard/roles/{id}`) with how many members hold it under the name. The finder (`RolesFinder`) runs the roles list's
+own query (`ListRoles`), so it shows what the list shows and nothing of another workspace. A workspace has tens of roles at
+most, so the words are matched in PHP, as letters, any case; no typo tolerance.
+
 ## Registries
 
 A package adds to Rbac with providers, bound and tagged `rbac.permissions`, `rbac.roles` and `rbac.menu`.
@@ -240,7 +248,7 @@ The shell of every signed-in screen. A page uses it with `definePageMeta({ layou
 | Page | Needs |
 | ---- | ----- |
 | `/dashboard/roles` | `rbac.view`. Lists roles, with a search that filters them by name and description; with `rbac.manage`, also create, duplicate and delete. |
-| `/dashboard/roles/[id]` | `rbac.view`. The role editor: a Permissions tab and a History tab, with the undo of the last change saved (`POST /rbac/roles/{role}/undo`), offered while there is no draft and the history holds a change the API can undo (an update; a role only created has none, and the button is disabled with "No earlier change to undo" in its tooltip). From `lg` the Permissions tab has two panes: at the left the name and the description (the full width of the pane) and the permission matrix by module, scrolling with the page; at the right the change-impact panel, sticky and as tall as the pane, up to the visible height. Below `lg` they stack, the impact after the permissions, right above Save. For whoever has `rbac.manage`, core's `PageActionBar` ends the page, always visible: Cancel throws the draft away, Undo steps back through it (each permission, or what was typed in one field, at a time), Review changes lists it before → after (the name and the description, the permissions added and removed as green and red badges), Save sends it, each once the draft has changes. The name, the description and the permissions are the fields of the page's change set (`provideChangeSet`, given to `useRoleEditor` as `changes`). Editing needs `rbac.manage`; without it there is no bar, and neither is there one while the role loads, when it fails to load or when the id is not a role of this workspace. |
+| `/dashboard/roles/[id]` | `rbac.view`. The role editor: a Permissions tab and a History tab, with the undo of the last change saved (`POST /rbac/roles/{role}/undo`), offered while there is no draft and the history holds a change the API can undo (an update; a role only created has none, and the button is disabled with "No earlier change to undo" in its tooltip). From `lg` the Permissions tab has two panes: at the left the name and the description (the full width of the pane) and the permission matrix by module, scrolling with the page; at the right the change-impact panel, sticky and as tall as the pane, up to the visible height. Below `lg` they stack, the impact after the permissions, right above Save. For whoever has `rbac.manage`, core's `PageActionBar` ends the page, always visible: Cancel throws the draft away, Undo steps back through it (each permission, or what was typed in one field, at a time), Review changes lists it before → after (the name and the description, the permissions added and removed as green and red badges), Save sends it, each once the draft has changes. The name, the description and the permissions are the fields of the page's change set (`provideChangeSet`, given to `useRoleEditor` as `changes`). Checking a permission checks what it requires; a permission that a checked one requires is disabled, with the tooltip "Needed by <that permission>", until that one is unchecked, so a save never adds one back. Editing needs `rbac.manage`; without it there is no bar, and neither is there one while the role loads, when it fails to load or when the id is not a role of this workspace. |
 
 It is the model for a module's own screens: a layer with pages under `pages/dashboard/<name>`, each with
 `definePageMeta({ layout: 'dashboard', auth: 'required', permission: '<module>.view' })`. When a member edits

@@ -1,8 +1,6 @@
-# Stripe and Stripe Connect
+# Stripe
 
 Stripe Billing charges workspaces for their plan: checkout, plan changes, the Customer Portal and a webhook. With no `STRIPE_SECRET` billing is off and the kit runs without it. The reference is [Stripe](/kit/configuration/stripe) and [Billing](/kit/packages/billing).
-
-> [!SOON] Stripe Connect, taking payments on a workspace's behalf, is not in the kit yet. The Billing package says it will arrive as its own optional package.
 
 ## Local
 

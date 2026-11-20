@@ -71,12 +71,15 @@ A validation failure has one error per failed rule, each with its field:
 }
 ```
 
-A list built with `ApiResponse::paginated()` uses cursor pagination and puts its state in
-`meta.pagination`: `perPage`, `nextCursor`, `prevCursor` and `hasMore`. Send a cursor back as it came: one the API did
-not hand out is 422 `validation.invalid_cursor` on `cursor`, a time in it that is not a real one in UTC included (never a
-500 from the database). A list reads it with `ApiRequest::pageCursor()` (Support's
-`PageCursor`, newest first by default, or the columns it orders by) and hands it to `cursorPaginate(cursor: ...)`, so no
-query sees a cursor that was not checked.
+A list built with `ApiResponse::paginated()` is paginated by page number, with a total, and puts its state in
+`meta.pagination`: `page` (from 1), `perPage`, `total` (every row the list has with its filters in force) and `lastPage`
+(1 for an empty list). It takes `?page=` (a whole number from 1, up to 1,000,000) and `?perPage=` (from 1; the list's own
+size when none is sent, and never more than 100: a bigger one is 100). A `page` or a `perPage` that is no whole number
+from 1 is 422 on that field. A page past the last answers no rows, with the same `total` and `lastPage`. A list reads
+both with `ApiRequest::pageRequest()` (`Support\Contracts\PageRequest`, whose `RULES`, spread into its request's own) and
+hands the query to `Paginate::of($page, $query, $default)` (Eloquent) or `Paginate::rows()` (a query builder), which counts and pages with one query:
+the total never holds a row that the filters, the branch bar or the person's rights leave out. A list that has no filters
+and takes nothing but its page uses `Support\Http\Requests\PagedRequest`.
 
 Every response under `/api` carries `X-Robots-Tag: noindex`.
 
@@ -87,7 +90,7 @@ Controllers build every response with `MoodKit\Support\Http\ApiResponse`:
 | Method | Sends |
 | ------ | ----- |
 | `ApiResponse::data($data, $meta = [], $status = 200)` | `{data, meta, errors: []}`. `data([])` is sent as `[]`, so use it for lists, never for one resource. |
-| `ApiResponse::paginated($paginator, $map, $meta = [])` | a page of a `CursorPaginator`, each item through `$map`, with `meta.pagination` |
+| `ApiResponse::paginated($paginator, $map, $meta = [])` | a page of a `LengthAwarePaginator`, each item through `$map`, with `meta.pagination` (`page`, `perPage`, `total`, `lastPage`) |
 | `ApiResponse::error($status, ...$errors)` | `{data: null, meta: {}, errors}` from `ApiError` objects. Only the exception renderer uses it. |
 | `ApiResponse::errorWithMeta($status, $meta, ...$errors)` | the same with a filled `meta` |
 
@@ -132,10 +135,11 @@ code, its message translated from its key, its status (422 unless it says otherw
 | `tenancy.not_found` | 404 | Tenancy |
 | `tenancy.suspended` | 403 | Tenancy |
 | `auth.invalid_credentials` | 401 | Auth |
+| `auth.membership_deactivated` | 403 | Auth: a login whose email and password are right for a membership of the workspace that was deactivated (no token is issued) |
+| `auth.session_deactivated` | 401 | Auth: a request carrying the token of a session that deactivating the member ended (`meta.workspace` is the workspace's name) |
 | `auth.handoff_invalid` | 401 | Auth |
 | `auth.password_reset_invalid` | 400 | Auth |
 | `auth.captcha_failed` | 422 | Support's `CaptchaFailed`, thrown by Auth, Signup and Clients' portal (asking for a sign-in code) |
-| `validation.invalid_cursor` | 422 | Support's `PageCursor`: a page's cursor the API did not hand out (changed, cut, of another list), on `cursor` |
 | `validation.json_object` | 422 | Support's `ApiRequest`: a JSON body that is not an object (a list, a string; an empty `[]` is no fields), on no field |
 | `auth.membership_not_found` | 404 | Auth |
 | `auth.avatar_invalid_type` (field `file`) | 422 | Auth |
@@ -370,5 +374,6 @@ show the failure:
 | `useAction` | a toast with the backend's message |
 
 A 401 from any request also fires the `kit:api:unauthenticated` hook in the browser. The auth layer ends
-the session only when the code is `auth.unauthenticated`; a refused sign-in or a spent handoff code is a 401
+the session only when the code is `auth.unauthenticated` or `auth.session_deactivated` (the member's access was turned off:
+the person lands on `/access-off`, which says so, not on the sign-in page); a refused sign-in or a spent handoff code is a 401
 too, and leaves the session alone. A failed captcha is not a 401: it is 422 `auth.captcha_failed`. See [Frontend](../frontend.md#calling-the-api).
