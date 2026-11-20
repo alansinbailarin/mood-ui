@@ -25,7 +25,7 @@
       "ctaDocs": "Leer la documentación",
       "ctaBuy": "Conseguir Mood Kit",
       "ctaStart": "Córrelo en local en 15 minutos",
-      "pricingNote": "Un solo pago, actualizaciones de por vida de la versión 1 y proyectos sin límite.",
+      "pricingNote": "Un solo pago, actualizaciones de por vida y proyectos sin límite.",
       "factsTitle": "Qué es, en cuatro líneas",
       "facts": {
         "api": "Una API JSON en Laravel 13, versionada en /api/v1, con un solo formato de respuesta y un código para cada error.",
@@ -150,7 +150,7 @@
         },
         "license": {
           "q": "¿Cómo se licencia y se entrega?",
-          "a": "Un solo pago de 149 USD, o 99 USD con el descuento de lanzamiento para los primeros 100 compradores. Lo usas en todos tus proyectos, sin límite, y todas las actualizaciones de la versión 1 están incluidas. Recibes acceso de lectura al repositorio privado de GitHub y una clave de licencia, las dos desde Polar justo después de pagar."
+          "a": "Un solo pago de 149 USD, o 99 USD con el descuento de lanzamiento para los primeros 100 compradores. Lo usas en todos tus proyectos y en los de tus clientes, sin límite, y todas las versiones futuras están incluidas. Recibes acceso de lectura al repositorio privado de GitHub y una clave de licencia, las dos desde Polar justo después de pagar."
         }
       },
       "ctaTitle": "Pruébalo antes de decidir",
