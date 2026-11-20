@@ -248,16 +248,23 @@ views. Keep the rule that nothing a person typed goes into it.
 | `/signup/verify-email` | "check your email", with resend; follows the status with the browser's token |
 | `/signup/confirm` | reads the secret from the fragment, removes it from the address bar, and confirms with the signup password or a new one |
 | `/signup/processing` | follows the build with the claim, then opens the `handoffUrl` |
+| `/terms` and `/privacy` | the two legal pages the form's checkbox links to (below); public, in the layout of the sign-in screens, drawn by the browser with `X-Robots-Tag: noindex` |
 
-- All four are rendered in the browser only, with `X-Robots-Tag: noindex`.
+- The four signup screens and the two legal pages are rendered in the browser only, with `X-Robots-Tag: noindex`.
 - The token and the email wait in the tab's `sessionStorage` for `/signup/verify-email`; the claim waits
   there for `/signup/processing`. Both are forgotten when the signup ends.
 - The processing screen follows `handoffUrl` only to the handoff page of `<tenantSlug>.<root domain>`. The
   browser that started the signup, which has no claim, says the workspace is ready and links to its sign-in
   page.
 - The terms and privacy links of the form come from `NUXT_PUBLIC_SIGNUP_TERMS_URL` and
-  `NUXT_PUBLIC_SIGNUP_PRIVACY_URL` (`/terms` and `/privacy` by default). The kit has no legal pages: point
-  these at yours.
+  `NUXT_PUBLIC_SIGNUP_PRIVACY_URL` (`/terms` and `/privacy` by default).
+- **The legal pages are templates.** `/terms` and `/privacy` exist so the links of the form never lead to a 404 while
+  you build. Each is a short plain text in English and Spanish (six sections, with the platform's name in them) under a
+  visible notice that says it is a template and has to be replaced with your own text before you launch. The kit cannot
+  know what your product promises, so it is yours to write, with a lawyer. To replace them, either edit the messages
+  `signup.legal.terms` and `signup.legal.privacy` in the layer's `i18n/locales/<locale>.json` and drop the notice
+  (`signup.legal.notice_title` and `notice_body`, drawn by `LegalPage.vue`), or host your own pages and point the two
+  settings above at them: the pages of the kit then are never linked, and you can delete them.
 - **By invitation.** An invitation's link is `/signup#invite=<token>`: the page reads the token from the fragment (core's
   `takeLinkFragment`, so no server, log or `Referer` sees it), takes it off the address and sends it as `invite` with the
   signup. While the platform's access mode (core's `usePlatformPublic()`, from `GET /platform/public`) is `waitlist` or

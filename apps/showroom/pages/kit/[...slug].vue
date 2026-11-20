@@ -49,7 +49,6 @@ const { data } = await useAsyncData(`kit:${locale.value}:${slug.value}`, async (
 });
 
 const block = page ? agentBlockFor(page.slug) : null;
-const comingSoon = page?.slug === "modules";
 
 // ── SEO ──────────────────────────────────────────────────────────────────────
 const metaTitle = `${page?.title ?? ""} · Mood Kit docs`;
@@ -63,8 +62,6 @@ useSeoMeta({
   ogDescription: description,
   twitterTitle: `${metaTitle} · mood-ui`,
   twitterDescription: description,
-  // Pages that only announce something are not worth indexing yet.
-  robots: comingSoon ? "noindex, follow" : undefined,
 });
 // Spanish shows the same English text, so its canonical is the English page.
 useHead({ link: [{ rel: "canonical", href: canonical }] });

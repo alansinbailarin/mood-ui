@@ -42,7 +42,7 @@ The rules broken most often:
    *(convention: see Calling the API)*. Text in a template goes through `t()` (ESLint
    `vue/no-bare-strings-in-template`).
 6. An event of a package lives in its `Events\` namespace and is sent after the commit (`ShouldDispatchAfterCommit`); the
-   few sent inside their transaction are listed with their reason in `tools/EventsInsideTheirTransaction.php`. PHPStan
+   few sent inside their transaction are listed with their reason in `backend/tools/EventsInsideTheirTransaction.php`. PHPStan
    (`Tools\PHPStan\EventsAfterCommitRule`, `composer analyse`) checks every call that sends one, `event()`, the `Event`
    facade, a dispatcher or `X::dispatch()`, by type; `tests/Architecture/EventsAfterCommitTest.php` checks every class of
    an `Events\` namespace. Queued jobs are sent after the commit too (`after_commit`).
@@ -62,6 +62,17 @@ docs/                     the buyer documentation (see Buyer documentation)
 
 A feature of your own is a package in `backend/packages/` plus a layer in `frontend/layers/`, and kit code never
 references it *(convention)*.
+
+Every new module goes through this checklist, and says in its commit which line does not apply *(convention: nothing fails
+when a module is left out of these)*; the guide is [docs/guides/build-a-module.md](docs/guides/build-a-module.md):
+
+- [ ] **Search source**: a `SearchSourceProvider` tagged `search.sources` (guide: `add-a-search-source`).
+- [ ] **Create action**, if it creates things: an entry of `kit:topbar:actions` for the top bar's "+" menu, with its permission
+  (and `offWhileImpersonating` when the API refuses it then).
+- [ ] **Dashboard widget**, if it has figures: a `DashboardWidgetProvider` tagged `dashboard.widgets` and its component
+  (guide: `add-a-dashboard-widget`).
+- [ ] **Menu entry and permissions**: its `<module>.view` (and `.manage`), the route guards, the role templates and the
+  sidebar entry (guide: `add-a-permission-and-menu-entry`).
 
 ## Before you write code
 
@@ -260,7 +271,9 @@ What the package does: [docs/packages/auth.md](docs/packages/auth.md). The rules
 - `IssueToken` is the only code that creates login tokens; never `$user->createToken()` elsewhere. Prune tokens with
   `auth:prune-tokens`, not `sanctum:prune-expired`. *(tested)*
 - A login failure is always the same `auth.invalid_credentials` 401, and an unknown email still costs a hash: never add a
-  failure with a code or message of its own. Run `auth:warm-dummy-hash` in the deploy script, with a persistent cache.
+  failure with a code or message of its own. The one exception is a password that is right for a membership that was
+  deactivated: 403 `auth.membership_deactivated`, raised only after the hash was checked and never before, with no token.
+  Run `auth:warm-dummy-hash` in the deploy script, with a persistent cache.
   *(tested by `LoginTest`)*
 - A request that carries a password, a secret or a code uses `ReadsJsonBodyOnly`. *(tested in each)*
 - A change that would hand the account to whoever holds a session (the password, the email) asks for the current password
@@ -302,6 +315,11 @@ What the package does: [docs/packages/auth.md](docs/packages/auth.md). The rules
   `HandoffTest`, `ForgotPasswordTest`)*
 - `GET /me` gets keys from a `MePayloadContributor` tagged `auth.me`, which receives ids and cannot replace the base keys.
   *(tested by `SessionTest`)*
+- Deactivating a member keeps a hash of each token it deletes in `revoked_tokens` (`RevokedToken`, RLS, tied to the
+  membership) so that the next request of that token is answered 401 `auth.session_deactivated`, and only a request
+  that carries that token can be (`DeactivatedSession`, ahead of `auth:sanctum` and after `tenant`); activating
+  forgets them, `auth:prune-tokens` prunes them with the tokens. Never keep the token itself, and never answer that
+  code to a request with no matching token. *(tested by `DeactivatedSessionTest`)*
 - Change a membership's status only with `Membership::deactivate()`, `activate()` and `remove()`: never a bulk update
   (`Membership::query()->update(['status' => ...])`, `DB::table('memberships')`) and never inside `withoutEvents()`, or old
   tokens come back and nobody hears of it. Veto a member leaving with a `MembershipLeaveGuard` tagged
@@ -812,7 +830,8 @@ What the package does: [docs/packages/search.md](docs/packages/search.md) and
 [docs/configuration/search.md](docs/configuration/search.md); how a module adds a source:
 [docs/guides/add-a-search-source.md](docs/guides/add-a-search-source.md). The rules:
 
-- A package adds what the global search finds with a `SearchSourceProvider` tagged `search.sources`, returning
+- A package adds what the global search finds with a `SearchSourceProvider` tagged `search.sources` (the kernel's: Team,
+  Branches, Clients and Rbac's roles), returning
   `Search\Contracts\SearchSource`s: a key `<package>.<what>` declared once, a label in every language, a finder that
   implements `FindsRecords`, and the permission it needs, always named (`permission: null` only on purpose, for a source any
   member may ask), plus the plan's feature if any. `SearchRegistry` refuses a malformed one (`InvalidRegistry`: the key, the
@@ -823,6 +842,13 @@ What the package does: [docs/packages/search.md](docs/packages/search.md) and
   a page of the dashboard (`/dashboard/...`, no `\` nor `//`). It never writes the term anywhere and lets a failure reach
   Search. *(convention; tested by `TeamSearchTest`, `BranchesSearchTest`, `ClientsSearchTest`; an answer that is not a list
   of hits, or a stray route, fails the source in `RunSearch`)*
+- With the `database` driver a word matches a name or an email that **contains** it or **resembles** it (Postgres'
+  `pg_trgm`, `MoodKit\Support\Database\FuzzyMatch`: the one predicate and score of the lists' search boxes and the
+  finders, so "Aln" finds "Alan"); a finder asks its list for the closest first (`bestMatch`), never for a second query.
+  `pg_trgm` is enabled by Support's `enable_pg_trgm` migration, run as the schema owner (a trusted extension), and the
+  GIN indexes on the lowered names and emails serve the contains half. Never write a `like` of a search by hand: it
+  would leave the resemblance out of that list. *(convention; tested by `FuzzyMatchTest`, `TrigramSetupTest` and each
+  source's search test)*
 - The route is `POST /search` with `q` in the JSON body, never in the address (a `?q=` is not read). It takes `workspace`,
   `KeepOutOfCachesAndReferrers` ahead of `throttle:search` (a named limiter by workspace and member) and no permission; it
   changes nothing, so an impersonation may search. *(tested by `SearchRoutesTest`, `SearchApiTest`,
@@ -1428,6 +1454,10 @@ gateway's HTML page) gets one chosen by what went wrong: `core.errors.network`, 
   which stays in English whatever the locale: only the table pagination follows it. *(tested in core:
   `appShell.test.ts`)*
 - Known gaps in mood-ui that the kit cannot fix from outside (fix them in mood-ui, then drop the line here):
+  - `TablePagination` (what core's `ListPagination` wraps, as it comes) has no box to type a page: it turns pages with
+    first, previous, next and last buttons and "Page 2 of 5", so a person cannot jump to any page. Its page-size select
+    has a fixed English aria label ("Rows per page") and no prop to replace it, and its range reads "26-41 of 41" with a
+    hyphen, not an en dash. Needs a page input (or a `Pagination` with the range), and an `rowsPerPageAriaLabel` prop.
   - `Sidebar`'s collapse button has a fixed English aria label ("Collapse sidebar" / "Expand sidebar") and no prop
     to replace it, so a screen reader reads it in English whatever the locale. Needs `collapseAriaLabel` /
     `expandAriaLabel` props, like its other aria label props.

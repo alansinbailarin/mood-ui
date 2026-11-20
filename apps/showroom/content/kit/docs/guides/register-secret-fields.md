@@ -90,8 +90,8 @@ In production, `zend.exception_ignore_args = On` in `php.ini` covers every other
 ## 5. Test it
 
 Add a feature test that shows what the package registers, as Signup's `SignupStatusTest` and Auth's
-`LoginTest` do. It needs the application booted, so put it in the package's `tests/Feature/` (here
-`backend/packages/Billing/tests/Feature/SecretsTest.php`), not in `tests/Unit/`:
+`LoginTest` do (`backend/packages/Signup/tests/Feature/SignupStatusTest.php` is a real one to copy). It needs the
+application booted, so put it in the package's `tests/Feature/`, not in `tests/Unit/`:
 
 ```php
 use MoodKit\Support\Reporting\SecretFields;

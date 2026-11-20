@@ -244,7 +244,7 @@ A new workspace gets it inside its provisioning: the listener of Signup's `Works
 that makes the workspace, so a subscription that cannot start (on an install where `plans:sync` never ran) undoes the workspace. `php artisan plans:start-subscriptions`
 gives one to every workspace that predates the package (reason `backfill`), and is safe to run again. The demo seeder
 (`Database\Seeders\DemoSubscriptionSeeder`, local development and tests only) writes the catalog, as the schema owner,
-and puts the demo workspace on the default plan.
+and puts the demo workspace on the Pro plan, active, so the plan-gated screens open in the demo (an earlier subscription is ended; one to Pro is left alone).
 
 The status is a `Contracts\SubscriptionStatus`, checked by the database too:
 

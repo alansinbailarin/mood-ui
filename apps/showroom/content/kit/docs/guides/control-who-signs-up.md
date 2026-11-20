@@ -50,7 +50,7 @@ From the admin host:
 
 | Route | What |
 | ----- | ---- |
-| `GET /platform/waitlist` | the waitlist, newest first, 25 a page; `status` (`waiting`, `invited`, `joined`), `search` (email, name or company), `cursor` |
+| `GET /platform/waitlist` | the waitlist, newest first, 25 a page, with the total; `page`, `perPage`; `status` (`waiting`, `invited`, `joined`), `search` (email, name or company) |
 | `POST /platform/waitlist/{id}/invite` | invites that entry's email |
 | `POST /platform/invitations` | `{email}`: invites any email, on the waitlist or not |
 | `GET /platform/invitations` | the invitations, newest first, each `pending`, `accepted`, `revoked` or `expired` |

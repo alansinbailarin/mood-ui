@@ -7,18 +7,46 @@ runs: in Postgres, the default, or, for the clients, also in Meilisearch.
 ## The default: Postgres
 
 With `SCOUT_DRIVER=database`, the default, there is nothing to install and nothing to run. Each source runs its own list's
-query: the clients are matched by name (any case, accents or not), email, or phone once what was typed has three digits,
-with `LIKE` and the `%`, `_` and `\` someone typed taken as letters. Laravel Scout is installed (the Clients package
-requires it) but watches no client: the Clients package turns its syncing off at boot, so nothing is queued and nothing
-leaves Postgres.
+query. A word matches a client's name (any case, accents or not) or email, a member's name or email and a branch's name or
+city when the text **contains** it, or when it is **similar** to it: Postgres' trigram similarity (`pg_trgm`) finds "Alan
+Pacheco" for "Aln" and "Pacheco" for "Pacheko". The clients are also matched by phone once what was typed has three digits.
+`%`, `_` and `\` someone typed are letters, and a word of fewer than three letters only matches by containing. In the
+palette the best match comes first: a text that contains the word, then the closest resemblance, then the list's own order. Laravel
+Scout is installed (the Clients package requires it) but watches no client: the Clients package turns its syncing off at
+boot, so nothing is queued and nothing leaves Postgres.
 
 The members and the branches are always searched in Postgres: a plan caps them at tens. The clients are the one set with
 no cap (a plan may allow any number), so they are the ones an index can help.
 
-## When to turn on Meilisearch
+### What the trigram search needs
 
-Turn it on when a workspace has tens of thousands of clients and the search slows down, or when you want a search that
-forgives typos ("lopes" finds "López"). Below that, Postgres is enough, and one service less to run.
+The extension is turned on by a migration (Support's `enable_pg_trgm`, `CREATE EXTENSION IF NOT EXISTS pg_trgm`), run as the
+schema owner (`DB_MIGRATION_USERNAME`). `pg_trgm` is a *trusted* extension, so the owner of a database may create it without
+being a superuser: that is how the local containers and CI get it, with no step of yours. A Postgres that does not let the
+owner (some managed services restrict extensions) needs one statement from a superuser, once per database, before
+`php artisan migrate`:
+
+```sql
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+```
+
+The migration then finds it there and does nothing. GIN trigram indexes on the lowered names and emails (`users`, `branches`,
+`clients`) keep the contains half quick. The similarity half compares the rows that survive the workspace's own filter
+(row-level security, the branch, the trash), which is fine for the tens of thousands, and why a workspace beyond that is the
+one for Meilisearch.
+
+## Postgres or Meilisearch
+
+|  | Postgres (`database`, trigrams) | Meilisearch |
+| --- | --- | --- |
+| Typos | one or two letters off in a word of four or more are forgiven ("Pacheko"); a short word ("Aln") is matched loosely | forgiven by design, word by word: one letter off from three letters ("Aln"), two from seven, and two swapped too |
+| Ranking | contains first, then the closest resemblance; no notion of a better *word* in a long text | by relevance (typos, proximity, how early the word appears) |
+| Volume | comfortable to tens of thousands of clients per workspace; every search reads the workspace's candidate rows | built for hundreds of thousands and more, with a search that does not slow as clients grow |
+| Cost | none: one service less | a service to run, keep, back up and name in your privacy policy |
+| What it covers | clients, members, branches | clients only (members and branches stay in Postgres) |
+
+Turn Meilisearch on when a workspace has tens of thousands of clients and the search slows down, or when you want
+relevance ranking beyond "contains, then close". Below that, Postgres is enough, and one service less to run.
 
 What changes for the clients, and only for them:
 
@@ -43,22 +71,27 @@ What changes for the clients, and only for them:
 
 ## Locally
 
-1. Start Meilisearch, which `docker compose up` leaves alone (it is in the profile `meilisearch`):
+Meilisearch is in the compose profile `meilisearch` (in `docker-compose.yml`), so a plain `docker compose up` leaves it alone.
+To try it, from the repository root:
+
+1. Start the service:
 
    ```bash
-   docker compose --profile meilisearch up -d --wait
+   docker compose --profile meilisearch up -d --wait meilisearch
    ```
 
-2. Install its PHP client, which the kit only suggests:
+2. In the root `.env`, set the keys below. `.env.example` already has the host and the key pointing at the container (the master
+   key is a public development default); only the driver changes:
 
-   ```bash
-   cd backend
-   composer require meilisearch/meilisearch-php http-interop/http-factory-guzzle
+   ```dotenv
+   SCOUT_DRIVER=meilisearch
+   SCOUT_QUEUE=true
+   MEILISEARCH_HOST=http://localhost:7700
+   MEILISEARCH_KEY=mood_kit_meili_local_dev
    ```
 
-3. In the root `.env`: `SCOUT_DRIVER=meilisearch`. `MEILISEARCH_HOST` and `MEILISEARCH_KEY` already point at the
-   container (`http://localhost:7700`, the master key `mood_kit_meili_local_dev`, a public development default).
-4. Create the index with its settings, then send every workspace's clients (run `scout:sync-index-settings` again after
+   Then `php artisan config:clear` in `backend/` if the config was cached.
+3. Create the index with its settings, then send every workspace's clients (run `scout:sync-index-settings` again after
    an upgrade that changes the index's settings in `backend/config/scout.php`, such as a new filterable attribute):
 
    ```bash
@@ -66,10 +99,13 @@ What changes for the clients, and only for them:
    php artisan search:reindex
    ```
 
-5. Keep a queue worker running (`php artisan queue:work`): with `SCOUT_QUEUE=true`, the default, each change reaches the
+4. Keep a queue worker running (`php artisan queue:work`): with `SCOUT_QUEUE=true`, the default, each change reaches the
    index from a queued job. With `SCOUT_QUEUE=false` it is sent inside the request instead, which also works locally, but
    not for production: with Meilisearch down, saving a client commits and then answers 500, and the index misses the
    change.
+
+To go back, set `SCOUT_DRIVER=database` and stop it with `docker compose --profile meilisearch stop meilisearch`
+([Turning it off](#turning-it-off)).
 
 ## In production
 

@@ -95,9 +95,9 @@ from every other route.
 
 The dashboard layer puts a **+** button in the top bar (a `kit:topbar:items` entry with order 8, between the search at 5 and
 the bell at 10), an icon alone on desktop and on a phone. It opens a menu, **Create**, with what the layers let people create:
-each layer pushes `{ id, order, labelKey, icon, to, permission, offWhileImpersonating? }` into `kit:topbar:actions`, and the menu lists the ones whose
+each layer pushes `{ id, order, labelKey, icon, to, permission, quota?, offWhileImpersonating? }` into `kit:topbar:actions`, and the menu lists the ones whose
 permission the person has, by order. A person who may create nothing does not see the button. The permissions arrive with the
-session, so the menu asks again when they change. An item opens the page that creates it, which still checks the plan itself. While a super admin
+session, so the menu asks again when they change. An item opens the page that creates it, which still checks the plan itself; one whose `quota` is full shows disabled, with the plan's tooltip. While a super admin
 acts as the person, what is flagged `offWhileImpersonating` (New branch, New client, Invite: the API refuses them) is left out, and the button with it when nothing is left ([Add a dashboard widget](../guides/add-a-dashboard-widget.md#6-a-quick-action-in-the-top-bar)).
 
 ## For a module

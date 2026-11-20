@@ -185,7 +185,8 @@ useNuxtApp().hook("kit:topbar:actions", (actions) => {
 `icon` is a component (a heroicon, say), `labelKey` a message key of your layer. The menu is the **+** button in the top
 bar, between the search and the bell, an icon alone on a phone too; it shows only the actions the person has the permission
 for, and it is not drawn when there are none. Flag `offWhileImpersonating: true` on whatever creates something: the API refuses
-it while a super admin acts as the person, so the menu leaves it out then. The page it opens still checks the plan.
+it while a super admin acts as the person, so the menu leaves it out then. Give `quota` the plan quota it uses (`members`, `branches`, `clients`, or one of your own) and the menu
+shows it disabled, with the plan's tooltip, while that quota is full. The page it opens still checks the plan.
 
 ## 7. Testing it
 

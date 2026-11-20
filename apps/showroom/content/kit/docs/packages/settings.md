@@ -83,6 +83,10 @@ A workspace's timezone, language and currency are settings of the `localization`
 have versions, history and audit like any setting. Until the workspace saves one, it is worth the
 `SETTINGS_DEFAULT_*` value.
 
+The currency is the one the workspace's modules use for prices. The kernel prices nothing with it, so saving it changes
+nothing until a module of yours reads it, with `currency()` of Settings' `Contracts\ReadsWorkspaceSettings`. The screen
+says so under the field.
+
 The workspace's name is the setting `identity.name`. Until it is saved it is worth the name the workspace was created
 with. Saving it also writes `tenants.name`, in the same transaction, which is what the tenant endpoint, the workspace
 switcher and the emails read. After a workspace is created, only this setting writes its name.

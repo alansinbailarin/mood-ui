@@ -134,7 +134,7 @@ export function exportClients(query: Record<string, unknown>) {
 | Composable | For |
 | ---------- | --- |
 | `useAsyncState(fetcher)` | one value: `data`, `status`, `error`, `hasLoaded`, `execute` |
-| `useListQuery(fetcher)` | a cursor-paginated list (`ApiResponse::paginated`), with load more and reload |
+| `useListQuery(fetcher, { pageKey })` | a list paginated by page number (`ApiResponse::paginated`), one page at a time: `page`, `perPage`, `total`, `lastPage`, `goTo`, `next`, `previous`, `setPerPage`, `reload` (the page on screen again) and `reset` (back to page 1, for a change of filter or search). The page is the URL's `?page=2` (`pageKey` names it for a second list on one page), so it survives a reload and the back button. The fetcher gets `{ page, perPage }`, which `pageQuery()` turns into the query. Under it goes core's `ListPagination` |
 | `useFormSubmit({ form, submit, onSuccess })` | a vee-validate form: field errors land on inputs, the rest in `formError` |
 | `useAction(action, { successMessage, onSuccess, failureMessage, onFailure })` | a one-off action (delete, resend): `successMessage` is its success toast, shown after `onSuccess` (never a `toast.success` of your own), or a function of the result that words it, or returns `null` for a result that is no plain success (the plan editor's save that Stripe did not take warns in `onSuccess` instead); failures become a toast, in the backend's words unless `failureMessage(view)` words that failure itself, or returns `null` for one the screen shows itself (no toast); `onFailure(view)` runs after the toast (load again after a conflict, open the dialog that shows it) |
 
@@ -145,6 +145,7 @@ Rules that keep every failure visible:
 - Show load, error, empty and content states with `<AsyncBoundary>`. Its loading block shows on the first
   load only; a reload keeps the content on screen, marked `aria-busy`. `#loading`, `#error` (with
   `{ error, retry }`) and `#empty` slots replace the defaults.
+- Put `<ListPagination :list="list" />` (core) at the foot of a list read with `useListQuery`: mood-ui's `TablePagination` as it comes (range, page size, first, previous, next and last), in the language of mood-ui's provider, shown once the list has rows. A page or a size picked goes to the list's `goTo` / `setPerPage`.
 - Show form-level errors with `<FormErrorBanner :message="formError">`.
 - To veil content that is reloading, put `<LoadingOverlay />` inside a `relative` parent. A mood-ui `Table` shows its
   own loader instead (`:loading="!list.hasLoaded.value || list.isReloading.value"`), and its `AsyncBoundary` takes
@@ -270,7 +271,7 @@ the Subscription page, drawn under the plan's summary; the billing layer's plans
 | `kit:portal:sections` | the client portal's account page (the clients layer's), with an array | a layer pushes `{ id, order, component }` for a section of the portal, its `id` the section's key as `GET /portal/me` lists it (`spa.visits`). The page draws only the sections the API listed for the client, in the API's order, each under the API's label; the component gets no props. `collectPortalSections()` gathers them, by order (then id). See [Add a portal section](guides/add-a-portal-section.md#3-draw-it). |
 | `kit:subscription:sections` | the Subscription page, with an array, when it mounts | a layer pushes `{ id, order, component }` for a section drawn under the plan's summary (the billing layer's plans and payments, see [Billing](packages/billing.md#the-billing-layer)). `collectSubscriptionSections()` gathers them, by order (then id). |
 | `kit:topbar:items` | the dashboard's top bar, with an array, when it mounts | a layer pushes `{ id, order, component }` for something of the dashboard's top bar, before the profile menu (the search at order 5, the dashboard's Create menu at 8, the notifications layer's bell at 10). `collectTopbarItems()` gathers them, by order (then id). |
-| `kit:topbar:actions` | the top bar's Create menu, with an array, when it mounts | a layer pushes `{ id, order, labelKey, icon, to, permission, offWhileImpersonating? }` for something people may create from the top bar (`labelKey` a message key of the layer, `icon` a component, `to` a path of the app). `collectTopbarActions()` gathers them by order (then id) and keeps only those whose `permission` the person has; the page itself still checks the plan. `offWhileImpersonating: true` (every create) leaves it out while a super admin acts as the person, since the API refuses it; with none left the menu is not drawn. |
+| `kit:topbar:actions` | the top bar's Create menu, with an array, when it mounts | a layer pushes `{ id, order, labelKey, icon, to, permission, quota?, offWhileImpersonating? }` for something people may create from the top bar (`labelKey` a message key of the layer, `icon` a component, `to` a path of the app). `collectTopbarActions()` gathers them by order (then id) and keeps only those whose `permission` the person has; the page itself still checks the plan. `quota` names the plan quota the action uses (`members`, `branches`, `clients`): while it is full the menu shows the action disabled, with the plan's tooltip (core's `usePlanGate`). `offWhileImpersonating: true` (every create) leaves it out while a super admin acts as the person, since the API refuses it; with none left the menu is not drawn. |
 | `kit:dashboard:widgets` | the dashboard's home, with an array, when it mounts | a layer pushes `{ key, component }` for a widget of the home, `key` being the widget's key as `GET /dashboard` lists it (`clients.recent`). The component gets one prop, `widget` (`DashboardWidgetView`: `key`, `label`, `size`, `data`, `failed`) and draws in core's `DashboardWidgetCard`. `collectDashboardWidgets()` gathers them by key, the first of a key winning. |
 | `kit:search:shortcuts` | the search palette, with an array, as it opens | a layer pushes `{ id, label, icon, to }` for a page the palette offers under "Pages" (`label` already translated, `icon` a Heroicons outline name as the menu's, `to` a path of the app). The dashboard layer answers with the menu entries it already loaded, with no request of its own. `collectSearchShortcuts()` gathers them in the order pushed, each id once. |
 | `kit:sidebar:top` | the dashboard's sidebar, with an array, when it mounts | a layer pushes `{ id, order, component }` for something at the top of the dashboard's sidebar, above the menu, in the mobile drawer too (the branches layer's switcher). The component gets one prop, `collapsed` (the sidebar shows icons only), and draws an icon with its tooltip then. An entry may add `shown`, read reactively, saying whether it has anything to show now: the sidebar draws its header (where mood-ui centres the collapse toggle) only for what shows. `collectSidebarTopItems()` gathers them, by order (then id); core's `MenuSidebar` draws them in mood-ui's `Sidebar` header. |
@@ -332,7 +333,7 @@ when the action is chosen): two actions, Cancel and the action in the danger col
 branches' list use it.
 
 Every dialog is core's `KitDialog` (`v-model`, `title`, `description`, `width`, `alert`, and the `body` and `footer`
-slots): mood-ui's `Dialog` as it comes, centred over its dimmed backdrop, with at most two `KitButton`s in its footer. A
+slots): mood-ui's `Dialog` as it comes, over its dimmed backdrop and growing out of the button that opened it (the last one pressed, a moment ago and still on the page: `useDialogOrigin`; with none, it settles in the centre), with at most two `KitButton`s in its footer. A
 question asked from a script is mood-ui's `useConfirm().confirm({ title, description, confirmLabel, cancelLabel, color })`,
 which resolves `true` or `false`: core's `ConfirmQueueDialog`, mounted once in `app.vue`, draws it in the same Dialog.
 
@@ -410,6 +411,19 @@ export default defineNuxtPlugin((nuxtApp) => {
   });
 });
 ```
+
+## The home page of the root domain
+
+`frontend/app/pages/index.vue`, at `/`, is the one page that belongs to the Nuxt shell and to no layer. On the root domain
+it is a small public page: the platform's name (`NUXT_PUBLIC_PLATFORM_NAME`, or the brand the platform set), one line
+about what it is, a **Create a workspace** button and a **Find my workspace** link (`/find-workspace`). The button
+follows the platform's access mode (core's `usePlatformPublic()`): to `/signup` while it is `open` (or unknown), to
+`/waitlist` as **Join the waitlist** while it is `waitlist`, and it is not shown while it is `closed`. On a workspace's
+host the same page offers to sign in, or greets whoever is signed in and lists their workspaces.
+
+It is a placeholder for your landing page: **you are expected to replace it** with your product's own. Keep the two
+links (or send people to `/signup` and `/find-workspace` yourself), and keep the `home.*` messages in step with whatever
+you write. The root domain's `robots.txt` and `sitemap.xml` already list `/`.
 
 ## The dashboard's home
 
@@ -659,7 +673,7 @@ the changes are gone. A field is registered until the component that registered 
 With a change set, the page's `PageActionBar` offers **Review changes**: core's `KitDialog` (mood-ui's `Dialog`) with every change by group
 (the group's name only when the page has more than one), each field's label and its value before (muted) → after
 (emphasised), a color as its swatch, a set as added and removed badges, and two actions: Close (nothing happens) and
-Save changes (the page's save). A part of the page with changes shows core's `UnsavedDot` (`group`): a warning dot named
+Save changes (the page's save). A part of the page with changes shows core's `UnsavedDot` (`group`): a warning dot (core's `StatusDot`: round, with a pulse that stops for `prefers-reduced-motion`) named
 "Unsaved changes" by its tooltip and aria label. `SettingsSection` uses it in its header, open or closed; My profile's
 cards beside their title. The settings sections register through `useSettingsForm`'s `label` and
 `fields`, and the role editor through `useRoleEditor(id, { changes })`. A value that is saved the moment it is chosen
@@ -728,6 +742,10 @@ const { onSubmit, isSubmitting, formError } = useFormSubmit({
     @update:model-value="(value: string) => (description = joinLines(value))"
   />
   ```
+- A field the form cannot do without carries mood-ui's `required` (the asterisk of its label; `KitSelect` and core's
+  `AddressFields` and `LocationPicker` pass it on), and a form that does not validate as the person types says which required
+  field is missing when Save is pressed, in the field's `errorText`, instead of only keeping Save off (the new branch and
+  new client pages do). A field that is optional carries nothing.
 - mood-ui's components are used as they come: their own props, variants, sizes, colors and slots, laid out from
   outside. No forced utilities (`text-2xl!`), no selectors into their internals (`[&_.modo-…]`), no classes that fight
   their sizes, heights, colors or radius, no hand-made replacement of a control mood-ui has. ESLint
@@ -811,6 +829,7 @@ To add a language, see [Add a locale](guides/add-a-locale.md).
 What mood-ui lacks, which the kit does not patch from outside (it uses the closest option and accepts the
 difference):
 
+- `TablePagination`, which core's `ListPagination` wraps, has no box to type a page (first, previous, next and last buttons, and "Page 2 of 5"), a fixed English aria label on its page-size select, and writes its range with a hyphen ("26-41 of 41").
 - `Sidebar`'s collapse button has a fixed English aria label, so screen readers read it in English in any
   locale.
 - `Accordion`'s header has a title only: settings sections show their description inside the open panel.

@@ -15,17 +15,16 @@
     },
     "landing": {
       "seo": {
-        "title": "Nuxt SaaS Boilerplate with a Laravel API and Multi-tenancy",
+        "title": "Vue and Nuxt SaaS Boilerplate with a Laravel API",
         "description": "Laravel + Nuxt SaaS starter kit: multi-tenant workspaces on subdomains with Postgres row-level security, roles, Stripe billing, notifications and an admin.",
-        "ogTitle": "Mood Kit: Laravel + Nuxt SaaS starter kit"
+        "ogTitle": "Mood Kit: Laravel + Vue/Nuxt SaaS starter kit"
       },
       "overline": "Mood Kit",
-      "h1": "A Nuxt SaaS boilerplate with a Laravel API and tenant isolation in the database",
-      "lead": "Mood Kit is a Laravel 13 API and a Nuxt 4 app on mood-ui. Each customer gets a workspace on its own subdomain, and Postgres row-level security keeps their rows apart even when a query forgets a filter. Sign-in, roles, plans, Stripe billing, notifications, onboarding, team, clients and a platform admin are already built and tested.",
+      "h1": "A Vue and Nuxt SaaS boilerplate with a Laravel API and tenant isolation in the database",
+      "lead": "Mood Kit is a Laravel 13 API and a Nuxt 4 app on mood-ui. Nuxt is Vue 3 with routing and server rendering on top, so if you write Vue you already know the frontend. Each customer gets a workspace on its own subdomain, and Postgres row-level security keeps their rows apart even when a query forgets a filter. Sign-in, roles, plans, Stripe billing, notifications, onboarding, team, clients and a platform admin are already built and tested.",
       "ctaDocs": "Read the docs",
       "ctaBuy": "Get Mood Kit",
       "ctaStart": "Run it locally in 15 minutes",
-      "buyTodo": "TODO for the owner: replace the placeholder buy link (utils/kit-config.ts).",
       "pricingNote": "One payment, lifetime updates to version 1, as many projects as you want.",
       "factsTitle": "What it is, in four lines",
       "facts": {
@@ -91,7 +90,7 @@
         },
         "frontend": {
           "name": "Frontend",
-          "value": "Nuxt 4, Vue 3, TypeScript, mood-ui"
+          "value": "Vue 3 on Nuxt 4, TypeScript, mood-ui"
         },
         "database": {
           "name": "Database",
@@ -118,11 +117,6 @@
           "value": "AGENTS.md with the rules, enforced by those gates"
         }
       },
-      "notYetTitle": "What is not there yet",
-      "notYet": {
-        "connect": "Stripe Connect, so your customers can charge their own customers. It will be an optional package.",
-        "modules": "The module recipe and reference deployments for specific hosts. The docs say so on those pages."
-      },
       "docsTitle": "Start with the docs",
       "docsLead": "The documentation is public. It is the same text the kit repository ships.",
       "docsLinks": {
@@ -146,10 +140,6 @@
           "q": "How are tenants isolated?",
           "a": "All workspaces share one database. Every tenant table has a row-level security policy, the app connects as a role that cannot bypass it, and php artisan tenancy:verify-rls fails the deploy if the setup could let rows leak. A forgotten where clause does not show another customer's data."
         },
-        "connect": {
-          "q": "Does it include Stripe Connect?",
-          "a": "Not yet. Stripe Billing, for charging workspaces for their plan, is included. Connect, for letting your customers take payments, will come as its own optional package."
-        },
         "requirements": {
           "q": "What do I need to run it?",
           "a": "Node 22 or 24 with pnpm 10, PHP 8.4 with a few extensions, Composer 2 and Docker. Docker runs Postgres, Redis, Mailpit and MinIO. Getting started takes about 15 minutes, most of it installing dependencies."
@@ -157,10 +147,6 @@
         "agents": {
           "q": "Can I build on it with Claude Code or Cursor?",
           "a": "Yes, that is a design goal. AGENTS.md at the repository root holds the rules, and each rule names the check that enforces it. The docs have a prompt for each common task and say which steps an agent can do alone and which need you."
-        },
-        "language": {
-          "q": "Is it available in Spanish?",
-          "a": "The application ships English and Spanish, and adding a language is a documented guide. The documentation itself is in English for now."
         },
         "license": {
           "q": "How is it licensed and delivered?",
@@ -173,7 +159,7 @@
     },
     "templatesCard": {
       "title": "Mood Kit",
-      "desc": "A Nuxt SaaS boilerplate with a Laravel API: multi-tenant workspaces, roles, Stripe billing and a platform admin. Docs are public.",
+      "desc": "A Vue and Nuxt SaaS boilerplate with a Laravel API: multi-tenant workspaces, roles, Stripe billing and a platform admin. Docs are public.",
       "cta": "See the kit"
     },
     "docsHome": {

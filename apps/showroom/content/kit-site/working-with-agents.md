@@ -67,7 +67,7 @@ implement it with tests, update the docs/ pages it affects in the same
 commit, and run every gate in "Before you claim done" until they pass.
 ```
 
-The module recipe is not written yet (see [Module system](/kit/modules)), so the prompt makes the agent plan from the architecture page and the guides first.
+The prompt makes the agent plan from the architecture page and the guides before it writes any code.
 
 ### Add a language
 

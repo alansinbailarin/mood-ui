@@ -7,8 +7,6 @@
 export const KIT_BUY_URL = "https://buy.polar.sh/polar_cl_JH81D3Yqkdb3aHHKX45X2u21jOSk5EypVt7AV0taXXZ";
 export const KIT_PRICE_USD: string | null = "99";
 
-export const kitBuyUrlIsPlaceholder = () => KIT_BUY_URL.includes("TODO");
-
 /** Ids of the landing's i18n lists, in display order. */
 export const KIT_FEATURE_IDS = [
   "tenancy",
@@ -36,11 +34,8 @@ export const KIT_FAQ_IDS = [
   "template",
   "why",
   "isolation",
-  "connect",
   "requirements",
   "agents",
-  "language",
   "license",
 ] as const;
-export const KIT_NOT_YET_IDS = ["connect", "modules"] as const;
 export const KIT_FACT_IDS = ["api", "app", "tenancy", "checks"] as const;

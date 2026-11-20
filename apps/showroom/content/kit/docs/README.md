@@ -1,8 +1,12 @@
 # Mood Kit documentation
 
 These pages cover Mood Kit as it ships today: a Laravel 13 API in `backend/` and a Nuxt 4 frontend in
-`frontend/`, with workspaces on subdomains, sign-in, roles and permissions, an audit trail and self-service
-signup. Start with [Getting started](getting-started.md) if you have not run the kit yet.
+`frontend/`, with workspaces on subdomains, sign-in, roles and permissions, an audit trail, self-service signup (with a
+waitlist and invitations), plans and billing through Stripe, a team, branches and clients, workspace settings and brand,
+notifications, the global search, the dashboard's home and the platform's admin panel. That is eighteen backend packages
+(Support, Tenancy, Auth, Rbac, Audit, Signup, Settings, Plans, Billing, Notifications, Onboarding, Team, Branches, Clients,
+Geocoding, Search, Dashboard and Platform) and sixteen frontend layers (`core` and one for each package but Support, Audit
+and Geocoding). Start with [Getting started](getting-started.md) if you have not run the kit yet.
 
 For the rules the code itself follows (layers, boundaries, what each gate checks), read
 [`AGENTS.md`](../AGENTS.md) at the repo root. These pages describe what the kit does and how to use and
@@ -82,6 +86,7 @@ Each backend package, with the frontend layer that pairs with it.
 
 ## Guides
 
+- [Build a module: the checklist](guides/build-a-module.md)
 - [Add a permission and a menu entry](guides/add-a-permission-and-menu-entry.md)
 - [Add a role template](guides/add-a-role-template.md)
 - [Add a settings group](guides/add-a-settings-group.md)

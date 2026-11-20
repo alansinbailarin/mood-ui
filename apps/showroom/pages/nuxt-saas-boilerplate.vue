@@ -13,10 +13,8 @@ import {
   KIT_FACT_IDS,
   KIT_FAQ_IDS,
   KIT_FEATURE_IDS,
-  KIT_NOT_YET_IDS,
   KIT_PRICE_USD,
   KIT_STACK_IDS,
-  kitBuyUrlIsPlaceholder,
 } from "~/utils/kit-config";
 import { KIT_LANDING, routeForSlug } from "~/utils/kit-docs";
 
@@ -39,8 +37,17 @@ useSeoMeta({
   twitterTitle: ogTitle,
   twitterDescription: description,
 });
-// hreflang alternates come from @nuxtjs/i18n; the canonical is this locale's own URL.
-useHead({ link: [{ rel: "canonical", href: url }] });
+// The canonical is this locale's own URL; the alternates name both, and English as the default.
+const switchLocalePath = useSwitchLocalePath();
+const enUrl = site.url + switchLocalePath("en");
+useHead({
+  link: [
+    { rel: "canonical", href: url },
+    { rel: "alternate", hreflang: "en", href: enUrl },
+    { rel: "alternate", hreflang: "es", href: site.url + switchLocalePath("es") },
+    { rel: "alternate", hreflang: "x-default", href: enUrl },
+  ],
+});
 defineOgImage("Default", { title: ogTitle, description, category: "Mood Kit" });
 
 const faq = KIT_FAQ_IDS.map((id) => ({
@@ -60,15 +67,14 @@ useSchemaOrg([
     softwareRequirements: "PHP 8.4, Node.js 22 or 24, PostgreSQL, Redis, Docker",
     inLanguage: ["en", "es"],
     keywords:
-      "nuxt saas boilerplate, laravel nuxt saas starter kit, multi-tenant saas boilerplate, nuxt saas template",
-    // TODO(owner): price and URL come from utils/kit-config.ts. With no price
-    // set, the Offer carries none, instead of a made-up one.
+      "nuxt saas boilerplate, vue saas boilerplate, laravel nuxt saas starter kit, laravel vue saas starter kit, multi-tenant saas boilerplate, nuxt saas template",
+    // Price and checkout link come from utils/kit-config.ts.
     offers: {
       "@type": "Offer",
       url: KIT_BUY_URL,
       priceCurrency: "USD",
       ...(KIT_PRICE_USD ? { price: KIT_PRICE_USD } : {}),
-      availability: "https://schema.org/PreOrder",
+      availability: "https://schema.org/InStock",
     },
   },
   {
@@ -145,10 +151,6 @@ const docsLinks = [
         </Button>
       </div>
       <p class="text-sm text-muted-foreground">{{ t("kit.landing.pricingNote") }}</p>
-      <!-- TODO(owner): remove this note once KIT_BUY_URL is real. It only shows while it is the placeholder. -->
-      <p v-if="kitBuyUrlIsPlaceholder()" class="kit-lang-note" role="note">
-        {{ t("kit.landing.buyTodo") }}
-      </p>
     </header>
 
     <!-- Facts -->
@@ -205,16 +207,6 @@ const docsLinks = [
       </dl>
     </section>
 
-    <!-- Not yet -->
-    <section class="flex flex-col gap-3" aria-labelledby="kit-not-yet">
-      <h2 id="kit-not-yet" class="text-xl font-semibold tracking-tight">{{ t("kit.landing.notYetTitle") }}</h2>
-      <ul class="flex flex-col gap-2 text-sm text-muted-foreground">
-        <li v-for="id in KIT_NOT_YET_IDS" :key="id" class="flex gap-2">
-          <span aria-hidden="true">&ndash;</span>
-          <span>{{ t(`kit.landing.notYet.${id}`) }}</span>
-        </li>
-      </ul>
-    </section>
 
     <!-- Docs -->
     <section class="flex flex-col gap-3" aria-labelledby="kit-docs">

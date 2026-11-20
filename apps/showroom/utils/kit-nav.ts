@@ -75,10 +75,10 @@ const SITE_PAGES: Omit<KitPage, "source">[] = [
   {
     slug: "setup/stripe",
     file: "setup/stripe.md",
-    title: "Stripe and Stripe Connect",
-    label: "Stripe and Connect",
+    title: "Stripe",
+    label: "Stripe",
     description:
-      "Set up Stripe Billing for Mood Kit with a sandbox and the Stripe CLI, then go live. Stripe Connect is not in the kit yet.",
+      "Set up Stripe Billing for Mood Kit with a sandbox and the Stripe CLI, then go live.",
   },
   {
     slug: "setup/reverb",
@@ -110,15 +110,7 @@ const SITE_PAGES: Omit<KitPage, "source">[] = [
     title: "Deployment",
     label: "Deployment",
     description:
-      "What a Mood Kit deployment runs and the commands to run on every deploy. Host-specific recipes are coming soon.",
-  },
-  {
-    slug: "modules",
-    file: "modules.md",
-    title: "Module system",
-    label: "Module system",
-    description:
-      "How modules plug into Mood Kit and how to create one. The recipe is coming soon; this page links what the docs already cover.",
+      "What a Mood Kit deployment runs and the commands to run on every deploy, on any host that runs PHP, Node, Postgres and Redis.",
   },
   {
     slug: "working-with-agents",
@@ -177,7 +169,6 @@ export function kitGroups(): KitGroupView[] {
       pages: SITE_PAGES.filter((p) => p.slug.startsWith("setup/")).map((p) => sitePage(p.slug)),
     },
     fromKit("guides"),
-    { id: "modules", title: "Modules", pages: [sitePage("modules")] },
     {
       id: "agents",
       title: "Working with agents",

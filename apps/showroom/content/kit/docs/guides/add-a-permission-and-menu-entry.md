@@ -1,18 +1,18 @@
 # Add a permission and a menu entry
 
 This guide gives a feature of your own a permission, guards its routes with it, and puts its screen in the
-dashboard menu for the members who hold it. The example is an invoices screen in a `Billing` package.
+dashboard menu for the members who hold it. The example is a projects screen in a `Projects` package of your own.
 
 ## Before you start
 
-- You have a backend package, here `backend/packages/Billing` with the namespace `MoodKit\Billing\` and a
-  `BillingServiceProvider`. To create one, follow "Packages" in `AGENTS.md`. Its screens are a layer in
+- You have a backend package, here `backend/packages/Projects` with the namespace `MoodKit\Projects\` and a
+  `ProjectsServiceProvider`. To create one, follow "Packages" in `AGENTS.md`. Its screens are a layer in
   `frontend/layers/`. See [Architecture](../concepts/architecture.md#where-your-code-goes).
 - A package of yours falls under the same coverage gate as the kit's: `composer check` fails when its
   `src/` is under 85%, on its own.
-- Its provider loads its translations under the `billing` namespace:
-  `$this->loadTranslationsFrom(__DIR__.'/../lang', 'billing');`.
-- You have a frontend layer for its screens, here `frontend/layers/billing`.
+- Its provider loads its translations under the `projects` namespace:
+  `$this->loadTranslationsFrom(__DIR__.'/../lang', 'projects');`.
+- You have a frontend layer for its screens, here `frontend/layers/projects`.
 
 ## 1. Declare the permissions and the menu entry
 
@@ -25,7 +25,7 @@ templates.
 
 declare(strict_types=1);
 
-namespace MoodKit\Billing;
+namespace MoodKit\Projects;
 
 use MoodKit\Rbac\Contracts\MenuItem;
 use MoodKit\Rbac\Contracts\MenuItemProvider;
@@ -34,36 +34,36 @@ use MoodKit\Rbac\Contracts\MenuSectionProvider;
 use MoodKit\Rbac\Contracts\PermissionDefinition;
 use MoodKit\Rbac\Contracts\PermissionProvider;
 
-final readonly class BillingRbacProvider implements MenuItemProvider, MenuSectionProvider, PermissionProvider
+final readonly class ProjectsRbacProvider implements MenuItemProvider, MenuSectionProvider, PermissionProvider
 {
     public function permissions(): array
     {
         return [
             new PermissionDefinition(
-                'invoices.view',
-                'invoices',
-                'billing::permissions.invoices.view.label',
-                'billing::permissions.invoices.view.description',
+                'projects.view',
+                'projects',
+                'projects::permissions.projects.view.label',
+                'projects::permissions.projects.view.description',
             ),
             new PermissionDefinition(
-                'invoices.send',
-                'invoices',
-                'billing::permissions.invoices.send.label',
-                'billing::permissions.invoices.send.description',
-                requires: ['invoices.view'],
+                'projects.archive',
+                'projects',
+                'projects::permissions.projects.archive.label',
+                'projects::permissions.projects.archive.description',
+                requires: ['projects.view'],
             ),
         ];
     }
 
     public function menuSections(): array
     {
-        return [new MenuSection('billing', 'billing::menu.sections.billing', order: 50)];
+        return [new MenuSection('projects', 'projects::menu.sections.projects', order: 50)];
     }
 
     public function menuItems(): array
     {
         return [
-            new MenuItem('/dashboard/invoices', 'billing::menu.invoices', 'receipt-percent', 'billing', order: 10, permission: 'invoices.view'),
+            new MenuItem('/dashboard/projects', 'projects::menu.projects', 'briefcase', 'projects', order: 10, permission: 'projects.view'),
         ];
     }
 }
@@ -71,7 +71,7 @@ final readonly class BillingRbacProvider implements MenuItemProvider, MenuSectio
 
 `PermissionDefinition($name, $module, $labelKey, $descriptionKey = null, ownerCritical: false, requires: [], platformOnly: false)`:
 
-- `name` is `<module>.<action>` in lowercase letters, digits and underscores: `invoices.send`.
+- `name` is `<module>.<action>` in lowercase letters, digits and underscores: `projects.archive`.
 - `module` groups permissions on the roles screen. Its label is `<namespace>::modules.<module>`.
 - `requires` lists permissions that this one makes no sense without. Saving a role adds them.
 - `ownerCritical: true` makes it the owner's alone, for a permission that lets its holder take over the
@@ -98,15 +98,15 @@ final readonly class BillingRbacProvider implements MenuItemProvider, MenuSectio
 
 ## 2. Tag the provider
 
-In `BillingServiceProvider::register()`:
+In `ProjectsServiceProvider::register()`:
 
 ```php
-$this->app->tag([BillingRbacProvider::class], ['rbac.permissions', 'rbac.menu_sections', 'rbac.menu']);
+$this->app->tag([ProjectsRbacProvider::class], ['rbac.permissions', 'rbac.menu_sections', 'rbac.menu']);
 ```
 
 ## 3. Add the translations, in English and Spanish
 
-`backend/packages/Billing/lang/en/permissions.php`:
+`backend/packages/Projects/lang/en/permissions.php`:
 
 ```php
 <?php
@@ -114,31 +114,31 @@ $this->app->tag([BillingRbacProvider::class], ['rbac.permissions', 'rbac.menu_se
 declare(strict_types=1);
 
 return [
-    'invoices' => [
-        'view' => ['label' => 'View invoices', 'description' => 'Open the invoices of the workspace.'],
-        'send' => ['label' => 'Send invoices', 'description' => 'Email an invoice to its customer.'],
+    'projects' => [
+        'view' => ['label' => 'View projects', 'description' => 'Open the projects of the workspace.'],
+        'archive' => ['label' => 'Archive projects', 'description' => 'Archive a project of the workspace.'],
     ],
 ];
 ```
 
-`backend/packages/Billing/lang/en/modules.php`:
+`backend/packages/Projects/lang/en/modules.php`:
 
 ```php
 <?php
 
 declare(strict_types=1);
 
-return ['invoices' => 'Invoices'];
+return ['projects' => 'Projects'];
 ```
 
-`backend/packages/Billing/lang/en/menu.php`:
+`backend/packages/Projects/lang/en/menu.php`:
 
 ```php
 <?php
 
 declare(strict_types=1);
 
-return ['invoices' => 'Invoices', 'sections' => ['billing' => 'Billing']];
+return ['projects' => 'Projects', 'sections' => ['projects' => 'Projects']];
 ```
 
 Then the same three files in `lang/es/`. `RegistryTranslationsTest` checks every key the registry points at
@@ -147,7 +147,7 @@ permission's Spanish label equals its English one.
 
 ## 4. Guard the routes
 
-Routes live in the package's own `routes/api.php`, here `backend/packages/Billing/routes/api.php`, which its
+Routes live in the package's own `routes/api.php`, here `backend/packages/Projects/routes/api.php`, which its
 provider loads in `boot()`, as `RbacServiceProvider` does:
 
 ```php
@@ -160,14 +160,14 @@ Then, in that file:
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('workspace')->group(function (): void {
-    Route::middleware('permission:invoices.view')->get('invoices', ListInvoicesController::class);
-    Route::middleware('permission:invoices.send')->post('invoices/{invoice}/send', SendInvoiceController::class);
+    Route::middleware('permission:projects.view')->get('projects', ListProjectsController::class);
+    Route::middleware('permission:projects.archive')->post('projects/{project}/archive', ArchiveProjectController::class);
 });
 ```
 
 A member without the permission gets 403 `auth.forbidden` with `meta.requiredPermission`. For a check with
 no request (a job, a command), inject `MoodKit\Rbac\Contracts\ChecksPermissions` and call
-`allows($tenantId, $userId, 'invoices.send')`.
+`allows($tenantId, $userId, 'projects.archive')`.
 
 ## 5. Give the permissions to roles
 
@@ -191,14 +191,14 @@ changes nothing. Run it after every deploy that adds permissions.
 
 ## 6. Add the screen
 
-In `frontend/layers/billing/app/pages/dashboard/invoices/index.vue`:
+In `frontend/layers/projects/app/pages/dashboard/projects/index.vue`:
 
 ```ts
-definePageMeta({ layout: "dashboard", auth: "required", permission: "invoices.view" });
+definePageMeta({ layout: "dashboard", auth: "required", permission: "projects.view" });
 ```
 
 The menu entry comes from the backend, so there is nothing to register in the frontend. Show or hide
-actions with `v-can="'invoices.send'"` or `usePermissions().can('invoices.send')`. Build the page in the standard
+actions with `v-can="'projects.archive'"` or `usePermissions().can('projects.archive')`. Build the page in the standard
 anatomy, `PageHeader`, then tabs if any, then `PageToolbar`, then the content ([Page
 anatomy](../frontend.md#page-anatomy)); see [Frontend](../frontend.md#calling-the-api) for loading data on the page.
 
@@ -208,8 +208,8 @@ The admin host's menu comes from the same registries. Put the entry in a section
 Platform's (`platform_overview`, `platform_admin`), with a route under `/platform` and no permission:
 
 ```php
-new MenuSection('billing_ops', 'billing::menu.sections.ops', order: 50, area: MenuSection::PLATFORM);
-new MenuItem('/platform/payouts', 'billing::menu.payouts', 'banknotes', 'billing_ops', order: 10);
+new MenuSection('projects_ops', 'projects::menu.sections.ops', order: 50, area: MenuSection::PLATFORM);
+new MenuItem('/platform/projects', 'projects::menu.all', 'briefcase', 'projects_ops', order: 10);
 ```
 
 It never shows in a workspace's dashboard, and the registry refuses a platform entry outside `/platform` or behind a
@@ -218,8 +218,8 @@ permission. See [Platform](../packages/platform.md#the-admins-menu).
 ## Check it
 
 1. `php artisan rbac:sync` reports the new permissions.
-2. Sign in to the demo workspace as `owner@demo.test`: **Invoices** shows under **Finance**, and
-   `/dashboard/roles` lists the **Invoices** module with both permissions.
-3. As `member@demo.test`, the entry is hidden, `/dashboard/invoices` sends you back to `/dashboard`, and
-   `GET /api/v1/invoices` answers 403.
+2. Sign in to the demo workspace as `owner@demo.test`: **Projects** shows under **Projects**, and
+   `/dashboard/roles` lists the **Projects** module with both permissions.
+3. As `member@demo.test`, the entry is hidden, `/dashboard/projects` sends you back to `/dashboard`, and
+   `GET /api/v1/projects` answers 403.
 4. `composer check` passes, `RegistryTranslationsTest` included.

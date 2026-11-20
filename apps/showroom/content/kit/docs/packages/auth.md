@@ -106,7 +106,7 @@ their locale over `Accept-Language`, and a super admin acting as them, see [Impe
 Every request of this package reads its fields from the JSON body only (`ReadsJsonBodyOnly`); the photo's file travels
 in the multipart files, which that leaves alone.
 
-Its errors: `auth.invalid_credentials` (401), `auth.handoff_invalid` (401), `auth.captcha_failed` (422),
+Its errors: `auth.invalid_credentials` (401), `auth.session_deactivated` (401, `meta.workspace`), `auth.membership_deactivated` (403, a login), `auth.handoff_invalid` (401), `auth.captcha_failed` (422),
 `auth.password_reset_invalid` (400), `auth.membership_not_found` (404), and on the profile `auth.avatar_invalid_type`
 (422) and `auth.avatar_too_large` (422, `meta.maxBytes`), both on `file`, and `auth.current_password_invalid` (422, on
 `currentPassword`), `auth.session_not_found` (404), `auth.session_is_current` (422), `auth.email_unchanged` and `auth.email_taken` (422, on
@@ -211,15 +211,27 @@ an audit entry belongs to a workspace.
 
 | Command | Schedule | Does |
 | ------- | -------- | ---- |
-| `php artisan auth:prune-tokens {--hours=24}` | daily, on one server | deletes the tokens that expired at least that many hours ago, acting as each workspace in turn. `sanctum:prune-expired` cannot: RLS hides every token from it. |
+| `php artisan auth:prune-tokens {--hours=24}` | daily, on one server | deletes the tokens that expired at least that many hours ago (and the `revoked_tokens` of sessions a deactivation ended, which lapse the same way), acting as each workspace in turn. `sanctum:prune-expired` cannot: RLS hides every token from it. |
 | `php artisan auth:warm-dummy-hash` | hourly, on one server | makes the dummy password hash that logins with an unknown email are checked against. Run it in your deploy script too. |
 
 ## Security behaviour
 
-- **Login failures are all the same**: no such email, a wrong or missing password and no active membership
-  all answer 401 `auth.invalid_credentials`. An unknown email is still checked against a dummy hash kept in
+- **Login failures are all the same**: no such email, a wrong or missing password, no membership in the workspace and an
+  invited one all answer 401 `auth.invalid_credentials`. An unknown email is still checked against a dummy hash kept in
   the cache, so the timing does not tell either. That needs a persistent cache store (Redis); a hash made per
   request would be the difference it hides.
+- **A deactivated member is told so, and only they.** Deactivating a member deletes their tokens, as ever. For each one
+  it keeps the token's SHA-256 hash (never the token) in `revoked_tokens`, tied to the membership, hidden from every other
+  workspace by RLS, until the token would have expired. A request whose token Sanctum no longer knows is answered 401
+  `auth.session_deactivated` (`meta.workspace` is the workspace's name) instead of `auth.unauthenticated` only when its own
+  `id|secret` matches one of those hashes in the workspace it is sent to: a stranger, a made-up token, a token on another
+  workspace or one of a member who was removed gets the plain 401. Activating the member forgets the hashes. The frontend
+  ends the session as for any dead token and shows `/access-off` ("Your access to Acme was turned off. Talk to whoever runs
+  the workspace.") with a link to sign in.
+- **One exception, for someone who proved who they are**: an email and password that are right for a membership in this
+  workspace that was *deactivated* answer 403 `auth.membership_deactivated` ("Your access to this workspace is turned off.")
+  and issue no token. The password was checked first (the hash costs the same), so the answer tells a stranger nothing about
+  which emails have an account; a wrong password stays the generic 401. It counts against the login limits like any other try.
 - **Login is limited three ways**: per email and address, per address across emails, and per email across
   addresses. Whichever runs out answers the same 429 `http.too_many_requests`.
 - **The captcha is checked before the credentials**, on login and on password recovery.
@@ -281,7 +293,7 @@ All in `MoodKit\Auth\Contracts\`, by id, never a model.
 | `EndsImpersonations` | `endBy($tenantId, $impersonatorUserId)` and `endPending($tenantId)`, as the workspace: end an admin's open impersonations and waiting codes, or every code not exchanged yet (see [Impersonation](#impersonation)). |
 | `IssuesHandoffLinks` | `handle($tenantId, $userId, $next, $replacing = null)`: a one-time sign-in address for a workspace, for code with no signed-in user (Signup uses it). Returns a `HandoffLink` with `url` and `reference`. |
 | `CaptchaVerifier` | `passes($token, $ip)`: the configured captcha driver; `isEnforcing()`: whether it checks anything (false for `null`) |
-| `ListsMembers` | `page($tenantId, MemberFilters $filters, $cursor, $perPage)`: the people with a place in a workspace, active or inactive, as `MemberRow`s (`userId`, `name`, `email`, `avatarUrl`, `status`, `joinedAt`, `lastLoginAt`, `locale`; times in ISO 8601 UTC with microseconds), oldest first. `MemberFilters` narrows by words of the name or the email (`%` and `_` are letters), a status and a set of people another package chose (null is anyone, an empty list nobody). Pages go by when each joined: read the client's cursor with Support's `PageCursor::read($cursor, PageCursor::NEWEST_FIRST)` first. `count($tenantId, MemberFilters $filters)`: how many people the same filters keep, the ones `page()` lists without paging. `find($tenantId, $userId)` returns one member, or null. |
+| `ListsMembers` | `page($tenantId, MemberFilters $filters, PageRequest $page, $perPage)`: a page, with the total of the people the filters leave, of the people with a place in a workspace, active or inactive, as `MemberRow`s (`userId`, `name`, `email`, `avatarUrl`, `status`, `joinedAt`, `lastLoginAt`, `locale`; times in ISO 8601 UTC with microseconds), oldest first. `MemberFilters` narrows by words of the name or the email (`%` and `_` are letters), a status and a set of people another package chose (null is anyone, an empty list nobody). Pages go by when each joined: read the client's cursor with Support's `PageCursor::read($cursor, PageCursor::NEWEST_FIRST)` first. `count($tenantId, MemberFilters $filters)`: how many people the same filters keep, the ones `page()` lists without paging. `find($tenantId, $userId)` returns one member, or null. |
 | `ManagesMemberships` | `status()` (`active`, `inactive` or null), `join()` (an active place for a person who has an account; false when they had one already, a `LogicException` for an inactive one: that is a reactivation), `deactivate()`, `activate()` and `remove()`. Always through the membership's own methods, so the leave guards are asked (`rbac.last_owner`), the tokens go with a change of status and Auth's events follow. Whether the caller may do it is the caller's to decide; someone with no place is `auth.membership_not_found` (404). |
 | `ResetsPasswords` | `reset($userId, $passwordHash)`: a new password for a person whose mailbox the caller has just proved (a one-time secret it mailed there was used: Team's invitation), as a reset link would. Every session of theirs ends in every workspace, the reset links and switch codes waiting die, it is audited in the current workspace (`auth.user.password_replaced`) and the person is told by email. Takes a bcrypt or argon2 hash, never the password. `reaches($userId)`: whether a reset link could reach the person, asked first: an active place in some workspace, and no super admin of the platform. `reset()` throws a `LogicException` for anyone else, so proving a mailbox never gives more than the link would. |
 | `IdentifiesPlatformAdmins` | `isAdmin($userId)`: whether the person is a super admin of the platform, whose password only their own reset changes. Auth binds an answer that is always no; a package that keeps super admins binds its own (Platform). |
