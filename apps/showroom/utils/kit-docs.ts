@@ -17,9 +17,13 @@ export const KIT_LANDING = "/nuxt-saas-boilerplate";
 /** Repo file for the agents rules, rendered as a docs page. */
 export const AGENTS_FILE = "AGENTS.md";
 
+/** Repo file for the release notes, rendered as a docs page. */
+export const CHANGELOG_FILE = "CHANGELOG.md";
+
 /** Maps a kit repo file to its page slug, or null for files that are not pages. */
 export function slugForFile(file: string): string | null {
   if (file === AGENTS_FILE) return "agents-md";
+  if (file === CHANGELOG_FILE) return "changelog";
   if (!file.startsWith("docs/") || !file.endsWith(".md")) return null;
   const rel = file.slice("docs/".length, -".md".length);
   return rel === "README" ? "overview" : rel;

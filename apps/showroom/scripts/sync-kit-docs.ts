@@ -8,7 +8,7 @@
  *   pnpm --filter showroom kit:sync -- --kit /path/to/mood-kit
  *   MOOD_KIT_DIR=/path/to/mood-kit pnpm --filter showroom kit:sync
  *
- * Reads `docs/**\/*.md` and `AGENTS.md` and writes them, byte for byte, to
+ * Reads `docs/**\/*.md`, `AGENTS.md` and `CHANGELOG.md` and writes them, byte for byte, to
  * `apps/showroom/content/kit/`, next to a `manifest.json` (sidebar order,
  * titles, descriptions, and the kit commit they came from). Files the kit no
  * longer has are deleted. Review `git diff content/kit` and commit it.
@@ -28,7 +28,7 @@ import {
 } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { AGENTS_FILE, buildManifest } from "../utils/kit-docs.js";
+import { AGENTS_FILE, buildManifest, CHANGELOG_FILE } from "../utils/kit-docs.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const OUT = resolve(here, "../content/kit");
@@ -59,7 +59,7 @@ if (!existsSync(join(kitDir, "docs"))) {
 }
 
 const isDocFile = (f: string) =>
-  f === AGENTS_FILE || (f.startsWith("docs/") && f.endsWith(".md"));
+  f === AGENTS_FILE || f === CHANGELOG_FILE || (f.startsWith("docs/") && f.endsWith(".md"));
 
 function walk(dir: string, base = ""): string[] {
   return readdirSync(join(dir, base)).flatMap((name) => {
@@ -70,18 +70,18 @@ function walk(dir: string, base = ""): string[] {
 
 const files: Record<string, string> = {};
 if (workingTree) {
-  for (const f of [...walk(kitDir, "docs").map((r) => r), AGENTS_FILE]) {
+  for (const f of [...walk(kitDir, "docs"), AGENTS_FILE, CHANGELOG_FILE]) {
     if (isDocFile(f)) files[f] = readFileSync(join(kitDir, f), "utf8");
   }
 } else {
-  const listed = git("ls-tree", "-r", "--name-only", ref, "--", "docs", AGENTS_FILE)
+  const listed = git("ls-tree", "-r", "--name-only", ref, "--", "docs", AGENTS_FILE, CHANGELOG_FILE)
     .split("\n")
     .filter(isDocFile);
   for (const f of listed) files[f] = git("show", `${ref}:${f}`);
 }
 
 const commit = git("rev-parse", "--short=12", workingTree ? "HEAD" : ref).trim();
-const dirty = workingTree && git("status", "--porcelain", "--", "docs", AGENTS_FILE).trim() !== "";
+const dirty = workingTree && git("status", "--porcelain", "--", "docs", AGENTS_FILE, CHANGELOG_FILE).trim() !== "";
 
 rmSync(OUT, { recursive: true, force: true });
 for (const [f, text] of Object.entries(files)) {
