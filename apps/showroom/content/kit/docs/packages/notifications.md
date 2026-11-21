@@ -863,6 +863,14 @@ Localization.
   `GET /notifications/inbox/summary` every `pollSeconds` until the websocket connects, whenever it drops, or always
   without realtime. It opens mood-ui's `Drawer` from the right, titled Notifications (its close button read in the screen's language), with the eight latest (each marked
   read or unread, or opened, which closes the drawer) and two actions in its footer, "Mark all as read" and "See all".
+- **The admin's bell.** The layer also puts a bell in the admin's top bar (core's `kit:platform:topbar:items`, order 10, after
+  the search): `PlatformBell`, the same `Chip` over the button and the same `Drawer` from the right, with the latest eight
+  notices of the signed-in super admin (the [platform's inbox](platform.md#the-admins-bell), `GET /platform/notices`) drawn
+  with the inbox's own `InboxItemRow` (a notice's kind is its badge, in its accent, over its line) and one action, "Mark all as
+  read". A notice opens the admin's page it is about, marking it read; a read one has no read button (the API only marks
+  read). The platform has no realtime channel (Reverb's are the workspaces'), so `usePlatformNotices()` asks when the bar
+  mounts, each time the drawer opens, when the language changes, and every 60 seconds while the page is visible: a hidden page
+  asks nothing and asks at once when it is shown again. The count and the notices live in `useState("notifications:platform-bell")`.
 - **The page.** `/dashboard/notifications` lists the whole inbox, every paragraph, under two tabs (`line`): All and Unread, with "Mark all
   as read" as the page's action and core's `ListPagination` (mood-ui's `TablePagination`) for the older ones. Each item opens what it is about (inside the app when its
   button points at this workspace, marking it read) and can be marked read or unread. A change made in another tab, or
@@ -881,10 +889,10 @@ Localization.
 - **The preference center.** `/notifications/preferences` (public, `auth` layout, drawn by the browser and kept out of
   search engines) is what an email's "Manage your notifications" opens. It reads the token from the link's fragment with
   core's `takeLinkFragment`, which takes the fragment off the address at once, sends it only in `X-Notification-Token`,
-  and asks the browser to send no `Referer`. It is written for someone who just clicked a link in an email: the title
-  names the workspace ("Your emails from Demo", with its logo above on its host; the auth screens' header keeps the
-  platform's name), and the line under it says whose emails these are and to which masked address ("You're getting emails
-  from Demo at o***@demo.test. Choose which ones you want."). Each category the recipient may turn off by email is a row:
+  and asks the browser to send no `Referer`. It is written for someone who just clicked a link in an email, as a simple page outside the dashboard (core's
+  `PublicPageShell`: the workspace's logo at the top left, the language at the top right, then the page): the page's
+  title names the workspace ("Your emails from Demo"), and the line under it says whose emails these are and to which masked address ("You're getting emails
+  from Demo at o***@demo.test. Choose which ones you want."). The choices sit in one outlined card. Each category the recipient may turn off by email is a row:
   its label, a line on what it covers, and a switch labelled "Email me about this". The API sends no description, so the
   line is the page's own, by the category's slug (`notifications.center.categories.<slug>`), and "Emails about {label}."
   for a category the page does not know. What always arrives is a section of its own, **Always sent**, with why ("Needed to
@@ -892,10 +900,10 @@ Localization.
   what it needs, and a line under it says where things stand: nothing changed yet, changes not saved, or "Saved. Changes
   apply to the next email." (no toast). When the recipient is a member (the API masks a member's address and sends
   `recipient: null` for any other), a last line says "For more options (in-app notifications, daily summary), sign in to
-  your profile.", the second half a text `KitButton` to the workspace's sign-in with `?redirect=` to My profile
+  your profile.", the second half a link in the sentence (core's `TextLink`) to the workspace's sign-in with `?redirect=` to My profile
   (`KIT_ROUTES.login` and `KIT_ROUTES.profile`). A missing link and every link the API
   does not take (`notifications.link_invalid`, on loading or on saving) are the same neutral "This link no longer works",
-  in the page's own words; any other failure offers to try again.
+  in the page's own words, a message screen of its own (core's `MessageShell`); any other failure offers to try again.
 - **The delivery log.** `/dashboard/notifications/deliveries` (`notification_settings.view`; the menu does not list it)
   shows the log in mood-ui's `Table`: when, the subject (or the event), to whom (masked), the channel, the status in its
   color with the reason under it, and **Send it again** on a row that allows it (`canResend`). The address's query filters

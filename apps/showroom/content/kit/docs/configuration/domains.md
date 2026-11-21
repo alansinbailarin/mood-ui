@@ -7,14 +7,14 @@ up the domain, the DNS records and the settings that must agree, for local devel
 
 | Host | Served by | What lives there |
 | ---- | --------- | ---------------- |
-| `example.com` | the Nuxt frontend | the home page, `/signup`, `/find-workspace`, `/waitlist`, `/terms` and `/privacy` |
+| `example.com` | the Nuxt frontend | the landing (`/`, with the waitlist at `/#waitlist`), `/signup`, `/find-workspace`, `/terms` and `/privacy` |
 | `<slug>.example.com` | the same Nuxt frontend | a workspace: `/login`, `/dashboard`, everything signed in |
 | `admin.example.com` | the same Nuxt frontend | the platform's administration, for super admins (see [The admin host](admin-host.md)) |
 | `api.example.com` (or any host you choose) | the Laravel API | `/api/v1/...` and `/up` |
 
-The home page of the root domain is a small placeholder of the kit: the platform's name, a line about it, **Create a
-workspace** (or **Join the waitlist**, or nothing, by the platform's access mode) and **Find my workspace**. Replace it
-with your landing page (see [Frontend](../frontend.md#the-home-page-of-the-root-domain)).
+The home page of the root domain is the product's landing, from the `marketing` layer, drawn by the server: its main call
+is **Create account** (or **Join the waitlist**, or nothing, by the platform's access mode), and **Sign in** leads to
+`/find-workspace`. Edit it, or replace it with your own (see [Edit the landing](../guides/edit-the-landing.md)).
 
 One frontend deployment answers the root domain and every workspace; it reads the workspace from the host.
 The API can live anywhere, because the frontend tells it the workspace in the `X-Tenant-Slug` header. `api`

@@ -199,8 +199,8 @@ const when = (at: string) => new Intl.DateTimeFormat(locale.value, { dateStyle: 
 ```
 
 The portal follows the frontend rules of the rest of the kit: mood-ui as it comes, a tooltip on every `KitButton`, `en`
-and `es` keys in snake case, no `v-html`, and it must look right in dark mode and at phone width (the portal's layout does
-not force light).
+and `es` keys in snake case, no `v-html`, no shadow, and it must look right at phone width. The portal's account is light,
+as the public screens (the `auth` layout), whatever the visitor's color mode.
 
 ## 4. Test it
 

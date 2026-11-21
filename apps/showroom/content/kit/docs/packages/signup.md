@@ -269,7 +269,7 @@ views. Keep the rule that nothing a person typed goes into it.
   `takeLinkFragment`, so no server, log or `Referer` sees it), takes it off the address and sends it as `invite` with the
   signup. While the platform's access mode (core's `usePlatformPublic()`, from `GET /platform/public`) is `waitlist` or
   `closed`, a visit with no invitation shows no form: it says that new workspaces come in by invitation, with **Join the
-  waitlist** (to `/waitlist`) in `waitlist` mode, or that none are taken for now in `closed` mode. With the mode unknown
+  waitlist** (to the landing's waitlist, `/#waitlist`) in `waitlist` mode, or that none are taken for now in `closed` mode. With the mode unknown
   (the platform layer could not read it) the form shows and the API decides. A refusal of the access mode
   (`signup.closed`, `signup.invite_invalid`) shows in the form's banner, in the API's words: the mode can change while the
   page is open.

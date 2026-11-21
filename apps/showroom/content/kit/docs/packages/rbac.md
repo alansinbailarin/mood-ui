@@ -217,7 +217,7 @@ Icons are names that core maps to Heroicons outline components for every menu (t
 `frontend/layers/core/app/utils/menu-icon.ts` (`menuIcon()`): `home`, `calendar-days`, `users`, `cog-6-tooth`,
 `chart-bar`, `shopping-bag`, `credit-card`, `envelope`, `bell`, `question-mark-circle`, `banknotes`,
 `building-storefront`, `link`, `sparkles`, `clipboard-document-list`, `identification`, `tag`,
-`user-group`, `briefcase`, `shield-check`, `receipt-percent`, `scale`, `wallet`, `inbox-arrow-down` and `flag`. An
+`user-group`, `briefcase`, `shield-check`, `receipt-percent`, `scale`, `wallet`, `inbox-arrow-down`, `flag` and `globe-alt`. An
 unknown name shows a question mark; add the icon to that file to use another.
 
 ## Seeders

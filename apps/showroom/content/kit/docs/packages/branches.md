@@ -405,6 +405,18 @@ the palette. It needs no feature of the plan.
 Each hit is the branch's name (its slug when the name is blank), its city under it (nothing while it has none), and its
 page, `/dashboard/branches/{id}`.
 
+## Dataset
+
+Branches declares the dataset `branches.branches` to [Data](data.md), through `BranchesData` (tagged `data.datasets`): the workspace's
+branches, for whoever has `branches.view`. It needs no flag and no feature of the plan.
+
+- **Columns:** `id`, `name`, `is_active`, `city`, `state`, `country`, `timezone` and `created_at`; the street, the notes and the
+  place on the map are not declared, so they cannot be read. `phone` and `email` are sensitive: they come out only for someone
+  who holds `branches.manage`. The metric is `count`.
+- **Who sees which:** `Data\BranchesScope` is the rule of the list ([Who sees which branch](#who-sees-which-branch)): every
+  branch for whoever has `branches.all` or while the workspace does not work by branch, else the ones the person works at. It
+  does not read the branch of the top bar. Closed branches are in; deleted ones are gone.
+
 ## For a module
 
 A module that works at branches (Booking's availability, a cash register per branch, a public page) reads them through
@@ -420,6 +432,9 @@ A module that works at branches (Booking's availability, a cash register per bra
   when the branch said none, which is not "always closed".
 - `members($tenantId, $branchId)`: the user ids of who works there.
 - `branchesOf($tenantId, $userId)`: the ids of the branches someone works at.
+- `Contracts\ListsPublicBranches::forPublicPage($tenantId, $ids, $limit)`: the active branches a workspace shows the world (all,
+  oldest first, or the ids given, in their order), each a `PublicBranch` with its address, point, zone, phone and week. It is
+  what a public page shows (PublicPage's branches block), so it knows nobody and never carries a branch's email or notes.
 
 `BranchSummary` is `id`, `name`, `slug`, `isActive`, `timezone`, `addressLine1`, `addressLine2`, `city`, `state`,
 `postalCode`, `country`, `latitude`, `longitude`: what a module needs to work with a branch, without its phone, email or
@@ -537,7 +552,7 @@ with the branch. `PATCH /branches/{branch}` takes any of them ([Editing a branch
 ### Contracts for modules
 
 - `Contracts\ReadsBranches` (`find`, `active`, `hours`, `members`, `branchesOf`) and `Contracts\BranchSummary`
-  ([For a module](#for-a-module)).
+  ([For a module](#for-a-module)); `Contracts\ListsPublicBranches` and `Contracts\PublicBranch` (what a public page shows).
 
 ### Errors
 

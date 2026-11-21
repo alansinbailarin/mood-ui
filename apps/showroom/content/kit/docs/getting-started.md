@@ -83,6 +83,8 @@ php artisan notifications:sync
 php artisan db:seed
 ```
 
+If you have not yet, run `php artisan assets:prepare-bucket`: the demo's public page stores its pictures there.
+
 `key:generate` writes `APP_KEY` into the root `.env`. `notifications:sync` writes the catalog of notification channels
 and event types the packages declare; run it again when you add or change an event type. `db:seed` creates the demo
 workspace and fills it, so no screen opens empty or locked. It does this only when `APP_ENV` is `local` or `testing`; in any
@@ -98,6 +100,7 @@ other environment the seeder creates nothing. You can run it again: nothing is m
 | Clients | 46 over the last sixty days: forty with the tags VIP and Frecuente, and three homed at Centro and three at Playas |
 | Team | three skills (Barbería, Colorimetría, Atención al cliente) and one invitation that waits, to `new.hire@example.com` |
 | Notifications | the default audiences of every event type, and in the owner's inbox three notices (two unread) with their deliveries in the log, one of them a failed email |
+| Public page | published, with a block of each kind (an image with text, a text, a gallery, the branches, contact and frequent questions) and four pictures; open `http://demo.localhost:3000/` |
 | Platform | two people on the waitlist (Marta Ruiz and Luis Ortega), one pending invitation to sign up, and, in `local` only, `owner@demo.test` as a super admin of the platform, the way `platform:setup` makes one. In `testing` there is no admin. |
 
 Change the plan to see the other states: edit it in the admin's panel (see **Edit a plan** below), or write a different one in
@@ -105,6 +108,25 @@ Change the plan to see the other states: edit it in the admin's panel (see **Edi
 
 Billing is off until you set Stripe's keys: the Subscription page lists the plans and says payments are not set up yet.
 To try it, see [Stripe](configuration/stripe.md).
+
+### Activate your license
+
+Run this once, with the license key from your Polar purchase:
+
+```bash
+php artisan kit:activate --project="My project"
+```
+
+It asks for the key, and what you type is hidden. The key is never an argument, so it stays out of your shell history and
+process list. In a script or CI, put it in the environment variable `KIT_LICENSE_KEY_INPUT`, or pipe it in with `--stdin`
+(`printf '%s\n' "$KEY" | php artisan kit:activate --stdin`). The command then records one activation with Polar under the project
+name (`APP_NAME` when you leave `--project` out) and writes `KIT_LICENSE_KEY` and `KIT_LICENSE_ACTIVATION_ID` into the
+root `.env`. It prints the key with only its last 4 characters.
+
+It is a record, nothing more. No code in the kit reads the key while the app runs, and nothing stops working if you skip
+it or it fails. If you have no connection, run it again later. Running it on an install that has both variables does
+nothing; `--force` activates again. If Polar accepted the key but the `.env` could not be written, the command prints the two lines to add by hand: add them, and do not run the command again, because it would use another activation. If it says the activation limit is reached, or the key is revoked, contact support.
+The kit's Polar organization id ships inside the release, so you set nothing for it. The settings behind it are in [The `.env` file](configuration/environment.md#the-mood-kit-license).
 
 ## 5. Run the four processes
 
@@ -262,6 +284,17 @@ The demo workspace's onboarding is already done; a workspace you create through 
 
 Locally no captcha is asked: `SIGNUP_REQUIRE_CAPTCHA` is empty, which means off when `APP_ENV` is `local`.
 See [Signup](packages/signup.md) for the whole flow and its limits.
+
+## Update to a new version
+
+Each release is one commit on `main` of the repository you were invited to, tagged `vX.Y.Z`. To take one into your project:
+
+1. Keep that repository as a remote (here called `kit`) and fetch its tags: `git fetch kit --tags`.
+2. Merge the version: `git merge vX.Y.Z`. Resolve any conflict in files you changed.
+3. Open [`CHANGELOG.md`](../CHANGELOG.md) and read the entries of every version between yours and the new one, newest first.
+   Under `### Upgrading` is what you must run or set.
+4. Run what it lists. Usually that is `pnpm install`, then in `backend/` `composer install` and `php artisan migrate`, and
+   sometimes `php artisan rbac:sync`, `plans:sync` or `notifications:sync`, or a new variable in your `.env`.
 
 ## Troubleshooting
 

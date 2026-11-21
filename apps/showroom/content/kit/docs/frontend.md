@@ -50,10 +50,13 @@ Four more are server-only: `NUXT_SECURITY_ASSETS_URL` and `NUXT_SECURITY_ASSETS_
 Security Policy allows (`connect-src`), and `NUXT_SECURITY_MAP_ORIGINS`, more origins the map's style loads from. The
 map's style and tile origins go in `contentSecurityPolicy()` through `mapOriginsOf()` (`connect-src` and `img-src`, never
 on the admin's host). The security headers are listed in
-[Production](configuration/production.md#security-headers).
+[Production](configuration/production.md#security-headers). The pages of a workspace may frame their own origin (`frame-src 'self'`),
+and only a route whose rule sends `X-Frame-Options: SAMEORIGIN` can be framed, by its own origin alone (`frame-ancestors 'self'`): today
+that is the public page's preview. The admin's host frames nothing of its own.
 
 `robots.txt` and `sitemap.xml` build their addresses from `NUXT_PUBLIC_TENANCY_ROOT_DOMAIN` and the scheme
-and port of the request, so the frontend has no site URL setting of its own. On the admin's host `robots.txt` is
+and port of the request, so the frontend has no site URL setting of its own. A workspace's host lets crawlers read
+its root alone (`Allow: /$`, `Allow: /_nuxt/` for its scripts and styles, `Disallow: /`: its public page) and has no sitemap. On the admin's host `robots.txt` is
 `Disallow: /` and there is no sitemap, and every page it renders carries `X-Robots-Tag: noindex, nofollow` and a narrower
 Content Security Policy (see [Production](configuration/production.md#security-headers)).
 
@@ -61,8 +64,7 @@ Content Security Policy (see [Production](configuration/production.md#security-h
 
 Each layer is a directory in `frontend/layers/<name>` with a `nuxt.config.ts`, a `package.json`, its source
 in `app/` and its tests in `tests/*.test.ts`. Nuxt reads these folders of `app/`: `components/`,
-`composables/`, `utils/` and `stores/` (auto-imported), `pages/`, `layouts/` (core has `auth`, clients has
-`portal`, dashboard has `dashboard`, onboarding has `onboarding`, platform has `platform`), `middleware/` (route middleware; a `.global` one runs on every page), and `plugins/` (run at
+`composables/`, `utils/` and `stores/` (auto-imported), `pages/`, `layouts/` (core has `auth` and `site`, dashboard has `dashboard`, onboarding has `onboarding`, platform has `platform`), `middleware/` (route middleware; a `.global` one runs on every page), and `plugins/` (run at
 start-up, where a layer listens to the `kit:*` hooks). `services/` (the API calls) and `types/` (TypeScript
 types) are the kit's own conventions, imported by path.
 
@@ -72,6 +74,9 @@ Import rules, enforced by ESLint:
 - `core` imports from no layer.
 - Auto-imported components, composables, stores and utils are used only from your own layer or `core`
   (`mood-kit/no-cross-layer-auto-import`).
+
+A layer whose folder has a dash keeps its messages under the folder's name with underscores (`public-page` becomes
+`public_page`).
 
 When two layers define the same file or auto-imported name, one silently wins (the app first, then layers
 in reverse alphabetical order), so keep names unique across layers.
@@ -192,7 +197,7 @@ and, for the last three, by the settings layer when something is saved:
 | `useWorkspaceBrand()` (`kit:brand`) | the workspace's `primaryColor` (`#rrggbb`, or `default` for black and white) and `logoUrl`; null on a screen with no workspace |
 | `useWorkspaceLocalization()` (`kit:localization`) | the workspace's `timezone`, `locale` and `currency` from `GET /me`; null signed out |
 | `useUserTheme()` (`kit:theme`) | the person's `colorMode` and `radius` from `GET /me`; null until the session says (`DEFAULT_THEME` is what the API answers for someone who never chose) |
-| `usePlatformPublic()` (`kit:platform`) | the platform's `name`, `logoUrl`, `primaryColor` (`#rrggbb` or `default`) and `accessMode` (`open`, `waitlist`, `closed`) from the public `GET /platform/public`, filled by the platform layer on the root domain and the admin's host; null on a workspace's host, or until it loads |
+| `usePlatformPublic()` (`kit:platform`) | the platform's `name`, `logoUrl`, `primaryColor` (`#rrggbb` or `default`), `accessMode` (`open`, `waitlist`, `closed`), `colorMode` (the default color mode: `light`, `dark` or `system`) and `radius` (the corners) from the public `GET /platform/public`, filled by the platform layer on the root domain and the admin's host; null on a workspace's host, or until it loads |
 | `usePlatformFlags()` / `usePlatformFlag(slug)` (`kit:platform-flags`) | the platform flags of the workspace from `GET /me` (`platformFlags`), filled by the platform layer and emptied with the session; `usePlatformFlag(slug)` is a computed that is off for a flag the map does not name |
 | `useImpersonationState()` (`kit:impersonation`) | who from the platform is acting as the person in this session (`by.name`, `endsAt`), from `GET /me` (`impersonation`); null for a session of their own. Filled by the auth layer, emptied with the session. `useImpersonationGate()` gives `{ blocked, tooltip }` for a control such a session may not use: disable it and show the tooltip, as with `usePlanGate()` |
 | `usePlanContext()` (`kit:plan`) | the workspace's plan from `GET /me` (`plan`): `slug`, `name`, `tier`, `status` (`trialing`, `active`, `past_due`, `cancelled`, or null with no subscription), `managedBy`, `trialEndsAt`, `currentPeriodEnd`, the `features` it includes and each quota's `limit` (null: none) and `used` (null until loaded); null until the session says, or with no Plans package |
@@ -231,7 +236,11 @@ tokens `--brand-mono-50` to `--brand-mono-950` in `main.css`: mood-ui uses shade
 light page and 400 on a dark one, so the one palette is black in light mode and white in dark mode, also in a
 subtree scoped to light. A screen with no workspace (the root domain: its home, signup, finding a workspace; the
 admin's host) takes the platform's color when it chose one (`usePlatformPublic().primaryColor`), and otherwise gets no
-palette and keeps mood-ui's own primary. `useBrandPalette()` is what `app.vue` uses: it reads the tokens
+palette and keeps mood-ui's own primary. The corners follow the same rule: `useAppRadius()` (what `app.vue` hands `ModoProvider`) is the signed-in person's own, else the
+platform's on its own screens (`usePlatformPublic().radius`), else mood-ui's. `usePublicShape()` gives the public screens (the landing, signup and sign in), which draw cards at `large` and buttons at `full`, the platform's chosen corners instead, once one is chosen (`radius` is null until then). The platform's default color mode is applied by
+the platform layer's `platform-appearance` plugin only when the visitor has saved no mode of their own in that browser. `app.vue` gives `ModoProvider` no `theme`, since the provider saves any it is given as the visitor's choice: core's `ModoThemeSync` tells it the mode instead. Core's
+`ColorModePicker` and `RadiusPicker` are the cards both the profile's appearance page and the admin's settings use.
+`useBrandPalette()` is what `app.vue` uses: it reads the tokens
 again after the mount, once the page has loaded and whenever a stylesheet is added to or changed in `<head>` (the dev
 server injects its CSS from scripts), so a stylesheet that arrives late still paints the brand.
 
@@ -239,6 +248,11 @@ The `--brand-mono-*` scale is not monotonic (400 is the lightest, 200 is darker 
 for mood-ui's per-mode shades, not to run light to dark. On a workspace on the default brand, a fixed `tenant-<shade>`
 utility does not give the shade its number suggests; use mood-ui's semantic tokens (`bg-primary`,
 `text-primary-foreground`, `bg-primary-subtle`) for anything that follows the brand.
+
+**A public demo** (`DEMO_MODE`, [Run a public demo](guides/run-a-public-demo.md)) is core's `useDemo()` state, null on a real
+install: the tenancy layer fills it from `GET /tenant` and the platform layer from `GET /platform/public`. Core's `DemoBanner` (the
+reset's hour, in the dashboard's banners and above the admin's pages) and `DemoCredentials` (the shared account on the sign-in
+screens, with a button that fills the form) draw from it and render nothing otherwise. The password is the API's, never in the frontend.
 
 **Hooks**, declared in `layers/core/app/composables/` next to what they serve: `useSession.ts` (`kit:auth:*`,
 `kit:session:me`),
@@ -248,9 +262,9 @@ utility does not give the shade its number suggests; use mood-ui's semantic toke
 `useClientTabs.ts` (`kit:clients:tabs`), `usePortalSections.ts` (`kit:portal:sections`),
 `useSubscriptionSections.ts` (`kit:subscription:sections`: a layer pushes `{ id, order, component }` for a section of
 the Subscription page, drawn under the plan's summary; the billing layer's plans and payments) and
-`useOnboardingSteps.ts` (`kit:onboarding:steps`), `useTopbarItems.ts` (`kit:topbar:items`),
+`useOnboardingSteps.ts` (`kit:onboarding:steps`), `useTopbarItems.ts` (`kit:topbar:items`), `usePlatformTopbarItems.ts` (`kit:platform:topbar:items`),
 `useSidebarTopItems.ts` (`kit:sidebar:top`), `useSearchShortcuts.ts` (`kit:search:shortcuts`),
-`useTeamMemberSections.ts` (`kit:team:member-sections`), `useDashboardWidgets.ts` (`kit:dashboard:widgets`), `useTopbarActions.ts` (`kit:topbar:actions`) and `useMapAdapter.ts` (`kit:map:adapter`):
+`useTeamMemberSections.ts` (`kit:team:member-sections`), `usePlatformWorkspaceSections.ts` (`kit:platform:workspace-sections`), `useDashboardWidgets.ts` (`kit:dashboard:widgets`), `useTopbarActions.ts` (`kit:topbar:actions`) and `useMapAdapter.ts` (`kit:map:adapter`) and `useWorkspaceHome.ts` (`kit:workspace:home`):
 
 | Hook | Called by | Meaning |
 | ---- | --------- | ------- |
@@ -271,11 +285,14 @@ the Subscription page, drawn under the plan's summary; the billing layer's plans
 | `kit:portal:sections` | the client portal's account page (the clients layer's), with an array | a layer pushes `{ id, order, component }` for a section of the portal, its `id` the section's key as `GET /portal/me` lists it (`spa.visits`). The page draws only the sections the API listed for the client, in the API's order, each under the API's label; the component gets no props. `collectPortalSections()` gathers them, by order (then id). See [Add a portal section](guides/add-a-portal-section.md#3-draw-it). |
 | `kit:subscription:sections` | the Subscription page, with an array, when it mounts | a layer pushes `{ id, order, component }` for a section drawn under the plan's summary (the billing layer's plans and payments, see [Billing](packages/billing.md#the-billing-layer)). `collectSubscriptionSections()` gathers them, by order (then id). |
 | `kit:topbar:items` | the dashboard's top bar, with an array, when it mounts | a layer pushes `{ id, order, component }` for something of the dashboard's top bar, before the profile menu (the search at order 5, the dashboard's Create menu at 8, the notifications layer's bell at 10). `collectTopbarItems()` gathers them, by order (then id). |
+| `kit:platform:topbar:items` | the admin's top bar (the platform layer's), with an array, when it mounts | a layer pushes `{ id, order, component }` for something of the admin's top bar, before Sign out (the search layer's palette at order 5, the notifications layer's bell at 10). `collectPlatformTopbarItems()` gathers them, by order (then id). The dashboard's `kit:topbar:items` is never drawn there, nor this one in the dashboard. |
 | `kit:topbar:actions` | the top bar's Create menu, with an array, when it mounts | a layer pushes `{ id, order, labelKey, icon, to, permission, quota?, offWhileImpersonating? }` for something people may create from the top bar (`labelKey` a message key of the layer, `icon` a component, `to` a path of the app). `collectTopbarActions()` gathers them by order (then id) and keeps only those whose `permission` the person has; the page itself still checks the plan. `quota` names the plan quota the action uses (`members`, `branches`, `clients`): while it is full the menu shows the action disabled, with the plan's tooltip (core's `usePlanGate`). `offWhileImpersonating: true` (every create) leaves it out while a super admin acts as the person, since the API refuses it; with none left the menu is not drawn. |
 | `kit:dashboard:widgets` | the dashboard's home, with an array, when it mounts | a layer pushes `{ key, component }` for a widget of the home, `key` being the widget's key as `GET /dashboard` lists it (`clients.recent`). The component gets one prop, `widget` (`DashboardWidgetView`: `key`, `label`, `size`, `data`, `failed`) and draws in core's `DashboardWidgetCard`. `collectDashboardWidgets()` gathers them by key, the first of a key winning. |
-| `kit:search:shortcuts` | the search palette, with an array, as it opens | a layer pushes `{ id, label, icon, to }` for a page the palette offers under "Pages" (`label` already translated, `icon` a Heroicons outline name as the menu's, `to` a path of the app). The dashboard layer answers with the menu entries it already loaded, with no request of its own. `collectSearchShortcuts()` gathers them in the order pushed, each id once. |
+| `kit:search:shortcuts` | the search palette, with an array, as it opens | a layer pushes `{ id, label, icon, to }` for a page the palette offers under "Pages" (`label` already translated, `icon` a Heroicons outline name as the menu's, `to` a path of the app). The dashboard layer answers with the menu entries it already loaded, with no request of its own, and the platform layer with the admin's, for the admin's palette. `collectSearchShortcuts()` gathers them in the order pushed, each id once. |
 | `kit:sidebar:top` | the dashboard's sidebar, with an array, when it mounts | a layer pushes `{ id, order, component }` for something at the top of the dashboard's sidebar, above the menu, in the mobile drawer too (the branches layer's switcher). The component gets one prop, `collapsed` (the sidebar shows icons only), and draws an icon with its tooltip then. An entry may add `shown`, read reactively, saying whether it has anything to show now: the sidebar draws its header (where mood-ui centres the collapse toggle) only for what shows. `collectSidebarTopItems()` gathers them, by order (then id); core's `MenuSidebar` draws them in mood-ui's `Sidebar` header. |
 | `kit:team:member-sections` | a member's page of the team (the team layer's), with an array, when it mounts | a layer pushes `{ id, order, component }` for a section of a member's page; Team's working hours (10) and skills (20) come first, a module's from 50. The component gets the props `memberId` (string) and `editable` (boolean: the person may change it) and saves with the page's action bar through `useSaverEntry()`, its fields in the page's change set. `collectTeamMemberSections()` gathers them, by order (then id). See [Team](packages/team.md#a-members-page). |
+| `kit:platform:workspace-sections` | a workspace's page in the admin's panel (the platform layer's), with an array, when it mounts | a layer pushes `{ id, order, component }` for a section drawn in the Summary tab, under the platform's own cards; the component gets the props `workspaceId` and `workspaceName`, loads what it shows through the module's own routes under `/platform/workspaces/{id}/...`, and emits `changed` after a change, so the page reads the workspace and its activity again. A module's go from 50. `collectPlatformWorkspaceSections()` gathers them, by order (then id), and leaves out a handler that throws, so one module cannot take the others' sections away; a section that throws while it draws shows nothing and the rest stay. The public-page layer's switch is one. |
+| `kit:workspace:home` | the root of a workspace's host (`resolveWorkspaceHome()`), with `{ component: null }` | a layer sets `choice.component` to the component that draws the root; it gets `name`, `portalOpen` and `signedIn`. With none, core's `WorkspaceGateway`. The public-page layer answers it. |
 | `kit:map:adapter` | the location picker's map (`resolveMapAdapter()`), with `{ factory: null }`, when a map mounts | a layer sets `choice.factory` to a `MapAdapterFactory` of another library (Google Maps JS, Leaflet); MapLibre (`createMapLibreAdapter`) otherwise. See [Maps](configuration/maps.md#another-map-library). |
 | `kit:onboarding:steps` | the setup wizard, with an array, when it mounts | a layer pushes `{ step, component }`: the screen of an onboarding step it brings (the settings layer's for the kernel's two). `collectOnboardingSteps()` gathers them; a step with none shows that it cannot be done there. |
 
@@ -415,15 +432,28 @@ export default defineNuxtPlugin((nuxtApp) => {
 ## The home page of the root domain
 
 `frontend/app/pages/index.vue`, at `/`, is the one page that belongs to the Nuxt shell and to no layer. On the root domain
-it is a small public page: the platform's name (`NUXT_PUBLIC_PLATFORM_NAME`, or the brand the platform set), one line
-about what it is, a **Create a workspace** button and a **Find my workspace** link (`/find-workspace`). The button
-follows the platform's access mode (core's `usePlatformPublic()`): to `/signup` while it is `open` (or unknown), to
-`/waitlist` as **Join the waitlist** while it is `waitlist`, and it is not shown while it is `closed`. On a workspace's
-host the same page offers to sign in, or greets whoever is signed in and lists their workspaces.
+it is the product's landing: the `marketing` layer's `MarketingLanding` in the `site` layout, drawn by the server (prices
+included, from the public `GET /plans`), with the platform layer's `WaitlistForm` in its closing section (`#waitlist`)
+while the platform lets people in by waitlist. Which sections show and in which order, the site's links, the customer
+logos, the FAQ's questions and the contact email are in `frontend/layers/marketing/app/app.config.ts`; the words in that
+layer's locale files; the prices only in the plan catalog the admin edits. The main call follows the platform's access mode
+(core's `useJoinCall()`): **Create account** to `/signup` while it is `open` (or unknown), **Join the waitlist** to
+`/#waitlist` while it is `waitlist`, none while it is `closed`. The old `/waitlist` address redirects to `/#waitlist`. See
+[Edit the landing](guides/edit-the-landing.md), which also says how to remove the layer for a landing of your own.
 
-It is a placeholder for your landing page: **you are expected to replace it** with your product's own. Keep the two
-links (or send people to `/signup` and `/find-workspace` yourself), and keep the `home.*` messages in step with whatever
-you write. The root domain's `robots.txt` and `sitemap.xml` already list `/`.
+The root domain's `robots.txt` and `sitemap.xml` already list `/`.
+
+## The root of a workspace
+
+On a workspace's host the same page asks core's `kit:workspace:home` hook (`resolveWorkspaceHome()`) what to draw, in the
+`auth` layout. The `public-page` layer answers with `PublicPageHome`: the page the workspace published (core's
+`WorkspaceHomeHeader`, its blocks, core's `WorkspaceHomeFooter`), loaded by the layer's middleware on the server so the
+content is in the HTML search engines read. With nothing published, a page turned off or no layer, the root is core's
+`WorkspaceGateway`: the logo, the name as the page's only `h1`, the tagline, **Client portal** while `GET /tenant` says the
+portal is open, and **Sign in** (or **Go to the dashboard** for whoever is signed in here).
+
+A workspace's page is indexable only while it is published; the gateway and a page turned off are `noindex`. See
+[Public page](packages/public-page.md#frontend).
 
 ## The dashboard's home
 
@@ -484,10 +514,12 @@ const tooltip = computed(() => (gate.value.limit !== null ? t("team.tooltips.pla
 | Page meta | Effect |
 | --------- | ------ |
 | `layout: 'dashboard'` | the signed-in shell: sidebar from `GET /menu`, top bar with the profile menu. It builds the page's breadcrumb (mood-ui's `Breadcrumbs`, with the menu's icons) and hands it to the page's `PageHeader`, which shows it from two levels down. It is core's `AppFrame` (the shell, the scrolling area with the kit's gutter, the banners and the action bar's strip) with the dashboard's top bar and its menu in core's `MenuSidebar` (the menu with its loading and failed states; `menuIcon()` maps the API's icon names, `activeMenuRoute()` picks the active entry). The admin's `platform` layout is the same frame. |
-| `layout: 'auth'` | the public-screen layout from `core` |
+| `layout: 'auth'` | the public-screen layout from `core`: light, fully rounded, no halo, around `<AuthShell>` |
+| `layout: 'site'` | the root domain's public site from `core`: `SiteHeader` (fixed, floating), the page, `SiteFooter` |
 | `auth: 'required'` | signed-out visitors go to `/login?redirect=...`; the session loads before the page |
 | `auth: 'guest'` | signed-in visitors go on to `/dashboard` |
 | `permission: 'x.view'` or a list | without all of them, the person goes to `/dashboard` |
+| `platformFlag: 'module.enabled'` | while that platform flag is off for the workspace (`GET /me`'s `platformFlags`), the person who opens the page goes to `/dashboard`. A module that ships off by default puts it on every page, beside `permission`; core's `platform-flag.global.ts` waits for the session, as the permission guard does. It hides the page only: the routes keep `platform-flag:<slug>`. Declared in that file. |
 | `breadcrumb: 'my.i18n.key'` | the crumb of a dashboard page the menu does not list (`/dashboard/me/profile`), or of a page under a menu entry (`/dashboard/team/:id` is "Member"); without it the crumb comes from the route name, or is "Detail" for an id under a menu entry. Declared in `layers/core/app/types/page-meta.d.ts`. |
 
 A page that depends on who is signed in is rendered in the browser only: the session lives in
@@ -512,9 +544,40 @@ and My profile use it.
 A layer never spells out the path of another layer's page: core's `KIT_ROUTES` names the ones that cross
 (`dashboard`, `login`, `profile` (My profile), `findWorkspace`, `handoff`, `signup`, `notificationDeliveries`, the delivery log, which a
 module opens with `?subjectType=...&subjectId=...` for one record's history, `platform`, the admin's panel, and
-`waitlist`, the root domain's public waitlist, and `subscription`, where a gate on the plan links whoever may see it), each owned by the layer it belongs to.
+`waitlist`, the landing's waitlist section (`/#waitlist`), and `subscription`, where a gate on the plan links whoever may see it), each owned by the layer it belongs to.
 
-A new public screen in a layer of its own uses `layout: 'auth'` and `<AuthShell>` from `core`, which also
+A new public screen that asks something uses `layout: 'auth'` and `<AuthShell>` from `core`. With `showcase`
+(`"workspace"`, `"signup"`, `"platform"`, `"portal"`) and `side` (`"end"` by default, `"start"` to mirror it) the screen
+splits in two from `lg` up: the form on the page, with no card, and on the other side `AuthShowcase`, a sample of the
+product drawn with mood-ui's pieces in the primary color (the workspace's on its host), its texts under
+`core.showcase.<variant>`. Below `lg` only the form shows. `AuthHeader` puts the brand
+(`BrandMark`: the workspace's logo, else the platform's, else a dashed "Your logo here" box) in the top left corner and the
+language in the top right one. The sign-in, the password recovery, find-a-workspace, signup and `/join` are the model.
+
+The root domain's site (the landing, `/terms`, `/privacy`) uses `layout: 'site'`: `SiteHeader`, a floating bar fixed near
+the top (the brand, the links of `useAppConfig().site.nav`, the language, **Sign in** and the main call of
+`useJoinCall()`, which follows the platform's access mode), and `SiteFooter` (the columns and legal links of
+`useAppConfig().site.footer`). Core leaves the links empty; the `marketing` layer fills them in its `app.config.ts` (see
+[Edit the landing](guides/edit-the-landing.md)). The header is fixed, so a page of the site leaves room at its top.
+
+A public screen that only says something, with one way on at most (a link that no longer works, the email on its way, a
+workspace that is not there, a failed page), is `<MessageShell>` from `core`, in the `auth` layout: the same header, then,
+centered on the page with no card, an icon in a soft circle of the primary color (`spin` turns it while something is
+worked on), an optional status code (`eyebrow`), the title (`title`, the page's `h1`), the message (`message`), what the
+screen adds in its default slot (the signup's steps) and its one way on in the `action` slot (one `KitButton` or
+`TextLink`), then the copyright. Its body alone is `MessageBlock`. The error page uses it too: inside the `site` layout on
+the root domain, and as a `MessageShell` on a workspace's host or the admin's, so a workspace never shows the site's menu. On a workspace's host the error page also wears the workspace's logo and color (tenancy's `tenant-brand` plugin).
+
+A simple page outside the dashboard, for someone who is no member (the client portal's account, the notifications'
+preference center), is `<PublicPageShell>` from `core`, in the `auth` layout: the same header (its `brand` and `actions`
+slots replace the brand and the language: the portal shows the workspace with no link, its own language select and Sign
+out), then a centered column (`max-w-3xl`) with the page anatomy, core's `PublicPageHeader` (the title as the page's one
+`h1`; `PageHeader`'s look with the tag chosen) and then outlined `SurfaceCard`s, and the copyright.
+
+None of the public chrome uses a shadow: surfaces are set apart by a hairline border (`border-ink-100`) or mood-ui's
+`soft` card, and the site's mobile menu is a flat panel under the bar, not a drawer.
+
+`core` also
 provides `FormSubmitButton` (the full-width submit button of the public forms, with `arrow` on the sign-in screens),
 `CaptchaWidget` with `useCaptcha()`, `PasswordStrength`, the password and email rules, `useAuthPage`,
 the address helpers `workspaceUrl()` and `rootDomainUrl()`, `useRootDomain()`, the root domain from the settings, and
@@ -756,8 +819,11 @@ const { onSubmit, isSubmitting, formError } = useFormSubmit({
   an icon-only one also needs `ariaLabel` (ESLint `mood-kit/kit-button`, and `nuxt typecheck` for the tooltip). The
   text is one short line, two to five words and at most 40 characters, under a key with a `tooltips` segment, which a
   core test checks in every locale file (each plural form of a `one | many` message on its own). A button at the right edge takes `tooltipPlacement="top-end"` (`bottom-end`
-  in the top bar). A text link is a `KitButton` with `to` and `variant="text"` (mood-ui has no link component): an `<a>`
-  with the page's address, opened by the router on a plain click, and by the browser for another host or `target="_blank"`.
+  in the top bar). A link that stands on its own as an action is a `KitButton` with `to` (and
+  `variant="text"` for a quiet one): an `<a>` with the page's address, opened by the router on a plain click, and by the
+  browser for another host or `target="_blank"`. A link inside a sentence ("No account? Create one") is core's `TextLink`
+  (`to`, `external` for a new tab): text in the primary color, underlined on hover, which keeps the line of the sentence,
+  since mood-ui has no link component and a text-variant button has a control's height and padding.
   Its tooltip shows while a mouse rests on it and on keyboard focus, never on a touch (a tap on a phone shows none), and
   closes when the button is pressed and when the route changes, so it never stays over the dialog, drawer or page the
   button opened (`useButtonTooltip`, through mood-ui's controlled `open`).
@@ -778,6 +844,7 @@ const { onSubmit, isSubmitting, formError } = useFormSubmit({
   <KitButton :label="t('billing.send')" :tooltip="t('billing.tooltips.send')" color="primary" @click="send.run()" />
   <KitButton :icon="TrashIcon" :aria-label="t('billing.delete')" :tooltip="t('billing.tooltips.delete')" variant="ghost" />
   <KitButton :to="KIT_ROUTES.login" variant="text" color="primary" size="small" :label="t('billing.sign_in')" :tooltip="t('billing.tooltips.sign_in')" />
+  <p>{{ t("billing.no_account") }} <TextLink :to="KIT_ROUTES.signup">{{ t("billing.create_one") }}</TextLink></p>
   ```
 - A choice between views or modes (all or unread, monthly or yearly prices, the default color or one of its own) is
   mood-ui's `Tabs` in the `line` variant, with what each shows in its panel (`#panel-<value>`, or `#panel` with `lazy` and
@@ -814,15 +881,19 @@ const { onSubmit, isSubmitting, formError } = useFormSubmit({
   code passes the number that chooses the form: `t("team.tooltips.plan_members", { count }, count)`. The backend does the
   same with Laravel's `one|many` lines: `trans_choice()` in a mail, and a `DomainError` whose replacements carry an integer
   `count` is rendered in its plural form.
+- Maps: core mounts every map through `useMapMount()` and loads MapLibre through `loadMapLibre()`; `LocationMap` is the
+  picker's (one pin you move) and `createPointsMap()` draws a pin per point that only shows (the public page's).
 - App messages are in `frontend/i18n/locales/<code>.json`; each layer's are in
   `layers/<name>/i18n/locales/<code>.json`, namespaced by layer (`core.*`, `rbac.*`). Every key segment is snake_case
   (`rbac.editor.save_with_count`); a core test fails on any other.
 - Missing keys fall back to English at run time; a core test (`locales.test.ts`) fails when a locale file of the app or
   of any layer lacks a key `en.json` has, leaves one blank, or misses a literal key the layer's code asks for.
+  `php artisan i18n:check` (part of `composer check`) covers the same files and also fails on a key English does not have,
+  a placeholder (`{name}`, `@:key`) that differs from English's and a plural with fewer forms.
 - mood-ui's own texts (table pagination, selects, dates, aria labels) follow the active locale through
   `ModoProvider` in `app.vue`. mood-ui ships `en` and `es`.
 
-To add a language, see [Add a locale](guides/add-a-locale.md).
+To add a language, run `php artisan kit:add-locale <code> --name=<Name>` and see [Add a locale](guides/add-a-locale.md).
 
 ## Known gaps in mood-ui
 
@@ -832,6 +903,7 @@ difference):
 - `TablePagination`, which core's `ListPagination` wraps, has no box to type a page (first, previous, next and last buttons, and "Page 2 of 5"), a fixed English aria label on its page-size select, and writes its range with a hyphen ("26-41 of 41").
 - `Sidebar`'s collapse button has a fixed English aria label, so screen readers read it in English in any
   locale.
+- mood-ui has no sortable list: the public page editor's block list reorders with a handle of its own, by pointer (mouse, pen or touch) and by the arrow keys, and announces the new position.
 - `Accordion`'s header has a title only: settings sections show their description inside the open panel.
 - `Accordion` keeps closed panels in the page, folded.
 - `Accordion`'s header has no slot after the title: `SettingsSection` lays its unsaved dot over the header's right end,

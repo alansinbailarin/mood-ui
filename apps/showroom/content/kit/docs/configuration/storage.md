@@ -66,6 +66,9 @@ By default the browser sends a file to the API and the API writes it to the buck
 bucket and asks the API to confirm it. This takes the upload off your API servers, and needs CORS on the bucket for the
 origins of your workspaces. See [Settings](../packages/settings.md#uploading-straight-to-the-bucket) for the endpoints.
 
+The public page's images work the same way with `PUBLIC_PAGE_MEDIA_PRESIGN=true`: the same CORS, the same `uploads/` area and the
+same lifecycle rule. See [PublicPage](../packages/public-page.md#images) for the endpoints.
+
 S3 cannot sign the type, the size or the cache headers of such an upload, and the address works until it expires, so
 the browser uploads to `uploads/<workspace>/<uuid>`, a key no file is served from. The API reads the upload, checks it
 (its key, size and real type), writes the bytes it checked to the workspace's own key with their real type and cache
@@ -96,11 +99,11 @@ were uploaded. Confirmed files live under `tenants/` and `users/`, which the rul
 Nothing in `uploads/` is checked yet, and whoever uploads chooses its type, so it must not be readable at the public
 address. Locally `assets:prepare-bucket` makes only `tenants/` and `users/` public. R2's public access covers the whole
 bucket, and a WAF rule applies only to a domain of your Cloudflare zone, never to `r2.dev`. So with
-`SETTINGS_LOGO_PRESIGN=true`:
+`SETTINGS_LOGO_PRESIGN=true` or `PUBLIC_PAGE_MEDIA_PRESIGN=true`:
 
 1. Serve the bucket from a custom domain only, and turn its `r2.dev` address off (bucket → Settings → Public access →
    R2.dev subdomain → Disallow access). `ASSETS_URL` is the custom domain.
 2. On that domain add a rule that blocks the path: Security → WAF → Custom rules, `URI Path starts with "/uploads/"`,
    action Block. The API reads uploads with its keys, never through the public address, so the block costs nothing.
 
-With presign off, nothing is ever written to `uploads/`, and `r2.dev` is fine.
+With both presigns off, nothing is ever written to `uploads/`, and `r2.dev` is fine.

@@ -351,7 +351,7 @@ the visitor to `/unavailable`, answered with status 404 or 403. Paths that end i
 (`.ico`, `.png`, `.css`, `.js`, `.xml`, `.json` and the like) skip the lookup.
 
 The layer also answers `/robots.txt` and `/sitemap.xml` from Nitro server routes: the root domain lets
-crawlers in and lists its home page; a workspace host answers `Disallow: /` and has no sitemap. Do not add
+crawlers in and lists its home page; a workspace host answers `Allow: /$`, `Allow: /_nuxt/` (the page's scripts and styles, so a crawler can render it) and `Disallow: /` (crawlers read its public page and nothing under it) and has no sitemap; the admin's host answers `Disallow: /`. Do not add
 a `public/robots.txt` or `public/sitemap.xml`: Nitro serves a file ahead of any route.
 
 ## Related

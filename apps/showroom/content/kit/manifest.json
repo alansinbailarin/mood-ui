@@ -1,6 +1,6 @@
 {
   "source": {
-    "commit": "b76bc9b76b14",
+    "commit": "bf64921246c3",
     "ref": "HEAD",
     "dirty": false
   },
@@ -148,6 +148,13 @@
           "description": "A workspace's clients: the people it serves. Each has a name, contact details, an address, a birthday, a language, notes, a home branch, their marketing…"
         },
         {
+          "slug": "packages/projects",
+          "file": "docs/packages/projects.md",
+          "title": "Projects",
+          "label": "Projects",
+          "description": "The example module. A workspace's projects, each with a name, a description, a status, an optional due date and an optional branch. Projects does nothing a…"
+        },
+        {
           "slug": "packages/platform",
           "file": "docs/packages/platform.md",
           "title": "Platform",
@@ -167,6 +174,20 @@
           "title": "Search",
           "label": "Search",
           "description": "The global search of the dashboard: what someone types, looked up in every kind of record they may open. Search keeps no tables and knows nothing of members,…"
+        },
+        {
+          "slug": "packages/data",
+          "file": "docs/packages/data.md",
+          "title": "Data",
+          "label": "Data",
+          "description": "What a module offers to read and to do, said once and checked by the kit. Data keeps no tables. It holds two registries: the datasets each package declares…"
+        },
+        {
+          "slug": "packages/public-page",
+          "file": "docs/packages/public-page.md",
+          "title": "PublicPage",
+          "label": "PublicPage",
+          "description": "The public page of each workspace, at the root of its address (<slug>.<root domain>/): a fixed header with the business's logo, name and tagline, then blocks…"
         },
         {
           "slug": "packages/dashboard",
@@ -278,6 +299,13 @@
           "title": "Production checklist",
           "label": "Production checklist",
           "description": "What a deployment needs that the local defaults leave out. Go through it before the first launch, and again when you add a server or change hosts. Each item…"
+        },
+        {
+          "slug": "configuration/docker",
+          "file": "docs/configuration/docker.md",
+          "title": "Docker images and the production stack",
+          "label": "Docker images and the production stack",
+          "description": "Reference for what ships in docker/ (three images) and deploy/ (the Compose stack that runs them). It describes what is there and why; it is not a step by…"
         }
       ]
     },
@@ -288,9 +316,9 @@
         {
           "slug": "guides/build-a-module",
           "file": "docs/guides/build-a-module.md",
-          "title": "Build a module: the checklist",
-          "label": "Build a module: the checklist",
-          "description": "A module of your own is a backend package plus a frontend layer (see Architecture). Whatever it does, the kit's screens only know about it once it has told…"
+          "title": "Build a module",
+          "label": "Build a module",
+          "description": "A module of your own is a backend package plus a frontend layer (see Architecture). You do not start one from an empty folder. One command makes it, as a…"
         },
         {
           "slug": "guides/add-a-permission-and-menu-entry",
@@ -328,11 +356,39 @@
           "description": "A platform flag switches something of a module on or off for the whole platform (a kill switch), or releases it to a share of the workspaces the platform's…"
         },
         {
+          "slug": "guides/force-a-flag-for-a-workspace",
+          "file": "docs/guides/force-a-flag-for-a-workspace.md",
+          "title": "Force a flag for a workspace",
+          "label": "Force a flag for a workspace",
+          "description": "A platform flag is on, off or rolled out to a share of the workspaces for the whole platform. Sometimes one workspace needs to be different: a customer who…"
+        },
+        {
+          "slug": "guides/add-a-platform-notice",
+          "file": "docs/guides/add-a-platform-notice.md",
+          "title": "Add a platform notice",
+          "label": "Add a platform notice",
+          "description": "A platform notice is a line in the bell of the admin's top bar: something that happened on the platform that every super admin may want to know, such as a…"
+        },
+        {
+          "slug": "guides/remove-the-projects-module",
+          "file": "docs/guides/remove-the-projects-module.md",
+          "title": "Remove the Projects module",
+          "label": "Remove the Projects module",
+          "description": "Projects is the kit's example module. Nothing of the kernel depends on it, so you can delete it whenever you stop needing a worked example. These are the…"
+        },
+        {
           "slug": "guides/brand-the-platform",
           "file": "docs/guides/brand-the-platform.md",
           "title": "Brand the platform",
           "label": "Brand the platform",
           "description": "There are two brands in the kit. A workspace's brand (its name, logo and color, from its own Settings) is what its people see inside it. The platform's brand…"
+        },
+        {
+          "slug": "guides/edit-the-landing",
+          "file": "docs/guides/edit-the-landing.md",
+          "title": "Edit the landing",
+          "label": "Edit the landing",
+          "description": "The home page of the root domain (example.com/, localhost:3000/ locally) is the product's landing: a hero, a row of customer logos, the features, what it…"
         },
         {
           "slug": "guides/control-who-signs-up",
@@ -354,6 +410,13 @@
           "title": "Impersonate a member",
           "label": "Impersonate a member",
           "description": "A super admin can enter a workspace as one of its people, to see what they see when they ask for help. It is a short, visible and recorded session, and some…"
+        },
+        {
+          "slug": "guides/run-a-public-demo",
+          "file": "docs/guides/run-a-public-demo.md",
+          "title": "Run a public demo",
+          "label": "Run a public demo",
+          "description": "Demo mode turns an install of the kit into a demo anyone can try: every visitor signs in with the same shared accounts, nothing they do can do harm, and the…"
         },
         {
           "slug": "guides/add-a-notification-event-type",
@@ -454,11 +517,39 @@
           "description": "This guide makes the records of a module of your own show up in the dashboard's global search (the palette, Cmd+K): a group of its own, with the records the…"
         },
         {
+          "slug": "guides/add-a-dataset",
+          "file": "docs/guides/add-a-dataset.md",
+          "title": "Add a dataset",
+          "label": "Add a dataset",
+          "description": "This guide declares the records of a module of your own as a dataset: a read view that says which columns may leave it and who may read them. The example is…"
+        },
+        {
+          "slug": "guides/add-an-action",
+          "file": "docs/guides/add-an-action.md",
+          "title": "Add an action",
+          "label": "Add an action",
+          "description": "This guide declares something a person can do through a module of your own: make a record, change one. It reuses the module's own Action, so the rules and…"
+        },
+        {
           "slug": "guides/add-a-dashboard-widget",
           "file": "docs/guides/add-a-dashboard-widget.md",
           "title": "Add a dashboard widget",
           "label": "Add a dashboard widget",
           "description": "This guide puts a card of a module of your own on the dashboard's home: a few figures, for the people who may see them. The example is the bookings of a…"
+        },
+        {
+          "slug": "guides/add-a-public-page-block",
+          "file": "docs/guides/add-a-public-page-block.md",
+          "title": "Add a block to the public page",
+          "label": "Add a block to the public page",
+          "description": "A block is one section of a business's public page: a class in the backend and a component in the frontend. The owner sees a form built from the block's…"
+        },
+        {
+          "slug": "guides/declare-open-and-public-routes",
+          "file": "docs/guides/declare-open-and-public-routes.md",
+          "title": "Declare open and public routes",
+          "label": "Declare open and public routes",
+          "description": "Every route of the app falls in one of three classes, and a test fails on a route that fits none. The only routes it leaves out are the framework's own,…"
         },
         {
           "slug": "guides/register-secret-fields",
@@ -472,7 +563,7 @@
           "file": "docs/guides/add-a-locale.md",
           "title": "Add a locale",
           "label": "Add a locale",
-          "description": "The kit ships English (en, the default and fallback) and Spanish (es). This guide adds a third language, French (fr) in the examples, to the API and the…"
+          "description": "The kit ships English (en, the default and fallback) and Spanish (es). php artisan kit:add-locale adds a third language, French (fr) in the examples, to the…"
         },
         {
           "slug": "guides/testing",

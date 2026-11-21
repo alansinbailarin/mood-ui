@@ -44,6 +44,8 @@ Branches registers `branches` (`total`): the workspace's active branches; an ina
 Clients registers `clients` (`total`): the workspace's live clients; one in the trash holds no place. It registers the
 features `clients_import` (importing clients from a CSV file) and `clients_portal` (the client portal) too (see
 [Clients](clients.md#quota-and-plan)).
+PublicPage registers the feature `public_page` ("Public page"): the way to sell the public page, or one of its blocks, in some
+plans. It counts only when the admin's catalog asks for it (see [PublicPage](public-page.md#the-admins-catalog)).
 The plan and what the workspace uses of each limit also show on the home, for whoever holds `subscription.view`: Dashboard's
 `dashboard.plan_usage` widget reads them through `ReadsCatalog` and `ReadsQuotas` (see [Dashboard](dashboard.md)).
 See [Add a quota or a feature flag](../guides/add-a-quota-or-feature.md).
@@ -380,7 +382,7 @@ security another one would find no subscription, and that would be cached).
 ## What a package that sells plans reads
 
 Billing (and any package of yours that sells plans) reads the catalog and asks whether a workspace may move to a plan
-through two contracts:
+through three contracts:
 
 - `Contracts\ReadsCatalog`: `offers()`, the available plans by tier; `find($slug)`, any written plan (a retired one
   included); `defaultPlan()`; `features()` and `resources()`, what the installed packages register, with their label keys.
@@ -389,6 +391,8 @@ through two contracts:
   `labelKey`, `limit`, `used`) for every resource counted over `total` that the workspace has more of than the plan allows,
   counted now. A `monthly` resource starts again every month, so it never stands in the way of a plan. `hadTrial($tenantId)`
   says whether any subscription the workspace ever had was a trial.
+- `Contracts\ShapesPlanOffers`: `handle($plan)` turns a plan into what a pricing grid shows (see `GET /plans`), in the
+  language of the request. Billing adds what Stripe offers to each price.
 
 ## Features
 
@@ -402,8 +406,9 @@ A feature is off unless the workspace's plan lists it and a package registers it
 - `Contracts\ChecksFeatures::allows($tenantId, $feature)`, as the workspace, answers the same for code that decides by
   itself.
 
-The kernel registers no feature, and the menu shows an entry with a `featureFlag` as it is: the flag is not checked
-against the plan there yet.
+The kernel registers no feature. A menu entry's `featureFlag` is a *platform* flag, not a plan's feature (see
+[Add a permission and a menu entry](../guides/add-a-permission-and-menu-entry.md)): the plan's features guard routes and
+actions, not the menu.
 
 ## Quotas
 
@@ -499,6 +504,41 @@ language of the request and what the workspace uses of each quota, counted live 
 
 `features` lists only those the plan includes; `quotas` lists every registered resource, in its order.
 
+### `GET /plans`
+
+Public: no session and no workspace, for the pricing section of the root domain's pages, so the prices come from the
+catalog the platform's admin edits. A request that names a workspace (the `X-Tenant-Slug` header or a workspace's host) is
+400 `platform.tenant_context_forbidden`, as for `GET /platform/public`. It has its own limiter, `plans-public`
+(`plans.public_reads_per_minute`, 600 a minute per address). The answer says `Cache-Control: public, max-age=60` and
+`Vary: Accept-Language`, so a cache may keep it a minute and a change of the catalog may take that long to show.
+
+```json
+{
+  "plans": [
+    {
+      "slug": "pro",
+      "name": "Pro",
+      "description": "For a growing team.",
+      "tier": 1,
+      "isDefault": false,
+      "trialDays": 14,
+      "currency": "USD",
+      "prices": { "month": { "amount": 2900 }, "year": { "amount": 29000 } },
+      "features": [{ "slug": "clients_import", "label": "Client import" }],
+      "quotas": [
+        { "resource": "members", "label": "Members", "period": "total", "limit": 20 }
+      ]
+    }
+  ]
+}
+```
+
+It lists the plans that are for sale (`ReadsCatalog::offers()`), by tier. Names, descriptions and labels are in the
+language of the request. `amount` is in the smallest unit of `currency` (cents), and a period with no price is `null`.
+`features` lists only those the plan includes; `quotas` lists every registered resource, in its order, with `limit` as
+a number, `null` for no limit and `0` for not included. `GET /billing` shapes its plans the same way (`Contracts\ShapesPlanOffers`, which Billing reads)
+and adds `offered` to each price.
+
 ## Configuration
 
 The catalog of plans is the app's, in `backend/config/plans.php` (see above).
@@ -506,6 +546,7 @@ The catalog of plans is the app's, in `backend/config/plans.php` (see above).
 | Key | Default | Meaning |
 | --- | ------- | ------- |
 | `plans.cache_ttl_seconds` | 3600 (`PLANS_CACHE_TTL`) | seconds a workspace's plan context is kept. A change made through the app forgets it at once; this is how long a change made straight in the database takes to show. |
+| `plans.public_reads_per_minute` | 600 | reads of `GET /plans` per minute and address (the `plans-public` limiter) |
 | `plans.trial_reminder_days` | `[3, 1]` | days before a trial ends on which the workspace is reminded, once for each |
 
 ## The `plans` layer

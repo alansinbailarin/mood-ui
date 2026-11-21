@@ -55,13 +55,18 @@ if ($flags->enabled('reports.export', $tenantId)) { /* ChecksPlatformFlags, from
 `platform-flag:<slug>` answers 503 `platform.flag_off` (with `meta.flag`) while the flag is off for the request's workspace.
 `Platform\Contracts\ChecksPlatformFlags::enabled($slug, $tenantId)` answers the same in code. A flag nobody declares is off.
 
-How a flag answers:
+How a flag answers, in this order:
 
+- the workspace's exception, if the admin set one: forced on or off, whatever the rest says (see
+  [Force a flag for a workspace](force-a-flag-for-a-workspace.md)). Asked with no workspace, exceptions do not count;
 - off: off for every workspace;
 - on, with no rollout (or a rollout of 100): on for every workspace;
 - on, with a rollout of `n`: on for the workspaces whose bucket, `crc32("<slug>:<workspace id>") % 100`, is below `n`. The
   bucket is stable, so a workspace keeps its answer while the percentage only grows, and each flag spreads the workspaces
   differently. Asked with no workspace, a rollout under 100 is off.
+
+So a flag that is off, or rolled out to 0, can still be on for one workspace (a customer in a beta), and a flag that is on can be
+off for one.
 
 ## 3. Read it in the frontend
 

@@ -4,7 +4,8 @@ The global search of the dashboard: what someone types, looked up in every kind 
 tables and knows nothing of members, branches or clients. It holds a registry of **sources**: each package declares what it
 finds and how, and Search asks every source the person may use.
 
-Search depends on Support, Tenancy, and the contracts of Auth, Rbac and Plans. No package depends on Search except through
+Search depends on Support, Tenancy, and the contracts of Auth, Rbac and Plans. Platform depends on Search, never the reverse: the platform flag a source of the
+admin's palette may need is asked through `Contracts\GatesPlatformSources`, which Platform binds. No package depends on Search except through
 its contracts: a package that adds a source implements `MoodKit\Search\Contracts\*`, and Search never names it.
 
 ## Sources
@@ -131,8 +132,68 @@ The palette is mood-ui's `SearchInput` as it comes, in the dashboard's top bar b
   real search.
 - **A failure** of the API shows its message in a muted row under "Search", and the results of an older search are hidden;
   an answer missing a source adds "Some results could not be loaded". Neither row can be chosen.
+- **In the admin** the same palette sits in the admin's top bar (`kit:platform:topbar:items`, order 5, the layer's
+  `PlatformSearchTopbarItem`), with the same `Cmd+K`, phone dialog and rows, worded "Search the admin" and asking
+  `POST /platform/search` (`SearchPalette scope="platform"`; it has no branch to follow). Its pages are the admin's menu
+  (the platform layer's `platform-search-shortcuts` plugin), and its groups the platform's sources: choosing a workspace opens
+  its page, a waitlist entry or an invitation opens the waitlist filtered to its email, a plan opens its editor.
 - **On a phone** the bar has a magnifying glass instead of the field. It opens the same palette in a dialog, which closes
   when a row is chosen or with its close button. There is no `Cmd+K` on a phone.
+
+## The admin's palette
+
+The super admin has a palette of its own, in the admin's top bar: `POST /api/v1/platform/search`. It has its own registry
+and its own sources, because what an admin finds (workspaces, super admins, the waitlist) is nobody's data inside a
+workspace, and the dashboard's route refuses an admin's token. Nothing of the dashboard's palette changes.
+
+A package declares its admin sources with a `PlatformSearchSourceProvider`, bound and tagged `search.platform_sources`:
+
+```php
+$this->app->tag([NotesPlatformSearchProvider::class], 'search.platform_sources');
+```
+
+| Contract | What it is |
+| -------- | ---------- |
+| `MoodKit\Search\Contracts\PlatformSearchSourceProvider` | `platformSearchSources()`: the list of `PlatformSearchSource` the package declares |
+| `MoodKit\Search\Contracts\PlatformSearchSource` | `key` (`<package>.<what>`), `labelKey`, `icon`, `finder`, `reads` (what it searches, in a few words: `name, slug`), `order` and `flag` |
+| `MoodKit\Search\Contracts\FindsPlatformRecords` | `find($adminId, $term, $limit)`: at most `$limit` `SearchHit`s, best first, each with a `route` that starts with `/platform/` |
+
+There is no permission: the route takes the `platform` group (the admin's guard and host, no workspace), so only a signed-in
+super admin asks, and every super admin may use every source. A source that belongs to a module that ships off by default
+names the platform flag it needs in `flag` (`<package>.<what>`): while it is off the source is never made nor asked. A
+finder that reads data of workspaces does it only through `ReadsAcrossWorkspaces` (the platform's read role, logged in
+`platform_reads` with its purpose), and never writes the term into that log's scope, an audit entry or a message.
+
+`PlatformSearchRegistry` checks them as `SearchRegistry` does (`InvalidRegistry`): the key, declared once, a finder that
+implements `FindsPlatformRecords`, and the shape of the flag. The answer has the dashboard's shape (`{groups: [{source,
+label, icon, hits}]}`, `meta.incomplete` when a source failed), so the palette draws it as it draws that one; a source that
+fails is reported as `SourceFailed` without its message, and a hit whose route is not under `/platform/` (or has `\` or `//`)
+fails its source (`UnsafeHitRoute`).
+
+The platform's own sources (`MoodKit\Platform\Search`), in this order:
+
+| Key | Finds | Read through | Opens |
+| --- | ----- | ------------ | ----- |
+| `platform.workspaces` | workspaces by name or slug (a deleted one is never found) | the platform read role, purpose `platform.search_workspaces`, scope `{source}` only (see below for Postgres' log) | `/platform/workspaces/{id}` |
+| `platform.plans` | plans by name in any language or slug, retired ones too, without accents or case | the plan editor's own read of the catalog (`ShowPlans`) | `/platform/plans/{slug}` |
+| `platform.waitlist` | waitlist entries by email | the app's role (the table has no workspace) | `/platform/waitlist?entry=<id>` |
+| `platform.invitations` | invitations by email | the app's role | `/platform/waitlist?tab=invitations&entry=<id>` |
+| `platform.admins` | super admins (people that still exist) by name or email | the app's role | `/platform/settings` (there is no page per admin) |
+
+Each matches as the dashboard's finders do (`FuzzyMatch`: contains the word, or resembles it, closest first; a `%`, `_` or
+`\` is a letter), served by GIN trigram indexes on the lowered workspace name and slug and on the waitlist and invitation
+emails (`Platform`'s `add_trigram_indexes_for_the_admin_search`). The route, its body, validation, `no-store` headers and
+`PlainName` rule are the dashboard's; its named limiter is `platform-search` (`search.platform_per_minute`, 30 a minute per
+admin). Every search of workspaces writes one `platform_reads` row (kept, as the audit of reads across workspaces asks), so that
+limit is also the most rows an admin can add to it a minute; the trigram indexes serve the contains half of the match, and the
+resemblance half reads each row of tables of a few thousand at most.
+
+**What Postgres logs.** The platform read role has `log_statement = 'all'`, so that a read that skipped the app's own log still
+shows in the server's. The workspace source sends what the admin typed as a bound value, so without a limit the server's log would
+keep the term. Set `log_parameter_max_length = 0` on the role (`deploy/postgres-init/01-roles.sh` and
+[Production](../configuration/production.md) do): the statements stay in the log and the bound values are dropped. The waitlist and
+invitation sources run as the app's role, which logs no statements. The app never writes the term (`platform_reads` keeps the purpose
+and the source only), and a hit opens a row by its id, so no address or log of the app holds an email.
 
 ## An index outside Postgres
 
@@ -195,6 +256,7 @@ The defaults live in `backend/packages/Search/config/search.php`, with no enviro
 | `min_length` | 2 | the shortest text that is searched |
 | `max_length` | 100 | the longest text that is searched |
 | `per_minute` | 60 | searches per member and workspace per minute (the named limiter `search`) |
+| `platform_per_minute` | 30 | searches per super admin per minute (the named limiter `platform-search`) |
 | `index_candidates` | 4 | with a search index, how many candidates per hit a source asks the index for before Postgres keeps what the person may see |
 
 ## For a module
@@ -211,9 +273,14 @@ an index. Step by step: [Add a search source](../guides/add-a-search-source.md).
 | ----- | ---------- | ---------- | ------- | ------------- | ------- |
 | `POST /search` (`{q}`) | `workspace`, `KeepOutOfCachesAndReferrers`, `throttle:search` | none (each source checks its own) | `search` | allowed | `{groups: [{source, label, icon, hits: [{id, title, subtitle, route}]}]}`; `meta.incomplete` when a source failed |
 
+| Route | Middleware | Permission | Limiter | Answers |
+| ----- | ---------- | ---------- | ------- | ------- |
+| `POST /platform/search` (`{q}`) | `platform` (`KeepOutOfCachesAndReferrers`, no workspace, the admin's host, `auth:platform`), `throttle:platform-search` | none: a signed-in super admin; a source may need a platform flag | `platform-search` | the same shape, from the sources tagged `search.platform_sources` |
+
 | Limiter | Counts | Setting |
 | ------- | ------ | ------- |
 | `search` | 60 a minute, per member and workspace | `search.per_minute` |
+| `platform-search` | 30 a minute, per super admin | `search.platform_per_minute` |
 
 ### Commands
 
@@ -233,4 +300,4 @@ answers:
 | `MoodKit\Search\Errors\SourceFailed` | a source failed: reported without the failure's message and with nothing chained; the answer goes on with `meta.incomplete` |
 | `MoodKit\Search\Errors\InvalidHit` | a finder answered something that is not a list of `SearchHit` (its class is named in the `SourceFailed` reported) |
 | `MoodKit\Search\Errors\ReindexFailed` | `search:reindex`: an index failed for a workspace; reported without the failure's message and with nothing chained, and the command goes on with the rest |
-| `MoodKit\Search\Errors\UnsafeHitRoute` | a finder answered a hit whose route is not a page of the dashboard (its class is named in the `SourceFailed` reported) |
+| `MoodKit\Search\Errors\UnsafeHitRoute` | a finder answered a hit whose route is not a page of the dashboard, or of the admin for the admin's palette (its class is named in the `SourceFailed` reported) |

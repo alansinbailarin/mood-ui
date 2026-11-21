@@ -23,7 +23,7 @@ The defaults live in `backend/packages/Tenancy/config/tenancy.php`; the env over
 
 | Method and path | Middleware | Answers |
 | --------------- | ---------- | ------- |
-| `GET /api/v1/tenant` | `tenant`, `throttle:tenancy-current` | `{slug, name}` of the request's workspace, plus what packages add (Settings adds `brand`). Public: the sign-in page needs it. |
+| `GET /api/v1/tenant` | `tenant`, `throttle:tenancy-current` | `{slug, name}` of the request's workspace, plus what packages add (Settings adds `brand`, Clients adds `portal`). Public: the sign-in page needs it. |
 
 A package adds keys to it with a `Contracts\TenantPayloadContributor`, bound and tagged `tenancy.public`:
 `contribute(string $tenantId): array` runs as the workspace of the request with nobody signed in, so it must say only
@@ -127,10 +127,11 @@ whether the workspace works by branch (`inUse`, true by default).
 | Piece | What it does |
 | ----- | ------------ |
 | plugin `tenant-slug` | reads the slug from the host and writes `useTenantSlugState()`, which `useApi` sends as `X-Tenant-Slug` |
+| plugin `tenant-brand` | while the app shows an error on a workspace's host (a 404), asks the tenant store, so the error page wears the workspace's logo and color; an unknown workspace goes to `/unavailable` |
 | middleware `tenant.global` | on a workspace host, loads `GET /tenant` before every page; a missing or suspended workspace goes to `/unavailable`. The workspace's `brand` in the answer goes to core's `useWorkspaceBrand()`, so every screen of the host, its sign-in page included, wears its color and logo (a brand the session already loaded stays) |
 | page `/unavailable` | explains that the workspace does not exist (404) or is suspended (403) and links to the root domain |
 | `useTenantHost()` | `slug`, `isTenantHost` and `rootUrl` of the current host |
-| server routes `robots.txt`, `sitemap.xml` | the root domain lets crawlers in and lists its home page; a workspace host is `Disallow: /` with no sitemap |
+| server routes `robots.txt`, `sitemap.xml` | the root domain lets crawlers in and lists its home page; a workspace host lets crawlers read its root alone (`Allow: /$`, `Allow: /_nuxt/` for its scripts and styles, `Disallow: /`: its public page) with no sitemap; the admin's host is `Disallow: /` |
 
 Its settings are runtime config, overridable at runtime:
 

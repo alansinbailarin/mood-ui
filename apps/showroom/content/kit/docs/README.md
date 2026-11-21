@@ -3,9 +3,9 @@
 These pages cover Mood Kit as it ships today: a Laravel 13 API in `backend/` and a Nuxt 4 frontend in
 `frontend/`, with workspaces on subdomains, sign-in, roles and permissions, an audit trail, self-service signup (with a
 waitlist and invitations), plans and billing through Stripe, a team, branches and clients, workspace settings and brand,
-notifications, the global search, the dashboard's home and the platform's admin panel. That is eighteen backend packages
+notifications, the global search, the dashboard's home and the platform's admin panel. That is twenty backend packages
 (Support, Tenancy, Auth, Rbac, Audit, Signup, Settings, Plans, Billing, Notifications, Onboarding, Team, Branches, Clients,
-Geocoding, Search, Dashboard and Platform) and sixteen frontend layers (`core` and one for each package but Support, Audit
+Geocoding, Search, Data, Dashboard, Platform and PublicPage, plus Projects, the example module) and eighteen frontend layers (`core`, `marketing` for the landing, and one for each package but Support, Audit
 and Geocoding). Start with [Getting started](getting-started.md) if you have not run the kit yet.
 
 For the rules the code itself follows (layers, boundaries, what each gate checks), read
@@ -16,6 +16,8 @@ configure it; `AGENTS.md` describes how to change it.
 
 - [Getting started](getting-started.md): run the kit locally, sign in to the demo workspace and create a
   workspace through signup.
+- [Changelog](../CHANGELOG.md): what changed in each release, and what to run when you update. How to merge a release is in
+  [Update to a new version](getting-started.md#update-to-a-new-version).
 
 ## Concepts
 
@@ -51,11 +53,15 @@ Each backend package, with the frontend layer that pairs with it.
 - [Branches](packages/branches.md): a workspace's branches, their place on the map, opening hours and people.
 - [Clients](packages/clients.md): a workspace's clients, their tags, duplicates and merging, activity, CSV import and export,
   and their privacy rights.
+- [Projects](packages/projects.md) and the `projects` layer: the example module, a small module that follows every standard,
+  off until the platform's admin turns it on.
 - [Platform](packages/platform.md): the platform's own administration, on a host of its own.
 - [Geocoding](packages/geocoding.md): places from an address and an address from a point, for the location picker, through
   the provider the app configures.
 - [Search](packages/search.md): the dashboard's global search (`Cmd+K`): the sources each package declares, its route and
   an optional index outside Postgres.
+- [Data](packages/data.md): what a module offers to read and to do: its datasets and its actions, declared once and checked on every deploy.
+- [PublicPage](packages/public-page.md) and the `public-page` layer: the public page at the root of each workspace, built from blocks.
 - [Dashboard](packages/dashboard.md): the home's cards: the widgets each package declares, with the permission and the plan
   feature each needs, and the route that works them out.
 - [Frontend](frontend.md): the Nuxt layers, `core`, calling the API, hooks, design rules, i18n and visual
@@ -83,19 +89,26 @@ Each backend package, with the frontend layer that pairs with it.
   it apart from the workspaces.
 - [Production checklist](configuration/production.md): what a deployment needs that the local defaults
   leave out.
+- [Docker images and the production stack](configuration/docker.md): the three images, `APP_ROLE`, the Caddyfile and
+  `deploy/compose.yml`.
 
 ## Guides
 
-- [Build a module: the checklist](guides/build-a-module.md)
+- [Build a module](guides/build-a-module.md): `kit:make-module` and what it already registers
 - [Add a permission and a menu entry](guides/add-a-permission-and-menu-entry.md)
 - [Add a role template](guides/add-a-role-template.md)
 - [Add a settings group](guides/add-a-settings-group.md)
 - [Add a quota or a feature flag](guides/add-a-quota-or-feature.md)
 - [Add a platform flag](guides/add-a-platform-flag.md)
+- [Force a flag for a workspace](guides/force-a-flag-for-a-workspace.md)
+- [Add a platform notice](guides/add-a-platform-notice.md)
+- [Remove the Projects module](guides/remove-the-projects-module.md)
 - [Brand the platform](guides/brand-the-platform.md)
+- [Edit the landing](guides/edit-the-landing.md)
 - [Control who signs up](guides/control-who-signs-up.md)
 - [Set up the first super admin](guides/set-up-the-first-super-admin.md)
 - [Impersonate a member](guides/impersonate-a-member.md)
+- [Run a public demo](guides/run-a-public-demo.md)
 - [Add a notification event type](guides/add-a-notification-event-type.md)
 - [Send a notification](guides/send-a-notification.md)
 - [Add a notification attachment](guides/add-a-notification-attachment.md)
@@ -110,7 +123,11 @@ Each backend package, with the frontend layer that pairs with it.
 - [Add a portal section](guides/add-a-portal-section.md)
 - [Scope data by branch](guides/scope-data-by-branch.md)
 - [Add a search source](guides/add-a-search-source.md)
+- [Add a dataset](guides/add-a-dataset.md)
+- [Add an action](guides/add-an-action.md)
 - [Add a dashboard widget](guides/add-a-dashboard-widget.md)
+- [Add a block to the public page](guides/add-a-public-page-block.md)
+- [Declare open and public routes](guides/declare-open-and-public-routes.md)
 - [Register secret fields and headers](guides/register-secret-fields.md)
 - [Add a locale](guides/add-a-locale.md)
 - [Testing and quality gates](guides/testing.md)

@@ -1,7 +1,8 @@
 # Production checklist
 
 What a deployment needs that the local defaults leave out. Go through it before the first launch, and again
-when you add a server or change hosts. Each item links to the page that explains it.
+when you add a server or change hosts. Each item links to the page that explains it. The images and the Compose stack in
+`docker/` and `deploy/` satisfy every item a container can: see [Docker images and the production stack](docker.md).
 
 ## Environment
 
@@ -11,15 +12,16 @@ when you add a server or change hosts. Each item links to the page that explains
 - [ ] New values for every password and key `.env.example` gives as a public development default:
   `DB_PASSWORD`, `DB_MIGRATION_PASSWORD`, `DB_PLATFORM_PASSWORD`, `DB_CATALOG_PASSWORD`, the `ASSETS_*` keys and the `REVERB_APP_*` keys.
 - [ ] Uploaded files on Cloudflare R2: `ASSETS_DISK=assets` and the `ASSETS_*` keys of your bucket and API token. See
-  [Storage](storage.md#in-production-cloudflare-r2). With `SETTINGS_LOGO_PRESIGN=true`, a custom domain with `r2.dev`
+  [Storage](storage.md#in-production-cloudflare-r2). With `SETTINGS_LOGO_PRESIGN=true` or `PUBLIC_PAGE_MEDIA_PRESIGN=true`, a custom domain with `r2.dev`
   off, the WAF block on `/uploads/` and the lifecycle rule on `uploads/`.
 - [ ] `LOG_CHANNEL=stderr` in containers, and `LOG_LEVEL` set on purpose, for example `warning`.
 - [ ] `php.ini` has `upload_max_filesize` at least the largest upload the app takes: `settings.logo.max_bytes` and
-  `auth-kit.avatar.max_bytes` (2 MiB each) and `clients.import.max_bytes` (5 MiB), so `5M` at least (PHP's default `2M`
+  `auth-kit.avatar.max_bytes` (2 MiB each), `clients.import.max_bytes` and `public_page.media.max_bytes` (5 MiB each, the
+  public page's images), so `5M` at least (PHP's default `2M`
   is too little for an import), and `post_max_size` a little above it, `6M` for example (`8M` is PHP's default). A file
   over `upload_max_filesize` is refused before the app sees it, as too large with PHP's lower limit; a body over
   `post_max_size` is 413 `http.error`. See [Settings](../packages/settings.md#the-workspace-logo),
-  [Auth](../packages/auth.md#my-profile) and [Clients](../packages/clients.md#the-file).
+  [Auth](../packages/auth.md#my-profile) and [Clients](../packages/clients.md#the-file) and [PublicPage](../packages/public-page.md#images).
 - [ ] `php.ini` keeps `memory_limit` at `128M` (PHP's default) or more, for the web server and the queue worker alike:
   the largest import of clients takes about 70 MB above what the app itself takes to upload, and about 55 MB to
   preview it or run a part of it (the file is read in memory, never into a temporary file). Raise it if you raise
@@ -46,7 +48,9 @@ Without it, the API believes no `X-Forwarded-*` header: every request seems to c
 login limiter counts all your users as one address, and the scheme and host are the proxy's. `*` trusts
 whoever calls, which lets anyone who can reach the API directly fake their address: use it only when the API
 is reachable through the proxy alone. Leave it empty when nothing sits in front of the API. The billing webhook's
-limiter counts the requests it refuses by address too, so behind a proxy it needs `TRUSTED_PROXIES` as well.
+limiter counts the requests it refuses by address too, so behind a proxy it needs `TRUSTED_PROXIES` as well. The public page's read limiter (`public_page.reads_per_minute`) counts per workspace, not per
+visitor, since the frontend's server reads for all of them from one address: limit each visitor at the edge (Caddy, Cloudflare or
+your proxy).
 
 ## Database
 
@@ -77,13 +81,16 @@ limiter counts the requests it refuses by address too, so behind a proxy it need
   CREATE ROLE mood_kit_platform WITH LOGIN BYPASSRLS NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT PASSWORD '...';
   ALTER ROLE mood_kit_platform SET default_transaction_read_only = on;
   ALTER ROLE mood_kit_platform SET log_statement = 'all';
+  ALTER ROLE mood_kit_platform SET log_parameter_max_length = 0;
   ```
 
   What keeps the role from writing is its grants: it owns nothing and may only `SELECT` what the migrations grant it.
   `default_transaction_read_only` is a default a session can change, not a guard. `log_statement = 'all'` makes Postgres
   log every statement the role runs, so a read that skipped the app's own log (`platform_reads`) still shows in the
   server's; keep that log where your provider keeps it, and set it as the superuser (some hosted plans set it through
-  their console instead).
+  their console instead). `log_parameter_max_length = 0` keeps the statements in that log but drops the values bound to them:
+  the admin's search of workspaces runs through this role with what was typed as a bound value, and without the setting the
+  server's log would keep it. The audit goal is the same (who read which table, and when); the values were never needed for it.
 
   Set `DB_PLATFORM_USERNAME` and `DB_PLATFORM_PASSWORD`. Some hosted Postgres plans do not let you give `BYPASSRLS`;
   without the role, leave `DB_PLATFORM_USERNAME` empty: the app runs, and only the reads across workspaces are
@@ -198,6 +205,7 @@ php artisan notifications:sync
 php artisan onboarding:verify
 php artisan geocoding:verify
 php artisan platform:verify
+php artisan data:verify
 php artisan platform:setup
 php artisan auth:warm-dummy-hash
 php artisan config:cache
@@ -215,7 +223,8 @@ php artisan reverb:restart
 | `onboarding:verify` | fail the deploy on an onboarding step, template section or workspace template a package declares with a mistake, or an `ONBOARDING_TEMPLATE` no package declares. The registry is built on first use, so without it the first signup would meet the mistake, and its workspace would be undone. |
 | `geocoding:verify` | fail the deploy on a `GEOCODING_DRIVER` no package registers (a typo, the old `null`: the driver that finds nothing is `none`), which would otherwise stop the first search; warn when production searches the public Nominatim server |
 | `platform:verify` | fail the deploy on a platform setting that cannot work, naming its variable: a `PLATFORM_HOST` a workspace could take, a `PLATFORM_ACCESS_MODE` that is not `open`, `waitlist` or `closed`, an entry of `PLATFORM_BOOTSTRAP_ADMINS` that is not an email, a platform flag a package declares with a mistake; it says who may sign up (the mode chosen in the admin panel, else `PLATFORM_ACCESS_MODE`) and warns when the admin's sign-in checks no captcha |
-| `platform:setup` | make the first super admins from `PLATFORM_BOOTSTRAP_ADMINS` while the platform has none; once it has one it does nothing, and two at once take turns under a lock. It connects as the schema owner, like `plans:sync`. See [Set up the first super admin](../guides/set-up-the-first-super-admin.md). |
+| `data:verify` | fail the deploy on a dataset or an action a package declares that cannot work: a key, a permission, a label without its Spanish line or an action that deletes, a dataset whose query breaks (a column or expression its table does not have), or whose table lacks forced row-level security. It builds each dataset's query for no rows, so it reads nothing of any workspace. See [Data](../packages/data.md). |
+| `platform:setup` | make the first super admins from `PLATFORM_BOOTSTRAP_ADMINS` while the platform has none; once it has one it does nothing, and two at once take turns under a lock. An email on the list with no account yet only gets a warning, so the first deploy of a new install goes on: it becomes a super admin on the next deploy after it signs up. It fails on an empty list or a value that is not an email. It connects as the schema owner, like `plans:sync`. See [Set up the first super admin](../guides/set-up-the-first-super-admin.md). |
 | `auth:warm-dummy-hash` | make the hash unknown-email logins are checked against, so their timing matches from the first request |
 | `config:cache` | the kit reads `env()` only in `backend/config`, so the config can be cached |
 | `queue:restart` | workers pick up the new code |
@@ -246,6 +255,10 @@ on the command line changes nothing. Run `php artisan config:clear`, then the co
   `NUXT_SECURITY_ASSETS_UPLOAD_URL` is its S3 endpoint (`ASSETS_ENDPOINT`). Without them the Content Security Policy
   blocks the logos and the uploads. See [Security headers](#security-headers).
 - [ ] Served over HTTPS only: the build sends HSTS for a year, subdomains included.
+- [ ] The landing (`/` on the root domain, the `marketing` layer) is drawn by the server, prices included: the frontend's
+  server must reach the API (`NUXT_PUBLIC_API_BASE_URL`) for `GET /plans`, or the pricing section says the prices could not
+  be loaded until the browser loads them. Its words, links, logos and FAQ are yours to edit before launch (see
+  [Edit the landing](../guides/edit-the-landing.md)).
 
 ## Security headers
 
@@ -314,6 +327,7 @@ hashed, and on Vue escaping what it renders. Never render HTML from data (`v-htm
   and the admin host answers (see [The admin host](admin-host.md#check-it)).
 - [ ] Sign up on `https://example.com/signup`, receive the email, confirm, and land in the new workspace.
 - [ ] A password reset email arrives.
+- [ ] `https://example.com/` shows the landing with your plans and prices, and `https://example.com/sitemap.xml` lists it.
 - [ ] `https://<slug>.example.com/robots.txt` disallows crawlers.
 - [ ] On an app that had workspaces before the Plans package, run `php artisan plans:start-subscriptions` once: each
   workspace with no subscription gets one to the default plan. It is safe to run again. See

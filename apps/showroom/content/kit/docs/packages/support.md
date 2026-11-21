@@ -14,6 +14,8 @@ registries for Sentry and the disk uploaded files live on. Support depends on no
 | `Errors\CaptchaFailed` | refuse a request whose captcha failed: 422 `auth.captcha_failed`, as login, password recovery and signup do |
 | `Errors\PermissionDenied` | refuse a member who lacks a permission: 403 `auth.forbidden` with `meta.requiredPermission`, as Rbac's `permission:` guard does |
 | `Errors\ImpersonationForbidden` | refuse what a super admin acting as someone may not do: 403 `auth.impersonation_forbidden`. Auth's guards throw it, and so does a package that refuses an impersonation in code a route lets through (Team's onboarding step). In Support because more than one package throws it and none may use another's errors |
+| `Demo\DemoMode`, `Errors\DemoLocked` | what a public demo (`DEMO_MODE`) locks: `refuse()`, `refuseForAccount($email)`, `refuseForOthers($email)`, `refuseInviteTo($email)` each throw 403 `demo.locked` in a demo and do nothing otherwise, and the `demo-locked` route alias does the same for a whole route. See [Run a public demo](../guides/run-a-public-demo.md) |
+| `Demo\DemoSeed`, `Demo\DemoDataProvider` | for demo data: a randomizer drawn from the day and a scope, dates counted from now, a callback run with the clock stopped at a moment, and the interface a module implements (tagged `demo.data`) to give a demo its rows |
 | `Http\ApiExceptionRenderer` | (registered for you) turn every exception under `/api` into an envelope |
 | `Database\TenantRls` | enable row-level security on a tenant table, in its migration |
 | `Database\Ids` | `Ids::canonical($id)`: an id as the database spells it (a uuid in lowercase), and `Ids::canonicalAll($ids)` for a list (each once). Postgres finds a uuid in capitals too, so an id that comes from outside (a path, a body, another package's call) is turned into this spelling where it comes in, before anything keys an array, a lock or a cache by it (Team, Rbac, Branches, Platform) |
@@ -68,8 +70,13 @@ default), `field()` (null), `meta()` (empty) and `headers()` (none: headers the 
 | `support.brand.name` | empty (`PLATFORM_NAME`) | the platform's name in its emails and public screens. Empty: `APP_NAME`. With Platform installed, it is where the admin's Settings start from. |
 | `support.brand.logo_url` | empty (`PLATFORM_LOGO_URL`) | an absolute URL of the platform's logo. Empty: the name stands alone. |
 | `support.brand.primary_color` | `default` (`PLATFORM_PRIMARY_COLOR`) | the platform's primary color, `#rrggbb`; anything else is `default`, the monochrome brand. |
+| `support.demo.enabled` | `false` (`DEMO_MODE`, on only for the word `true`) | the public demo mode: locks, mail to the log, the daily `demo:reset`. See [Run a public demo](../guides/run-a-public-demo.md). |
+| `support.demo.password`, `.reset_at`, `.timezone` | `Demo-Password-2026`, `04:00`, `America/Tijuana` (`DEMO_PASSWORD`, `DEMO_RESET_AT`, `DEMO_TIMEZONE`) | the shared accounts' password (public by design), and when the reset runs. |
+| `support.demo.caps` | `['uploads' => 20, 'checkout' => 5]` | per person and hour, what the `demo-capped:<bucket>` alias lets a demo do (answers 429 over it). |
+| `support.demo.invite_domain`, `.flags` | `example.com`, `['projects.enabled']` | the only domain a demo invites to, and the platform flags the reset turns on. |
 
-No environment variable sets the locales: edit `backend/packages/Support/config/support.php`. See
+No environment variable sets the locales: `php artisan kit:add-locale <code> --name=<Name>` adds one to this file and to
+every place that names the languages, and `php artisan i18n:check` checks every language file against English. See
 [Add a locale](../guides/add-a-locale.md).
 
 ## What its provider does
@@ -89,7 +96,11 @@ No environment variable sets the locales: edit `backend/packages/Support/config/
 - Binds `SecretHeaders`, `SecretFields` and `SentryOnlyFields` as singletons, one list of each for the whole app.
 - Loads its one migration, the first of all, which grants the runtime role the rows of every table the schema owner
   makes. See [Multi-tenancy](../concepts/multi-tenancy.md#the-database-role).
-- Registers the `assets:prepare-bucket` command.
+- Registers the `demo-locked` (`RefuseInDemo`) and `demo-capped:<bucket>` (`CapInDemo`) route aliases and, while `DEMO_MODE=true`: forces the default mailer to `log`, stops the boot when a
+  `STRIPE_*` variable or the configured secret holds a live key, or the cache is the database (`Demo\DemoGuard`), and schedules `demo:reset` daily. See
+  [Run a public demo](../guides/run-a-public-demo.md).
+- Registers the `assets:prepare-bucket`, `demo:reset`, `i18n:check` and `kit:add-locale` commands, and binds `Locales\RepoLayout`, where they find
+  the backend's packages and the frontend beside it.
 
 It has no routes or events.
 

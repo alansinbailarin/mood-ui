@@ -85,7 +85,7 @@ can make anyone a super admin. Only three commands write it, connecting as the s
 | Command | What it does |
 | ------- | ------------ |
 | `php artisan platform:setup [--create]` | makes the first super admins, from `PLATFORM_BOOTSTRAP_ADMINS`, only while there is none: safe in every deploy, since once there is one it does nothing, and two at once (two servers
-deploying) take turns under a lock, the second finding the admins the first made. Each listed email needs an account (sign up a workspace with it); with `--create` it asks the name and password of one that has none and makes the account, in no workspace. It fails when the list is empty or nobody on it has an account. |
+deploying) take turns under a lock, the second finding the admins the first made. Each listed email needs an account (sign up a workspace with it); with `--create` it asks the name and password of one that has none and makes the account, in no workspace. An email with no account yet only gets a warning (it becomes a super admin on the next deploy after it signs up), so the first deploy of a new install goes on. It fails when the list is empty or holds a value that is not an email. |
 | `php artisan platform:grant-admin {email} [--create]` | makes someone a super admin by the email of their account (`--create`, as above) |
 | `php artisan platform:revoke-admin {email}` | takes the role away, ends their sessions and their impersonations (open ones and unused codes); never from the last super admin |
 
@@ -106,7 +106,7 @@ declares two sections:
 | Section | Order | Items |
 | ------- | ----- | ----- |
 | `platform_overview` (Platform) | 0 | Overview (`/platform`), Workspaces (`/platform/workspaces`), Plans and subscriptions (`/platform/plans`) |
-| `platform_admin` (Administration) | 100 | Waitlist (`/platform/waitlist`), Flags (`/platform/flags`), Settings (`/platform/settings`) |
+| `platform_admin` (Administration) | 100 | Waitlist (`/platform/waitlist`), Flags (`/platform/flags`), Public page (`/platform/public-page`, PublicPage, order 25), Settings (`/platform/settings`) |
 
 A module adds to it with a section of its own or in one of these (see
 [Add a permission and a menu entry](../guides/add-a-permission-and-menu-entry.md#an-entry-of-the-admin-host)). An item
@@ -144,6 +144,10 @@ The list takes `search` (a text in the name or the slug, any case; `%` and `_` a
 isSuperAdmin}`; an entry of the activity is `{id, action, actor, after, createdAt}`, `actor` the admin's name. An id that is
 no workspace, or was deleted, is 404 `platform.workspace_not_found`, whatever it looks like.
 
+A module adds a section to a workspace's screen with routes of its own under `/platform/workspaces/{workspace}/<module>`, in the
+`platform` group. PublicPage adds the switch for the workspace's page that way (see [The platform's switch for a
+workspace](public-page.md#the-platforms-switch-for-a-workspace)).
+
 ## Overview, plans and subscriptions
 
 | Route | Purpose logged | What |
@@ -152,8 +156,13 @@ no workspace, or was deleted, is 404 `platform.workspace_not_found`, whatever it
 | `GET /platform/subscriptions` | `plans.subscriptions_report` | every plan, with its live subscriptions by status |
 
 The overview is `{workspaces: {active, suspended, closing, newLast30Days}, subscriptions: {trialing, active, past_due,
-cancelled}, waitlist: {waiting}}`: workspaces that are not deleted, by standing (a closing one counts only as `closing`), those made in the last
-30 days, and the live subscriptions of all of them by status. The plans are `{plans: [{slug, name, tier, available,
+cancelled}, waitlist: {waiting, newLast30Days}, series: {days, workspaces, waitlist, subscriptions}}`: workspaces that are not deleted, by standing (a closing one counts only as `closing`), those made in the last
+30 days, and the live subscriptions of all of them by status. `series` is what the screen draws as lines: three lists of 30
+whole numbers, one per UTC day, oldest first and today last, each a 0 on a quiet day. The lines are the workspaces created that day, the waitlist entries made that day (whatever their status), and the
+subscriptions in force at the end of that day (started before it and not ended by it; one that ends exactly then is not in
+force; for today, as of now). The window is those 30 calendar days, today included, for every figure: `workspaces.newLast30Days`
+and `waitlist.newLast30Days` are the sums of their lines (`waiting` is how many wait now). Each takes one query: the first two count with Support's `DailyCounts`, the subscriptions' with one
+`generate_series` in Plans (`ReportsSubscriptions::liveByDay()`), all through the platform's read role like the rest. The plans are `{plans: [{slug, name, tier, available,
 isDefault, counts: {trialing, active, past_due, cancelled}}]}`, by tier: every plan on offer, and a plan no longer sold
 while a workspace still has it. The counts come from Plans (`ReportsSubscriptions`), the names in the request's language. It feeds the workspaces' plan filter and Give a plan; the plans page reads `GET /platform/plans` (see
 [Editing the plans](#editing-the-plans)).
@@ -457,10 +466,34 @@ who is no longer a super admin.
 `platform_flags` keeps only what an admin changed (`enabled`, `rollout` from 0 to 100 or null, `version`, who and when); a
 flag with no row follows its default. The states are cached under a generation that a save moves on after its commit.
 
+A flag can also be forced on or off for one workspace (see [Force a flag for a workspace](../guides/force-a-flag-for-a-workspace.md)).
+`platform_flag_overrides` keeps one row per flag and workspace: `enabled`, an optional `reason` (200 characters), who set it
+(`set_by_user_id`) and when. It is the platform's own table, like `platform_flags`: the admin writes it with no workspace in
+context and every workspace's request reads them all, so it has no `tenant_id` and no row-level security; `workspace_id` names the
+workspace, and the rows go when the workspace is deleted for good. A flag answers in this order: the workspace's exception, then
+the global state, then the rollout. The exceptions are cached with the states, under the same generation. An exception of a flag
+no package declares any more is ignored.
+
 | Route | What |
 | ----- | ---- |
 | `GET /platform/flags` | every declared flag: `[{slug, label, description, default, rollout, enabled, rolloutPercent, version}]`, the words in the request's language; `version` is 0 for a flag never changed |
 | `PUT /platform/flags` | `{flags: [{slug, enabled, rolloutPercent, version}]}` (1 to 100 flags, each once) → the list, as `GET` |
+
+`GET /platform/flags` also carries `overrides`, how many workspaces the flag is forced for. The routes of one workspace's flags
+(the `GET` outside the `platform` limiter, the other two inside it):
+
+| Route | What |
+| ----- | ---- |
+| `GET /platform/workspaces/{id}/flags` | every declared flag for the workspace: `[{slug, label, description, global: {enabled, rolloutPercent}, override: {enabled, reason, setBy, updatedAt} \| null, effective}]`; `effective` is what is in force for it |
+| `PUT /platform/workspaces/{id}/flags/{slug}` | `{enabled, reason?}` (`reason` up to 200 characters, blank is none) → the flag's row |
+| `DELETE /platform/workspaces/{id}/flags/{slug}` | takes the exception back → the flag's row, with `override: null` |
+
+A flag no package declares is 422 `platform.flag_unknown` (on `slug`), a workspace that does not exist (or was deleted) is 404
+`platform.workspace_not_found`. Each change runs under the workspace's lock and is written to the platform's trail:
+`platform.flag.forced` (before and after: `enabled`, `reason`) and `platform.flag.override_cleared`. An exception left as it was, or
+taken back when there is none, writes and audits nothing. The cache is forgotten after the commit, so a route behind
+`platform-flag:<slug>` and `GET /me` follow the change at once. In a demo, no exception of `platform.impersonation` is written or
+taken back (403 `demo.locked`), as the flag itself stays on there. The admin's page has them in the **Features** tab of a workspace.
 
 Saving is all or none, under a lock of its own: each flag against the `version` it was loaded at (409
 `platform.version_mismatch`, `meta.currentVersions` by slug), a flag no package declares is 422 `platform.flag_unknown`
@@ -471,28 +504,91 @@ audited; each change is written to the platform's trail (`platform.flag.updated`
 
 In a workspace, `GET /me` carries `platformFlags`: every declared flag with its answer for that workspace, by slug.
 
+## The admin's search
+
+`POST /platform/search` (`{q}`) is the palette of the admin's top bar (Cmd+K), a route of [Search](search.md#the-admins-palette)
+under the `platform` group: only a signed-in super admin, no workspace, `no-store`, 60 a minute per admin. Platform declares
+its sources (`Platform\Search\PlatformSearchProvider`, tagged `search.platform_sources`): workspaces by name or slug (a read
+across workspaces: the platform's read role, logged in `platform_reads` as `platform.search_workspaces`, whose scope names
+the source and never what was typed), plans, waitlist entries and invitations by email, and super admins by name or email.
+A module adds its own as that page says.
+
+## The admin's bell
+
+Each super admin has an inbox of what happened on the platform: the bell of the admin's top bar. It is Platform's own
+(`platform_notices`, no workspace and no row-level security: only the `platform` guard reaches it, and every query filters by
+the signed-in admin, so another admin's notice is no notice, 404 `platform.notice_not_found`). A row says which admin,
+the notice's `type`, its `data` (scalars, what its texts and link are made from) and whether that admin read it; it is
+translated into the reader's language when it is read. It sends no email.
+
+| Notice | When | Opens |
+| ------ | ---- | ----- |
+| `platform.workspace_created` | a workspace was made (`WorkspaceProvisioned`) | the workspace |
+| `platform.waitlist_joined` | an email that was not on the waitlist joined it (`WaitlistJoined`, sent by the public form) | the waitlist, filtered to the email |
+| `platform.payment_failed` | a subscription became `past_due` (`SubscriptionStatusChanged`, which is how a charge Stripe could not take reaches the kernel); once per transition (the event carries its own `occurredAt`, so a retried job writes nothing twice) | the workspace |
+| `platform.workspace_closed` | an admin closed a workspace (`WorkspaceClosed`) | the workspace |
+
+Each is a queued listener (after the commit, three tries) that writes one row per super admin who exists, in one statement; the
+unique `admin + type + key` makes a retried job write nothing twice. The workspace's name and slug are read from its own row
+(a workspace already gone says nothing), never across workspaces.
+
+A notice about a person stores only the record's id: the waitlist notice keeps the entry's id, and its name and email are read from
+the entry when the notice is read (`Notices\ResolvesWaitlistNotice`), so they live as long as the entry does. An entry that was
+removed shows "Someone asked to be let in, and their entry has been removed." and opens nothing.
+
+A module adds its own with a provider tagged `platform.notices` (`Contracts\PlatformNoticeProvider`, `PlatformNoticeType`) and
+the event `Events\PlatformNoticeRequested(type, key, data)`: [Add a platform notice](../guides/add-a-platform-notice.md). A notice
+whose type is no longer declared (a module was removed) reads as a plain line that opens nothing.
+
+| Route | Who | What |
+| ----- | --- | ---- |
+| `GET /platform/notices` | an admin | `unread` (`1`), `page`, `perPage` (20) → `[{id, type, icon, accent, title, body, route, read, createdAt}]`, `meta.pagination` and `meta.unread`, the admin's unread count |
+| `POST /platform/notices/{id}/read` | an admin | the notice, read; `meta.unread` |
+| `POST /platform/notices/read-all` | an admin | `data: null`; `meta.unread` is 0 |
+
+The two writes take their own limiter, `platform-notices` (`platform.notices_writes_per_minute`, 120), apart from the `platform` writes, and are not audited: what an admin has read is their own state. There is no
+realtime channel for the platform (Reverb's channels are the workspaces' people's), so the panel asks again when the bell
+opens and every 60 seconds while the page is visible.
+
+`php artisan platform:prune-notices` (daily at 04:30, see [Queues and the scheduler](../configuration/queues-and-scheduler.md))
+deletes the notices older than `platform.notices_keep_days` (60), read or not, and those of people who are no longer super
+admins.
+
 ## Settings and the brand
 
 The platform's own settings, by key, in `platform_settings` (the platform's own: no `tenant_id`): its name
 (`brand.name`), primary color (`brand.primaryColor`), logo (`brand.logo`, a key of the assets disk) and who may sign up
-(`access.mode`). A key with no row follows the environment (`PLATFORM_NAME` or `APP_NAME`, `PLATFORM_PRIMARY_COLOR`,
-`PLATFORM_LOGO_URL`, `PLATFORM_ACCESS_MODE`): that is how the `.env` seeds them, with nothing written when migrating. The
-table takes only those four keys and, for `access.mode`, only `open`, `waitlist` or `closed`. Each key has a version, so two
+(`access.mode`), and its look: the color mode a visitor starts in (`appearance.colorMode`) and the corner style
+(`appearance.radius`). A key with no row follows the environment (`PLATFORM_NAME` or `APP_NAME`, `PLATFORM_PRIMARY_COLOR`,
+`PLATFORM_LOGO_URL`, `PLATFORM_ACCESS_MODE`): that is how the `.env` seeds them, with nothing written when migrating; the look has
+no variable and starts as `system` and `medium`. The table takes only those six keys and, for the access mode, the color mode and
+the radius, only their own values (`open`, `waitlist` or `closed`; `light`, `dark` or `system`; `none`, `small`, `medium`,
+`large` or `full`). Each key has a version, so two
 admins cannot overwrite each other. Platform binds Support's `PlatformBrand` to these settings: the emails and screens that
 speak for the platform follow them at once (see [Brand the platform](../guides/brand-the-platform.md)).
 
 | Route | Who | What |
 | ----- | --- | ---- |
-| `GET /platform/settings` | an admin | `{values: {name, primaryColor, logoUrl, accessMode}, versions: {name, primaryColor, logo, accessMode}}` |
-| `PATCH /platform/settings` | an admin | any of `{name, primaryColor, accessMode}` and `versions` → as `GET` |
+| `GET /platform/settings` | an admin | `{values: {name, primaryColor, logoUrl, accessMode, colorMode, radius}, versions: {name, primaryColor, logo, accessMode, colorMode, radius}}` |
+| `PATCH /platform/settings` | an admin | any of `{name, primaryColor, accessMode, colorMode, radius}` and `versions` → as `GET` |
 | `POST /platform/settings/logo` | an admin | multipart `logo` → as `GET` |
 | `DELETE /platform/settings/logo` | an admin | → as `GET` |
-| `GET /platform/public` | anyone, limited | `{name, logoUrl, primaryColor, accessMode}` |
+| `GET /platform/public` | anyone, limited | `{name, logoUrl, primaryColor, accessMode, colorMode, radius}` (`radius` is null until an admin chooses one) |
 
 - **Saving** is all or none, under a lock of its own, each field against its version (409 `platform.version_mismatch`, with
   `meta.currentVersions` by field). `name` is plain text of 2 to 60 characters, `primaryColor` `#rrggbb` in lower case or
-  `default`, `accessMode` `open`, `waitlist` or `closed`; at least one of them. Audited as `platform.settings.updated`
+  `default`, `accessMode` `open`, `waitlist` or `closed`, `colorMode` `light`, `dark` or `system`, `radius` `none`, `small`, `medium`, `large` or
+  `full`; at least one of them. Audited as `platform.settings.updated`
   (before and after).
+- **The look** applies to the platform's own screens only. The color mode applies to the admin's host; the root domain's pages
+  (the landing, the signup and the sign in) are light by design, so the default mode does not show there. The corners apply to
+  the admin's host and to those pages, which keep their light design. A workspace keeps its own look: its people's saved
+  theme, else mood-ui's. The color mode is only a default: a visitor who chose a mode of their own in that browser keeps it (the frontend never saves the default as a choice, so
+  changing it reaches everyone who chose none), and the page's `<head>` script sets the `dark` class before the first paint so a
+  dark default does not flash light. The corners are the platform's until a signed-in person's own theme says otherwise. The
+  public screens draw cards large and buttons round by design: while no corner style is chosen (`radius` null in the public
+  read) they keep those shapes, and once one is chosen every card and button of those screens follows it. The settings page
+  shows `medium` while none is chosen, which is how the admin draws.
 - **The logo** is checked by its bytes (PNG, JPEG or WebP; anything else, 422 `platform.logo_invalid`), at most
   `platform.logo.max_bytes` (1 MB), written again by GD at most `platform.logo.max_side` (512) on a side, and kept under
   `platform/brand/`. The file it replaces, or the one taken away, is deleted by a queued job after the commit, which deletes
@@ -520,7 +616,7 @@ language, for the Settings page.
 | `POST /platform/waitlist` | anyone, limited | `{email, name, company, note, locale, captchaToken}` (`note` up to 1000 characters, Support's `MultilineText`) → 202 `data: null`, always the same |
 | `GET /platform/waitlist` | an admin | `status`, `search`, `page`, `perPage` → `[{id, email, name, company, note, locale, status, createdAt, invitedAt, joinedAt}]`, `meta.pagination` |
 | `POST /platform/waitlist/{id}/invite` | an admin | → an invitation |
-| `GET /platform/invitations` | an admin | `page`, `perPage` → `[{id, email, status, createdAt, expiresAt, acceptedAt, workspaceId}]`, `meta.pagination` |
+| `GET /platform/invitations` | an admin | `status` (`pending`, `accepted`, `revoked` or `expired`), `search` (a text in the email, up to 80 characters), `page`, `perPage` → `[{id, email, status, createdAt, expiresAt, acceptedAt, workspaceId}]`, `meta.pagination` |
 | `POST /platform/invitations` | an admin | `{email}` → an invitation |
 | `DELETE /platform/invitations/{id}` | an admin | `data: null` |
 
@@ -558,6 +654,13 @@ What the admin does to the catalog of plans belongs to no workspace and goes to 
 `platform.plans.reordered` (resource `PlanCatalog`, the order before and after) and `platform.plan.prices_offered`. Plans
 also keeps each change of a plan in `plan_revisions` (see [Editing the catalog](plans.md#editing-the-catalog)).
 
+A screen that a module adds to the panel writes to the same trail through `Platform\Contracts\PlatformAuditLog`, never through
+`PlatformAudit`, which is Platform's own. It takes the action (`<package>.<resource>.<what happened>`, as
+`public_page.catalog.block_updated`), the resource's type and id, and before and after. The actor is the admin of the `platform`
+guard, never whoever the default guard holds, and the entry belongs to no workspace. When the screen is about one workspace, it uses
+`recordAbout()`, which also takes the workspace's id: the entry is the platform's, and that workspace's Activity tab lists it. The
+module writes the workspace's own trail itself, as that workspace, as Platform does for what it does to a workspace.
+
 ## The `platform` layer
 
 The admin's panel is the frontend layer `frontend/layers/platform`. One build serves every host: the panel's pages live
@@ -587,33 +690,46 @@ under `/platform/**`, and `NUXT_PUBLIC_PLATFORM_HOST` (core's `usePlatformHost()
   in the browser for a page the server did not draw. `usePlatformName()`, `useBrandPalette()` (the platform's color) and
   `AuthShell` (its logo) follow it. When it cannot be read, the screens keep `NUXT_PUBLIC_PLATFORM_NAME` and mood-ui's
   color, and the failure is logged.
+- **The look.** The plugin `platform-appearance.ts` starts a visitor who has saved no color mode in that browser in the
+  platform's default (`usePlatformPublic().colorMode`), without saving it as their choice; on the server it writes the default as
+  `data-default-color-mode` on `<html>`, which the one script in `<head>` (`nuxt.config.ts`) reads before the first paint.
+  `app.vue` hands `ModoProvider` no `theme` (it would save it as a choice) and core's `ModoThemeSync` tells it the mode instead.
+  `useAppRadius()` hands the platform's corners to `ModoProvider` while no signed-in person's own theme says otherwise, and
+  core's `usePublicShape()` gives the public screens' cards and buttons the chosen corners, or their own shapes while none is chosen.
 - **In a workspace** the plugin `platform-profile-link.ts` reads `platformFlags` of `/me` into core's
   `usePlatformFlags()`, and gives a super admin a link to the panel in the profile menu (`kit:profile-menu:links`), an
   address on the admin's host that opens as a new page.
+
+The admin's top bar draws what other layers register in `kit:platform:topbar:items` before Sign out: the search layer's
+palette (`Cmd+K`, see [Search](search.md#the-admins-palette)) and the notifications layer's bell (see
+[the admin's bell](#the-admins-bell)). The layout shares the pages of the loaded menu through `useState("platform:menu-items")`,
+which the plugin `platform-search-shortcuts.ts` offers the palette under "Pages".
 
 The panel's pages, each in the kit's page anatomy (`PageHeader`, then `Tabs` in the `line` variant where there are tabs,
 `PageToolbar`, the content, and `PageActionBar` on a page that edits):
 
 | Page | What it shows and does |
 | ---- | ---------------------- |
-| `/platform` | the overview: workspaces by standing and the new ones of the last 30 days, subscriptions by status, and who waits on the waitlist, each in mood-ui's `Stat` |
+| `/platform` | the overview: three cards with a line each for the last 30 days (new workspaces, subscriptions in force, people who joined the waitlist with how many still wait; mood-ui's `Stat` and `Chart` of type `sparkline` with straight segments from 0, each with a link to its page), then workspaces by standing and subscriptions by status in mood-ui's `Stat` |
 | `/platform/workspaces` | every workspace, newest first, in a table: search by name or slug (asked once the admin stops typing), filters by standing and plan, a pager. The name is plain text; each row ends in its actions, outline icon buttons with their tooltip: Open, Enter as a member (an active workspace with active members: a dialog picks the member, never a super admin, and asks why), and the changes of standing its standing allows, as on its page (Suspend and Close ask why first; Resume and Reopen act at once), after which the list is read again |
-| `/platform/workspaces/{id}` | one workspace: its standing in the header with at most two actions (Suspend or Resume, and Close; Reopen while a closing one's grace lasts, none after it), Suspend and Close asking for a reason in a dialog with a `Textarea` (10 to 500 characters); tabs Summary (plan, subscription, address, members; a closing one's date and reason in a danger banner; the plan's card has Give a plan, off with why while Stripe bills the workspace, which opens a dialog with the plan in a `KitSelect`, an optional end date in mood-ui's `DateField` and the reason, and Take it back on a plan the platform gave, which asks why; neither on a closing workspace), Members (Enter as for an active member of an active workspace, never for a super admin, who carries a badge) and Activity (what the platform did to it, with the reasons, in mood-ui's `Timeline`) |
+| `/platform/workspaces/{id}` | one workspace: its standing in the header with at most two actions (Suspend or Resume, and Close; Reopen while a closing one's grace lasts, none after it), Suspend and Close asking for a reason in a dialog with a `Textarea` (10 to 500 characters); tabs Summary (plan, subscription, address, members; a closing one's date and reason in a danger banner; the plan's card has Give a plan, off with why while Stripe bills the workspace, which opens a dialog with the plan in a `KitSelect`, an optional end date in mood-ui's `DateField` and the reason, and Take it back on a plan the platform gave, which asks why; neither on a closing workspace), Members (Enter as for an active member of an active workspace, never for a super admin, who carries a badge), Activity (what the platform did to it, with the reasons, in mood-ui's `Timeline`) and Features (one row per declared platform flag with a `GlassSwitch` that shows what is in force for the workspace and saves at once with a toast, reverting if the save fails; a flag with an exception shows a Forced badge, a ghost Reset (tooltip "Back to global") and an optional reason in an `Input` of up to 200 characters that saves when the field is left). Under the plan's card, the Summary tab draws the sections the modules bring through core's `kit:platform:workspace-sections` (the public page's switch is one), each in its own error boundary. The Activity tab names an action of a module with the words of its layer: `<package>.<what>` reads `<package>.activity.<what, with underscores>`, as `public_page.page.platform_off` reads `public_page.activity.page_platform_off`. |
 | `/platform/plans` | every plan of the catalog in its order, retired ones too, with its badges (Default, Not for sale, and Prices not on Stripe where Stripe is set up and `prices.inLine` is false), how many workspaces have it and its subscriptions by status. Each row ends in its actions, outline icon buttons: one place up and one place down (only where it can go), saved at once with the whole order (`PUT /platform/plans/order`; a 409 reads the list again), and Edit, which opens the plan's editor. New plan, in the header, opens a dialog (the slug, the plan it copies in a `KitSelect`, a name in each language) that makes it off sale and last in the order and opens its editor; a refusal of a field (a slug taken) shows on that field. With no catalog writer (`editable` false) a banner says why, and the list only shows: no moves and no New plan, only Edit |
-| `/platform/plans/{slug}` | one plan, to edit: its name in the header with its slug, how many workspaces have it and its badges, and five tabs. General: Texts (a name and a one-line description in each language, a column each on a wide screen) and Sale and trial (On sale, a switch that stays on for the default plan, and the trial's days, empty for none). Prices: the monthly and yearly prices in the currency's units (empty: not sold for that period; 0: free; the currency does not change here); where Stripe is set up and does not have the saved prices yet (`prices.pending`), a warning banner says which periods nobody can buy meanwhile and Offer on Stripe sends `POST /platform/plans/{plan}/prices` (a 502 shows the periods still missing), and without Stripe a line says the prices are only saved. Limits: a row per resource the packages register, a number or No limit (a switch; turned off, the number starts at 0). Features: a switch per declared feature, or an empty state when no package declares any. History: the last 20 changes, read when the tab first opens and again after a save, each with its version, who made it (the admin, "From config/plans.php" for `plans:sync`, or "A deleted account"), when and what changed. Every card shows its unsaved dot, and the action bar reviews the changes by card and saves the whole plan (`PUT /platform/plans/{plan}`) at the version it read; a save Stripe did not take (`stripe: "failed"`) is saved and warns, pointing at Prices, instead of the success. A change that takes something from the workspaces on the plan (409 `platform.plan_change_unconfirmed`) opens a dialog that lists each impact and how many workspaces have the plan, with Cancel and Save anyway, which sends it again confirmed with the token the API asked with; any other refusal of the confirmed save closes the dialog; someone who saved meanwhile (409 `platform.plan_changed`), or a catalog writer gone since the page loaded (503 `platform.catalog_not_editable`, on a save or Offer on Stripe), makes the page read the plan again and drop the draft; a refusal of a field shows on its field. With no catalog writer (`editable` false) a banner says why, every field is disabled and there is no bar |
-| `/platform/flags` | each flag with what it does and its default, a switch, and the share of workspaces for one that rolls out; the changes wait for the action bar, which reviews them (On → Off) and sends only those (`PUT /platform/flags`), and a 409 reads them again |
-| `/platform/settings` | the brand in one card: the name and the color at the left (two tabs of the `line` variant, the default color or one of its own with its picker), the logo at the right (saved the moment it is chosen or removed); and who may sign up (the three access modes as cards); the name, the color and the mode wait for the action bar (`PATCH /platform/settings` with only what changed and its versions). Whatever is saved shows at once on the screens (`usePlatformPublic()`) |
+| `/platform/plans/{slug}` | one plan, to edit: its name in the header with its slug, how many workspaces have it and its badges, and five tabs. General: Texts (a name and a one-line description in each language, a tab of the `line` variant for each language; a tab with unsaved changes shows how many as its badge, and a tab whose fields the API refused shows `!` and opens on a failed save) and Sale and trial (On sale, a switch that stays on for the default plan, and the trial's days, empty for none). Prices: the monthly and yearly prices in the currency's units (empty: not sold for that period; 0: free; the currency does not change here); where Stripe is set up and does not have the saved prices yet (`prices.pending`), a warning banner says which periods nobody can buy meanwhile and Offer on Stripe sends `POST /platform/plans/{plan}/prices` (a 502 shows the periods still missing), and without Stripe a line says the prices are only saved. Limits: a row per resource the packages register, a number or No limit (a switch; turned off, the number starts at 0). Features: a switch per declared feature, or an empty state when no package declares any. History: the last 20 changes, read when the tab first opens and again after a save, each with its version, who made it (the admin, "From config/plans.php" for `plans:sync`, or "A deleted account"), when and what changed. Every card shows its unsaved dot, and the action bar reviews the changes by card and saves the whole plan (`PUT /platform/plans/{plan}`) at the version it read; a save Stripe did not take (`stripe: "failed"`) is saved and warns, pointing at Prices, instead of the success. A change that takes something from the workspaces on the plan (409 `platform.plan_change_unconfirmed`) opens a dialog that lists each impact and how many workspaces have the plan, with Cancel and Save anyway, which sends it again confirmed with the token the API asked with; any other refusal of the confirmed save closes the dialog; someone who saved meanwhile (409 `platform.plan_changed`), or a catalog writer gone since the page loaded (503 `platform.catalog_not_editable`, on a save or Offer on Stripe), makes the page read the plan again and drop the draft; a refusal of a field shows on its field. With no catalog writer (`editable` false) a banner says why, every field is disabled and there is no bar |
+| `/platform/flags` | each flag with what it does and its default, a switch, the share of workspaces for one that rolls out, and "N workspaces forced" for one with exceptions; the changes wait for the action bar, which reviews them (On → Off) and sends only those (`PUT /platform/flags`), and a 409 reads them again |
+| `/platform/public-page` | the blocks of the public page that businesses may use (see [PublicPage](public-page.md#the-admins-catalog)). The page's options at the top (the plan feature the page needs, and whether the foot shows the platform's name) and a card for each block: its thumbnail, a switch and the plan feature it needs. The page belongs to the `public-page` layer and uses the platform layout; the changes wait for the action bar and send only what changed with its versions (`PATCH /platform/public-page`), and a 409 reads the catalog again |
+| `/platform/settings` | the brand in one card: the name and the color at the left (two tabs of the `line` variant, the default color or one of its own with its picker), the logo at the right (saved the moment it is chosen or removed); an Appearance card with the default color mode (light, dark or system) and the corner style, picked with core's `ColorModePicker` and `RadiusPicker`, the same cards a person uses for their own look; and who may sign up (the three access modes as cards). The name, the color, the look and the mode wait for the action bar (`PATCH /platform/settings` with only what changed and its versions). Whatever is saved shows at once on the screens (`usePlatformPublic()`) |
 
-| `/platform/waitlist` | two tabs: Waitlist (search by email, name or company, a status filter, each person's note cut with the whole of it in a tooltip, and Invite on someone who waits) and Invitations (where each stands, and Revoke on a pending one); Invite by email, in the header, opens a dialog for an address not on the list, which shows `platform.email_has_account` on its field |
+| `/platform/waitlist` | two tabs: Waitlist (search by email, name or company, a status filter, each person's note cut with the whole of it in a tooltip, and Invite on someone who waits) and Invitations (a search by email, a status filter, where each stands, and Revoke on a pending one); Invite by email, in the header, opens a dialog for an address not on the list, which shows `platform.email_has_account` on its field and, once sent, a toast saying so. A link from the admin's palette opens it on a tab with a search: `?search=<email>` filters the Waitlist tab and `?tab=invitations&search=<email>` the Invitations tab, also while the page is open |
 
 Enter as (on the Members tab, or a row of the list) opens the address the API answers in a new tab: the workspace, signed in as the person, with its banner and Exit
 (see [Impersonate a member](../guides/impersonate-a-member.md)); the panel stays in its own tab.
 
-**The public waitlist**, `/waitlist` on the root domain, is drawn by the server (it needs no session) and explains itself
-by the access mode: in `waitlist` mode, a form (name, email, company and a note, both optional, in a `Textarea`, and the
-captcha) that sends `POST /platform/waitlist` in the screen's language and then says the person is on the list (the same
-whether the email was there already: the API answers the same); in `open` mode, that signups are open, with the way to
-`/signup`; in `closed` mode (or with the mode unknown), that no new workspaces are taken for now. The signup form reads an
+**The public waitlist** is the closing section of the root domain's landing (`/#waitlist`; the old `/waitlist` address
+redirects there), drawn by the server (it needs no session). In `waitlist` mode it holds the platform layer's
+`WaitlistForm` (name, email, company and a note, both optional, in a `Textarea`, and the captcha), which sends
+`POST /platform/waitlist` in the screen's language and then says the person is on the list (the same whether the email was
+there already: the API answers the same). In `open` mode the section offers the signup instead, and in `closed` mode only
+the way into a workspace (see [Edit the landing](../guides/edit-the-landing.md#the-access-mode)). The signup form reads an
 invitation from its link (see [Signup](signup.md#the-signup-layer)).
 
 A module adds a page to the panel with a page of its own layer under `pages/platform/...` with
@@ -639,6 +755,8 @@ environment sets.
 | `platform.waitlist_per_email_per_hour`, `.waitlist_per_address_per_hour` | `5`, `20` | | the waitlist form's submissions, per email and address, and per address |
 | `platform.deletion_grace_days` | `30` | `PLATFORM_DELETION_GRACE_DAYS` | the days a closed workspace waits before it is deleted |
 | `platform.invitation_days` | `14` | `PLATFORM_INVITATION_DAYS` | the days an invitation to sign up lasts |
+| `platform.notices_writes_per_minute` | `120` | | how many times an admin may mark notices read per minute (the `platform-notices` limiter) |
+| `platform.notices_keep_days` | `60` | | the days a notice stays in the super admins' bell before `platform:prune-notices` deletes it |
 | `platform.logo.max_bytes`, `.max_side` | `1048576`, `512` | | the largest logo file taken, and the longest side it is stored at |
 
 ## Checking the configuration
