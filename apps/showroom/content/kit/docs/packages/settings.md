@@ -482,9 +482,9 @@ person's own cards, in three cards:
 - **Color mode**: light, dark or system.
 - **Corner style**: square, small, medium, large or full.
 
-Each option of the last two is mood-ui's `SurfaceCard` with a small drawn preview and mood-ui's `Radio`, which carries its
+Each option of the last two is core's `ColorModePicker` and `RadiusPicker` (core owns them, so the platform's settings page uses the same cards), each option mood-ui's `SurfaceCard` with a small drawn preview and mood-ui's `Radio`, which carries its
 name and a line about it; a click anywhere on the card chooses it. core's `KitTooltip` (mood-ui's `MorphTooltip`) around each card says what
-choosing it does ("Use dark mode", `settings.tooltips.color_mode.*` and `settings.tooltips.radius.*`); like a
+choosing it does ("Use dark mode", `core.tooltips.color_mode.*` and `core.tooltips.radius.*`); like a
 `KitButton`'s, it shows on hover and keyboard focus, never on a tap, and goes once the card is chosen.
 
 The mode and the corners are the person's own, wherever they sign in: they apply at once and are saved with

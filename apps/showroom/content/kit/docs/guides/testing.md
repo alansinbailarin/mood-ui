@@ -17,7 +17,7 @@ pnpm lint:secrets                # needs the gitleaks binary
 
 | Gate | Runs |
 | ---- | ---- |
-| `composer check` | Pint (style), Deptrac (layers), Larastan level 8, a Rector dry run, then Pest: the architecture tests, and the rest in parallel with coverage, at least 85% in total and in every package |
+| `composer check` | Pint (style), Deptrac (layers), `i18n:check` (every language file against English), Larastan level 8, a Rector dry run, then Pest: the architecture tests, and the rest in parallel with coverage, at least 85% in total and in every package |
 | `pnpm --filter ./frontend check` | ESLint, `nuxt typecheck`, Vitest with coverage per file, a production build, then Playwright |
 | `pnpm quality` | `lint:dup` (jscpd: any clone of 8 lines and 60 tokens in PHP, TS, JS or Vue fails) and `lint:dead` (knip: unused files, exports and dependencies) |
 | `pnpm lint:secrets` | gitleaks over the whole git history |
@@ -35,6 +35,7 @@ From `backend/`:
 | ------- | ---- |
 | `composer lint` / `composer lint:fix` | check / fix style with Pint |
 | `composer deps` | Deptrac, and fail on a class outside every layer |
+| `composer i18n:check` | every language file of the packages and the frontend against English: missing and extra keys, blank messages, placeholders (see [Add a locale](add-a-locale.md#check-the-translations)) |
 | `composer analyse` | Larastan at level 8 |
 | `composer refactor:check` / `composer refactor` | list / apply Rector's changes |
 | `composer test` | Pest in parallel, no coverage |
@@ -90,6 +91,24 @@ Name files `*Test.php`; nothing else runs. A feature test inside a workspace use
 seeAll: [$olga->id])` sets the scope of every request, who works where and who sees every branch. A migration that
 enables RLS sets `FORCE ROW LEVEL SECURITY` (`TenantRls::enable()` does), or the schema owner, which owns the
 table, skips the policies.
+
+A test that a record never crosses a workspace, or a person, uses `MoodKit\Tenancy\Testing\AssertsIsolation`:
+`uses(ActsAsTenant::class, AssertsIsolation::class)`, and then
+`$this->assertTenantIsolated($seed, 'tickets.index', 'tickets.show', 'tickets.tickets')`. `$seed` is
+`fn (Tenant $tenant, User $person) => ['id' => $id, 'term' => 'Roof repair']`: it makes one record in that workspace as that person
+and answers its id (and the term the global search finds it by, when you name a search source as the last argument). The helper
+makes two workspaces, A (with the people A1 and A2) and B (with B1), seeds the record in each, and asks as A1: B's record must be
+in no list, answer 404 on its id and be in no search, while A's own shows everywhere, or the routes are not the ones that read it.
+`$this->assertPersonIsolated($seedFor, 'me.tickets.index', 'me.tickets.destroy', $payload)` does the same between A1 and A2 for a
+person's own records (sessions, inbox items): A2's record is not in A1's list, and A1's call of the route on it, a read or a change
+such as a delete, is a 404. For a change, pass `$unchanged` as the last argument, `fn (Tenant $tenant, User $person, string $id)`:
+it rereads A2's record and asserts what must still hold (the session is there, the item is unread), so a route that changes the
+record and then answers 404 fails. A list is read on page 1, enough for the few records of a seeded world. A search that is not
+the kit's `search` route is named in the helper's last argument. `$this->isolationWorld()` gives the workspaces, the people and their tokens
+(`$world->a1Token`...). The helper fails with PHPUnit's own exception on the first thing that crosses, and its own test
+(`packages/Tenancy/tests/Feature/AssertsIsolationTest.php`) runs it against routes that leak to show that it does. Projects
+(`ProjectsIsolationTest`), the sessions of Auth and the inbox of Notifications use it. `assertTenantIsolated()` covers reads (the list, the detail and the search). A write to another workspace's record is covered by the operations
+test of a module (an action on another workspace's record is not found) and by row-level security.
 
 A test of a module that hangs data from clients can start from Clients' own world
 (`packages/Clients/tests/Support/clients-world.php`): `clientsWorld($this)` makes two workspaces with their people and
@@ -178,7 +197,9 @@ root.
 ### Visual tests
 
 Playwright runs `frontend/tests/e2e/*.spec.ts` against the production build on port 4173, with a stub API
-(`tests/e2e/support/stub-api.ts`), so it needs neither Docker nor the backend. Install the browser once:
+(`tests/e2e/support/stub-api.ts`), so it needs neither Docker nor the backend. The stub of a module (the one `kit:make-module`
+writes, or Projects') is a file of its own in `tests/e2e/support/modules/`, which the stub API finds by its name. Install the
+browser once:
 
 ```bash
 pnpm --filter ./frontend exec playwright install chromium

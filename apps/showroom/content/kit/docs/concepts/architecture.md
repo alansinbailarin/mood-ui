@@ -10,13 +10,13 @@ This page explains what they are, how they reach each other, and where your own 
 backend/                 Laravel 13 API
   app/                   thin shell: one middleware (your providers go in bootstrap/providers.php)
   config/                framework config, and the env overrides of each package
-  packages/<Name>/       kernel packages (Audit, Auth, Billing, Branches, Clients, Dashboard, Geocoding, Notifications,
-                         Onboarding, Plans, Platform, Rbac, Search, Settings, Signup, Support, Team, Tenancy)
+  packages/<Name>/       kernel packages (Audit, Auth, Billing, Branches, Clients, Dashboard, Data, Geocoding,
+                         Notifications, Onboarding, Plans, Platform, PublicPage, Rbac, Search, Settings, Signup, Support, Team, Tenancy)
   tests/                 app tests and the architecture tests
 frontend/                Nuxt 4 app on mood-ui
   app/                   shell: app.vue, the home page, main.css with the color tokens
-  layers/<name>/         Nuxt layers (auth, billing, branches, clients, core, dashboard, notifications, onboarding, plans,
-                         platform, rbac, search, settings, signup, team, tenancy)
+  layers/<name>/         Nuxt layers (auth, billing, branches, clients, core, dashboard, marketing, notifications,
+                         onboarding, plans, platform, public-page, rbac, search, settings, signup, team, tenancy)
   tests/e2e/             Playwright visual tests
 scripts/postgres-init/   creates the app role and the test database on the first Postgres boot
 docker-compose.yml       Postgres, Redis, Mailpit and MinIO, for local use only
@@ -43,6 +43,7 @@ bindings. `backend/routes/api.php` and `backend/routes/console.php` are empty on
 | [Settings](../packages/settings.md) | workspace settings by group and key, with versions and history; the workspace brand and each member's theme |
 | [Plans](../packages/plans.md) | plans, subscriptions, quota limits and feature flags |
 | [Notifications](../packages/notifications.md) | event types, templates and audiences, the inbox, the delivery log, bounces and the daily summary |
+| [PublicPage](../packages/public-page.md) | the public page at the root of each workspace: blocks, the document, `GET /public-page` |
 | [Dashboard](../packages/dashboard.md) | the home's cards: a registry of the widgets each package declares |
 | [Team](../packages/team.md) | a workspace's people: invitations, the members list, working hours and skills |
 | [Platform](../packages/platform.md) | the platform's own administration: super admins, the admin host, the waitlist, flags and the plans' catalog; no package depends on it |
@@ -52,6 +53,7 @@ bindings. `backend/routes/api.php` and `backend/routes/console.php` are empty on
 | [Branches](../packages/branches.md) | a workspace's branches, their place on the map, opening hours and people; it uses Auth, Rbac, Plans, Settings, Onboarding, Audit and Team through their contracts, and only Clients depends on it (a client's home branch) |
 | [Clients](../packages/clients.md) | a workspace's clients: their data, tags, duplicates and merging, activity, CSV import and export, and their privacy rights; it uses Auth, Rbac, Audit, Plans, Notifications and Branches through their contracts, and modules hang their data from it through its own |
 | [Search](../packages/search.md) | the global search: a registry of the sources each package declares (`search.sources`); it uses Auth, Rbac and Plans through their contracts and knows no package that registers a source |
+| [Data](../packages/data.md) | the datasets and actions each package declares (`data.datasets`, `data.actions`), read and run as a person of a workspace; it uses Rbac, Plans and Platform through their contracts and knows no package that registers one |
 
 Every package's settings live in its own `config/`, with defaults only. The env overrides are in
 `backend/config/<file>.php`, the one place that calls `env()`, so `php artisan config:cache` works.
@@ -145,7 +147,7 @@ Each area of the UI is a Nuxt layer in `frontend/layers/<name>`, registered by N
 
 | Layer | What it holds |
 | ----- | ------------- |
-| `core` | `useApi`, the request composables, the envelope helpers, the session, permissions, brand and theme state, the hooks, `KitButton` and the page anatomy, the settings-section pieces, `KIT_ROUTES` and `useRootDomain()`, the public-screen chrome (`AuthShell`, the `auth` layout, `FormSubmitButton`, `CaptchaWidget`), and the server's security headers |
+| `core` | `useApi`, the request composables, the envelope helpers, the session, permissions, brand and theme state, the hooks, `KitButton` and the page anatomy, the settings-section pieces, `KIT_ROUTES` and `useRootDomain()`, the public-screen chrome (`AuthShell` and its showcase, the `auth` and `site` layouts, `SiteHeader`, `SiteFooter`, `BrandMark`, `TextLink`, `FormSubmitButton`, `CaptchaWidget`), and the server's security headers |
 | `tenancy` | the workspace of the current host, the `/unavailable` page, `robots.txt` and `sitemap.xml` |
 | `auth` | the session store (it reads `user` and `tenant` of `GET /me` and hands the rest to `kit:session:me`) the sign-in, password and handoff screens, and My profile (`/dashboard/me/profile`) with its link in the profile menu |
 | `dashboard` | the shell of the signed-in screens: sidebar from `GET /menu`, top bar, profile menu; the browser-only rule of `/dashboard/**` |
@@ -160,7 +162,9 @@ Each area of the UI is a Nuxt layer in `frontend/layers/<name>`, registered by N
 | `branches` | the branches, a branch's page with its map, hours and people, and the branch switcher |
 | `clients` | the clients, their tags, imports and exports, and the client portal |
 | `search` | the search palette in the top bar (`Cmd+K`), and a dialog on a phone |
-| `platform` | the admin's panel under `/platform`, on the admin host only, and the public `/waitlist` |
+| `platform` | the admin's panel under `/platform`, on the admin host only, and the public waitlist form the landing shows |
+| `public-page` | the root of a workspace's host: the page it published, built from blocks (`PublicBlock<Type>.vue`), with its SEO, or core's way in |
+| `marketing` | the root domain's landing on `/`: its sections, links, logos and FAQ in one `app.config.ts`, its prices from `GET /plans` |
 
 A layer imports only from itself and `core` (ESLint `boundaries`), and uses no other layer's
 auto-imports (ESLint `mood-kit/no-cross-layer-auto-import`). What two layers both need lives in `core` as
@@ -182,8 +186,8 @@ every workspace (`<slug>.localhost:3000`). See [Multi-tenancy](multi-tenancy.md)
 A feature of your own is a backend package under `backend/packages/` plus a frontend layer under
 `frontend/layers/`, built the same way as the kit's: Composer, Deptrac, Larastan, Rector, Pest, Nuxt, ESLint and Vitest
 already cover both. Kit code never references yours. `AGENTS.md` ("Packages" and "Layers") lists the steps for each, and
-[Build a module: the checklist](../guides/build-a-module.md) lists what a new module registers so that the search, the "+" menu,
-the home and the sidebar know it.
+`php artisan kit:make-module` makes one, and [Build a module](../guides/build-a-module.md) says what it registers so that the
+search, the "+" menu, the home and the sidebar know it.
 
 ## What it does not ship
 

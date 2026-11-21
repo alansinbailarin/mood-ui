@@ -21,7 +21,9 @@ owner, like `migrate`. Run them with `DB_MIGRATION_USERNAME` and `DB_MIGRATION_P
 
    Each listed email that has an account becomes a super admin. An email with no account is skipped with a warning; with
    `--create`, the command asks for that person's name and password (the app's password rules) and makes the account, in
-   no workspace. It fails when the list is empty, or when nobody on it was made one.
+   no workspace. It fails when the list is empty or holds a value that is not an email. An email with no account is only
+   a warning, so the deploy of a new install, where nobody has signed up yet, goes on: sign up with that email, and the
+   next deploy (or running the command again) makes it a super admin.
 
 `platform:setup` does nothing once the platform has a super admin, so it is safe in every deploy (see
 [Production](../configuration/production.md#every-deploy)). From then on the list grants nothing, whatever it says.

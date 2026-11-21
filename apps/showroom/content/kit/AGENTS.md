@@ -22,6 +22,16 @@ buyer-visible behaviour, config key, env variable, command, route, error code or
 Write what the code does, checked against the code; when this file and the code disagree, the code wins and
 both docs are fixed.
 
+## Production images
+
+The production images live in `docker/` (`backend`, `frontend`, `caddy`) and the Compose stack, Caddyfile and env template in
+`deploy/`; `docs/configuration/docker.md` describes them. `docker/backend/deploy.sh` must run the commands of the "Every deploy"
+block of `docs/configuration/production.md`, in the same order: `tests/Architecture/DeployScriptTest.php` fails when they
+differ, so change both together. A new long-running process (a second kind of worker, a new server) becomes a supervisord
+program in `docker/backend/supervisor/programs/` behind a value of `APP_ROLE` in `docker/backend/entrypoint.sh`, with its port
+in the Caddyfile if it has one. Config files in `docker/` and `deploy/` explain why, in plain English, and are not edited
+with a secret in them: `deploy/.env` is ignored by git.
+
 ## Quick reference
 
 Gates, from the repo root: `(cd backend && composer check)`, `pnpm --filter ./frontend check`,
@@ -53,7 +63,7 @@ The rules broken most often:
 backend/app/              Laravel shell: one middleware (TrustHostsExceptHealth); the User model is in packages/Auth
 backend/packages/<Name>/  kernel packages, each with src/ and tests/{Unit,Feature}
 backend/tests/            app tests and the architecture tests
-frontend/app/             Nuxt shell: app.vue, the home page, main.css with the color tokens
+frontend/app/             Nuxt shell: app.vue, the home page (the landing, or what `kit:workspace:home` gives a workspace's root), main.css with the color tokens
 frontend/layers/<name>/   Nuxt layers, each with app/ (source) and tests/ (Vitest)
 frontend/shared/          Nuxt's shared/ for code the app, layers and server all use (not created yet)
 frontend/tests/e2e/       Playwright visual tests
@@ -62,6 +72,11 @@ docs/                     the buyer documentation (see Buyer documentation)
 
 A feature of your own is a package in `backend/packages/` plus a layer in `frontend/layers/`, and kit code never
 references it *(convention)*.
+`backend/packages/Projects` and `frontend/layers/projects` are the **reference module**: the one small module that follows every
+standard below, with a short comment on why each piece is there ([docs/packages/projects.md](docs/packages/projects.md)). A module
+of your own starts with `php artisan kit:make-module`, which writes it from stubs derived from this one
+([docs/guides/build-a-module.md](docs/guides/build-a-module.md)). It is off until the platform flag
+`projects.enabled` is on, and [it can be removed whole](docs/guides/remove-the-projects-module.md).
 
 Every new module goes through this checklist, and says in its commit which line does not apply *(convention: nothing fails
 when a module is left out of these)*; the guide is [docs/guides/build-a-module.md](docs/guides/build-a-module.md):
@@ -73,6 +88,15 @@ when a module is left out of these)*; the guide is [docs/guides/build-a-module.m
   (guide: `add-a-dashboard-widget`).
 - [ ] **Menu entry and permissions**: its `<module>.view` (and `.manage`), the route guards, the role templates and the
   sidebar entry (guide: `add-a-permission-and-menu-entry`).
+- [ ] **Every route has a class**: a route of the `workspace` group takes a `permission:`; one with none (the person's own
+  data) or one outside every signed-in group (a webhook, a signed link) is declared by its package in a
+  `RouteDeclarations` tagged `routes.declarations`, with its reason or its lock (guide:
+  `declare-open-and-public-routes`; `RoutesAreClassifiedTest` fails on a route that is neither).
+- [ ] **Dataset and actions**, if others (people or the AI module) should read or do something through it: a `DatasetProvider`
+  tagged `data.datasets` and an `ActionProvider` tagged `data.actions`, `"mood-kit/data": "@dev"` in its `composer.json`, and a
+  `data:verify` that passes (guides: `add-a-dataset`, `add-an-action`). `kit:make-module` writes them, with their tests.
+- [ ] **Isolation test**: a test that uses `AssertsIsolation` and proves a record never crosses a workspace (list, detail and
+  search). It is mandatory in a new module and `kit:make-module` writes it (`<Name>IsolationTest`).
 
 ## Before you write code
 
@@ -82,7 +106,7 @@ when a module is left out of these)*; the guide is [docs/guides/build-a-module.m
 2. Write the failing test, then the code *(convention)*, and finish with the gates below.
 
 Never weaken a gate to get a green run *(convention)*: no lowered coverage thresholds, no new
-exclusions in `deptrac.yaml`, `.jscpd.json` or `knip.jsonc`, no `@phpstan-ignore` comments, no
+exclusions in `deptrac.yaml`, `.jscpd.json` or `knip.jsonc` (the only one allowed is the two lines `kit:make-module` adds to `.jscpd.json`, removed once the module is its own), no `@phpstan-ignore` comments, no
 screenshot updates that hide a diff. (An `eslint-disable` comment does nothing: ESLint ignores inline
 config and fails on a leftover directive, `<!-- eslint-disable -->` in templates included.) If a rule
 is wrong, change it in its own commit and say why.
@@ -126,8 +150,58 @@ is wrong, change it in its own commit and say why.
   `AssetPath::belongsTo()` (`belongsToUser()` for a person's). `php artisan assets:prepare-bucket` creates the local
   MinIO bucket and refuses to run in production. *(convention; tested in Support's `AssetDisk*Test` and Settings' logo
   tests)*
+- Every route of the app, but the framework's own (Sanctum's cookie, the storage disk, the health check), is a member's (the `workspace` group and a `permission:` guard), the platform's (the `platform`
+  group) or declared by its package: `MoodKit\Support\Routes\RouteDeclarations`, tagged `routes.declarations` in the
+  provider, lists an `OpenRoute(name, reason)` for a member's route with no permission (the person's own data, a menu filtered
+  by permission) and a `PublicRoute(name, lock)` for a route outside every signed-in group, with what guards it instead (a
+  signature, a signed token, the portal session). Name the route: the test fails on one with no name or a name another route has, on a declaration of a
+  route that does not exist and on an `OpenRoute` whose route has a permission. See
+  [declare-open-and-public-routes](docs/guides/declare-open-and-public-routes.md). *(tested by `RoutesAreClassifiedTest`)*
 - A package that checks a permission of its own, beyond the `permission:` guard, refuses with
   `MoodKit\Support\Errors\PermissionDenied` (403 `auth.forbidden`, `meta.requiredPermission`), as the guard does.
+
+### Activation (`packages/Support`, `kit:activate`)
+
+- `php artisan kit:activate {--project=} {--force} {--stdin}` records the buyer's license once, at install: it asks Polar's customer
+  endpoint (`POST /v1/customer-portal/license-keys/activate`, no token, the kit's public organization id, the constant
+  `Support\License\KitLicense::POLAR_ORGANIZATION_ID`, which `KIT_POLAR_ORGANIZATION_ID` overrides only when it is not empty) and writes `KIT_LICENSE_KEY` and `KIT_LICENSE_ACTIVATION_ID` into the root `.env`
+  (`Support\License\EnvFile`: replaces or appends those lines, touches no other). It never prints or logs a whole key, only its
+  last 4 characters, and only of a key of 16 or more. The key is never an argument (the shell history, `ps` and Sentry's console
+  breadcrumbs would keep it): it is asked for, hidden, or read from `KIT_LICENSE_KEY_INPUT` or one line of `--stdin`. Anything
+  unexpected from the call to Polar is caught without reporting or logging it, since its trace would carry the key. The `.env`
+  is written atomically (temporary file, same mode, `rename()`; a symlinked `.env` is written at its target). *(tested by `ActivateKitCommandTest`, `EnvFileTest`)*
+- No code reads the license while the app runs, and nothing may start to: no middleware, guard, scheduler or boot check that reads
+  `KIT_LICENSE_KEY` or `KIT_LICENSE_ACTIVATION_ID`, no feature that stops without them. The command is visibility only, and
+  its failures (no network, a refused key) block nothing. A test calls Polar through `Http::fake`, never the network.
+  *(convention)*
+
+### Public demo (`packages/Support`, `DEMO_MODE`)
+
+What it does and how to run one: [docs/guides/run-a-public-demo.md](docs/guides/run-a-public-demo.md). The rules:
+
+- It is off unless `DEMO_MODE` is the word `true` (`support.demo.enabled === true`, set only in `config/support.php`). While it is on, the
+  default mailer is `log`, the app stops at boot with a live Stripe key (`Demo\DemoGuard`), and `demo:reset` is scheduled daily; none
+  of that exists while it is off. Never read `env('DEMO_MODE')` anywhere else: ask `Support\Demo\DemoMode`. *(tested by `DemoModeTest`)*
+- **A package whose action would do harm in a demo declares its own lock**, from its own routes or actions, and tests it: the `demo-locked`
+  route alias for a route that is dangerous whatever its input, `DemoMode::refuse()`, `refuseForAccount()`, `refuseForOthers()` or
+  `refuseInviteTo()` in the action for one that depends on the input. The answer is 403 `demo.locked` (`Errors\DemoLocked`), never a
+  code or a message of the package's own. Harm is: spending or changing real money (Stripe), mailing an address outside `example.com`,
+  changing the shared accounts (their password, their email, their sessions, their place and role, impersonating anyone else), closing or
+  suspending a workspace, switching off what keeps the demo running, and deleting what the reset cannot remake. What costs the demo
+  something the reset does not undo (an upload, a Stripe Checkout in test mode) is capped per person and hour with the
+  `demo-capped:<bucket>` route alias (`support.demo.caps`), not locked. Everything else stays open, because the demo is reset daily.
+  The list of what the kit locks is in the guide. *(tested by each package's `DemoLockTest`)*
+- `demo:reset` wipes the database as the schema owner (the only place `migrate:fresh` is allowed in production) and only a database it
+  wiped before, an empty one, one with no workspace, or one a reset began and failed on (a note in the cache, which the wipe does not
+  reach); any other needs `--adopt` and an answer of yes. It never runs twice at once, tries the whole reset once more when it fails and logs
+  each failure at critical level. A demo refuses to boot with `CACHE_STORE=database` (the wipe drops its locks). Do not weaken any of it. *(tested by `DemoResetTest`, which runs outside `RefreshDatabase`: `tests/Pest.php` extends `packages/*/tests/Reset`
+  without it, and the test leaves the schema made and empty)*
+- Demo data counts every date from now and draws what varies from `Support\Demo\DemoSeed` (the day and a scope), never an absolute date or
+  `rand()`; rows made over the past are made with `DemoSeed::at()`, which stops the clock, so the trail and the timestamps agree. A module
+  with data to show implements `Support\Demo\DemoDataProvider` and tags it `demo.data` (Projects' rows are the app's `DemoProjectsSeeder`). *(tested by
+  `DemoSeedersTest` on three different days)*
+- The shared accounts' password is `support.demo.password`, public by design: it is shown only by `GET /tenant` of the demo workspace and
+  `GET /platform/public`, and only in a demo. The frontend never holds it. *(tested by `DemoTenantPayloadTest`, Platform's `DemoLockTest`)*
 
 ### Layers (Deptrac, `composer deps`)
 
@@ -259,8 +333,8 @@ What the package does: [docs/packages/auth.md](docs/packages/auth.md). The rules
 - A route for a signed-in member uses the `workspace` middleware group, never `auth:sanctum` alone; a signed-in client of
   the portal uses Clients' `portal` group, and a signed-in super admin Platform's `platform` group. A public route uses
   `tenant` alone, says why it is public, and has a named limiter of its own, never `throttle:n,m`: login, the password
-  reset, the handoff, `GET /tenant`, Team's invitation lookup and acceptance, and the portal's `GET /portal`,
-  `POST /portal/code` and `POST /portal/session`. *(tested by `TokenTenantBindingTest`, `ThrottleIsolationTest`,
+  reset, the handoff, `GET /tenant`, `GET /public-page`, Team's invitation lookup and acceptance, and the portal's
+  `GET /portal`, `POST /portal/code` and `POST /portal/session`. *(tested by `TokenTenantBindingTest`, `ThrottleIsolationTest`,
   `CurrentTenantThrottleTest`, `PortalRoutesTest`)*
 - Platform's `platform` and Clients' `client-portal` are guards of their own tables (`Auth::viaRequest()`), neither is
   Sanctum's, and `client-portal` never becomes the default: no route takes `auth:client-portal`. A token of one kind (a
@@ -298,7 +372,8 @@ What the package does: [docs/packages/auth.md](docs/packages/auth.md). The rules
   workspace. Allowed on purpose
   (support may need them; audited with `impersonator_user_id`): sign-out and Exit, `me/locale`, `me/theme`, the branch
   the person works at (`PUT /me/branch`, kept for that impersonation alone, never the person's own choice),
-  `realtime/auth`, the workspace's settings and logo, `PUT /notifications/settings`, the onboarding's actions, the two
+  `realtime/auth`, the workspace's settings and logo, the workspace's public page (its draft, publishing, discarding,
+  turning it off and the images it takes, which the trail audits), `PUT /notifications/settings`, the onboarding's actions, the two
   previews, the team's skills and a member's hours and skills (Team's onboarding step still refuses to invite), a
   branch's data, hours and people (Branches' onboarding step still refuses to add a branch), a client's name, language,
   home branch and custom fields (`PATCH /clients/{client}`; `UpdateClient` still refuses a change to the person's contact
@@ -307,7 +382,8 @@ What the package does: [docs/packages/auth.md](docs/packages/auth.md). The rules
   (`POST /clients/{client}/portal/sign-out`) or every portal session of the workspace (`POST /clients/portal/sign-out`), which
   protects them, the map's two searches (`geocoding/search`, `geocoding/reverse`) and the palette's search (`POST /search`),
   which change nothing.
-  A new write route of the `workspace` group goes in one list or the other. Never build a session from an impersonation
+  A new write route of the `workspace` group goes in one list or the other, or, for a module's, carries `not-impersonating` or
+  `impersonation-allowed` (a middleware that does nothing) itself. Never build a session from an impersonation
   token. *(tested by `ImpersonationGuardTest` and `ImpersonationRoutesTest`, which lists both and fails on a write route
   in neither)*
 - A token or a reset secret never travels in a query string: a switch hands a one-time code, a reset link carries its token
@@ -334,7 +410,7 @@ What the package does: [docs/packages/auth.md](docs/packages/auth.md). The rules
   `ResetPasswordMailTest`)*
 - Other packages use Auth through `Auth\Contracts\` and ids, never a model; `CreatesMembers::create()` takes a password
   *hash*, never a password. *(tested by `CreateMemberTest`, `IssueHandoffLinkTest`)*
-- The demo users exist in local development and tests only. *(tested by `DemoUserSeederTest`)*
+- The demo users exist in local development, tests and a public demo (`DEMO_MODE`, below) only. *(tested by `DemoUserSeederTest`, `DemoSeedersTest`)*
 - In production the app answers only for `APP_URL`'s host and the root domain with its subdomains (`/up` on any host),
   believes `X-Forwarded-*` only from `TRUSTED_PROXIES`, and lets in cross-origin requests only from the frontend's origins
   (`config/cors.php`). *(tested by `TrustedHostsTest`, `TrustedProxiesTest`, `CorsTest`)*
@@ -822,6 +898,24 @@ What the package does: [docs/packages/platform.md](docs/packages/platform.md) an
   is closed. *(tested by `AccessModeTest`, `SignupGatesTest`)*
 - Emails and screens that speak for the platform take `Support\Branding\PlatformBrand`, never `config('app.name')`.
   *(convention)*
+- A screen a module adds to the panel writes the platform's trail through `Contracts\PlatformAuditLog`
+  (`<package>.<resource>.<what happened>`): `record()` about no workspace, `recordAbout()` about one, which the workspace's
+  Activity tab lists (the module writes the workspace's own trail itself, as it); never `Audit\PlatformAudit`. *(tested by
+  `ModuleAuditLogTest`)*
+- The super admins' bell is `platform_notices`: one row per admin per notice, Platform's own (no tenant, no RLS), read and marked
+  only by `Notices\NoticeInbox`, whose every query filters by the signed-in admin of the `platform` guard. A notice is written only
+  by `WritesPlatformNotices` from a queued listener (`QueuedNotice`: after the commit, three tries), one row per super admin in
+  one statement, once per `type + key`; its type must be declared by a `PlatformNoticeProvider` tagged `platform.notices`
+  (`<package>.<what>`, texts in every language, a route under `/platform/`) and its data scalars. A module raises one by sending
+  `Events\PlatformNoticeRequested` after the commit, never by writing the table; no email. The listeners read a workspace's
+  name from its own row, never across workspaces. A notice about a person holds only the record's id in `data`, never a name or an
+  email: the type's `resolver` (`Contracts\ResolvesNoticeData`) reads them when the notice is read, and a record that is gone reads as
+  the type's `removed` line that opens nothing. *(tested by `PlatformNoticesTest`)*
+- The admin's lists of people (the waitlist, the invitations) are searched by `POST .../search` with the text in the body, and a
+  `GET` that carries `search` is refused (422); a link, a notice or a palette hit opens a person's row by `?entry=<id>`, never by their
+  email. `search` is a Sentry-only field. *(tested by `WaitlistTest`, `InvitationsTest`, `PlatformSearchTest`, `PlatformNoticesTest`)*
+- The platform read role keeps `log_statement = 'all'` and has `log_parameter_max_length = 0`, so Postgres' log names the statements and
+  never the values bound to them (what the admin typed). *(convention: `deploy/postgres-init/01-roles.sh`, docs/configuration/production.md)*
 - Run `php artisan platform:verify` and `php artisan platform:setup` in the deploy script. *(tested by `PlatformHostTest`)*
 
 ### Search (`packages/Search`)
@@ -864,10 +958,52 @@ What the package does: [docs/packages/search.md](docs/packages/search.md) and
   palette searches by and what ranks it among what the person may see, never more (Clients': `id`, `tenant_id`, `name`,
   `email`, `phone`, `branch`), and nothing of a record in the trash or erased. With the `database` driver, Scout watches
   nothing. *(tested by `ClientIndexTest`, `ClientIndexBranchDeletedTest`)*
+- The super admin's palette is `POST /platform/search` under the `platform` group (never `workspace`), behind
+  `throttle:platform-search`. Its sources are `PlatformSearchSourceProvider`s tagged `search.platform_sources`
+  (`PlatformSearchSource`: key, label, icon, finder, `reads`, order and an optional platform `flag`; no permission: a super
+  admin sees every source), finders implement `FindsPlatformRecords` and answer hits whose route starts with `/platform/`.
+  A finder reads across workspaces only through `ReadsAcrossWorkspaces` and never puts the term in the read's scope; it
+  matches with `FuzzyMatch` like the rest. *(tested by `PlatformSearchApiTest`, `PlatformSearchTest`)*
 - A package that keeps an index implements `ReindexesSearch`, tagged `search.indexes`; its `reindex()` sends synchronously,
   never through the queue. `search:reindex` asks each index one workspace at a time inside `RunAsTenant`, reports a failure
   as `ReindexFailed` (no message, nothing chained) and never removes a document: to rebuild, flush the index first. Never
   `scout:import` nor `scout:queue-import`: they run with no workspace. *(tested by `ReindexCommandTest`, `ClientIndexTest`)*
+
+### Data (`packages/Data`)
+
+What the package does: [docs/packages/data.md](docs/packages/data.md); how a module declares a dataset and an action:
+[docs/guides/add-a-dataset.md](docs/guides/add-a-dataset.md) and [docs/guides/add-an-action.md](docs/guides/add-an-action.md). The rules:
+
+- A package declares what a person may read of it with a `DatasetProvider` tagged `data.datasets`, and what a person may do through it with an
+  `ActionProvider` tagged `data.actions`. What a package builds with (`Dataset`, `Column`, `Relation`, `Field`, `Operation`, the
+  results and the errors a declaration throws) lives in `Data\Contracts\`, the only part of Data another package may use. Its registries,
+  reader and runner are classes of Data that no other package names. *(tested by `PackageBoundariesTest`)*
+- A dataset names the permission that reads it, always, and the columns that exist for a reader, and nothing else: a column that is not
+  declared cannot be read. Contact data and notes are `sensitive`, behind the permission that exports or manages them. The label,
+  the description and every column's label have a line in each language. `DatasetRegistry` refuses a malformed one (`DatasetInvalid`: the key, a
+  permission that no package declares, a label without a line, a metric over a column that is not a number, a relation to a dataset
+  nobody declared). *(tested by `DatasetRegistryTest`)*
+- `DatasetReader` is the only way a dataset is read, and it keeps its guards: the dataset's permission, platform flag and plan
+  feature checked at each read; the request's workspace and signed-in person the viewer's; `tenant_id = <workspace>` on the dataset's base table ANDed
+  to everything the source and the scope did (never only RLS, never only the source); only declared columns, a sensitive one for
+  whoever holds its permission; 200 rows at most; a read-only transaction rolled back, with a three second `statement_timeout`.
+  Never weaken one to make a dataset work: change the dataset. *(tested by `DatasetReaderTest`)*
+- Run `php artisan data:verify` in the deploy script and in CI after the migrations (it needs a migrated database, so it is not part of
+  `composer check`). It builds every dataset's query for no rows and checks that its table has forced row-level security.
+  *(tested by `VerifyDataCommandTest`, `DeployScriptTest`)*
+- Every dataset of the kernel has a test that reads it through `ReadsDatasets` as a person of a workspace with a second workspace beside
+  it, and proves that no row of the other comes out, that branches are respected, that a sensitive column leaves only with its
+  permission, that a person without the view permission is refused, and, where it applies, that the flag off refuses and that the
+  rows that must never be read (the trash, erased or merged clients) are not. A dataset of a module of your own has the same test.
+  *(tested by `ProjectsDatasetTest`, `ClientsDatasetTest`, `BranchesDatasetTest`, `TeamDatasetTest`)*
+- An action that deletes is never declared. `OperationRegistry` refuses a key that ends in `.delete`, `.destroy`, `.erase`, `.remove` or
+  `.purge` (`OperationInvalid`), and it checks the key, the permission and the labels as a dataset's are (a handler that implements `PerformsAction`, one name for
+  each field). A `Field` is the one place that says an input: its rules and its JSON Schema come from it, and a schema is never derived
+  from a form request. *(tested by `OperationRegistryTest`, `FieldTest`)*
+- `OperationRunner` is the only way an action is run, and it keeps its guards: the permission, platform flag and plan feature checked
+  before the input is looked at; the request's workspace and signed-in person the viewer's (`WrongWorkspace`, `WrongViewer`); the input read as the HTTP stack reads it (trimmed, `""` as `null`); validation with the fields' rules and a refusal of every key that is not a
+  field (never a rule written for a key someone sent); the handler called with what the fields kept. A handler calls the module's own Action, never
+  a model, so the API's rules and its audit trail apply. *(tested by `OperationRunnerTest`, `ProjectsOperationsTest`)*
 
 ### Dashboard (`packages/Dashboard`)
 
@@ -890,6 +1026,137 @@ What the package does: [docs/packages/dashboard.md](docs/packages/dashboard.md);
   failing closed is a convention)*
 - The route takes `workspace`, `KeepOutOfCachesAndReferrers` ahead of `throttle:dashboard` (a named limiter by workspace and
   member) and no permission; it changes nothing, so an impersonation may load it. *(tested by `DashboardRoutesTest`)*
+
+### PublicPage (`packages/PublicPage`)
+
+What the package does: [docs/packages/public-page.md](docs/packages/public-page.md). The rules:
+
+- A block is a class that implements `PublicPage\Contracts\PublicPageBlock`, tagged `public-page.blocks`: a type in snake case
+  declared once, fields (`Contracts\Field`) with a name and a label, rules that start from `BlockRules::of($this->fields(),
+  $locales)`, a `resolve()` that reads other packages only through their contracts and images only through `$context->media`,
+  and a `sample()` that passes its own rules. Every name, description, label and help exists in `en` and `es`.
+  `BlockRegistry` refuses a malformed one (`InvalidRegistry`) and lists the kit's six first, then the rest by type. *(tested by
+  `BlockRegistryTest`, `BlockContractTest`)*
+- A block of a package of yours starts with `php artisan kit:make-block <Name> --package=<Package>`, never by hand: its class in
+  `src/PublicPage/`, its words in `lang/<locale>/block_<type>.php` (English and Spanish, and English again for any other language of `support.locales`), its Pest test, the tag in the package's provider, and its
+  component and Vitest test in the public-page layer (`components/blocks/PublicBlock<Name>.vue`, `tests/blocks/`), where the
+  frontend's registry finds it by file name. It starts off in the admin's catalog. `BlockContractTest` says, block by block and
+  in a sentence each, which piece is missing, and crosses the registered types with the components both ways. Guide:
+  [docs/guides/add-a-public-page-block.md](docs/guides/add-a-public-page-block.md). *(tested by `MakeBlockCommandTest`,
+  `MakeBlockOutputTest`, `BlockContractTest`, `BlockPiecesTest`)*
+- The kit's tests list the kit's blocks and their own only (`withBlocks()` builds the registry from `Blocks\KitBlocks` and the
+  test's fakes); a test of the tag itself uses `taggedBlocks()` with a type that starts with `test_`. *(convention)*
+- `GET /public-page/blocks` and `GET /platform/public-page` call each block's `resolve()` on its `sample()` with
+  `BlockContext::forSample()`: an empty `tenantId` and `$context->sample` true. A block that reads live data in `resolve()` checks
+  `$context->sample` and answers fictional data, and never queries with the empty workspace. *(tested by `BlockContractTest`)*
+- Only `Pages\PageRows` writes `public_pages`, and only what `Document\ValidateDocument` answered: at most `public_page.max_blocks`
+  blocks and `public_page.max_document_bytes`, each block's data against its rules, every text through Support's
+  `MultilineText`, keys nobody declared dropped. *(tested by `ValidateDocumentTest`)*
+- A text the owner writes is by language (`support.locales` as keys) and goes to the frontend as it is: the component picks the
+  language. Formatted text is limited Markdown checked by `SafeMarkdown`; a link is `https:`, `mailto:` or `tel:`
+  (`SafeLink`); an image is the id of one of the workspace's own `public_page_media`, never an address. *(tested by
+  `BlockRulesTest`, `ValidateDocumentTest`)*
+- Only `Media\MediaFiles` writes `public_page_media` and its files, on `AssetDisk` under `AssetPath::forTenant($id,
+  'public-page', ...)`. *(tested by `PageMediaTest`)*
+- `GET /public-page` is public (`tenant`, `throttle:public-page` by workspace and address) and answers only what was published,
+  never the draft, with `Cache-Control: public, max-age=60` and `Vary: X-Tenant-Slug, Accept-Language`: a public answer of a
+  workspace always varies by the header that names it. *(tested by `PublicPageApiTest`)*
+- What the platform lets a workspace show goes through `Catalog\Availability`, bound to `Catalog\PlatformCatalog`: a block is
+  allowed while the admin's catalog has it on (no row: on for the kit's, `Blocks\KitBlocks`, told by class; off for any other)
+  and the workspace's plan includes the feature it needs (`ChecksFeatures`), and the page while the platform has not turned this
+  workspace's off (`Holds\PageHolds`, asked as that workspace) and the plan includes the page's feature. A block it does not allow
+  is not drawn and stays in the document. *(tested by `PlatformCatalogTest`, `CatalogCacheTest`, `ShowPublicPageTest`,
+  `PageHoldsTest`, `HoldContractTest`)*
+- Only `Holds\HoldRows` writes `public_page_holds` (the platform's switch for one workspace's page): one transaction under the
+  `public-page:hold:<canonical id>` lock, the workspace read inside it and the work done as it (`RunAsTenant`), each change to the
+  workspace's trail and to the platform's through `PlatformAuditLog::recordAbout()`, nothing written for what already is, and
+  `PageHolds` told to forget. The admin reads it only through `Holds\WorkspaceHolds` (`ReadsAcrossWorkspaces`, purpose
+  `public_page.workspace_hold`); its routes (`GET` and `PATCH /platform/workspaces/{workspace}/public-page`) take Platform's
+  `platform` group, named, and the write `throttle:platform`. *(tested by `HoldRowsTest`, `WorkspaceHoldReadTest`,
+  `WorkspaceHoldApiTest`, Platform's `HostSeparationTest`)*
+- Saving the draft refuses a block the platform does not allow only when it is new: `Document\AddedBlocks`, called by
+  `PageRows::saveDraft` under the row's lock after the version check, keeps a block whose id and type the saved draft held.
+  *(tested by `DraftCatalogTest`)*
+- Only `Catalog\CatalogRows` writes `public_page_blocks` and `public_page_options`: under the `public-page:catalog` lock, each
+  block and the options against their version (409 `public_page.catalog_changed`), each change to the platform's trail through
+  `Platform\Contracts\PlatformAuditLog`, and `CatalogState`'s generation moved on after the commit (a cache that fails then is
+  logged, never a 500). Pages read the catalog only through `CatalogState`; the admin's screen reads the tables
+  (`CatalogTable`). *(tested by `SavePlatformCatalogTest`, `CatalogStateTest`)*
+- The admin's catalog (`GET` and `PATCH /platform/public-page`) takes Platform's `platform` group, named, and the write
+  `throttle:platform`; its menu entry is in `platform_admin` with no permission. *(tested by `PlatformCatalogApiTest`,
+  `SavePlatformCatalogTest`, Platform's `HostSeparationTest`)*
+- Saving, publishing and discarding hold the row in `PageRows` and check the `version` the editor sent first: a stale one is
+  `Errors\DraftConflict` (409, `meta.version`) and nothing is written; every write of the document bumps the version, turning
+  the page off does not. A draft is checked as `DocumentMode::Draft` (it may lack what publishing asks, `DraftRules`; never what
+  keeps it safe) and publishing checks every block that is not hidden, whole. *(tested by `PageRowsTest`, `DraftRulesTest`,
+  `ValidateDocumentTest`, `DraftWritesTest`)*
+- The editor's routes take `workspace`, then `permission:public_page.view` (reading) or `permission:public_page.manage` with
+  `throttle:public-page-write` or `throttle:public-page-media` (writing), named limiters and never `throttle:n,m`. Publishing,
+  discarding and turning the page off are audited (`AuditEntries`) with the version and counts, never the document. *(tested by
+  `EditorAccessTest`, `DraftWritesTest`)*
+- An uploaded image becomes one of the page's only through `Media\StoreUploadedMedia`: its bytes checked by `RasterImage` (JPEG,
+  PNG or WebP by content, `public_page.media.max_bytes`), written again and shrunk to `public_page.media.max_side`, then stored by
+  `MediaFiles`. A presigned upload is confirmed only from this workspace's uploads area (`AssetPath::isUploadOf`), its size asked
+  of the bucket first and its stored type checked against its bytes; the upload is deleted whatever the answer. A draft never
+  names an image of another workspace. *(tested by `MediaUploadTest`, `PresignedMediaTest`, `EditorAccessTest`)*
+- `public-page:prune-media` runs every night as each workspace, and deletes only an image older than
+  `public_page.media.orphan_hours` whose id appears nowhere in the draft or the published page (any uuid counts, whatever the
+  block). *(tested by `PruneMediaTest`)*
+- The editor's answers keep the shape of `docs/packages/public-page.md`, "The API": the frontend's fixtures and the e2e stub are
+  built from it. *(tested by `EditorContractTest`)*
+- The branch: nothing of the public page follows a branch (it is the workspace's, and public). The branches block lists active
+  branches through `Branches\Contracts\ListsPublicBranches`, which never carries a branch's email or notes. *(tested by
+  `PublicBranchesTest`, `BranchesBlockTest`)*
+
+### Modules
+
+The reference module is `packages/Projects` ([docs/packages/projects.md](docs/packages/projects.md)): the example a module of your
+own copies, so what it does is the standard, and a change to a standard changes it too. The rules of a module:
+
+- A module is made with `php artisan kit:make-module <Plural> --es="singular,plural,gender"` (`Support\Console\MakeModuleCommand`,
+  with `--singular=`, `--en=` and `--no-install`), never by hand: it writes the package, the layer, the e2e spec and stub, a
+  docs page and its tests from the stubs in `backend/packages/Support/stubs/module`, adds the package to `backend/composer.json`
+  (`require` and `versions`), runs `composer update mood-kit/<name>`, and adds the two folders to the `ignore` list of
+  `.jscpd.json` (a copy of the template repeats it on purpose; this is the one sanctioned exclusion, temporary: remove the two lines
+  once the module is its own, and never add another by hand). Like `kit:make-block` it runs only where you develop, validates
+  everything before it writes anything (name, words, a package, layer, table, route, screen, permission, flag, menu entry,
+  limiter or words namespace that exists, a class that would clash with an import, a file that exists), never overwrites, and
+  takes back a failed write. What it writes includes the module's dataset (`<Name>Data`, tagged `data.datasets` and
+  `data.actions`), its create and update operations and the isolation test (`<Name>IsolationTest`), with their tests. The module starts off (`<slug>.enabled` is off), and the command edits no file of the kernel.
+  *(tested by `MakeModuleCommandTest`, `ModuleNameTest`, `ModuleWordsTest`, `ModuleFilesEditTest`; the criterion, a generated
+  module passing `composer check`, the frontend's checks and its own e2e spec without touching the kernel, is the CI job
+  "Generated module", which makes two modules, runs the kit's whole Pest suite and both modules' checks, and fails if any
+  tracked file but the four it is meant to change was edited)*
+- **Projects and the stubs never drift.** The stubs are the files of `packages/Projects`, `layers/projects` and its two e2e files
+  with their names and words taken out as `%%tokens%%` (`Support\Modules\ModuleTokens` lists them: spellings of the name, the
+  English words, and the Spanish words and the articles and endings of their gender). A change to any of those files is made in
+  its stub in the same commit, and `ModuleStubsDriftTest` fails until it is, by rendering the stubs as `Projects` and comparing
+  them with the real files in both directions. Write the text of Projects so that it survives a rename: the words of a screen
+  or a message come from the tokens' words, a Spanish noun's article and ending from the gender tokens (`%%es_el%%`,
+  `%%es_o%%`), never "the example" or a sentence that is true only of projects. The comments stay in the stubs, so a module
+  explains itself as Projects does. *(tested by `ModuleStubsDriftTest`, which skips itself without Projects)*
+- A module's e2e stub is a file `frontend/tests/e2e/support/modules/stub-<name>.ts` that default-exports a `ModuleStub`
+  (`support/modules.ts`: the tokens that sign in, what `GET /me` adds, its sidebar entry, its routes). The stub API and the stub
+  menu find it by its file name, so a module never edits `stub-api.ts` or `stub-menu.ts`. *(convention)*
+- A module gates itself with a platform flag declared by a `PlatformFlagProvider` tagged `platform.flags` (off by default):
+  `platform-flag:<slug>` after `workspace` on every route, and the finder and the widget ask `ChecksPlatformFlags` and answer
+  nothing while it is off. The menu entry names the flag in its `featureFlag`, which the dashboard layer reads from `/me`'s
+  `platformFlags`; a layer's `kit:topbar:actions` handler checks the same flag. *(tested by `ProjectsFlagTest`,
+  `ProjectsRoutesTest`, `useDashboardMenu.test.ts`, `projectsPlugins.test.ts`)*
+- A list, a search finder and a widget start from one query (`Records\ProjectSearch`), which holds the branch rule
+  (`Scope\ProjectVisibility`: the branch of the top bar and the records of none; one record opens by `BranchAccess`). The branch
+  of a record comes in the body and is checked, never taken from the top bar. *(tested by `ProjectsBranchScopeTest`,
+  `ProjectsSearchTest`, `ProjectsWidgetTest`)*
+- A module's status is a string column with a `CHECK` and a backed enum in `Enums\`; a field a client edits is validated by one
+  `Validation\<Name>Rules` for making and editing (`sometimes` when editing), and an action takes a DTO, never the request's
+  array. *(convention; tested by the endpoint tests)*
+- Every write route of a module says whether a super admin acting as the person may use it, in its own `routes/api.php`:
+  `not-impersonating` (it refuses) or `impersonation-allowed` (it does nothing; support may need it, and the trail names the
+  admin). The kernel's tests that name things by package (the impersonation lists, Search's trigram indexes, `/me`'s platform
+  flags) accept what a module adds, so a module never edits the kernel's tests. *(tested by `ImpersonationRoutesTest`,
+  `ProjectsRoutesTest`)*
+- A page of a module that ships off by default names its flag in `definePageMeta({ platformFlag })` (core's guard sends the
+  person to the dashboard while it is off), and the plugin's hooks read the same constant. *(tested by `platformFlagGuard.test.ts`)*
 
 ### PHP rules
 
@@ -966,8 +1233,14 @@ What the package does: [docs/packages/dashboard.md](docs/packages/dashboard.md);
 - Responses: `ApiResponse::data()`, `ApiResponse::paginated()` for lists (cursor, meta
   `pagination.{perPage,nextCursor,prevCursor,hasMore}`), `ApiResponse::error()` only inside the renderer.
   *(convention)*
-- Locales: the API answers in the best match of `Accept-Language` among `support.locales`; add a locale
-  there and in every package's `lang/`. `SetLocaleFromRequest` runs ahead of every other sorted middleware, and a
+- Locales: the API answers in the best match of `Accept-Language` among `support.locales`; add one with
+  `php artisan kit:add-locale <code> --name=<Name>`, never by hand (it declares the code, copies every package's `lang/en`, and
+  does the frontend and the config of plans too). Every key English has exists in every locale, and nothing else does:
+  `php artisan i18n:check` (part of `composer check`) fails otherwise, and so on a blank message, a placeholder (`:name`,
+  `{{ name }}`) that differs from English's, fewer plural forms than English's several, a vue-i18n message that cannot compile
+  (a bare `@` or brace), or a language no one declared. A test that lists locales reads `config('support.locales')`,
+  never `['en', 'es']`. A text that varies by language and is not a lang file (the plans' names) has every locale
+  of `support.locales`. *(tested by `CheckTranslationsCommandTest`, `AddLocaleCommandTest`)* `SetLocaleFromRequest` runs ahead of every other sorted middleware, and a
   signed-in member's own locale replaces it for the rest of the request, errors included: the renderer only
   resolves the locale again for a request that matched no route. *(tested by `LocaleTest`)*
 - Coverage: every package needs 85% on its own, not only the total. *(`composer test:coverage`)*
@@ -995,13 +1268,19 @@ What the package does: [docs/packages/dashboard.md](docs/packages/dashboard.md);
   as it finishes, so call it again before the test reads tenant rows after a request. The trait lives in
   `packages/Tenancy/tests/Support` and is autoloaded in dev (`autoload-dev` in `backend/composer.json`):
   Larastan rejects a trait in `src/` that no analysed class uses.
+- A test that a record never crosses a workspace or a person uses `MoodKit\Tenancy\Testing\AssertsIsolation` (same folder as
+  `ActsAsTenant`): `assertTenantIsolated($seed, $listRoute, $showRoute, $searchSource)` makes two workspaces, seeds the record in
+  each and fails when B's record shows in A1's list, answers on its id or shows in the global search;
+  `assertPersonIsolated($seedFor, $listRoute, $showRoute)` does the same between two people of one workspace. A new module that
+  keeps records, or a resource that is a person's own, has one *(convention; the helper's own test proves it fails on a route
+  that leaks)*. See [Testing](docs/guides/testing.md).
 - `tests/TestCase` closes the database connection last in `tearDown`, after the cleanups that touch it (a cleanup
   that runs after RefreshDatabase's disconnect opens a new connection, which stays open until PHP collects the
   application: one per test, and a parallel run runs Postgres out of connection slots). *(tested by
   `ConnectionLeakTest`)*
 - Coverage is measured with pcov on `packages/*/src` only, minimum 85%.
 
-Gate: `cd backend && composer check` runs Pint, Deptrac, Larastan, Rector (dry run), the architecture tests on their
+Gate: `cd backend && composer check` runs Pint, Deptrac, `i18n:check`, Larastan, Rector (dry run), the architecture tests on their
 own and the rest of Pest in parallel with coverage (`tests/Architecture` keeps its parsed classes in memory, so it stays
 out of the coverage workers). It needs the Postgres and MinIO containers (`docker compose up -d --wait`): Postgres's first
 boot on an empty volume creates the `DB_USERNAME` and `DB_MIGRATION_USERNAME` roles and `mood_kit_test` through
@@ -1033,8 +1312,74 @@ storage tests use the bucket `<ASSETS_BUCKET>-test`, which they create. It also 
   the API uses, refuses), `isPlainText` (the backend's `PlainName`) and `joinLines` (line breaks made spaces, for a `Textarea` the API takes on one line),
   `CaptchaWidget` with `useCaptcha` (the `turnstileSiteKey` setting), `useAuthPage` and the address helpers
   (`workspaceUrl`, `rootDomainUrl`, and `useRootDomain()`, the only reader of the root domain setting). Their messages are `core.shell.*`, `core.captcha.*` and `core.password.*`. The language switch (`useChangeLocale`) sets the language itself and asks auth to save the choice
-  through `kit:auth:save-locale`. A new public
-  screen in a layer of its own uses `layout: 'auth'` and `<AuthShell>`.
+  through `kit:auth:save-locale`.
+- A public screen that asks something (a form) uses `layout: 'auth'` and `<AuthShell>`, which `showcase` (`"workspace"`,
+  `"signup"`, `"platform"`, `"portal"`) and `side` (`"end"`, the default; `"start"` for signup, so the two mirror each
+  other) split in two from `lg` up: the form on the page itself, with no card, and `AuthShowcase` on the other side, a
+  sample of the product drawn with mood-ui's own pieces in the primary color (`AuthShowcase<Variant>.vue`, its texts under
+  `core.showcase.<variant>`, inert and hidden from assistive technology). `AuthHeader` pins `BrandMark` (the workspace's logo on its host, else the platform's, else a dashed "Your logo here") to
+  the top left corner and `LocaleSwitcher` to the top right one, and `AuthIntro` draws the `h1` and the subtitle. The
+  sign-in, password recovery, find-a-workspace, signup and join screens are the model. A public screen that only says
+  something, with one way on at most (a link that no longer works, the email on its way, a workspace that is not there,
+  the error page), is core's `MessageShell` instead: the same header, then centered on the page with no card an icon in a
+  soft circle of the primary color (`spin` while something is being worked on), an optional status code, the `h1`, the
+  message, what the screen adds (its default slot) and one `KitButton` or `TextLink` (its `action` slot), and the
+  copyright. Its body alone is `MessageBlock`, which the error page puts in the `site` layout on the root domain (on any
+  other host it is a `MessageShell`, never the site's menu). The signup's status screens, `/handoff`, `/unavailable` and
+  the spent links of `/signup/confirm`, `/join` and `/notifications/preferences` are the model. A simple page outside the
+  dashboard, for someone who is no member (the client portal's account, the notifications' preference center), is core's
+  `PublicPageShell` in the `auth` layout: the same header (its `brand` and `actions` slots replace the brand and the
+  language), then a centered column with the page anatomy (`PageHeader`, then outlined `SurfaceCard`s) and the copyright.
+  *(convention)*
+- The root domain's public site uses the `site` layout (core): `SiteHeader`, a floating bar fixed near the top with
+  `BrandMark`, the links of `useAppConfig().site.nav`, the language, **Sign in** and the main call of `useJoinCall()` (the
+  signup, the waitlist or none, by the platform's access mode), and `SiteFooter`, with the columns and legal links of
+  `useAppConfig().site.footer`. Their types are in `types/site.ts`; core's `app.config.ts` leaves them empty. The
+  `marketing` layer is the landing on `/` (`MarketingLanding`, drawn by `frontend/app/pages/index.vue` on the root
+  domain): its sections, their order, the site's links, the customer logos, the FAQ's questions and the contact email are
+  all in its one `app/app.config.ts`, its words in its locale files, and its prices only from `GET /plans` (the catalog the
+  admin edits), never from code (`docs/guides/edit-the-landing.md`). The legal pages use the `site` layout too. A page of
+  the site leaves room at its top for the fixed header. *(convention)*
+- The root of a workspace's host (`frontend/app/pages/index.vue`, in the `auth` layout) draws what a layer gives core's
+  `kit:workspace:home` (`resolveWorkspaceHome()`), else core's `WorkspaceGateway`: the way in, with `WorkspaceHomeBrand` (the
+  logo, the name as the page's only `h1`, the tagline), `WorkspaceHomeActions` ("Client portal" while `GET /tenant` says the
+  portal is open, then "Sign in" or "Go to the dashboard") and `WorkspaceHomeFooter`. The public-page layer gives its
+  `PublicPageHome`. *(convention; tested in core: `workspaceGateway.test.ts`, `workspaceHome.test.ts`)*
+- A block of the public page is drawn by `layers/public-page/app/components/blocks/PublicBlock<Type>.vue`, found by its file's
+  name; it gets `data` and `locale` and nothing else, lays out only its own content (the section, its width and rhythm are
+  `PublicPageBlocks`'; a block's optional `title` is an `h2` through `PublicPageHeading`; text-like blocks share `max-w-3xl`; no brand
+  icons, a neutral Heroicons glyph per network), reads texts through `textIn()`, draws formatted text only through `PublicPageMarkdown` (never `v-html`)
+  and links only through `safeHref()` with `EXTERNAL_LINK` for an external one. Anything that depends on the visitor's clock
+  ("Open now") is worked out after the page mounts, never on the server. *(tested by `blockContract.test.ts`,
+  `markdownRender.test.ts`, `safeLink.test.ts`)*
+- The public page's editor (`layers/public-page`, `/dashboard/public-page`) builds a block's form only from its fields
+  (`GET /public-page/blocks`): every field type of the backend has its input in `utils/field-form.ts`, and a block of a module
+  needs no form of its own. The draft saves itself through `useDraftAutosave` (a second after the last change, one save at a
+  time, stopping at a 409), never through a Save button. *(tested by `fieldForm.test.ts`, `draftAutosave.test.ts`)*
+- The editor's preview is `/public-page/preview`, the only page a frame may hold (its route rule sends `X-Frame-Options:
+  SAMEORIGIN`, and core's policy then says `frame-ancestors 'self'`). The editor and the preview take a message only from this
+  same origin and from the one window expected (`fromExpected`), read it without trusting its shape and draw it with Vue's
+  interpolation only. *(tested by `previewMessage.test.ts`, `previewReceiver.test.ts`, `previewChannel.test.ts`,
+  `tests/e2e/security.spec.ts`)*
+- A block's thumbnail is `PublicPageBlockThumbnail` (layer public-page): the block's own component drawn through
+  `PublicPageBlocks` with the `sample` the API resolved, in a box 1024 px wide shrunk with a CSS transform, inert and
+  `aria-hidden`; never an iframe. The admin's catalog (`/platform/public-page`, a page of the public-page layer with the
+  platform layout) and the editor's "Add a block" draw it. *(tested by `blockThumbnail.test.ts`, `addBlockDialog.test.ts`)*
+- The admin's catalog keeps what the admin changes as drafts for `PageActionBar` and sends only what changed, each with the
+  version it was read at (`utils/catalog-drafts.ts`); a 409 reads it again and drops the drafts. *(tested by
+  `catalogDrafts.test.ts`, `usePublicPageCatalog.test.ts`)*
+- A module adds to a workspace's page in the admin's panel through core's `kit:platform:workspace-sections`: a section of the
+  Summary tab that gets `workspaceId` and `workspaceName`, loads its data through the module's own routes and emits `changed`
+  after a change; never by editing the platform layer. A handler that throws is left out and a section that fails to draw shows
+  nothing, so the others stay. The activity names a module's action with its own layer's words, `<package>.activity.<what>`.
+  *(tested by `platformWorkspaceSections.test.ts`, `workspacePage.test.ts`, `platformUtils.test.ts`)*
+- A layer whose folder has a dash keeps its messages under the folder's name with underscores (`public-page` becomes
+  `public_page`). *(tested by `locales.test.ts`)*
+- Every map is mounted through core's `useMapMount()` and loads MapLibre through `loadMapLibre()`: the picker's
+  (`LocationMap`, one pin you move) and the public page's (`createPointsMap`, a pin per point that only shows). *(convention)*
+- The public chrome (the `auth` and `site` layouts, the shells, the showcase, the site's header and footer) never uses a
+  shadow: no `shadow-*`, no `elevated` card, no mood-ui `Drawer` for a menu (it brings its own). A surface is set apart by
+  a hairline border (`border-ink-100`) or mood-ui's `soft` card. *(convention)*
 - The signup flow keeps its secrets out of addresses *(tested: `signupClaim.test.ts`, `signupSent.test.ts`,
   `verificationFragment.test.ts`)*. The form leaves the email and the signup's token for `/signup/verify-email` in the tab's
   `sessionStorage`, forgotten when the signup ends or the flow reaches `/signup/processing`; the status and the resend send the
@@ -1055,7 +1400,8 @@ storage tests use the bucket `<ASSETS_BUCKET>-test`, which they create. It also 
   The home page stays on the server and shows the session once it has mounted. *(tested: `ssrRules.test.ts`,
   `tests/e2e/spa.spec.ts`)*
 - The frontend's server sends the security headers: nosniff, `X-Frame-Options: DENY` and the referrer policy on every
-  response (core's route rule, HSTS from a production build), and on every rendered page a Content Security Policy that
+  response (core's route rule, HSTS from a production build; a route rule may set `SAMEORIGIN` for a page that its own origin
+  frames, and the policy then says `frame-ancestors 'self'` through `framedBySelf`; a workspace's pages carry `frame-src 'self'` to hold it), and on every rendered page a Content Security Policy that
   core's `server/plugins/security-headers.ts` builds from the runtime config and the hashes of the page's inline scripts
   (`contentSecurityPolicy()` in `layers/core/app/utils/security-headers.ts`). Never add `'unsafe-inline'` or
   `'unsafe-eval'` to `script-src` or render HTML from data (`v-html`): the session token is in `localStorage`. A
@@ -1064,7 +1410,7 @@ storage tests use the bucket `<ASSETS_BUCKET>-test`, which they create. It also 
   build served by the frontend, so the policy has no `blob:` script or worker. *(tested: `securityHeaders.test.ts`,
   `tests/e2e/security.spec.ts`)*
 - The tenancy layer answers `/robots.txt` and `/sitemap.xml` from `server/routes`, before the Vue app: the root
-  domain lets crawlers in and lists its home page, a workspace host is `Disallow: /` with no sitemap (404).
+  domain lets crawlers in and lists its home page, a workspace host lets crawlers read its root alone (`Allow: /$`, `Allow: /_nuxt/`, `Disallow: /`: its public page) with no sitemap (404), and the admin's host is `Disallow: /`.
   Never add a `public/robots.txt` or `public/sitemap.xml`: Nitro serves a file ahead of any route. The tenant
   middleware skips any path that ends in a known static extension (`ico`, `png`, `jpg`, `jpeg`, `svg`, `webp`,
   `gif`, `css`, `js`, `map`, `txt`, `xml`, `json`, `woff`, `woff2`, `ttf`, `webmanifest`, listed in
@@ -1114,9 +1460,12 @@ storage tests use the bucket `<ASSETS_BUCKET>-test`, which they create. It also 
   any layer and language; a message with plural forms (`one | many`) is checked form by form. A button at the right edge (a page's primary action, the action bar, the top bar) takes
   `tooltipPlacement="top-end"` (`bottom-end` in the top bar) so the tooltip lines up with it; the rest keep `top`. A
   button with no words (an icon) also needs `ariaLabel`. `KitButton` is only for a real button, whose content is a
-  label or an icon. A text link (to another page, in a sentence or under a form) is a `KitButton` with `to` and
-  `variant="text"`, mood-ui's link-style PressButton, never a `NuxtLink` styled by hand: `to` makes it an `<a>` with the
-  page's address, opened by the router on a plain click (a path of another layer comes from `KIT_ROUTES`). A control
+  label or an icon. A link inside a sentence ("No account? Create one", "I accept the Terms") is core's `TextLink`
+  (`to`, `external` for a new tab): plain text in the primary color, underlined on hover, on the line of its text, since
+  mood-ui has no text link and a text-variant `PressButton` has a control's height and padding. A link that stands on its
+  own as an action (under a form, in an empty state) is a `KitButton` with `to` and `variant="text"` (or another variant),
+  never a `NuxtLink` styled by hand: `to` makes it an `<a>` with the page's address, opened by the router on a plain click
+  (a path of another layer comes from `KIT_ROUTES`). A control
   that is its own element (a color swatch, the avatar that opens the profile menu, a choice card, a note in a table) gets
   only core's `KitTooltip` around it (mood-ui's `MorphTooltip`, bound to that one element), never a `PressButton`, whose background and padding would show around it. The tooltip takes mood-ui's radius from the provider; never set one on it.
   A `KitButton` drives its tooltip itself (core's `useButtonTooltip`, through mood-ui's `trigger="manual"` and controlled
@@ -1132,8 +1481,8 @@ storage tests use the bucket `<ASSETS_BUCKET>-test`, which they create. It also 
   one without `tooltip`. Anything else interactive with no visible text gets a tooltip and an aria label too
   *(convention)*.
 - Every card is mood-ui's `SurfaceCard` with `:framed="false"`: a single border (its default, `framed`, draws a second
-  frame inside the border, which the kit does not use). It is `outline` unless it stands out (`elevated`: the auth card,
-  the plan in use), with its content in a `SurfaceCardBody`, which pads it at the card's size (`size="large"` for a
+  frame inside the border, which the kit does not use). It is `outline` unless it stands out (`elevated`: the plan in use;
+  never on the public screens), with its content in a `SurfaceCardBody`, which pads it at the card's size (`size="large"` for a
   roomier one, `padding="none"` for a card that lays out its own content, as `ChoiceCard`). mood-ui's plain `Card` is not
   used. *(ESLint `mood-kit/no-mood-ui-overrides` fails on a `SurfaceCard` without `:framed="false"`; the rest is convention)*
 - Every on/off control is mood-ui's `GlassSwitch` (settings, the notifications matrix and audiences, preferences, the
@@ -1377,7 +1726,8 @@ gateway's HTML page) gets one chosen by what went wrong: `core.errors.network`, 
   own), `useProfileSections.ts`
   (`kit:profile:sections`: a layer pushes `{ id, order, component }` for a section of My profile), `usePlanContext.ts`
   (`kit:plan:load-usage`: the plans layer loads what the workspace uses of each quota) and `useDashboardBanners.ts`
-  (`kit:dashboard:banners`: a layer pushes `{ id, order, component }` for a banner above every dashboard page),
+  (`kit:dashboard:banners`: a layer pushes `{ id, order, component }` for a banner above every dashboard page; the dashboard layer's
+  plugin pushes a public demo's `DemoBanner`, which draws only while core's `useDemo()` is set, as the platform layout does for the admin),
   `useClientTabs.ts` (`kit:clients:tabs`: a layer pushes `{ id, order, labelKey, component }` for a tab of a client's page),
   `usePortalSections.ts` (`kit:portal:sections`: a layer pushes `{ id, order, component }` for a section of the client portal,
   `id` being the section's key from `GET /portal/me`; the page draws only the listed ones, in the API's order, and the component
@@ -1442,9 +1792,12 @@ gateway's HTML page) gets one chosen by what went wrong: `core.errors.network`, 
   (`:label="'Email'"`), so check those yourself *(convention)*.
 - A message that counts something (`{count} members`, `{days} days`) has its plural forms (`one | many`) in every language
   where they differ, and the code passes the number that chooses one: `t(key, { count }, count)` *(convention)*.
-- To add a locale, add one entry to `i18n.locales` in `frontend/nuxt.config.ts` and create its
-  `frontend/i18n/locales/<code>.json`. A layer that ships messages (`core` does) needs the same in its
-  own `nuxt.config.ts` and `i18n/locales/`. Missing keys fall back to English at run time, so core's `locales.test.ts`
+- To add a locale run `php artisan kit:add-locale <code> --name=<Name>` (guide:
+  [docs/guides/add-a-locale.md](docs/guides/add-a-locale.md)): it adds the entry to `i18n.locales` in `frontend/nuxt.config.ts`
+  and in every layer's own `nuxt.config.ts`, copies each `en.json` to `<code>.json` and names the language in the profile menu
+  (`dashboard.user_menu.locale_<code>`). Every key `en.json` has exists in every locale file, with its placeholders
+  (`{name}`, `@:key`) and at least the forms of its plural (a bare `@` or brace is written `{'@'}`): `php artisan i18n:check` must pass (it reads the frontend from the backend's
+  `..`). Missing keys fall back to English at run time, so core's `locales.test.ts`
   checks the app and every layer alike: each locale file has the keys `en.json` has, none blank, a layer's under its
   own name, and every literal key its code asks for (`t("x.y")`, `keypath="x.y"`, its own and core's) exists. A key
   built at run time (`` t(`core.password.${rule}`) ``) is not seen: check it yourself *(convention)*.
@@ -1496,9 +1849,9 @@ gateway's HTML page) gets one chosen by what went wrong: `core.errors.network`, 
     always an `h2`, and `as` only sets the root `header` tag. Dashboard titles are `h2`s until it has one; then core's
     `PageHeader` passes `h1` and the page's only `h1` is back, with no change to the tests, which find the title by role
     and name.
-  - mood-ui has no text link: a link is its `PressButton` with `variant="text"` and `as="a"` (core's `KitButton` with `to`),
-    which has a control's height and padding and a background on hover, even in the middle of a sentence. Needs a
-    `Link` component.
+  - mood-ui has no text link: its `PressButton` with `variant="text"` (core's `KitButton` with `to`) has a control's height
+    and padding and a background on hover, which breaks the line of a sentence. A link inside a sentence is core's
+    `TextLink` (a `NuxtLink` in the primary color) until mood-ui has one. Needs a `Link` component.
   - `paletteFromHex` puts the chosen color at shade 700 of the palette it derives, while mood-ui paints the primary with
     shade 600 on a light page: a brand color shows lighter on buttons than its swatch. Teal `#14b8a6` gives 600 =
     `#18ddc7`, so a teal workspace's buttons are `#18ddc7`, not `#14b8a6`. It also makes some colors darker: violet
@@ -1613,6 +1966,17 @@ Always lint from `frontend/`, through `pnpm --filter ./frontend lint` or `lint:f
   fails on a leak, so a secret that slips past still blocks the merge. Install it locally to catch
   it before you push (`brew install gitleaks`, `apt install gitleaks`).
 - Do not skip hooks with `--no-verify` *(convention)*.
+
+## Releases
+
+Buyers receive a version through `scripts/publish-release.sh X.Y.Z`, which publishes the tag `vX.Y.Z` to the distribution
+repository, and read what changed in `CHANGELOG.md`. Every release adds its entry (`## [X.Y.Z] - date`, with `### Added`,
+`### Changed` and `### Fixed` as they apply) in the commit before the tag. Add `### Upgrading` whenever a buyer must run or set
+something: a migration, `php artisan rbac:sync`, `plans:sync` or `notifications:sync`, a new env variable, a new scheduled command
+or `pnpm install`. The publish script refuses a version whose entry is missing at the tag, and one whose
+`backend/packages/Support/src/License/KitLicense.php` has an empty `POLAR_ORGANIZATION_ID` constant at the tag (`kit:activate` needs
+the kit's public Polar organization id: set it before you tag). That constant is the one place the id lives: `backend/config/support.php`
+reads it, because an app config array replaces the package's whole `license` array and a default kept in the package config is never seen.
 
 ## Before you claim done
 

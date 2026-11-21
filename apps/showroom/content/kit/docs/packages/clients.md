@@ -757,6 +757,22 @@ workspace, name, email and phone in Meilisearch, and the finder runs the same qu
 proposes, in its order: the index suggests, Postgres decides. `search:reindex` sends them again. See
 [Search configuration](../configuration/search.md).
 
+## Dataset
+
+Clients declares the dataset `clients.clients` to [Data](data.md), through `ClientsData` (tagged `data.datasets`): the workspace's
+clients, for whoever has `clients.view`. It needs no flag and no feature of the plan.
+
+- **The rows:** live clients. The trash, the clients erased for privacy (`erased_at`) and the ones merged into another
+  (`merged_into_id`) are never in it, whoever asks.
+- **Columns:** `id`, `name`, `city`, `country`, `source`, `marketing_consent`, `created_at` and `home_branch_id`. The email, the
+  phone, the birthday, the street address and the notes (`email`, `phone`, `birthday`, `address_line_1`, `notes`) are sensitive:
+  they come out only for someone who holds `clients.export`. The rest of what is kept about a client (the other address lines,
+  the language, the custom fields, the portal's data) is not declared, so it cannot be read. The metric is `count`; the relation
+  `home_branch` points at `branches.branches`.
+- **Who sees which:** `Data\ClientsScope`, through `ClientVisibility::narrowForPerson()`: the clients of every branch the person
+  may see (`BranchAccess::visibleTo()`) and those of no branch, or all of them for whoever sees every branch. It never reads the
+  branch of the top bar, which `narrow()` does ([Following the branch](#following-the-branch)).
+
 ## On the dashboard
 
 Clients brings the widget `clients.overview` to the home ([Dashboard](dashboard.md)), through `ClientsDashboardProvider` (tagged
@@ -1392,6 +1408,9 @@ The portal is closed until all three say so:
 setting). Opening the portal on a plan without it does nothing until the plan includes it, and a plan that drops it closes
 the portal whatever the setting says.
 
+`GET /tenant` carries `portal: { open }` (`Portal\PortalTenantPayload`), the same answer as `GET /portal`, so the root of a
+workspace's address links to the portal only while it is open.
+
 `GET /portal` is public (`tenant` alone, the `portal-public` limiter, per address): what the sign-in page asks first. It
 tells anyone on the workspace's address whether the portal is open and the workspace's name, and nothing else:
 
@@ -1765,7 +1784,8 @@ The clients layer draws the portal on the workspace's address, under `/portal`. 
 nofollow` in the page's head).
 
 **Signing in** is `/portal` (`pages/portal/index.vue`), a public page with the `auth` layout and core's `AuthShell`, like the
-team's sign-in. It has no `auth` meta, so a member signed in on the same address still reaches it: the two sessions never
+team's sign-in: split from `lg` up, with core's `portal` showcase beside the form (a sample of what a client finds inside:
+their details, their next visit and the news and offers switch, in the workspace's color). It has no `auth` meta, so a member signed in on the same address still reaches it: the two sessions never
 meet. It asks `GET /portal` first (`usePortalSignIn`): the title names the workspace, the subtitle says what the portal is
 and that there is no password, only a code by email. Then, in two steps:
 
@@ -1781,17 +1801,15 @@ and that there is no password, only a code by email. Then, in two steps:
    `clients.portal_code_invalid`) shows under the digits; too many tries, in the banner. Going back to the email keeps
    what was typed and asks for a new captcha.
 
-A closed portal (`open: false`) shows that it is closed and asks nothing (`data-testid="portal-closed"`). On the root
+A closed portal (`open: false`) shows that it is closed and asks nothing, as the centered message alone (core's `MessageShell`, no showcase; `data-testid="portal-closed"`). On the root
 domain there is no workspace and so no portal: the page sends the visitor to find their workspace (`KIT_ROUTES.findWorkspace`)
 and asks the API nothing. A client who already has a session goes straight to `/portal/account`.
 
 **The account** is `/portal/account` (`pages/portal/account.vue`, `data-testid="portal-account"`), a signed-in client's own
-page. It is drawn in the layer's `portal` layout (`layouts/portal.vue`), which the page puts around itself
-(`<NuxtLayout name="portal">`, with `layout: false` in its meta) and hands the workspace's name and Sign out, so the
-layout never calls the API. The layout is mood-ui's `Topbar` over the page at a reading width (`max-w-3xl`, core's
-`PAGE_GUTTER`): at the left the workspace, core's `WorkspaceMark` with the name `GET /portal/me` gives (its `name` prop:
-never the name of a member's session on the same address); at the right the language and Sign out. It follows the
-person's light or dark (the sign-in's `auth` layout forces light), has no menu and links nowhere on the team's side. The
+page, in the `auth` layout (light, as the sign-in) inside core's `PublicPageShell`: the public screens' header, then the
+page (its title an `h1`, core's `PublicPageHeader`) in a centered column (`max-w-3xl`) and the copyright. At the top left the workspace, core's `WorkspaceMark` with the
+name `GET /portal/me` gives (its `name` prop: never the name of a member's session on the same address), with no link; at
+the top right the language (`PortalLanguage`) and Sign out. It has no menu and links nowhere on the team's side. The
 language switches the screen alone (`$i18n.setLocale`), not through core's `useChangeLocale`, which would save it on a
 member signed in on the same address. On a phone Sign out is its icon, with its words as its aria label.
 
@@ -2059,7 +2077,7 @@ All in `Events\`, sent after the commit, with ids in lower case.
 - **Pages**: the Clients page, `/dashboard/clients`, with its Clients and Tags tabs, the New client page,
   `/dashboard/clients/new`, a client's page, `/dashboard/clients/{id}`, and the import's two pages,
   `/dashboard/clients/import` and `/dashboard/clients/imports/{id}` (below), and the client portal's sign-in, `/portal`,
-  and account, `/portal/account`, with the layer's `portal` layout (see [The portal's screens](#the-portals-screens)).
+  and account, `/portal/account`, in core's `PublicPageShell` (see [The portal's screens](#the-portals-screens)).
 - **Settings**: the client portal's section of the settings page (`ClientPortalSettings`, from the plugin
   `clients-settings.ts`; see [For the team](#for-the-team)).
 

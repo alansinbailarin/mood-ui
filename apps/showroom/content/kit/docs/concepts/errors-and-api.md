@@ -12,12 +12,13 @@ asks for `/tenant`, never `/api/v1/tenant`.
 
 | Middleware | What it does | Used by |
 | ---------- | ------------ | ------- |
-| `tenant` | finds the workspace from `X-Tenant-Slug` or the host (see [Multi-tenancy](multi-tenancy.md)) | public routes of a workspace: login, password reset, handoff, `GET /tenant`, Team's invitation lookup and acceptance, the client portal's `GET /portal`, `POST /portal/code` and `POST /portal/session` |
+| `tenant` | finds the workspace from `X-Tenant-Slug` or the host (see [Multi-tenancy](multi-tenancy.md)) | public routes of a workspace: login, password reset, handoff, `GET /tenant`, Team's invitation lookup and acceptance, the client portal's `GET /portal`, `POST /portal/code` and `POST /portal/session`, PublicPage's `GET /public-page` (limiter `public-page`) |
 | `workspace` (group) | `tenant`, then `auth:sanctum`, then the check that the token belongs to this workspace, then the user's RLS setting and locale (and, in a session of an impersonation, the super admin in the request's context), then the refusal of a `DELETE` during an impersonation | every route of a signed-in member |
 | `portal` (group) | `tenant`, no cache nor referrer (`KeepOutOfCachesAndReferrers`), then Clients' `client-portal` guard asked by name (a session of `client_portal_sessions`, never a Sanctum token, and never the default guard), then whether the portal is open (403 `clients.portal_closed`), then the `portal` limiter per client | every route of a signed-in client of the portal, under `/api/v1/portal` (see [Clients](../packages/clients.md#the-session)) |
 | `permission:a,b` | requires every permission listed, in this workspace | after `workspace`, on guarded routes |
 | `onboarded` | refuses while the workspace's required onboarding steps are left (403 `onboarding.incomplete`) | after `workspace`, on a module's route that needs a set-up workspace |
 | `not-impersonating` | refuses a super admin acting as the person (403 `auth.impersonation_forbidden`), ahead of the route's limiters; every `DELETE` of the `workspace` group refuses one too | after `workspace`, on a route that would hand the account over or touches money |
+| `no-tenant` | refuses any workspace: 400 `platform.tenant_context_forbidden` for an `X-Tenant-Slug` header or a workspace's host (Platform's `RefuseTenantContext`) | public routes of the root domain: `GET /platform/public`, Plans' `GET /plans` |
 | `platform-flag:<slug>` | refuses while the platform flag is off for the request's workspace (503 `platform.flag_off`, with `meta.flag`) | a module's route that the platform's admin can switch off or roll out (see [Add a platform flag](../guides/add-a-platform-flag.md)) |
 | `platform` (group) | refuses any workspace (400 `platform.tenant_context_forbidden` for an `X-Tenant-Slug` header or a workspace's host), answers only on the API's own host and the admin host (404 elsewhere, `AdminHostOnly`), then `auth:platform`: the admin host's own guard, a session of `platform_sessions`, never a Sanctum token | every route of a signed-in super admin, under `/api/v1/platform` (see [Platform](../packages/platform.md#the-admin-host)) |
 
@@ -147,6 +148,7 @@ code, its message translated from its key, its status (422 unless it says otherw
 | `auth.current_password_invalid` (field `currentPassword`) | 422 | Auth |
 | `auth.session_not_found` | 404 | Auth |
 | `auth.session_is_current` | 422 | Auth |
+| `demo.locked` | 403 | Support (the `demo-locked` route alias and the guards of Auth, Team, Platform and Billing): a public demo (`DEMO_MODE`) does not let anyone do this. See [Run a public demo](../guides/run-a-public-demo.md) |
 | `auth.impersonation_forbidden` | 403 | Support (Auth's guards, Team's onboarding step): a super admin acting as the person may not do this (it would hand the account over, touch money or delete) |
 | `auth.not_impersonating` | 409 | Auth: Exit from a session that is the person's own |
 | `auth.email_unchanged`, `auth.email_taken` (field `email`) | 422 | Auth |
@@ -173,6 +175,15 @@ code, its message translated from its key, its status (422 unless it says otherw
 | `settings.logo_empty` (field `file` or `objectKey`) | 422 | Settings |
 | `settings.logo_key_invalid`, `settings.logo_not_uploaded` (field `objectKey`) | 422 | Settings |
 | `settings.logo_presign_disabled` | 404 | Settings |
+| `public_page.draft_conflict` (with `meta.version`, the current one) | 409 | PublicPage |
+| `public_page.block_not_available` (field `blocks.<i>.type`, with `meta.type`) | 422 | PublicPage |
+| `public_page.catalog_changed` (with `meta.currentVersions`) | 409 | PublicPage |
+| `public_page.block_unknown` (field `blocks.<i>.type`), `public_page.feature_unknown` (field `blocks.<i>.requiredFeature` or `options.requiredFeature`) | 422 | PublicPage |
+| `public_page.media_too_large` (field `file`, or `sizeBytes` and `objectKey` when uploading straight to the bucket) | 422 | PublicPage |
+| `public_page.media_invalid_type` (field `file` or `objectKey`) | 422 | PublicPage |
+| `public_page.media_key_invalid`, `public_page.media_not_uploaded` (field `objectKey`) | 422 | PublicPage |
+| `public_page.media_presign_disabled` | 404 | PublicPage |
+| `public_page.workspace_not_found` (the id an admin's request names is no workspace) | 404 | PublicPage |
 | `plans.feature_not_included` (with `meta.feature`, `meta.plan`, `meta.upgradeAvailable`) | 403 | Plans' `feature.enabled` middleware |
 | `plans.invalid_transition` (with `meta.from`, `meta.to`) | 409 | Plans |
 | `plans.quota_exceeded` (with `meta.resource`, `meta.limit`, `meta.used`, `meta.plan`, `meta.upgradeAvailable`, `meta.scheduledPlan`) | 422 | Plans: over the limit of the plan, or of the plan it moves down to at the end of the period (`meta.scheduledPlan`) |
@@ -375,5 +386,5 @@ show the failure:
 
 A 401 from any request also fires the `kit:api:unauthenticated` hook in the browser. The auth layer ends
 the session only when the code is `auth.unauthenticated` or `auth.session_deactivated` (the member's access was turned off:
-the person lands on `/access-off`, which says so, not on the sign-in page); a refused sign-in or a spent handoff code is a 401
+the person lands on the sign-in page with a notice that says so); a refused sign-in or a spent handoff code is a 401
 too, and leaves the session alone. A failed captcha is not a 401: it is 422 `auth.captcha_failed`. See [Frontend](../frontend.md#calling-the-api).

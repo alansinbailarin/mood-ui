@@ -488,6 +488,21 @@ asked, so nobody without `team.view` sees a member's name or email in the palett
 Each hit is the member's name (their email when they have none), their email under it, and their page,
 `/dashboard/team/{id}`.
 
+## Dataset
+
+Team declares the dataset `team.members` to [Data](data.md), through `TeamData` (tagged `data.datasets`): the workspace's people,
+for whoever has `team.view`. It needs no flag and no feature of the plan.
+
+- **The rows:** a membership (the `id` is the membership's, not the account's) joined to the account for the name. Someone invited
+  who has not joined, and an account that was deleted, are not in it. Team reads the `memberships` table through its own read-only
+  model, `Models\TeamMember`, since Auth's model is Auth's.
+- **Columns:** `id`, `name`, `role` (the name the workspace stored for the role the person holds), `status`, `last_login_at` and
+  `created_at`. The `email` is sensitive: it comes out only for someone who holds `team.manage`. Nothing else of the account is
+  declared. The metric is `count`.
+- **Who sees which:** `Data\TeamScope`, as the list: whoever manages the team sees the active members and the deactivated ones,
+  anyone else the active ones. There is no branch rule: the list's one follows the branch of the top bar, which is the request's
+  and not the person's.
+
 ## On the dashboard
 
 Team brings the widget `team.members` to the home ([Dashboard](dashboard.md)), through `TeamDashboardProvider` (tagged

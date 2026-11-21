@@ -37,7 +37,7 @@ In `open`, an invitation that works is still taken, so its conversion shows in t
 
 ## The waitlist
 
-`POST /api/v1/platform/waitlist` is public, for the root domain's `/waitlist` page: `{email, name, company?, note?,
+`POST /api/v1/platform/waitlist` is public, for the waitlist form of the root domain's landing (`/#waitlist`): `{email, name, company?, note?,
 locale?, captchaToken}`. It answers 202 with `data: null` whether the email was there already or not, and the first entry
 stays as it was: the form never tells whether an address asked before. It sends no email, so nobody can use it to write to
 a stranger. It takes a captcha by Signup's rule (`SIGNUP_REQUIRE_CAPTCHA`: where signups need one, a driver that checks
@@ -50,10 +50,12 @@ From the admin host:
 
 | Route | What |
 | ----- | ---- |
-| `GET /platform/waitlist` | the waitlist, newest first, 25 a page, with the total; `page`, `perPage`; `status` (`waiting`, `invited`, `joined`), `search` (email, name or company) |
+| `GET /platform/waitlist` | the waitlist, newest first, 25 a page, with the total; `page`, `perPage`; `status` (`waiting`, `invited`, `joined`), `entry` (one row, by its id). A `search` here is refused (422): a person's email must not sit in an address |
+| `POST /platform/waitlist/search` | the same list, with `search` (email, name or company) in the body, so what was typed is in no address or access log |
 | `POST /platform/waitlist/{id}/invite` | invites that entry's email |
 | `POST /platform/invitations` | `{email}`: invites any email, on the waitlist or not |
-| `GET /platform/invitations` | the invitations, newest first, each `pending`, `accepted`, `revoked` or `expired` |
+| `GET /platform/invitations` | the invitations, newest first, each `pending`, `accepted`, `revoked` or `expired`; `status`, `entry` (by id) |
+| `POST /platform/invitations/search` | the same list, with `search` (an email) in the body |
 | `DELETE /platform/invitations/{id}` | takes an invitation away; one used or already taken away stays as it is |
 
 An invitation is a token of 48 random characters bound to one email. Only its SHA-256 is kept. The email, queued

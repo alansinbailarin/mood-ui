@@ -88,10 +88,14 @@ into, so two clones never share data. Two clones in folders with the same name n
 | `PLATFORM_PRIMARY_COLOR` | `default` | backend: the platform's primary color, `#rrggbb` (anything else is `default`, the monochrome brand), until the admin's Settings change it | [Brand the platform](../guides/brand-the-platform.md) |
 | `PLATFORM_LOGO_URL` | empty | backend: an absolute URL of the platform's logo, for its emails and public screens, until the admin uploads one | [Brand the platform](../guides/brand-the-platform.md) |
 | `RBAC_CACHE_TTL` | `3600` | backend | [Rbac](../packages/rbac.md#configuration) |
+| `DEMO_MODE` | empty (off) | backend: `true` makes the install a public demo that resets itself daily; mail goes to the log and a live Stripe key stops the boot | [Run a public demo](../guides/run-a-public-demo.md) |
+| `DEMO_PASSWORD` | `Demo-Password-2026` | backend: the shared demo accounts' password, public by design | [Run a public demo](../guides/run-a-public-demo.md) |
+| `DEMO_RESET_AT`, `DEMO_TIMEZONE` | `04:00`, `America/Tijuana` | backend: when the demo resets, and in which time zone | [Run a public demo](../guides/run-a-public-demo.md) |
 | `SETTINGS_DEFAULT_TIMEZONE` | `UTC` | backend: a workspace's timezone until it saves one | [Settings](../packages/settings.md#configuration) |
 | `SETTINGS_DEFAULT_LOCALE` | `APP_LOCALE`, else `en` | backend: a workspace's language until it saves one | [Settings](../packages/settings.md#configuration) |
 | `SETTINGS_DEFAULT_CURRENCY` | `USD` | backend: a workspace's currency until it saves one | [Settings](../packages/settings.md#configuration) |
 | `SETTINGS_LOGO_PRESIGN` | `false` | backend: upload the logo straight to the bucket | [Settings](../packages/settings.md#configuration) |
+| `PUBLIC_PAGE_MEDIA_PRESIGN` | `false` | backend: upload the public page's images straight to the bucket | [PublicPage](../packages/public-page.md#images) |
 | `SETTINGS_CACHE_TTL` | `3600` | backend | [Settings](../packages/settings.md#configuration) |
 | `PLANS_CACHE_TTL` | `3600` | backend | [Plans](../packages/plans.md#configuration) |
 | `AWS_SES_CONFIGURATION_SET` | empty: none | backend: the SES configuration set that publishes bounces and complaints, with the email's tags, to SNS | [Mail](mail.md#bounces-and-complaints-amazon-ses) |
@@ -139,6 +143,19 @@ into, so two clones never share data. Two clones in folders with the same name n
 
 `APP_NAME` names the platform in emails (the sender name, through `MAIL_FROM_NAME`, and the verification
 email's header).
+
+## The Mood Kit license
+
+`php artisan kit:activate` records your license once and writes the first two variables. Nothing reads them while the app runs.
+See [Activate your license](../getting-started.md#activate-your-license).
+
+| Variable | Default | Read by |
+| -------- | ------- | ------- |
+| `KIT_LICENSE_KEY` | empty | written by `kit:activate`; read by nothing at runtime |
+| `KIT_LICENSE_ACTIVATION_ID` | empty | written by `kit:activate`; read by nothing at runtime |
+| `KIT_LICENSE_KEY_INPUT` | unset | `kit:activate`: the key, for a run with no one to ask. Set it for that one command, not in the `.env`. |
+| `KIT_POLAR_ORGANIZATION_ID` | unset | `kit:activate`: overrides the kit's public Polar organization id, which the release ships in the code. Leave it unset except to use Polar's sandbox; an empty value is ignored. While the shipped id is empty the command says so and stops. |
+| `KIT_POLAR_API_URL` | `https://api.polar.sh` | `kit:activate`: Polar's API. `https://sandbox-api.polar.sh` is its sandbox. |
 
 ## Laravel settings that matter here
 
