@@ -207,6 +207,22 @@ const BLOCKS: Record<string, AgentBlock> = {
       "Run the deploy and watch the first one.",
     ],
   },
+  docker: {
+    docs: ["docs/configuration/docker.md", "docs/configuration/production.md"],
+    task: "Explain what the three images and the Compose stack in deploy/ do, then prepare deploy/.env from deploy/.env.example for <a test on this machine | a server> without values for the secrets. Build the three images and validate the stack with docker compose config. Do not start the stack against a server.",
+    agentCan: [
+      "Build the backend, frontend and Caddy images from the repo root.",
+      "Copy deploy/.env.example to deploy/.env, fill the non-secret values and list the required ones that are still empty.",
+      "Run docker compose config to validate the stack, and the one machine test with CADDY_TLS=internal when you ask for it.",
+      "Choose the APP_ROLE of each service and check that only one scheduler runs.",
+    ],
+    humanMust: [
+      "Generate and set APP_KEY, the database and Redis passwords and the REVERB_APP_* keys in deploy/.env.",
+      "Create the Cloudflare API token for the wildcard certificate and point the DNS at the server.",
+      "Set up the S3 or R2 bucket for uploads, since the stack keeps none.",
+      "Run the stack on the server, sign up the first super admin and run the deploy again.",
+    ],
+  },
   maps: {
     docs: ["docs/configuration/maps.md"],
     task: "Check GEOCODING_DRIVER and run php artisan geocoding:verify. For production recommend a provider fit for real traffic and say what its terms allow.",
@@ -249,6 +265,7 @@ const PAGE_TO_BLOCK: Record<string, string> = {
   "configuration/queues-and-scheduler": "scheduler",
   "configuration/maps": "maps",
   "configuration/search": "search",
+  "configuration/docker": "docker",
   "configuration/production": "deployment",
   "setup/domains": "domains",
   "setup/database": "database",
