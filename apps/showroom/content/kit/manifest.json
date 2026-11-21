@@ -15,6 +15,13 @@
           "title": "Getting started",
           "label": "Getting started",
           "description": "This guide takes a fresh clone to a running kit on your machine: the API, the frontend, a queue worker and the scheduler, with Postgres, Redis, Mailpit and…"
+        },
+        {
+          "slug": "changelog",
+          "file": "CHANGELOG.md",
+          "title": "Changelog",
+          "label": "Changelog",
+          "description": "What changed in each release of Mood Kit, newest first. The format follows Keep a Changelog and the versions are tags of the distribution repository (vX.Y.Z)."
         }
       ]
     },

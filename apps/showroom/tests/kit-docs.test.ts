@@ -47,6 +47,7 @@ describe("paths and slugs", () => {
     expect(slugForFile("docs/README.md")).toBe("overview");
     expect(slugForFile("docs/packages/auth.md")).toBe("packages/auth");
     expect(slugForFile("AGENTS.md")).toBe("agents-md");
+    expect(slugForFile("CHANGELOG.md")).toBe("changelog");
     expect(slugForFile("backend/x.md")).toBeNull();
     expect(slugForFile("docs/diagram.png")).toBeNull();
   });
@@ -64,6 +65,9 @@ describe("paths and slugs", () => {
     const k = new Set(["packages/auth", "agents-md"]);
     expect(resolveLink("docs/guides/x.md", "../packages/auth.md#me", k)).toEqual({ kind: "page", slug: "packages/auth", hash: "#me" });
     expect(resolveLink("docs/README.md", "../AGENTS.md", k)).toEqual({ kind: "page", slug: "agents-md", hash: "" });
+    const c = new Set(["changelog", "guides/testing"]);
+    expect(resolveLink("docs/README.md", "../CHANGELOG.md", c)).toEqual({ kind: "page", slug: "changelog", hash: "" });
+    expect(resolveLink("CHANGELOG.md", "docs/guides/testing.md#x", c)).toEqual({ kind: "page", slug: "guides/testing", hash: "#x" });
     expect(resolveLink("docs/x.md", "https://stripe.com", k).kind).toBe("external");
     expect(resolveLink("docs/x.md", "#a", k).kind).toBe("anchor");
     expect(resolveLink("docs/x.md", "../backend/a.php", k).kind).toBe("unresolved");
@@ -103,6 +107,27 @@ describe("synced kit docs", () => {
       expect(p.description, p.slug).not.toBe("");
       expect(p.description.length, p.slug).toBeLessThanOrEqual(160);
     }
+  });
+});
+
+describe("changelog", () => {
+  it("is a page at /kit/changelog, listed once under Start here", () => {
+    const p = pages.find((x) => x.slug === "changelog");
+    expect(p?.file).toBe("CHANGELOG.md");
+    expect(p?.title).toBe("Changelog");
+    expect(kitGroups().find((g) => g.id === "start-here")?.pages.map((x) => x.slug)).toContain("changelog");
+    expect(kitDocRoutes()).toContain("/kit/changelog");
+  });
+  it("is a byte for byte copy of the kit's file and the docs index links to it", () => {
+    expect(kitFiles["CHANGELOG.md"]).toMatch(/^# Changelog\n/);
+    expect(kitFiles["docs/README.md"]).toContain("(../CHANGELOG.md)");
+  });
+  it("renders with its links to the docs resolved to pages", async () => {
+    const r = await renderKitMarkdown(kitFiles["CHANGELOG.md"] ?? "", { file: "CHANGELOG.md", knownSlugs: known });
+    expect(r.unresolved).toEqual([]);
+    expect(r.html).toContain('href="/kit/guides/testing"');
+    const idx = await renderKitMarkdown(kitFiles["docs/README.md"] ?? "", { file: "docs/README.md", knownSlugs: known });
+    expect(idx.html).toContain('href="/kit/changelog"');
   });
 });
 
