@@ -1,7 +1,8 @@
 # Add an action
 
-This guide declares something a person can do through a module of your own: make a record, change one. It reuses the module's
-own Action, so the rules and the audit trail of the API apply as they do there. The example is `tickets.create` of a `Tickets`
+This guide declares something a person can do through a module of your own: make a record, change one. The declaration names the
+module's own Action as its handler, so the rules and the audit trail of the API are the ones the Action already has. It is a
+declaration: the kit does not run it as a person, and the paid Mood Kit AI add-on reads it. The example is `tickets.create` of a `Tickets`
 package. What an action is and what the registry checks is in [Data](../packages/data.md).
 
 Only creates and edits can be declared. The registry refuses an action whose key ends in `.delete`, `.destroy`, `.erase`,
@@ -16,7 +17,8 @@ Only creates and edits can be declared. The registry refuses an action whose key
 ## 1. The handler
 
 A handler implements `PerformsAction`. It turns the validated input into the Action's own input and calls it, as the
-controller does. It does not check the permission (the runner did) and it does not write an audit entry (the Action does):
+controller does. It does not check the permission, which is a declared field of the action and not the handler's business, and it does not write an audit
+entry (the Action does):
 
 ```php
 <?php
@@ -44,7 +46,7 @@ final readonly class CreateTicketOperation implements PerformsAction
 }
 ```
 
-The input holds only the fields you declare, already validated. An id of a record comes from the person, so the Action must
+The input a handler receives holds only the fields you declare, already validated. An id of a record comes from a person, so the Action must
 look it up the way the API does (its finder, with the workspace and branch rules): a record of another workspace or of a branch
 the person does not see is a not found, never a change.
 
@@ -77,9 +79,8 @@ public function operations(): array
 - A `Field` gives both the Laravel rules and the JSON Schema of the input. `->required()`, `->max()`, `->nullable()` and
   `->also(new PlainName)` (a rule of your own, the same your API request uses) say the rest.
 - `summary` is one line, translated for the request's language, that says what the action will do. It gets the viewer too: read
-  anything it names (a record's name) as that person, never as the request's. A confirmation card shows it, and it is asked through
-  `RunsOperations::summarize()`, which makes the checks of `run()` first (permission, flag, feature, impersonation, input), so the
-  closure is never called for someone who may not run the action. Nothing else calls it.
+  anything it names (a record's name) as that person, never as the request's. The closure is private to the declaration: `Operation`
+  has no public way to call it other than an `@internal` accessor, and what it reads is only for someone who may run the action.
 - `flag` and `feature` gate it as they gate the routes. Name them: an action without them is open to the permission alone.
 - `duringImpersonation` says whether a super admin acting as the person may run it. It is `false` unless you say so: say `true` only
   when the action's HTTP route carries `impersonation-allowed` (a create or an edit of your module's own data), and leave it
@@ -98,17 +99,19 @@ $this->app->tag([TicketsData::class], ['data.datasets', 'data.actions']);
 
 ## 3. Test it
 
-Run it through `MoodKit\Data\Contracts\RunsOperations` as a person of a workspace, signed in as that person (the audit entry names
-whoever the request is signed in as), with the request acting as their workspace:
+A test of an action checks its declaration: the registry has the key, behind the permission and the flag you meant, the schema is the
+closed object you meant (the required fields, no field the API does not take), the handler is a `PerformsAction` the container can
+make, `duringImpersonation` is what the route says, and both languages have its label:
 
 ```php
-Laravel\Sanctum\Sanctum::actingAs($olga, ['*']);
-$this->actingAsTenant($alpha);
+$operation = resolve(OperationCatalog::class)->find('tickets.create');
 
-$result = resolve(RunsOperations::class)->run('tickets.create', ['subject' => 'Leak'], new Viewer($alpha->id, $olga->id));
+expect($operation->permission)->toBe('tickets.manage')
+    ->and($operation->schema()['required'])->toBe(['subject'])
+    ->and($operation->schema()['additionalProperties'])->toBeFalse()
+    ->and(resolve($operation->handler))->toBeInstanceOf(PerformsAction::class);
 ```
 
-The input reaches the handler as the API would read it (trimmed, `""` as `null`). Test what the API tests: the audit entry is written, a branch the person may not use is refused as the API refuses it, a record of
-another workspace or of a branch out of sight is not found, a missing permission is `OperationForbidden`, an invalid input is a
-`ValidationException`, and an input with a field you did not declare is refused. `ProjectsOperationsTest` is the model.
-
+`ProjectsOperationsTest` is the model, and `kit:make-module` writes the same test for a module it makes. The Action the handler calls
+has its own tests, as the API's controller does: the rules of a branch, a record of another workspace and the audit entry are tested
+there, once.

@@ -2,7 +2,8 @@
 
 What a deployment needs that the local defaults leave out. Go through it before the first launch, and again
 when you add a server or change hosts. Each item links to the page that explains it. The images and the Compose stack in
-`docker/` and `deploy/` satisfy every item a container can: see [Docker images and the production stack](docker.md).
+`docker/` and `deploy/` satisfy every item a container can: see [Docker images and the production stack](docker.md). To go from an
+empty server to a running install, follow [Deploy to a VPS](../guides/deploy-to-a-vps.md).
 
 ## Environment
 

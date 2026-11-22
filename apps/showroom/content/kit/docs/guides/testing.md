@@ -107,8 +107,14 @@ record and then answers 404 fails. A list is read on page 1, enough for the few 
 the kit's `search` route is named in the helper's last argument. `$this->isolationWorld()` gives the workspaces, the people and their tokens
 (`$world->a1Token`...). The helper fails with PHPUnit's own exception on the first thing that crosses, and its own test
 (`packages/Tenancy/tests/Feature/AssertsIsolationTest.php`) runs it against routes that leak to show that it does. Projects
-(`ProjectsIsolationTest`), the sessions of Auth and the inbox of Notifications use it. `assertTenantIsolated()` covers reads (the list, the detail and the search). A write to another workspace's record is covered by the operations
-test of a module (an action on another workspace's record is not found) and by row-level security.
+(`ProjectsIsolationTest`), the sessions of Auth and the inbox of Notifications use it. `assertTenantIsolated()` covers reads (the list, the detail and the search). A write to another workspace's record is covered by the update
+test of a module (an edit of another workspace's record is not found) and by row-level security.
+
+A module that declares a dataset or an action tests the declaration, not a read or a run: the kit reads no row through a dataset and
+runs no action as a person. The test asks `DatasetCatalog` or `OperationCatalog` for the key and checks what it declares (the
+permission and the platform flag, the columns and which are sensitive, the schema of an action, a handler that is a `PerformsAction`,
+the words in both languages), and calls `php artisan data:verify`, which runs the dataset's query for no rows. `ProjectsDatasetTest` and
+`ProjectsOperationsTest` are the models; see [Add a dataset](add-a-dataset.md) and [Add an action](add-an-action.md).
 
 A test of a module that hangs data from clients can start from Clients' own world
 (`packages/Clients/tests/Support/clients-world.php`): `clientsWorld($this)` makes two workspaces with their people and

@@ -60,7 +60,7 @@ Each backend package, with the frontend layer that pairs with it.
   the provider the app configures.
 - [Search](packages/search.md): the dashboard's global search (`Cmd+K`): the sources each package declares, its route and
   an optional index outside Postgres.
-- [Data](packages/data.md): what a module offers to read and to do: its datasets and its actions, declared once and checked on every deploy.
+- [Data](packages/data.md): what a module declares as readable and doable: its datasets and its actions, as metadata, checked on every deploy.
 - [PublicPage](packages/public-page.md) and the `public-page` layer: the public page at the root of each workspace, built from blocks.
 - [Dashboard](packages/dashboard.md): the home's cards: the widgets each package declares, with the permission and the plan
   feature each needs, and the route that works them out.
@@ -94,6 +94,8 @@ Each backend package, with the frontend layer that pairs with it.
 
 ## Guides
 
+- [Deploy to a VPS](guides/deploy-to-a-vps.md): from an empty server to a running install: firewall, server setup,
+  DNS, certificate, R2, mail, build and verify, with `deploy/server-setup.sh` and `deploy/make-env`.
 - [Build a module](guides/build-a-module.md): `kit:make-module` and what it already registers
 - [Add a permission and a menu entry](guides/add-a-permission-and-menu-entry.md)
 - [Add a role template](guides/add-a-role-template.md)

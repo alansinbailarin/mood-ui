@@ -10,6 +10,11 @@ merge a release is in [Update to a new version](docs/getting-started.md#update-t
 
 ### Added
 
+- A guide to deploy the kit to a rented server, from an empty Ubuntu 24.04 VPS to a running install, and two scripts it uses:
+  `deploy/server-setup.sh` (firewall, user, swap, Docker, and ssh hardening that refuses when the user has no authorized key)
+  and `deploy/make-env` (makes `deploy/.env`, generates every internal secret without printing it, merges your account keys,
+  and never regenerates a secret on an existing file). The guide also covers the provider firewall, Cloudflare DNS and token,
+  R2, Resend with its DMARC record, and the checks to run. See [Deploy to a VPS](docs/guides/deploy-to-a-vps.md).
 - A platform flag can be forced on or off for one workspace, over its global state and its rollout. The admin's workspace page has a
   new **Features** tab (Funciones in Spanish): one switch per flag that saves at once, a **Forced** badge, **Reset** to go back
   to the global state, and an optional reason. The Flags page shows how many workspaces each flag is forced for. New table
@@ -96,23 +101,19 @@ merge a release is in [Update to a new version](docs/getting-started.md#update-t
   (`platform:prune-notices`, daily). `GET /platform/notices`, `POST /platform/notices/{id}/read` and `/read-all`. A module adds its
   own kind of notice with a `PlatformNoticeProvider` tagged `platform.notices` and the event `PlatformNoticeRequested`. No email.
   See [Add a platform notice](docs/guides/add-a-platform-notice.md).
-- `Data`, a kernel package: the datasets and the actions a module offers. A package declares a dataset (a read view of its records:
-  its columns, the permission, the platform flag and the plan feature behind it, and a scope that narrows rows by branch) with a
-  `DatasetProvider` tagged `data.datasets`, and an action (a create or an edit, with its fields, that reuses the module's own Action)
-  with an `ActionProvider` tagged `data.actions`. The registries refuse what cannot work on first use, and an action that deletes can
-  never be declared. A `Field` gives both the Laravel rules and the JSON Schema of an input. `ReadsDatasets` reads a dataset as a person
-  of a workspace: their permission, the platform flag and the plan feature checked at each read, the workspace's filter always
-  added (on the table and on every table it joins by name that has a `tenant_id`), only the declared columns (the sensitive ones for whoever holds their permission), 200 rows at most, in a read-only
-  transaction that stops after three seconds. The kernel declares four datasets: `projects.projects`, `clients.clients` (the email,
-  phone, birthday, address and notes are sensitive, behind `clients.export`; never the trash, the erased or the merged), `branches.branches`
-  and `team.members` (the email is sensitive, behind `team.manage`). `RunsOperations` runs an action as a
-  person of a workspace: the impersonation rule (an action says `duringImpersonation`, as its route does), permission, flag and plan
-  feature first, then the input validated with the fields' rules (a key that is not a field is refused), then the module's own Action;
-  `summarize()` gives the line of a confirmation card after the same checks. Both work inside a request only. Projects declares `projects.create` and `projects.update`, through the Actions
-  its API calls. `php artisan data:verify` runs in the deploy script, after `platform:verify`: it fails on a
-  dataset or an action that cannot work. See [Data](docs/packages/data.md), [Add a dataset](docs/guides/add-a-dataset.md) and
-  [Add an action](docs/guides/add-an-action.md).
-- `php artisan kit:make-module` now writes the module's dataset, its create and update actions and the tests of both, and an
+- `Data`, a kernel package: the declarations of the datasets and the actions a module offers. A package declares a dataset (the description
+  of a read view of its records: its columns, the permission, the platform flag and the plan feature behind it, and a scope that narrows
+  rows by branch) with a `DatasetProvider` tagged `data.datasets`, and an action (a create or an edit, with its fields, whose handler
+  calls the module's own Action) with an `ActionProvider` tagged `data.actions`. The registries refuse what cannot work on first use, and
+  an action that deletes can never be declared. A `Field` gives both the Laravel rules and the JSON Schema of an input. These are
+  declarations only: the kit reads no row and runs no action as a person through them. They are what the paid Mood Kit AI add-on reads.
+  The kernel declares four datasets: `projects.projects`, `clients.clients` (the email, phone, birthday, address and notes are sensitive,
+  behind `clients.export`; never the trash, the erased or the merged), `branches.branches` and `team.members` (the email is sensitive,
+  behind `team.manage`). Projects declares `projects.create` and `projects.update`, through the Actions its API calls.
+  `php artisan data:verify` runs in the deploy script, after `platform:verify`: it fails on a dataset or an action that cannot work,
+  and on a table a dataset reads that lacks forced row-level security. See [Data](docs/packages/data.md),
+  [Add a dataset](docs/guides/add-a-dataset.md) and [Add an action](docs/guides/add-an-action.md).
+- `php artisan kit:make-module` now writes the module's dataset, its create and update actions and the declaration tests of both, and an
   isolation test that proves its records never cross a workspace, so `data:verify` and the kit's checks cover a module of your own
   from its first commit. See [Build a module](docs/guides/build-a-module.md).
 

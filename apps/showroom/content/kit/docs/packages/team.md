@@ -497,7 +497,7 @@ for whoever has `team.view`. It needs no flag and no feature of the plan.
   who has not joined, and an account that was deleted, are not in it. Team reads the `memberships` table through its own read-only
   model, `Models\TeamMember`, since Auth's model is Auth's.
 - **Columns:** `id`, `name`, `role` (the name the workspace stored for the role the person holds), `status`, `last_login_at` and
-  `created_at`. The `email` is sensitive: it comes out only for someone who holds `team.manage`. Nothing else of the account is
+  `created_at`. The `email` is sensitive: it is for someone who holds `team.manage`. Nothing else of the account is
   declared. The metric is `count`.
 - **Who sees which:** `Data\TeamScope`, as the list: whoever manages the team sees the active members and the deactivated ones,
   anyone else the active ones. There is no branch rule: the list's one follows the branch of the top bar, which is the request's

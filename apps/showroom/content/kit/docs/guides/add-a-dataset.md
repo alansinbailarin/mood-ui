@@ -1,12 +1,12 @@
 # Add a dataset
 
-This guide declares the records of a module of your own as a dataset: a read view that says which columns may leave it and
-who may read them. The example is the tickets of a `Tickets` package. What a dataset is and what the registry checks is in
+This guide declares the records of a module of your own as a dataset: the description of a read view that says which columns it
+has and who may read them. The example is the tickets of a `Tickets` package. What a dataset is and what the registry checks is in
 [Data](../packages/data.md).
 
-A dataset is the one place that says what a person may read of a module. The module's tests read through it to prove two
-workspaces never see each other's rows, `php artisan data:verify` stops a deploy on one that cannot work, and an assistant add-on can
-read only what datasets declare.
+A dataset is a declaration: metadata, with no code that reads a row. The kit checks it (the registry on first use, and
+`php artisan data:verify` on every deploy, which stops a deploy on one that cannot work). Declarations are what the paid Mood Kit AI
+add-on reads; the kit does not read rows through them.
 
 ## Before you start
 
@@ -67,7 +67,7 @@ final readonly class TicketsData implements DatasetProvider
 - `source` is a closure that returns an Eloquent query, and it already leaves out what nobody may see: the trash (a model with
   soft deletes does it by itself), a record erased for privacy, a record merged into another. It is the module's place to
   decide that, because only the module knows what its records are.
-- Only the columns you list exist for a reader. Leave out internal columns, ids of other tables that mean nothing alone and
+- Only the columns you list are part of the dataset. Leave out internal columns, ids of other tables that mean nothing alone and
   timestamps of the system. A column reads the column of that name in the source's table; for anything else give an
   expression: `Column::string('name')->expression('users.name')`.
 - `->sensitive('tickets.manage')` keeps a column (an email, a phone, notes) from anyone who does not hold that permission.
@@ -79,8 +79,8 @@ final readonly class TicketsData implements DatasetProvider
 
 ## 2. The scope
 
-A scope is the module's rule of who sees which row. It runs first, and the reader then wraps everything the source and the scope asked for in one group and ANDs the workspace's own filter to it, so a scope only narrows. Take the
-branches the person may see from `BranchAccess` (not from the branch chosen in the top bar: a reader asks about
+A scope is the module's rule of who sees which row. It only narrows: it adds conditions to the query it is given and never takes any
+away. Take the branches the person may see from `BranchAccess` (not from the branch chosen in the top bar: a scope is about
 everything the person is allowed to see):
 
 ```php
@@ -129,7 +129,7 @@ return [
 ];
 ```
 
-and the same in `lang/es/data.php`. The description is what a reader of the catalog sees, so say what a row is.
+and the same in `lang/es/data.php`. The description is what anyone who lists the catalog sees, so say what a row is.
 
 ## 4. Register it
 
@@ -141,19 +141,20 @@ $this->app->tag([TicketsData::class], 'data.datasets');
 
 ## 5. Test it
 
-Read the dataset through `MoodKit\Data\Contracts\ReadsDatasets`, as a person of workspace A that has a second workspace B with rows
-of its own, with the request acting as A (`$this->actingAsTenant($alpha)`):
+A test of a dataset checks its declaration: the registry has it, it sits behind the permission and the flag you meant, the columns
+that may leave it are the ones you listed (a sensitive one names its permission), the source is a query of your model, the scope is a
+`DatasetScope`, and both languages have its words:
 
 ```php
-$rows = resolve(ReadsDatasets::class)->rows('tickets.tickets', new Viewer($alpha->id, $olga->id), ['subject']);
+$dataset = resolve(DatasetCatalog::class)->find('tickets.tickets');
 
-expect(array_column($rows->rows, 0))->toBe(['Alpha ticket'])->and($rows->total)->toBe(1);
+expect($dataset->permission)->toBe('tickets.view')
+    ->and($dataset->column('notes')?->sensitivePermission)->toBe('tickets.manage')
+    ->and($dataset->column('tenant_id'))->toBeNull();
 ```
 
-The test proves four things: no row of B comes out, a person who works at another branch does not see the branch's rows (and does see
-those of none), a sensitive column leaves only with its permission, and someone without `tickets.view` gets `DatasetForbidden`. If
-the module has a platform flag, a read with the flag off is a `DatasetForbidden` too. The kernel's four datasets have such tests
-(`ProjectsDatasetTest`, `ClientsDatasetTest`, `BranchesDatasetTest`, `TeamDatasetTest`): copy the nearest one.
+The kernel's four datasets have such tests (`ProjectsDatasetTest`, `ClientsDatasetTest`, `BranchesDatasetTest`, `TeamDatasetTest`):
+copy the nearest one. `kit:make-module` writes one for a module it makes.
 
 Then run `php artisan data:verify` on a migrated database. It builds the query of your dataset for no rows, so a column that its table
-does not have fails there and not in front of someone.
+does not have fails there and not in front of someone, and it checks that the table has forced row-level security.
