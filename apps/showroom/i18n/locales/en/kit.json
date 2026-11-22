@@ -25,7 +25,12 @@
       "ctaDocs": "Read the docs",
       "ctaBuy": "Get Mood Kit",
       "ctaStart": "Run it locally in 15 minutes",
+      "ctaDemo": "See the live demo",
       "pricingNote": "One payment, lifetime updates, as many projects as you want.",
+      "demoNote": "The demo is a full install that resets every day at 04:00 Tijuana time. Its sign-in screens show shared accounts (owner and super admin), so nothing you do there lasts.",
+      "termsNote": "Read the {terms} before you pay.",
+      "termsLink": "terms of sale",
+      "supportNote": "Questions before buying? Write to {email}.",
       "factsTitle": "What it is, in four lines",
       "facts": {
         "api": "A Laravel 13 JSON API, versioned under /api/v1, with one response envelope and a code for every error.",
@@ -148,9 +153,21 @@
           "q": "Can I build on it with Claude Code or Cursor?",
           "a": "Yes, that is a design goal. AGENTS.md at the repository root holds the rules, and each rule names the check that enforces it. The docs have a prompt for each common task and say which steps an agent can do alone and which need you."
         },
+        "demo": {
+          "q": "Is there a demo?",
+          "a": "Yes, at demo.mood-ui.com. It is a full install that resets every day at 04:00 Tijuana time, with shared owner and super admin accounts on its sign-in screens, so nothing you do there lasts."
+        },
         "license": {
           "q": "How is it licensed and delivered?",
           "a": "One payment of 149 USD, or 99 USD with the launch discount for the first 100 buyers. You can use it in as many of your own and your clients' projects as you want, and every future version is included. You get read access to the private GitHub repository and a license key, both from Polar right after paying."
+        },
+        "refunds": {
+          "q": "Can I get a refund?",
+          "a": "Not once access to the repository has been granted, because the full source code is delivered right away. If the invitation or the key never arrives, or a payment was charged twice, write to support{'@'}mood-ui.com and it is fixed or refunded. The terms of sale have the details."
+        },
+        "support": {
+          "q": "How does support work?",
+          "a": "By email at support{'@'}mood-ui.com, in English or Spanish. It is best effort, and there is no response time promise."
         }
       },
       "ctaTitle": "Run it before you decide",
@@ -164,6 +181,54 @@
     },
     "docsHome": {
       "landingLink": "Mood Kit overview, what is included and how to get it"
+    },
+    "terms": {
+      "seo": {
+        "title": "Terms of sale for Mood Kit",
+        "description": "What you get when you buy Mood Kit, the price, who handles payment and taxes, delivery, refunds and support."
+      },
+      "h1": "Terms of sale",
+      "lead": "These terms cover buying Mood Kit from mood-ui. Read them before you pay.",
+      "backToKit": "Back to Mood Kit",
+      "license": {
+        "title": "What you buy",
+        "body": "A license to Mood Kit, as written in the LICENSE file of the kit repository. That file is the full text and the one that governs. This page only summarizes it.",
+        "points": {
+          "payment": "One payment, and the license is perpetual.",
+          "products": "As many End Products as you want, for yourself or for your clients.",
+          "developers": "Every developer who works on those End Products may use the kit for that work.",
+          "redistribution": "You may not redistribute the kit as a template, boilerplate or starter kit.",
+          "updates": "Every future version is included for life. Modules and add-ons sold separately, such as Booking, are not part of the kit."
+        }
+      },
+      "price": {
+        "title": "Price",
+        "body": "One payment in USD, with the price shown at checkout. The price is 149 USD, or 99 USD with the launch discount for the first 100 buyers."
+      },
+      "payment": {
+        "title": "Payment and taxes",
+        "body": "Polar is the merchant of record. It takes the payment, charges the taxes that apply and issues your receipt or invoice."
+      },
+      "delivery": {
+        "title": "Delivery",
+        "body": "Right after the payment, Polar sends a GitHub invitation to the private repository and a license key. The command php artisan kit:activate validates the key once, when you install."
+      },
+      "refunds": {
+        "title": "Refunds",
+        "body": "The full source code is delivered immediately, so purchases are not refundable once access to the repository has been granted. If the invitation or the key never arrives, or a payment was charged twice, write to {email} and it is fixed or refunded."
+      },
+      "support": {
+        "title": "Support",
+        "body": "Support is by email, in English or Spanish, on a best effort basis. There is no response time promise. Write to {email}."
+      },
+      "changes": {
+        "title": "Changes to these terms",
+        "body": "A change to these terms applies to purchases made after the change."
+      },
+      "seller": {
+        "title": "Seller",
+        "body": "The seller is mood-ui."
+      }
     }
   }
 }

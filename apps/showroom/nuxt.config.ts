@@ -1,7 +1,7 @@
 import tailwindcss from "@tailwindcss/vite";
 import { defineOrganization } from "nuxt-schema-org/schema";
 import { kitDocRoutes } from "./utils/kit-nav";
-import { KIT_LANDING } from "./utils/kit-docs";
+import { KIT_LANDING, KIT_TERMS } from "./utils/kit-docs";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -26,7 +26,7 @@ export default defineNuxtConfig({
       crawlLinks: true,
       // The Kit landing and every Kit docs page are listed too: the docs are one
       // catch-all route, which the crawler only finds through links.
-      routes: ["/", "/es", KIT_LANDING, `/es${KIT_LANDING}`, ...kitDocRoutes(), ...kitDocRoutes().map((r) => `/es${r}`)],
+      routes: ["/", "/es", KIT_LANDING, `/es${KIT_LANDING}`, KIT_TERMS, `/es${KIT_TERMS}`, ...kitDocRoutes(), ...kitDocRoutes().map((r) => `/es${r}`)],
     },
   },
 
@@ -115,8 +115,9 @@ export default defineNuxtConfig({
     // The Kit docs are one catch-all page, so the sitemap cannot find them by
     // itself. English only: the Spanish site shows the same English text and
     // points its canonical at the English page.
-    exclude: ["/es/kit", "/es/kit/**"],
-    urls: kitDocRoutes().map((loc) => ({ loc, changefreq: "weekly" as const })),
+    // The terms of sale are written in both languages, so the Spanish one is listed.
+    exclude: [/^\/es\/kit(\/(?!terms\/?$).*)?$/],
+    urls: [...kitDocRoutes(), KIT_TERMS, `/es${KIT_TERMS}`].map((loc) => ({ loc, changefreq: "weekly" as const })),
     // SSG: bake the sitemap at build time, no server runtime needed.
     zeroRuntime: true,
   },
