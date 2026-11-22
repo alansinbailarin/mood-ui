@@ -2,7 +2,6 @@
   "kit": {
     "tab": "Kit",
     "docsLabel": "Documentación de Mood Kit",
-    "englishOnly": "Esta documentación está escrita en inglés. El sitio en español muestra las mismas páginas.",
     "agent": {
       "title": "Hazlo con un agente",
       "intro": "Pega esto en Claude Code, Cursor u otro agente de código, desde la raíz de tu repositorio de Mood Kit. Hace que el agente lea primero las reglas.",

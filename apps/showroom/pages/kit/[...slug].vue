@@ -136,10 +136,6 @@ function onBodyClick(e: MouseEvent) {
       </Typography>
     </header>
 
-    <p v-if="locale === 'es'" class="kit-lang-note" role="note">
-      {{ t("kit.englishOnly") }}
-    </p>
-
     <p v-if="isHome" class="kit-lang-note" role="note">
       <NuxtLinkLocale :to="KIT_LANDING" class="text-primary underline underline-offset-4">{{ t("kit.docsHome.landingLink") }}</NuxtLinkLocale>
     </p>
