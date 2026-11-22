@@ -4,7 +4,8 @@ This guide takes a fresh clone to a running kit on your machine: the API, the fr
 the scheduler, with Postgres, Redis, Mailpit and MinIO in Docker. At the end you sign in to the demo
 workspace and create a second workspace through signup.
 
-It takes about 15 minutes, most of it installing dependencies.
+It takes about 15 minutes, most of it installing dependencies. If you have just bought the kit and have no access to the
+repository yet, start with [Buy the kit and get access](guides/buy-and-get-access.md).
 
 ## Requirements
 
@@ -14,7 +15,7 @@ It takes about 15 minutes, most of it installing dependencies.
 | pnpm           | 10. The repo pins `pnpm@10.33.0`, which `corepack enable` picks up.      |
 | PHP            | `^8.4` with `pdo_pgsql`, `redis`, `gd` (with WEBP) and `pcov`; `pcntl` and `posix` for the queue worker |
 | Composer       | 2                                                                       |
-| Docker         | with Compose v2                                                         |
+| Docker         | with Compose v2, and the daemon running                                 |
 | gitleaks       | optional. The pre-commit hook skips the secret scan without it; CI scans the full history either way. |
 
 `pcov` is how `composer check` measures coverage. `pcntl` and `posix` are not needed to install or test the
@@ -25,112 +26,49 @@ so have them wherever a worker runs. Check the PHP extensions with:
 php -m | grep -E "pcov|pdo_pgsql|redis|gd|pcntl|posix"
 ```
 
-All six names should print.
+All six names should print. The setup script in step 1 checks all of these and lists what is missing.
 
-## 1. Clone and create the `.env`
+## 1. Clone and set up
 
 ```bash
-git clone <repository-url> mood-kit
-cd mood-kit
-cp .env.example .env
+git clone https://github.com/mood-ui/mood-kit.git my-app
+cd my-app
+bash scripts/setup.sh
 ```
 
-`<repository-url>` is the private repository you were invited to.
+Pick the folder name (`my-app` here) with care: Docker Compose names its containers and volumes after it, so two copies
+of the kit in folders with the same name share them. If you use `gh`, `gh repo clone mood-ui/mood-kit my-app` does the same
+clone. The repository is private: [Buy the kit and get access](guides/buy-and-get-access.md) says how you get in.
+
+`scripts/setup.sh` gives you a ready local install. It checks your tools first and lists every one that is missing, then
+creates the `.env`, starts Docker's services, installs the dependencies, makes the app key, migrates, seeds the demo
+workspace and offers to activate your license. [What setup does, step by step](#what-setup-does-step-by-step) lists the
+commands, in case you prefer to run them yourself.
+
+You can run it again at any time. It never overwrites a `.env` that exists and never makes a second `APP_KEY`. It asks
+`Activate your license now? [y/N]` only in a terminal and only while `KIT_LICENSE_KEY` is empty; pass `--no-activate` to
+skip the question. See [Activate your license](#activate-your-license).
 
 The root `.env` is the only env file. Docker Compose, Laravel and Nuxt all read it, and its defaults work
 locally as they are. See [The `.env` file](configuration/environment.md) for what each setting does.
 
-## 2. Start the services
+## 2. Run the kit
 
 ```bash
-docker compose up -d --wait
+pnpm dev
 ```
 
-`--wait` returns once Postgres, Redis, Mailpit and MinIO all report healthy. On the first boot of
-an empty Postgres volume, `scripts/postgres-init` creates the role the app connects as (`DB_USERNAME`), the
-schema owner the migrations run as (`DB_MIGRATION_USERNAME`), the platform's read-only role (`DB_PLATFORM_USERNAME`),
-the catalog's writer (`DB_CATALOG_USERNAME`) and the test database `mood_kit_test`. A volume made before the platform
-role existed gets it with `docker compose exec postgres sh /docker-entrypoint-initdb.d/02-platform-reader.sh`, and one
-made before the catalog's writer with `docker compose exec postgres sh /docker-entrypoint-initdb.d/03-catalog-writer.sh`.
+From the repo root, `pnpm dev` starts the API, the worker, the scheduler, Reverb and the frontend in one terminal, each
+line prefixed with the process it comes from. Ctrl+C stops all of them. If one of them dies the others stop too, so a
+crashed API never hides behind a frontend that still answers. Docker's services must be up first: setup starts them, and
+`docker compose up -d --wait` starts them again after a reboot.
 
-| Service     | Address                 |
-| ----------- | ----------------------- |
-| Postgres    | `127.0.0.1:5432`        |
-| Redis       | `127.0.0.1:6379`        |
-| Mailpit     | http://localhost:8025 (SMTP on `127.0.0.1:1025`) |
-| MinIO       | http://localhost:9001, the console (S3 API on `127.0.0.1:9000`). Sign in with `ASSETS_ACCESS_KEY_ID` and `ASSETS_SECRET_ACCESS_KEY`. |
+Check the API with `curl -i http://localhost:8000/up`: it answers `200`.
 
-All ports bind to `127.0.0.1`. If one is taken, see [Ports](configuration/environment.md#ports).
+These servers read `.env` once, when they start. Restart `pnpm dev` after you edit it.
 
-## 3. Install the dependencies
-
-```bash
-pnpm install
-cd backend
-composer install
-```
-
-`pnpm install` also sets up the Git hooks (Husky) and runs `nuxt prepare` for the frontend.
-
-## 4. Generate the app key and migrate
-
-Still in `backend/`:
-
-```bash
-php artisan key:generate
-php artisan migrate
-php artisan notifications:sync
-php artisan db:seed
-```
-
-If you have not yet, run `php artisan assets:prepare-bucket`: the demo's public page stores its pictures there.
-
-`key:generate` writes `APP_KEY` into the root `.env`. `notifications:sync` writes the catalog of notification channels
-and event types the packages declare; run it again when you add or change an event type. `db:seed` creates the demo
-workspace and fills it, so no screen opens empty or locked. It does this only when `APP_ENV` is `local` or `testing`; in any
-other environment the seeder creates nothing. You can run it again: nothing is made twice.
-
-### What the demo contains
-
-| Where | What is there |
-| ----- | ------------- |
-| The workspace `demo` | an owner (`owner@demo.test`) and a member (`member@demo.test`) with their roles, and its onboarding done |
-| Plan | **Pro**, active: the clients' import, the client portal and up to 5 branches work. The catalog of plans (`backend/config/plans.php`) is written too. |
-| Branches | "Main branch", **Centro** and **Playas**, the last two with an address and a pin in Tijuana |
-| Clients | 46 over the last sixty days: forty with the tags VIP and Frecuente, and three homed at Centro and three at Playas |
-| Team | three skills (Barbería, Colorimetría, Atención al cliente) and one invitation that waits, to `new.hire@example.com` |
-| Notifications | the default audiences of every event type, and in the owner's inbox three notices (two unread) with their deliveries in the log, one of them a failed email |
-| Public page | published, with a block of each kind (an image with text, a text, a gallery, the branches, contact and frequent questions) and four pictures; open `http://demo.localhost:3000/` |
-| Platform | two people on the waitlist (Marta Ruiz and Luis Ortega), one pending invitation to sign up, and, in `local` only, `owner@demo.test` as a super admin of the platform, the way `platform:setup` makes one. In `testing` there is no admin. |
-
-Change the plan to see the other states: edit it in the admin's panel (see **Edit a plan** below), or write a different one in
-`DemoSubscriptionSeeder`.
-
-Billing is off until you set Stripe's keys: the Subscription page lists the plans and says payments are not set up yet.
-To try it, see [Stripe](configuration/stripe.md).
-
-### Activate your license
-
-Run this once, with the license key from your Polar purchase:
-
-```bash
-php artisan kit:activate --project="My project"
-```
-
-It asks for the key, and what you type is hidden. The key is never an argument, so it stays out of your shell history and
-process list. In a script or CI, put it in the environment variable `KIT_LICENSE_KEY_INPUT`, or pipe it in with `--stdin`
-(`printf '%s\n' "$KEY" | php artisan kit:activate --stdin`). The command then records one activation with Polar under the project
-name (`APP_NAME` when you leave `--project` out) and writes `KIT_LICENSE_KEY` and `KIT_LICENSE_ACTIVATION_ID` into the
-root `.env`. It prints the key with only its last 4 characters.
-
-It is a record, nothing more. No code in the kit reads the key while the app runs, and nothing stops working if you skip
-it or it fails. If you have no connection, run it again later. Running it on an install that has both variables does
-nothing; `--force` activates again. If Polar accepted the key but the `.env` could not be written, the command prints the two lines to add by hand: add them, and do not run the command again, because it would use another activation. If it says the activation limit is reached, or the key is revoked, contact support.
-The kit's Polar organization id ships inside the release, so you set nothing for it. The settings behind it are in [The `.env` file](configuration/environment.md#the-mood-kit-license).
-
-## 5. Run the four processes
-
-Each runs in its own terminal and keeps running.
+If you prefer one terminal for each process, or want to run only some, these are the five commands `pnpm dev` runs. Each
+keeps running.
 
 | Process   | Command, from                                   | What it does                                    |
 | --------- | ----------------------------------------------- | ----------------------------------------------- |
@@ -140,15 +78,11 @@ Each runs in its own terminal and keeps running.
 | Scheduler | `php artisan schedule:work`, in `backend/`      | runs the periodic commands: the full table is in [Queues and the scheduler](configuration/queues-and-scheduler.md#the-scheduler) |
 | Realtime  | `php artisan reverb:start`, in `backend/`       | pushes new notifications to the bell (optional: without it the bell updates every minute) |
 
-Check the API with `curl -i http://localhost:8000/up`: it answers `200`.
-
-Both servers read `.env` once, when they start. Restart them after you edit it.
-
 Without the worker, nothing that is queued happens: no password reset email, no signup email, and no
 workspace is built after a signup is confirmed. [Queues and the scheduler](configuration/queues-and-scheduler.md)
 lists what each one runs.
 
-## 6. Sign in to the demo workspace
+## 3. Sign in to the demo workspace
 
 Workspaces live on `<slug>.<root domain>`, and the local root domain is `localhost`, so the demo workspace
 is http://demo.localhost:3000.
@@ -224,13 +158,13 @@ Beto Ramírez,beto@example.com,664 987 6543
 Press **Import** and drop the file. The columns step guesses which column has the name, the email and the phone; type
 `+52` as the country code for the phone written without one and press **Check the file**: it says how many clients are new
 and lists the lines it would not import, by line and field. Press **Import 2 clients**. The worker runs it (it must be
-running, see step 5); the page follows it to the end and the bell has the notice that it ended, with its email in Mailpit.
+running: `pnpm dev` runs it); the page follows it to the end and the bell has the notice that it ended, with its email in Mailpit.
 Back on the list, the download button at the end of the toolbar saves the clients, as the list is filtered, as a CSV. See
 [Clients](packages/clients.md).
 
 The client portal is part of Pro too. Open **Settings**, then **Client portal**, turn on **Portal open** and press **Save changes**: the section shows the
 portal's address. Give a client an email first (the portal signs in by email), then open `http://demo.localhost:3000/portal`
-in a private window, type that email and press **Email me a code**. The code goes by email through the worker of step 5:
+in a private window, type that email and press **Email me a code**. The code goes by email through the worker that `pnpm dev` runs:
 take it from Mailpit (`http://localhost:8025`), type it and press **Sign in**. The client's page has their details and their
 choice about news and offers: change one and save, then, back as the owner, the client's **Activity** shows the change, and
 their **Profile** has a **Client portal** card that says on how many devices they are signed in, with **Sign out everywhere**.
@@ -261,7 +195,7 @@ the save offers the new price on Stripe, and if Stripe fails the tab says which 
 again. The panel edits plans only where the catalog's writer is set up (`DB_CATALOG_USERNAME`); without it the editor
 only shows them. See [Platform](packages/platform.md#editing-the-plans).
 
-## 7. Create a workspace through signup
+## 4. Create a workspace through signup
 
 Signup happens on the root domain, signed out.
 
@@ -272,7 +206,7 @@ Signup happens on the root domain, signed out.
 3. Submit. The screen says a verification email is on its way.
 4. Open Mailpit at http://localhost:8025 and open the email. Its link goes to
    `http://localhost:3000/signup/confirm#verification=...`.
-5. On the confirm screen, enter the password you chose in step 2. (The screen also lets whoever holds the
+5. On the confirm screen, enter the password you chose in step 2 of this list. (The screen also lets whoever holds the
    email choose a new password instead.)
 6. The processing screen follows the worker as it builds the workspace, then signs you in on
    `http://<slug>.localhost:3000` and opens `/dashboard`. You are the owner.
@@ -284,6 +218,111 @@ The demo workspace's onboarding is already done; a workspace you create through 
 
 Locally no captcha is asked: `SIGNUP_REQUIRE_CAPTCHA` is empty, which means off when `APP_ENV` is `local`.
 See [Signup](packages/signup.md) for the whole flow and its limits.
+
+## What setup does, step by step
+
+These are the commands `scripts/setup.sh` runs, in order. Run them yourself if you prefer, or to see which one fails.
+
+### Copy the `.env`
+
+```bash
+cp .env.example .env
+```
+
+Skip this when you have a `.env` already: copying over it would lose your settings.
+
+### Start the services
+
+```bash
+docker compose up -d --wait
+```
+
+`--wait` returns once Postgres, Redis, Mailpit and MinIO all report healthy. On the first boot of
+an empty Postgres volume, `scripts/postgres-init` creates the role the app connects as (`DB_USERNAME`), the
+schema owner the migrations run as (`DB_MIGRATION_USERNAME`), the platform's read-only role (`DB_PLATFORM_USERNAME`),
+the catalog's writer (`DB_CATALOG_USERNAME`) and the test database `mood_kit_test`. A volume made before the platform
+role existed gets it with `docker compose exec postgres sh /docker-entrypoint-initdb.d/02-platform-reader.sh`, and one
+made before the catalog's writer with `docker compose exec postgres sh /docker-entrypoint-initdb.d/03-catalog-writer.sh`.
+
+| Service     | Address                 |
+| ----------- | ----------------------- |
+| Postgres    | `127.0.0.1:5432`        |
+| Redis       | `127.0.0.1:6379`        |
+| Mailpit     | http://localhost:8025 (SMTP on `127.0.0.1:1025`) |
+| MinIO       | http://localhost:9001, the console (S3 API on `127.0.0.1:9000`). Sign in with `ASSETS_ACCESS_KEY_ID` and `ASSETS_SECRET_ACCESS_KEY`. |
+
+All ports bind to `127.0.0.1`. If one is taken, see [Ports](configuration/environment.md#ports). If another copy of the kit
+lives in a folder with the same name, set a different `COMPOSE_PROJECT_NAME` in this copy's `.env`, so the two do not share
+containers and volumes.
+
+### Install the dependencies
+
+```bash
+pnpm install --frozen-lockfile
+cd backend
+composer install
+```
+
+`pnpm install` also sets up the Git hooks (Husky) and runs `nuxt prepare` for the frontend.
+
+### Generate the app key, migrate, prepare the bucket and seed
+
+Still in `backend/`:
+
+```bash
+php artisan key:generate
+php artisan migrate
+php artisan notifications:sync
+php artisan assets:prepare-bucket
+php artisan db:seed
+```
+
+Run `assets:prepare-bucket` before `db:seed`: the demo's public page stores its pictures in the bucket, and the seeder stops
+and tells you to run it when the bucket is not there. It creates the bucket on the local MinIO and lets browsers read its
+files, and it is safe to run again.
+
+`key:generate` writes `APP_KEY` into the root `.env`. `notifications:sync` writes the catalog of notification channels
+and event types the packages declare; run it again when you add or change an event type. `db:seed` creates the demo
+workspace and fills it, so no screen opens empty or locked. It does this only when `APP_ENV` is `local` or `testing`; in any
+other environment the seeder creates nothing. You can run it again: nothing is made twice.
+
+### What the demo contains
+
+| Where | What is there |
+| ----- | ------------- |
+| The workspace `demo` | an owner (`owner@demo.test`) and a member (`member@demo.test`) with their roles, and its onboarding done |
+| Plan | **Pro**, active: the clients' import, the client portal and up to 5 branches work. The catalog of plans (`backend/config/plans.php`) is written too. |
+| Branches | "Main branch", **Centro** and **Playas**, the last two with an address and a pin in Tijuana |
+| Clients | 46 over the last sixty days: forty with the tags VIP and Frecuente, and three homed at Centro and three at Playas |
+| Team | three skills (Barbería, Colorimetría, Atención al cliente) and one invitation that waits, to `new.hire@example.com` |
+| Notifications | the default audiences of every event type, and in the owner's inbox three notices (two unread) with their deliveries in the log, one of them a failed email |
+| Public page | published, with a block of each kind (an image with text, a text, a gallery, the branches, contact and frequent questions) and four pictures; open `http://demo.localhost:3000/` |
+| Platform | two people on the waitlist (Marta Ruiz and Luis Ortega), one pending invitation to sign up, and, in `local` only, `owner@demo.test` as a super admin of the platform, the way `platform:setup` makes one. In `testing` there is no admin. |
+
+Change the plan to see the other states: edit it in the admin's panel (see [Edit a plan](#edit-a-plan)), or write a different one in
+`DemoSubscriptionSeeder`.
+
+Billing is off until you set Stripe's keys: the Subscription page lists the plans and says payments are not set up yet.
+To try it, see [Stripe](configuration/stripe.md).
+
+### Activate your license
+
+Run this once, with the license key from your Polar purchase:
+
+```bash
+php artisan kit:activate --project="My project"
+```
+
+It asks for the key, and what you type is hidden. The key is never an argument, so it stays out of your shell history and
+process list. In a script or CI, put it in the environment variable `KIT_LICENSE_KEY_INPUT`, or pipe it in with `--stdin`
+(`printf '%s\n' "$KEY" | php artisan kit:activate --stdin`). The command then records one activation with Polar under the project
+name (`APP_NAME` when you leave `--project` out) and writes `KIT_LICENSE_KEY` and `KIT_LICENSE_ACTIVATION_ID` into the
+root `.env`. It prints the key with only its last 4 characters.
+
+It is a record, nothing more. No code in the kit reads the key while the app runs, and nothing stops working if you skip
+it or it fails. If you have no connection, run it again later. Running it on an install that has both variables does
+nothing; `--force` activates again. If Polar accepted the key but the `.env` could not be written, the command prints the two lines to add by hand: add them, and do not run the command again, because it would use another activation. If it says the activation limit is reached, or the key is revoked, contact support.
+The kit's Polar organization id ships inside the release, so you set nothing for it. The settings behind it are in [The `.env` file](configuration/environment.md#the-mood-kit-license).
 
 ## Update to a new version
 
@@ -300,10 +339,12 @@ Each release is one commit on `main` of the repository you were invited to, tagg
 
 | Symptom | Cause and fix |
 | ------- | ------------- |
-| No email in Mailpit | The worker is not running. Start `php artisan queue:work` in `backend/`. Queued emails go out once it starts. |
+| No email in Mailpit | The worker is not running. Run `pnpm dev`, or start `php artisan queue:work` in `backend/`. Queued emails go out once it starts. |
 | The processing screen waits forever | Same cause: the worker builds the workspace. After 15 minutes `signup:prune` marks the signup failed, if the scheduler runs. |
 | `demo.localhost` does not resolve | Chrome, Firefox and Edge resolve `*.localhost` to `127.0.0.1` themselves; Safari does not. Use another browser, or add `127.0.0.1 demo.localhost` (and one line per workspace you create) to `/etc/hosts`. |
 | Port 8000 or 3000 is already in use | `php artisan serve` moves to the next free port (8001...) and the frontend dev server picks another free one; both print the address they use. The kit's settings still point at 8000 and 3000, so either free the port, or follow the new one: for the API, `APP_URL` and `NUXT_PUBLIC_API_BASE_URL` (which keeps its `/api/v1`); for the frontend, `APP_FRONTEND_URL`. Pin a port with `php artisan serve --port=8001` or `pnpm --filter ./frontend dev --port 3001`, then restart everything that reads `.env`. |
+| `db:seed` says the assets bucket is not ready | The bucket does not exist yet. Run `php artisan assets:prepare-bucket` in `backend/`, then `php artisan db:seed` again. |
+| `docker compose up` warns that a variable is not set, or the setup cannot start Docker's services | Your `.env` may predate this version. Compare it with `.env.example`: the `NUXT_SECURITY_ASSETS_*` lines must come after the `ASSETS_*` block. If the cause is a port or another copy of the kit in a folder with the same name, see [Ports](configuration/environment.md#ports) and `COMPOSE_PROJECT_NAME`. |
 | `corepack: command not found` | Node 25 and later no longer bundle corepack. Install it with `npm install --global corepack`, then `corepack enable`. |
 | `composer check` cannot connect to the test database | Your Postgres volume predates `scripts/postgres-init`. Reset it with `docker compose down -v`, which erases all local data, then `docker compose up -d --wait` and `php artisan migrate` again. |
 | A port is already in use | Change `DB_PORT`, `REDIS_PORT`, `MAILPIT_SMTP_PORT` or `MAILPIT_UI_PORT` in `.env` and run `docker compose up -d --wait` again. |

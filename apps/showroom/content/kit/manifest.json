@@ -1,6 +1,6 @@
 {
   "source": {
-    "commit": "489685c41e43",
+    "commit": "0a9bc8b96d5b",
     "ref": "HEAD",
     "dirty": false
   },
@@ -9,6 +9,13 @@
       "id": "start-here",
       "title": "Start here",
       "pages": [
+        {
+          "slug": "guides/buy-and-get-access",
+          "file": "docs/guides/buy-and-get-access.md",
+          "title": "Buy the kit and get access",
+          "label": "Buy the kit and get access",
+          "description": "How to get from paying on Polar to a clone of the kit on your machine. You need a GitHub account and a few minutes. The repository is private, so the first…"
+        },
         {
           "slug": "getting-started",
           "file": "docs/getting-started.md",
