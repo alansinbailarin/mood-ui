@@ -129,34 +129,25 @@ const docsLinks = [
         {{ t("kit.landing.lead") }}
       </p>
       <div class="flex flex-wrap items-center gap-3 pt-1">
-        <Button
-          as="a"
-          color="primary"
-          size="large"
-          :href="localePath(routeForSlug('getting-started'))"
-          @click="go($event, routeForSlug('getting-started'))"
-        >
-          {{ t("kit.landing.ctaStart") }}
+        <Button as="a" color="primary" size="large" :href="KIT_BUY_URL" rel="nofollow noopener">
+          {{ t("kit.landing.ctaBuy") }}
           <template #suffix><ArrowRightIcon class="size-5" /></template>
+        </Button>
+        <Button as="a" variant="outline" size="large" :href="KIT_DEMO_URL">
+          {{ t("kit.landing.ctaDemo") }}
         </Button>
         <Button
           as="a"
-          variant="outline"
+          variant="ghost"
           size="large"
           :href="localePath(routeForSlug('overview'))"
           @click="go($event, routeForSlug('overview'))"
         >
           {{ t("kit.landing.ctaDocs") }}
         </Button>
-        <Button as="a" variant="outline" size="large" :href="KIT_DEMO_URL">
-          {{ t("kit.landing.ctaDemo") }}
-        </Button>
-        <Button as="a" variant="outline" size="large" :href="KIT_BUY_URL" rel="nofollow noopener">
-          {{ t("kit.landing.ctaBuy") }}
-        </Button>
       </div>
+      <p class="text-sm text-foreground">{{ t("kit.landing.proof") }}</p>
       <p class="text-sm text-muted-foreground">{{ t("kit.landing.demoNote") }}</p>
-      <p class="text-sm text-muted-foreground">{{ t("kit.landing.pricingNote") }}</p>
       <p class="text-sm text-muted-foreground">
         <i18n-t keypath="kit.landing.termsNote" scope="global">
           <template #terms>

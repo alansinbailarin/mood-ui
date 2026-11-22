@@ -20,8 +20,8 @@
         "ogTitle": "Mood Kit: kit SaaS con Laravel y Vue/Nuxt"
       },
       "overline": "Mood Kit",
-      "h1": "Un boilerplate SaaS con Vue y Nuxt, una API en Laravel y aislamiento de tenants en la base de datos",
-      "lead": "Mood Kit es una API en Laravel 13 y una app en Nuxt 4 sobre mood-ui. Nuxt es Vue 3 con rutas y render en servidor encima, así que si escribes Vue ya conoces el frontend. Cada cliente tiene un workspace en su propio subdominio, y la row-level security de Postgres mantiene sus filas separadas aunque una consulta olvide un filtro. Inicio de sesión, roles, planes, facturación con Stripe, notificaciones, onboarding, equipo, clientes y un panel de plataforma ya están construidos y probados.",
+      "h1": "Lanza tu SaaS en días, no en meses",
+      "lead": "El kit en Laravel y Nuxt donde cada cliente tiene su subdominio, su equipo y sus datos aislados. Inicio de sesión, roles, cobros con Stripe y panel de administración ya hechos, con más de 11,000 pruebas que te avisan si algo se rompe. Nuxt es Vue 3 con rutas y render en servidor, así que si escribes Vue ya conoces el frontend.",
       "ctaDocs": "Leer la documentación",
       "ctaBuy": "Conseguir Mood Kit",
       "ctaStart": "Córrelo en local en 15 minutos",
@@ -172,7 +172,8 @@
       },
       "ctaTitle": "Pruébalo antes de decidir",
       "ctaBody": "La forma más rápida es la documentación: Getting started te lleva a un workspace en marcha, con el usuario de demo, en tu propia máquina.",
-      "backToTemplates": "Parte de Plantillas"
+      "backToTemplates": "Parte de Plantillas",
+      "proof": "Más de 11,000 pruebas automáticas · Corre en tu máquina en 15 minutos · Un solo pago, proyectos ilimitados y actualizaciones de por vida"
     },
     "templatesCard": {
       "title": "Mood Kit",

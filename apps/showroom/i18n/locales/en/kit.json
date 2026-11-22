@@ -20,8 +20,8 @@
         "ogTitle": "Mood Kit: Laravel + Vue/Nuxt SaaS starter kit"
       },
       "overline": "Mood Kit",
-      "h1": "A Vue and Nuxt SaaS boilerplate with a Laravel API and tenant isolation in the database",
-      "lead": "Mood Kit is a Laravel 13 API and a Nuxt 4 app on mood-ui. Nuxt is Vue 3 with routing and server rendering on top, so if you write Vue you already know the frontend. Each customer gets a workspace on its own subdomain, and Postgres row-level security keeps their rows apart even when a query forgets a filter. Sign-in, roles, plans, Stripe billing, notifications, onboarding, team, clients and a platform admin are already built and tested.",
+      "h1": "The multi-tenant SaaS kit your AI agent can't easily break",
+      "lead": "Laravel and Nuxt, a subdomain per customer, data isolated in Postgres, billing and roles done. 11,000+ tests and an AGENTS.md keep every change, yours or your agent's, inside the rules. Nuxt is Vue 3 with routing and server rendering on top, so if you write Vue you already know the frontend.",
       "ctaDocs": "Read the docs",
       "ctaBuy": "Get Mood Kit",
       "ctaStart": "Run it locally in 15 minutes",
@@ -172,7 +172,8 @@
       },
       "ctaTitle": "Run it before you decide",
       "ctaBody": "The quickest check is the docs: Getting started takes you to a running workspace, with the demo sign-in, on your own machine.",
-      "backToTemplates": "Part of Templates"
+      "backToTemplates": "Part of Templates",
+      "proof": "11,000+ automated tests · Runs on your machine in 15 minutes · One payment, unlimited projects, lifetime updates"
     },
     "templatesCard": {
       "title": "Mood Kit",
