@@ -411,7 +411,7 @@ Branches declares the dataset `branches.branches` to [Data](data.md), through `B
 branches, for whoever has `branches.view`. It needs no flag and no feature of the plan.
 
 - **Columns:** `id`, `name`, `is_active`, `city`, `state`, `country`, `timezone` and `created_at`; the street, the notes and the
-  place on the map are not declared, so they cannot be read. `phone` and `email` are sensitive: they come out only for someone
+  place on the map are not declared. `phone` and `email` are sensitive: they are for someone
   who holds `branches.manage`. The metric is `count`.
 - **Who sees which:** `Data\BranchesScope` is the rule of the list ([Who sees which branch](#who-sees-which-branch)): every
   branch for whoever has `branches.all` or while the workspace does not work by branch, else the ones the person works at. It

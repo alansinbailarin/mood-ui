@@ -53,7 +53,7 @@ bindings. `backend/routes/api.php` and `backend/routes/console.php` are empty on
 | [Branches](../packages/branches.md) | a workspace's branches, their place on the map, opening hours and people; it uses Auth, Rbac, Plans, Settings, Onboarding, Audit and Team through their contracts, and only Clients depends on it (a client's home branch) |
 | [Clients](../packages/clients.md) | a workspace's clients: their data, tags, duplicates and merging, activity, CSV import and export, and their privacy rights; it uses Auth, Rbac, Audit, Plans, Notifications and Branches through their contracts, and modules hang their data from it through its own |
 | [Search](../packages/search.md) | the global search: a registry of the sources each package declares (`search.sources`); it uses Auth, Rbac and Plans through their contracts and knows no package that registers a source |
-| [Data](../packages/data.md) | the datasets and actions each package declares (`data.datasets`, `data.actions`), read and run as a person of a workspace; it uses Rbac, Plans and Platform through their contracts and knows no package that registers one |
+| [Data](../packages/data.md) | the datasets and actions each package declares (`data.datasets`, `data.actions`) as metadata, and `data:verify`; it uses Rbac and Tenancy and knows no package that registers one |
 
 Every package's settings live in its own `config/`, with defaults only. The env overrides are in
 `backend/config/<file>.php`, the one place that calls `env()`, so `php artisan config:cache` works.

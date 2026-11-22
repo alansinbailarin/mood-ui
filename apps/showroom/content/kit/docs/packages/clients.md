@@ -766,8 +766,8 @@ clients, for whoever has `clients.view`. It needs no flag and no feature of the 
   (`merged_into_id`) are never in it, whoever asks.
 - **Columns:** `id`, `name`, `city`, `country`, `source`, `marketing_consent`, `created_at` and `home_branch_id`. The email, the
   phone, the birthday, the street address and the notes (`email`, `phone`, `birthday`, `address_line_1`, `notes`) are sensitive:
-  they come out only for someone who holds `clients.export`. The rest of what is kept about a client (the other address lines,
-  the language, the custom fields, the portal's data) is not declared, so it cannot be read. The metric is `count`; the relation
+  they are for someone who holds `clients.export`. The rest of what is kept about a client (the other address lines,
+  the language, the custom fields, the portal's data) is not declared. The metric is `count`; the relation
   `home_branch` points at `branches.branches`.
 - **Who sees which:** `Data\ClientsScope`, through `ClientVisibility::narrowForPerson()`: the clients of every branch the person
   may see (`BranchAccess::visibleTo()`) and those of no branch, or all of them for whoever sees every branch. It never reads the

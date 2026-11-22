@@ -11,9 +11,9 @@ php artisan kit:make-module Invoices --es="factura,facturas,f"
 
 That makes a working, tested module of invoices that follows every standard of the kit: a table with row-level security, a list
 with search, filter and pages, a form, permissions, an entry in the sidebar, a search source, a card on the home, a **+** action
-in the top bar, words in English and Spanish, and a platform flag that keeps it off until you turn it on. It also declares what
-the module offers to read and to do, a dataset and two actions, and ships the test that proves its records never cross a
-workspace. You then change its fields into yours. Nothing of the kit's own code is edited, so the kit's tests and checks keep passing.
+in the top bar, words in English and Spanish, and a platform flag that keeps it off until you turn it on. It also declares
+what the module offers to read and to do, a dataset and two actions (declarations that the kit checks and that the paid Mood Kit AI
+add-on reads), with the tests of those declarations, and ships the test that proves its records never cross a workspace. You then change its fields into yours. Nothing of the kit's own code is edited, so the kit's tests and checks keep passing.
 
 ## What the command takes
 
@@ -51,7 +51,7 @@ to do, when:
 | What | Where |
 | ---- | ----- |
 | The backend package: model, actions, form requests, rules, resource, controller, routes, search source, widget, permissions, role templates, menu entry, platform flag, migration, words in `en` and `es`, and its Pest tests | `backend/packages/<Name>` |
-| Its dataset and its two actions for [Data](../packages/data.md): `<Name>Data` (tagged `data.datasets` and `data.actions`), the scope that narrows rows by branch, the create and update operations and the line each confirmation shows, with their words and their tests | `backend/packages/<Name>/src/<Name>Data.php`, `src/Data`, `lang/{en,es}/data.php`, `tests/Feature/<Name>DatasetTest.php`, `<Name>OperationsTest.php` |
+| Its dataset and its two actions for [Data](../packages/data.md): `<Name>Data` (tagged `data.datasets` and `data.actions`), the scope that narrows rows by branch, the create and update operations (with their handlers) and the line each confirmation shows, with their words and the tests of their declarations | `backend/packages/<Name>/src/<Name>Data.php`, `src/Data`, `lang/{en,es}/data.php`, `tests/Feature/<Name>DatasetTest.php`, `<Name>OperationsTest.php` |
 | The isolation test: it seeds a record in two workspaces and fails if the list, the detail or the search of one ever gives the other's | `backend/packages/<Name>/tests/Feature/<Name>IsolationTest.php` (uses `AssertsIsolation`, see [Testing](testing.md)) |
 | The frontend layer: list, new and edit pages, form, table, service, composables, plugin for the home and the **+** menu, words in `en` and `es`, and its Vitest tests | `frontend/layers/<name>` |
 | An end-to-end spec and its stub of the API (the stub is found by its file name: no file of the e2e harness is edited) | `frontend/tests/e2e/<name>.spec.ts`, `frontend/tests/e2e/support/modules/stub-<name>.ts` |
@@ -79,19 +79,19 @@ The migration is dated now, and never before the tables it hangs from. The modul
 The command decides nothing that depends on what your records are. After it, you decide:
 
 - **The dataset's columns.** It declares the template's columns. Add yours, and mark a column `sensitive` (behind a permission of
-  its own) when it holds contact data or anything a reader with plain `<name>.view` should not get. See
+  its own) when it holds contact data or anything someone with plain `<name>.view` should not get. See
   [Add a dataset](add-a-dataset.md).
 - **The actions' fields.** The create and update operations take the template's fields. Change them with the form's. Neither
   deletes, and a delete action can never be declared. See [Add an action](add-an-action.md).
 - **Whether it is offered at all.** If the module should not appear in `data:verify`'s list, remove `<Name>Data` and its two tags,
-  and the two tests with it.
+  and the two declaration tests with it.
 - **The routes that need no permission.** Every route the command writes takes `<name>.view` or `<name>.manage`. A route of your own
   with none, or outside every signed-in group, must be declared (see
   [Declare open and public routes](declare-open-and-public-routes.md)), or `RoutesAreClassifiedTest` fails.
 - **The isolation test's record.** It seeds a record with the helper of `tests/Support/<name>-world.php`. If you add a field the record
   needs, add it there too.
 - **What the isolation test covers.** The generated test proves the list, the detail and the search never give another workspace's record. A
-  write to another workspace's record is covered by the operations test (`<Name>OperationsTest`: a record of another workspace is not
+  write to another workspace's record is covered by the update test (`Update<Name>Test`: a record of another workspace is not
   found) and by row-level security, not by this test.
 
 `php artisan data:verify` checks the new dataset and actions on every deploy, and the CI job "Generated module" runs it after it

@@ -29,8 +29,9 @@ The production images live in `docker/` (`backend`, `frontend`, `caddy`) and the
 block of `docs/configuration/production.md`, in the same order: `tests/Architecture/DeployScriptTest.php` fails when they
 differ, so change both together. A new long-running process (a second kind of worker, a new server) becomes a supervisord
 program in `docker/backend/supervisor/programs/` behind a value of `APP_ROLE` in `docker/backend/entrypoint.sh`, with its port
-in the Caddyfile if it has one. Config files in `docker/` and `deploy/` explain why, in plain English, and are not edited
-with a secret in them: `deploy/.env` is ignored by git.
+in the Caddyfile if it has one. `deploy/make-env` and `deploy/server-setup.sh` are what `docs/guides/deploy-to-a-vps.md` tells a
+buyer to run: change them with that guide; `backend/tests/Architecture/DeployToolsTest.php` covers them. Config files in `docker/`
+and `deploy/` explain why, in plain English, and are not edited with a secret in them: `deploy/.env` is ignored by git.
 
 ## Quick reference
 
@@ -92,9 +93,9 @@ when a module is left out of these)*; the guide is [docs/guides/build-a-module.m
   data) or one outside every signed-in group (a webhook, a signed link) is declared by its package in a
   `RouteDeclarations` tagged `routes.declarations`, with its reason or its lock (guide:
   `declare-open-and-public-routes`; `RoutesAreClassifiedTest` fails on a route that is neither).
-- [ ] **Dataset and actions**, if others (people or the AI module) should read or do something through it: a `DatasetProvider`
+- [ ] **Dataset and actions**, if the paid AI add-on (or your own code) should be able to read or do something through it: a `DatasetProvider`
   tagged `data.datasets` and an `ActionProvider` tagged `data.actions`, `"mood-kit/data": "@dev"` in its `composer.json`, and a
-  `data:verify` that passes (guides: `add-a-dataset`, `add-an-action`). `kit:make-module` writes them, with their tests.
+  `data:verify` that passes (guides: `add-a-dataset`, `add-an-action`). They are declarations only. `kit:make-module` writes them, with their declaration tests.
 - [ ] **Isolation test**: a test that uses `AssertsIsolation` and proves a record never crosses a workspace (list, detail and
   search). It is mandatory in a new module and `kit:make-module` writes it (`<Name>IsolationTest`).
 
@@ -974,36 +975,32 @@ What the package does: [docs/packages/search.md](docs/packages/search.md) and
 What the package does: [docs/packages/data.md](docs/packages/data.md); how a module declares a dataset and an action:
 [docs/guides/add-a-dataset.md](docs/guides/add-a-dataset.md) and [docs/guides/add-an-action.md](docs/guides/add-an-action.md). The rules:
 
-- A package declares what a person may read of it with a `DatasetProvider` tagged `data.datasets`, and what a person may do through it with an
-  `ActionProvider` tagged `data.actions`. What a package builds with (`Dataset`, `Column`, `Relation`, `Field`, `Operation`, the
-  results and the errors a declaration throws) lives in `Data\Contracts\`, the only part of Data another package may use. Its registries,
-  reader and runner are classes of Data that no other package names. *(tested by `PackageBoundariesTest`)*
-- A dataset names the permission that reads it, always, and the columns that exist for a reader, and nothing else: a column that is not
-  declared cannot be read. Contact data and notes are `sensitive`, behind the permission that exports or manages them. The label,
-  the description and every column's label have a line in each language. `DatasetRegistry` refuses a malformed one (`DatasetInvalid`: the key, a
-  permission that no package declares, a label without a line, a metric over a column that is not a number, a relation to a dataset
-  nobody declared). *(tested by `DatasetRegistryTest`)*
-- `DatasetReader` is the only way a dataset is read, and it keeps its guards: the dataset's permission, platform flag and plan
-  feature checked at each read; the request's workspace and signed-in person the viewer's; `tenant_id = <workspace>` on the dataset's base table ANDed
-  to everything the source and the scope did (never only RLS, never only the source); only declared columns, a sensitive one for
-  whoever holds its permission; 200 rows at most; a read-only transaction rolled back, with a three second `statement_timeout`.
-  Never weaken one to make a dataset work: change the dataset. *(tested by `DatasetReaderTest`)*
+- The kit ships declarations only. A package declares what may be read of it with a `DatasetProvider` tagged `data.datasets`, and what may
+  be done through it with an `ActionProvider` tagged `data.actions`: metadata that nothing in the kit uses to read a row or to run an action
+  as a person. Declarations are what the paid Mood Kit AI add-on reads. What a package builds with (`Dataset`, `Column`, `Relation`,
+  `Field`, `Operation`, the errors a declaration throws) lives in `Data\Contracts\`, the only part of Data another package may use. Its
+  registries are classes of Data that no other package names. *(tested by `PackageBoundariesTest`)*
+- Do not add to the kit a class that reads a dataset or runs an action for a person (a reader, a runner, a confirmation of an action).
+  That code is the paid add-on's. `DatasetProbe`, which `data:verify` uses to run a dataset's query for no rows, is `@internal`: it checks
+  no permission, adds no workspace filter and gives no row, and it is not a contract.
+- A dataset names the permission that reads it, always, and the columns it declares, and nothing else. Contact data and notes are `sensitive`,
+  behind the permission that exports or manages them. The label, the description and every column's label have a line in each language.
+  `DatasetRegistry` refuses a malformed one (`DatasetInvalid`: the key, a permission that no package declares, a label without a line, a
+  metric over a column that is not a number, a relation to a dataset nobody declared). *(tested by `DatasetRegistryTest`)*
 - Run `php artisan data:verify` in the deploy script and in CI after the migrations (it needs a migrated database, so it is not part of
-  `composer check`). It builds every dataset's query for no rows and checks that its table has forced row-level security.
-  *(tested by `VerifyDataCommandTest`, `DeployScriptTest`)*
-- Every dataset of the kernel has a test that reads it through `ReadsDatasets` as a person of a workspace with a second workspace beside
-  it, and proves that no row of the other comes out, that branches are respected, that a sensitive column leaves only with its
-  permission, that a person without the view permission is refused, and, where it applies, that the flag off refuses and that the
-  rows that must never be read (the trash, erased or merged clients) are not. A dataset of a module of your own has the same test.
+  `composer check`). It builds every dataset's query and runs it for no rows and checks that its table, and every table it joins by name
+  that has a `tenant_id`, has forced row-level security. *(tested by `VerifyDataCommandTest`, `DeployScriptTest`)*
+- Every dataset of the kernel has a declaration test: it is in the registry, behind the permission and the flag it should have, its
+  columns are the ones listed and the sensitive ones name their permission, its source is a query of its model, its scope is a
+  `DatasetScope`, its words exist in both languages, and `data:verify` passes. A dataset of a module of your own has the same test.
   *(tested by `ProjectsDatasetTest`, `ClientsDatasetTest`, `BranchesDatasetTest`, `TeamDatasetTest`)*
-- An action that deletes is never declared. `OperationRegistry` refuses a key that ends in `.delete`, `.destroy`, `.erase`, `.remove` or
-  `.purge` (`OperationInvalid`), and it checks the key, the permission and the labels as a dataset's are (a handler that implements `PerformsAction`, one name for
-  each field). A `Field` is the one place that says an input: its rules and its JSON Schema come from it, and a schema is never derived
-  from a form request. *(tested by `OperationRegistryTest`, `FieldTest`)*
-- `OperationRunner` is the only way an action is run, and it keeps its guards: the permission, platform flag and plan feature checked
-  before the input is looked at; the request's workspace and signed-in person the viewer's (`WrongWorkspace`, `WrongViewer`); the input read as the HTTP stack reads it (trimmed, `""` as `null`); validation with the fields' rules and a refusal of every key that is not a
-  field (never a rule written for a key someone sent); the handler called with what the fields kept. A handler calls the module's own Action, never
-  a model, so the API's rules and its audit trail apply. *(tested by `OperationRunnerTest`, `ProjectsOperationsTest`)*
+- An action that deletes is never declared. `OperationRegistry` refuses a key with any of these words in it: `delete`, `destroy`,
+  `erase`, `remove`, `purge`, `wipe`, `void`, `drop`, `truncate` or `forget` (`OperationInvalid`). It is a naming guard, not a
+  guarantee, and it checks the key, the permission and the labels as a dataset's are (a handler that implements
+  `PerformsAction`, one name for each field). A `Field` is the one place that says an input: its rules and its JSON Schema come from it, and a
+  schema is never derived from a form request. *(tested by `OperationRegistryTest`, `FieldTest`)*
+- A handler of an action stays with its module and calls the module's own Action, never a model, so the API's rules and its audit trail
+  apply. An action says `duringImpersonation` as its route does. *(tested by `ProjectsOperationsTest`, `OperationImpersonationTest`)*
 
 ### Dashboard (`packages/Dashboard`)
 
@@ -1122,7 +1119,7 @@ own copies, so what it does is the standard, and a change to a standard changes 
   everything before it writes anything (name, words, a package, layer, table, route, screen, permission, flag, menu entry,
   limiter or words namespace that exists, a class that would clash with an import, a file that exists), never overwrites, and
   takes back a failed write. What it writes includes the module's dataset (`<Name>Data`, tagged `data.datasets` and
-  `data.actions`), its create and update operations and the isolation test (`<Name>IsolationTest`), with their tests. The module starts off (`<slug>.enabled` is off), and the command edits no file of the kernel.
+  `data.actions`), its create and update operations (declarations with handlers) and the isolation test (`<Name>IsolationTest`), with their declaration tests. The module starts off (`<slug>.enabled` is off), and the command edits no file of the kernel.
   *(tested by `MakeModuleCommandTest`, `ModuleNameTest`, `ModuleWordsTest`, `ModuleFilesEditTest`; the criterion, a generated
   module passing `composer check`, the frontend's checks and its own e2e spec without touching the kernel, is the CI job
   "Generated module", which makes two modules, runs the kit's whole Pest suite and both modules' checks, and fails if any

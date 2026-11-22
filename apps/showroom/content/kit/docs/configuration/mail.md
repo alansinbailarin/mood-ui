@@ -185,6 +185,38 @@ RESEND_API_KEY=...
 MAIL_FROM_ADDRESS=hello@example.com
 ```
 
+### Example: Resend over SMTP
+
+This is the setup used for the kit's public demo, and it needs no extra package. The sending domain is a subdomain
+(`mail.example.com`), so its reputation stays apart from your root domain's.
+
+1. In Resend, add `mail.example.com`. With your DNS on Cloudflare, Resend's Cloudflare auto-configure adds the records.
+2. Create an API key with sending access, limited to that domain.
+3. Set:
+
+```dotenv
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.resend.com
+MAIL_PORT=587
+MAIL_USERNAME=resend
+MAIL_PASSWORD=<the API key>
+MAIL_FROM_ADDRESS=hello@mail.example.com
+```
+
+4. Add a DMARC record on the root domain: a TXT record named `_dmarc` with `v=DMARC1; p=none; adkim=r; aspf=r;`. Resend's
+   records give SPF and DKIM, but without a DMARC record Gmail shows DMARC as failed. Tighten `p=none` to `p=quarantine` once
+   your mail passes. After you add the record, Gmail can keep its earlier "no record" answer for up to about 30 minutes: wait
+   before you test again.
+
+In the demo mode the default mailer is forced to `log`, so test by naming the mailer. In the stack, from the kit's root:
+
+```bash
+docker compose -p mood-kit -f deploy/compose.yml --env-file deploy/.env exec -T backend php artisan tinker --execute 'Illuminate\Support\Facades\Mail::mailer("smtp")->raw("test", fn ($m) => $m->to("you@example.com")->subject("Mood Kit mail test"));'
+```
+
+Then open the message in Gmail and choose **Show original** to read SPF, DKIM and DMARC. The whole path is in
+[Deploy to a VPS](../guides/deploy-to-a-vps.md#8-set-up-mail).
+
 ## Check it
 
 1. Start a worker: `php artisan queue:work`.

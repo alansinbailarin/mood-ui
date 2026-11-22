@@ -52,12 +52,31 @@ build of the community server, from its frozen legacy archive. It is for develop
        ASSETS_BUCKET=<bucket name>
        ASSETS_ENDPOINT=https://<account id>.r2.cloudflarestorage.com
        ASSETS_URL=https://assets.example.com
-       ASSETS_USE_PATH_STYLE_ENDPOINT=true
+       ASSETS_USE_PATH_STYLE_ENDPOINT=false
+
+   `false` is the value of `deploy/.env.example` and the one the kit's public demo runs on R2. (`true` is for MinIO locally.)
 
 5. If you turn on uploads straight to the bucket, use a custom domain with `r2.dev` off, and add the lifecycle rule
    and the block on `uploads/`, as described below.
 
 Do not run `assets:prepare-bucket` in production; it refuses to.
+
+To check the bucket before the app uses it, write, read through the custom domain and delete a file with `curl`. First put the
+values of step 4 in the shell (`read -rs SECRET` keeps the secret off the screen and out of the history). The answers are `200`,
+`200` and `204`:
+
+```bash
+ASSETS_ENDPOINT=https://<account id>.r2.cloudflarestorage.com
+ASSETS_BUCKET=<bucket name>
+ASSETS_URL=https://assets.example.com
+read -r ID
+read -rs SECRET
+curl -s -o /dev/null -w "%{http_code}\n" --aws-sigv4 "aws:amz:auto:s3" --user "$ID:$SECRET" -X PUT --data "ok" "$ASSETS_ENDPOINT/$ASSETS_BUCKET/healthcheck/x.txt"
+curl -s -o /dev/null -w "%{http_code}\n" "$ASSETS_URL/healthcheck/x.txt"
+curl -s -o /dev/null -w "%{http_code}\n" --aws-sigv4 "aws:amz:auto:s3" --user "$ID:$SECRET" -X DELETE "$ASSETS_ENDPOINT/$ASSETS_BUCKET/healthcheck/x.txt"
+```
+
+The whole path to a server is in [Deploy to a VPS](../guides/deploy-to-a-vps.md#7-set-up-file-storage-r2).
 
 ## Uploads straight to the bucket (presign)
 

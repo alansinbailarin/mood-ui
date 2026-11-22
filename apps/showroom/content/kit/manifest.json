@@ -1,6 +1,6 @@
 {
   "source": {
-    "commit": "bf64921246c3",
+    "commit": "489685c41e43",
     "ref": "HEAD",
     "dirty": false
   },
@@ -187,7 +187,7 @@
           "file": "docs/packages/data.md",
           "title": "Data",
           "label": "Data",
-          "description": "What a module offers to read and to do, said once and checked by the kit. Data keeps no tables. It holds two registries: the datasets each package declares…"
+          "description": "What a module declares as readable and as doable, said once and checked by the kit. Data keeps no tables. It holds two registries: the datasets each package…"
         },
         {
           "slug": "packages/public-page",
@@ -320,6 +320,13 @@
       "id": "guides",
       "title": "Guides",
       "pages": [
+        {
+          "slug": "guides/deploy-to-a-vps",
+          "file": "docs/guides/deploy-to-a-vps.md",
+          "title": "Deploy to a VPS",
+          "label": "Deploy to a VPS",
+          "description": "Put the kit on one rented server, with its own domain, wildcard certificate, file storage and mail, from an empty server to a signed-in workspace. The steps…"
+        },
         {
           "slug": "guides/build-a-module",
           "file": "docs/guides/build-a-module.md",
@@ -528,14 +535,14 @@
           "file": "docs/guides/add-a-dataset.md",
           "title": "Add a dataset",
           "label": "Add a dataset",
-          "description": "This guide declares the records of a module of your own as a dataset: a read view that says which columns may leave it and who may read them. The example is…"
+          "description": "This guide declares the records of a module of your own as a dataset: the description of a read view that says which columns it has and who may read them.…"
         },
         {
           "slug": "guides/add-an-action",
           "file": "docs/guides/add-an-action.md",
           "title": "Add an action",
           "label": "Add an action",
-          "description": "This guide declares something a person can do through a module of your own: make a record, change one. It reuses the module's own Action, so the rules and…"
+          "description": "This guide declares something a person can do through a module of your own: make a record, change one. The declaration names the module's own Action as its…"
         },
         {
           "slug": "guides/add-a-dashboard-widget",

@@ -1,8 +1,8 @@
 # Docker images and the production stack
 
 Reference for what ships in `docker/` (three images) and `deploy/` (the Compose stack that runs them). It describes what is
-there and why; it is not a step by step guide to a server. The checklist of what a deployment needs is
-[Production](production.md): the images satisfy every item a container can.
+there and why; it is not a step by step guide to a server: for that, follow [Deploy to a VPS](../guides/deploy-to-a-vps.md). The
+checklist of what a deployment needs is [Production](production.md): the images satisfy every item a container can.
 
 | Path | Is |
 | ---- | -- |
@@ -12,6 +12,8 @@ there and why; it is not a step by step guide to a server. The checklist of what
 | `deploy/compose.yml` | the stack: Caddy, API, frontend, Postgres, Redis, optional Meilisearch |
 | `deploy/Caddyfile` | the public edge |
 | `deploy/.env.example` | every variable the stack needs, copied to `deploy/.env` |
+| `deploy/make-env` | makes `deploy/.env` on the server: generates the stack's secrets, merges your account keys, never prints a value |
+| `deploy/server-setup.sh` | prepares a fresh Ubuntu 24.04 server: firewall, user, swap, Docker, and optionally ssh hardening |
 | `deploy/postgres-init/` | the four database roles, created on the first start of an empty volume |
 | `.dockerignore` | keeps `.env` files, `node_modules`, `vendor`, tests and docs out of every build |
 
