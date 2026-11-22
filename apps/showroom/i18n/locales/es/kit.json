@@ -25,7 +25,12 @@
       "ctaDocs": "Leer la documentación",
       "ctaBuy": "Conseguir Mood Kit",
       "ctaStart": "Córrelo en local en 15 minutos",
+      "ctaDemo": "Ver la demo en vivo",
       "pricingNote": "Un solo pago, actualizaciones de por vida y proyectos sin límite.",
+      "demoNote": "La demo es una instalación completa que se reinicia todos los días a las 04:00, hora de Tijuana. Sus pantallas de inicio de sesión muestran cuentas compartidas (propietario y super admin), así que nada de lo que hagas ahí se conserva.",
+      "termsNote": "Lee los {terms} antes de pagar.",
+      "termsLink": "términos de venta",
+      "supportNote": "¿Dudas antes de comprar? Escribe a {email}.",
       "factsTitle": "Qué es, en cuatro líneas",
       "facts": {
         "api": "Una API JSON en Laravel 13, versionada en /api/v1, con un solo formato de respuesta y un código para cada error.",
@@ -148,9 +153,21 @@
           "q": "¿Puedo construir sobre él con Claude Code o Cursor?",
           "a": "Sí, es un objetivo de diseño. AGENTS.md en la raíz del repositorio tiene las reglas, y cada regla nombra el control que la vigila. La documentación trae un prompt para cada tarea común e indica qué pasos puede hacer un agente solo y cuáles necesitan de ti."
         },
+        "demo": {
+          "q": "¿Hay una demo?",
+          "a": "Sí, en demo.mood-ui.com. Es una instalación completa que se reinicia todos los días a las 04:00, hora de Tijuana, con cuentas compartidas de propietario y super admin en sus pantallas de inicio de sesión, así que nada de lo que hagas ahí se conserva."
+        },
         "license": {
           "q": "¿Cómo se licencia y se entrega?",
           "a": "Un solo pago de 149 USD, o 99 USD con el descuento de lanzamiento para los primeros 100 compradores. Lo usas en todos tus proyectos y en los de tus clientes, sin límite, y todas las versiones futuras están incluidas. Recibes acceso de lectura al repositorio privado de GitHub y una clave de licencia, las dos desde Polar justo después de pagar."
+        },
+        "refunds": {
+          "q": "¿Puedo pedir un reembolso?",
+          "a": "No una vez que se concedió el acceso al repositorio, porque el código fuente completo se entrega al instante. Si la invitación o la clave nunca llegan, o un pago se cobró dos veces, escribe a support{'@'}mood-ui.com y se corrige o se reembolsa. Los términos de venta tienen el detalle."
+        },
+        "support": {
+          "q": "¿Cómo funciona el soporte?",
+          "a": "Por correo a support{'@'}mood-ui.com, en español o inglés. Es con el mejor esfuerzo y no prometemos un tiempo de respuesta."
         }
       },
       "ctaTitle": "Pruébalo antes de decidir",
@@ -164,6 +181,54 @@
     },
     "docsHome": {
       "landingLink": "Resumen de Mood Kit, qué incluye y cómo conseguirlo"
+    },
+    "terms": {
+      "seo": {
+        "title": "Términos de venta de Mood Kit",
+        "description": "Qué recibes al comprar Mood Kit, el precio, quién cobra el pago y los impuestos, la entrega, los reembolsos y el soporte."
+      },
+      "h1": "Términos de venta",
+      "lead": "Estos términos cubren la compra de Mood Kit a mood-ui. Léelos antes de pagar.",
+      "backToKit": "Volver a Mood Kit",
+      "license": {
+        "title": "Qué compras",
+        "body": "Una licencia de Mood Kit, tal como está escrita en el archivo LICENSE del repositorio del kit. Ese archivo es el texto completo y el que manda. Esta página solo lo resume.",
+        "points": {
+          "payment": "Un solo pago, y la licencia es perpetua.",
+          "products": "Todos los productos finales que quieras, para ti o para tus clientes.",
+          "developers": "Cada desarrollador que trabaje en esos productos finales puede usar el kit para ese trabajo.",
+          "redistribution": "No puedes redistribuir el kit como plantilla, boilerplate o starter kit.",
+          "updates": "Todas las versiones futuras están incluidas de por vida. Los módulos y complementos que se venden aparte, como Booking, no forman parte del kit."
+        }
+      },
+      "price": {
+        "title": "Precio",
+        "body": "Un solo pago en USD, con el precio que ves al pagar. El precio es de 149 USD, o 99 USD con el descuento de lanzamiento para los primeros 100 compradores."
+      },
+      "payment": {
+        "title": "Pago e impuestos",
+        "body": "Polar es el comerciante de registro (merchant of record). Cobra el pago, aplica los impuestos que correspondan y emite tu recibo o factura."
+      },
+      "delivery": {
+        "title": "Entrega",
+        "body": "Justo después del pago, Polar te envía una invitación de GitHub al repositorio privado y una clave de licencia. El comando php artisan kit:activate valida la clave una sola vez, al instalar."
+      },
+      "refunds": {
+        "title": "Reembolsos",
+        "body": "El código fuente completo se entrega al instante, así que las compras no son reembolsables una vez que se concede el acceso al repositorio. Si la invitación o la clave nunca llegan, o un pago se cobró dos veces, escribe a {email} y se corrige o se reembolsa."
+      },
+      "support": {
+        "title": "Soporte",
+        "body": "El soporte es por correo, en español o inglés, con el mejor esfuerzo. No prometemos un tiempo de respuesta. Escribe a {email}."
+      },
+      "changes": {
+        "title": "Cambios en estos términos",
+        "body": "Un cambio en estos términos aplica a las compras hechas después del cambio."
+      },
+      "seller": {
+        "title": "Vendedor",
+        "body": "El vendedor es mood-ui."
+      }
     }
   }
 }

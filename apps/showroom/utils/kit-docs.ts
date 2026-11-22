@@ -14,6 +14,9 @@ export const KIT_BASE = "/kit";
 /** The landing page. Its URL follows the SEO spec, not the docs tree. */
 export const KIT_LANDING = "/nuxt-saas-boilerplate";
 
+/** Terms of sale: its own page (in both languages), not a synced doc. */
+export const KIT_TERMS = "/kit/terms";
+
 /** Repo file for the agents rules, rendered as a docs page. */
 export const AGENTS_FILE = "AGENTS.md";
 

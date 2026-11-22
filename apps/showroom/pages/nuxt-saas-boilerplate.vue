@@ -10,13 +10,15 @@ import { ArrowRightIcon, CheckIcon } from "@heroicons/vue/24/outline";
 import { useI18n } from "vue-i18n";
 import {
   KIT_BUY_URL,
+  KIT_DEMO_URL,
   KIT_FACT_IDS,
   KIT_FAQ_IDS,
   KIT_FEATURE_IDS,
   KIT_PRICE_USD,
   KIT_STACK_IDS,
+  KIT_SUPPORT_EMAIL,
 } from "~/utils/kit-config";
-import { KIT_LANDING, routeForSlug } from "~/utils/kit-docs";
+import { KIT_LANDING, KIT_TERMS, routeForSlug } from "~/utils/kit-docs";
 
 const { t } = useI18n();
 const localePath = useLocalePath();
@@ -146,11 +148,22 @@ const docsLinks = [
         >
           {{ t("kit.landing.ctaDocs") }}
         </Button>
+        <Button as="a" variant="outline" size="large" :href="KIT_DEMO_URL">
+          {{ t("kit.landing.ctaDemo") }}
+        </Button>
         <Button as="a" variant="outline" size="large" :href="KIT_BUY_URL" rel="nofollow noopener">
           {{ t("kit.landing.ctaBuy") }}
         </Button>
       </div>
+      <p class="text-sm text-muted-foreground">{{ t("kit.landing.demoNote") }}</p>
       <p class="text-sm text-muted-foreground">{{ t("kit.landing.pricingNote") }}</p>
+      <p class="text-sm text-muted-foreground">
+        <i18n-t keypath="kit.landing.termsNote" scope="global">
+          <template #terms>
+            <NuxtLinkLocale :to="KIT_TERMS" class="text-primary underline underline-offset-4">{{ t("kit.landing.termsLink") }}</NuxtLinkLocale>
+          </template>
+        </i18n-t>
+      </p>
     </header>
 
     <!-- Facts -->
@@ -236,6 +249,13 @@ const docsLinks = [
           <p class="mt-2 text-sm text-muted-foreground leading-relaxed">{{ f.a }}</p>
         </details>
       </div>
+      <p class="text-sm text-muted-foreground">
+        <i18n-t keypath="kit.landing.supportNote" scope="global">
+          <template #email>
+            <a :href="`mailto:${KIT_SUPPORT_EMAIL}`" class="text-primary underline underline-offset-4">{{ KIT_SUPPORT_EMAIL }}</a>
+          </template>
+        </i18n-t>
+      </p>
     </section>
 
     <!-- Closing CTA -->
@@ -255,6 +275,13 @@ const docsLinks = [
           {{ t("kit.landing.ctaBuy") }}
         </Button>
       </div>
+      <p class="text-sm text-muted-foreground">
+        <i18n-t keypath="kit.landing.termsNote" scope="global">
+          <template #terms>
+            <NuxtLinkLocale :to="KIT_TERMS" class="text-primary underline underline-offset-4">{{ t("kit.landing.termsLink") }}</NuxtLinkLocale>
+          </template>
+        </i18n-t>
+      </p>
     </section>
   </div>
 </template>
