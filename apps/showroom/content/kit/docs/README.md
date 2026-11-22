@@ -14,8 +14,9 @@ configure it; `AGENTS.md` describes how to change it.
 
 ## Start here
 
-- [Getting started](getting-started.md): run the kit locally, sign in to the demo workspace and create a
-  workspace through signup.
+- [Buy the kit and get access](guides/buy-and-get-access.md): from paying on Polar to a clone of the private repository.
+- [Getting started](getting-started.md): set the kit up with `bash scripts/setup.sh`, run it with `pnpm dev`, sign in to the
+  demo workspace and create a workspace through signup.
 - [Changelog](../CHANGELOG.md): what changed in each release, and what to run when you update. How to merge a release is in
   [Update to a new version](getting-started.md#update-to-a-new-version).
 

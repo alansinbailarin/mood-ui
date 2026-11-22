@@ -8,6 +8,42 @@ merge a release is in [Update to a new version](docs/getting-started.md#update-t
 
 ## [Unreleased]
 
+## [0.12.1] - 2026-11-22
+
+### Added
+
+- `scripts/setup.sh`: one command sets up a fresh clone, `bash scripts/setup.sh`. It lists every missing tool at once, then
+  creates the `.env`, starts Docker's services, installs the dependencies, generates the app key, migrates, prepares the
+  assets bucket, seeds the demo workspace and offers to activate your license (`--no-activate` skips the question). Run it
+  again at any time: it never overwrites a `.env` and never makes a second `APP_KEY`. See
+  [Getting started](docs/getting-started.md).
+- A guide from paying on Polar to a clone of the repository: the license key, the GitHub invitation and several GitHub
+  accounts. See [Buy the kit and get access](docs/guides/buy-and-get-access.md).
+- `pnpm dev` is now in the docs as the way to run the kit: the API, the worker, the scheduler, Reverb and the frontend in one
+  terminal. The table of the five processes stays for running them one by one.
+
+### Fixed
+
+- `.env.example` defined `NUXT_SECURITY_ASSETS_URL` and `NUXT_SECURITY_ASSETS_UPLOAD_URL` before the `ASSETS_URL` and
+  `ASSETS_ENDPOINT` they copy, so `docker compose` warned that the variables were not set and the Content Security Policy's
+  assets addresses were empty. They now come after the `ASSETS_*` block, and a test fails on any reference to a variable
+  defined further down.
+- `php artisan db:seed` on a fresh install failed with "The assets disk refused to write" because the demo's public page stores
+  its pictures in a bucket that did not exist yet. The seeder now stops early and says to run
+  `php artisan assets:prepare-bucket` and then `php artisan db:seed` again, and the docs run the bucket step before the seed.
+- The `generated-module` job of the CI workflow had no MinIO service, so the S3 tests of the kit's suite failed there with
+  `S3Exception`. It has the same service as the backend job, and a test keeps every job that runs Pest on the image
+  `docker-compose.yml` pins.
+
+### Upgrading
+
+- In your `.env`, move the lines `NUXT_SECURITY_ASSETS_URL=${ASSETS_URL}` and `NUXT_SECURITY_ASSETS_UPLOAD_URL=${ASSETS_ENDPOINT}`
+  below the `ASSETS_*` block, as `.env.example` now has them. Where they stay above, Docker Compose warns that the variables are
+  not set and the values come out empty. If you set them to literal addresses, change nothing.
+- On a new install, run `php artisan assets:prepare-bucket` before `php artisan db:seed`, or use `bash scripts/setup.sh`.
+
+## [0.12.0] - 2026-11-21
+
 ### Added
 
 - A guide to deploy the kit to a rented server, from an empty Ubuntu 24.04 VPS to a running install, and two scripts it uses:
@@ -189,6 +225,9 @@ merge a release is in [Update to a new version](docs/getting-started.md#update-t
   whose permission is checked somewhere else (in a form request's `authorize()` or with a Gate, with no `RequirePermission`
   middleware) counts as a route with no guard: declare it as an `OpenRoute` or give it the `permission:` middleware. See
   [Declare open and public routes](docs/guides/declare-open-and-public-routes.md).
+
+- Activate the kit once per project with the license key from your Polar purchase: `php artisan kit:activate --project="My project"`
+  (see [Getting started](docs/getting-started.md)). Nothing in the kit stops working without it.
 
 ## [0.11.0] - 2026-11-20
 
